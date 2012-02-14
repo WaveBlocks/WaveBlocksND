@@ -128,7 +128,7 @@ class WaveFunction(object):
 
         # Compute the prefactor
         T = self._grid.get_extensions()
-        N = self._grid.get_number_nodes(overall=False)
+        N = self._grid.get_number_nodes()
         prefactor = product( sqrt(array(T)) / (1.0*array(N)) )
 
         # Compute the norm for all components specified

@@ -107,7 +107,7 @@ class TensorProductGrid(DenseGrid):
         return [ self._meshwidths[i] for i in atleast_1d(axes) ]
 
 
-    def get_number_nodes(self, axes=None, overall=True):
+    def get_number_nodes(self, axes=None, overall=False):
         """Returns the number of grid nodes along a set of axes.
 
         :param axes: The axes for which we want to get the number of nodes.
@@ -152,7 +152,7 @@ class TensorProductGrid(DenseGrid):
         S = self._build_slicers()
         grid =  mgrid[S]
         # TODO: Consider storing a (D, N_1, ..., N_D) shaped version
-        self._gridnodes = grid.reshape((self._dimension, self.get_number_nodes()))
+        self._gridnodes = grid.reshape((self._dimension, self.get_number_nodes(overall=True)))
 
 
     def get_axes(self, axes=None):
@@ -174,7 +174,7 @@ class TensorProductGrid(DenseGrid):
         return [ self._gridaxes[i] for i in axes ]
 
 
-    def get_nodes(self):
+    def get_nodes(self, flat=True):
         """Returns all grid nodes of the full tensor product grid.
 
         :return: An ndarrays of shape :math:`(D, \prod_i^D N_i)`.
@@ -182,4 +182,8 @@ class TensorProductGrid(DenseGrid):
         if self._gridnodes is None:
             self._compute_grid_full()
 
-        return self._gridnodes
+        if flat is True:
+            return self._gridnodes
+        else:
+            return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
+

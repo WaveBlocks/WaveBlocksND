@@ -10,3 +10,7 @@ from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
 
 from WaveFunction import WaveFunction
+
+from MatrixPotential import MatrixPotential
+from MatrixPotential1S import MatrixPotential1S
+
