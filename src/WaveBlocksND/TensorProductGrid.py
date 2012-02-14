@@ -179,6 +179,7 @@ class TensorProductGrid(DenseGrid):
 
         :return: An ndarrays of shape :math:`(D, \prod_i^D N_i)`.
         """
+        # TODO: Consider a `split` option returning a list of ndarrays
         if self._gridnodes is None:
             self._compute_grid_full()
 

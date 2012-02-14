@@ -132,6 +132,7 @@ class WaveFunction(object):
         prefactor = product( sqrt(array(T)) / (1.0*array(N)) )
 
         # Compute the norm for all components specified
+        # TODO: Consider splitting into cases `fft` versus `fftn`
         norms = prefactor *array([ la.norm(fftn(self._values[component])) for component in atleast_1d(components) ])
 
         # Sum the individual norms if requested

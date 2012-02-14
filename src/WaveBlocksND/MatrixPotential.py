@@ -94,3 +94,22 @@ class MatrixPotential:
         :raise NotImplementedError: This is an abstract base class.
         """
         raise NotImplementedError("evaluate_eigenvectors_at(...)")
+
+
+    def calculate_exponential(self, factor=1):
+        """Calculate the matrix exponential :math:`\exp(\alpha V)`.
+
+        :param factor: The prefactor :math:`\alpha` in the exponential.
+        :raise NotImplementedError: This is an abstract base class.
+        """
+        raise NotImplementedError("calculate_exponential(...)")
+
+
+    def evaluate_exponential_at(self, grid):
+        """Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
+
+        :param grid: The grid containing the nodes :math:`\gamma_i` we want
+                     to evaluate the exponential at.
+        :raise NotImplementedError: This is an abstract base class.
+        """
+        raise NotImplementedError("evaluate_exponential_at(...)")
