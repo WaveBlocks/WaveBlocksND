@@ -25,4 +25,4 @@ class DenseGrid(Grid):
         """Answers the question if the grid spacing is regular.
         (It can still be different along each axis!)
         """
-        return self.is_regular
+        return self._is_regular

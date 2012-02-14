@@ -8,3 +8,5 @@
 from Grid import Grid
 from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
+
+from WaveFunction import WaveFunction

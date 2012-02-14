@@ -22,7 +22,7 @@ class TestTensorProductGrid:
         d['grid_limits'] = [(-1, 2),(0,3)]
         d['grid_number_nodes'] = [8,10]
 
-        Grid = TensorProductGrid.TensorProductGrid(d)
+        Grid = TensorProductGrid(d)
 
         return Grid
 
@@ -40,10 +40,10 @@ class TestTensorProductGrid:
         assert l == [(-1, 2), (0, 3)]
 
         l = G.get_limits(axes=0)
-        assert l == (-1, 2)
+        assert l == [(-1, 2)]
 
         l = G.get_limits(axes=[1])
-        assert l == (0, 3)
+        assert l == [(0, 3)]
 
         l = G.get_limits(axes=[0,1])
         assert l == [(-1, 2), (0, 3)]
@@ -56,19 +56,19 @@ class TestTensorProductGrid:
         G = self.build_grid()
 
         m = G.get_meshwidth()
-        assert m == [0.375, 0.3]
+        assert m == array([0.375, 0.3])
 
         m = G.get_meshwidth(axes=0)
-        assert m == 0.375
+        assert m == array([0.375])
 
         m = G.get_meshwidth(axes=(1,))
-        assert m == 0.3
+        assert m == array([0.3])
 
         m = G.get_meshwidth(axes=(0,1))
-        assert m == [0.375, 0.3]
+        assert m == array([0.375, 0.3])
 
         m = G.get_meshwidth(axes=[1,0])
-        assert m == [0.3, 0.375]
+        assert m == array([0.3, 0.375])
 
 
     def test_number_nodes(self):
@@ -90,19 +90,19 @@ class TestTensorProductGrid:
         assert nn == 80
 
         nn = G.get_number_nodes(overall=False)
-        assert nn == [8, 10]
+        assert nn == array([8, 10])
 
         nn = G.get_number_nodes(axes=0, overall=False)
-        assert nn == 8
+        assert nn == array([8])
 
         nn = G.get_number_nodes(axes=[1], overall=False)
-        assert nn == 10
+        assert nn == array([10])
 
         nn = G.get_number_nodes(axes=[0,1], overall=False)
-        assert nn == [8, 10]
+        assert nn == array([8, 10])
 
         nn = G.get_number_nodes(axes=[1,0], overall=False)
-        assert nn == [10, 8]
+        assert nn == array([10, 8])
 
 
     def test_axes(self):
@@ -132,7 +132,7 @@ class TestTensorProductGrid:
         assert ax[0].shape == (1,10)
         assert ax[1].shape == (8,1)
 
-        li = G.get_limits(axes=1)
+        li = G.get_limits(axes=1)[0]
         ax = G.get_axes(axes=1)[0]
         assert ax.min() == li[0]
         assert ax.max() < li[1]

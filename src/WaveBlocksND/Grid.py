@@ -21,4 +21,4 @@ class Grid(object):
     def get_dimension(self):
         """Return the dimension :math:`D` of the grid.
         """
-        return self.dimension
+        return self._dimension

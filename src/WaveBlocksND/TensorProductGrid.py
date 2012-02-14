@@ -9,7 +9,7 @@ dense regular tensor product grids.
 """
 
 import operator
-from numpy import mgrid, ogrid, atleast_1d
+from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, product, hstack, floating
 
 from DenseGrid import DenseGrid
 
@@ -40,24 +40,25 @@ class TensorProductGrid(DenseGrid):
         #       This comes with the Blocks factory?
 
         # Regular grid spacing
-        self.is_regular = True
+        self._is_regular = True
 
         # The dimension of the grid
-        self.dimension = parameters["dimension"]
-
-        # The limits of the bounding box of the grid
-        self.limits = parameters["grid_limits"]
-        # format: [(min_0,max_0), ..., (min_D,max_D)]
+        self._dimension = parameters["dimension"]
 
         # The number of grid nodes along each axis
-        self.number_nodes = parameters["grid_number_nodes"]
+        self._number_nodes = parameters["grid_number_nodes"]
         # format: [N_1, ..., N_D]
 
+        # The limits of the bounding box of the grid
+        self._limits = [ array(limit) for limit in parameters["grid_limits"] ]
+        # format: [(min_0,max_0), ..., (min_D,max_D)]
+
+        # The extensions (edge length) of the bounding box
+        self._extensions = hstack([ abs(diff(limit)) for limit in self._limits ])
+
         # Compute the grid spacings along each axis
-        self.meshwidth = []
+        self._meshwidths = self._extensions / squeeze(array(self._number_nodes, dtype=floating))
         # format: [h_1, ...,, h_D]
-        for lims, Ni in zip(self.limits, self.number_nodes):
-            self.meshwidth.append(abs(lims[1]-lims[0])/(1.0*Ni))
 
         # Cached values
         self._gridaxes = None
@@ -69,35 +70,41 @@ class TensorProductGrid(DenseGrid):
 
         :param axes: The axes for which we want to get the limits.
         :type axes: A single integer or a list of integers. If set
-                    to `None` (default) we return the data for all axes.
-        :return: A list of :math:`(min_i, max_i)` tuples or a single tuple.
+                    to `None` (default) we return the limits for all axes.
+        :return: A list of :math:`(min_i, max_i)` ndarrays.
         """
         if axes is None:
-            axes = range(self.dimension)
+            axes = range(self._dimension)
 
-        limits = [ self.limits[i] for i in atleast_1d(axes) ]
-
-        if len(limits) == 1:
-            return limits[0]
-        return limits
+        return [ self._limits[i] for i in atleast_1d(axes) ]
 
 
-    def get_meshwidth(self, axes=None):
-        """Returns the meshwidth of the grid.
+    def get_extensions(self, axes=None):
+        """Returns the extensions (length of the edges) of the bounding box.
 
-        :param axes: The axes for which we want to get the meshwidth.
+        :param axes: The axes for which we want to get the extensions.
+        :type axes: A single integer or a list of integers. If set
+                    to `None` (default) we return the extensions for all axes.
+        :return: A list of :math:`\abs(max_i-min_i)` values.
+        """
+        if axes is None:
+            axes = range(self._dimension)
+
+        return [ self._extensions[i] for i in atleast_1d(axes) ]
+
+
+    def get_meshwidths(self, axes=None):
+        """Returns the meshwidths of the grid.
+
+        :param axes: The axes for which we want to get the meshwidths.
         :type axes: A single integer or a list of integers. If set
                     to `None` (default) we return the data for all axes.
         :return: A list of :math:`h_i` values or a single value.
         """
         if axes is None:
-            axes = xrange(self.dimension)
+            axes = xrange(self._dimension)
 
-        meshwidth = [ self.meshwidth[i] for i in atleast_1d(axes) ]
-
-        if len(meshwidth) == 1:
-            return meshwidth[0]
-        return meshwidth
+        return [ self._meshwidths[i] for i in atleast_1d(axes) ]
 
 
     def get_number_nodes(self, axes=None, overall=True):
@@ -113,14 +120,12 @@ class TensorProductGrid(DenseGrid):
         :return: A list of :math:`h_i` values or a single value.
         """
         if axes is None:
-            axes = xrange(self.dimension)
+            axes = xrange(self._dimension)
 
-        values = [ self.number_nodes[i] for i in atleast_1d(axes) ]
+        values = [ self._number_nodes[i] for i in atleast_1d(axes) ]
 
         if overall is True:
             return reduce(operator.mul, values)
-        elif len(values) == 1:
-            return values[0]
         else:
             return values
 
@@ -128,7 +133,7 @@ class TensorProductGrid(DenseGrid):
     def _build_slicers(self):
         # Helper routine to build the necessary slicing
         # objects used for constructing the grid nodes.
-        slicers = [ slice(lims[0], lims[1], step) for lims, step in zip(self.limits, self.meshwidth) ]
+        slicers = [ slice(lims[0], lims[1], step) for lims, step in zip(self._limits, self._meshwidths) ]
         return slicers
 
 
@@ -147,7 +152,7 @@ class TensorProductGrid(DenseGrid):
         S = self._build_slicers()
         grid =  mgrid[S]
         # TODO: Consider storing a (D, N_1, ..., N_D) shaped version
-        self._gridnodes = grid.reshape((self.dimension, self.get_number_nodes()))
+        self._gridnodes = grid.reshape((self._dimension, self.get_number_nodes()))
 
 
     def get_axes(self, axes=None):
@@ -163,7 +168,7 @@ class TensorProductGrid(DenseGrid):
             self._compute_grid_axes()
 
         if axes is None:
-            axes = xrange(self.dimension)
+            axes = xrange(self._dimension)
         axes = atleast_1d(axes)
 
         return [ self._gridaxes[i] for i in axes ]
