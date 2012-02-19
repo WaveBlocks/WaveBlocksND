@@ -55,9 +55,11 @@ class MatrixPotential1S(MatrixPotential):
             self._isconstant = True
             self._variables_const = constants
 
+        self._all_variables = list(self._variables) + list(self._variables_const)
+
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
-        self._potential_n = sympy.lambdify(self._variables, self._potential_s[0,0], "numpy")
+        self._potential_n = sympy.lambdify(self._all_variables, self._potential_s[0,0], "numpy")
 
         # The cached eigenvalues, symbolic expressions and evaluatable functions
         self._eigenvalues_s = None
@@ -178,7 +180,7 @@ class MatrixPotential1S(MatrixPotential):
         Note: This function is idempotent.
         """
         self._exponential_s = sympy.exp(factor*self._potential_s[0,0])
-        self._exponential_n = sympy.lambdify(self._variables, self._exponential_s, "numpy")
+        self._exponential_n = sympy.lambdify(self._all_variables, self._exponential_s, "numpy")
 
 
     def evaluate_exponential_at(self, grid):

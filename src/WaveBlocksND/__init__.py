@@ -14,3 +14,10 @@ from WaveFunction import WaveFunction
 from MatrixPotential import MatrixPotential
 from MatrixPotential1S import MatrixPotential1S
 
+
+from PotentialFactory import PotentialFactory
+
+from KineticOperator import KineticOperator
+
+
+from FourierPropagator import FourierPropagator
