@@ -1,4 +1,4 @@
-"""The WaveBlocks Project
+r"""The WaveBlocks Project
 
 This file contains a class for representing
 dense regular tensor product grids.
@@ -9,7 +9,7 @@ dense regular tensor product grids.
 """
 
 import operator
-from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, product, hstack, floating
+from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, hstack, floating
 
 from DenseGrid import DenseGrid
 
@@ -17,7 +17,7 @@ __all__ = ["TensorProductGrid"]
 
 
 class TensorProductGrid(DenseGrid):
-    """This class represents a dense tensor product grid. It can
+    r"""This class represents a dense tensor product grid. It can
     have an arbitrary dimension :math:`D`. The grid nodes are
     enclosed in a hypercubic bounding box. This box can have
     different limits :math:`min_i`, :math:`max_i` along each
@@ -28,7 +28,7 @@ class TensorProductGrid(DenseGrid):
     """
 
     def __init__(self, parameters):
-        """Construct a tnesor product grid instace.
+        r"""Construct a tnesor product grid instace.
 
         :param parameters: The simulation parameters. There must be
                            values for the keys `dimension`, `grid_limits`
@@ -66,7 +66,7 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_limits(self, axes=None):
-        """Returns the limits of the bounding box.
+        r"""Returns the limits of the bounding box.
 
         :param axes: The axes for which we want to get the limits.
         :type axes: A single integer or a list of integers. If set
@@ -80,12 +80,12 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_extensions(self, axes=None):
-        """Returns the extensions (length of the edges) of the bounding box.
+        r"""Returns the extensions (length of the edges) of the bounding box.
 
         :param axes: The axes for which we want to get the extensions.
         :type axes: A single integer or a list of integers. If set
                     to `None` (default) we return the extensions for all axes.
-        :return: A list of :math:`\abs(max_i-min_i)` values.
+        :return: A list of :math:`|max_i-min_i|` values.
         """
         if axes is None:
             axes = range(self._dimension)
@@ -94,7 +94,7 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_meshwidths(self, axes=None):
-        """Returns the meshwidths of the grid.
+        r"""Returns the meshwidths of the grid.
 
         :param axes: The axes for which we want to get the meshwidths.
         :type axes: A single integer or a list of integers. If set
@@ -108,7 +108,7 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_number_nodes(self, axes=None, overall=False):
-        """Returns the number of grid nodes along a set of axes.
+        r"""Returns the number of grid nodes along a set of axes.
 
         :param axes: The axes for which we want to get the number of nodes.
         :type axes: A single integer or a list of integers. If set
@@ -156,7 +156,7 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_axes(self, axes=None):
-        """Returns the one-dimensional grids along the axes.
+        r"""Returns the one-dimensional grids along the axes.
 
         :param axes: The axes for which we want to get the grid.
         :type axes: A single integer or a list of integers. If set
@@ -175,7 +175,7 @@ class TensorProductGrid(DenseGrid):
 
 
     def get_nodes(self, flat=True):
-        """Returns all grid nodes of the full tensor product grid.
+        r"""Returns all grid nodes of the full tensor product grid.
 
         :return: An ndarrays of shape :math:`(D, \prod_i^D N_i)`.
         """
@@ -187,4 +187,3 @@ class TensorProductGrid(DenseGrid):
             return self._gridnodes
         else:
             return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
-

@@ -1,4 +1,4 @@
-"""The WaveBlocks Project
+r"""The WaveBlocks Project
 
 This file contains code to numerically represent multiple
 components of vector valued wave functions together with
@@ -20,14 +20,14 @@ __all__ = ["WaveFunction"]
 
 
 class WaveFunction(object):
-    """This class represents a vector valued wavefuncton :math:`\Ket{\Psi}`
+    r"""This class represents a vector valued wavefuncton :math:`\Psi`
     as used in the vector valued time-dependent Schroedinger equation. The
-    state :math:`\Ket{\Psi}` consists of the components :math:`\psi_0` to
+    state :math:`\Psi` consists of the components :math:`\psi_0` to
     :math:`\psi_{N-1}`.
     """
 
     def __init__(self, parameters):
-        """Initialize the :py:class:`WaveFunction` instance that represents
+        r"""Initialize the :py:class:`WaveFunction` instance that represents
         the vector :math:`\Psi` of components :math:`\psi_i`.
 
         :param parameters: A :py:class:`ParameterProvider` instance having at
@@ -40,20 +40,20 @@ class WaveFunction(object):
 
 
     def get_number_components(self):
-        """The number of components :math:`\psi_i` the vector :math:`\Psi` consists of.
+        r"""The number of components :math:`\psi_i` the vector :math:`\Psi` consists of.
         """
         return self._number_components
 
 
     def get_grid(self):
-        """Return the :py:class:`Grid` instance representing the grid :math:`\Gamma`.
+        r"""Return the :py:class:`Grid` instance representing the grid :math:`\Gamma`.
         The wavefunction :math:`\Psi` is evaluated on the grid nodes to get :math:`\Psi(\Gamma)`.
         """
         return self._grid
 
 
     def set_grid(self, grid):
-        """Assign a new grid :math:`\Gamma` to this :py:class:`WaveFunction` instance.
+        r"""Assign a new grid :math:`\Gamma` to this :py:class:`WaveFunction` instance.
 
         Note: The user of this class has to make sure that the grid :math:`\Gamma` and
         the wavefunction values :math:`\Psi(\Gamma)` are consistent with each other!
@@ -64,7 +64,7 @@ class WaveFunction(object):
 
 
     def get_values(self, components=None):
-        """Get the wavefunction values :math:`\psi(\Gamma)` for each
+        r"""Get the wavefunction values :math:`\psi(\Gamma)` for each
         component :math:`\psi_i` of :math:`\Psi`.
 
         :param components: The components :math:`i` for which we want to get
@@ -80,7 +80,7 @@ class WaveFunction(object):
 
 
     def set_values(self, values, components=None):
-        """Assign new wavefunction values :math:`\psi_i(\Gamma)` for each component
+        r"""Assign new wavefunction values :math:`\psi_i(\Gamma)` for each component
         :math:`i` of :math:`\Psi` to the current :py:class:`WaveFunction` instance.
 
         :param values: A list with the new values of all components we want to change.
@@ -105,7 +105,7 @@ class WaveFunction(object):
     # TODO: Decide whether to move the following methods into an own class
 
     def compute_norm(self, values=None, summed=False, components=None):
-        """Calculate the :math:`L^2` norm of the whole vector values wavefunction
+        r"""Calculate the :math:`L^2` norm of the whole vector values wavefunction
         :math:`\Psi` or some individual components :math:`\psi_i`. The calculation
         is done in momentum space.
 
@@ -116,7 +116,7 @@ class WaveFunction(object):
         :param components: The components :math:`\psi_i` of which the norms are calculated.
         :type components: A single integer or a list of integers. If set to
                           `None` (default) we compute the norm for all components.
-        :return: The :math:`L^2` norm of :math:`\Ket{\Psi}` or a list of :math:`L^2`
+        :return: The :math:`L^2` norm of :math:`\Psi` or a list of :math:`L^2`
                  norms of the specified components :math:`\psi_i`.
         """
         # TODO: Assumption: values[i].shape is (N_1, ..., N_D) and not (D, product(N_i))
