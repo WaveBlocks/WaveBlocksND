@@ -104,7 +104,7 @@ class WaveFunction(object):
 
     # TODO: Decide whether to move the following methods into an own class
 
-    def compute_norm(self, values=None, summed=False, components=None):
+    def norm(self, values=None, summed=False, components=None):
         r"""Calculate the :math:`L^2` norm of the whole vector values wavefunction
         :math:`\Psi` or some individual components :math:`\psi_i`. The calculation
         is done in momentum space.
@@ -137,9 +137,76 @@ class WaveFunction(object):
 
         # Sum the individual norms if requested
         if summed is True:
-            norms = map(lambda x: x**2, result)
+            norms = map(lambda x: x**2, norms)
             return sqrt(sum(norms))
         else:
             return norms
 
-    # TODO: Energy computation
+
+    def kinetic_energy(self, kinetic, summed=False):
+        """Calculate the kinetic energy :math:`E_{\text{kin}} := \Braket{\Psi|T|\Psi}`
+        of the different components :math:`\psi_i`.
+
+        :param kinetic: The kinetic energy operator :math:`T(\omega)`.
+        :type kinetic: A :py:class:`KineticOperator` instance.
+        :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual
+                       components :math:`\psi_i`. Default is `False`.
+        :return: A list with the kinetic energies of the individual components
+        or the overall kinetic energy of the wavefunction. (Depending on the optional arguments.)
+        """
+        # TODO: Consider using less declarative coding style.
+        #       Issue: Compute fft of each component only once
+        #              AND avoid storing fft of all components.
+
+        # Fourier transform the components
+        ftc = [ fftn(component) for component in self._values ]
+
+        # Compute the prefactor
+        T = self._grid.get_extensions()
+        N = self._grid.get_number_nodes()
+        prefactor = product( array(T) / (1.0*array(N)**2) )
+
+        # TODO: Consider taking the result of this call as input for efficiency?
+        KO = kinetic.evaluate_at()
+
+        # Compute the braket in Fourier space
+        ekin = [ prefactor * sum(conjugate(item) * KO * item) for item in ftc ]
+
+        if summed is True:
+            ekin = sum(ekin)
+
+        return ekin
+
+
+    def potential_energy(self, potential, summed=False):
+        """Calculate the potential energy :math:`E_{\text{pot}} := \Braket{\Psi|V|\Psi}`
+        of the different components :math:`\psi_i`.
+
+        :param potential: The potential energy operator :math:`V(x)`.
+        :param summed: Whether to sum up the potential energies :math:`E_i` of the individual
+                       components :math:`\psi_i`. Default is `False`.
+        :return: A list with the potential energies of the individual components
+        or the overall potential energy of the wavefunction. (Depending on the optional arguments.)
+        """
+        # Compute the prefactor
+        T = self._grid.get_extensions()
+        N = self._grid.get_number_nodes()
+        prefactor = product( array(T) / (1.0*array(N)**2) )
+
+        # Apply the matrix potential to the ket
+        tmp = [ zeros(component.shape, dtype=complexfloating) for component in self._values ]
+        for row in xrange(0, self._number_components):
+            for col in xrange(0, self._number_components):
+                tmp[row] = tmp[row] + potential[row*self._number_components+col] * self._values[col]
+
+        # Fourier transform the components
+        ftcbra = [ fftn(component) for component in self._values ]
+        ftcket = [ fftn(component) for component in tmp ]
+
+        # Compute the braket in Fourier space
+        epot = [ prefactor * sum(conjugate(cbra) * cket) for cbra, cket in zip(ftcbra, ftcket) ]
+
+        if summed is True:
+            epot = sum(epot)
+
+        return epot

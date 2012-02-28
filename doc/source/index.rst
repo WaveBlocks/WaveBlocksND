@@ -50,6 +50,15 @@ Time propagation
    waveblocks_classes/Propagator
    waveblocks_classes/FourierPropagator
 
+Simulation result storage I/O
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+.. toctree::
+   :maxdepth: 1
+
+   waveblocks_classes/IOManager
+
+   waveblocks_classes/IOM_plugin_parameters
+
 Etc
 ===
 

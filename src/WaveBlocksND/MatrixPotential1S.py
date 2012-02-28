@@ -55,7 +55,10 @@ class MatrixPotential1S(MatrixPotential):
             self._isconstant = True
             self._variables_const = constants
 
+        # TODO: Fix this to be consistent for all sorts
         self._all_variables = list(self._variables) + list(self._variables_const)
+
+        self._isconstant = True
 
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression

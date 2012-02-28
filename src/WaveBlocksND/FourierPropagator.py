@@ -24,13 +24,11 @@ class FourierPropagator(Propagator):
     of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
     """
 
-    def __init__(self, grid, potential, initial_values, para):
+    def __init__(self, potential, initial_values, para):
         r"""Initialize a new :py:class:`FourierPropagator` instance. Precalculate the
         the kinetic operator :math:`T_e` and the potential operator :math:`V_e`
         used or time propagation.
 
-        :param grid: The position space grid.
-        :type grid: A :py:class:ensorProductGrid` instace.
         :param potential: The potential :math:`V(x)` governing the time evolution.
         :type potential: A :py:class:`MatrixPotential` instance.
         :param initial_values: The initial values :math:`\Psi(\Gamma, t_0)` given
@@ -53,10 +51,10 @@ class FourierPropagator(Propagator):
             raise ValueError("Potential dimension and number of components do not match.")
 
         # The position space grid nodes '\Gamma'.
-        self._grid = grid
+        self._grid = initial_values.get_grid()
 
         # The kinetic operator 'T' defined in momentum space.
-        self._KO = KineticOperator(grid)
+        self._KO = KineticOperator(self._grid)
         self._KO.calculate_operator(para["dt"], para["eps"])
 
         # Exponential '\exp(-i/eps^2*dt*T)' used in the Strang splitting.
@@ -65,9 +63,10 @@ class FourierPropagator(Propagator):
         # Exponential '\exp(-i/eps^2*dt*V)' used in the Strang splitting.
         # TODO: Think about the interface 'calculate_exponential'
         self._potential.calculate_exponential(-0.5j * para["dt"] / para["eps"]**2)
-        self._VE = self._potential.evaluate_exponential_at(grid)
+        self._VE = self._potential.evaluate_exponential_at(self._grid)
 
 
+    # TODO: Consider removig this, duplicate
     def get_number_components(self):
         r"""Get the number :math:`N` of components of :math:`\Psi`.
 

@@ -8,7 +8,7 @@ operator :math:`-\frac{1}{2} \Delta` in the Fourier space.
 @license: Modified BSD License
 """
 
-from numpy import roll, exp
+from numpy import roll, exp, pi, sqrt
 from numpy.fft import fftfreq
 
 __all__ = ["KineticOperator"]
@@ -22,17 +22,24 @@ class KineticOperator(object):
         # TODO: Consider class "FourierSpaceGrid"
         D = grid.get_dimension()
         N = grid.get_number_nodes()
+        T = grid.get_extensions()
 
-        shape = [-1] + (D-1)*[1]
-
+        # Fourier domain nodes
+        prefactors = [ t / (2.0*pi) for t in T ]
         omega = [ fftfreq(n, d=1.0/n) for n in N ]
+        omega = [ o / p for o, p in zip(omega, prefactors) ]
+
+        # Reshape properly
+        shape = [-1] + (D-1)*[1]
         omega = [ o.reshape(roll(shape, i)) for i, o in enumerate(omega) ]
+
+        # Compute the dot product of omega with itself
         omega_sqr = map(lambda x: x*x, omega)
         omega_sqr = reduce(lambda x,y: x+y, omega_sqr)
 
         # Fourier space grid axes
         self._omega = omega
-        # omega dot omega
+        # Omega dot Omega
         self._omega_sqr = omega_sqr
 
 
@@ -42,7 +49,11 @@ class KineticOperator(object):
 
     # TODO: Reconsider external API: which version of the
     #       calculate function do we want to use?
-    #       Consistency with the potential?
+    #       Consistency with the potential!
+
+    # TODO: Split up calculation routines?
+    #       Reason: in static situations we may want T
+    #       but do not know dt
 
     def calculate_operator(self, dt, eps):
         self._dt = dt
