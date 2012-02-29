@@ -11,14 +11,13 @@ for the Fourier propagator.
 import numpy as np
 import scipy as sp
 
-
 from TensorProductGrid import TensorProductGrid
 from PotentialFactory import PotentialFactory
 from WaveFunction import WaveFunction
 from Initializer import Initializer
 from FourierPropagator import FourierPropagator
 from SimulationLoop import SimulationLoop
-#from IOManager import IOManager
+from IOManager import IOManager
 
 __all__ = ["SimulationLoopFourier"]
 
@@ -47,10 +46,10 @@ class SimulationLoopFourier(SimulationLoop):
         # Which data do we want to save
         self._tm = self.parameters.get_timemanager()
 
-        # TODO: Set up serializing of simulation data
-        #self.IOManager = IOManager()
-        #self.IOManager.create_file(self.parameters)
-        #self.IOManager.create_block()
+        # Set up serialization of simulation data
+        self.IOManager = IOManager()
+        self.IOManager.create_file(self.parameters)
+        self.IOManager.create_block()
 
 
     def prepare_simulation(self):
@@ -81,16 +80,16 @@ class SimulationLoopFourier(SimulationLoop):
         # Finally create and initialize the propagator instace
         self.propagator = FourierPropagator(potential, IV, self.parameters)
 
-        #slots = self._tm.compute_number_saves()
+        slots = self._tm.compute_number_saves()
 
-        #self.IOManager.add_grid(self.parameters, blockid="global")
+        self.IOManager.add_grid(self.parameters, blockid="global")
         #self.IOManager.add_fourieroperators(self.parameters)
-        #self.IOManager.add_wavefunction(self.parameters, timeslots=slots)
+        self.IOManager.add_wavefunction(self.parameters, timeslots=slots)
 
         # Write some initial values to disk
-        #self.IOManager.save_grid(nodes, blockid="global")
+        self.IOManager.save_grid(grid.get_nodes(flat=False), blockid="global")
         #self.IOManager.save_fourieroperators(self.propagator.get_operators())
-        #self.IOManager.save_wavefunction(IV.get_values(), timestep=0)
+        self.IOManager.save_wavefunction(IV.get_values(), timestep=0)
 
 
     def run_simulation(self):
@@ -106,15 +105,12 @@ class SimulationLoopFourier(SimulationLoop):
             self.propagator.propagate()
 
             # Save some simulation data
-            # TODO
-            #if tm.must_save(i):
-            #    self.IOManager.save_wavefunction(self.propagator.get_wavefunction().get_values(), timestep=i)
+            if self._tm.must_save(i):
+                self.IOManager.save_wavefunction(self.propagator.get_wavefunction().get_values(), timestep=i)
 
 
     def end_simulation(self):
         """Do the necessary cleanup after a simulation. For example request the
         :py:class:`IOManager` to write the data and close the output files.
         """
-        # TODO
-        #self.IOManager.finalize()
-        pass
+        self.IOManager.finalize()
