@@ -18,6 +18,8 @@ def add_grid(self, parameters, blockid=0):
                        at least the keys `grid_number_nodes` and `dimension`.
     :param blockid: The ID of the data block to operate on.
     """
+    # TODO: Consider storing axes, extensions etc too
+    # TODO: What about grid types other than tensor product grids?
     self._srf[self._prefixb+str(blockid)].create_dataset("grid", [parameters["dimension"]] + list(parameters["grid_number_nodes"]), np.floating)
 
 

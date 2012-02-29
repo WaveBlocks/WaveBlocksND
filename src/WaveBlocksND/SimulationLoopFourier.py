@@ -83,12 +83,12 @@ class SimulationLoopFourier(SimulationLoop):
         slots = self._tm.compute_number_saves()
 
         self.IOManager.add_grid(self.parameters, blockid="global")
-        #self.IOManager.add_fourieroperators(self.parameters)
+        self.IOManager.add_fourieroperators(self.parameters)
         self.IOManager.add_wavefunction(self.parameters, timeslots=slots)
 
         # Write some initial values to disk
         self.IOManager.save_grid(grid.get_nodes(flat=False), blockid="global")
-        #self.IOManager.save_fourieroperators(self.propagator.get_operators())
+        self.IOManager.save_fourieroperators(self.propagator.get_operators())
         self.IOManager.save_wavefunction(IV.get_values(), timestep=0)
 
 
