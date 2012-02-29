@@ -211,7 +211,7 @@ class PotentialFactory:
         # Create instances of MatrixPotential*
         if nc == 1:
             from MatrixPotential1S import MatrixPotential1S
-            potential = MatrixPotential1S(dimension, potential_matrix, free_symbols, constants=unused_free_variables)
+            potential = MatrixPotential1S(potential_matrix, free_symbols)
         elif nc == 2:
             #from MatrixPotential2S import MatrixPotential2S
             pass

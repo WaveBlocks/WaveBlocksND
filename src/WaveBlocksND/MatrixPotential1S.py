@@ -1,11 +1,11 @@
 """The WaveBlocks Project
 
 This file contains code for the representation of potentials :math:`V(x)`
-that containg only a single energy level :math:`\lambda_0`. The number
+that contain only a single energy level :math:`\lambda_0`. The number
 of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -23,42 +23,46 @@ class MatrixPotential1S(MatrixPotential):
     calculations with the potential are supported.
     """
 
-    def __init__(self, dimension, expression, variables, constants=None):
+    def __init__(self, expression, variables):
         """Create a new :py:class:`MatrixPotential1S` instance for a given
         potential matrix :math:`V(x)`.
 
-        :param dimension: The number of space dimensions.
-        :type dimension: A single integer.
         :param expression:The mathematical expression representing the potential.
         :type expressiom: A `Sympy` matrix type.
         :param variables: The variables corresponding to the space dimensions.
         :type variables: A list of `Sympy` symbols.
-        :param unused_vars: A list of variables not occuring in the expression.
-                            This is only relevant if the potential is constant
-                            along one or more axes.
-        :type unused_vars: A list of `Sympy` symbols.
         """
         # This class handles potentials with a single energy level.
         self._number_components = 1
 
+        # The variables that represents position space. The order matters!
+        self._all_variables = variables
+
         # The dimension of position space.
-        self._dimension = dimension
+        self._dimension = len(variables)
 
-        # The variables that represents position space.
-        self._variables = variables
+        # Find active variables and constants
+        self._variables = []
+        self._constants = []
+        self._isconstant = []
 
-        # Does the potential depend on all space variables.
-        if constants == None or len(constants) == 0:
-            self._isconstant = False
-            self._variables_const = []
-        else:
-            self._isconstant = True
-            self._variables_const = constants
+        for entry in expression:
+            # Determine the variables and constants for each component
+            local_vars = [ v for v in entry.atoms(sympy.Symbol) ]
+            local_consts = [ c for c in variables if not c in local_vars ]
+            self._variables.append(local_vars)
+            self._constants.append(local_consts)
 
-        # TODO: Fix this to be consistent for all sorts
-        self._all_variables = list(self._variables) + list(self._variables_const)
-
-        self._isconstant = True
+            # Does the potential depend on all space variables?
+            # True:  V_i,j is constant along all axes
+            # False: V_i,j is not constant
+            # None:  V_i,j is constant along some axes
+            if len(local_consts) == 0:
+                self._isconstant.append(False)
+            elif len(local_vars) == 0:
+                self._isconstant.append(True)
+            else:
+                self._isconstant.append(None)
 
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
@@ -98,17 +102,17 @@ class MatrixPotential1S(MatrixPotential):
         # else:
         #    ...
 
-        # Can we use numpy broadcasting
-        if self._isconstant is False:
+        if self._isconstant[0] is False:
+            # We can use numpy broadcasting
             return tuple([ self._potential_n(*grid.get_axes()) ])
-        else:
+        elif self._isconstant[0] is None:
             nodes = grid.get_nodes()
             values = self._potential_n(*[ nodes[i,:] for i in xrange(self._dimension) ])
-            # Check of the potential is constant on all directions
-            if numpy.array(values).ndim == 0:
-                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
             # Make sure we work with (N_1, ..., N_D) shaped arrays
             return tuple([ values.reshape(grid.get_number_nodes()) ])
+        elif self._isconstant[0] is True:
+            values = self._potential_n(*grid.get_axes())
+            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) ])
 
 
     def calculate_eigenvalues(self):
@@ -169,7 +173,6 @@ class MatrixPotential1S(MatrixPotential):
         # This is the correct solution but we will never use the values
         #if self._eigenvectors_n is None:
         #    self.calculate_eigenvectors()
-
         shape = grid.get_number_nodes() + [1]
         return tuple([ numpy.ones(shape, dtype=numpy.floating) ])
 
@@ -186,7 +189,7 @@ class MatrixPotential1S(MatrixPotential):
         self._exponential_n = sympy.lambdify(self._all_variables, self._exponential_s, "numpy")
 
 
-    def evaluate_exponential_at(self, grid):
+    def evaluate_exponential_at(self, grid, entry=None):
         """Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the exponential at.
@@ -197,17 +200,18 @@ class MatrixPotential1S(MatrixPotential):
         if self._exponential_n is None:
             self.calculate_exponential()
 
-        if self._isconstant is False:
+        if self._isconstant[0] is False:
             return tuple([ self._exponential_n(*grid.get_axes()) ])
-        else:
+        elif self._isconstant[0] is None:
             nodes = grid.get_nodes()
             values = self._exponential_n(*[ nodes[i,:] for i in xrange(self._dimension) ])
-            # Check of the potential is constant on all directions
-            if numpy.array(values).ndim == 0:
-                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
             # Make sure we work with (N_1, ..., N_D) shaped arrays
             return tuple([ values.reshape(grid.get_number_nodes()) ])
+        elif self._isconstant[0] is True:
+            # The potential is constant on all directions
+            values = self._exponential_n(*grid.get_axes())
+            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) ])
 
         # TODO: Recheck output format one propagation works
         #       Output: [ exp(...)[i,j] for i, j ... ]
-        #               each entry of same shape ab grid bbox
+        #               each entry of same shape as grid bbox
