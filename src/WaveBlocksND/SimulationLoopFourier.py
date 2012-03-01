@@ -85,7 +85,7 @@ class SimulationLoopFourier(SimulationLoop):
 
         self.IOManager.save_grid(grid.get_nodes(flat=False), blockid="global")
         self.IOManager.save_fourieroperators(self.propagator.get_operators())
-        self.IOManager.save_wavefunction(IV.get_values(), timestep=0)
+        self.IOManager.save_wavefunction(initialvalues.get_values(), timestep=0)
 
 
     def run_simulation(self):
