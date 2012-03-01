@@ -69,7 +69,7 @@ class SimulationLoopFourier(SimulationLoop):
         initialvalues = I.initialize_for_fourier(grid)
 
         # Transform the initial values to the canonical basis
-        BT = BasisTransformation(potential)
+        BT = BasisTransformationWF(potential)
         BT.set_grid(grid)
         BT.transform_to_canonical(initialvalues)
 
