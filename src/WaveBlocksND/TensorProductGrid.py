@@ -174,16 +174,31 @@ class TensorProductGrid(DenseGrid):
         return [ self._gridaxes[i] for i in axes ]
 
 
-    def get_nodes(self, flat=True):
+    def get_nodes(self, flat=True, split=False):
         r"""Returns all grid nodes of the full tensor product grid.
 
-        :return: An ndarrays of shape :math:`(D, \prod_i^D N_i)`.
+        :param flat: Whether to return the grid with a `hypercubic`
+                     :math:`(D, N_1, ..., N_D)` shape or a `flat`
+                     :math:`(D, \prod_i^D N_i)` shape.
+        :type flat: Boolean, default is `True`.
+        :param split: Whether to return the different components, one for each
+                      dimension inside a single ndarray or a list with ndarrays,
+                      with one item per dimension.
+        :type split: Boolean, default is `False`.
+        :return: Depends of the optional arguments.
         """
-        # TODO: Consider a `split` option returning a list of ndarrays
         if self._gridnodes is None:
             self._compute_grid_full()
 
+        # All operations here only return views to the original grid data
         if flat is True:
-            return self._gridnodes
+            if split is False:
+                return self._gridnodes
+            else:
+                return tuple([ self._gridnodes[i,:] for i in xrange(self._dimension) ])
         else:
-            return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
+            if split is False:
+                return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
+            else:
+                return tuple([ self._gridnodes[i,:].reshape(self.get_number_nodes()) for i in xrange(self._dimension) ])
+

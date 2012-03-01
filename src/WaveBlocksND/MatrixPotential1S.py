@@ -106,8 +106,7 @@ class MatrixPotential1S(MatrixPotential):
             # We can use numpy broadcasting
             return tuple([ self._potential_n(*grid.get_axes()) ])
         elif self._isconstant[0] is None:
-            nodes = grid.get_nodes()
-            values = self._potential_n(*[ nodes[i,:] for i in xrange(self._dimension) ])
+            values = self._potential_n(*grid.get_nodes(split=True))
             # Make sure we work with (N_1, ..., N_D) shaped arrays
             return tuple([ values.reshape(grid.get_number_nodes()) ])
         elif self._isconstant[0] is True:
@@ -132,10 +131,11 @@ class MatrixPotential1S(MatrixPotential):
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvalue at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
-        :param entry: The index :math:`i` of the component :math:`\lambda_i(x)`
-                      we want to evaluate or `None` to evaluate all eigenvalues.
-                      This has no effect here as we only have a single entry :math:`\lambda_0`.
-        :type entry: A singly python  integer.
+        :param entry: The indices :math:`(i,j)` of the component :math:`\Lambda_{i,j}(x)`
+                      we want to evaluate or `None` to evaluate all entries. If :math:`j = i`
+                      then we evaluate the eigenvalue :math:`\lambda_i(x)`. This has no
+                      effect here as we only have a single entry :math:`\lambda_0`.
+        :type entry: A python tuple of two integers.
         :param as_matrix: Dummy parameter which has no effect here.
         :return: A list containing a single numpy ndarray of shape :math:`(N_1, ... ,N_D)`.
         """
@@ -173,7 +173,7 @@ class MatrixPotential1S(MatrixPotential):
         # This is the correct solution but we will never use the values
         #if self._eigenvectors_n is None:
         #    self.calculate_eigenvectors()
-        shape = grid.get_number_nodes() + [1]
+        shape = [1] + list(grid.get_number_nodes())
         return tuple([ numpy.ones(shape, dtype=numpy.floating) ])
 
 
@@ -181,9 +181,9 @@ class MatrixPotential1S(MatrixPotential):
         """Calculate the matrix exponential :math:`\exp(\alpha V)`. In the
         case of this class the matrix is of size :math:`1 \times 1` thus
         the exponential simplifies to the scalar exponential function.
+        Note: This function is idempotent.
 
         :param factor: The prefactor :math:`\alpha` in the exponential.
-        Note: This function is idempotent.
         """
         self._exponential_s = sympy.exp(factor*self._potential_s[0,0])
         self._exponential_n = sympy.lambdify(self._all_variables, self._exponential_s, "numpy")
@@ -191,11 +191,11 @@ class MatrixPotential1S(MatrixPotential):
 
     def evaluate_exponential_at(self, grid, entry=None):
         """Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
+
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the exponential at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
-
-        @return: The numerical approximation of the matrix exponential at the given grid nodes.
+        :return: The numerical approximation of the matrix exponential at the given grid nodes.
         """
         if self._exponential_n is None:
             self.calculate_exponential()
@@ -203,15 +203,10 @@ class MatrixPotential1S(MatrixPotential):
         if self._isconstant[0] is False:
             return tuple([ self._exponential_n(*grid.get_axes()) ])
         elif self._isconstant[0] is None:
-            nodes = grid.get_nodes()
-            values = self._exponential_n(*[ nodes[i,:] for i in xrange(self._dimension) ])
+            values = self._exponential_n(*grid.get_nodes(split=True))
             # Make sure we work with (N_1, ..., N_D) shaped arrays
             return tuple([ values.reshape(grid.get_number_nodes()) ])
         elif self._isconstant[0] is True:
             # The potential is constant on all directions
             values = self._exponential_n(*grid.get_axes())
             return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) ])
-
-        # TODO: Recheck output format one propagation works
-        #       Output: [ exp(...)[i,j] for i, j ... ]
-        #               each entry of same shape as grid bbox
