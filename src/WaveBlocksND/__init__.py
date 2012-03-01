@@ -18,6 +18,7 @@ from MatrixPotential2S import MatrixPotential2S
 from PotentialFactory import PotentialFactory
 
 
+
 from KineticOperator import KineticOperator
 
 
@@ -30,6 +31,9 @@ from IOManager import IOManager
 
 
 # TODO: Recheck these files:
+from BasisTransformation import BasisTransformation
+from BasisTransformationWF import BasisTransformationWF
+
 from ParameterLoader import ParameterLoader
 from ParameterProvider import ParameterProvider
 

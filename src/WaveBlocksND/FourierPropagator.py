@@ -136,5 +136,5 @@ class FourierPropagator(Propagator):
                 values[row] = values[row] + self._VE[row*N+col] * tmp[col]
 
         # Pack values back to WaveFunction object
-        # TODO: Consider squueze(.) of data before repacking
+        # TODO: Consider squeeze(.) of data before repacking
         self._psi.set_values(values)

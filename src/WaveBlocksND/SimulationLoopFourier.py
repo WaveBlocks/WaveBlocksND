@@ -15,6 +15,7 @@ from TensorProductGrid import TensorProductGrid
 from PotentialFactory import PotentialFactory
 from WaveFunction import WaveFunction
 from Initializer import Initializer
+from BasisTransformationWF import BasisTransformationWF
 from FourierPropagator import FourierPropagator
 from SimulationLoop import SimulationLoop
 from IOManager import IOManager
@@ -67,26 +68,21 @@ class SimulationLoopFourier(SimulationLoop):
         I = Initializer(self.parameters)
         initialvalues = I.initialize_for_fourier(grid)
 
-        # Project the initial values to the canonical basis
-        # TODO: Make basis transformation procedure working with WF objects
-        #initialvalues = potential.project_to_canonical(nodes, initialvalues.get_values())
-
-        # Store the initial values in a WaveFunction object
-        #IV = WaveFunction(self.parameters)
-        #IV.set_grid(grid)
-        #IV.set_values(initialvalues)
-        IV = initialvalues
+        # Transform the initial values to the canonical basis
+        BT = BasisTransformation(potential)
+        BT.set_grid(grid)
+        BT.transform_to_canonical(initialvalues)
 
         # Finally create and initialize the propagator instace
-        self.propagator = FourierPropagator(potential, IV, self.parameters)
+        self.propagator = FourierPropagator(potential, initialvalues, self.parameters)
 
+        # Write some initial values to disk
         slots = self._tm.compute_number_saves()
 
         self.IOManager.add_grid(self.parameters, blockid="global")
         self.IOManager.add_fourieroperators(self.parameters)
         self.IOManager.add_wavefunction(self.parameters, timeslots=slots)
 
-        # Write some initial values to disk
         self.IOManager.save_grid(grid.get_nodes(flat=False), blockid="global")
         self.IOManager.save_fourieroperators(self.propagator.get_operators())
         self.IOManager.save_wavefunction(IV.get_values(), timestep=0)
