@@ -208,13 +208,16 @@ class PotentialFactory:
         print("Number of levels:")
         print(nc)
 
+        # Hack for unique symbols
+        free_symbols = list(set(free_symbols))
+
         # Create instances of MatrixPotential*
         if nc == 1:
             from MatrixPotential1S import MatrixPotential1S
             potential = MatrixPotential1S(potential_matrix, free_symbols)
         elif nc == 2:
-            #from MatrixPotential2S import MatrixPotential2S
-            pass
+            from MatrixPotential2S import MatrixPotential2S
+            potential = MatrixPotential2S(potential_matrix, free_symbols)
         else:
             #from MatrixPotentialMS import MatrixPotentialMS
             pass

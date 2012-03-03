@@ -8,7 +8,7 @@ operator :math:`-\frac{1}{2} \Delta` in the Fourier space.
 @license: Modified BSD License
 """
 
-from numpy import roll, exp, pi, sqrt
+from numpy import roll, exp, pi
 from numpy.fft import fftfreq
 
 __all__ = ["KineticOperator"]

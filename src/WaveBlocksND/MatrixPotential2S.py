@@ -14,7 +14,7 @@ import numpy
 
 from MatrixPotential import MatrixPotential
 
-__all__ = ["MatrixPotential1S"]
+__all__ = ["MatrixPotential2S"]
 
 
 class MatrixPotential2S(MatrixPotential):
@@ -253,6 +253,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # Retrieve the grid nodes
         nodes = grid.get_nodes(split=True)
+        nodes = [ numpy.array(n, dtype=numpy.complexfloating) for n in nodes ]
         # Assure real values as atan2 is only defined for real values!
         nodes = map(numpy.real, nodes)
 
@@ -301,6 +302,8 @@ class MatrixPotential2S(MatrixPotential):
             M[1,0] = t * (c * sympy.sinh(D)/D)
             M[1,1] = t * (sympy.cosh(D) - (a-d)/2 * sympy.sinh(D)/D)
 
+        print(M)
+
         self._exponential_s = M
         self._exponential_n = tuple([ sympy.lambdify(self._all_variables, item, "numpy") for item in self._exponential_s ])
 
@@ -316,6 +319,7 @@ class MatrixPotential2S(MatrixPotential):
                  same shape as the grid.
         """
         tmp = [ f(*grid.get_nodes(split=True)) for f in self._exponential_n ]
+        tmp = [ numpy.array(n, dtype=numpy.complexfloating) for n in tmp ]
 
         # TODO: Better fix for globally constant functions
         tmp2 = []

@@ -8,12 +8,8 @@ for the Fourier propagator.
 @license: Modified BSD License
 """
 
-import numpy as np
-import scipy as sp
-
 from TensorProductGrid import TensorProductGrid
 from PotentialFactory import PotentialFactory
-from WaveFunction import WaveFunction
 from Initializer import Initializer
 from BasisTransformationWF import BasisTransformationWF
 from FourierPropagator import FourierPropagator

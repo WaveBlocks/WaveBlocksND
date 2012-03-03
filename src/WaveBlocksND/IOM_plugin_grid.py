@@ -8,7 +8,6 @@ IOM plugin providing functions for handling grid data.
 """
 
 import numpy as np
-import h5py as hdf
 
 
 def add_grid(self, parameters, blockid=0):

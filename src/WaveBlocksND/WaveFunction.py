@@ -11,9 +11,9 @@ are some methods for calculating obervables as for example
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, atleast_1d, product, array, conjugate, sum, abs, squeeze
-from numpy.fft import fft, fftn
-from scipy import sqrt, pi, dot, conj
+from numpy import zeros, complexfloating, atleast_1d, product, array, conjugate, sum
+from numpy.fft import fftn
+from scipy import sqrt
 from scipy import linalg as la
 
 __all__ = ["WaveFunction"]

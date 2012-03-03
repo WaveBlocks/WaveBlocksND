@@ -6,7 +6,7 @@
 @license: Modified BSD License
 """
 
-from numpy import array
+from numpy import array, zeros
 
 from WaveFunction import WaveFunction
 
@@ -45,9 +45,11 @@ class Initializer(object):
         # Reshape values into hypercubic shape
         values = values.reshape(grid.get_number_nodes())
 
+        psi = [ values, zeros(values.shape) ]
+
         # Pack the values in a WaveFunction instance
         WF = WaveFunction(self._parameters)
         WF.set_grid(grid)
-        WF.set_values([ values ])
+        WF.set_values(psi)
 
         return WF

@@ -9,7 +9,7 @@ dense regular tensor product grids.
 """
 
 import operator
-from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, hstack, floating
+from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, hstack, floating, complexfloating
 
 from DenseGrid import DenseGrid
 
@@ -142,7 +142,7 @@ class TensorProductGrid(DenseGrid):
         # grids along all axes and caches the result. Each
         # grid is a D-dimensional ndarray of correct shape.
         S = self._build_slicers()
-        self._gridaxes = ogrid[S]
+        self._gridaxes = [ array(ax, dtype=complexfloating) for ax in ogrid[S] ]
 
 
     def _compute_grid_full(self):
@@ -150,8 +150,8 @@ class TensorProductGrid(DenseGrid):
         # tensor product grid nodes and caches the result.
         # The result is a (D, product(N_i)) shaped ndarray.
         S = self._build_slicers()
-        grid =  mgrid[S]
-        # TODO: Consider storing a (D, N_1, ..., N_D) shaped version
+        # TODO: Code is 4x slower withOUT complex floating
+        grid = array(mgrid[S], dtype=complexfloating)
         self._gridnodes = grid.reshape((self._dimension, self.get_number_nodes(overall=True)))
 
 

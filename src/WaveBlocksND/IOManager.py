@@ -13,7 +13,6 @@ import h5py as hdf
 import numpy as np
 
 import GlobalDefaults
-import ParameterProvider as ParameterProvider
 
 
 class IOManager:

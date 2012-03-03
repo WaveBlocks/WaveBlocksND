@@ -5,6 +5,8 @@
 @license: Modified BSD License
 """
 
+__version__ = 0.1
+
 from Grid import Grid
 from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
