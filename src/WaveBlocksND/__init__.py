@@ -16,6 +16,7 @@ from WaveFunction import WaveFunction
 from MatrixPotential import MatrixPotential
 from MatrixPotential1S import MatrixPotential1S
 from MatrixPotential2S import MatrixPotential2S
+from MatrixPotentialMS import MatrixPotentialMS
 
 from PotentialFactory import PotentialFactory
 

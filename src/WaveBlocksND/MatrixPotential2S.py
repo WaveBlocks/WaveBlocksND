@@ -115,14 +115,14 @@ class MatrixPotential2S(MatrixPotential):
         for item in items:
             if self._isconstant[item] is False:
                 # We can use numpy broadcasting
+                # TODO: This only works with tensor product grids
                 result.append( self._potential_n[item](*grid.get_axes()) )
             elif self._isconstant[item] is None:
-                values = self._potential_n[item](*grid.get_nodes(split=True))
                 # Make sure we work with (N_1, ..., N_D) shaped arrays
-                result.append( values.reshape(grid.get_number_nodes()) )
+                result.append( self._potential_n[item](*grid.get_nodes(split=True, flat=False)) )
             elif self._isconstant[item] is True:
                 values = self._potential_n[item](*grid.get_axes())
-                result.append( values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) )
+                result.append( values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) )
 
         # TODO: Consider unpacking single ndarray iff entry != None
         return result
@@ -133,8 +133,6 @@ class MatrixPotential2S(MatrixPotential):
         We can do this by symbolic calculations. The multiplicities are taken into account.
         Note: This function is idempotent and the eigenvalues are memoized for later reuse.
         """
-        # TODO: Consider using numerical techniques!
-
         # Symbolic formula for the eigenvalues of a general 2x2 matrix
         T = self._potential_s.trace()
         D = self._potential_s.det()
@@ -182,6 +180,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # Sort the eigenvalues pointwise. We can do this because we
         # assume that the different eigenvalues never cross.
+        # TODO: Sort will fail iff energy level cross!
         tmp = numpy.sort(numpy.vstack(tmp), axis=0)
         tmp = [ tmp[i,:] for i in reversed(xrange(self._number_components)) ]
 
@@ -194,7 +193,7 @@ class MatrixPotential2S(MatrixPotential):
             if row == col:
                 result = tmp[row]
             else:
-                result = numpy.zeros(grid.get_number_nodes(), dtype=numpy.floating)
+                result = numpy.zeros(grid.get_number_nodes(), dtype=numpy.complexfloating)
         elif as_matrix is True:
             result = []
             for row in xrange(self._number_components):
@@ -202,7 +201,7 @@ class MatrixPotential2S(MatrixPotential):
                     if row == col:
                         result.append(tmp[row])
                     else:
-                        result.append( numpy.zeros(grid.get_number_nodes(), dtype=numpy.floating) )
+                        result.append( numpy.zeros(grid.get_number_nodes(), dtype=numpy.complexfloating) )
         else:
             result = tmp
 
@@ -214,8 +213,6 @@ class MatrixPotential2S(MatrixPotential):
         We can do this by symbolic calculations.
         Note: This function is idempotent and the eigenvectors are memoized for later reuse.
         """
-        # TODO: Consider using pure numerical techniques
-
         # Assumption: The matrix is symmetric
         # TODO: Consider generalization for arbitrary 2x2 matrices?
         V1 = self._potential_s[0,0]
@@ -261,7 +258,7 @@ class MatrixPotential2S(MatrixPotential):
         result = []
 
         for vector in self._eigenvectors_n:
-            tmp = numpy.zeros((self._number_components, grid.get_number_nodes(overall=True)), dtype=numpy.floating)
+            tmp = numpy.zeros((self._number_components, grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating)
             for index in xrange(self._number_components):
 
                 tmp[index,:] = vector[index](*nodes)
@@ -289,6 +286,12 @@ class MatrixPotential2S(MatrixPotential):
 
         M = sympy.Matrix([[0,0],[0,0]])
 
+        try:
+            D = sympy.simplify(D)
+            t = sympy.simplify(t)
+        except:
+            pass
+
         if sympy.Eq(D,0):
             # special case
             M[0,0] = t * (1 + (a-d)/2)
@@ -301,8 +304,6 @@ class MatrixPotential2S(MatrixPotential):
             M[0,1] = t * (b * sympy.sinh(D)/D)
             M[1,0] = t * (c * sympy.sinh(D)/D)
             M[1,1] = t * (sympy.cosh(D) - (a-d)/2 * sympy.sinh(D)/D)
-
-        print(M)
 
         self._exponential_s = M
         self._exponential_n = tuple([ sympy.lambdify(self._all_variables, item, "numpy") for item in self._exponential_s ])

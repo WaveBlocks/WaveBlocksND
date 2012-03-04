@@ -80,13 +80,11 @@ if __name__ == "__main__":
 
     parameters = iom.load_parameters()
 
-    if not parameters["dimension"] == 2:
+    if parameters["dimension"] == 2:
+        Potential = PotentialFactory().create_potential(parameters)
+        Grid = TensorProductGrid(parameters)
+        plot_potential(Grid, Potential, interactive=True)
+    else:
         print("Not a potential in two space dimensions, silent return!")
-        return
-
-    Potential = PotentialFactory().create_potential(parameters)
-    Grid = TensorProductGrid(parameters)
-
-    plot_potential(Grid, Potential, interactive=True)
 
     iom.finalize()

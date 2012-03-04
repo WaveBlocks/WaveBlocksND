@@ -10,21 +10,20 @@ The number of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 @license: Modified BSD License
 """
 
-from functools import partial
 import sympy
 import numpy
 from scipy import linalg
-import numdifftools as ndt
 
 from MatrixPotential import MatrixPotential
+
+__all__ = ["MatrixPotentialMS"]
 
 
 class MatrixPotentialMS(MatrixPotential):
     """This class represents a matrix potential :math:`V(x)`. The potential is
-    given as an analytic :math:`N \times N` matrix expression. Some symbolic
-    calculations with the potential are supported.
-    All methods use pure numerical techniques because symbolical calculations
-    are unfeasible for 3 or more energy levels.
+    given as an analytic :math:`N \times N` matrix expression. All methods use
+    pure numerical techniques because symbolical calculations are unfeasible
+    for 3 or more energy levels.
     """
 
     def __init__(self, expression, variables):
@@ -110,16 +109,14 @@ class MatrixPotentialMS(MatrixPotential):
                 # TODO: This only works with tensor product grids
                 result.append( self._potential_n[item](*grid.get_axes()) )
             elif self._isconstant[item] is None:
-                # TODO: Recheck evaluation/* routines for semiconstant potentials!
-                values = self._potential_n[item](*grid.get_nodes(split=True))
                 # Make sure we work with (N_1, ..., N_D) shaped arrays
-                result.append( values.reshape(grid.get_number_nodes()) )
+                result.append( self._potential_n[item](*grid.get_nodes(split=True, flat=False)) )
             elif self._isconstant[item] is True:
                 values = self._potential_n[item](*grid.get_axes())
                 result.append( values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) )
 
         # TODO: Consider unpacking single ndarray iff entry != None
-        return result
+        return tuple(result)
 
 
     def calculate_eigenvalues(self):
@@ -152,19 +149,20 @@ class MatrixPotentialMS(MatrixPotential):
         tmppot = numpy.ndarray((n, N, N), dtype=numpy.complexfloating)
         tmpew = numpy.ndarray((n, N), dtype=numpy.complexfloating)
 
-        # evaluate potential
+        # Evaluate potential
         values = self.evaluate_at(grid)
         values = [ value.flatten() for value in values ]
 
-        # fill in values
+        # Fill in values
         for row in xrange(N):
             for col in xrange(N):
                 tmppot[:, row, col] = values[N*row + col]
 
-        # calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)
+        # Calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)
         for i in xrange(n):
             ew = linalg.eigvalsh(tmppot[i,:,:])
             # Sorting the eigenvalues biggest first.
+            # TODO: Sort will fail iff energy level cross!
             ew.sort()
             tmpew[i,:] = ew[::-1]
 
@@ -286,5 +284,7 @@ class MatrixPotentialMS(MatrixPotential):
         for i in xrange(n):
             tmp[i,:,:] = linalg.expm(tmp[i,:,:], 10)
 
-        result = tuple([ tmp[:,row,col] for row in xrange(N) for col in xrange(N) ])
-        return result
+        # Split the data into different components
+        shape = grid.get_number_nodes()
+        result = [ tmp[:,row,col].reshape(shape) for row in xrange(N) for col in xrange(N) ]
+        return tuple(result)

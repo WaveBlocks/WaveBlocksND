@@ -111,7 +111,7 @@ class MatrixPotential1S(MatrixPotential):
             return tuple([ values.reshape(grid.get_number_nodes()) ])
         elif self._isconstant[0] is True:
             values = self._potential_n(*grid.get_axes())
-            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) ])
+            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) ])
 
 
     def calculate_eigenvalues(self):
@@ -174,7 +174,7 @@ class MatrixPotential1S(MatrixPotential):
         #if self._eigenvectors_n is None:
         #    self.calculate_eigenvectors()
         shape = [1] + list(grid.get_number_nodes())
-        return tuple([ numpy.ones(shape, dtype=numpy.floating) ])
+        return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
 
 
     def calculate_exponential(self, factor=1):
@@ -209,4 +209,4 @@ class MatrixPotential1S(MatrixPotential):
         elif self._isconstant[0] is True:
             # The potential is constant on all directions
             values = self._exponential_n(*grid.get_axes())
-            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating) ])
+            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) ])
