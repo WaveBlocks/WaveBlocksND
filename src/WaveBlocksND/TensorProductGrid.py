@@ -27,30 +27,29 @@ class TensorProductGrid(DenseGrid):
     tensor product of all the grid nodes along all the axes.
     """
 
-    def __init__(self, parameters):
+    def __init__(self, limits, number_nodes):
         r"""Construct a tnesor product grid instace.
 
-        :param parameters: The simulation parameters. There must be
-                           values for the keys `dimension`, `grid_limits`
-                           and `grid_number_nodes`.
+        :param limits: The grid domain limits along each axis.
+        :type limits: A list of two-element tuples.
+        :param number_nodes: The number of grid nodes along each axis.
+        :type number_nodes: A list of positive integers.
         :return: A :py:class:`TensorProductGrid` instance.
         """
-
-        # TODO: Improve for one|multiple values
-        #       This comes with the Blocks factory?
+        assert len(limits) == len(number_nodes)
 
         # Regular grid spacing
         self._is_regular = True
 
         # The dimension of the grid
-        self._dimension = parameters["dimension"]
+        self._dimension = len(limits)
 
         # The number of grid nodes along each axis
-        self._number_nodes = parameters["grid_number_nodes"]
+        self._number_nodes = number_nodes
         # format: [N_1, ..., N_D]
 
         # The limits of the bounding box of the grid
-        self._limits = [ array(limit) for limit in parameters["grid_limits"] ]
+        self._limits = [ array(limit) for limit in limits ]
         # format: [(min_0,max_0), ..., (min_D,max_D)]
 
         # The extensions (edge length) of the bounding box
@@ -58,7 +57,7 @@ class TensorProductGrid(DenseGrid):
 
         # Compute the grid spacings along each axis
         self._meshwidths = self._extensions / squeeze(array(self._number_nodes, dtype=floating))
-        # format: [h_1, ...,, h_D]
+        # format: [h_1, ..., h_D]
 
         # Cached values
         self._gridaxes = None

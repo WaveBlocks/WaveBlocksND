@@ -12,7 +12,7 @@ from numpy import angle, conj, real, imag
 from mayavi import mlab
 
 from WaveBlocksND import PotentialFactory
-from WaveBlocksND import TensorProductGrid
+from WaveBlocksND import GridFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 from WaveBlocksND import IOManager
@@ -27,7 +27,7 @@ def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=Fal
         print("No wavefunction of two space dimensions, silent return!")
         return
 
-    G = TensorProductGrid(parameters)
+    G = GridFactory().create_grid(parameters)
     V = PotentialFactory().create_potential(parameters)
 
     WF = WaveFunction(parameters)

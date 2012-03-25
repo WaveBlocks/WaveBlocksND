@@ -8,7 +8,7 @@ for the Fourier propagator.
 @license: Modified BSD License
 """
 
-from TensorProductGrid import TensorProductGrid
+from GridFactory import GridFactory
 from PotentialFactory import PotentialFactory
 from Initializer import Initializer
 from BasisTransformationWF import BasisTransformationWF
@@ -58,7 +58,7 @@ class SimulationLoopFourier(SimulationLoop):
         potential = PotentialFactory().create_potential(self.parameters)
 
         # Compute the position space grid points
-        grid = TensorProductGrid(self.parameters)
+        grid = GridFactory().create_grid(self.parameters)
 
         # Construct initial values
         I = Initializer(self.parameters)

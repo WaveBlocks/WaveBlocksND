@@ -12,12 +12,12 @@ from numpy import angle, conj, real, imag
 from matplotlib.pyplot import *
 
 from WaveBlocksND import PotentialFactory
-from WaveBlocksND import TensorProductGrid
+from WaveBlocksND import GridFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 from WaveBlocksND import IOManager
-from WaveBlocksND.Plot import plotcm
 
+from WaveBlocksND.Plot import plotcm
 
 
 def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, imgsize=(12,9)):
@@ -28,7 +28,7 @@ def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=Fal
         print("No wavefunction of two space dimensions, silent return!")
         return
 
-    G = TensorProductGrid(parameters)
+    G = GridFactory().create_grid(parameters)
     V = PotentialFactory().create_potential(parameters)
 
     WF = WaveFunction(parameters)

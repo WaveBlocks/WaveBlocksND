@@ -95,6 +95,7 @@ class WaveFunction(object):
         :raise ValueError: If the list of `values` has the wrong length.
         """
         if components is None:
+            assert len(values) == self._number_components
             # Set all components
             self._values = values[:]
         else:

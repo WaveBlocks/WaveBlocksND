@@ -10,7 +10,7 @@ Compute the kinetic and potential energies of a wavefunction.
 from numpy import zeros
 
 from WaveBlocksND import PotentialFactory
-from WaveBlocksND import TensorProductGrid
+from WaveBlocksND import GridFactory
 from WaveBlocksND import KineticOperator
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
@@ -34,7 +34,7 @@ def compute_energy(iom, blockid=0):
     # elif  iom.has_grid(blockid="global"):
     #     grid = iom.load_grid(blockid="global")
     # else:
-    grid = TensorProductGrid(parameters)
+    grid = GridFactory().create_grid(parameters)
 
     # The potential used
     Potential = PotentialFactory().create_potential(parameters)
