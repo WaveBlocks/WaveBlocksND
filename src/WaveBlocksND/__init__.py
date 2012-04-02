@@ -33,6 +33,11 @@ from FourierPropagator import FourierPropagator
 from IOManager import IOManager
 
 
+from BasisShape import BasisShape
+from HyperCubicShape import HyperCubicShape
+
+#from Utils import Utils
+
 
 # TODO: Recheck these files:
 from BasisTransformation import BasisTransformation
