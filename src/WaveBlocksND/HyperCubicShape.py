@@ -144,6 +144,7 @@ class HyperCubicShape(BasisShape):
     def _get_index_iterator_chain(self, direction=0):
         r"""
         """
+        # TODO: Fix iterator not to return k = (0,...,0) for limits = [1,...,1]
         def index_iterator_chain(d):
             # Number of functions in each dimension
             bounds = self._limits[:]
@@ -193,10 +194,10 @@ class HyperCubicShape(BasisShape):
             if direction < self._dimension:
                 return self._get_index_iterator_chain(direction=direction)
             else:
-                raise ArgumentError("Can not build iterator for this direction.")
+                raise ValueError("Can not build iterator for this direction.")
         # TODO: Consider boundary node only iterator
         else:
-            raise ArgumentError("Unknown iterator mode: "+str(mode)+".")
+            raise ValueError("Unknown iterator mode: "+str(mode)+".")
 
 
     def get_limits(self):
@@ -206,7 +207,7 @@ class HyperCubicShape(BasisShape):
         return tuple(self._limits)
 
 
-    def get_neighbours(self, k, direction=None):
+    def get_neighbours(self, k, selection=None, direction=None):
         r"""
         Returns a list of all multi-indices that are neighbours of a given
         multi-index :math:`k`. A direct neighbours is defines as
@@ -214,6 +215,12 @@ class HyperCubicShape(BasisShape):
 
         :param k: The multi-index of which we want to get the neighbours.
         :type k: tuple
+        :param selection:
+        :type selection: string with fixed values ``forward``, ``backward`` or ``all``.
+                         The values ``all`` is equivalent to the value ``None`` (default).
+        :param direction: The direction :math:`0 \leq d < D` in which we want to find
+                          the neighbours :math:`k \pm e_d`.
+        :type direction: int
         :return: A list containing the pairs :math:`(d, k^\prime)`.
         """
         # First build a list of potential neighbours
@@ -236,10 +243,13 @@ class HyperCubicShape(BasisShape):
             nfw = tuple(nbfw[:,d])
             nbw = tuple(nbbw[:,d])
 
-            if nbw in self:
-                nbh.append((d, nbw))
+            # TODO: Try to simplify these nested if blocks
+            if selection in ("backward", "all", None):
+                if nbw in self:
+                    nbh.append((d, nbw))
 
-            if nfw in self:
-                nbh.append((d, nfw))
+            if selection in ("forward", "all", None):
+                if nfw in self:
+                    nbh.append((d, nfw))
 
         return nbh

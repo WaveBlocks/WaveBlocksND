@@ -12,6 +12,8 @@ class BasisShape(object):
     r"""This class defines the abstract interface to basis shapes.
     A basis shape is essentially all information and operations
     related to the set :math:`\mathcal{K}` of multi-indices :math:`k`.
+
+    Basis shapes must be immutable objects.
     """
 
     def __init__(self):
@@ -81,7 +83,7 @@ class BasisShape(object):
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
 
-    def get_neighbours(self, k):
+    def get_neighbours(self, k, direction=None):
         r"""
         Returns a list of all multi-indices that are neighbours of a given
         multi-index :math:`k`. A direct neighbours is defines as
@@ -89,6 +91,9 @@ class BasisShape(object):
 
         :param k: The multi-index of which we want to get the neighbours.
         :type k: tuple
+        :param direction: The direction :math:`0 \leq d < D` in which we want to find
+                          the neighbours :math:`k \pm e_d`.
+        :type direction: int
         :return: A list containing the pairs :math:`(d, k^\prime)`.
         :raise NotImplementedError: Abstract interface.
         """
