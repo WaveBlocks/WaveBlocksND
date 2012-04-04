@@ -39,6 +39,7 @@ from HyperCubicShape import HyperCubicShape
 from Wavepacket import Wavepacket
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HagedornWavepacket import HagedornWavepacket
+from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 
 
 # TODO: Recheck these files:

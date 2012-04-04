@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-This file contains the class which represents a homogeneous Hagedorn wavepacket.
+This file contains the class which represents an inhomogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
@@ -8,7 +8,7 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 """
 
 from functools import partial
-from numpy import zeros, complexfloating, array, sum, transpose, arange, vstack, eye
+from numpy import zeros, complexfloating, array, sum, transpose, arange, eye, vstack
 from scipy import pi, sqrt, exp, conj, dot
 from scipy.linalg import norm, inv, det
 
@@ -17,8 +17,8 @@ from HyperCubicShape import HyperCubicShape
 import GlobalDefaults as GD
 
 
-class HagedornWavepacket(HagedornWavepacketBase):
-    r"""This class represents homogeneous vector valued Hagedorn wavepackets
+class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
+    r"""This class represents inhomogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
 
@@ -32,6 +32,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         self._eps = parameters["eps"]
 
+        # The parameter sets Pi_i
+        self._Pis = []
         # The basis shapes K_i
         self._basis_shapes = []
         # The coefficients c^i
@@ -45,24 +47,23 @@ class HagedornWavepacket(HagedornWavepacketBase):
             # A Gaussian
             self._coefficients = [ zeros((bs.get_basissize(),1)) ]
 
+            # Default parameters of harmonic oscillator eigenstates
+            q = zeros((self._dimension, 1))
+            p = zeros((self._dimension, 1))
+            Q = eye(self._dimension)
+            P = 1.0j * eye(self._dimension)
+            S = 0.0
+
+            self._Pis.append([q, p, Q, P, S])
+
         # Cache basis sizes
         self._basis_sizes = [ bs.get_basissize() for bs in self._basis_shapes ]
-
-        # Default parameters of harmonic oscillator eigenstates
-        q = zeros((self._dimension, 1))
-        p = zeros((self._dimension, 1))
-        Q = eye(self._dimension)
-        P = 1.0j * eye(self._dimension)
-        S = 0.0
-
-        # The parameter set Pi
-        self._Pis = [q, p, Q, P, S]
 
 
     def __str__(self):
         r""":return: A string describing the Hagedorn wavepacket :math:`\Psi`.
         """
-        s = ("Homogeneous Hagedorn wavepacket with "+str(self._number_components)
+        s = ("Inhomogeneous Hagedorn wavepacket with "+str(self._number_components)
              +" component(s) in "+str(self._dimension)+" space dimension(s)\n")
         return s
 
@@ -74,7 +75,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
                   "eps":         self._eps}
 
         # Create a new Packet
-        other = HagedornWavepacket(params)
+        other = HagedornWavepacketInhomogeneous(params)
         # If we wish to keep the packet ID
         if keepid is True:
             other.set_id(self.get_id())
@@ -88,26 +89,34 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
 
     def get_parameters(self, component=None, aslist=False):
-        r"""Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi`.
+        r"""Get the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
+        of the wavepacket :math:`\Psi`.
 
-        :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
-        :param aslist: Return a list of :math:`N` parameter tuples. This is for API compatibility
-                       with inhomogeneous packets.
-        :return: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
+        :param component: The index :math:`i` of the component :math:`\Phi_i` whose
+                          parameters :math:`\Pi_i` we want to get.
+        :param aslist: Dummy parameter for API compatibility with the homogeneous packets.
+        :return: A list with all parameter sets :math:`\Pi_i` or a single parameter set.
+                 The parameters :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` are always in this order.
         """
-        if aslist is True:
-            return self._number_components * self._Pis
-        return self._Pis[:]
+        if component is None:
+            return self._Pis[:]
+        else:
+            return self._Pis[component]
 
 
     def set_parameters(self, Pi, component=None):
-        r"""Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi`.
+        r"""Set the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
+        of the wavepacket :math:`\Psi`.
 
-        :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
-        :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
+        :param Pi: The parameter sets :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` with its values in this order.
+        :type Pi: A single tuple or a list of tuples
+        :param component: The index :math:`i` of the component :math:`\Phi_i` whose parameters :math:`\Pi_i` we want to update.
         """
-        # TODO: Use atleast_2d(...) for arrays
-        self._Pis = Pi[:]
+        if component is None:
+            for index, item in enumerate(Pi):
+                self._Pis[index] = item[:]
+        else:
+            self._Pis[component] = Pi[:]
 
 
     def evaluate_basis_at(self, grid, component, prefactor=False):
@@ -116,7 +125,6 @@ class HagedornWavepacket(HagedornWavepacketBase):
         :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:method:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
-                          We need this to choose the correct basis shape.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
         :type prefactor: bool, default is ``False``.
         :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathcal{K}_i|, |\Gamma|)` where
@@ -132,7 +140,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         phi = zeros((bs, nn), dtype=complexfloating)
 
         # Precompute some constants
-        q, p, Q, P, S = self._Pis
+        q, p, Q, P, S = self._Pis[component]
 
         Qinv = inv(Q)
         Qbar = conj(Q)
@@ -143,7 +151,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         # Compute the ground state phi_0 via direct evaluation
         mu0 = bas[tuple(D*[0])]
-        phi[mu0,:] = self._evaluate_phi0(self._Pis, nodes, prefactor=False)
+        phi[mu0,:] = self._evaluate_phi0(self._Pis[component], nodes, prefactor=False)
 
         # Compute all higher order states phi_k via recursion
         for d in xrange(D):
@@ -196,25 +204,20 @@ class HagedornWavepacket(HagedornWavepacketBase):
         :type prefactor: bool, default is ``False``.
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
         """
-        # The global phase part
-        phase = exp(1.0j * self._Pis[4] / self._eps**2)
-
         if component is not None:
-            basis = self.evaluate_basis_at(grid, component, prefactor=prefactor)
+            # Avoid the expensive evaluation of unused other bases
+            q, p, Q, P, S = self._Pis[component]
+            phase = exp(1.0j * S / self._eps**2)
+            basis = self.evaluate_basis_at(grid, component=component, prefactor=prefactor)
             values = phase * sum(self._coefficients[component] * basis, axis=0)
 
         else:
             values = []
 
-            for component in xrange(self._number_components):
-                # Note: This is very inefficient! We may evaluate the same basis functions multiple
-                #       times. But as long as we don't know that the basis shapes are true subsets
-                #       of the largest one, we can not evaluate just all functions in this
-                #       maximal set.
-
-                # TODO: Find more efficient way to do this
-
-                basis = self.evaluate_basis_at(grid, component, prefactor=prefactor)
-                values.append( phase * sum(self._coefficients[component] * basis, axis=0) )
+            for index in xrange(self._number_components):
+                q, p, Q, P, S = self._Pis[index]
+                phase = exp(1.0j * S / self._eps**2)
+                basis = self.evaluate_basis_at(grid, component=index, prefactor=prefactor)
+                values.append( phase * sum(self._coefficients[index] * basis, axis=0) )
 
         return values
