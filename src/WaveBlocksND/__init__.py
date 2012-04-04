@@ -36,7 +36,9 @@ from IOManager import IOManager
 from BasisShape import BasisShape
 from HyperCubicShape import HyperCubicShape
 
-#from Utils import Utils
+from Wavepacket import Wavepacket
+from HagedornWavepacketBase import HagedornWavepacketBase
+from HagedornWavepacket import HagedornWavepacket
 
 
 # TODO: Recheck these files:
