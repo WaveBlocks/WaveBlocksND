@@ -7,13 +7,16 @@
 
 __version__ = 0.1
 
+# Grids
 from Grid import Grid
 from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
 from GridFactory import GridFactory
 
+# Wavefunctions
 from WaveFunction import WaveFunction
 
+# Potentials
 from MatrixPotential import MatrixPotential
 from MatrixPotential1S import MatrixPotential1S
 from MatrixPotential2S import MatrixPotential2S
@@ -32,14 +35,21 @@ from FourierPropagator import FourierPropagator
 
 from IOManager import IOManager
 
-
+# Basis shapes
 from BasisShape import BasisShape
 from HyperCubicShape import HyperCubicShape
 
+# Wavepackets
 from Wavepacket import Wavepacket
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HagedornWavepacket import HagedornWavepacket
 from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
+
+# Quadrature rules
+from QuadratureRule import QuadratureRule
+from GaussHermiteQR import GaussHermiteQR
+from TensorProductQR import TensorProductQR
+
 
 
 # TODO: Recheck these files:
