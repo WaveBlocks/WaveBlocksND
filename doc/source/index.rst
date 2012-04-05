@@ -28,6 +28,12 @@ Basic numerics
    waveblocks_classes/DenseGrid
    waveblocks_classes/TensorProductGrid
 
+   waveblocks_classes/QuadratureRule
+   waveblocks_classes/GaussHermiteQR
+   waveblocks_classes/TensorProductQR
+
+   waveblocks_classes/Utils
+
 Basic quantum mechanics
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -40,6 +46,20 @@ Basic quantum mechanics
    waveblocks_classes/MatrixPotential1S
 
    waveblocks_classes/PotentialFactory
+
+Wavepackets
+^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 1
+
+   waveblocks_classes/BasisShape
+   waveblocks_classes/HyperCubicShape
+
+   waveblocks_classes/Wavepacket
+   waveblocks_classes/HagedornWavepacketBase
+   waveblocks_classes/HagedornWavepacket
+   waveblocks_classes/HagedornWavepacketInhomogeneous
 
 Time propagation
 ^^^^^^^^^^^^^^^^
@@ -58,6 +78,18 @@ Simulation result storage I/O
    waveblocks_classes/IOManager
 
    waveblocks_classes/IOM_plugin_parameters
+
+Other classes
+^^^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 1
+
+   waveblocks_classes/GlobalDefaults
+   waveblocks_classes/ParameterLoader
+   waveblocks_classes/ParameterProvider
+   waveblocks_classes/Utils
+
 
 Etc
 ===
