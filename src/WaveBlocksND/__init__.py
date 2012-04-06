@@ -50,6 +50,9 @@ from QuadratureRule import QuadratureRule
 from GaussHermiteQR import GaussHermiteQR
 from TensorProductQR import TensorProductQR
 
+# Inner products
+from Quadrature import Quadrature
+from HomogeneousQuadrature import HomogeneousQuadrature
 
 
 # TODO: Recheck these files:
