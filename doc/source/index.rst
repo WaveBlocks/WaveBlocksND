@@ -61,6 +61,9 @@ Wavepackets
    waveblocks_classes/HagedornWavepacket
    waveblocks_classes/HagedornWavepacketInhomogeneous
 
+   waveblocks_classes/Quadrature
+   waveblocks_classes/HomogeneousQuadrature
+
 Time propagation
 ^^^^^^^^^^^^^^^^
 
