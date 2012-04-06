@@ -8,12 +8,13 @@ This file contains the class which represents an inhomogeneous Hagedorn wavepack
 """
 
 from functools import partial
-from numpy import zeros, complexfloating, array, sum, transpose, arange, eye, vstack
+from numpy import zeros, complexfloating, array, sum, transpose, arange, eye, vstack, prod
 from scipy import pi, sqrt, exp, conj, dot
 from scipy.linalg import norm, inv, det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
+from Grid import Grid
 import GlobalDefaults as GD
 
 
@@ -134,7 +135,19 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
 
         bas = self._basis_shapes[component]
         bs = self._basis_sizes[component]
-        nn = grid.get_number_nodes(overall=True)
+
+        # TODO: Consider putting this into the Grid class as 2nd level API
+        # Allow ndarrays for the 'grid' argument
+        if isinstance(grid, Grid):
+            # The overall number of nodes
+            nn = grid.get_number_nodes(overall=True)
+            # The grid nodes
+            nodes = grid.get_nodes()
+        else:
+            # The overall number of nodes
+            nn = prod(grid.shape[1:])
+            # The grid nodes
+            nodes = grid
 
         # Allocate the storage array
         phi = zeros((bs, nn), dtype=complexfloating)
@@ -145,9 +158,6 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         Qinv = inv(Q)
         Qbar = conj(Q)
         QQ = dot(Qinv, Qbar)
-
-        # The grid nodes
-        nodes = grid.get_nodes()
 
         # Compute the ground state phi_0 via direct evaluation
         mu0 = bas[tuple(D*[0])]

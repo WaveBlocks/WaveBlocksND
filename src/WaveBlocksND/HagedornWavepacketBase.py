@@ -217,6 +217,14 @@ class HagedornWavepacketBase(Wavepacket):
         self._coefficients = vsplit(vector, partition)
 
 
+    def get_eps(self):
+        r"""Retrieve the semi-classical scaling parameter :math:`\varepsilon` of the wavepacket.
+
+        :return: The value of :math:`\varepsilon`.
+        """
+        return self._eps
+
+
     # We can evaluate the ground state basis function phi_0 on a set of nodes
     # the same way for homogeneous and inhomogeneous Hagedorn wavepackets.
 
