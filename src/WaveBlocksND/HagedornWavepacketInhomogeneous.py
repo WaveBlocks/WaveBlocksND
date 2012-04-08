@@ -46,7 +46,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             self._basis_shapes.append(bs)
 
             # A Gaussian
-            self._coefficients = [ zeros((bs.get_basissize(),1)) ]
+            self._coefficients = [ zeros((bs.get_basis_size(),1)) ]
 
             # Default parameters of harmonic oscillator eigenstates
             q = zeros((self._dimension, 1))
@@ -58,7 +58,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             self._Pis.append([q, p, Q, P, S])
 
         # Cache basis sizes
-        self._basis_sizes = [ bs.get_basissize() for bs in self._basis_shapes ]
+        self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
 
 
     def __str__(self):

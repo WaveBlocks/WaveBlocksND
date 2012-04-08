@@ -81,7 +81,7 @@ class HomogeneousQuadrature(Quadrature):
         weights = self._QR.get_weights()
 
         N = packet.get_number_components()
-        K = [ bs.get_basissize() for bs in packet.get_basis_shape() ]
+        K = [ bs.get_basis_size() for bs in packet.get_basis_shape() ]
 
         coeffs = packet.get_coefficients()
 
@@ -156,7 +156,7 @@ class HomogeneousQuadrature(Quadrature):
         weights = self._QR.get_weights()
 
         N = packet.get_number_components()
-        K = [ bs.get_basissize() for bs in packet.get_basis_shape() ]
+        K = [ bs.get_basis_size() for bs in packet.get_basis_shape() ]
 
         bases = [ packet.evaluate_basis_at(nodes, component=n) for n in xrange(N) ]
 

@@ -58,7 +58,7 @@ class BasisShape(object):
         return self._dimension
 
 
-    def get_basissize(self, extended=False):
+    def get_basis_size(self, extended=False):
         r"""
         Returns the size :math:`|\mathcal{K}|` of the basis. The size is the
         number of distinct multi-indices :math:`k` that belong to the basis

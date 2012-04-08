@@ -30,8 +30,8 @@ class HagedornWavepacketBase(Wavepacket):
     def _resize_coefficient_storage(self, component, bs_old, bs_new):
         r"""
         """
-        bso = bs_old.get_basissize()
-        bsn = bs_new.get_basissize()
+        bso = bs_old.get_basis_size()
+        bsn = bs_new.get_basis_size()
 
         # Find the intersection of K and K'
         # Optimization: iterate over smaller set
@@ -96,7 +96,7 @@ class HagedornWavepacketBase(Wavepacket):
                 self._basis_shapes[index] = bsnew
 
         # And update the caches information
-        self._basis_sizes = [ bs.get_basissize() for bs in self._basis_shapes ]
+        self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
 
 
     # We can handle coefficient set manipulation here as the logic is
