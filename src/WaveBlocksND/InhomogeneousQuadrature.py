@@ -99,6 +99,7 @@ class InhomogeneousQuadrature(Quadrature):
                  a list of :math:`N \cdot N^\prime` scalar elements depending on the value of ``summed``.
         """
         # Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
+        D = packet.get_dimension()
         eps = packet.get_eps()
 
         weights = self._QR.get_weights()
@@ -147,7 +148,8 @@ class InhomogeneousQuadrature(Quadrature):
                 # Operator should support the component notation for efficiency
                 values = operator(nodes, component=(row,col))
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
-                factor = squeeze(eps * values * weights * det(Pimix[1]))
+                # TODO: Recheck that eps**D is correct
+                factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Summing up matrices over all quadrature nodes
                 for r in xrange(self._QR.get_number_nodes()):
@@ -178,6 +180,8 @@ class InhomogeneousQuadrature(Quadrature):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :return: A matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^{N^\prime} |\mathcal{K}^\prime_j|`.
         """
+        # Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
+        D = packet.get_dimension()
         eps = packet.get_eps()
 
         weights = self._QR.get_weights()
@@ -215,7 +219,8 @@ class InhomogeneousQuadrature(Quadrature):
                 # TODO: operator should be only f(nodes) but we can not fix this currently
                 values = operator(Pimix[0], nodes, component=(row,col))
 
-                factor = squeeze(eps * values * weights * det(Pimix[1]))
+                # TODO: Recheck that eps**D is correct
+                factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Sum up matrices over all quadrature nodes
                 for r in xrange(self._QR.get_number_nodes()):

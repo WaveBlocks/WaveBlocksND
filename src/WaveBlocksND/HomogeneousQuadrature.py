@@ -75,6 +75,7 @@ class HomogeneousQuadrature(Quadrature):
         :return: The value of the braket :math:`\langle\Psi|f|\Psi\rangle`. This is either a scalar value or
                  a list of :math:`N^2` scalar elements depending on the value of ``summed``.
         """
+        D = packet.get_dimension()
         eps = packet.get_eps()
 
         nodes = self.transform_nodes(packet.get_parameters(), eps)
@@ -100,6 +101,7 @@ class HomogeneousQuadrature(Quadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
+
             operator = lambda nodes, component=None: ones(nodes.shape[1]) if component[0] == component[1] else zeros(nodes.shape[1])
             values = [ operator(nodes, component=(r,c)) for r in xrange(N) for c in xrange(N) ]
         else:
@@ -123,7 +125,8 @@ class HomogeneousQuadrature(Quadrature):
             for col in cols:
                 M = zeros((K[row],K[col]), dtype=complexfloating)
 
-                factor = squeeze(eps * weights * values[row*N + col])
+                # TODO: Recheck that eps**D is correct
+                factor = squeeze(eps**D * weights * values[row*N + col])
 
                 # Summing up matrices over all quadrature nodes
                 for r in xrange(self._QR.get_number_nodes()):
@@ -150,6 +153,7 @@ class HomogeneousQuadrature(Quadrature):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
         """
+        D = packet.get_dimension()
         eps = packet.get_eps()
 
         nodes = self.transform_nodes(packet.get_parameters(), eps)
@@ -181,7 +185,8 @@ class HomogeneousQuadrature(Quadrature):
             for col in xrange(N):
                 M = zeros((K[row],K[col]), dtype=complexfloating)
 
-                factor = squeeze(eps * weights * values[row*N + col])
+                # TODO: Recheck that eps**D is correct
+                factor = squeeze(eps**D * weights * values[row*N + col])
 
                 # Sum up matrices over all quadrature nodes
                 for r in xrange(self._QR.get_number_nodes()):
