@@ -63,6 +63,7 @@ Wavepackets
 
    waveblocks_classes/Quadrature
    waveblocks_classes/HomogeneousQuadrature
+   waveblocks_classes/InhomogeneousQuadrature
 
 Time propagation
 ^^^^^^^^^^^^^^^^
