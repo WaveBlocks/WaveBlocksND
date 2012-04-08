@@ -46,7 +46,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             self._basis_shapes.append(bs)
 
             # A Gaussian
-            self._coefficients = [ zeros((bs.get_basis_size(),1)) ]
+            self._coefficients.append(zeros((bs.get_basis_size(),1)))
 
             # Default parameters of harmonic oscillator eigenstates
             q = zeros((self._dimension, 1))
