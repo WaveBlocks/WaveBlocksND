@@ -63,6 +63,12 @@ class Wavepacket:
         self._id = anid
 
 
+    def get_dimension(self):
+        r""":return: The space dimension :math:`D` of the wavepacket :math:`\Psi`.
+        """
+        return self._dimension
+
+
     def get_number_components(self):
         r""":return: The number :math:`N` of components the wavepacket :math:`\Psi` has.
         """

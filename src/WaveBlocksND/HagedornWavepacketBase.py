@@ -250,11 +250,11 @@ class HagedornWavepacketBase(Wavepacket):
         pr1 = sum(df * dot(P*inv(Q), df), axis=0)
         pr2 = sum(p * df, axis=0)
 
-        exponent = 1.0j / (2.0*eps**2) * pr1 + 1.0j / (eps**2) * pr2
+        exponent = 1.0j / eps**2 * (0.5 * pr1 + pr2)
 
         # TODO: Use continuous sqrt function
         if prefactor is True:
-            prefactor = (pi*eps**2)**(-d*0.25) * det(Q)**(-0.5)
+            prefactor = (pi*eps**2)**(-d*0.25) / sqrt(det(Q))
         else:
             prefactor = (pi*eps**2)**(-d*0.25)
 
