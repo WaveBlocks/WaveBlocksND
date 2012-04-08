@@ -16,6 +16,7 @@ class Wavepacket:
         r"""Initialize a wavepacket object that represents :math:`\Psi`. A wavepacket
         has :math:`N` components :math:`\Phi_i` with :math:`i \in 1 \ldots N`. Each
         component is defined over :math:`D` dimensional space.
+
         :raise NotImplementedError: Abstract interface.
         """
         raise NotImplementedError("'Wavepacket' is an abstract interface.")
@@ -23,6 +24,7 @@ class Wavepacket:
 
     def __str__(self):
         r""":return: A string describing the wavepacket.
+
         :raise NotImplementedError: Abstract interface.
         """
         raise NotImplementedError("'Wavepacket' is an abstract interface.")
@@ -31,6 +33,7 @@ class Wavepacket:
     def clone(self):
         r"""Clone the wavepacket. Return a new copy of the wavepacket and
         make sure that all references between the two wavepackets get broken.
+
         :raise NotImplementedError: Abstract interface.
         """
         raise NotImplementedError("'Wavepacket' is an abstract interface.")
@@ -46,6 +49,7 @@ class Wavepacket:
     def get_id(self):
         r"""Return the packet ID of this wavepacket instance.
         The ID may be used for storing packets in associative lists.
+
         :return: The ID of the current instance.
         """
         if not hasattr(self, "_id"):
@@ -56,6 +60,9 @@ class Wavepacket:
 
     def set_id(self, anid):
         r"""Manually set a new ID for the current wavepacket instance.
+
+        :param anid: The new ID.
+        :type anid: int
         """
         # Currently we force integers as ID s. However in general IDs
         # could be of any object type, as long as we can avoid name clashes.
