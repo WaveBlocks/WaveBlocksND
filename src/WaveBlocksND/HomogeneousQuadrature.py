@@ -2,15 +2,15 @@
 
 This file contains code for the homogeneous quadrature of Hagedorn wavepackets.
 The class defined here can compute brakets, inner products and expectation
-values and compute the matrix elements of an arbitrary operator.
+values and the matrix elements of an arbitrary operator.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2011, 2012 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer, transpose
-from scipy.linalg import sqrtm, inv
+from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer
+from scipy.linalg import sqrtm, inv, svd, diagsvd
 
 from Quadrature import Quadrature
 
@@ -25,31 +25,38 @@ class HomogeneousQuadrature(Quadrature):
 
 
     def __str__(self):
-        return "Homogeneous quadrature using a " + str(self.QR)
+        return "Homogeneous quadrature using a " + str(self._QR)
 
 
     def transform_nodes(self, Pi, eps, QR=None):
-        r"""Transform the quadrature nodes :math:`\gamma` such that they fit the given wavepacket :math:`\Phi\left[\Pi\right]`.
+        r"""Transform the quadrature nodes :math:`\gamma` such that they
+        fit the given wavepacket :math:`\Phi\left[\Pi\right]`.
 
         :param Pi: The parameter set :math:`\Pi` of the wavepacket.
         :param eps: The value of :math:`\varepsilon` of the wavepacket.
-        :param QR: An optional quadrature rule :math:`(\gamma, \omega)` providing the nodes. If not given
-                   the internal quadrature rule will be used.
+        :param QR: An optional quadrature rule :math:`\Gamma = (\gamma, \omega)` providing
+                   the nodes. If not given the internal quadrature rule will be used.
+        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where
+                 :math:`|\Gamma|` denotes the total number of quadrature nodes.
         """
         if QR is None:
             QR = self._QR
 
         q, p, Q, P, S = Pi
 
-        # TODO: Try to get rid of inverses by using LU
-        Q0 = inv(dot(Q, conjugate(transpose(Q))))
+        # Compute the affine transformation
+        Q0 = inv(dot(Q, conjugate(Q.T)))
         Qs = inv(sqrtm(Q0))
 
-        # TODO: Avoid sqrtm computation, use svd
-        #U, S, Vh = svd(...)
-        #Sinv = diagsvd(s)
-        #Qs = V Sinv Vh
+        # TODO: Avoid sqrtm and inverse computation, use svd
+        # Untested code:
+        # D = Q.shape[0]
+        # U, S, Vh = svd(inv(Q))
+        # Sinv = 1.0 / S
+        # Sinv = diagsvd(Sinv, D, D)
+        # Qs = dot(conjugate(Vh.T), dot(Sinv, Vh))
 
+        # And transform the nodes
         nodes = q + eps * dot(Qs, QR.get_nodes())
         return nodes.copy()
 
@@ -58,15 +65,15 @@ class HomogeneousQuadrature(Quadrature):
         r"""Performs the quadrature of :math:`\langle\Psi|f|\Psi\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
-
         :param packet: The wavepacket :math:`\Psi`.
-        :param operator: A real-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
+        :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :param summed: Whether to sum up the individual integrals :math:`\langle\Phi_i|f_{i,j}|\Phi_j\rangle`.
         :type summed: bool, default is ``False``.
         :param component: Request only the i-th component of the result. Remember that :math:`i \in [0, N^2-1]`.
         :param diag_component: Request only the i-th component from the diagonal entries, here :math:`i \in [0, N-1]`.
                                Note that ``component`` takes precedence over ``diag_component`` if both are supplied. (Which is discouraged)
-        :return: The value of :math:`\langle\Psi|f|\Psi\rangle`. This is either a scalar value or a list of :math:`N^2` scalar elements.
+        :return: The value of the braket :math:`\langle\Psi|f|\Psi\rangle`. This is either a scalar value or
+                 a list of :math:`N^2` scalar elements depending on the value of ``summed``.
         """
         eps = packet.get_eps()
 
@@ -90,11 +97,10 @@ class HomogeneousQuadrature(Quadrature):
             cols = xrange(N)
 
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the component=(r,c) option.
+        #       For this, 'operator' must support the 'component=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
-            nn = self._QR.get_number_nodes()
-            operator = lambda nodes, component=None: ones((nn,)) if component[0] == component[1] else zeros((nn,))
+            operator = lambda nodes, component=None: ones(nodes.shape[1]) if component[0] == component[1] else zeros(nodes.shape[1])
             values = [ operator(nodes, component=(r,c)) for r in xrange(N) for c in xrange(N) ]
         else:
             values = operator(nodes)
@@ -112,6 +118,7 @@ class HomogeneousQuadrature(Quadrature):
 
         # Compute the quadrature
         result = []
+
         for row in rows:
             for col in cols:
                 M = zeros((K[row],K[col]), dtype=complexfloating)
@@ -122,8 +129,8 @@ class HomogeneousQuadrature(Quadrature):
                 for r in xrange(self._QR.get_number_nodes()):
                     M += factor[r] * outer(conjugate(bases[row][:,r]), bases[col][:,r])
 
-                # And include the coefficients as conj(c)*M*c
-                result.append(dot(conjugate(coeffs[row]).T, dot(M,coeffs[col])))
+                # And include the coefficients as conj(c).T*M*c
+                result.append(dot(conjugate(coeffs[row]).T, dot(M, coeffs[col])))
 
         if summed is True:
             result = sum(result)
@@ -137,9 +144,10 @@ class HomogeneousQuadrature(Quadrature):
     def build_matrix(self, packet, operator=None):
         r"""Calculate the matrix elements of :math:`\langle\Psi|f|\Psi\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
+        The matrix is computed without including the coefficients :math:`c^i_k`.
 
         :param packet: The wavepacket :math:`\Psi`.
-        :param operator: A real-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
+        :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
         """
         eps = packet.get_eps()
@@ -156,30 +164,30 @@ class HomogeneousQuadrature(Quadrature):
         partition = [0] + list(cumsum(K))
 
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the component=(r,c) option.
+        #       For this, 'operator' must support the 'component=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
-            nn = self._QR.get_number_nodes()
-            operator = lambda nodes, component=None: ones((nn,)) if component[0] == component[1] else zeros((nn,))
+            operator = lambda nodes, component=None: ones(nodes.shape[1]) if component[0] == component[1] else zeros(nodes.shape[1])
             values = [ operator(nodes, component=(r,c)) for r in xrange(N) for c in xrange(N) ]
         else:
-            # TODO: operator should be only f(nodes)
-            q, P, Q, P, S = packet.get_parameters()
+            # TODO: operator should be only f(nodes) but we can not fix this currently
+            q, p, Q, P, S = packet.get_parameters()
             values = operator(q, nodes)
 
+        # Compute the matrix elements
         result = zeros((sum(K),sum(K)), dtype=complexfloating)
 
         for row in xrange(N):
             for col in xrange(N):
-                factor = squeeze(eps * weights * values[row*N + col])
-
                 M = zeros((K[row],K[col]), dtype=complexfloating)
 
-                # Sum up matrices over all quadrature nodes and
-                # remember to slice the evaluated basis appropriately
+                factor = squeeze(eps * weights * values[row*N + col])
+
+                # Sum up matrices over all quadrature nodes
                 for r in xrange(self._QR.get_number_nodes()):
                     M += factor[r] * outer(conjugate(bases[row][:,r]), bases[col][:,r])
 
+                # Put the result into the global storage
                 result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = M
 
         return result

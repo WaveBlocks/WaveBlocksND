@@ -53,6 +53,7 @@ from TensorProductQR import TensorProductQR
 # Inner products
 from Quadrature import Quadrature
 from HomogeneousQuadrature import HomogeneousQuadrature
+from InhomogeneousQuadrature import InhomogeneousQuadrature
 
 
 # TODO: Recheck these files:
