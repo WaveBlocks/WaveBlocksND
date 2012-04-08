@@ -7,8 +7,9 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum, exp
-from numpy.linalg import det, inv
+from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum
+from scipy import exp, sqrt, conjugate
+from scipy.linalg import det, inv, norm
 
 from Wavepacket import Wavepacket
 
@@ -258,3 +259,31 @@ class HagedornWavepacketBase(Wavepacket):
             prefactor = (pi*eps**2)**(-d*0.25)
 
         return prefactor * exp(exponent)
+
+
+    # We can compute the norms the same way for homogeneous and inhomogeneous Hagedorn wavepackets.
+
+
+    def get_norm(self, component=None, summed=False):
+        r"""Calculate the :math:`L^2` norm :math:`\langle\Psi|\Psi\rangle` of the wavepacket :math:`\Psi`.
+
+        :param component: The index :math:`i` of the component :math:`\Phi_i` whose norm is calculated.
+                          The default value is ``None`` which means to compute the norms of all :math:`N` components.
+        :type component: int or ``None``.
+        :param summed: Whether to sum up the norms :math:`\langle\Phi_i|\Phi_i\rangle` of the
+                       individual components :math:`\Phi_i`.
+        :type summed: Boolean, default is ``False``.
+        :type summed: Boolean, default is ``False``.
+        :return: The norm of :math:`\Psi` or the norm of :math:`\Phi_i` or a list with the :math:`N`
+                 norms of all components. Depending on the values of ``component`` and ``summed``.
+        """
+        if component is not None:
+            result = norm(self._coefficients[component])
+        else:
+            result = [ norm(item) for item in self._coefficients ]
+
+            if summed is True:
+                result = reduce(lambda x,y: x+conjugate(y)*y, result, 0.0)
+                result = sqrt(result)
+
+        return result
