@@ -264,7 +264,7 @@ class HagedornWavepacketBase(Wavepacket):
     # We can compute the norms the same way for homogeneous and inhomogeneous Hagedorn wavepackets.
 
 
-    def get_norm(self, component=None, summed=False):
+    def norm(self, component=None, summed=False):
         r"""Calculate the :math:`L^2` norm :math:`\langle\Psi|\Psi\rangle` of the wavepacket :math:`\Psi`.
 
         :param component: The index :math:`i` of the component :math:`\Phi_i` whose norm is calculated.
