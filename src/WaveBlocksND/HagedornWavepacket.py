@@ -44,7 +44,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
             self._basis_shapes.append(bs)
 
             # A Gaussian
-            self._coefficients.append(zeros((bs.get_basis_size(),1)))
+            self._coefficients.append(zeros((bs.get_basis_size(),1), dtype=complexfloating))
 
         # Cache basis sizes
         self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
