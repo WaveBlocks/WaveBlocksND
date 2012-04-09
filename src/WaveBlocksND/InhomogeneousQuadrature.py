@@ -148,7 +148,6 @@ class InhomogeneousQuadrature(Quadrature):
                 # Operator should support the component notation for efficiency
                 values = operator(nodes, component=(row,col))
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
-                # TODO: Recheck that eps**D is correct
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Summing up matrices over all quadrature nodes
@@ -218,8 +217,6 @@ class InhomogeneousQuadrature(Quadrature):
                 # Operator should support the component notation for efficiency
                 # TODO: operator should be only f(nodes) but we can not fix this currently
                 values = operator(Pimix[0], nodes, component=(row,col))
-
-                # TODO: Recheck that eps**D is correct
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Sum up matrices over all quadrature nodes

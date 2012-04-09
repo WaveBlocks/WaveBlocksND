@@ -125,7 +125,6 @@ class HomogeneousQuadrature(Quadrature):
             for col in cols:
                 M = zeros((K[row],K[col]), dtype=complexfloating)
 
-                # TODO: Recheck that eps**D is correct
                 factor = squeeze(eps**D * weights * values[row*N + col])
 
                 # Summing up matrices over all quadrature nodes
@@ -185,7 +184,6 @@ class HomogeneousQuadrature(Quadrature):
             for col in xrange(N):
                 M = zeros((K[row],K[col]), dtype=complexfloating)
 
-                # TODO: Recheck that eps**D is correct
                 factor = squeeze(eps**D * weights * values[row*N + col])
 
                 # Sum up matrices over all quadrature nodes
