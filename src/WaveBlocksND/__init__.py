@@ -35,6 +35,7 @@ from FourierPropagator import FourierPropagator
 
 from IOManager import IOManager
 
+
 # Basis shapes
 from BasisShape import BasisShape
 from HyperCubicShape import HyperCubicShape
@@ -55,11 +56,14 @@ from Quadrature import Quadrature
 from HomogeneousQuadrature import HomogeneousQuadrature
 from InhomogeneousQuadrature import InhomogeneousQuadrature
 
-
-# TODO: Recheck these files:
+# Basis transformations
 from BasisTransformation import BasisTransformation
 from BasisTransformationWF import BasisTransformationWF
+from BasisTransformationHAWP import BasisTransformationHAWP
 
+
+
+# TODO: Recheck these files:
 from ParameterLoader import ParameterLoader
 from ParameterProvider import ParameterProvider
 
