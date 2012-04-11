@@ -7,7 +7,7 @@ This file contains the class for Gauss-Hermite quadrature.
 @license: Modified BSD License
 """
 
-from numpy import zeros, floating
+from numpy import zeros, floating, real
 from scipy import pi, exp, sqrt
 from scipy.special.orthogonal import h_roots
 
@@ -40,7 +40,8 @@ class GaussHermiteQR(QuadratureRule):
         # The number of nodes in this quadrature rule
         self._number_nodes = nodes.size
 
-        h = self._hermite_recursion(nodes)
+        # We deal with real values only, but the array we get from h_roots is of complex dtype
+        h = self._hermite_recursion(real(nodes))
         weights = 1.0/((h**2) * self._order)
 
         # The quadrature nodes \gamma.
@@ -75,7 +76,7 @@ class GaussHermiteQR(QuadratureRule):
 
         :param nodes: The points at which the Hermite functions are evaluated.
         :return: Returns a twodimensional array :math:`H` where the entry :math:`H[k,i]` is the value
-                 of the :math:`k`-th Hermite function evaluated at the node :math:`i`.
+                 of the :math:`k`-th Hermite function evaluated at the node :math:`\gamma_i`.
         """
         H = zeros((self._order, nodes.size), dtype=floating)
 
