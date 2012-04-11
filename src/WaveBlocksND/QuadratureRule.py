@@ -11,7 +11,7 @@ like inner products (brakets) etc.
 @license: Modified BSD License
 """
 
-class QuadratureRule:
+class QuadratureRule(object):
     r"""This class is an abstract interface to quadrature rules in general.
     """
 

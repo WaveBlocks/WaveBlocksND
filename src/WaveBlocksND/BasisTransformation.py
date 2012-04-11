@@ -12,7 +12,7 @@ of the potential.
 __all__ = ["BasisTransformation"]
 
 
-class BasisTransformation:
+class BasisTransformation(object):
     r"""This class is the interface definition for general basis transformation
     procedures. The transformation switches between the canonical basis of the
     potential :math:`V(x)` and its eigenbasis :math:`\Lambda(x)` consisting

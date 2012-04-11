@@ -12,7 +12,7 @@ like inner products (brakets) etc.
 """
 
 
-class Quadrature:
+class Quadrature(object):
     r"""This class is an abstract interface to quadratures in general.
     """
 

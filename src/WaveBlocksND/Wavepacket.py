@@ -8,7 +8,7 @@ This file contains the basic interface for general wavepackets.
 """
 
 
-class Wavepacket:
+class Wavepacket(object):
     r"""This class is an abstract interface to wavepackets in general.
     """
 
