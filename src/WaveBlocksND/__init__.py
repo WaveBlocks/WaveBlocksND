@@ -74,6 +74,11 @@ from SimulationLoopFourier import SimulationLoopFourier
 
 
 
+from Observables import Observables
+from ObservablesHAWP import ObservablesHAWP
+
+
+
 
 # Enable dynamic plugin loading for IOManager
 import sys
