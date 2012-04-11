@@ -69,6 +69,17 @@ Wavepackets
    waveblocks_classes/BasisTransformationWF
    waveblocks_classes/BasisTransformationHAWP
 
+
+Observables
+^^^^^^^^^^^
+
+.. toctree::
+   :maxdepth: 1
+
+   waveblocks_classes/Observables
+   waveblocks_classes/ObservablesHAWP
+
+
 Time propagation
 ^^^^^^^^^^^^^^^^
 
