@@ -8,9 +8,9 @@ of Hagedorn wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, vstack, conjugate, dot, squeeze, sum
+from functools import partial
+from numpy import zeros, complexfloating, conjugate, dot, squeeze, sum
 from scipy import sqrt
-from scipy.linalg import norm
 
 from Observables import Observables
 
@@ -97,7 +97,7 @@ class ObservablesHAWP(Observables):
 
 
     def kinetic_energy(self, wavepacket, component=None, summed=False):
-        r"""Calculate the kinetic energy :math:`E_{\text{kin}} := \langle\Psi|T|\Psi\rangle`
+        r"""Compute the kinetic energy :math:`E_{\text{kin}} := \langle\Psi|T|\Psi\rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 
         :param wavepacket: The wavepacket :math:`\Psi` of which we compute the kinetic energy.
@@ -134,7 +134,7 @@ class ObservablesHAWP(Observables):
 
 
     def potential_energy(self, wavepacket, potential, component=None, summed=False):
-        r"""Calculate the potential energy :math:`E_{\text{pot}} := \langle\Psi|V|\Psi\rangle`
+        r"""Compute the potential energy :math:`E_{\text{pot}} := \langle\Psi|V|\Psi\rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 
         :param wavepacket: The wavepacket :math:`\Psi` of which we compute the potential energy.
@@ -150,4 +150,27 @@ class ObservablesHAWP(Observables):
         :return: A list with the potential energies of the individual components or the
                  overall potential energy of the wavepacket. (Depending on the optional arguments.)
         """
-        pass
+        N = wavepacket.get_number_components()
+
+        # TODO: Better take 'V' instead of 'V.evaluate_at' as argument?
+        #f = partial(potential.evaluate_at, as_matrix=True)
+        f = partial(potential, as_matrix=True)
+
+        # Compute the brakets for each component
+        if component is not None:
+            Q = self._quadrature.quadrature(wavepacket, operator=f, diag_component=component)
+        else:
+            Q = self._quadrature.quadrature(wavepacket, operator=f)
+
+        # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
+        # TODO: Should this go inside the quadrature?
+        tmp = map(squeeze, Q)
+        epot = [ sum(tmp[i*N:(i+1)*N]) for i in xrange(N) ]
+
+        if summed is True:
+            epot = sum(epot)
+        elif component is not None:
+            # Do not return a list for specific single components
+            epot = epot[0]
+
+        return epot
