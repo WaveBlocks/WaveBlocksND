@@ -75,6 +75,7 @@ class HomogeneousQuadrature(Quadrature):
         :return: The value of the braket :math:`\langle\Psi|f|\Psi\rangle`. This is either a scalar value or
                  a list of :math:`N^2` scalar elements depending on the value of ``summed``.
         """
+        # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         D = packet.get_dimension()
         eps = packet.get_eps()
 
@@ -151,6 +152,7 @@ class HomogeneousQuadrature(Quadrature):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
         """
+        # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         D = packet.get_dimension()
         eps = packet.get_eps()
 

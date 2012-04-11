@@ -98,7 +98,8 @@ class InhomogeneousQuadrature(Quadrature):
         :return: The value of the braket :math:`\langle\Psi|f|\Psi^\prime\rangle`. This is either a scalar value or
                  a list of :math:`N \cdot N^\prime` scalar elements depending on the value of ``summed``.
         """
-        # Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
+        # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
+        # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
         D = packet.get_dimension()
         eps = packet.get_eps()
 
@@ -179,7 +180,8 @@ class InhomogeneousQuadrature(Quadrature):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :return: A matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^{N^\prime} |\mathcal{K}^\prime_j|`.
         """
-        # Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
+        # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
+        # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
         D = packet.get_dimension()
         eps = packet.get_eps()
 
