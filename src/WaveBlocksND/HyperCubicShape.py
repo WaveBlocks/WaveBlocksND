@@ -207,10 +207,10 @@ class HyperCubicShape(BasisShape):
         return tuple(self._limits)
 
 
-    def get_neighbours(self, k, selection=None, direction=None):
+    def get_neighbours(self, k, selection=None, direction=None, extended=False):
         r"""
         Returns a list of all multi-indices that are neighbours of a given
-        multi-index :math:`k`. A direct neighbours is defines as
+        multi-index :math:`k`. A direct neighbour is defined as
         :math:`(k_0, \ldots, k_d \pm 1, \ldots, k_{D-1}) \forall d \in [0 \ldots D-1]`.
 
         :param k: The multi-index of which we want to get the neighbours.
@@ -245,11 +245,11 @@ class HyperCubicShape(BasisShape):
 
             # TODO: Try to simplify these nested if blocks
             if selection in ("backward", "all", None):
-                if nbw in self:
+                if self.contains(nbw, extended=extended):
                     nbh.append((d, nbw))
 
             if selection in ("forward", "all", None):
-                if nfw in self:
+                if self.contains(nfw, extended=extended):
                     nbh.append((d, nfw))
 
         return nbh
