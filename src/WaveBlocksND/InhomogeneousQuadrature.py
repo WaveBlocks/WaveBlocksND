@@ -82,7 +82,7 @@ class InhomogeneousQuadrature(Quadrature):
         return (q0, Qs)
 
 
-    def quadrature(self, pacbra, packet, operator=None, summed=False, component=None, diag_component=None):
+    def quadrature(self, pacbra, packet=None, operator=None, summed=False, component=None, diag_component=None):
         r"""Performs the quadrature of :math:`\langle\Psi|f|\Psi^\prime\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
@@ -98,6 +98,10 @@ class InhomogeneousQuadrature(Quadrature):
         :return: The value of the braket :math:`\langle\Psi|f|\Psi^\prime\rangle`. This is either a scalar value or
                  a list of :math:`N \cdot N^\prime` scalar elements depending on the value of ``summed``.
         """
+        # Allow to ommit the ket if it is the same as the bra
+        if packet is None:
+            packet = pacbra
+
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
         D = packet.get_dimension()
@@ -147,7 +151,7 @@ class InhomogeneousQuadrature(Quadrature):
                 basisc = packet.evaluate_basis_at(nodes, component=col, prefactor=True)
 
                 # Operator should support the component notation for efficiency
-                values = operator(nodes, component=(row,col))
+                values = operator(nodes, entry=(row,col))
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
@@ -170,7 +174,7 @@ class InhomogeneousQuadrature(Quadrature):
         return result
 
 
-    def build_matrix(self, pacbra, packet, operator=None):
+    def build_matrix(self, pacbra, packet=None, operator=None):
         r"""Calculate the matrix elements of :math:`\langle\Psi|f|\Psi^\prime\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c^i_k`.
@@ -180,6 +184,10 @@ class InhomogeneousQuadrature(Quadrature):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :return: A matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^{N^\prime} |\mathcal{K}^\prime_j|`.
         """
+        # Allow to ommit the ket if it is the same as the bra
+        if packet is None:
+            packet = pacbra
+
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
         D = packet.get_dimension()
@@ -218,7 +226,7 @@ class InhomogeneousQuadrature(Quadrature):
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
                 # Operator should support the component notation for efficiency
                 # TODO: operator should be only f(nodes) but we can not fix this currently
-                values = operator(Pimix[0], nodes, component=(row,col))
+                values = operator(Pimix[0], nodes, entry=(row,col))
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Sum up matrices over all quadrature nodes
