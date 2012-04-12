@@ -86,7 +86,7 @@ class FourierPropagator(Propagator):
     def get_operators(self):
         r"""Get the kinetic and potential operators :math:`T(\Omega)` and :math:`V(\Gamma)`.
 
-        :return: A tuple `(T, V)` containing two ndarrays.
+        :return: A tuple :math:`(T, V)` containing two ``ndarrays``.
         """
         # TODO: What kind of object exactly do we want to return?
         T = self._KO.evaluate_at()
