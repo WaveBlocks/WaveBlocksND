@@ -75,6 +75,7 @@ class BasisTransformationHAWP(BasisTransformation):
 
         # Basically an ugly hack to overcome some shortcomings of the
         # matrix function and of the data layout.
+        # TODO: Fix and remove
         def f(dummy, x):
             # x is given as (D, |QR|) array
             G = GridWrapper(x)
@@ -119,6 +120,7 @@ class BasisTransformationHAWP(BasisTransformation):
 
         # Basically an ugly hack to overcome some shortcomings of the
         # matrix function and of the data layout.
+        # TODO: Fix and remove
         def f(dummy, x):
             # x is given as (D, |QR|) array
             G = GridWrapper(x)
