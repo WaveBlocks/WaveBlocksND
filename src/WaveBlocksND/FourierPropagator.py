@@ -75,14 +75,6 @@ class FourierPropagator(Propagator):
         return self._potential.get_number_components()
 
 
-    def get_potential(self):
-        r"""Get the potential :math:`V(x)` used for time propagation.
-
-        :return: The :py:class:`MatrixPotential` instance.
-        """
-        return self._potential
-
-
     def get_wavefunction(self):
         r"""Get the wavefunction that stores the current data :math:`\Psi(\Gamma)`.
 
