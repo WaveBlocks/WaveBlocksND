@@ -102,8 +102,8 @@ class HomogeneousQuadrature(Quadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
-            operator = lambda nodes, component=None: ones(nodes.shape[1]) if component[0] == component[1] else zeros(nodes.shape[1])
-            values = [ operator(nodes, component=(r,c)) for r in xrange(N) for c in xrange(N) ]
+            operator = lambda nodes, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
+            values = [ operator(nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ]
         else:
             values = operator(nodes)
 
@@ -171,8 +171,8 @@ class HomogeneousQuadrature(Quadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
-            operator = lambda nodes, component=None: ones(nodes.shape[1]) if component[0] == component[1] else zeros(nodes.shape[1])
-            values = [ operator(nodes, component=(r,c)) for r in xrange(N) for c in xrange(N) ]
+            operator = lambda nodes, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
+            values = [ operator(nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ]
         else:
             # TODO: operator should be only f(nodes) but we can not fix this currently
             q, p, Q, P, S = packet.get_parameters()
