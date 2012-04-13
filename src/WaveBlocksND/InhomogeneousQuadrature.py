@@ -152,6 +152,11 @@ class InhomogeneousQuadrature(Quadrature):
 
                 # Operator should support the component notation for efficiency
                 values = operator(nodes, entry=(row,col))
+
+                # Recheck what we got
+                assert type(values) is ndarray
+                assert values.shape == (D,self._QR.get_number_nodes())
+
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
@@ -227,6 +232,11 @@ class InhomogeneousQuadrature(Quadrature):
                 # Operator should support the component notation for efficiency
                 # TODO: operator should be only f(nodes) but we can not fix this currently
                 values = operator(Pimix[0], nodes, entry=(row,col))
+
+                # Recheck what we got
+                assert type(values) is ndarray
+                assert values.shape == (D,self._QR.get_number_nodes())
+
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 
                 # Sum up matrices over all quadrature nodes
