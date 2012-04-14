@@ -13,6 +13,8 @@ import sympy
 import numpy
 
 from MatrixPotential import MatrixPotential
+from Grid import Grid
+from GridWrapper import GridWrapper
 
 __all__ = ["MatrixPotential1S"]
 
@@ -41,29 +43,6 @@ class MatrixPotential1S(MatrixPotential):
         # The dimension of position space.
         self._dimension = len(variables)
 
-        # Find active variables and constants
-        self._variables = []
-        self._constants = []
-        self._isconstant = []
-
-        for entry in expression:
-            # Determine the variables and constants for each component
-            local_vars = [ v for v in entry.atoms(sympy.Symbol) ]
-            local_consts = [ c for c in variables if not c in local_vars ]
-            self._variables.append(local_vars)
-            self._constants.append(local_consts)
-
-            # Does the potential depend on all space variables?
-            # True:  V_i,j is constant along all axes
-            # False: V_i,j is not constant
-            # None:  V_i,j is constant along some axes
-            if len(local_consts) == 0:
-                self._isconstant.append(False)
-            elif len(local_vars) == 0:
-                self._isconstant.append(True)
-            else:
-                self._isconstant.append(None)
-
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
         self._potential_n = sympy.lambdify(self._all_variables, self._potential_s[0,0], "numpy")
@@ -80,6 +59,24 @@ class MatrixPotential1S(MatrixPotential):
         self._exponential_s = None
         self._exponential_n = None
 
+        # The cached Jacobian of the eigenvalues, symbolic expressions and evaluatable functions
+        self._jacobian_s = None
+        self._jacobian_n = None
+
+        # The cached Hessian of the eigenvalues, symbolic expressions and evaluatable functions
+        self._hessian_s = None
+        self._hessian_n = None
+
+
+    def _grid_wrap(self, grid):
+        # TODO: Consider additional input types for "nodes":
+        #       list of numpy ndarrays, list of single python scalars
+        if not isinstance(grid, Grid):
+            if not type(grid) is numpy.ndarray:
+                grid = numpy.atleast_2d(grid)
+            grid = GridWrapper(grid)
+        return grid
+
 
     def evaluate_at(self, grid, entry=None, as_matrix=False):
         """Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.
@@ -94,24 +91,24 @@ class MatrixPotential1S(MatrixPotential):
         :param as_matrix: Dummy parameter which has no effect here.
         :return: A list containing a single numpy ndarray of shape :math:`(N_1, ... ,N_D)`.
         """
-        # TODO: Consider additional input types for "grid":
-        #       list of numpy ndarrays, list of single python scalars
-        #       -> [ atleast_1d(i) for i in values ]
-        # if isinstace(grid, Grid):
-        #    ...
-        # else:
-        #    ...
+        grid = self._grid_wrap(grid)
 
-        if self._isconstant[0] is False:
-            # We can use numpy broadcasting
-            return tuple([ self._potential_n(*grid.get_axes()) ])
-        elif self._isconstant[0] is None:
-            values = self._potential_n(*grid.get_nodes(split=True))
-            # Make sure we work with (N_1, ..., N_D) shaped arrays
-            return tuple([ values.reshape(grid.get_number_nodes()) ])
-        elif self._isconstant[0] is True:
-            values = self._potential_n(*grid.get_axes())
-            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) ])
+        # Evaluate the potential at the given nodes
+        values = self._potential_n(*grid.get_nodes(split=True))
+
+        # Test for potential beeing constant
+        if numpy.atleast_1d(values).shape == (1,):
+            values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
+
+        # Put the result in correct shape (1, #gridnodes)
+        N = grid.get_number_nodes(overall=True)
+        result = [ values.reshape((1,N)) ]
+
+        # TODO: Consider unpacking single ndarray iff entry != None
+        if entry is not None:
+            result = result[0]
+
+        return result
 
 
     def calculate_eigenvalues(self):
@@ -173,6 +170,7 @@ class MatrixPotential1S(MatrixPotential):
         # This is the correct solution but we will never use the values
         #if self._eigenvectors_n is None:
         #    self.calculate_eigenvectors()
+        grid = self._grid_wrap(grid)
         shape = [1] + list(grid.get_number_nodes())
         return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
 
@@ -197,16 +195,132 @@ class MatrixPotential1S(MatrixPotential):
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
         :return: The numerical approximation of the matrix exponential at the given grid nodes.
         """
+        grid = self._grid_wrap(grid)
+
         if self._exponential_n is None:
             self.calculate_exponential()
 
-        if self._isconstant[0] is False:
-            return tuple([ self._exponential_n(*grid.get_axes()) ])
-        elif self._isconstant[0] is None:
-            values = self._exponential_n(*grid.get_nodes(split=True))
-            # Make sure we work with (N_1, ..., N_D) shaped arrays
-            return tuple([ values.reshape(grid.get_number_nodes()) ])
-        elif self._isconstant[0] is True:
-            # The potential is constant on all directions
-            values = self._exponential_n(*grid.get_axes())
-            return tuple([ values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) ])
+        # Evaluate the exponential at the given nodes
+        values = self._exponential_n(*grid.get_nodes(split=True))
+
+        # Test for potential beeing constant
+        if numpy.atleast_1d(values).shape == (1,):
+            values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
+
+        # Put the result in correct shape (1, #gridnodes)
+        N = grid.get_number_nodes(overall=True)
+        result = [ values.reshape((1,N)) ]
+
+        # TODO: Consider unpacking single ndarray iff entry != None
+        if entry is not None:
+            result = result[0]
+
+        return result
+
+
+    def calculate_jacobian(self):
+        r"""Calculate the Jacobian matrix :math:`\nabla V` of the potential :math:`V(x)`
+        with :math:`x \in \mathbb{R}^D`. For potentials which depend only one variable,
+        this equals the first derivative and :math:`D=1`. Note that this function is idempotent.
+        """
+        if self._jacobian_s is None:
+            self._jacobian_s = self._potential_s.jacobian(self._all_variables).T
+            self._jacobian_n = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in self._jacobian_s ])
+
+
+    def evaluate_jacobian_at(self, grid, component=None):
+        r"""Evaluate the potential's Jacobian :math:`\nabla V(x)` at some grid
+        nodes :math:`\Gamma`.
+
+        :param grid: The grid nodes :math:`\Gamma` the Jacobian gets evaluated at.
+        :param component: Dummy parameter that has no effect here.
+        :return: The value of the potential's Jacobian at the given nodes. The result
+                 is an ``ndarray`` of shape :math:`(D,1)` is we evaluate at a single
+                 grid node or of shape :math:`(D,N)` where :math:`N = |\Gamma|`
+                 if we evaluate at multiple nodes simultaneously.
+        """
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes(split=True)
+
+        D = self._dimension
+        N = grid.get_number_nodes(overall=True)
+
+        J = numpy.zeros((D,N))
+
+        for row in xrange(D):
+            J[row, :] = self._jacobian_n[row](*nodes)
+
+        return J
+
+
+    def calculate_hessian(self):
+        r"""Calculate the Hessian matrix :math:`\nabla^2 V` of the potential :math:`V(x)`
+        with :math:`x \in \mathbb{R}^D`. For potentials which depend only one variable,
+        this equals the second derivative and :math:`D=1`. Note that this function is idempotent.
+        """
+        if self._hessian_s is None:
+            self._hessian_s = sympy.hessian(self._potential_s[0,0], self._all_variables)
+            self._hessian_n = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in self._hessian_s ])
+
+
+    def evaluate_hessian_at(self, grid, component=None):
+        r"""Evaluate the potential's Hessian :math:`\nabla^2 V(x)` at some grid
+        nodes :math:`\Gamma`.
+
+        :param grid: The grid nodes :math:`\Gamma` the Hessian gets evaluated at.
+        :param component: Dummy parameter that has no effect here.
+        :return: The value of the potential's Hessian at the given nodes. The result
+                 is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single
+                 grid node or of shape :math:`(N,D,D)` if we evaluate at multiple
+                 nodes simultaneously.
+        """
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes(split=True)
+
+        D = self._dimension
+        N = grid.get_number_nodes(overall=True)
+
+        H = numpy.zeros((N,D,D))
+
+        for row in xrange(D):
+            for col in xrange(D):
+                H[:, row, col] = self._hessian_n[row*D+col](*nodes)
+
+        return numpy.squeeze(H)
+
+
+    def calculate_local_quadratic(self, diagonal_component=None):
+        """Calculate the local quadratic approximation :math:`U(x)` of the potential's
+        eigenvalue :math:`\lambda(x)`. Note that this function is idempotent.
+
+        :param diagonal_component: Dummy parameter that has no effect here.
+        """
+        # Calculation already done at some earlier time?
+        self.calculate_eigenvalues()
+        self.calculate_jacobian()
+        self.calculate_hessian()
+
+        # Construct function to evaluate the taylor approximation at point q at the given nodes
+        self._taylor_eigen_s = [ (0, self._eigenvalues_s), (1, self._jacobian_s), (2, self._hessian_s) ]
+        self._taylor_eigen_n = [ (0, self._eigenvalues_n), (1, self._jacobian_n), (2, self._hessian_n) ]
+
+
+    def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
+        """Numerically evaluate the local quadratic approximation :math:`U(x)` of
+        the potential's eigenvalue :math:`\lambda(x)` at the given grid nodes :math:`\Gamma`.
+        This function is used for the homogeneous case.
+
+        :param grid: The grid nodes :math:`\Gamma` the the quadratic approximation gets evaluated at.
+        :param diagonal_component: Dummy parameter that has no effect here.
+        :return: A list containing the values :math:`V(\Gamma)`, :math:`\nabla V(\Gamma)` and
+                 :math:`\nabla^2 V(\Gamma)`.
+        """
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes(split=True)
+
+        # TODO: Relate this to the _taylor_eigen_{s,n} data
+        V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+        J = self.evaluate_jacobian_at(grid)
+        H = self.evaluate_hessian_at(grid)
+
+        return tuple([V, J, H])
