@@ -172,7 +172,7 @@ class HomogeneousQuadrature(Quadrature):
         partition = [0] + list(cumsum(K))
 
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the 'component=(r,c)' option.
+        #       For this, 'operator' must support the 'entry=(r,c)' option.
         if operator is None:
             # Operator is None is interpreted as identity transformation
             operator = lambda nodes, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
@@ -180,7 +180,7 @@ class HomogeneousQuadrature(Quadrature):
         else:
             # TODO: operator should be only f(nodes) but we can not fix this currently
             q, p, Q, P, S = packet.get_parameters()
-            values = tuple( operator(q, nodes) )
+            values = tuple( operator(nodes, q) )
 
         # Recheck what we got
         assert type(values) is tuple

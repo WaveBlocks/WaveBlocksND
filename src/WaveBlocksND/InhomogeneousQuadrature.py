@@ -9,7 +9,7 @@ expectation values and the matrix elements of an arbitrary operator.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, imag, conjugate, outer, dot
+from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, imag, conjugate, outer, dot, ndarray
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
@@ -155,7 +155,7 @@ class InhomogeneousQuadrature(Quadrature):
 
                 # Recheck what we got
                 assert type(values) is ndarray
-                assert values.shape == (D,self._QR.get_number_nodes())
+                assert values.shape == (1,self._QR.get_number_nodes())
 
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
@@ -217,7 +217,7 @@ class InhomogeneousQuadrature(Quadrature):
 
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            operator = lambda dummy, nodes, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
+            operator = lambda nodes, dummy, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
 
         for row in xrange(Nbra):
             for col in xrange(Nket):
@@ -231,11 +231,11 @@ class InhomogeneousQuadrature(Quadrature):
                 Pimix = self.mix_parameters(Pibra[row], Piket[col])
                 # Operator should support the component notation for efficiency
                 # TODO: operator should be only f(nodes) but we can not fix this currently
-                values = operator(Pimix[0], nodes, entry=(row,col))
+                values = operator(nodes, Pimix[0], entry=(row,col))
 
                 # Recheck what we got
                 assert type(values) is ndarray
-                assert values.shape == (D,self._QR.get_number_nodes())
+                assert values.shape == (1,self._QR.get_number_nodes())
 
                 factor = squeeze(eps**D * values * weights * det(Pimix[1]))
 

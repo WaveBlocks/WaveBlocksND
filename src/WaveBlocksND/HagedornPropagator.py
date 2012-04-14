@@ -148,7 +148,7 @@ class HagedornPropagator(Propagator):
 
             # Do a potential step with the local non-quadratic taylor remainder
             quadrature = packet.get_quadrature()
-            F = quadrature.build_matrix(packet, partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            F = quadrature.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
             coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
