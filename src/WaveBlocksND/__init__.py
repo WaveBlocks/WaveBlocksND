@@ -12,6 +12,7 @@ from Grid import Grid
 from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
 from GridFactory import GridFactory
+from GridWrapper import GridWrapper
 
 # Wavefunctions
 from WaveFunction import WaveFunction
@@ -28,8 +29,10 @@ from PotentialFactory import PotentialFactory
 
 from KineticOperator import KineticOperator
 
-
+# Time Propagators
+from Propagator import Propagator
 from FourierPropagator import FourierPropagator
+from HagedornPropagator import HagedornPropagator
 
 
 
@@ -77,8 +80,8 @@ from SimulationLoopFourier import SimulationLoopFourier
 from Observables import Observables
 from ObservablesHAWP import ObservablesHAWP
 
-
-
+#from MatrixExponential import MatrixExponential
+from MatrixExponentialFactory import MatrixExponentialFactory
 
 # Enable dynamic plugin loading for IOManager
 import sys
