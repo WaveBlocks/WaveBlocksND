@@ -89,7 +89,7 @@ class MatrixPotential1S(MatrixPotential):
                       This has no effect here as we only have a single entry :math:`V_{0,0}`.
         :type entry: A python tuple of two integers.
         :param as_matrix: Dummy parameter which has no effect here.
-        :return: A list containing a single numpy ndarray of shape :math:`(N_1, ... ,N_D)`.
+        :return: A list containing a single numpy ``ndarray`` of shape :math:`(1,|\Gamma|)`.
         """
         grid = self._grid_wrap(grid)
 
@@ -116,10 +116,8 @@ class MatrixPotential1S(MatrixPotential):
         In the scalar case this is just equal to the matrix entry :math:`V_{0,0}(x)`.
         Note: This function is idempotent and the eigenvalues are memoized for later reuse.
         """
-        # This is the correct solution but we will never use the values
-        #self._eigenvalues_s = self._potential_s
-        #self._eigenvalues_n = self._potential_n
-        pass
+        self._eigenvalues_s = self._potential_s
+        self._eigenvalues_n = self._potential_n
 
 
     def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False):
@@ -286,7 +284,11 @@ class MatrixPotential1S(MatrixPotential):
             for col in xrange(D):
                 H[:, row, col] = self._hessian_n[row*D+col](*nodes)
 
-        return numpy.squeeze(H)
+        # 'squeeze' would be dangerous here, make sure it works in the 1D case too
+        if N == 1:
+            H = H[0,:,:]
+
+        return H
 
 
     def calculate_local_quadratic(self, diagonal_component=None):
@@ -310,7 +312,7 @@ class MatrixPotential1S(MatrixPotential):
         the potential's eigenvalue :math:`\lambda(x)` at the given grid nodes :math:`\Gamma`.
         This function is used for the homogeneous case.
 
-        :param grid: The grid nodes :math:`\Gamma` the the quadratic approximation gets evaluated at.
+        :param grid: The grid nodes :math:`\Gamma` the quadratic approximation gets evaluated at.
         :param diagonal_component: Dummy parameter that has no effect here.
         :return: A list containing the values :math:`V(\Gamma)`, :math:`\nabla V(\Gamma)` and
                  :math:`\nabla^2 V(\Gamma)`.
@@ -324,3 +326,79 @@ class MatrixPotential1S(MatrixPotential):
         H = self.evaluate_hessian_at(grid)
 
         return tuple([V, J, H])
+
+
+    def calculate_local_remainder(self, diagonal_component=None):
+        """Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
+        Taylor approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda(x)`.
+        Note that this function is idempotent.
+
+        :param diagonal_component: Dummy parameter that has no effect here.
+        """
+        # Calculation already done at some earlier time?
+        self.calculate_eigenvalues()
+        self.calculate_jacobian()
+        self.calculate_hessian()
+
+        # Point q where the taylor series is computed
+        # This is a column vector q = (q1, ... ,qD)
+        qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._all_variables) ]
+
+        pairs = [ (xi,qi) for xi,qi in zip(self._all_variables, qs) ]
+
+        V = self._eigenvalues_s.subs(pairs)
+        J = self._jacobian_s.subs(pairs)
+        H = self._hessian_s.subs(pairs)
+
+        # Symbolic expression for the quadratic Taylor expansion term
+        xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._all_variables, qs) ])
+        quadratic = V + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+        try:
+            quadratic = quadratic.applyfunc(sympy.simplify)
+        except:
+            pass
+
+        # Symbolic expression for the Taylor expansion remainder term
+        remainder = self._potential_s - quadratic
+        try:
+            remainder = remainder.applyfunc(sympy.simplify)
+        except:
+            pass
+        self._remainder_s = remainder
+
+        # Construct functions to evaluate the approximation at point q at the given nodes
+        # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
+        self._remainder_n = tuple([ sympy.lambdify(self._all_variables + qs, self._remainder_s[0,0], "numpy") ])
+
+
+    def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
+        """Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic
+        approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda(x)` at the
+        given nodes :math:`\Gamma`.
+
+        :param grid: The grid nodes :math:`\Gamma` the remainder :math:`W` gets evaluated at.
+        :param position: The point :math:`q \in \mathbb{R}^D` where the Taylor series is computed.
+        :param diagonal_component: Dummy parameter that has no effect here.
+        :keyword entry: Dummy parameter that has no effect here.
+        :return: A list with a single entry consisting of an ``ndarray`` containing the
+                 values of :math:`W(\Gamma)`. The array is of shape :math:`(1,|\Gamma|)`.
+        """
+        grid = self._grid_wrap(grid)
+
+        # Evaluate the remainder at the given nodes
+        args = grid.get_nodes(split=True) + numpy.vsplit(position, position.shape[0])
+        values = self._remainder_n[0](*args)
+
+        # Test for potential beeing constant
+        if numpy.atleast_1d(values).shape == (1,):
+            values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
+
+        # Put the result in correct shape (1, #gridnodes)
+        N = grid.get_number_nodes(overall=True)
+        result = [ values.reshape((1,N)) ]
+
+        # TODO: Consider unpacking single ndarray iff entry != None
+        if entry is not None:
+            result = result[0]
+
+        return result
