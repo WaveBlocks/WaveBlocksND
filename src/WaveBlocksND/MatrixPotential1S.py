@@ -1,4 +1,4 @@
-"""The WaveBlocks Project
+r"""The WaveBlocks Project
 
 This file contains code for the representation of potentials :math:`V(x)`
 that contain only a single energy level :math:`\lambda_0`. The number
@@ -20,13 +20,13 @@ __all__ = ["MatrixPotential1S"]
 
 
 class MatrixPotential1S(MatrixPotential):
-    """This class represents a scalar potential :math:`V(x)`. The potential is
+    r"""This class represents a scalar potential :math:`V(x)`. The potential is
     given as an analytic :math:`1 \times 1` matrix expression. Some symbolic
     calculations with the potential are supported.
     """
 
     def __init__(self, expression, variables):
-        """Create a new :py:class:`MatrixPotential1S` instance for a given
+        r"""Create a new :py:class:`MatrixPotential1S` instance for a given
         potential matrix :math:`V(x)`.
 
         :param expression:The mathematical expression representing the potential.
@@ -79,7 +79,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_at(self, grid, entry=None, as_matrix=False):
-        """Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the potential at.
@@ -112,7 +112,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def calculate_eigenvalues(self):
-        """Calculate the eigenvalue :math:`\lambda_0(x)` of the potential :math:`V(x)`.
+        r"""Calculate the eigenvalue :math:`\lambda_0(x)` of the potential :math:`V(x)`.
         In the scalar case this is just equal to the matrix entry :math:`V_{0,0}(x)`.
         Note: This function is idempotent and the eigenvalues are memoized for later reuse.
         """
@@ -121,7 +121,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False):
-        """Evaluate the eigenvalue :math:`\lambda_0(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the eigenvalue :math:`\lambda_0(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvalue at.
@@ -143,7 +143,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def calculate_eigenvectors(self):
-        """Calculate the eigenvector :math:`\nu_0(x)` of the potential :math:`V(x)`.
+        r"""Calculate the eigenvector :math:`\nu_0(x)` of the potential :math:`V(x)`.
         In the scalar case this is just the value :math:`1`.
         Note: This function is idempotent and the eigenvectors are memoized for later reuse.
         """
@@ -154,7 +154,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_eigenvectors_at(self, grid, entry=None):
-        """Evaluate the eigenvector :math:`\nu_0(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the eigenvector :math:`\nu_0(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvector at.
@@ -174,7 +174,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def calculate_exponential(self, factor=1):
-        """Calculate the matrix exponential :math:`\exp(\alpha V)`. In the
+        r"""Calculate the matrix exponential :math:`\exp(\alpha V)`. In the
         case of this class the matrix is of size :math:`1 \times 1` thus
         the exponential simplifies to the scalar exponential function.
         Note: This function is idempotent.
@@ -186,7 +186,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_exponential_at(self, grid, entry=None):
-        """Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
+        r"""Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the exponential at.
@@ -292,7 +292,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def calculate_local_quadratic(self, diagonal_component=None):
-        """Calculate the local quadratic approximation :math:`U(x)` of the potential's
+        r"""Calculate the local quadratic approximation :math:`U(x)` of the potential's
         eigenvalue :math:`\lambda(x)`. Note that this function is idempotent.
 
         :param diagonal_component: Dummy parameter that has no effect here.
@@ -308,7 +308,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
-        """Numerically evaluate the local quadratic approximation :math:`U(x)` of
+        r"""Numerically evaluate the local quadratic approximation :math:`U(x)` of
         the potential's eigenvalue :math:`\lambda(x)` at the given grid nodes :math:`\Gamma`.
         This function is used for the homogeneous case.
 
@@ -329,7 +329,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def calculate_local_remainder(self, diagonal_component=None):
-        """Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
+        r"""Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
         Taylor approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda(x)`.
         Note that this function is idempotent.
 
@@ -372,7 +372,7 @@ class MatrixPotential1S(MatrixPotential):
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
-        """Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic
+        r"""Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic
         approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda(x)` at the
         given nodes :math:`\Gamma`.
 
