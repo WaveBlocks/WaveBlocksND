@@ -70,7 +70,7 @@ class HagedornPropagator(Propagator):
         """
         for chi in set([ p[1] for p in self._packets ]):
             self._potential.calculate_local_quadratic(diagonal_component=chi)
-            #self._potential.calculate_local_remainder(diagonal_component=chi)
+            self._potential.calculate_local_remainder(diagonal_component=chi)
 
 
     def add_wavepacket(self, packet):
@@ -147,12 +147,12 @@ class HagedornPropagator(Propagator):
             packet.set_parameters((q, p, Q, P, S))
 
             # Do a potential step with the local non-quadratic taylor remainder
-            #quadrature = packet.get_quadrature()
-            #F = quadrature.build_matrix(packet, partial(self.potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            quadrature = packet.get_quadrature()
+            F = quadrature.build_matrix(packet, partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
-            #coefficients = packet.get_coefficient_vector()
-            #coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
-            #packet.set_coefficient_vector(coefficients)
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2
             q, p, Q, P, S = packet.get_parameters()
