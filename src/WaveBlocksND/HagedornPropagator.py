@@ -141,9 +141,9 @@ class HagedornPropagator(Propagator):
             q, p, Q, P, S = packet.get_parameters()
             V = self._potential.evaluate_local_quadratic_at(q, diagonal_component=leading_chi)
 
-            p = p - dt * V[1][1]
-            P = P - dt * dot(V[2][1], Q)
-            S = S - dt * V[0][1]
+            p = p - dt * V[1]
+            P = P - dt * dot(V[2], Q)
+            S = S - dt * V[0]
             packet.set_parameters((q, p, Q, P, S))
 
             # Do a potential step with the local non-quadratic taylor remainder
