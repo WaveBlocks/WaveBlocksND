@@ -35,10 +35,10 @@ from FourierPropagator import FourierPropagator
 
 from IOManager import IOManager
 
-
 # Basis shapes
 from BasisShape import BasisShape
 from HyperCubicShape import HyperCubicShape
+from HyperbolicCutShape import HyperbolicCutShape
 
 # Wavepackets
 from Wavepacket import Wavepacket
