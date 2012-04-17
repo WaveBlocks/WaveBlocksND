@@ -203,6 +203,8 @@ class MatrixPotential2S(MatrixPotential):
             if numpy.atleast_1d(values).shape == (1,):
                 values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
 
+            tmp.append(values)
+
         # Sort the eigenvalues pointwise. We can do this because we
         # assume that the different eigenvalues never cross.
         # TODO: Sort will fail iff energy levels really cross!
