@@ -44,6 +44,8 @@ class MatrixPotential1S(MatrixPotential):
         self._dimension = len(variables)
 
         # The the potential, symbolic expressions and evaluatable functions
+        assert expression.shape == (1,1)
+
         self._potential_s = expression
         self._potential_n = sympy.lambdify(self._all_variables, self._potential_s[0,0], "numpy")
 
@@ -116,6 +118,9 @@ class MatrixPotential1S(MatrixPotential):
         In the scalar case this is just equal to the matrix entry :math:`V_{0,0}(x)`.
         Note: This function is idempotent and the eigenvalues are memoized for later reuse.
         """
+        if self._eigenvalues_s is not None:
+            return
+
         self._eigenvalues_s = self._potential_s
         self._eigenvalues_n = self._potential_n
 
@@ -163,13 +168,15 @@ class MatrixPotential1S(MatrixPotential):
                       we want to evaluate or `None` to evaluate all eigenvectors.
                       This has no effect here as we only have a single entry :math:`\nu_0`.
         :type entry: A singly python  integer.
-        :return: A list containing a single numpy ndarray of shape :math:`(N_1, ... ,N_D, 1)`.
+        :return: A list containing the numpy ndarrays, all of shape :math:`(1, |\Gamma|)`.
         """
         # This is the correct solution but we will never use the values
         #if self._eigenvectors_n is None:
         #    self.calculate_eigenvectors()
+        # TODO: Rethink about the 'entry' parameter here. Do we need it?
         grid = self._grid_wrap(grid)
-        shape = [1] + list(grid.get_number_nodes())
+        #shape = [1] + list(grid.get_number_nodes())
+        shape = (1, grid.get_number_nodes(overall=True))
         return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
 
 
@@ -222,6 +229,7 @@ class MatrixPotential1S(MatrixPotential):
         this equals the first derivative and :math:`D=1`. Note that this function is idempotent.
         """
         if self._jacobian_s is None:
+            # TODO: Add symbolic simplification
             self._jacobian_s = self._potential_s.jacobian(self._all_variables).T
             self._jacobian_n = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in self._jacobian_s ])
 
@@ -234,9 +242,10 @@ class MatrixPotential1S(MatrixPotential):
         :param component: Dummy parameter that has no effect here.
         :return: The value of the potential's Jacobian at the given nodes. The result
                  is an ``ndarray`` of shape :math:`(D,1)` is we evaluate at a single
-                 grid node or of shape :math:`(D,N)` where :math:`N = |\Gamma|`
+                 grid node or of shape :math:`(D,|\Gamma|)`
                  if we evaluate at multiple nodes simultaneously.
         """
+        # TODO: Rethink about the 'component' parameter here. Do we need it?
         grid = self._grid_wrap(grid)
         nodes = grid.get_nodes(split=True)
 
@@ -257,6 +266,7 @@ class MatrixPotential1S(MatrixPotential):
         this equals the second derivative and :math:`D=1`. Note that this function is idempotent.
         """
         if self._hessian_s is None:
+            # TODO: Add symbolic simplification
             self._hessian_s = sympy.hessian(self._potential_s[0,0], self._all_variables)
             self._hessian_n = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in self._hessian_s ])
 
@@ -269,9 +279,10 @@ class MatrixPotential1S(MatrixPotential):
         :param component: Dummy parameter that has no effect here.
         :return: The value of the potential's Hessian at the given nodes. The result
                  is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single
-                 grid node or of shape :math:`(N,D,D)` if we evaluate at multiple
+                 grid node or of shape :math:`(|\Gamma|,D,D)` if we evaluate at multiple
                  nodes simultaneously.
         """
+        # TODO: Rethink about the 'component' parameter here. Do we need it?
         grid = self._grid_wrap(grid)
         nodes = grid.get_nodes(split=True)
 
