@@ -89,6 +89,8 @@ Time propagation
    waveblocks_classes/Propagator
    waveblocks_classes/FourierPropagator
 
+   waveblocks_classes/HyperbolicCutShape
+
 Simulation result storage I/O
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
