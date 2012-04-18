@@ -206,7 +206,7 @@ class HyperbolicCutShape(BasisShape):
 
         :return: A tuple of the maximum of the multi-index in each direction.
         """
-        return tuple(self._dimension * [self._sparsity])
+        return tuple(self._dimension * [self._sparsity-1])
 
 
     def get_neighbours(self, k, selection=None, direction=None, extended=False):
