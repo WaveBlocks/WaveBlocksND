@@ -26,7 +26,7 @@ class MatrixPotential2S(MatrixPotential):
     """
 
     def __init__(self, expression, variables):
-        """Create a new :py:class:`MatrixPotential2S` instance for a given
+        r"""Create a new :py:class:`MatrixPotential2S` instance for a given
         potential matrix :math:`V(x)`.
 
         :param expression:The mathematical expression representing the potential.
@@ -68,6 +68,14 @@ class MatrixPotential2S(MatrixPotential):
         # The cached Hessian of the eigenvalues, symbolic expressions and evaluatable functions
         self._hessian_s = None
         self._hessian_n = None
+
+        # {}[chi] -> [(order, function),...]
+        self._taylor_eigen_s = {}
+        self._taylor_eigen_n = {}
+
+        # {}[chi] -> [remainder]
+        self._remainder_eigen_s = {}
+        self._remainder_eigen_n = {}
 
 
     def _grid_wrap(self, grid):
@@ -189,7 +197,7 @@ class MatrixPotential2S(MatrixPotential):
                 entries = [ (row,row) for row in xrange(N) ]
 
         # Compute all diagonal entries first
-        diags = [ entry[0] for entry in entries if entry[0] == entry[1] ]
+        diags = [ e[0] for e in entries if e[0] == e[1] ]
 
         nodes = grid.get_nodes(split=True)
 
@@ -212,14 +220,15 @@ class MatrixPotential2S(MatrixPotential):
 
         if N > 1:
             tmp = numpy.vsplit(numpy.sort(numpy.vstack(tmp), axis=0), N)
-            # Take in descending order and reshape
-            tmp = [ item.reshape((1,grid.get_number_nodes(overall=True))) for item in reversed(tmp) ]
+
+        # Take in descending order and reshape
+        tmp = [ item.reshape((1,grid.get_number_nodes(overall=True))) for item in reversed(tmp) ]
 
         # Compose the result for all entries specified
         result = []
 
-        for entry in entries:
-            (row, col) = entry
+        for ent in entries:
+            (row, col) = ent
             if row == col:
                 result.append( tmp[row] )
             else:
@@ -392,6 +401,7 @@ class MatrixPotential2S(MatrixPotential):
         nodes :math:`\Gamma`.
 
         :param grid: The grid nodes :math:`\Gamma` the Jacobian gets evaluated at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
         :param component: Dummy parameter that has no effect here.
         :return: The value of the potential's Jacobian at the given nodes. The result
                  is a list of ``ndarray`` each of shape :math:`(D,1)` is we evaluate
@@ -405,15 +415,25 @@ class MatrixPotential2S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        jacobians = []
+        if component is not None:
+            indices = [ component ]
+        else:
+            indices = xrange(self._number_components)
 
-        for jacobian in self._jacobian_n:
+        result = []
+
+        for i in indices:
+            jacobian = self._jacobian_n[i]
             J = numpy.zeros((D,N))
-            for index, component in enumerate(jacobian):
-                J[index, :] = component(*nodes)
-            jacobians.append(J)
+            for index, comp in enumerate(jacobian):
+                J[index, :] = comp(*nodes)
+            result.append(J)
 
-        return jacobians
+        # TODO: Consider unpacking single ndarray iff entry != None
+        if component is not None:
+            result = result[0]
+
+        return result
 
 
     def calculate_hessian(self):
@@ -442,6 +462,7 @@ class MatrixPotential2S(MatrixPotential):
         nodes :math:`\Gamma`.
 
         :param grid: The grid nodes :math:`\Gamma` the Hessian gets evaluated at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
         :param component: Dummy parameter that has no effect here.
         :return: The value of the potential's Hessian at the given nodes. The result
                  is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single
@@ -455,9 +476,15 @@ class MatrixPotential2S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        hessians = []
+        if component is not None:
+            indices = [ component ]
+        else:
+            indices = xrange(self._number_components)
 
-        for hessian in self._hessian_n:
+        result = []
+
+        for i in indices:
+            hessian = self._hessian_n[i]
             H = numpy.zeros((N,D,D))
 
             for row in xrange(D):
@@ -468,6 +495,88 @@ class MatrixPotential2S(MatrixPotential):
             if N == 1:
                 H = H[0,:,:]
 
-            hessians.append(H)
+            result.append(H)
 
-        return hessians
+        # TODO: Consider unpacking single ndarray iff entry != None
+        if component is not None:
+            result = result[0]
+
+        return result
+
+
+    def _calculate_local_quadratic_component(self, diagonal_component):
+        r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
+        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
+        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        """
+        if self._taylor_eigen_s.has_key(diagonal_component):
+            # Calculation already done at some earlier time
+            return
+        else:
+            # Calculation already done at some earlier time?
+            self.calculate_eigenvalues()
+            self.calculate_jacobian()
+            self.calculate_hessian()
+
+            self._taylor_eigen_s[diagonal_component] = []
+
+            # Construct function to evaluate the taylor approximation at point q at the given nodes
+            self._taylor_eigen_s[diagonal_component] = [ (0, self._eigenvalues_s[diagonal_component]),
+                                                         (1, self._jacobian_s[diagonal_component]),
+                                                         (2, self._hessian_s[diagonal_component]) ]
+            self._taylor_eigen_n[diagonal_component] = [ (0, self._eigenvalues_n[diagonal_component]),
+                                                         (1, self._jacobian_n[diagonal_component]),
+                                                         (2, self._hessian_n[diagonal_component]) ]
+
+
+    def calculate_local_quadratic(self, diagonal_component=None):
+        r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
+        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
+        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
+        If the parameter :math:`\chi` is not given, calculate the local quadratic approximation
+        matrix :math:`U(x)` of all the potential's eigenvalues in :math:`\Lambda`. This case
+        can be used for the inhomogeneous case.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        :type diagonal_component: Integer or ``None`` (default)
+        """
+        if diagonal_component is not None:
+            self._calculate_local_quadratic_component(diagonal_component)
+        else:
+            for component in xrange(self._number_components):
+                self._calculate_local_quadratic_component(component)
+
+
+    def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
+        r"""Numerically evaluate the local quadratic approximation matrix :math:`U(x)` of
+        the potential's eigenvalues in :math:`\Lambda(x)` at the given grid nodes :math:`\Gamma`.
+
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma` we want to
+                     evaluate the quadratic approximation at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        :return: A list of tuples or a single tuple. Each tuple :math:`(\lambda, J, H)` contains the
+                 the evaluated eigenvalues :math:`\lambda_i(\Gamma)`, the Jacobian :math:`J(\Gamma)`
+                 and the Hessian :math:`H(\Gamma)` in this order.
+        """
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes(split=True)
+
+        # TODO: Relate this to the _taylor_eigen_{s,n} data
+        if diagonal_component is not None:
+            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+            J = self.evaluate_jacobian_at(grid, component=diagonal_component)
+            H = self.evaluate_hessian_at(grid, component=diagonal_component)
+            result = (V, J, H)
+        else:
+            Vlist = self.evaluate_eigenvalues_at(grid)
+            Jlist = self.evaluate_jacobian_at(grid)
+            Hlist = self.evaluate_hessian_at(grid)
+            result = [ (V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist) ]
+
+        return tuple(result)
