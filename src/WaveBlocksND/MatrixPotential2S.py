@@ -603,7 +603,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # Point q where the taylor series is computed
         # This is a column vector q = (q1, ... ,qD)
-        qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._all_variables) ]
+        qs = [ sympy.Symbol("q"+str(i)) for i in xrange(len(self._all_variables)) ]
         pairs = [ (xi,qi) for xi,qi in zip(self._all_variables, qs) ]
 
         V = self._eigenvalues_s[diagonal_component].subs(pairs)
@@ -625,7 +625,7 @@ class MatrixPotential2S(MatrixPotential):
         try:
             remainder = W.applyfunc(sympy.simplify)
         except:
-            pass
+            remainder = W
         self._remainder_eigen_s[diagonal_component] = remainder
 
         # Construct functions to evaluate the approximation at point q at the given nodes
@@ -679,7 +679,7 @@ class MatrixPotential2S(MatrixPotential):
         try:
             remainder = W.applyfunc(sympy.simplify)
         except:
-            pass
+            remainder = W
         self._remainder_eigen_ih_s = remainder
 
         # Construct functions to evaluate the approximation at point q at the given nodes
