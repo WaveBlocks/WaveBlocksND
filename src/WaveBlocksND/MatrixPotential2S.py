@@ -34,18 +34,19 @@ class MatrixPotential2S(MatrixPotential):
         :param variables: The variables corresponding to the space dimensions.
         :type variables: A list of `Sympy` symbols.
         """
-        # This class handles potentials with two energy levels.
-        self._number_components = 2
-
         # The variables that represents position space. The order matters!
         self._all_variables = variables
 
         # The dimension of position space.
         self._dimension = len(variables)
 
-        # The the potential, symbolic expressions and evaluatable functions
+        # This number of energy levels.
+        assert expression.is_square
+        # We only handle the 2x2 case here
         assert expression.shape == (2,2)
+        self._number_components = expression.shape[0]
 
+        # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
         self._potential_n = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in self._potential_s ])
 
@@ -76,6 +77,10 @@ class MatrixPotential2S(MatrixPotential):
         # {}[chi] -> [remainder]
         self._remainder_eigen_s = {}
         self._remainder_eigen_n = {}
+
+        # Remainder in the inhomogeneous case
+        self._remainder_eigen_ih_s = None
+        self._remainder_eigen_ih_n = None
 
 
     def _grid_wrap(self, grid):
@@ -536,7 +541,7 @@ class MatrixPotential2S(MatrixPotential):
         r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
         eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
         and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
-        If the parameter :math:`\chi` is not given, calculate the local quadratic approximation
+        If the parameter :math:`i` is not given, calculate the local quadratic approximation
         matrix :math:`U(x)` of all the potential's eigenvalues in :math:`\Lambda`. This case
         can be used for the inhomogeneous case.
 
@@ -564,8 +569,6 @@ class MatrixPotential2S(MatrixPotential):
                  the evaluated eigenvalues :math:`\lambda_i(\Gamma)`, the Jacobian :math:`J(\Gamma)`
                  and the Hessian :math:`H(\Gamma)` in this order.
         """
-        grid = self._grid_wrap(grid)
-        nodes = grid.get_nodes(split=True)
 
         # TODO: Relate this to the _taylor_eigen_{s,n} data
         if diagonal_component is not None:
@@ -580,3 +583,180 @@ class MatrixPotential2S(MatrixPotential):
             result = [ (V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist) ]
 
         return tuple(result)
+
+
+    def _calculate_local_remainder_component(self, diagonal_component=None):
+        r"""Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
+        Taylor approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda_i(x)`.
+        Note that this function is idempotent.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        """
+        # Calculation already done at some earlier time?
+        if self._remainder_eigen_s.has_key(diagonal_component):
+            return
+
+        self.calculate_eigenvalues()
+        self.calculate_jacobian()
+        self.calculate_hessian()
+
+        # Point q where the taylor series is computed
+        # This is a column vector q = (q1, ... ,qD)
+        qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._all_variables) ]
+        pairs = [ (xi,qi) for xi,qi in zip(self._all_variables, qs) ]
+
+        V = self._eigenvalues_s[diagonal_component].subs(pairs)
+        J = self._jacobian_s[diagonal_component].subs(pairs)
+        H = self._hessian_s[diagonal_component].subs(pairs)
+
+        # Symbolic expression for the quadratic Taylor expansion term
+        xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._all_variables, qs) ])
+        quadratic = sympy.Matrix([[V]]) + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+        try:
+            quadratic = quadratic.applyfunc(sympy.simplify)
+        except:
+            pass
+
+        # Symbolic expression for the Taylor expansion remainder term
+        U = sympy.diag( *self._number_components*[quadratic[0,0]] )
+        W = self._potential_s - U
+
+        try:
+            remainder = W.applyfunc(sympy.simplify)
+        except:
+            pass
+        self._remainder_eigen_s[diagonal_component] = remainder
+
+        # Construct functions to evaluate the approximation at point q at the given nodes
+        # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
+        self._remainder_eigen_n[diagonal_component] = tuple([
+            sympy.lambdify(self._all_variables + qs, entry, "numpy") for entry in remainder ])
+
+
+    def _calculate_local_remainder_inhomogeneous(self):
+        r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
+        quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
+        :math:`\Lambda(x)`. This function is used for the inhomogeneous case.
+        """
+        if self._remainder_eigen_ih_s is not None:
+            # Calculation already done at some earlier time
+            return
+        else:
+            self._remainder_eigen_ih_s = []
+
+        self.calculate_eigenvalues()
+        self.calculate_jacobian()
+        self.calculate_hessian()
+
+        # Quadratic taylor series for all eigenvalues
+        quadratics = []
+
+        for index, eigenvalue in enumerate(self._eigenvalues_s):
+            # Point q where the taylor series is computed
+            # This is a column vector q = (q1, ... ,qD)
+            qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._all_variables) ]
+            pairs = [ (xi,qi) for xi,qi in zip(self._all_variables, qs) ]
+
+            V = self._eigenvalues_s[index].subs(pairs)
+            J = self._jacobian_s[index].subs(pairs)
+            H = self._hessian_s[index].subs(pairs)
+
+            # Symbolic expression for the quadratic Taylor expansion term
+            xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._all_variables, qs) ])
+            quadratic = sympy.Matrix([[V]]) + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+            try:
+                quadratic = quadratic.applyfunc(sympy.simplify)
+            except:
+                pass
+
+            quadratics.append(quadratic[0,0])
+
+        # Symbolic expression for the Taylor expansion remainder term
+        U = sympy.diag( *quadratics )
+        W = self._potential_s - U
+
+        try:
+            remainder = W.applyfunc(sympy.simplify)
+        except:
+            pass
+        self._remainder_eigen_ih_s = remainder
+
+        # Construct functions to evaluate the approximation at point q at the given nodes
+        self._remainder_eigen_ih_n = tuple([
+            sympy.lambdify(self._all_variables + qs, entry, "numpy") for entry in remainder ])
+
+
+    def calculate_local_remainder(self, diagonal_component=None):
+        r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
+        quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
+        :math:`\Lambda(x)`. In the homogeneous case the matrix :math:`U` is given by
+        :math:`U(x) = \text{diag}([u_i,\ldots,u_i])` where in the inhomogeneous case it
+        is given by :math:`U(x) = \text{diag}([u_0,\ldots,u_{N-1}])`.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`. If set to
+                                   ``None`` the inhomogeneous case is computed.
+        :type diagonal_component: Integer or ``None`` (default)
+        """
+        if diagonal_component is not None:
+            self._calculate_local_remainder_component(diagonal_component)
+        else:
+            self._calculate_local_remainder_inhomogeneous()
+
+
+    def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
+        r"""Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic
+        approximation :math:`U(x)` of the potential's eigenvalue :math:`\Lambda(x)` at the
+        given nodes :math:`\Gamma`.
+
+         Warning: do not set the ``diagonal_component`` and the ``entry`` parameter both to ``None``.
+
+        :param grid: The grid nodes :math:`\Gamma` the remainder :math:`W` gets evaluated at.
+        :param position: The point :math:`q \in \mathbb{R}^D` where the Taylor series is computed.
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i` and whose
+                                   remainder matrix :math:`W(x) = V(x) - \text{diag}([u_i,\ldots,u_i])`
+                                   we evaluate. If set to ``None`` the inhomogeneous case given by
+                                   :math:`W(x) = V(x) - \text{diag}([u_0,\ldots,u_{N-1}])` is computed.
+        :type diagonal_component: Integer or ``None`` (default)
+        :param entry: The entry :math:`\left(i,j\right)` of the remainder matrix :math:`W`
+                      that is evaluated.
+        :type entry: A python tuple of two integers.
+        :return: A list with :math:`N^2` ``ndarray`` elements or a single ``ndarray``. Each
+                 containing the values of :math:`W_{i,j}(\Gamma)`. Each array is of shape
+                 :math:`(1,|\Gamma|)`.
+        """
+        if diagonal_component is not None:
+            functions = self._remainder_eigen_n[diagonal_component]
+        else:
+            functions = self._remainder_eigen_ih_n
+
+        grid = self._grid_wrap(grid)
+        N = grid.get_number_nodes(overall=True)
+        # Evaluate the remainder at the given nodes
+        args = grid.get_nodes(split=True) + numpy.vsplit(position, position.shape[0])
+
+        if entry is not None:
+            (row, col) = entry
+            values = functions[row*self._number_components+col](*args)
+
+            # Test for potential beeing constant
+            if numpy.atleast_1d(values).shape == (1,):
+                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
+
+            # Put the result in correct shape (1, #gridnodes)
+            result = values.reshape((1,N))
+        else:
+            result = []
+            for function in functions:
+                values = function(*args)
+
+                # Test for potential beeing constant
+                if numpy.atleast_1d(values).shape == (1,):
+                    values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
+
+                # Put the result in correct shape (1, #gridnodes)
+                result.append(values.reshape((1,N)))
+
+        return result
