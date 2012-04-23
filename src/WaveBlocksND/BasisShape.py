@@ -78,6 +78,15 @@ class BasisShape(object):
             return self._basissize_ext
 
 
+    def get_description(self):
+        r"""Return a description of this basis shape object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current basis shape. A description
+        never contains any data.
+        """
+        raise NotImplementedError("'BasisShape' is an abstract interface.")
+
+
     def get_node_iterator(self, mode="lex"):
         r"""
         Returns an iterator to iterate over all basis elements :math:`k`.
