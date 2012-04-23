@@ -67,6 +67,8 @@ from BasisTransformationHAWP import BasisTransformationHAWP
 
 
 # TODO: Recheck these files:
+from BlockFactory import BlockFactory
+
 from ParameterLoader import ParameterLoader
 from ParameterProvider import ParameterProvider
 
@@ -74,6 +76,7 @@ from TimeManager import TimeManager
 
 from SimulationLoop import SimulationLoop
 from SimulationLoopFourier import SimulationLoopFourier
+from SimulationLoopHagedorn import SimulationLoopHagedorn
 
 
 
