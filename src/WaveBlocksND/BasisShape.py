@@ -23,6 +23,14 @@ class BasisShape(object):
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
 
+    def __hash__(self):
+        r"""
+        Implement a custom hash function for basis shapes.
+        This is important for storing wavepackets.
+        """
+        raise NotImplementedError("No custom hash function defined.")
+
+
     def __contains__(self, k):
         r"""
         Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathcal{K}`.

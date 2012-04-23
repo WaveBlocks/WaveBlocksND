@@ -56,6 +56,14 @@ class HyperCubicShape(BasisShape):
         self._basissize_ext = self._basissize + len(self._lima_ext)
 
 
+    def __hash__(self):
+        r"""Compute a unique hash for the basis shape. In the case of hypercubic
+        basis shapes :math:`\mathcal{K}` the basis is fully specified by its
+        maximal index :math:`K_i` along each direction :math:`i \in [0,\ldots,D-1]`.
+        """
+        return hash(self._limits)
+
+
     def __getitem__(self, k):
         r"""Make map lookups.
         """
