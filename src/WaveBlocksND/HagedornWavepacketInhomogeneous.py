@@ -69,6 +69,22 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         return s
 
 
+    def get_description(self):
+        r"""Return a description of this wavepacket object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current instance. A description
+        never contains any data.
+        """
+        d = {}
+        d["type"] = "HagedornWavepacketInhomogeneous"
+        d["dimension"] = self._dimension
+        d["ncomponents"] = self._number_components
+        d["eps"] = self._eps
+        if self._QE is not None:
+            d["quadrature"] = self._QE.get_description()
+        return d
+
+
     def clone(self, keepid=False):
         # Parameters of this packet
         params = {"dimension":   self._dimension,
