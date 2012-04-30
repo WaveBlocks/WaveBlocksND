@@ -236,7 +236,7 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             for key, value in self._srf[pathd+ahash].attrs.iteritems():
                 descr[key] = pickle.loads(value)
             # 'ahash' is "basis_shape_..." and we want only the "..." part
-            descrs[ahash[12:]] = descr
+            descrs[int(ahash[12:])] = descr
         return descrs
     else:
         name = "basis_shape_"+str(the_hash)
