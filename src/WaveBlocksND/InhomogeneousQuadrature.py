@@ -29,6 +29,18 @@ class InhomogeneousQuadrature(Quadrature):
         return "Inhomogeneous quadrature using a " + str(self._QR)
 
 
+    def get_description(self):
+        r"""Return a description of this quadrature object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current instance. A description
+        never contains any data.
+        """
+        d = {}
+        d["type"] = "InhomogeneousQuadrature"
+        d["qr"] = self._QR.get_description()
+        return d
+
+
     def transform_nodes(self, Pibra, Piket, eps, QR=None):
         r"""Transform the quadrature nodes :math:`\gamma` such that they
         fit the given wavepackets :math:`\Phi\left[\Pi_i\right]` and

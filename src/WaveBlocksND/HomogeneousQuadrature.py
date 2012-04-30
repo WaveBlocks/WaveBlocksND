@@ -28,6 +28,18 @@ class HomogeneousQuadrature(Quadrature):
         return "Homogeneous quadrature using a " + str(self._QR)
 
 
+    def get_description(self):
+        r"""Return a description of this quadrature object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current instance. A description
+        never contains any data.
+        """
+        d = {}
+        d["type"] = "HomogeneousQuadrature"
+        d["qr"] = self._QR.get_description()
+        return d
+
+
     def transform_nodes(self, Pi, eps, QR=None):
         r"""Transform the quadrature nodes :math:`\gamma` such that they
         fit the given wavepacket :math:`\Phi\left[\Pi\right]`.
