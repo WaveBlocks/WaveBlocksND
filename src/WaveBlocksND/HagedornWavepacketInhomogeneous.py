@@ -60,6 +60,9 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         # Cache basis sizes
         self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
 
+        # No quadrature set
+        self._QE = None
+
 
     def __str__(self):
         r""":return: A string describing the Hagedorn wavepacket :math:`\Psi`.
@@ -131,9 +134,9 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         """
         if component is None:
             for index, item in enumerate(Pi):
-                self._Pis[index] = item[:]
+                self._Pis[index] = [ atleast_2d(array(jtem, dtype=complexfloating)) for jtem in item ]
         else:
-            self._Pis[component] = Pi[:]
+            self._Pis[component] = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi ]
 
 
     def evaluate_basis_at(self, grid, component, prefactor=False):
