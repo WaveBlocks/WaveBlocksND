@@ -95,6 +95,8 @@ Time propagation
    waveblocks_classes/HagedornPropagator
 
 
+   waveblocks_classes/HyperbolicCutShape
+
 Simulation result storage I/O
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
