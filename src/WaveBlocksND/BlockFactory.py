@@ -92,58 +92,12 @@ class BlockFactory(object):
         # TODO: Maybe denest QR initialization?
         if qe_type == "HomogeneousQuadrature":
             from HomogeneousQuadrature import HomogeneousQuadrature
-            from GaussHermiteQR import GaussHermiteQR
-
-            dim = description["dimension"]
-
-            if dim == 1:
-                order = description["qr_order"]
-                assert type(order) == int
-                QR = GaussHermiteQR(order)
-
-            else:
-                orders = description["qr_order"]
-                # 'orders' should be a list here
-                qrs_done = {}
-                qrs = []
-                for index, order in enumerate(orders):
-                    if not qrs_done.has_key(order):
-                        qrs_done[order] = index
-                        qrs.append( GaussHermiteQR(order) )
-                    else:
-                        qrs.append( qrs[qrs_done[order]] )
-
-                from TensorProductQR import TensorProductQR
-                QR = TensorProductQR(qrs)
-
+            QR = self.create_quadrature_rule(description["qr"])
             QE = HomogeneousQuadrature(QR)
 
         elif qe_type == "InhomogeneousQuadrature":
             from InhomogeneousQuadrature import InhomogeneousQuadrature
-            from GaussHermiteQR import GaussHermiteQR
-
-            dim = description["dimension"]
-
-            if dim == 1:
-                order = description["qr_order"]
-                assert type(order) == int
-                QR = GaussHermiteQR(order)
-
-            else:
-                orders = description["qr_order"]
-                # 'orders' should be a list here
-                qrs_done = {}
-                qrs = []
-                for index, order in enumerate(orders):
-                    if not qrs_done.has_key(order):
-                        qrs_done[order] = index
-                        qrs.append( GaussHermiteQR(order) )
-                    else:
-                        qrs.append( qrs[qrs_done[order]] )
-
-                from TensorProductQR import TensorProductQR
-                QR = TensorProductQR(qrs)
-
+            QR = self.create_quadrature_rule(description["qr"])
             QE = InhomogeneousQuadrature(QR)
 
         else:
@@ -157,24 +111,14 @@ class BlockFactory(object):
 
         if qr_type == "GaussHermiteQR":
             from GaussHermiteQR import GaussHermiteQR
-            order = description["qr_order"]
+            order = description["order"]
             assert type(order) == int
             QR = GaussHermiteQR(order)
 
         elif qr_type == "TensorProductQR":
-            from GaussHermiteQR import GaussHermiteQR
-            orders = description["qr_order"]
-            # 'orders' should be a list here
-            qrs_done = {}
-            qrs = []
-            for index, order in enumerate(orders):
-                if not qrs_done.has_key(order):
-                    qrs_done[order] = index
-                    qrs.append( GaussHermiteQR(order) )
-                else:
-                    qrs.append( qrs[qrs_done[order]] )
-
             from TensorProductQR import TensorProductQR
+            # Iteratively create all quadrature rules necessary
+            qrs = [ self.create_quadrature_rule(desc) for desc in description["qr_rules"] ]
             QR = TensorProductQR(qrs)
 
         return QR

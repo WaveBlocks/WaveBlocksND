@@ -209,8 +209,7 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
     if get_hashes is True:
         hashes = self._srf[pathbs][index,...]
         # Number of components
-        print(hashes.shape)
-        N = hashes.shape[1]
+        N = self._srf[pathbs].shape[1]
         hashes = np.hsplit(hashes, N)
 
     data = []
@@ -236,7 +235,8 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             descr = {}
             for key, value in self._srf[pathd+ahash].attrs.iteritems():
                 descr[key] = pickle.loads(value)
-            descrs[ahash] = descr
+            # 'ahash' is "basis_shape_..." and we want only the "..." part
+            descrs[ahash[12:]] = descr
         return descrs
     else:
         name = "basis_shape_"+str(the_hash)
