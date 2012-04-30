@@ -15,6 +15,7 @@ from PotentialFactory import PotentialFactory
 from BlockFactory import BlockFactory
 from BasisTransformationHAWP import BasisTransformationHAWP
 from HagedornPropagator import HagedornPropagator
+from BlockFactory import BlockFactory
 
 
 class SimulationLoopHagedorn(SimulationLoop):
@@ -45,7 +46,6 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Set up serializing of simulation data
         self.IOManager = IOManager()
         self.IOManager.create_file(self.parameters)
-        self.IOManager.create_block()
 
 
     def prepare_simulation(self):
@@ -57,29 +57,41 @@ class SimulationLoopHagedorn(SimulationLoop):
         # The potential instance
         potential = PotentialFactory().create_potential(self.parameters)
 
-        # Create a suitable wave packet
-        packet = WavepacketFactory().create_wavepacket(self.parameters)
-
         # Project the initial values to the canonical basis
         BT = BasisTransformationHAWP(potential)
-        BT.transform_to_canonical(packet)
 
         # Finally create and initialize the propagator instace
         # TODO: Attach the "leading_component to the hawp as codata
-        self.propagator = HagedornPropagator(potential, packet, self.parameters["leading_component"], self.parameters)
+        self.propagator = HagedornPropagator(self.parameters, potential)
 
-        # Write some initial values to disk
+        # Create  suitable wavepackets
+        chi = self.parameters["leading_component"]
+
+        for packet_descr in self.parameters["initvals"]:
+            packet = BlockFactory().create_wavepacket(packet_descr)
+            # Transform to canonical basis
+            BT.transform_to_canonical(packet)
+            # And hand over
+            self.propagator.add_wavepacket((packet, chi))
+
+        # Add storage for each packet
+        npackets = len(self.parameters["initvals"])
         slots = self._tm.compute_number_saves()
 
-        self.IOManager.add_grid(self.parameters, blockid="global")
-        self.IOManager.add_wavepacket(self.parameters, timeslots=slots)
-        # Pi
-        self.IOManager.save_wavepacket_parameters(self.propagator.get_wavepackets().get_parameters(), timestep=0)
-        # Basis shapes
-        for shape in self.propagator.get_wavepackets().get_basis_shape():
-            self.IOManager.save_wavepacket_basisshapes(shape, timestep=0)
-        # Coefficients
-        self.IOManager.save_wavepacket_coefficients(self.propagator.get_wavepackets().get_coefficients(), timestep=0)
+        for i in xrange(npackets):
+            bid = self.IOManager.create_block()
+            self.IOManager.add_wavepacket(self.parameters, timeslots=slots, blockid=bid)
+
+        # Write some initial values to disk
+        for packet in self.propagator.get_wavepackets():
+            self.IOManager.save_wavepacket_description(packet.get_description())
+            # Pi
+            self.IOManager.save_wavepacket_parameters(packet.get_parameters(), timestep=0)
+            # Basis shapes
+            for shape in packet.get_basis_shape():
+                self.IOManager.save_wavepacket_basisshapes(shape)
+            # Coefficients
+            self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shape(), timestep=0)
 
 
     def run_simulation(self):
@@ -99,15 +111,15 @@ class SimulationLoopHagedorn(SimulationLoop):
                 # TODO: Generalize for arbitrary number of wavepackets
                 packets = self.propagator.get_wavepackets()
                 assert len(packets) == 1
-                packet = packets[0]
 
-                # Pi
-                self.IOManager.save_wavepacket_parameters(packet.get_parameters(), timestep=i)
-                # Basis shapes (in case they changed!)
-                for shape in packet.get_basis_shape():
-                    self.IOManager.save_wavepacket_basisshapes(shape, timestep=i)
-                # Coefficients
-                self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), timestep=i)
+                for packet in packets:
+                    # Pi
+                    self.IOManager.save_wavepacket_parameters(packet.get_parameters(), timestep=i)
+                    # Basis shapes (in case they changed!)
+                    for shape in packet.get_basis_shape():
+                        self.IOManager.save_wavepacket_basisshapes(shape)
+                    # Coefficients
+                    self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shape(), timestep=i)
 
 
     def end_simulation(self):
