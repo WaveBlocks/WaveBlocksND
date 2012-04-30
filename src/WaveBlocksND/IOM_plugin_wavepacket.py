@@ -33,6 +33,8 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0):
     grp_bs = grp_wp.create_group("basisshapes")
     # The group for storing the parameter set Pi
     grp_pi = grp_wp.create_group("Pi")
+    # The group for storing the coefficients
+    grp_ci = grp_wp.create_group("coefficients")
 
     # Create the dataset with appropriate parameters
     if timeslots is None:
@@ -44,7 +46,8 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0):
         daset_Q = grp_pi.create_dataset("Q", (0, D, D), dtype=np.complexfloating, chunks=True, maxshape=(None,D,D))
         daset_P = grp_pi.create_dataset("P", (0, D, D), dtype=np.complexfloating, chunks=True, maxshape=(None,D,D))
         daset_S = grp_pi.create_dataset("S", (0, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,1,1))
-        daset_c = grp_wp.create_dataset("coefficients", (0, N, bs), dtype=np.complexfloating, chunks=True, maxshape=(None,N,bs))
+        for i in xrange(N):
+            daset_c_i = grp_ci.create_dataset("c_"+str(i), (0, bs), dtype=np.complexfloating, chunks=True, maxshape=(None,bs))
     else:
         # User specified how much space is necessary.
         daset_tg = grp_wp.create_dataset("timegrid", (timeslots,), dtype=np.integer)
@@ -54,11 +57,12 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0):
         daset_Q = grp_pi.create_dataset("Q", (timeslots, D, D), dtype=np.complexfloating)
         daset_P = grp_pi.create_dataset("P", (timeslots, D, D), dtype=np.complexfloating)
         daset_S = grp_pi.create_dataset("S", (timeslots, 1, 1), dtype=np.complexfloating)
-        daset_c = grp_wp.create_dataset("coefficients", (timeslots, N, bs), dtype=np.complexfloating)
+        for i in xrange(N):
+            daset_c_i = grp_ci.create_dataset("c_"+str(i), (timeslots, bs), dtype=np.complexfloating)
 
     # Attach pointer to data instead timegrid
     grp_pi.attrs["pointer"] = 0
-    daset_c.attrs["pointer"] = 0
+    grp_ci.attrs["pointer"] = 0
 
 
 def delete_wavepacket(self, blockid=0):
@@ -89,7 +93,7 @@ def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0):
     # Write the data
     for key, item in zip(("q","p","Q","P","S"), parameters):
         self.must_resize(pathd+key, timeslot)
-        self._srf[pathd+key][timeslot,:,:] = np.squeeze(item)
+        self._srf[pathd+key][timeslot,:,:] = item
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -111,16 +115,16 @@ def save_wavepacket_coefficients(self, coefficients, basisshapes, timestep=None,
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
     pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # Write the data
-    self.must_resize(pathd, timeslot)
     self.must_resize(pathbs, timeslot)
     for index, (bs,ci) in enumerate(zip(basisshapes, coefficients)):
+        self.must_resize(pathd+"c_"+str(index), timeslot)
         size = bs.get_basis_size()
         self._srf[pathbs][timeslot,index] = hash(bs)
-        self._srf[pathd][timeslot,index,:size] = np.squeeze(ci)
+        self._srf[pathd+"c_"+str(index)][timeslot,:size] = np.squeeze(ci)
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -173,27 +177,34 @@ def load_wavepacket_parameters(self, timestep=None, blockid=0):
     return params
 
 
-def load_wavepacket_coefficients(self, timestep=None, get_hash=True, blockid=0):
+def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, component=None, blockid=0):
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
     pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
-        if get_hash is True:
-            return ( self._srf[pathbs][index,...],
-                     self._srf[pathd][index,...])
-        else:
-            return self._srf[pathd][index,...]
     else:
-        if get_hash is True:
-            return ( self._srf[pathbs][...],
-                     self._srf[pathd][...])
-        else:
-            return self._srf[pathd][...]
+        index = slice(None)
+
+    if get_hashes is True:
+        hashes = self._srf[pathbs][index,...]
+        # Number of components
+        print(hashes.shape)
+        N = hashes.shape[1]
+        hashes = np.hsplit(hashes, N)
+
+    data = []
+    for i in xrange(len(self._srf[pathd].keys())):
+        data.append( self._srf[pathd+"c_"+str(i)][index,...] )
+
+    if get_hashes is True:
+        return (hashes, data)
+    else:
+        return data
 
 
-def load_wavepacket_basisshape(self, the_hash=None, blockid=0):
+def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
     r"""Load the basis shapes by hash.
     """
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/basisshapes/"
