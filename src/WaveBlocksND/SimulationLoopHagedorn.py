@@ -70,6 +70,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         for packet_descr in self.parameters["initvals"]:
             packet = BlockFactory().create_wavepacket(packet_descr)
             # Transform to canonical basis
+            BT.set_matrix_builder(packet.get_quadrature())
             BT.transform_to_canonical(packet)
             # And hand over
             self.propagator.add_wavepacket((packet, chi))
