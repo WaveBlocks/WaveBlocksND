@@ -80,6 +80,15 @@ def has_wavepacket(self, blockid=0):
     return "wavepacket" in self._srf[self._prefixb+str(blockid)].keys()
 
 
+def save_wavepacket_description(self, descr, blockid=0):
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+    # Save the description
+    for key, value in descr.iteritems():
+        # Store all the values as pickled strings because hdf can
+        # only store strings or ndarrays as attributes.
+        self._srf[pathd].attrs[key] = pickle.dumps(value)
+
+
 def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0):
     r"""Save the parameter set :math:`\Pi` of the Hagedorn wavepacket :math:`\Psi` to a file.
 
@@ -158,6 +167,16 @@ def save_wavepacket_basisshapes(self, basisshape, blockid=0):
             daset.attrs[key] = pickle.dumps(value)
 
         # TODO: Consider to save the mapping. Do we want or need this?
+
+
+def load_wavepacket_description(self, blockid=0):
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+
+    # Load and return all descriptions available
+    descr = {}
+    for key, value in self._srf[pathd].attrs.iteritems():
+        descr[key] = pickle.loads(value)
+    return descr
 
 
 def load_wavepacket_timegrid(self, blockid=0):
