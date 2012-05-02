@@ -24,6 +24,8 @@ Basic numerics
 .. toctree::
    :maxdepth: 1
 
+   waveblocks_classes/ComplexMath
+
    waveblocks_classes/Grid
    waveblocks_classes/DenseGrid
    waveblocks_classes/TensorProductGrid
