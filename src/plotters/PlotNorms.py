@@ -19,6 +19,7 @@ import GraphicsDefaults as GD
 
 def read_all_datablocks(iom):
     """Read the data from all blocks that contain any usable data.
+
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     """
     # Iterate over all blocks and plot their data
