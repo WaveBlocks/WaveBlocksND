@@ -125,6 +125,19 @@ class HyperbolicCutShape(BasisShape):
             return (l in self._lima or l in self._lima_ext)
 
 
+    def get_description(self):
+        r"""Return a description of this basis shape object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current basis shape. A description
+        never contains any data.
+        """
+        d = {}
+        d["type"] = "HyperbolicCutShape"
+        d["dimension"] = self._dimension
+        d["K"] = self._sparsity
+        return d
+
+
     def _get_index_iterator_lex(self, extended=False):
         r"""
         """

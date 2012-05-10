@@ -34,6 +34,12 @@ class BlockFactory(object):
             limits = description["limits"]
             BS = HyperCubicShape(limits)
 
+        elif bs_type == "HyperbolicCutShape":
+            from HyperbolicCutShape import HyperbolicCutShape
+            K = description["K"]
+            D = description["dimension"]
+            BS = HyperbolicCutShape(D, K)
+
         else:
             raise ValueError("Unknown basis shape type "+str(bs_type))
 
