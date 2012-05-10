@@ -74,24 +74,24 @@ class ObservablesHAWP(Observables):
             if i in K:
                 ccur = coeffs[K[i]]
             else:
-                ccur = 0.0
+                ccur = 0.0j
 
             # Backward neighbours phi_{i - e_d}
             cbw = zeros((D,1), dtype=complexfloating)
-            nbw = K.get_neighbours(i, selection="backward", extended=False)
+            nbw = K.get_neighbours(i, selection="backward")
 
             for d, nb in nbw:
                 cbw[d] = coeffs[K[nb]] * sqrt(i[d])
 
             # Forward neighbours phi_{i + e_d}
             cfw = zeros((D,1), dtype=complexfloating)
-            nfw = K.get_neighbours(i, selection="forward", extended=False)
+            nfw = K.get_neighbours(i, selection="forward")
 
             for d, nb in nfw:
                 cfw[d] = coeffs[K[nb]] * sqrt(i[d] + 1.0)
 
             # Compute parts and assemble
-            cnew[K[i],:] = squeeze(sqrt(eps**2/2.0) * (dot(P, cfw) + dot(Pbar, cbw)) + p * ccur)
+            cnew[K[i],:] = squeeze(sqrt(eps**2/2.0) * (dot(Pbar, cfw) + dot(P, cbw)) + p * ccur)
 
         return (K, cnew)
 
