@@ -115,7 +115,7 @@ def read_data_inhomogeneous(iom, blockid=0):
 #     return time, coeffs
 
 
-def plot_coefficients(parameters, data, index=0, imgsize=(5,20)):
+def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -130,6 +130,10 @@ def plot_coefficients(parameters, data, index=0, imgsize=(5,20)):
 
     # Plot for each of the N levels
     for jndex, coeff in enumerate(coeffs):
+
+        # Scale the image to roughly fit the data shape
+        v, u = coeff.shape
+        imgsize = (imgsize[0], int(10*v / (1.0*u)))
 
         fig = figure(figsize=imgsize)
         ax = gca()
