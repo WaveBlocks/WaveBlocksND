@@ -104,8 +104,22 @@ def plot_energies(data, index=0):
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
     ax.set_title(r"Energy drift of the wavepacket $\Psi$")
 
-    fig.savefig("energy_drift_block"+str(index)+GD.output_format)
+    fig.savefig("energy_drift_block"+str(index)+"_lin"+GD.output_format)
     close(fig)
+
+
+    fig = figure()
+    ax = fig.gca()
+
+    ax.semilogy(timegrid, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
+    ax.grid(True)
+    ax.set_xlabel(r"Time $t$")
+    ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
+    ax.set_title(r"Energy drift of the wavepacket $\Psi$")
+
+    fig.savefig("energy_drift_block"+str(index)+"_log"+GD.output_format)
+    close(fig)
+
 
 
 if __name__ == "__main__":
