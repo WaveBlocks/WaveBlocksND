@@ -5,7 +5,6 @@
 @license: Modified BSD License
 """
 
-from surfcf import surfcf
 from plotcm import plotcm
 from contourcf import contourcf
 

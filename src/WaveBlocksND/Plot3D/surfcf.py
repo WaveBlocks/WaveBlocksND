@@ -1,11 +1,11 @@
-"""The WaveBlocks Project
+r"""The WaveBlocks Project
 
-Function for plotting functions of the type f:I^2 -> C
-with abs(f) as y-value and phase(f) as color code.
+Function for plotting functions of the type :math:`f:I^2 -> C`
+with :math:`|f|` as y-value and :math:`\arg(f)` as color code.
 This function makes a 3D surface plot.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -24,12 +24,14 @@ def compute_color_map():
 
 
 def surfcf(gridx, gridy, phase, modulus, colormap=None):
-    """Plot the modulus of a complex valued function $f:R^2 -> C$ together with its phase in a color coded fashion.
-    @param gridx: The grid nodes along the x axis of the real domain R^2
-    @param gridy: The grid nodes along the y axis of the real domain R^2
-    @param phase: The phase of the complex domain result f(grid)
-    @param modulus: The modulus of the complex domain result f(grid)
-    @keyword colormap: The colormap to use, if none is given, compute the 'default' QM colormap.
+    r"""Plot the modulus of a complex valued function :math:`f:R^2 -> C`
+    together with its phase in a color coded fashion.
+
+    :param gridx: The grid nodes along the :math:`x` axis of the real domain :math:`R^2`
+    :param gridy: The grid nodes along the :math:`y` axis of the real domain :math:`R^2`
+    :param phase: The phase of the complex domain result f(grid)
+    :param modulus: The modulus of the complex domain result f(grid)
+    :param colormap: The colormap to use, if none is given, compute the 'default' QM colormap.
     """
     if colormap is None:
         colormap = compute_color_map()

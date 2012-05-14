@@ -4,7 +4,7 @@ Function for mapping complex numbers to colors specified
 by the usual color map used in quantum mechanics.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011 R. Bourquin
+@copyright: Copyright (C) 2011, 2012 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -14,10 +14,11 @@ from matplotlib.colors import hsv_to_rgb
 
 def color_map(data, phase=None, modulus=None, darken=False):
     """Color mapping according to the QM standard map.
-    @param data: The complex numbers.
-    @keyword phase: The phase of the complex numbers, computed if not given.
-    @keyword modulus: The modulus of the complex numbers, computed if not given.
-    @keyword darken: Whether to take into account the modulus of the data to darken colors.
+
+    :param data: The complex numbers.
+    :param phase: The phase of the complex numbers, computed if not given.
+    :param modulus: The modulus of the complex numbers, computed if not given.
+    :param darken: Whether to take into account the modulus of the data to darken colors.
     """
     if len(data.shape) == 1:
         hsv_colors = empty((1,)+data.shape+(3,))
