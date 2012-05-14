@@ -102,6 +102,26 @@ cosh_osc_2d["variables"] = ["x", "y"]
 cosh_osc_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
 cosh_osc_2d["defaults"] = {"a":"1", "b":"1"}
 
+# A potential consisting of a hyperbolic cosine
+corral_rotsym_2d = {}
+corral_rotsym_2d["variables"] = ["x", "y"]
+corral_rotsym_2d["potential"] = "atan(sigma*(sqrt(x**2+y**2) - R)) + pi/2"
+corral_rotsym_2d["defaults"] = {"sigma":"10", "R":"8"}
+
+# A potential consisting of circular pit of radius R
+circle_pit_2d = {}
+circle_pit_2d["variables"] = ["x", "y"]
+circle_pit_2d["potential"] = "atan(sigma*(sqrt(x**2+y**2) - R)) + pi/2"
+circle_pit_2d["defaults"] = {"sigma":"10", "R":"8"}
+
+# A potential consisting of a ring like corral
+corral_ring = {}
+corral_ring["variables"] = ["x", "y"]
+corral_ring["potential"] = "sqrt(delta**2 + tanh(sqrt(x**2 + y**2) - R)**2*tanh(sqrt(x**2 + y**2) + R)**2)/2"
+corral_ring["defaults"] = {"delta":"1/32", "R":"3"}
+
+
+
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #
@@ -157,6 +177,11 @@ two_crossings["defaults"] = {"rho":3.0}
 ######################################################################
 # Potentials in two dimensions and with two energy levels (D=2, N=2) #
 ######################################################################
+
+delta_gap_rotsym = {}
+delta_gap_rotsym["variables"] = ["x", "y"]
+delta_gap_rotsym["potential"] = [["tanh(sqrt(x**2 + y**2))/2",                      "delta"],
+                                 ["delta"                    , "-tanh(sqrt(x**2 + y**2))/2"]]
 
 
 ########################################################################
