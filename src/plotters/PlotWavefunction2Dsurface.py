@@ -3,7 +3,7 @@
 Plot the wavefunctions probability densities for two-dimensional wavefunctions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2012 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -16,10 +16,10 @@ from WaveBlocksND import GridFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 from WaveBlocksND import IOManager
-from WaveBlocksND.Plot import surfcf
+from WaveBlocksND.Plot3D import surfcf
 
 
-def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, imgsize=(12,9)):
+def plot_frames(iom, blockid=0):
 
     parameters = iom.load_parameters()
 
