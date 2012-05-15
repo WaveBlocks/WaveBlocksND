@@ -261,16 +261,10 @@ class MatrixPotential2S(MatrixPotential):
         We can do this by symbolic calculations.
         Note: This function is idempotent and the eigenvectors are memoized for later reuse.
         """
-        # Assumption: The matrix is symmetric
-        # TODO: Consider generalization for arbitrary 2x2 matrices?
-        V1 = self._potential_s[0,0]
-        V2 = self._potential_s[0,1]
-
-        theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
-
-        # The two eigenvectors
-        upper = sympy.Matrix([[ sympy.cos(theta)], [sympy.sin(theta)]])
-        lower = sympy.Matrix([[-sympy.sin(theta)], [sympy.cos(theta)]])
+        V = self._potential_s
+        ev = V.eigenvects()
+        upper = sympy.Matrix(ev[0][2]).normalized()
+        lower = sympy.Matrix(ev[1][2]).normalized()
 
         # The symbolic expressions for the eigenvectors
         self._eigenvectors_s = (upper, lower)
