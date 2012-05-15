@@ -133,7 +133,9 @@ def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
 
         # Scale the image to roughly fit the data shape
         v, u = coeff.shape
-        imgsize = (imgsize[0], int(10*v / (1.0*u)))
+        imags = (imgsize[0], int(10*v / (1.0*u)))
+        if imags[1] < 10000:
+            imgsize = imags
 
         fig = figure(figsize=imgsize)
         ax = gca()
