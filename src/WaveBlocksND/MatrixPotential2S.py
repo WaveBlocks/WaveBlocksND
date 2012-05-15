@@ -265,7 +265,8 @@ class MatrixPotential2S(MatrixPotential):
         V1 = self._potential_s[0,0]
         V2 = self._potential_s[0,1]
 
-        theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
+        #theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
+        theta = sympy.Rational(1,2) * sympy.atan(V2/V1)
 
         # The two eigenvectors
         upper = sympy.Matrix([[ sympy.cos(theta)], [sympy.sin(theta)]])
@@ -439,7 +440,7 @@ class MatrixPotential2S(MatrixPotential):
 
         for i in indices:
             jacobian = self._jacobian_n[i]
-            J = numpy.zeros((D,N))
+            J = numpy.zeros((D,N), dtype=numpy.complexfloating)
             for index, comp in enumerate(jacobian):
                 J[index, :] = comp(*nodes)
             result.append(J)
@@ -500,7 +501,7 @@ class MatrixPotential2S(MatrixPotential):
 
         for i in indices:
             hessian = self._hessian_n[i]
-            H = numpy.zeros((N,D,D))
+            H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
 
             for row in xrange(D):
                 for col in xrange(D):
@@ -762,7 +763,7 @@ class MatrixPotential2S(MatrixPotential):
 
             # Test for potential beeing constant
             if numpy.atleast_1d(values).shape == (1,):
-                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
+                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
 
             # Put the result in correct shape (1, #gridnodes)
             result = values.reshape((1,N))
@@ -773,7 +774,7 @@ class MatrixPotential2S(MatrixPotential):
 
                 # Test for potential beeing constant
                 if numpy.atleast_1d(values).shape == (1,):
-                    values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.floating)
+                    values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
 
                 # Put the result in correct shape (1, #gridnodes)
                 result.append(values.reshape((1,N)))

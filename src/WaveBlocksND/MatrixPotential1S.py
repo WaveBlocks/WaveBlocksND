@@ -259,7 +259,7 @@ class MatrixPotential1S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        J = numpy.zeros((D,N))
+        J = numpy.zeros((D,N), dtype=numpy.complexfloating)
 
         for row in xrange(D):
             J[row, :] = self._jacobian_n[row](*nodes)
@@ -296,7 +296,7 @@ class MatrixPotential1S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        H = numpy.zeros((N,D,D))
+        H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
 
         for row in xrange(D):
             for col in xrange(D):
