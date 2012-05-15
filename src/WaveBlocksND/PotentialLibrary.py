@@ -183,6 +183,16 @@ delta_gap_rotsym["variables"] = ["x", "y"]
 delta_gap_rotsym["potential"] = [["tanh(sqrt(x**2 + y**2))/2",                      "delta"],
                                  ["delta"                    , "-tanh(sqrt(x**2 + y**2))/2"]]
 
+conic = {}
+conic["variables"] = ["x", "y"]
+conic["potential"] = [["x",  "y"],
+                      ["y", "-x"]]
+
+conic_gap = {}
+conic_gap["variables"] = ["x", "y"]
+conic_gap["potential"] = [["x",           "y + I*delta"],
+                          ["y - I*delta", "-x"         ]]
+
 
 ########################################################################
 # Potentials in three dimensions and with two energy levels (D=3, N=2) #
