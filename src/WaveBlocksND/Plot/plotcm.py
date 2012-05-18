@@ -14,7 +14,7 @@ from matplotlib import ticker
 from color_map import color_map
 
 
-def plotcm(matrix, phase=None, modulus=None, darken=True, axes=None, **kwargs):
+def plotcm(matrix, phase=None, modulus=None, darken=None, axes=None, **kwargs):
     """Plot complex matrices with the phase of the entries encoded into the usual color code.
     @param matrix: The matrix data.
     @param phase: The phase of the entries, if not given they are computed.
