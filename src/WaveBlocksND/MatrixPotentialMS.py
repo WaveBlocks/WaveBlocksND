@@ -1,4 +1,4 @@
-"""The WaveBlocks Project
+r"""The WaveBlocks Project
 
 This file contains code for the representation of potentials :math:`V(x)`
 that contain three or more energy levels :math:`\lambda_i`. (In principle
@@ -15,19 +15,21 @@ import numpy
 from scipy import linalg
 
 from MatrixPotential import MatrixPotential
+from Grid import Grid
+from GridWrapper import GridWrapper
 
 __all__ = ["MatrixPotentialMS"]
 
 
 class MatrixPotentialMS(MatrixPotential):
-    """This class represents a matrix potential :math:`V(x)`. The potential is
+    r"""This class represents a matrix potential :math:`V(x)`. The potential is
     given as an analytic :math:`N \times N` matrix expression. All methods use
     pure numerical techniques because symbolical calculations are unfeasible
     for 3 or more energy levels.
     """
 
     def __init__(self, expression, variables, **kwargs):
-        """Create a new :py:class:`MatrixPotentialMS` instance for a given
+        r"""Create a new :py:class:`MatrixPotentialMS` instance for a given
         potential matrix :math:`V(x)`.
 
         :param expression:The mathematical expression representing the potential.
@@ -35,54 +37,34 @@ class MatrixPotentialMS(MatrixPotential):
         :param variables: The variables corresponding to the space dimensions.
         :type variables: A list of `Sympy` symbols.
         """
-        # This class handles potentials with a single energy level.
-        self._number_components = expression.shape[0]
-
         # The variables that represents position space. The order matters!
         self._variables = variables
 
         # The dimension of position space.
         self._dimension = len(variables)
 
-        # Find active variables and constants
-        self._variables = []
-        self._constants = []
-        self._isconstant = []
-
-        for entry in expression:
-            # Determine the variables and constants for each component
-            local_vars = [ v for v in entry.atoms(sympy.Symbol) ]
-            local_consts = [ c for c in variables if not c in local_vars ]
-            self._variables.append(local_vars)
-            self._constants.append(local_consts)
-
-            # Does the potential depend on all space variables?
-            # True:  V_i,j is constant along all axes
-            # False: V_i,j is not constant
-            # None:  V_i,j is constant along some axes
-            if len(local_consts) == 0:
-                self._isconstant.append(False)
-            elif len(local_vars) == 0:
-                self._isconstant.append(True)
-            else:
-                self._isconstant.append(None)
+        # This number of energy levels.
+        assert expression.is_square
+        # We handle the general NxN case here
+        self._number_components = expression.shape[0]
 
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
         self._potential_n = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in self._potential_s ])
 
-        # The cached eigenvalues evaluatable functions
-        self._eigenvalues_n = None
 
-        # The cached eigenvectors evaluatable functions
-        self._eigenvectors_n = None
-
-        # The cached exponential evaluatable functions
-        self._exponential_n = None
+    def _grid_wrap(self, grid):
+        # TODO: Consider additional input types for "nodes":
+        #       list of numpy ndarrays, list of single python scalars
+        if not isinstance(grid, Grid):
+            if not type(grid) is numpy.ndarray:
+                grid = numpy.atleast_2d(grid)
+            grid = GridWrapper(grid)
+        return grid
 
 
     def evaluate_at(self, grid, entry=None, as_matrix=True):
-        """Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the potential at.
@@ -91,36 +73,44 @@ class MatrixPotentialMS(MatrixPotential):
                       we want to evaluate or `None` to evaluate all entries.
         :type entry: A python tuple of two integers.
         :param as_matrix: Dummy parameter which has no effect here.
-        :return: A list containing :math:`N^2` numpy ndarrays of shape :math:`(N_1, ... ,N_D)`.
+        :return: A list containing :math:`N^2` numpy ndarrays of shape :math:`(1, |\Gamma|)`.
         """
+        grid = self._grid_wrap(grid)
+
+        # Determine which entries to evaluate
         if entry is not None:
             (row, col) = entry
-            items = [ row * self._number_components + col ]
+            entries = [ row * self._number_components + col ]
         else:
             N = self._number_components
-            items = [ row * N + col for row in xrange(N) for col in xrange(N) ]
+            entries = [ row * N + col for row in xrange(N) for col in xrange(N) ]
 
         # Evaluate all entries specified
         result = []
 
-        for item in items:
-            if self._isconstant[item] is False:
-                # We can use numpy broadcasting
-                # TODO: This only works with tensor product grids
-                result.append( self._potential_n[item](*grid.get_axes()) )
-            elif self._isconstant[item] is None:
-                # Make sure we work with (N_1, ..., N_D) shaped arrays
-                result.append( self._potential_n[item](*grid.get_nodes(split=True, flat=False)) )
-            elif self._isconstant[item] is True:
-                values = self._potential_n[item](*grid.get_axes())
-                result.append( values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating) )
+        nodes = grid.get_nodes(split=True)
+
+        for index in entries:
+            # Evaluate the potential at the given nodes
+            values = self._potential_n[index](*nodes)
+
+            # Test for potential beeing constant
+            if numpy.atleast_1d(values).shape == (1,):
+                values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
+
+            # Put the result in correct shape (1, #gridnodes)
+            N = grid.get_number_nodes(overall=True)
+            result.append( values.reshape((1,N)) )
 
         # TODO: Consider unpacking single ndarray iff entry != None
+        if entry is not None:
+            result = result[0]
+
         return tuple(result)
 
 
     def calculate_eigenvalues(self):
-        """Calculate all the eigenvalues :math:`\lambda_i(x)` of the potential :math:`V(x)`.
+        r"""Calculate all the eigenvalues :math:`\lambda_i(x)` of the potential :math:`V(x)`.
         We can not do this by symbolic calculations, hence the function has an empty
         implementation. We compute the eigenvalues by numercial techniques in the corresponding
         `evaluate_eigenvalues_at` function.
@@ -129,7 +119,7 @@ class MatrixPotentialMS(MatrixPotential):
 
 
     def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False):
-        """Evaluate the eigenvalues :math:`\lambda_i(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the eigenvalues :math:`\lambda_i(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvalues at.
@@ -140,10 +130,18 @@ class MatrixPotentialMS(MatrixPotential):
         :type entry: A python tuple of two integers.
         :param as_matrix: Whether to include the off-diagonal zero entries of
                           :math:`\Lambda_{i,j}(x)` in the return value.
-        :return: A list containing the numpy ndarrays, all of shape :math:`(N_1, ... ,N_D)`.
+        :return: A list containing the numpy ndarrays, all of shape :math:`(1, |\Gamma|)`.
         """
+        grid = self._grid_wrap(grid)
+
         N = self._number_components
         n = grid.get_number_nodes(overall=True)
+
+        # Early return shortcut for off-diagonal entries
+        if entry is not None:
+            (row, col) = entry
+            if row != col:
+                return numpy.zeros((1, n), dtype=numpy.complexfloating)
 
         # Memory for storing temporary values
         tmppot = numpy.ndarray((n, N, N), dtype=numpy.complexfloating)
@@ -151,7 +149,6 @@ class MatrixPotentialMS(MatrixPotential):
 
         # Evaluate potential
         values = self.evaluate_at(grid)
-        values = [ value.flatten() for value in values ]
 
         # Fill in values
         for row in xrange(N):
@@ -167,15 +164,12 @@ class MatrixPotentialMS(MatrixPotential):
             tmpew[i,:] = ew[::-1]
 
         # Split the data into different eigenvalues
-        shape = grid.get_number_nodes()
-        tmp = [ tmpew[:,index].reshape(shape) for index in xrange(N) ]
+        tmp = [ tmpew[:,index].reshape((1,n)) for index in xrange(N) ]
 
         if entry is not None:
             (row, col) = entry
-            if row == col:
-                result = tmp[row]
-            else:
-                result = numpy.zeros(tmp[row].shape, dtype=numpy.complexfloating)
+            result = tmp[row]
+            # Offdiagonal case handled on top
         elif as_matrix is True:
             result = []
             for row in xrange(N):
@@ -185,13 +179,13 @@ class MatrixPotentialMS(MatrixPotential):
                     else:
                         result.append(numpy.zeros(tmp[row].shape, dtype=numpy.complexfloating))
         else:
-            result = tmp
+            result = tuple(tmp)
 
         return result
 
 
     def calculate_eigenvectors(self):
-        """Calculate all the eigenvectors :math:`\nu_i(x)` of the potential :math:`V(x)`.
+        r"""Calculate all the eigenvectors :math:`\nu_i(x)` of the potential :math:`V(x)`.
         We can not do this by symbolic calculations, hence the function has an empty
         implementation. We compute the eigenvectors by numercial techniques in the corresponding
         `evaluate_eigenvectors_at` function.
@@ -200,13 +194,15 @@ class MatrixPotentialMS(MatrixPotential):
 
 
     def evaluate_eigenvectors_at(self, grid):
-        """Evaluate the eigenvectors :math:`\nu_i(x)` elementwise on a grid :math:`\Gamma`.
+        r"""Evaluate the eigenvectors :math:`\nu_i(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvectors at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
-        :return: A list containing the numpy ndarrays, all of shape :math:`(N_1, ... ,N_D, 1)`.
+        :return: A list containing the :math:`N` numpy ndarrays, all of shape :math:`(D, |\Gamma|)`.
         """
+        grid = self._grid_wrap(grid)
+
         N = self._number_components
         n = grid.get_number_nodes(overall=True)
 
@@ -216,7 +212,6 @@ class MatrixPotentialMS(MatrixPotential):
 
         # Evaluate potential
         values = self.evaluate_at(grid)
-        values = [ value.flatten() for value in values ]
 
         # Fill in values
         for row in xrange(N):
@@ -233,21 +228,21 @@ class MatrixPotentialMS(MatrixPotential):
             tmpev[i,:,:] = evs
 
         # A trick due to G. Hagedorn to get continuous eigenvectors
-        for i in xrange(1, n):
+        # TODO: Not sure if it works in higher dimensions too! (Probably it does not)
+        for i in xrange(1,n):
             for ev in xrange(0,N):
                 if numpy.dot(tmpev[i,:,ev],tmpev[i-1,:,ev]) < 0:
                     tmpev[i,:,ev] *= -1
 
-        result = tuple([ numpy.transpose(tmpev[:,:,index]) for index in xrange(N) ])
-        return result
+        return tuple([ numpy.transpose(tmpev[:,:,index]) for index in xrange(N) ])
 
 
     def calculate_exponential(self, factor=1):
-        """Calculate the matrix exponential :math:`\exp(\alpha V)`. In the case
+        r"""Calculate the matrix exponential :math:`\exp(\alpha V)`. In the case
         of this class the matrix is of size :math:`N \times N` thus the exponential
         can not be calculated analytically for a general matrix. We use numerical
-        approximations to determine the matrix exponential.
-        Note: This function is idempotent.
+        approximations to determine the matrix exponential. We just store
+        the prefactor :math:`\alpha` for use during numerical evaluation.
 
         :param factor: The prefactor :math:`\alpha` in the exponential.
         """
@@ -256,15 +251,17 @@ class MatrixPotentialMS(MatrixPotential):
 
 
     def evaluate_exponential_at(self, grid):
-        """Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
+        r"""Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the exponential at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
         :return: The numerical approximation of the matrix exponential at the given grid nodes.
-                 A list contains the exponentials for all entries :math:`(i,j)`, each having the
-                 same shape as the grid.
+                 A list contains the exponentials for all entries :math:`(i,j)`, each having
+                 a shape of :math:`(1, |\Gamma|)`.
         """
+        grid = self._grid_wrap(grid)
+
         N = self._number_components
         n = grid.get_number_nodes(overall=True)
 
@@ -273,7 +270,6 @@ class MatrixPotentialMS(MatrixPotential):
 
         # Evaluate potential
         values = self.evaluate_at(grid)
-        values = [ value.flatten() for value in values ]
 
         # Fill in values
         for row in xrange(N):
@@ -285,6 +281,4 @@ class MatrixPotentialMS(MatrixPotential):
             tmp[i,:,:] = linalg.expm(tmp[i,:,:], 10)
 
         # Split the data into different components
-        shape = grid.get_number_nodes()
-        result = [ tmp[:,row,col].reshape(shape) for row in xrange(N) for col in xrange(N) ]
-        return tuple(result)
+        return tuple([ tmp[:,row,col].reshape((1,n)) for row in xrange(N) for col in xrange(N) ])
