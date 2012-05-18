@@ -23,6 +23,7 @@ def color_map(data, phase=None, modulus=None, darken=1.0):
                    while :math:`|z| = 0` is black and :math:`|z| \rightarrow \infty`
                    get whiter and whiter.
     :type darken: Float or ``None`` to disable darkening of colors. Default is :math:`R = 1.0`.
+    :param axes: The axes instance used for plotting.
     """
     if len(data.shape) == 1:
         hsv_colors = empty((1,)+data.shape+(3,))

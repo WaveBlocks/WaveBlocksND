@@ -6,6 +6,7 @@
 """
 
 from plotcm import plotcm
+from plotcf2d import plotcf2d
 from contourcf import contourcf
 
 from legend import legend
