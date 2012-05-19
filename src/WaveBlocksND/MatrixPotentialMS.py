@@ -282,3 +282,159 @@ class MatrixPotentialMS(MatrixPotential):
 
         # Split the data into different components
         return tuple([ tmp[:,row,col].reshape((1,n)) for row in xrange(N) for col in xrange(N) ])
+
+
+    def calculate_jacobian(self):
+        r"""Calculate the Jacobian matrix :math:`\nabla \lambda_i` of the potential's
+        eigenvalues :math:`\Lambda(x)` with :math:`x \in \mathbb{R}^D`. For potentials
+        which depend only one variable, this equals the first derivative and :math:`D=1`.
+        Note that this function is idempotent.
+        """
+        pass
+
+
+    def evaluate_jacobian_at(self, grid, component=None):
+        r"""Evaluate the list of Jacobian matrices :math:`\nabla \lambda_i(x)` at some grid
+        nodes :math:`\Gamma`.
+
+        :param grid: The grid nodes :math:`\Gamma` the Jacobian gets evaluated at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
+        :param component: Dummy parameter that has no effect here.
+        :return: The value of the potential's Jacobian at the given nodes. The result
+                 is a list of ``ndarray`` each of shape :math:`(D,1)` is we evaluate
+                 at a single grid node or of shape :math:`(D,|\Gamma|)`
+                 if we evaluate at multiple nodes simultaneously.
+        """
+        pass
+
+
+    def calculate_hessian(self):
+        r"""Calculate the Hessian matrix :math:`\nabla^2 \lambda_i` of the potential's
+        eigenvalues :math:`\Lambda(x)` with :math:`x \in \mathbb{R}^D`. For potentials
+        which depend only one variable, this equals the second derivative and :math:`D=1`.
+        Note that this function is idempotent.
+        """
+        pass
+
+
+    def evaluate_hessian_at(self, grid, component=None):
+        r"""Evaluate the list of Hessian matrices :math:`\nabla^2 \lambda_i(x)` at some grid
+        nodes :math:`\Gamma`.
+
+        :param grid: The grid nodes :math:`\Gamma` the Hessian gets evaluated at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
+        :param component: Dummy parameter that has no effect here.
+        :return: The value of the potential's Hessian at the given nodes. The result
+                 is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single
+                 grid node or of shape :math:`(|\Gamma|,D,D)` if we evaluate at multiple
+                 nodes simultaneously.
+        """
+        pass
+
+
+    def _calculate_local_quadratic_component(self, diagonal_component):
+        r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
+        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
+        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        """
+        pass
+
+
+    def calculate_local_quadratic(self, diagonal_component=None):
+        r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
+        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
+        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
+        If the parameter :math:`i` is not given, calculate the local quadratic approximation
+        matrix :math:`U(x)` of all the potential's eigenvalues in :math:`\Lambda`. This case
+        can be used for the inhomogeneous case.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        :type diagonal_component: Integer or ``None`` (default)
+        """
+        if diagonal_component is not None:
+            self._calculate_local_quadratic_component(diagonal_component)
+        else:
+            for component in xrange(self._number_components):
+                self._calculate_local_quadratic_component(component)
+
+
+    def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
+        r"""Numerically evaluate the local quadratic approximation matrix :math:`U(x)` of
+        the potential's eigenvalues in :math:`\Lambda(x)` at the given grid nodes :math:`\Gamma`.
+
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma` we want to
+                     evaluate the quadratic approximation at.
+        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        :return: A list of tuples or a single tuple. Each tuple :math:`(\lambda, J, H)` contains the
+                 the evaluated eigenvalues :math:`\lambda_i(\Gamma)`, the Jacobian :math:`J(\Gamma)`
+                 and the Hessian :math:`H(\Gamma)` in this order.
+        """
+        pass
+
+
+    def _calculate_local_remainder_component(self, diagonal_component=None):
+        r"""Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
+        Taylor approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda_i(x)`.
+        Note that this function is idempotent.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`.
+        """
+        pass
+
+
+    def _calculate_local_remainder_inhomogeneous(self):
+        r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
+        quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
+        :math:`\Lambda(x)`. This function is used for the inhomogeneous case.
+        """
+        pass
+
+
+    def calculate_local_remainder(self, diagonal_component=None):
+        r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
+        quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
+        :math:`\Lambda(x)`. In the homogeneous case the matrix :math:`U` is given by
+        :math:`U(x) = \text{diag}([u_i,\ldots,u_i])` where in the inhomogeneous case it
+        is given by :math:`U(x) = \text{diag}([u_0,\ldots,u_{N-1}])`.
+
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i`. If set to
+                                   ``None`` the inhomogeneous case is computed.
+        :type diagonal_component: Integer or ``None`` (default)
+        """
+        if diagonal_component is not None:
+            self._calculate_local_remainder_component(diagonal_component)
+        else:
+            self._calculate_local_remainder_inhomogeneous()
+
+
+    def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
+        r"""Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic
+        approximation :math:`U(x)` of the potential's eigenvalue :math:`\Lambda(x)` at the
+        given nodes :math:`\Gamma`.
+
+         Warning: do not set the ``diagonal_component`` and the ``entry`` parameter both to ``None``.
+
+        :param grid: The grid nodes :math:`\Gamma` the remainder :math:`W` gets evaluated at.
+        :param position: The point :math:`q \in \mathbb{R}^D` where the Taylor series is computed.
+        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
+                                   that gets expanded into a Taylor series :math:`u_i` and whose
+                                   remainder matrix :math:`W(x) = V(x) - \text{diag}([u_i,\ldots,u_i])`
+                                   we evaluate. If set to ``None`` the inhomogeneous case given by
+                                   :math:`W(x) = V(x) - \text{diag}([u_0,\ldots,u_{N-1}])` is computed.
+        :type diagonal_component: Integer or ``None`` (default)
+        :param entry: The entry :math:`\left(i,j\right)` of the remainder matrix :math:`W`
+                      that is evaluated.
+        :type entry: A python tuple of two integers.
+        :return: A list with :math:`N^2` ``ndarray`` elements or a single ``ndarray``. Each
+                 containing the values of :math:`W_{i,j}(\Gamma)`. Each array is of shape
+                 :math:`(1,|\Gamma|)`.
+        """
+        pass
