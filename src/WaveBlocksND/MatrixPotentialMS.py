@@ -388,17 +388,15 @@ class MatrixPotentialMS(MatrixPotential):
         Jn = []
         # For each eigenvalue
         for l in xrange(N):
-            Jl = numpy.zeros((n, D), dtype=numpy.complexfloating)
+            Jl = numpy.zeros((D, n), dtype=numpy.complexfloating)
             # For each variable xi
             for i in xrange(D):
-                # Evaluate the Jacobian of the matrix entries
                 dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
-                # And compute the formula
                 # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
-                for ooo in xrange(n):
-                    Jl[ooo, i] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxi[ooo,:,:], EV[l][:,ooo]))
+                Jl[i,:] = numpy.einsum("j...,...jk,k...", EV[l], dAdxi, EV[l])
 
-            Jn.append(numpy.transpose(Jl))
+            Jn.append(Jl)
+
         return tuple(Jn)
 
 
@@ -445,34 +443,26 @@ class MatrixPotentialMS(MatrixPotential):
             # For all variable pairs (xi, xj)
             for i in xrange(D):
                 for j in xrange(D):
-
                     # First term
                     dAdxidxj = self._evaluate_hessian_of_matrix((i,j), grid)
-
-                    for ooo in xrange(n):
-                        Hl[i,j, ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxidxj[ooo,:,:], EV[l][:,ooo]))
+                    Hl[i,j] = numpy.einsum("j...,...jk,k...", EV[l], dAdxidxj, EV[l])
 
                     # Second terms
                     tmp = numpy.zeros((n,), dtype=numpy.complexfloating)
-
-                    for s in xrange(N):
-                        if s != l:
+                    for k in xrange(N):
+                        if k != l:
                             # TODO: Pull these out of the i/j loops?
                             dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
                             dAdxj = self._evaluate_jacobian_of_matrix(j, grid)
 
-                            factor1 = numpy.zeros((n,), dtype=numpy.complexfloating)
-                            factor2 = numpy.zeros((n,), dtype=numpy.complexfloating)
+                            factor1 = numpy.einsum("j...,...jk,k...", EV[l], dAdxi, EV[k])
+                            factor2 = numpy.einsum("j...,...jk,k...", EV[l], dAdxj, EV[k])
+                            tmp = tmp + factor1*factor2 / (EW[l]-EW[k])
 
-                            for ooo in xrange(n):
-                                factor1[ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxi[ooo,:,:], EV[s][:,ooo]))
-                                factor2[ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxj[ooo,:,:], EV[s][:,ooo]))
-
-                            ud = numpy.squeeze(factor1*factor2) / (EW[l]-EW[s])
-                            tmp = tmp + ud
-                            Hl[i,j,:] = Hl[i,j,:] + 2*numpy.squeeze(tmp)
+                    Hl[i,j,:] = Hl[i,j,:] + 2*tmp
 
             Hn.append(Hl)
+
         return Hn
 
 
