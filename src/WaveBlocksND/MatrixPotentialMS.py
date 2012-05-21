@@ -454,7 +454,7 @@ class MatrixPotentialMS(MatrixPotential):
         Hn = []
         # For each eigenvalue
         for l in levels:
-            Hl = numpy.zeros((N,N, n), dtype=numpy.complexfloating)
+            Hl = numpy.zeros((D,D, n), dtype=numpy.complexfloating)
 
             # For all variable pairs (xi, xj)
             for i in xrange(D):
