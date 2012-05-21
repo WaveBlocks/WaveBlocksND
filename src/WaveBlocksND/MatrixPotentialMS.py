@@ -364,11 +364,11 @@ class MatrixPotentialMS(MatrixPotential):
 
     def evaluate_jacobian_at(self, grid, component=None):
         r"""Evaluate the list of Jacobian matrices :math:`\nabla \lambda_i(x)` at some grid
-        nodes :math:`\Gamma`.
+        nodes :math:`\Gamma` for one or all eigenvalues.
 
         :param grid: The grid nodes :math:`\Gamma` the Jacobian gets evaluated at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
-        :param component: Dummy parameter that has no effect here.
+        :param component: The index :math:`i` of the eigenvalue :math:`\lambda_i`.
         :return: The value of the potential's Jacobian at the given nodes. The result
                  is a list of ``ndarray`` each of shape :math:`(D,1)` is we evaluate
                  at a single grid node or of shape :math:`(D,|\Gamma|)`
@@ -380,6 +380,12 @@ class MatrixPotentialMS(MatrixPotential):
         N = self._number_components
         n = grid.get_number_nodes(overall=True)
 
+        # For which eigenvalues do we need to do the computation
+        if component is None:
+            levels = xrange(N)
+        else:
+            levels = [component]
+
         nodes = grid.get_nodes(split=True)
 
         # Compute eigenvectors
@@ -387,7 +393,7 @@ class MatrixPotentialMS(MatrixPotential):
 
         Jn = []
         # For each eigenvalue
-        for l in xrange(N):
+        for l in levels:
             Jl = numpy.zeros((D, n), dtype=numpy.complexfloating)
             # For each variable xi
             for i in xrange(D):
@@ -397,7 +403,11 @@ class MatrixPotentialMS(MatrixPotential):
 
             Jn.append(Jl)
 
-        return tuple(Jn)
+        if component is not None:
+            # Unpack single item
+            return Jn[0]
+        else:
+            return tuple(Jn)
 
 
     def calculate_hessian(self):
@@ -411,14 +421,14 @@ class MatrixPotentialMS(MatrixPotential):
 
     def evaluate_hessian_at(self, grid, component=None):
         r"""Evaluate the list of Hessian matrices :math:`\nabla^2 \lambda_i(x)` at some grid
-        nodes :math:`\Gamma`.
+        nodes :math:`\Gamma` for one or all eigenvalues.
 
         :param grid: The grid nodes :math:`\Gamma` the Hessian gets evaluated at.
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
-        :param component: Dummy parameter that has no effect here.
+        :param component: The index :math:`i` of the eigenvalue :math:`\lambda_i`.
         :return: The value of the potential's Hessian at the given nodes. The result
                  is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single
-                 grid node or of shape :math:`(|\Gamma|,D,D)` if we evaluate at multiple
+                 grid node or of shape :math:`(D,D,|\Gamma|)` if we evaluate at multiple
                  nodes simultaneously.
         """
         grid = self._grid_wrap(grid)
@@ -429,6 +439,12 @@ class MatrixPotentialMS(MatrixPotential):
 
         nodes = grid.get_nodes(split=True)
 
+        # For which eigenvalues do we need to do the computation
+        if component is None:
+            levels = xrange(N)
+        else:
+            levels = [component]
+
         # Compute eigenvalues
         EW = self.evaluate_eigenvalues_at(grid)
 
@@ -437,7 +453,7 @@ class MatrixPotentialMS(MatrixPotential):
 
         Hn = []
         # For each eigenvalue
-        for l in xrange(N):
+        for l in levels:
             Hl = numpy.zeros((N,N, n), dtype=numpy.complexfloating)
 
             # For all variable pairs (xi, xj)
@@ -463,7 +479,11 @@ class MatrixPotentialMS(MatrixPotential):
 
             Hn.append(Hl)
 
-        return Hn
+        if component is not None:
+            # Unpack single item
+            return Hn[0]
+        else:
+            return tuple(Hn)
 
 
     def calculate_local_quadratic(self, diagonal_component=None):
@@ -474,9 +494,7 @@ class MatrixPotentialMS(MatrixPotential):
         matrix :math:`U(x)` of all the potential's eigenvalues in :math:`\Lambda`. This case
         can be used for the inhomogeneous case.
 
-        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
-                                   that gets expanded into a Taylor series :math:`u_i`.
-        :type diagonal_component: Integer or ``None`` (default)
+        :param diagonal_component: Dummy parameter which has no effect here.
         """
         self._calculate_jacobian_of_matrix()
         self._calculate_hessian_of_matrix()
@@ -492,10 +510,21 @@ class MatrixPotentialMS(MatrixPotential):
         :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
                                    that gets expanded into a Taylor series :math:`u_i`.
         :return: A list of tuples or a single tuple. Each tuple :math:`(\lambda, J, H)` contains the
-                 the evaluated eigenvalues :math:`\lambda_i(\Gamma)`, the Jacobian :math:`J(\Gamma)`
-                 and the Hessian :math:`H(\Gamma)` in this order.
+                 the evaluated eigenvalue :math:`\lambda_i(\Gamma)`, its Jacobian :math:`J(\Gamma)`
+                 and its Hessian :math:`H(\Gamma)` in this order.
         """
-        pass
+        if diagonal_component is not None:
+            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+            J = self.evaluate_jacobian_at(grid, component=diagonal_component)
+            H = self.evaluate_hessian_at(grid, component=diagonal_component)
+            result = (V, J, H)
+        else:
+            Vlist = self.evaluate_eigenvalues_at(grid)
+            Jlist = self.evaluate_jacobian_at(grid)
+            Hlist = self.evaluate_hessian_at(grid)
+            result = [ (V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist) ]
+
+        return tuple(result)
 
 
     def calculate_local_remainder(self, diagonal_component=None):
