@@ -333,7 +333,7 @@ class MatrixPotentialMS(MatrixPotential):
         dAdxk = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
         for row in xrange(N):
             for col in xrange(N):
-                dAdxk[:,row,col] = self._JV_n[variable][row+N*col](*nodes)
+                dAdxk[:,row,col] = self._JV_n[variable][row*N+col](*nodes)
 
         return dAdxk
 
@@ -348,7 +348,7 @@ class MatrixPotentialMS(MatrixPotential):
         dAdxidxj = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
         for row in xrange(N):
             for col in xrange(N):
-                dAdxidxj[:,row,col] = self._HV_n[variables][row+N*col](*nodes)
+                dAdxidxj[:,row,col] = self._HV_n[variables][row*N+col](*nodes)
 
         return dAdxidxj
 
@@ -565,4 +565,56 @@ class MatrixPotentialMS(MatrixPotential):
                  containing the values of :math:`W_{i,j}(\Gamma)`. Each array is of shape
                  :math:`(1,|\Gamma|)`.
         """
-        pass
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
+        N = self._number_components
+
+        if entry is not None:
+            rows = [entry[0]]
+            cols = [entry[1]]
+        else:
+            rows = xrange(N)
+            cols = xrange(N)
+
+        W = []
+
+        if diagonal_component is not None:
+            # Homogeneous case
+            V = self.evaluate_at(grid)
+            L, J, H = self.evaluate_local_quadratic_at(position, diagonal_component=diagonal_component)
+
+            # Compute quadratic approximation
+            # L(q) + J(q)*(G-q) + 1/2*(G-q)T*H(q)*(G-q)
+            df = nodes - position
+            U = L + numpy.einsum("i...,i...", J, df) + 0.5*numpy.einsum("j...,jk...,k...", df, H, df)
+
+            # Compute the remainder W = V - U
+            for row in rows:
+                for col in cols:
+                    if row == col:
+                        W.append(V[row*N+col] - U)
+                    else:
+                        W.append(V[row*N+col])
+        else:
+            # Inhomogeneous case
+            V = self.evaluate_at(grid)
+            # Compute the remainder W = V - U
+            for row in rows:
+                L, J, H = self.evaluate_local_quadratic_at(position, diagonal_component=row)
+                # Compute quadratic approximation
+                # L(q) + J(q)*(G-q) + 1/2*(G-q)T*H(q)*(G-q)
+                df = nodes - position
+                U = L + numpy.einsum("i...,i...", J, df) + 0.5*numpy.einsum("j...,jk...,k...", df, H, df)
+
+                for col in cols:
+
+                    if row == col:
+                        W.append(V[row*N+col] - U)
+                    else:
+                        W.append(V[row*N+col])
+
+        if entry is not None:
+            # Unpack single item
+            return W[0]
+        else:
+            return tuple(W)
