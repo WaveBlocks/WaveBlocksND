@@ -52,6 +52,12 @@ class MatrixPotentialMS(MatrixPotential):
         self._potential_s = expression
         self._potential_n = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in self._potential_s ])
 
+        # The Jacobian and Hessian matrices of all entries of V
+        self._JV_s = None
+        self._JV_n = None
+        self._HV_s = None
+        self._HV_n = None
+
 
     def _grid_wrap(self, grid):
         # TODO: Consider additional input types for "nodes":
@@ -284,13 +290,76 @@ class MatrixPotentialMS(MatrixPotential):
         return tuple([ tmp[:,row,col].reshape((1,n)) for row in xrange(N) for col in xrange(N) ])
 
 
+    def _calculate_jacobian_of_matrix(self, entry=None):
+        r"""Compute the Jacobian of the matrix elements :math:`V_{i,j}`.
+        """
+        if self._JV_s is not None:
+            return
+
+        self._JV_s = {}
+        self._JV_n = {}
+
+        for i, variable in enumerate(self._all_variables):
+            self._JV_s[i] = tuple([ sympy.diff(entry, variable) for entry in self._potential_s ])
+
+        for k, v in self._JV_s.iteritems():
+            self._JV_n[k] = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in v ])
+
+
+    def _calculate_hessian_of_matrix(self, entry=None):
+        r"""Compute the Hessian of the matrix elements :math:`V_{i,j}`.
+        """
+        if self._HV_s is not None:
+            return
+
+        self._HV_s = {}
+        self._HV_n = {}
+
+        for i, variable1 in enumerate(self._all_variables):
+            for j, variable2 in enumerate(self._all_variables):
+                self._HV_s[(i,j)] = tuple([ sympy.diff(sympy.diff(entry, variable1), variable2)  for entry in self._potential_s ])
+
+        for key, val in self._HV_s.iteritems():
+            self._HV_n[key] = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in val ])
+
+
+    def _evaluate_jacobian_of_matrix(self, variable, grid, entry=None):
+        # Note: We assume grid is already of supertype Grid
+        #issubclass(type(grid), Grid)
+        n = grid.get_number_nodes(overall=True)
+        N = self._number_components
+        nodes = grid.get_nodes(split=True)
+
+        dAdxk = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
+        for row in xrange(N):
+            for col in xrange(N):
+                dAdxk[:,row,col] = self._JV_n[variable][row+N*col](*nodes)
+
+        return dAdxk
+
+
+    def _evaluate_hessian_of_matrix(self, variables, grid, entry=None):
+        # Note: We assume grid is already of supertype Grid
+        #issubclass(type(grid), Grid)
+        n = grid.get_number_nodes(overall=True)
+        N = self._number_components
+        nodes = grid.get_nodes(split=True)
+
+        dAdxidxj = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
+        for row in xrange(N):
+            for col in xrange(N):
+                dAdxidxj[:,row,col] = self._HV_n[variables][row+N*col](*nodes)
+
+        return dAdxidxj
+
+
     def calculate_jacobian(self):
         r"""Calculate the Jacobian matrix :math:`\nabla \lambda_i` of the potential's
         eigenvalues :math:`\Lambda(x)` with :math:`x \in \mathbb{R}^D`. For potentials
         which depend only one variable, this equals the first derivative and :math:`D=1`.
         Note that this function is idempotent.
         """
-        pass
+        self._calculate_jacobian_of_matrix()
 
 
     def evaluate_jacobian_at(self, grid, component=None):
@@ -305,7 +374,32 @@ class MatrixPotentialMS(MatrixPotential):
                  at a single grid node or of shape :math:`(D,|\Gamma|)`
                  if we evaluate at multiple nodes simultaneously.
         """
-        pass
+        grid = self._grid_wrap(grid)
+
+        D = self._dimension
+        N = self._number_components
+        n = grid.get_number_nodes(overall=True)
+
+        nodes = grid.get_nodes(split=True)
+
+        # Compute eigenvectors
+        EV = self.evaluate_eigenvectors_at(grid)
+
+        Jn = []
+        # For each eigenvalue
+        for l in xrange(N):
+            Jl = numpy.zeros((n, D), dtype=numpy.complexfloating)
+            # For each variable xi
+            for i in xrange(D):
+                # Evaluate the Jacobian of the matrix entries
+                dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
+                # And compute the formula
+                # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
+                for ooo in xrange(n):
+                    Jl[ooo, i] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxi[ooo,:,:], EV[l][:,ooo]))
+
+            Jn.append(numpy.transpose(Jl))
+        return tuple(Jn)
 
 
     def calculate_hessian(self):
@@ -314,7 +408,7 @@ class MatrixPotentialMS(MatrixPotential):
         which depend only one variable, this equals the second derivative and :math:`D=1`.
         Note that this function is idempotent.
         """
-        pass
+        self._calculate_hessian_of_matrix()
 
 
     def evaluate_hessian_at(self, grid, component=None):
@@ -329,18 +423,57 @@ class MatrixPotentialMS(MatrixPotential):
                  grid node or of shape :math:`(|\Gamma|,D,D)` if we evaluate at multiple
                  nodes simultaneously.
         """
-        pass
+        grid = self._grid_wrap(grid)
 
+        D = self._dimension
+        N = self._number_components
+        n = grid.get_number_nodes(overall=True)
 
-    def _calculate_local_quadratic_component(self, diagonal_component):
-        r"""Calculate the local quadratic approximation matrix :math:`U(x)` of the potential's
-        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case
-        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.
+        nodes = grid.get_nodes(split=True)
 
-        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
-                                   that gets expanded into a Taylor series :math:`u_i`.
-        """
-        pass
+        # Compute eigenvalues
+        EW = self.evaluate_eigenvalues_at(grid)
+
+        # Compute eigenvectors
+        EV = self.evaluate_eigenvectors_at(grid)
+
+        Hn = []
+        # For each eigenvalue
+        for l in xrange(N):
+            Hl = numpy.zeros((N,N, n), dtype=numpy.complexfloating)
+
+            # For all variable pairs (xi, xj)
+            for i in xrange(D):
+                for j in xrange(D):
+
+                    # First term
+                    dAdxidxj = self._evaluate_hessian_of_matrix((i,j), grid)
+
+                    for ooo in xrange(n):
+                        Hl[i,j, ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxidxj[ooo,:,:], EV[l][:,ooo]))
+
+                    # Second terms
+                    tmp = numpy.zeros((n,), dtype=numpy.complexfloating)
+
+                    for s in xrange(N):
+                        if s != l:
+                            # TODO: Pull these out of the i/j loops?
+                            dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
+                            dAdxj = self._evaluate_jacobian_of_matrix(j, grid)
+
+                            factor1 = numpy.zeros((n,), dtype=numpy.complexfloating)
+                            factor2 = numpy.zeros((n,), dtype=numpy.complexfloating)
+
+                            for ooo in xrange(n):
+                                factor1[ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxi[ooo,:,:], EV[s][:,ooo]))
+                                factor2[ooo] = numpy.dot(numpy.transpose(EV[l][:,ooo]), numpy.dot(dAdxj[ooo,:,:], EV[s][:,ooo]))
+
+                            ud = numpy.squeeze(factor1*factor2) / (EW[l]-EW[s])
+                            tmp = tmp + ud
+                            Hl[i,j,:] = Hl[i,j,:] + 2*numpy.squeeze(tmp)
+
+            Hn.append(Hl)
+        return Hn
 
 
     def calculate_local_quadratic(self, diagonal_component=None):
@@ -355,11 +488,8 @@ class MatrixPotentialMS(MatrixPotential):
                                    that gets expanded into a Taylor series :math:`u_i`.
         :type diagonal_component: Integer or ``None`` (default)
         """
-        if diagonal_component is not None:
-            self._calculate_local_quadratic_component(diagonal_component)
-        else:
-            for component in xrange(self._number_components):
-                self._calculate_local_quadratic_component(component)
+        self._calculate_jacobian_of_matrix()
+        self._calculate_hessian_of_matrix()
 
 
     def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
@@ -378,25 +508,6 @@ class MatrixPotentialMS(MatrixPotential):
         pass
 
 
-    def _calculate_local_remainder_component(self, diagonal_component=None):
-        r"""Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic
-        Taylor approximation :math:`U(x)` of the potential's eigenvalue :math:`\lambda_i(x)`.
-        Note that this function is idempotent.
-
-        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
-                                   that gets expanded into a Taylor series :math:`u_i`.
-        """
-        pass
-
-
-    def _calculate_local_remainder_inhomogeneous(self):
-        r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
-        quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
-        :math:`\Lambda(x)`. This function is used for the inhomogeneous case.
-        """
-        pass
-
-
     def calculate_local_remainder(self, diagonal_component=None):
         r"""Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the
         quadratic approximation matrix :math:`U(x)` of the potential's eigenvalue matrix
@@ -409,10 +520,8 @@ class MatrixPotentialMS(MatrixPotential):
                                    ``None`` the inhomogeneous case is computed.
         :type diagonal_component: Integer or ``None`` (default)
         """
-        if diagonal_component is not None:
-            self._calculate_local_remainder_component(diagonal_component)
-        else:
-            self._calculate_local_remainder_inhomogeneous()
+        self._calculate_jacobian_of_matrix()
+        self._calculate_hessian_of_matrix()
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
