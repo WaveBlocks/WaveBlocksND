@@ -487,7 +487,7 @@ class MatrixPotentialMS(MatrixPotential):
 
                     Hl[i,j,:] = Hl[i,j,:] + 2*tmp
 
-            Hn.append(Hl)
+            Hn.append(numpy.squeeze(Hl))
 
         if component is not None:
             # Unpack single item
