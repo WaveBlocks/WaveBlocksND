@@ -407,7 +407,7 @@ class MatrixPotentialMS(MatrixPotential):
             for i in xrange(D):
                 dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
                 # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
-                Jl[i,:] = numpy.einsum("j...,...jk,k...", EV[l], dAdxi, EV[l])
+                Jl[i,:] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxi, EV[l])
 
             Jn.append(Jl)
 
@@ -469,7 +469,8 @@ class MatrixPotentialMS(MatrixPotential):
                 for j in xrange(D):
                     # First term
                     dAdxidxj = self._evaluate_hessian_of_matrix((i,j), grid)
-                    Hl[i,j] = numpy.einsum("j...,...jk,k...", EV[l], dAdxidxj, EV[l])
+                    # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
+                    Hl[i,j] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxidxj, EV[l])
 
                     # Second terms
                     tmp = numpy.zeros((n,), dtype=numpy.complexfloating)
@@ -479,8 +480,9 @@ class MatrixPotentialMS(MatrixPotential):
                             dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
                             dAdxj = self._evaluate_jacobian_of_matrix(j, grid)
 
-                            factor1 = numpy.einsum("j...,...jk,k...", EV[l], dAdxi, EV[k])
-                            factor2 = numpy.einsum("j...,...jk,k...", EV[l], dAdxj, EV[k])
+                            # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
+                            factor1 = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxi, EV[k])
+                            factor2 = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxj, EV[k])
                             tmp = tmp + factor1*factor2 / (EW[l]-EW[k])
 
                     Hl[i,j,:] = Hl[i,j,:] + 2*tmp
