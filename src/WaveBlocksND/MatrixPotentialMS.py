@@ -124,7 +124,7 @@ class MatrixPotentialMS(MatrixPotential):
         pass
 
 
-    def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False):
+    def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False, sorted=True):
         r"""Evaluate the eigenvalues :math:`\lambda_i(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
@@ -164,10 +164,14 @@ class MatrixPotentialMS(MatrixPotential):
         # Calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)
         for i in xrange(n):
             ew = linalg.eigvalsh(tmppot[i,:,:])
-            # Sorting the eigenvalues biggest first.
-            # TODO: Sort will fail iff energy level cross!
-            ew.sort()
-            tmpew[i,:] = ew[::-1]
+            if sorted is True:
+                # Sorting the eigenvalues, biggest first.
+                # TODO: Sort will fail iff energy level cross!
+                ew.sort()
+                tmpew[i,:] = ew[::-1]
+            else:
+                # Do not sort
+                tmpew[i,:] = ew[:]
 
         # Split the data into different eigenvalues
         tmp = [ tmpew[:,index].reshape((1,n)) for index in xrange(N) ]
@@ -199,7 +203,7 @@ class MatrixPotentialMS(MatrixPotential):
         pass
 
 
-    def evaluate_eigenvectors_at(self, grid):
+    def evaluate_eigenvectors_at(self, grid, sorted=True):
         r"""Evaluate the eigenvectors :math:`\nu_i(x)` elementwise on a grid :math:`\Gamma`.
 
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
@@ -227,11 +231,15 @@ class MatrixPotentialMS(MatrixPotential):
         # Calculate eigenvectors assuming hermitian matrix (eigh for stability!)
         for i in xrange(0, n):
             ew, ev = linalg.eigh(tmppot[i,:,:])
-            # Sorting the eigenvectors in the same order as the eigenvalues.
-            ind = numpy.argsort(ew)
-            ind = ind[::-1]
-            evs = ev[:,ind]
-            tmpev[i,:,:] = evs
+            if sorted is True:
+                # Sorting the eigenvectors in the same order as the eigenvalues.
+                ind = numpy.argsort(ew)
+                ind = ind[::-1]
+                evs = ev[:,ind]
+                tmpev[i,:,:] = evs
+            else:
+                # No sorting
+                tmpev[i,:,:] = ev
 
         # A trick due to G. Hagedorn to get continuous eigenvectors
         # TODO: Not sure if it works in higher dimensions too! (Probably it does not)
@@ -333,7 +341,7 @@ class MatrixPotentialMS(MatrixPotential):
         dAdxk = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
         for row in xrange(N):
             for col in xrange(N):
-                dAdxk[:,row,col] = self._JV_n[variable][row*N+col](*nodes)
+                dAdxk[:,row,col] = self._JV_n[variable][N*row+col](*nodes)
 
         return dAdxk
 
@@ -348,7 +356,7 @@ class MatrixPotentialMS(MatrixPotential):
         dAdxidxj = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
         for row in xrange(N):
             for col in xrange(N):
-                dAdxidxj[:,row,col] = self._HV_n[variables][row*N+col](*nodes)
+                dAdxidxj[:,row,col] = self._HV_n[variables][N*row+col](*nodes)
 
         return dAdxidxj
 
@@ -389,7 +397,7 @@ class MatrixPotentialMS(MatrixPotential):
         nodes = grid.get_nodes(split=True)
 
         # Compute eigenvectors
-        EV = self.evaluate_eigenvectors_at(grid)
+        EV = self.evaluate_eigenvectors_at(grid, sorted=False)
 
         Jn = []
         # For each eigenvalue
@@ -446,10 +454,10 @@ class MatrixPotentialMS(MatrixPotential):
             levels = [component]
 
         # Compute eigenvalues
-        EW = self.evaluate_eigenvalues_at(grid)
+        EW = self.evaluate_eigenvalues_at(grid, sorted=False)
 
         # Compute eigenvectors
-        EV = self.evaluate_eigenvectors_at(grid)
+        EV = self.evaluate_eigenvectors_at(grid, sorted=False)
 
         Hn = []
         # For each eigenvalue
