@@ -53,6 +53,7 @@ class HyperCubicShape(BasisShape):
         r"""Make map lookups.
         """
         if type(k) is tuple:
+            assert len(k) == self._dimension
             if k in self._lima:
                 return self._lima[k]
         elif type(k) is int:
@@ -69,6 +70,7 @@ class HyperCubicShape(BasisShape):
         :param k: The multi-index we want to test.
         :type k: tuple
         """
+        assert len(tuple(k)) == self._dimension
         return tuple(k) in self._lima
 
 
@@ -218,6 +220,8 @@ class HyperCubicShape(BasisShape):
         :type direction: int
         :return: A list containing the pairs :math:`(d, k^\prime)`.
         """
+        assert len(tuple(k)) == self._dimension
+
         # First build a list of potential neighbours
         I = eye(self._dimension, dtype=integer)
         ki = vstack(k)
