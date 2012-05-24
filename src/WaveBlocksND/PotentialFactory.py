@@ -188,7 +188,9 @@ class PotentialFactory(object):
                 assert given_free_variables.issuperset(found_free_variables)
                 unused_free_variables = given_free_variables.difference(found_free_variables)
 
-            free_variables = found_free_variables
+            free_variables = given_free_variables
+            free_symbols = given_free_variables
+
 
         # dimension, free_vars and unused_free_vars set now
 
