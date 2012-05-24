@@ -52,7 +52,7 @@ class HyperbolicCutShape(BasisShape):
         cut basis shapes :math:`\mathcal{K}` the basis is fully specified by its
         dimension :math:`D` and the sparsity parameter :math:`K`.
         """
-        return hash((self._dimension, self._sparsity))
+        return hash(("HyperbolicCutShape", self._dimension, self._sparsity))
 
 
     def __getitem__(self, k):
