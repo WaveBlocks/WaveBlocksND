@@ -61,6 +61,8 @@ Wavepackets
 
    waveblocks_classes/BasisShape
    waveblocks_classes/HyperCubicShape
+   waveblocks_classes/HyperbolicCutShape
+   waveblocks_classes/LimitedHyperbolicCutShape
 
    waveblocks_classes/Wavepacket
    waveblocks_classes/HagedornWavepacketBase
@@ -96,8 +98,6 @@ Time propagation
    waveblocks_classes/FourierPropagator
    waveblocks_classes/HagedornPropagator
 
-
-   waveblocks_classes/HyperbolicCutShape
 
 Simulation result storage I/O
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
