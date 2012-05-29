@@ -265,8 +265,7 @@ class MatrixPotential2S(MatrixPotential):
         V1 = self._potential_s[0,0]
         V2 = self._potential_s[0,1]
 
-        #theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
-        theta = sympy.Rational(1,2) * sympy.atan(V2/V1)
+        theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
 
         # The two eigenvectors
         upper = sympy.Matrix([[ sympy.cos(theta)], [sympy.sin(theta)]])
