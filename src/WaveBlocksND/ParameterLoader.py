@@ -13,6 +13,8 @@ from copy import deepcopy
 
 from ParameterProvider import ParameterProvider
 
+__all__ = ["ParameterLoader"]
+
 
 class ParameterLoader(object):
 

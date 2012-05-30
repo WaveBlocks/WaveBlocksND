@@ -9,10 +9,12 @@ values and the matrix elements of an arbitrary operator.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer, ndarray
+from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer
 from scipy.linalg import sqrtm, inv, svd, diagsvd
 
 from Quadrature import Quadrature
+
+__all__ = ["HomogeneousQuadrature"]
 
 
 class HomogeneousQuadrature(Quadrature):

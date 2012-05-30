@@ -7,11 +7,13 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum, sqrt
+from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum
 from scipy import exp, sqrt, conjugate
 from scipy.linalg import det, inv, norm
 
 from Wavepacket import Wavepacket
+
+__all__ = ["HagedornWavepacketBase"]
 
 
 class HagedornWavepacketBase(Wavepacket):

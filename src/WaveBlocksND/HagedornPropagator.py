@@ -13,6 +13,8 @@ from numpy import dot
 from Propagator import Propagator
 from MatrixExponentialFactory import MatrixExponentialFactory
 
+__all__ = ["HagedornPropagator"]
+
 
 class HagedornPropagator(Propagator):
     r"""This class can numerically propagate given initial values :math:`\Psi` in

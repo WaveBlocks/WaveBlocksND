@@ -15,7 +15,8 @@ from PotentialFactory import PotentialFactory
 from BlockFactory import BlockFactory
 from BasisTransformationHAWP import BasisTransformationHAWP
 from HagedornPropagator import HagedornPropagator
-from BlockFactory import BlockFactory
+
+__all__ = ["SimulationLoopHagedorn"]
 
 
 class SimulationLoopHagedorn(SimulationLoop):

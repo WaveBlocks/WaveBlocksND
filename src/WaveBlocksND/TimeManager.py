@@ -10,6 +10,9 @@ handling time and timesteps.
 
 from scipy import floor
 
+__all__ = ["TimeManager"]
+
+
 # TODO: Clean up and allow for calculation of all time related quantities given a subset
 
 class TimeManager(object):

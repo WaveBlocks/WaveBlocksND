@@ -9,6 +9,8 @@ This file contains the abstract class for representing dense grids.
 
 from Grid import Grid
 
+__all__ = ["DenseGrid"]
+
 
 class DenseGrid(Grid):
     """This class is an abstract interface to dense grids in general.

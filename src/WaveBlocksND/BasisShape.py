@@ -7,6 +7,8 @@ This file contains the abstract class for representing basis shapes.
 @license: Modified BSD License
 """
 
+__all__ = ["BasisShape"]
+
 
 class BasisShape(object):
     r"""This class defines the abstract interface to basis shapes.

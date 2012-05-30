@@ -11,6 +11,8 @@ like inner products (brakets) etc.
 @license: Modified BSD License
 """
 
+__all__ = ["Quadrature"]
+
 
 class Quadrature(object):
     r"""This class is an abstract interface to quadratures in general.

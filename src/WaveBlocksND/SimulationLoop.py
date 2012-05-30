@@ -7,6 +7,9 @@ This file contains the main simulation loop interface.
 @license: Modified BSD License
 """
 
+__all__ = ["SimulationLoop"]
+
+
 class SimulationLoop(object):
     """This class acts as the main simulation loop. It owns a propagator that
     propagates a set of initial values during a time evolution. It is responsible

@@ -14,6 +14,8 @@ from numpy import vstack
 from QuadratureRule import QuadratureRule
 from Utils import meshgrid_nd
 
+__all__ = ["TensorProductQR"]
+
 
 class TensorProductQR(QuadratureRule):
     r"""This class implements the construction of high dimensional

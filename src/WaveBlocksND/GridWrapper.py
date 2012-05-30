@@ -10,6 +10,8 @@ numpy ndarrays into Grid instances.
 
 from Grid import Grid
 
+__all__ = ["GridWrapper"]
+
 
 class GridWrapper(Grid):
     r"""This class constructs a thin layer around an ``ndarray`` and wrappes

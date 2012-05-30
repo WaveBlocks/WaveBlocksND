@@ -15,6 +15,8 @@ from scipy.linalg import sqrtm, inv, det
 
 from Quadrature import Quadrature
 
+__all__ = ["InhomogeneousQuadrature"]
+
 
 class InhomogeneousQuadrature(Quadrature):
 

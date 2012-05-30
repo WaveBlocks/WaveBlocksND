@@ -9,6 +9,9 @@ time propagation algorithm.
 @license: Modified BSD License
 """
 
+__all__ = ["Propagator"]
+
+
 class Propagator(object):
     r"""Propagators can numerically simulate the time evolution of quantum states
     :math:`\psi(x,t)` as described by the time-dependent Schroedinger equation

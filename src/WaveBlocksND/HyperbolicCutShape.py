@@ -12,6 +12,8 @@ from numpy import eye, vstack, integer
 
 from BasisShape import BasisShape
 
+__all__ = ["HyperbolicCutShape"]
+
 
 class HyperbolicCutShape(BasisShape):
     r"""This class implements the hyperbolic cut basis shape which

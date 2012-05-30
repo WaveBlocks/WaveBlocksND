@@ -7,6 +7,9 @@ This file contains the abstract class for representing grids.
 @license: Modified BSD License
 """
 
+__all__ = ["Grid"]
+
+
 class Grid(object):
     """This class is an abstract interface to grids in general.
     """

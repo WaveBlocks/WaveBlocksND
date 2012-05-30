@@ -6,10 +6,10 @@
 @license: Modified BSD License
 """
 
-from numpy import array, zeros
-
 from WaveFunction import WaveFunction
 from BlockFactory import BlockFactory
+
+__all__ = ["Initializer"]
 
 
 class Initializer(object):

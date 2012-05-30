@@ -7,16 +7,16 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
-from functools import partial
-from numpy import zeros, complexfloating, array, sum, transpose, arange, vstack, eye, prod, atleast_2d
-from scipy import pi, sqrt, exp, conj, dot
-from scipy.linalg import norm, inv, det
+from numpy import zeros, complexfloating, array, sum, vstack, eye, prod, atleast_2d
+from scipy import sqrt, exp, conj, dot
+from scipy.linalg import inv, det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
 from Grid import Grid
 from ComplexMath import ContinuousSqrt
-import GlobalDefaults as GD
+
+__all__ = ["HagedornWavepacket"]
 
 
 class HagedornWavepacket(HagedornWavepacketBase):

@@ -7,6 +7,8 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
+__all__ = ["Wavepacket"]
+
 
 class Wavepacket(object):
     r"""This class is an abstract interface to wavepackets in general.

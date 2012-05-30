@@ -15,6 +15,8 @@ import GlobalDefaults
 from PotentialFactory import PotentialFactory as PF
 from TimeManager import TimeManager
 
+__all__ = ["ParameterProvider"]
+
 
 class ParameterProvider(object):
 

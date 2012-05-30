@@ -14,6 +14,8 @@ import numpy as np
 
 import GlobalDefaults
 
+__all__ = ["IOManager"]
+
 
 class IOManager(object):
     """An IOManager class that can save various simulation results into data

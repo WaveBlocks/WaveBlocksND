@@ -13,7 +13,6 @@ from numpy import dot, transpose, conjugate, vsplit
 
 from BasisTransformation import BasisTransformation
 
-
 __all__ = ["BasisTransformationHAWP"]
 
 

@@ -13,6 +13,8 @@ from scipy.special.orthogonal import h_roots
 
 from QuadratureRule import QuadratureRule
 
+__all__ = ["GaussHermiteQR"]
+
 
 class GaussHermiteQR(QuadratureRule):
     r"""This class implements a Gauss-Hermite quadrature rule.

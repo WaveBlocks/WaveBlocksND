@@ -10,6 +10,8 @@ matrix exponential routine.
 
 from functools import partial
 
+__all__  =["MatrixExponentialFactory"]
+
 
 class MatrixExponentialFactory:
     """A factory for matrix exponential routines.

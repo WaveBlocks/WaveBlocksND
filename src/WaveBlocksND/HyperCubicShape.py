@@ -12,6 +12,8 @@ from numpy import eye, vstack, integer
 
 from BasisShape import BasisShape
 
+__all__ = ["HyperCubicShape"]
+
 
 class HyperCubicShape(BasisShape):
     r"""This class implements the hypercubic basis shape
