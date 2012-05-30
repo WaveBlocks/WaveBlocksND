@@ -392,7 +392,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
-        self._remainder_n = tuple([ sympy.lambdify(self._all_variables + qs, self._remainder_s[0,0], "numpy") ])
+        self._remainder_n = tuple([ sympy.lambdify(list(self._all_variables) + qs, self._remainder_s[0,0], "numpy") ])
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):

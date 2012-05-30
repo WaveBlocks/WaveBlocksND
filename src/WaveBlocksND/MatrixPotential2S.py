@@ -647,7 +647,7 @@ class MatrixPotential2S(MatrixPotential):
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
         self._remainder_eigen_n[diagonal_component] = tuple([
-            sympy.lambdify(self._all_variables + qs, entry, "numpy") for entry in remainder ])
+            sympy.lambdify(list(self._all_variables) + qs, entry, "numpy") for entry in remainder ])
 
 
     def _calculate_local_remainder_inhomogeneous(self):
@@ -703,7 +703,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         self._remainder_eigen_ih_n = tuple([
-            sympy.lambdify(self._all_variables + qs, entry, "numpy") for entry in remainder ])
+            sympy.lambdify(list(self._all_variables) + qs, entry, "numpy") for entry in remainder ])
 
 
     def calculate_local_remainder(self, diagonal_component=None):
