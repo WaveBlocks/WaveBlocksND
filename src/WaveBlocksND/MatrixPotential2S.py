@@ -261,10 +261,13 @@ class MatrixPotential2S(MatrixPotential):
         We can do this by symbolic calculations.
         Note: This function is idempotent and the eigenvectors are memoized for later reuse.
         """
+        self.calculate_eigenvalues()
+
         V = self._potential_s
-        ev = V.eigenvects()
-        upper = sympy.Matrix(ev[0][2]).normalized()
-        lower = sympy.Matrix(ev[1][2]).normalized()
+        l1, l2 = self._eigenvalues_s
+
+        upper = sympy.Matrix([[V[0,1]],[l1 - V[0,0]]]).normalized()
+        lower = sympy.Matrix([[V[0,1]],[l2 - V[0,0]]]).normalized()
 
         # The symbolic expressions for the eigenvectors
         self._eigenvectors_s = (upper, lower)
