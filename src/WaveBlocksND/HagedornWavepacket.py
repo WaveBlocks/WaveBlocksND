@@ -15,7 +15,7 @@ from scipy.linalg import norm, inv, det
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
 from Grid import Grid
-from ComplexMath import cont_sqrt
+from ComplexMath import ContinuousSqrt
 import GlobalDefaults as GD
 
 
@@ -63,7 +63,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
         # No quadrature set
         self._QE = None
 
-        self._cont_sqrt_cache = 0.0
+        # Function for taking continuous roots
+        self._sqrt = ContinuousSqrt()
 
 
     def __str__(self):
@@ -213,8 +214,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
                     phi[bas[kped[1]],:] = (t1 - t2) / sqrt(ki[d] + 1.0)
 
         if prefactor is True:
-            sqrtQ, self._cont_sqrt_cache = cont_sqrt(det(Q), reference=self._cont_sqrt_cache)
-            phi = phi / sqrtQ
+            phi = phi / self._sqrt(det(Q))
 
         return phi
 
