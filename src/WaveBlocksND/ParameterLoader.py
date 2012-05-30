@@ -34,6 +34,7 @@ class ParameterLoader(object):
         parameters = [ item for item in parameters if not type(item[1]) == types.ModuleType ]
         parameters = [ item for item in parameters if not type(item[1]) == types.InstanceType ]
         parameters = [ item for item in parameters if not item[0].startswith("_") ]
+        parameters = [ item for item in parameters if not item[0] == "self" ]
 
         return dict(parameters)
 
