@@ -11,8 +11,8 @@ eps = 0.1
 potential = "quadratic"
 
 # The grid of our simulation domain
-grid_limits = [(-6.283185307179586, 6.283185307179586)]
-grid_number_nodes = [4096]
+limits = [(-6.283185307179586, 6.283185307179586)]
+number_nodes = [4096]
 
 # The parameter set of the initial wavepacket
 Q = [[1.0]]
