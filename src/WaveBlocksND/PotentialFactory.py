@@ -154,14 +154,30 @@ def create_potential(description):
     print("====================================")
 
     # Create instances of MatrixPotential*
-    if nc == 1:
+    if potential_description.has_key("type"):
+        class_type = potential_description["type"]
+    else:
+        # Default classes if no other wish specified
+        if nc == 1:
+            class_type = "MatrixPotential1S"
+        elif nc == 2:
+            class_type = "MatrixPotential2S"
+        else:
+            class_type = "MatrixPotentialMS"
+
+    if class_type == "MatrixPotential1S":
+        # Scalar potential case
+        assert nc == 1
         from MatrixPotential1S import MatrixPotential1S
         potential = MatrixPotential1S(potential_matrix, free_variables)
-    elif nc == 2:
+    elif class_type == "MatrixPotential2S":
+        # Symbolic computations, only for N = 2
+        assert nc == 2
         from MatrixPotential2S import MatrixPotential2S
         potential = MatrixPotential2S(potential_matrix, free_variables)
-    else:
-        #from MatrixPotentialMS import MatrixPotentialMS
-        pass
+    elif class_type == "MatrixPotentialMS":
+        # General numerical computations, for all N >= 1
+        from MatrixPotentialMS import MatrixPotentialMS
+        potential = MatrixPotentialMS(potential_matrix, free_variables)
 
     return potential
