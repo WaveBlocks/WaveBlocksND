@@ -42,6 +42,7 @@ class HagedornPropagator(Propagator):
 
         # Number :math:`N` of components the wavepacket :math:`\Psi` has got.
         self._number_components = self._potential.get_number_components()
+        self._dimension = self._potential.get_dimension()
 
         # A list of Hagedorn wavepackets :math:`\Psi` together with some codata
         # like the leading component :math:`\chi` which is the index of the eigenvalue
@@ -59,11 +60,11 @@ class HagedornPropagator(Propagator):
         # The relative mass scaling matrix M
         if self._parameters.has_key("mass_scaling"):
             self._M = atleast_2d(self._parameters["mass_scaling"])
-            assert self._M.shape == (self._number_components, self._number_components)
+            assert self._M.shape == (self._dimension, self._dimension)
             self._Minv = inv(self._M)
         else:
             # No mass matrix given. Scale all masses equally
-            self._M = eye(self._number_components)
+            self._M = eye(self._dimension)
             self._Minv = self._M
 
         # Decide about the matrix exponential algorithm to use
