@@ -10,9 +10,8 @@ time propagation.
 """
 
 import sys
-from numpy import real, imag, abs, squeeze
+from numpy import real, imag, abs, squeeze, array
 from numpy.linalg import norm, det
-from matplotlib.mlab import amap
 from matplotlib.pyplot import *
 
 from WaveBlocksND import ComplexMath
@@ -30,8 +29,8 @@ def read_all_datablocks(iom):
     for blockid in iom.get_block_ids():
         if iom.has_wavepacket(blockid=blockid):
             plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
-        elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+        #elif iom.has_inhomogwavepacket(blockid=blockid):
+        #    plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
         else:
             print("Warning: Not plotting wavepacket parameters in block '"+str(blockid)+"'!")
 
@@ -46,12 +45,14 @@ def read_data_homogeneous(iom, blockid=0):
     time = timegrid * parameters["dt"]
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
-    Pi = map(squeeze, Pi)
     qhist, phist, Qhist, Phist, Shist = Pi
-    qhist = amap(norm, qhist)
-    phist = amap(norm, phist)
-    Qhist = amap(det, Qhist)
-    Phist = amap(det, Phist)
+
+    qhist = squeeze(array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]))
+    phist = squeeze(array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]))
+    Qhist = squeeze(array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]))
+    Phist = squeeze(array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]))
+    Shist = squeeze(Shist)
+
     return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
 
 
