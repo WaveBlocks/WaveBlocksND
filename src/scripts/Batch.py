@@ -63,7 +63,10 @@ def batch_run(call_simulation, call_for_each, call_once):
 
         # Call all evaluation scripts need to be run for each simulation
         for command in call_for_each:
-            sp.call(["python", command])
+            if type(command) == list or type(command) == tuple:
+                sp.call(["python"] + list(command))
+            else:
+                sp.call(["python", command])
 
         # Clean up and move results
         simulationid = configuration[:-3]
@@ -84,7 +87,10 @@ def batch_run(call_simulation, call_for_each, call_once):
 
     # Postprocessing, call scripts that should get called once after all simulations finished
     for command in call_once:
-        sp.call(["python", command])
+        if type(command) == list or type(command) == tuple:
+            sp.call(["python"] + list(command))
+        else:
+            sp.call(["python", command])
 
     print("All simulations finished")
 

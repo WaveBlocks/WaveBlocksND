@@ -16,12 +16,12 @@ call_simulation = ["Main.py"]
 #: All scripts in this list are called for each simulation configuration
 #: but without additional arguments. They can assume that the simulation
 #: results data file is available at the standard location (default: 'simulation_results.hdf5')
-call_for_each = ["ComputeNorms.py",
-                 "ComputeEnergies.py",
-                 #"PlotPotential.py",
-                 "PlotNorms.py",
-                 "PlotEnergies.py",
-                 #"PlotWavepacketParametersDD.py",
+call_for_each = ["ComputeTransformToEigen.py",
+                 ("ComputeNormsNET.py", "simulation_results_eigen.hdf5"),
+                 ("ComputeEnergiesNET.py", "simulation_results_eigen.hdf5"),
+                 ("PlotNorms.py", "simulation_results_eigen.hdf5"),
+                 ("PlotEnergies.py", "simulation_results_eigen.hdf5"),
+                 "PlotWavepacketParametersDD.py",
                  #"PlotWavepacketCoefficientsMap.py"
                  ]
 
