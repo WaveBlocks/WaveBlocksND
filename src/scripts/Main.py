@@ -43,7 +43,15 @@ elif PA["algorithm"] == "hagedorn_inhomog":
 # NOTE: Add new algorithms here
 
 else:
-    raise ValueError("Invalid propagator algorithm.")
+    # Try to load a custom simulation loop
+    try:
+        # See if we can import a module by this name
+        custom_sl_module = __import__(PA["algorithm"])
+        sl_class = custom_sl_module.__dict__[PA["algorithm"]]
+    except:
+        raise ValueError("Invalid propagator algorithm.")
+
+    SL = sl_class(PA)
 
 # Initialize and run the simulation
 SL.prepare_simulation()
