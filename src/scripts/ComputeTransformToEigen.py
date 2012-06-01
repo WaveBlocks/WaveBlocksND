@@ -11,6 +11,7 @@ import sys
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import BlockFactory
+from WaveBlocksND import GlobalDefaults as GD
 
 
 if __name__ == "__main__":
@@ -19,11 +20,12 @@ if __name__ == "__main__":
     iome = IOManager()
 
     # Read file with simulation data
-    filename=sys.argv[1]
     try:
-        iomc.open_file(filename=filename)
+        filename = sys.argv[1]
     except IndexError:
-        iomc.open_file()
+        filename = GD.file_resultdatafile
+
+    iomc.open_file(filename=filename)
 
     # New file for eigen transformed data
     P = iomc.load_parameters()
