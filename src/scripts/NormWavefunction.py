@@ -17,6 +17,8 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read. Default is `0`.
+    :param eigentrafo: Whether to make a transformation into the eigenbasis.
+    :type eigentrafo: Boolean, default is ``True``.
     """
     parameters = iom.load_parameters()
 
@@ -27,11 +29,10 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
     # Construct the grid from the parameters
     grid = BlockFactory().create_grid(parameters)
 
-    # The potential used
-    Potential = BlockFactory().create_potential(parameters)
-
     # Basis transformator
     if eigentrafo is True:
+        # The potential used
+        Potential = BlockFactory().create_potential(parameters)
         BT = BasisTransformationWF(Potential)
         BT.set_grid(grid)
 

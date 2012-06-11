@@ -19,6 +19,8 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     :type blockid: Integer, Default is ``0``
+    :param eigentrafo: Whether to make a transformation into the eigenbasis.
+    :type eigentrafo: Boolean, default is ``True``.
     """
     parameters = iom.load_parameters()
 
@@ -26,11 +28,10 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
     timesteps = iom.load_wavepacket_timegrid(blockid=blockid)
     nrtimesteps = timesteps.shape[0]
 
-    # The potential used
-    Potential = BlockFactory().create_potential(parameters)
-
     # Basis transformator
     if eigentrafo is True:
+        # The potential used
+        Potential = BlockFactory().create_potential(parameters)
         BT = BasisTransformationHAWP(Potential)
 
     # We want to save norms, thus add a data slot to the data file
