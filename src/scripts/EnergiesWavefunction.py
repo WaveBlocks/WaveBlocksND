@@ -19,6 +19,11 @@ def compute_energy(iom, blockid=0, eigentrafo=True):
     """
     :param iom: An :py:class:`IOManager: instance providing the simulation data.
     :param blockid: The data block from which the values are read. Default is `0`.
+    :param eigentrafo: Whether to make a transformation into the eigenbasis.
+    :type eigentrafo: Boolean, default is ``True``.
+    :param iseigen: Whether the data is assumed to be in the eigenbasis.
+    :type iseigen: Boolean, default is ``True``
+
     """
     parameters = iom.load_parameters()
 
@@ -39,7 +44,10 @@ def compute_energy(iom, blockid=0, eigentrafo=True):
     if eigentrafo is True:
         opV = Potential.evaluate_at(grid)
     else:
-        opV = Potential.evaluate_eigenvalues_at(grid, as_matrix=True)
+        if iseigen is True:
+            opV = Potential.evaluate_eigenvalues_at(grid, as_matrix=True)
+        else:
+            opV = Potential.evaluate_at(grid, as_matrix=True)
 
     # Basis transformator
     if eigentrafo is True:
