@@ -307,11 +307,11 @@ class MatrixPotentialMS(MatrixPotential):
         self._JV_s = {}
         self._JV_n = {}
 
-        for i, variable in enumerate(self._all_variables):
+        for i, variable in enumerate(self._variables):
             self._JV_s[i] = tuple([ sympy.diff(entry, variable) for entry in self._potential_s ])
 
         for k, v in self._JV_s.iteritems():
-            self._JV_n[k] = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in v ])
+            self._JV_n[k] = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in v ])
 
 
     def _calculate_hessian_of_matrix(self, entry=None):
@@ -323,12 +323,12 @@ class MatrixPotentialMS(MatrixPotential):
         self._HV_s = {}
         self._HV_n = {}
 
-        for i, variable1 in enumerate(self._all_variables):
-            for j, variable2 in enumerate(self._all_variables):
+        for i, variable1 in enumerate(self._variables):
+            for j, variable2 in enumerate(self._variables):
                 self._HV_s[(i,j)] = tuple([ sympy.diff(sympy.diff(entry, variable1), variable2)  for entry in self._potential_s ])
 
         for key, val in self._HV_s.iteritems():
-            self._HV_n[key] = tuple([ sympy.lambdify(self._all_variables, entry, "numpy") for entry in val ])
+            self._HV_n[key] = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in val ])
 
 
     def _evaluate_jacobian_of_matrix(self, variable, grid, entry=None):
