@@ -112,9 +112,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
         other.set_coefficients(self.get_coefficients())
         # Quadratures are immutable, no issues with sharing same instance
         other.set_quadrature(self.get_quadrature())
-
-        other._cont_sqrt_cache = self._cont_sqrt_cache
-
+        # The complex root cache
+        other._sqrt = self._sqrt.clone()
 
         return other
 

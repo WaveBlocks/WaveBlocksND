@@ -113,6 +113,8 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         other.set_coefficients(self.get_coefficients())
         # Quadratures are immutable, no issues with sharing same instance
         other.set_quadrature(self.get_quadrature())
+        # The complex root caches
+        other._sqrt = [ item.clone() for item in self._sqrt ]
 
         return other
 
