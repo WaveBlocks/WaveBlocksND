@@ -189,10 +189,18 @@ conic["variables"] = ["x", "y"]
 conic["potential"] = [["x",  "y"],
                       ["y", "-x"]]
 
-conic_gap = {}
-conic_gap["variables"] = ["x", "y"]
-conic_gap["potential"] = [["x",           "y + I*delta"],
-                          ["y - I*delta", "-x"         ]]
+conic_avoided = {}
+conic_avoided["variables"] = ["x", "y"]
+conic_avoided["potential"] = [["x",                   "sqrt(y**2+delta**2)"],
+                              ["sqrt(y**2+delta**2)", "-x"                 ]]
+conic_avoided["defaults"] = {"delta":1.0}
+
+conic_avoided_c = {}
+conic_avoided_c["variables"] = ["x", "y"]
+conic_avoided_c["potential"] = [["x",           "y + I*delta"],
+                                ["y - I*delta", "-x"         ]]
+
+
 
 
 ########################################################################
