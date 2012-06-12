@@ -19,9 +19,12 @@ call_simulation = ["Main.py"]
 call_for_each = ["ComputeTransformToEigen.py",
                  ("ComputeNormsNET.py", "simulation_results_eigen.hdf5"),
                  ("ComputeEnergiesNET.py", "simulation_results_eigen.hdf5"),
+                 #("ComputeNormsNET.py", "simulation_results.hdf5"),
+                 #("ComputeEnergiesCAN.py", "simulation_results.hdf5"),
                  ("PlotNorms.py", "simulation_results_eigen.hdf5"),
                  ("PlotEnergies.py", "simulation_results_eigen.hdf5"),
-                 "PlotWavepacketParametersDD.py",
+                 ("PlotWavepacketParametersDD.py", "simulation_results_eigen.hdf5"),
+                 ("PlotWavepacketParametersTrajectory2D.py", "simulation_results_eigen.hdf5"),
                  #"PlotWavepacketCoefficientsMap.py"
                  ]
 
