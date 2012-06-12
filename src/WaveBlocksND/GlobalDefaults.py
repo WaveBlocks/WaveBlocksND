@@ -33,12 +33,17 @@ kvp_rdel = "]"
 default_Pi = [1.0j, 1.0, 0.0, 0.0, 0.0]
 default_basis_size = 8
 
-
 # Defaults for some simulation configuration parameters
 try_simplification = False
 
 # Try to make eigenvectors continuous
 continuous_eigenvectors = True
+
+# Do we want to sort the eigenvalues and eigenvectors
+# Make sure to sort or not to sort both! If sorting
+# is disabled consistency issues may arise!
+sort_eigenvalues = True
+sort_eigenvectors = True
 
 # Matrix exponential algorithm
 matrix_exponential = "arnoldi"

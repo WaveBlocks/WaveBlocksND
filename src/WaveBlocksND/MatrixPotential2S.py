@@ -47,6 +47,20 @@ class MatrixPotential2S(MatrixPotential):
         else:
             self._try_simplify = GlobalDefaults.__dict__["try_simplification"]
 
+        # Do we want to sort the eigenvalues
+        if kwargs.has_key("sort_eigenvalues"):
+            self._sort_eigenvalues = kwargs["sort_eigenvalues"]
+        else:
+            self._sort_eigenvalues = GlobalDefaults.__dict__["sort_eigenvalues"]
+
+        # Do we want to sort the eigenvectors
+        if kwargs.has_key("sort_eigenvectors"):
+            self._sort_eigenvectors = kwargs["sort_eigenvectors"]
+        else:
+            self._sort_eigenvectors = GlobalDefaults.__dict__["sort_eigenvectors"]
+
+        # TODO: Really apply the sorting of eigenvectors
+
         # This number of energy levels.
         assert expression.is_square
         # We only handle the 2x2 case here
@@ -228,14 +242,15 @@ class MatrixPotential2S(MatrixPotential):
 
         # Sort the eigenvalues pointwise. We can do this because we
         # assume that the different eigenvalues never cross.
-        # TODO: Sort will fail iff energy levels really cross!
-        N = len(diags)
+        # Sort will fail iff energy levels really cross!
+        if self._sort_eigenvalues is True:
+            N = len(diags)
 
-        if N > 1:
-            tmp = numpy.vsplit(numpy.sort(numpy.vstack(tmp), axis=0), N)
+            if N > 1:
+                tmp = numpy.vsplit(numpy.sort(numpy.vstack(tmp), axis=0), N)
 
-        # Take in descending order and reshape
-        tmp = [ item.reshape((1,grid.get_number_nodes(overall=True))) for item in reversed(tmp) ]
+            # Take in descending order and reshape
+            tmp = [ item.reshape((1,grid.get_number_nodes(overall=True))) for item in reversed(tmp) ]
 
         # Compose the result for all entries specified
         result = []

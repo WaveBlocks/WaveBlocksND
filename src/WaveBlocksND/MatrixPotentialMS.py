@@ -51,6 +51,20 @@ class MatrixPotentialMS(MatrixPotential):
         else:
             self._continuous_eigenvectors = GlobalDefaults.__dict__["continuous_eigenvectors"]
 
+        # Do we want to sort the eigenvalues
+        if kwargs.has_key("sort_eigenvalues"):
+            self._sort_eigenvalues = kwargs["sort_eigenvalues"]
+        else:
+            self._sort_eigenvalues = GlobalDefaults.__dict__["sort_eigenvalues"]
+
+        # Do we want to sort the eigenvectors
+        if kwargs.has_key("sort_eigenvectors"):
+            self._sort_eigenvectors = kwargs["sort_eigenvectors"]
+        else:
+            self._sort_eigenvectors = GlobalDefaults.__dict__["sort_eigenvectors"]
+
+        # TODO: Really apply the sorting of eigenvalues and eigenvectors
+
         # This number of energy levels.
         assert expression.is_square
         # We handle the general NxN case here
