@@ -23,8 +23,6 @@ def plot_potential(grid, potential, along_axes=False, interactive=False, size=(8
     u = real(u)
     v = real(v)
 
-    # TODO: Consider taking every n-th gridpoint only
-
     # Create potential and evaluate eigenvalues
     potew = potential.evaluate_eigenvalues_at(grid)
     potew = [ level.reshape(grid.get_number_nodes(overall=False)) for level in potew ]
