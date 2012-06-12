@@ -7,8 +7,6 @@ Compute the transformation to the eigen basis for wavefunction.
 @license: Modified BSD License
 """
 
-from numpy import zeros
-
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF

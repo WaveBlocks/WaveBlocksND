@@ -7,10 +7,7 @@ Compute the transformation to the eigen basis for wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import zeros
-
 from WaveBlocksND import BlockFactory
-from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationHAWP
 
 

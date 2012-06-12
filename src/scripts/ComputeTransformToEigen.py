@@ -10,7 +10,6 @@ Compute the eigen transformation of some simulation results.
 import sys
 
 from WaveBlocksND import IOManager
-from WaveBlocksND import BlockFactory
 from WaveBlocksND import GlobalDefaults as GD
 
 

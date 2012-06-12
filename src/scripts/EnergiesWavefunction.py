@@ -15,7 +15,7 @@ from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 
 
-def compute_energy(iom, blockid=0, eigentrafo=True):
+def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
     """
     :param iom: An :py:class:`IOManager: instance providing the simulation data.
     :param blockid: The data block from which the values are read. Default is `0`.

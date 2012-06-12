@@ -7,8 +7,6 @@ Compute the norms of the homogeneous wavepackets as well as the sum of all norms
 @license: Modified BSD License
 """
 
-from numpy import unique
-
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
 
