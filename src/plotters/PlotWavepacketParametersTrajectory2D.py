@@ -10,12 +10,9 @@ time propagation.
 """
 
 import sys
-from numpy import real, imag, abs, squeeze
-from numpy.linalg import norm, det
-from matplotlib.mlab import amap
+from numpy import squeeze
 from matplotlib.pyplot import *
 
-from WaveBlocksND import ComplexMath
 from WaveBlocksND import IOManager
 
 import GraphicsDefaults as GD

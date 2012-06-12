@@ -13,11 +13,10 @@ basis shapes are adaptive and their mappings mu incompatible!
 """
 
 import sys
-from numpy import squeeze, real, imag, abs, angle, transpose, hstack
+from numpy import abs, angle, transpose, hstack
 from matplotlib.pyplot import *
 
 from WaveBlocksND import IOManager
-from WaveBlocksND import PotentialFactory
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
 
@@ -53,7 +52,7 @@ def read_data_homogeneous(iom, blockid=0):
     time = timegrid * parameters["dt"]
 
     # The potential used
-    Potential = PotentialFactory().create_potential(parameters)
+    Potential = BlockFactory().create_potential(parameters)
 
     # Basis transformator
     BT = BasisTransformationHAWP(Potential)

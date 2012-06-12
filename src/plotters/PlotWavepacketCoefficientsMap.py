@@ -13,7 +13,7 @@ basis shapes are adaptive and their mappings mu incompatible!
 """
 
 import sys
-from numpy import squeeze, real, imag, abs, angle
+from numpy import abs, angle
 from matplotlib.pyplot import *
 
 from WaveBlocksND import IOManager

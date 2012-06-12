@@ -8,11 +8,10 @@ Plot the wavefunctions probability densities for two-dimensional wavefunctions.
 """
 
 import sys
-from numpy import angle, conj, real, imag
+from numpy import real
 from matplotlib.pyplot import *
 
-from WaveBlocksND import PotentialFactory
-from WaveBlocksND import GridFactory
+from WaveBlocksND import BlockFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 from WaveBlocksND import IOManager
@@ -28,8 +27,10 @@ def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=Fal
         print("No wavefunction of two space dimensions, silent return!")
         return
 
-    G = GridFactory().create_grid(parameters)
-    V = PotentialFactory().create_potential(parameters)
+    G = BlockFactory().create_grid(parameters)
+    V = BlockFactory().create_potential(parameters)
+
+    print(G.get_extensions())
 
     WF = WaveFunction(parameters)
     WF.set_grid(G)
@@ -68,7 +69,7 @@ def plot_frames(iom, blockid=0):#, view=None, plotphase=True, plotcomponents=Fal
             z = Psi[level]
 
             subplot(N,1,level+1)
-            plotcm(z)
+            plotcm(z, darken=0.3)
 
         savefig("wavefunction_level_"+str(level)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+".png")
         close(fig)
