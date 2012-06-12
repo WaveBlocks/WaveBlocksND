@@ -12,7 +12,7 @@ import sys
 from numpy import real
 from mayavi import mlab
 
-from WaveBlocksND import PotentialFactory
+from WaveBlocksND import BlockFactory
 from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
 
@@ -27,12 +27,13 @@ def plot_potential(grid, potential, along_axes=False, interactive=False, size=(8
 
     # Create potential and evaluate eigenvalues
     potew = potential.evaluate_eigenvalues_at(grid)
+    potew = [ level.reshape(grid.get_number_nodes(overall=False)) for level in potew ]
 
     # Plot the energy surfaces of the potential
     fig = mlab.figure(size=size)
 
     for level in potew:
-        mlab.surf(u, v, level)
+        mlab.surf(u, v, real(level))
 
     fig.scene.parallel_projection = True
     fig.scene.isometric_view()
@@ -80,9 +81,28 @@ if __name__ == "__main__":
 
     parameters = iom.load_parameters()
 
+    # Manually adjust the plotting region
+    xmin = None
+    xmax = None
+    ymin = None
+    ymax = None
+    Nx = None
+    Ny = None
+
+    if xmin is None or xmax is None or ymin is None or ymax is None:
+        limits = parameters["limits"]
+    else:
+        limits = [(xmin, xmax), (ymin, ymax)]
+    if Nx is None or Ny is None:
+        number_nodes = parameters["number_nodes"]
+    else:
+        number_nodes = [Nx, Ny]
+
+    print("Plotting in region: "+str(limits))
+
     if parameters["dimension"] == 2:
-        Potential = PotentialFactory().create_potential(parameters)
-        Grid = TensorProductGrid(parameters)
+        Potential = BlockFactory().create_potential(parameters)
+        Grid = TensorProductGrid(limits, number_nodes)
         plot_potential(Grid, Potential, interactive=True)
     else:
         print("Not a potential in two space dimensions, silent return!")
