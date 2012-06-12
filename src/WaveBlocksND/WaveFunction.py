@@ -145,7 +145,7 @@ class WaveFunction(object):
 
 
     def kinetic_energy(self, kinetic, summed=False):
-        """Calculate the kinetic energy :math:`E_{\text{kin}} := \Braket{\Psi|T|\Psi}`
+        r"""Calculate the kinetic energy :math:`E_{\text{kin}} := \langle\Psi|T|\Psi\rangle`
         of the different components :math:`\psi_i`.
 
         :param kinetic: The kinetic energy operator :math:`T(\omega)`.
@@ -180,7 +180,7 @@ class WaveFunction(object):
 
 
     def potential_energy(self, potential, summed=False):
-        """Calculate the potential energy :math:`E_{\text{pot}} := \Braket{\Psi|V|\Psi}`
+        r"""Calculate the potential energy :math:`E_{\text{pot}} := \langle\Psi|V|\Psi\rangle`
         of the different components :math:`\psi_i`.
 
         :param potential: The potential energy operator :math:`V(x)`.
