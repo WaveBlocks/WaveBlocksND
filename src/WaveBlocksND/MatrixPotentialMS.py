@@ -63,8 +63,6 @@ class MatrixPotentialMS(MatrixPotential):
         else:
             self._sort_eigenvectors = GlobalDefaults.__dict__["sort_eigenvectors"]
 
-        # TODO: Really apply the sorting of eigenvalues and eigenvectors
-
         # This number of energy levels.
         assert expression.is_square
         # We handle the general NxN case here
@@ -186,9 +184,9 @@ class MatrixPotentialMS(MatrixPotential):
         # Calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)
         for i in xrange(n):
             ew = linalg.eigvalsh(tmppot[i,:,:])
-            if sorted is True:
-                # Sorting the eigenvalues, biggest first.
-                # TODO: Sort will fail iff energy level cross!
+            if self._sort_eigenvalues is True and sorted is True:
+                # Sort the eigenvalues, biggest first. Note that sorting
+                # will give wrong results if the energy levels cross!
                 ew.sort()
                 tmpew[i,:] = ew[::-1]
             else:
@@ -253,7 +251,7 @@ class MatrixPotentialMS(MatrixPotential):
         # Calculate eigenvectors assuming hermitian matrix (eigh for stability!)
         for i in xrange(0, n):
             ew, ev = linalg.eigh(tmppot[i,:,:])
-            if sorted is True:
+            if self._sort_eigenvectors is True and sorted is True:
                 # Sorting the eigenvectors in the same order as the eigenvalues.
                 ind = numpy.argsort(ew)
                 ind = ind[::-1]
