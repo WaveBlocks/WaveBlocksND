@@ -5,7 +5,7 @@ a bunch of simulation configuration given some
 sets of parameters.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,7 +13,7 @@ from itertools import product
 import sys
 import os
 
-from WaveBlocks import GlobalDefaults
+from WaveBlocksND import GlobalDefaults
 
 
 def sort_statements(alist):
@@ -21,7 +21,8 @@ def sort_statements(alist):
     such that they all can be executed w.r.t. local variable
     references. This is some kind of topological sorting
     and uses a good ammount of black magic!!
-    @param alist: The list of statements
+
+    :param alist: The list of statements
     """
 
     # todo: Rewrite and improve this using reflection
@@ -50,10 +51,11 @@ def sort_statements(alist):
 
 def construct_name(filename, adict):
     """Construct a filename which contains several
-    key=value pairs after a given prefix. The filename
-    will end with the python extension .py
-    @param filename: The beginning of the filename.
-    @param names: A dict containing the key=value pairs.
+    ``key=value`` pairs after a given prefix. The filename
+    will end with the python extension ``.py``
+
+    :param filename: The beginning of the filename.
+    :param names: A dict containing the ``key=value`` pairs.
     """
     # Put all key=value pairs as string into a list
     kvs = [ GlobalDefaults.kvp_ldel + str(k) + GlobalDefaults.kvp_mdel + str(v) + GlobalDefaults.kvp_rdel for k, v in adict.iteritems() ]
@@ -85,12 +87,13 @@ def construct_name(filename, adict):
 
 def write_file(filepath, settings, sort_code=False):
     """Write a configuration file containing several
-    configuration statements of the form key = value.
-    The I{key} has to be a valid python variable name,
-    the I{value} a valid python statement.
-    @param path: The filepath where to put the new files.
-    @param filepath: The name and path of the output file.
-    @param setting: A dict containing the key=value pairs
+    configuration statements of the form ``key = value``.
+    The ``key`` has to be a valid python variable name,
+    the ``value`` a valid python statement.
+
+    :param path: The filepath where to put the new files.
+    :param filepath: The name and path of the output file.
+    :param setting: A python ``dict`` containing the ``key=value`` pairs
     """
     # Create new file
     f = open(filepath, "w")
@@ -123,11 +126,12 @@ def generate_configurations(gp, lp, cfname="Parameters", cfpath=GlobalDefaults.p
     of global parameters which are the same in all configurations
     and a set of local parameters which differ. We compute the
     cartesian product of the sets of all local parameter.
-    @param gp: A dict of global parameters.
-    @param lp: A dict of local parameter lists.
-    @keyword cfname: The common filename prefix. Default is I{Parameters}
-    @keyword cfpath: The path where the new configuration files will be placed.
-    It is interpreted relative to ".".
+
+    :param gp: A ``dict`` of global parameters.
+    :param lp: A ``dict`` of local parameter lists.
+    :param cfname: The common filename prefix. Default is ``Parameters``
+    :param cfpath: The path where the new configuration files will be
+                   placed. It is interpreted relative to ``.``.
     """
     # Check if the destination for the new configuration files is prepared
     configpath = os.path.join(".", cfpath)
@@ -170,6 +174,7 @@ def generate_configurations(gp, lp, cfname="Parameters", cfpath=GlobalDefaults.p
         write_file(filepath, params, sort_code=True)
 
     print("Wrote all "+str(i)+" configuration files.")
+
 
 
 
