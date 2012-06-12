@@ -50,6 +50,7 @@ Basic quantum mechanics
    waveblocks_classes/MatrixPotential
    waveblocks_classes/MatrixPotential1S
    waveblocks_classes/MatrixPotential2S
+   waveblocks_classes/MatrixPotentialMS
 
    waveblocks_classes/PotentialFactory
 
