@@ -92,16 +92,19 @@ def plot_parameters(data, index=0):
     ax = fig.gca()
     for item in qhist:
         ax.plot(item[:,0], item[:,1], "-o", label=r"Trajectory of $q$")
+    ax.set_xlabel(r"$q_x$")
+    ax.set_ylabel(r"$q_y$")
     ax.grid(True)
     ax.set_title(r"Trajectory of $q$")
     fig.savefig("wavepacket_parameters_trajectoryq_block"+str(index)+GD.output_format)
     close(fig)
 
-    # Plot the 2D trajectory of the parameters q and p
     fig = figure()
     ax = fig.gca()
     for item in phist:
         ax.plot(item[:,0], item[:,1], "-o", label=r"Trajectory of $p$")
+    ax.set_xlabel(r"$p_x$")
+    ax.set_ylabel(r"$p_y$")
     ax.grid(True)
     ax.set_title(r"Trajectory of $p$")
     fig.savefig("wavepacket_parameters_trajectoryp_block"+str(index)+GD.output_format)

@@ -194,6 +194,8 @@ def plot_parameters(data, index=0):
     ax = fig.gca()
     for item in Phist:
         ax.plot(real(item), imag(item), "-o")
+    ax.set_xlabel(r"$\Re \det P$")
+    ax.set_ylabel(r"$\Im \det P$")
     ax.grid(True)
     ax.set_title(r"Trajectory of $\det P$")
     fig.savefig("wavepacket_parameters_trajectoryP_block"+str(index)+GD.output_format)
@@ -205,6 +207,8 @@ def plot_parameters(data, index=0):
     ax = fig.gca()
     for item in Qhist:
         ax.plot(real(item), imag(item), "-o")
+    ax.set_xlabel(r"$\Re \det Q$")
+    ax.set_ylabel(r"$\Im \det Q$")
     ax.grid(True)
     ax.set_title(r"Trajectory of $\det Q$")
     fig.savefig("wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format)
