@@ -257,7 +257,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         exponent = 1.0j / eps**2 * (0.5 * pr1 + pr2)
 
-        # TODO: Use continuous sqrt function
+        # The problematic prefactor cancels in inner products
         if prefactor is True:
             prefactor = (pi*eps**2)**(-d*0.25) / root(det(Q))
         else:
