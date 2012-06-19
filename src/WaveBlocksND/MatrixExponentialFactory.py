@@ -25,7 +25,7 @@ def create_matrixexponential(description):
     elif method == "arnoldi":
         from MatrixExponential import matrix_exp_arnoldi
         try:
-            arnoldi_steps = min(description["basis_size"], description["arnoldi_steps"])
+            arnoldi_steps = description["arnoldi_steps"]
         except:
             arnoldi_steps = description["arnoldi_steps"]
         return partial(matrix_exp_arnoldi, k=arnoldi_steps)
