@@ -111,12 +111,16 @@ def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
             j = BS[level][vect]
             if j is not None:
 
-                ax = fig.add_subplot(N,1,level)
+                ax = fig.add_subplot(N,1,level+1)
                 ax.plot(timegrid, real(coeffs[level][:,j]))
                 ax.plot(timegrid, imag(coeffs[level][:,j]))
                 ax.plot(timegrid, abs(coeffs[level][:,j]))
                 ax.grid(True)
+                ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+                ax.set_xlabel(r"$t$")
+                ax.set_ylabel(r"$c^"+str(level)+r"$")
 
+        fig.suptitle(r"$\underline{k} = "+str(vect)+r"$")
         fig.savefig("coefficient_k"+str(vect)+"_block"+str(index)+GD.output_format)
         close(fig)
 
