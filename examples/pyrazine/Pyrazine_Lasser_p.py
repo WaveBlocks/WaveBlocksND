@@ -28,9 +28,10 @@ leading_component = 0
 # hbar = 0.074
 eps = 0.27203
 
-# Different values than Lasser:
-T = 1
-dt = 0.01
+# Time [0, 500] femto seconds, 200'00 timesteps
+#T = 28
+T = 0.1
+dt = 0.00014
 
 # Parameter values: sqrt(alpha_j)
 sa1 = 1.305
