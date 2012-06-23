@@ -31,9 +31,6 @@ class HagedornPropagator(Propagator):
 
         :param potential: The potential :math:`V(x)` the wavepacket :math:`\Psi` feels during the time propagation.
         :param packet: The initial homogeneous Hagedorn wavepacket :math:`\Psi` we propagate in time.
-        :param leading_component: The leading component index :math:`\chi`.
-
-
         :raises ValueError: If the number of components of :math:`\Psi` does not match
                             the number of energy levels :math:`\lambda_i` of the potential.
         """
@@ -76,7 +73,7 @@ class HagedornPropagator(Propagator):
 
     def __str__(self):
         r"""Prepare a printable string representing the :py:class:`HagedornPropagator` instance."""
-        return "Hagedorn propagator for " + str(self._number_components) + " components.\n"
+        return "Homogeneous Hagedorn propagator for " + str(self._number_components) + " components.\n"
 
 
     def _prepare_potential(self):
