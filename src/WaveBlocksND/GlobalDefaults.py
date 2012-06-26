@@ -33,7 +33,7 @@ default_basis_size = 8
 
 
 # Defaults for some simulation configuration parameters
-try_simplification = True
+try_simplification = False
 
 # Try to make eigenvectors continuous
 continuous_eigenvectors = True
