@@ -22,7 +22,7 @@ def add_inhomogwavepacket(self, parameters, timeslots=None, blockid=0):
     D = parameters["dimension"]
 
     # The overall group containing all wavepacket data
-    grp_wp = self._srf[self._prefixb+str(blockid)].require_group("wavepacket")
+    grp_wp = self._srf[self._prefixb+str(blockid)].require_group("wavepacket_inhomog")
     # The group for storing the basis shapes
     grp_bs = grp_wp.create_group("basisshapes")
     # The group for storing the parameter set Pi
@@ -69,7 +69,7 @@ def delete_inhomogwavepacket(self, blockid=0):
     r"""Remove the stored wavepackets.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/wavepacket"]
+        del self._srf[self._prefixb+str(blockid)+"/wavepacket_inhomog"]
     except KeyError:
         pass
 
@@ -77,11 +77,11 @@ def delete_inhomogwavepacket(self, blockid=0):
 def has_inhomogwavepacket(self, blockid=0):
     r"""Ask if the specified data block has the desired data tensor.
     """
-    return "wavepacket" in self._srf[self._prefixb+str(blockid)].keys()
+    return "wavepacket_inhomog" in self._srf[self._prefixb+str(blockid)].keys()
 
 
 def save_inhomogwavepacket_description(self, descr, blockid=0):
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog"
     # Save the description
     for key, value in descr.iteritems():
         # Store all the values as pickled strings because hdf can
@@ -95,8 +95,8 @@ def save_inhomogwavepacket_parameters(self, parameters, timestep=None, blockid=0
     :param parameters: The parameter set of the Hagedorn wavepacket.
     :type parameters: A ``list`` containing the five ``ndarrays`` like :math:`(q,p,Q,P,S)`
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
+    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/Pi/"
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # Write the data
@@ -123,10 +123,10 @@ def save_inhomogwavepacket_coefficients(self, coefficients, basisshapes, timeste
     :param basisshapes: The corresponding basis shapes of the Hagedorn wavepacket.
     :type basisshapes: A ``list`` with :math:`N` :py:class:`BasisShape` subclass instances.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
+    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
+    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_shape_hash"
+    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_size"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/coefficients/"
 
     timeslot = self._srf[pathd].attrs["pointer"]
 
@@ -156,7 +156,7 @@ def save_inhomogwavepacket_basisshapes(self, basisshape, blockid=0):
 
     :param coefficients: The basis shapes of the Hagedorn wavepacket.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/basisshapes/"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basisshapes/"
 
     ha = hash(basisshape)
     name = "basis_shape_"+str(ha)
@@ -178,7 +178,7 @@ def save_inhomogwavepacket_basisshapes(self, basisshape, blockid=0):
 
 
 def load_inhomogwavepacket_description(self, blockid=0):
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog"
 
     # Load and return all descriptions available
     descr = {}
@@ -188,13 +188,13 @@ def load_inhomogwavepacket_description(self, blockid=0):
 
 
 def load_inhomogwavepacket_timegrid(self, blockid=0):
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
+    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
     return self._srf[pathtg][:]
 
 
 def load_inhomogwavepacket_parameters(self, timestep=None, component=None, blockid=0):
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
+    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/Pi/"
 
     index = self.find_timestep_index(pathtg, timestep)
 
@@ -209,10 +209,10 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
 
 
 def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, component=None, blockid=0):
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
+    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
+    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_shape_hash"
+    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_size"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/coefficients/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -242,7 +242,7 @@ def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, c
 def load_inhomogwavepacket_basisshapes(self, the_hash=None, blockid=0):
     r"""Load the basis shapes by hash.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/basisshapes/"
+    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basisshapes/"
 
     if the_hash is None:
         # Load and return all descriptions available
