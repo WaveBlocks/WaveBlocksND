@@ -104,7 +104,7 @@ def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0):
 
     :param parameters: The parameter set of the Hagedorn wavepacket.
     :type parameters: A ``list`` containing the five ``ndarrays`` like :math:`(q,p,Q,P,S)`
-    :param timestep: Load only the data of this timestep.
+    :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
@@ -133,7 +133,7 @@ def save_wavepacket_coefficients(self, coefficients, basisshapes, timestep=None,
     :type coefficients: A ``list`` with :math:`N` suitable ``ndarrays``.
     :param basisshapes: The corresponding basis shapes of the Hagedorn wavepacket.
     :type basisshapes: A ``list`` with :math:`N` :py:class:`BasisShape` subclass instances.
-    :param timestep: Load only the data of this timestep.
+    :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
@@ -217,6 +217,7 @@ def load_wavepacket_timegrid(self, blockid=0):
 def load_wavepacket_parameters(self, timestep=None, blockid=0):
     r"""Load the wavepacket parameters.
 
+    :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"

@@ -62,7 +62,7 @@ def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
 
     :param wavefunctionvalues: A list of the values to save.
     :type wavefunctionvalues: A list of ndarrays.
-    :param timestep: Load only the data of this timestep.
+    :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
     #@refactor: take wavefunction or wavefunction.get_values() as input?
