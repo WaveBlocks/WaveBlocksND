@@ -11,10 +11,12 @@ import numpy as np
 
 
 def add_wavefunction(self, parameters, timeslots=None, blockid=0):
-    """Add storage for the sampled wavefunction.
+    r"""Add storage for the sampled wavefunction.
 
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the keys `number_nodes` and `ncomponents`.
+    :param timeslots: The number of time slots we need. Can be ``None``
+                      to get automatically growing datasets.
     :param blockid: The ID of the data block to operate on.
     """
     grp_wf = self._srf[self._prefixb+str(blockid)].require_group("wavefunction")
@@ -37,7 +39,7 @@ def add_wavefunction(self, parameters, timeslots=None, blockid=0):
 
 
 def delete_wavefunction(self, blockid=0):
-    """Remove the stored wavefunction.
+    r"""Remove the stored wavefunction.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -48,18 +50,19 @@ def delete_wavefunction(self, blockid=0):
 
 
 def has_wavefunction(self, blockid=0):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
     """
     return "wavefunction" in self._srf[self._prefixb+str(blockid)].keys()
 
 
-def save_wavefunction(self, wavefunctionvalues, blockid=0, timestep=None):
-    """Save the values :math:`\psi_i` of a :py:class:`WaveFunction` instance.
+def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
+    r"""Save the values :math:`\psi_i` of a :py:class:`WaveFunction` instance.
 
     :param wavefunctionvalues: A list of the values to save.
     :type wavefunctionvalues: A list of ndarrays.
+    :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
     #@refactor: take wavefunction or wavefunction.get_values() as input?
@@ -82,7 +85,8 @@ def save_wavefunction(self, wavefunctionvalues, blockid=0, timestep=None):
 
 
 def load_wavefunction_timegrid(self, blockid=0):
-    """
+    r"""Load the wavefunction timegrid.
+
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"
@@ -90,7 +94,9 @@ def load_wavefunction_timegrid(self, blockid=0):
 
 
 def load_wavefunction(self, timestep=None, blockid=0):
-    """
+    r"""Load the wavefunction values.
+
+    :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"

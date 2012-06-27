@@ -11,9 +11,11 @@ import numpy as np
 
 
 def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
-    """
+    r"""
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the key `ncomponents`.
+    :param timeslots: The number of time slots we need. Can be ``None``
+                      to get automatically growing datasets.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which energies to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``kin``, ``pot`` and ``tot``.
@@ -63,7 +65,7 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
 
 
 def delete_energy(self, blockid=0):
-    """Remove the stored energies
+    r"""Remove the stored energies
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -77,7 +79,7 @@ def delete_energy(self, blockid=0):
 
 
 def has_energy(self, blockid=0, key=("kin", "pot")):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which energies to save. All are independent.
@@ -101,11 +103,12 @@ def has_energy(self, blockid=0, key=("kin", "pot")):
 
 
 def save_energy(self, energies, timestep=None, blockid=0, key=("kin", "pot")):
-    """Save the kinetic and potential energies to a file.
+    r"""Save the kinetic and potential energies to a file.
 
     :param energies: A tuple containing the energies. The order is important,
                      it has to match the order in the ``key`` argument. Per default
                      the order has to be :math:`(E_\text{kin}, E_\text{pot})`.
+    :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which energies to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``kin``, ``pot`` and ``tot``.
@@ -140,7 +143,7 @@ def save_energy(self, energies, timestep=None, blockid=0, key=("kin", "pot")):
 
 
 def load_energy_timegrid(self, blockid=0, key=("kin", "pot")):
-    """Load the time grid for specified energies.
+    r"""Load the time grid for specified energies.
 
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which energies to save. All are independent.
@@ -166,7 +169,10 @@ def load_energy_timegrid(self, blockid=0, key=("kin", "pot")):
 
 
 def load_energy(self, timestep=None, split=False, blockid=0, key=("kin", "pot")):
-    """
+    r"""Load the energy data.
+
+    :param timestep: Load only the data of this timestep.
+    :param split: Split the array into arrays for each component.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which energies to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``kin``, ``pot`` and ``tot``.

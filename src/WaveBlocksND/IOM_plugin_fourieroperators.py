@@ -13,7 +13,7 @@ import numpy as np
 
 
 def add_fourieroperators(self, parameters, blockid=0):
-    """Add storage for the Fourier propagation operators.
+    r"""Add storage for the Fourier propagation operators.
 
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the keys `ncomponents` and `number_grid_nodes`.
@@ -26,7 +26,7 @@ def add_fourieroperators(self, parameters, blockid=0):
 
 
 def delete_fourieroperators(self, blockid=0):
-    """Remove the stored Fourier operators.
+    r"""Remove the stored Fourier operators.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -40,7 +40,7 @@ def delete_fourieroperators(self, blockid=0):
 
 
 def has_fourieroperators(self, blockid=0):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -49,7 +49,7 @@ def has_fourieroperators(self, blockid=0):
 
 
 def save_fourieroperators(self, operators, blockid=0):
-    """Save the kinetic and potential operator to a file.
+    r"""Save the kinetic and potential operator to a file.
 
     :param operators: The operators to save, given as tuple :math:`(T, V)`.
     :param blockid: The ID of the data block to operate on.
@@ -64,7 +64,8 @@ def save_fourieroperators(self, operators, blockid=0):
 
 
 def load_fourieroperators(self, blockid=0):
-    """
+    r"""Load the Fourier operators.
+
     :param blockid: The ID of the data block to operate on.
     """
     path = "/"+self._prefixb+str(blockid)+"/propagation/operators/"

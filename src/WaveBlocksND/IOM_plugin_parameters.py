@@ -13,7 +13,9 @@ import ParameterProvider as ParameterProvider
 
 
 def add_parameters(self, blockid="global"):
-    """Add storage for the simulation parameters.
+    r"""Add storage for the simulation parameters.
+
+    :param blockid: The ID of the data block to operate on.
     """
     # Store the simulation parameters
     # We are only interested in the attributes of this data set
@@ -22,7 +24,9 @@ def add_parameters(self, blockid="global"):
 
 
 def delete_parameters(self, blockid="global"):
-    """Remove the stored simulation parameters.
+    r"""Remove the stored simulation parameters.
+
+    :param blockid: The ID of the data block to operate on.
     """
     try:
         del self._srf[self._prefixb+str(blockid)+"/simulation_parameters"]
@@ -31,13 +35,18 @@ def delete_parameters(self, blockid="global"):
 
 
 def has_parameters(self, blockid="global"):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
+
+    :param blockid: The ID of the data block to operate on.
     """
     return "simulation_parameters" in self._srf[self._prefixb+str(blockid)].keys()
 
 
 def save_parameters(self, parameters, blockid="global"):
-    """Save the norm of wavefunctions or wavepackets.
+    r"""Save the simulation parameters.
+
+    :param parameters: The simulation parameters to store.
+    :param blockid: The ID of the data block to operate on.
     """
     paset = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"]
 
@@ -48,7 +57,9 @@ def save_parameters(self, parameters, blockid="global"):
 
 
 def load_parameters(self, blockid="global"):
-    """Load the simulation parameters.
+    r"""Load the simulation parameters.
+
+    :param blockid: The ID of the data block to operate on.
     """
     p = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"].attrs
     PP = ParameterProvider.ParameterProvider()
@@ -63,6 +74,11 @@ def load_parameters(self, blockid="global"):
 
 
 def update_parameters(self, parameters, blockid="global"):
+    r"""Update the parameters by some new values.
+
+    :param parameters: The parameters containing updated values.
+    :param blockid: The ID of the data block to operate on.
+    """
     params = self.load_parameters(blockid=blockid)
     self.delete_parameters(blockid=blockid)
     params.update_parameters(parameters)

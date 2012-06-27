@@ -11,7 +11,7 @@ import numpy as np
 
 
 def add_grid(self, parameters, blockid=0):
-    """Add storage for a tensor product grid.
+    r"""Add storage for a tensor product grid.
 
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the keys `number_nodes` and `dimension`.
@@ -23,7 +23,7 @@ def add_grid(self, parameters, blockid=0):
 
 
 def delete_grid(self, blockid=0):
-    """Remove the stored grid.
+    r"""Remove the stored grid.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -34,7 +34,7 @@ def delete_grid(self, blockid=0):
 
 
 def has_grid(self, blockid=0):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -42,8 +42,9 @@ def has_grid(self, blockid=0):
 
 
 def save_grid(self, gridnodes, blockid=0):
-    """Save the grid nodes.
+    r"""Save the grid nodes.
 
+    :param gridnodes: The grid nodes to store.
     :param blockid: The ID of the data block to operate on.
     """
     path = "/"+self._prefixb+str(blockid)+"/grid"
@@ -51,7 +52,7 @@ def save_grid(self, gridnodes, blockid=0):
 
 
 def load_grid(self, blockid=0):
-    """Load the grid nodes.
+    r"""Load the grid nodes.
 
     :param blockid: The ID of the data block to operate on.
     """

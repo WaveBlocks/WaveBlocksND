@@ -11,10 +11,12 @@ import numpy as np
 
 
 def add_norm(self, parameters, timeslots=None, blockid=0):
-    """Add storage for the norms.
+    r"""Add storage for the norms.
 
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the key `ncomponents`.
+    :param timeslots: The number of time slots we need. Can be ``None``
+                      to get automatically growing datasets.
     :param blockid: The ID of the data block to operate on.
     """
     grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
@@ -37,7 +39,7 @@ def add_norm(self, parameters, timeslots=None, blockid=0):
 
 
 def delete_norm(self, blockid=0):
-    """Remove the stored norms.
+    r"""Remove the stored norms.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -51,7 +53,7 @@ def delete_norm(self, blockid=0):
 
 
 def has_norm(self, blockid=0):
-    """Ask if the specified data block has the desired data tensor.
+    r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -60,8 +62,10 @@ def has_norm(self, blockid=0):
 
 
 def save_norm(self, norm, timestep=None, blockid=0):
-    """Save the norm of wavefunctions or wavepackets.
+    r"""Save the norm of wavefunctions or wavepackets.
 
+    :param norm: The norm values to save.
+    :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/observables/norm/timegrid"
@@ -84,7 +88,7 @@ def save_norm(self, norm, timestep=None, blockid=0):
 
 
 def load_norm_timegrid(self, blockid=0):
-    """Load the timegrid corresponding to the norm data.
+    r"""Load the timegrid corresponding to the norm data.
 
     :param blockid: The ID of the data block to operate on.
     """
@@ -93,8 +97,10 @@ def load_norm_timegrid(self, blockid=0):
 
 
 def load_norm(self, timestep=None, split=False, blockid=0):
-    """Load the norm data.
+    r"""Load the norm data.
 
+    :param timestep: Load only the data of this timestep.
+    :param split: Split the data array into one array for each component.
     :param blockid: The ID of the data block to operate on.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/observables/norm/timegrid"
