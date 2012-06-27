@@ -118,6 +118,7 @@ Simulation result storage I/O
    waveblocks_classes/IOM_plugin_wavefunction
    waveblocks_classes/IOM_plugin_fourieroperators
    waveblocks_classes/IOM_plugin_wavepacket
+   waveblocks_classes/IOM_plugin_inhomogwavepacket
    waveblocks_classes/IOM_plugin_norm
    waveblocks_classes/IOM_plugin_energy
 
