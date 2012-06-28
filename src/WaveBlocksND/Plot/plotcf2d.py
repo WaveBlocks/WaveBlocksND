@@ -16,7 +16,7 @@ from color_map import color_map
 
 
 def plotcf2d(x, y, z, darken=None, axes=None, **kwargs):
-    """Plot complex valued functions :math:`\mathbb{R}^2 \rightarrow \mathbb{C}`
+    r"""Plot complex valued functions :math:`\mathbb{R}^2 \rightarrow \mathbb{C}`
     with the usual color code.
 
     :param x: The :math:`x` values.
