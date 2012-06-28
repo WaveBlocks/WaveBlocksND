@@ -150,7 +150,7 @@ class InhomogeneousQuadrature(Quadrature):
 
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            operator = lambda nodes, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
+            operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
 
         # Compute the quadrature
         result = []
@@ -231,7 +231,7 @@ class InhomogeneousQuadrature(Quadrature):
 
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            operator = lambda nodes, dummy, entry=None: ones(nodes.shape[1]) if entry[0] == entry[1] else zeros(nodes.shape[1])
+            operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
 
         for row in xrange(Nbra):
             for col in xrange(Nket):
