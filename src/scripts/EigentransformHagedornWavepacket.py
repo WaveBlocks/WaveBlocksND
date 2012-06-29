@@ -73,7 +73,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
         iomout.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shape(), timestep=step, blockid=blockidout)
 
 
-def transform_hawpih_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
+def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     """Compute the transformation to the eigenbasis for a wavepacket.
     Save the result back to a file.
 
@@ -95,7 +95,7 @@ def transform_hawpih_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     BT = BasisTransformationHAWP(Potential)
 
     # Initialize a Hagedorn wavepacket with the data
-    descr = iomin.load_wavepacket_description(blockid=blockidin)
+    descr = iomin.load_inhomogwavepacket_description(blockid=blockidin)
     HAWP = BlockFactory().create_wavepacket(descr)
 
     iomout.add_inhomogwavepacket(descr, timeslots=nrtimesteps, blockid=blockidout)

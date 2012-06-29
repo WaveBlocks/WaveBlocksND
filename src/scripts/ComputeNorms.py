@@ -35,11 +35,11 @@ if __name__ == "__main__":
         # We test for an inhomogeneous wavepacket next
         if iom.has_inhomogwavepacket(blockid=blockid):
             import NormWavepacket
-            NormWavepacket.compute_norm(iom, blockid=blockid)
+            NormWavepacket.compute_norm_inhawp(iom, blockid=blockid)
         # We test for a homogeneous wavepacket next
         elif iom.has_wavepacket(blockid=blockid):
             import NormWavepacket
-            NormWavepacket.compute_norm(iom, blockid=blockid)
+            NormWavepacket.compute_norm_hawp(iom, blockid=blockid)
         # We have no wavepacket, then we try for a wavefunction
         elif iom.has_wavefunction(blockid=blockid):
             import NormWavefunction

@@ -57,7 +57,7 @@ if __name__ == "__main__":
             # See if we have an inhomogeneous wavepacket next
             if iomc.has_inhomogwavepacket(blockid=blockid):
                 from EigentransformHagedornWavepacket import transform_hawpih_to_eigen
-                transform_hawpih_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
+                transform_inhawp_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
 
     iomc.finalize()
     iome.finalize()
