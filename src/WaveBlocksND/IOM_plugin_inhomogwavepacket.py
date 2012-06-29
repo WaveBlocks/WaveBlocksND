@@ -199,7 +199,7 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
     index = self.find_timestep_index(pathtg, timestep)
 
     data = []
-    for i in xrange(len(self._srf[pathd].keys())):
+    for i in xrange(len(self._srf[pathd].keys())//5):
         if timestep is not None:
             data.append( tuple([ self._srf[pathd+key+str(i)][index,:,:] for key in ("q_","p_","Q_","P_","S_") ]) )
         else:
