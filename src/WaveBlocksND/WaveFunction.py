@@ -153,7 +153,7 @@ class WaveFunction(object):
         :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual
                        components :math:`\psi_i`. Default is `False`.
         :return: A list with the kinetic energies of the individual components
-        or the overall kinetic energy of the wavefunction. (Depending on the optional arguments.)
+                 or the overall kinetic energy of the wavefunction. (Depending on the optional arguments.)
         """
         # TODO: Consider using less declarative coding style.
         #       Issue: Compute fft of each component only once
@@ -187,7 +187,7 @@ class WaveFunction(object):
         :param summed: Whether to sum up the potential energies :math:`E_i` of the individual
                        components :math:`\psi_i`. Default is `False`.
         :return: A list with the potential energies of the individual components
-        or the overall potential energy of the wavefunction. (Depending on the optional arguments.)
+                 or the overall potential energy of the wavefunction. (Depending on the optional arguments.)
         """
         # Compute the prefactor
         T = self._grid.get_extensions()

@@ -81,7 +81,7 @@ class HyperCubicShape(BasisShape):
         of the basis set :math:`\mathcal{K}`.
 
         Note: The order of iteration is NOT fixed. If you need a special
-        iteration scheme, use :py:method:`get_node_iterator`.
+        iteration scheme, use :py:meth:`get_node_iterator`.
         """
         # TODO: Better remove this as it may cause unexpected behaviour?
         return iter(self._lima)

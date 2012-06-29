@@ -51,21 +51,27 @@ class QuadratureRule(object):
 
 
     def get_number_nodes(self):
-        r""":return: The number of quadrature nodes denoted by :math:`|\Gamma|`
-                     that are part of this quadrature rule :math:`\Gamma = (\gamma, \omega)`.
+        r"""
+
+        :return: The number of quadrature nodes denoted by :math:`|\Gamma|` that are
+                 part of this quadrature rule :math:`\Gamma = (\gamma, \omega)`.
         """
         return self._number_nodes
 
 
     def get_nodes(self):
-        r""":return: A two-dimensional ndarray containing the quadrature nodes
-                     :math:`\gamma_i`. The array must have a shape of :math:`(D, |\Gamma|)`.
+        r"""
+
+        :return: A two-dimensional ndarray containing the quadrature nodes :math:`\gamma_i`.
+                 The array must have a shape of :math:`(D, |\Gamma|)`.
         """
         raise NotImplementedError("'QuadratureRule' is an abstract interface.")
 
 
     def get_weights(self):
-        r""":return: A two-dimensional ndarray containing the quadrature weights
-                     :math:`\omega_i`.  The array must have a shape of :math:`(1, |\Gamma|)`.
+        r"""
+
+        :return: A two-dimensional ndarray containing the quadrature weights :math:`\omega_i`.
+                 The array must have a shape of :math:`(1, |\Gamma|)`.
         """
         raise NotImplementedError("'QuadratureRule' is an abstract interface.")

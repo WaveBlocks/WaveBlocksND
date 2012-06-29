@@ -144,7 +144,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
-        :type grid: A class having a :py:method:`get_nodes(...)` method.
+        :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
                           We need this to choose the correct basis shape.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
@@ -227,7 +227,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
-        :type grid: A class having a :py:method:`get_nodes(...)` method.
+        :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
                           (Defaults to ``None`` for evaluating all components.)
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
