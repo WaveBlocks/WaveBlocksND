@@ -132,6 +132,7 @@ Other classes
    waveblocks_classes/GlobalDefaults
    waveblocks_classes/ParameterLoader
    waveblocks_classes/ParameterProvider
+   waveblocks_classes/TimeManager
    waveblocks_classes/FileTools
 
 Etc

@@ -16,16 +16,21 @@ __all__ = ["TimeManager"]
 # TODO: Clean up and allow for calculation of all time related quantities given a subset
 
 class TimeManager(object):
-    """This class performs several computation with time, timesteps and so for.
+    r"""This class performs several computation with time, timesteps and so for.
+
     The important quantities here are:
-    T  : the fixed simulation end time
-    dt : the size of the timestep
-    N  : the overall number of timesteps.
-    t  : an unspecified time in the interval [0, T]
-    n  : an unspecified timestep in the interval [0, N]
-    The importtant relations that hold are:
-    T = N * dt  and in analogy  t = n * dt
-    There are also conversion routines for t and n.
+
+    ============ ====================================================== 
+    :math:`T`    the fixed simulation end time
+    :math:`\tau` the size of the timestep
+    :math:`N`    the overall number of timesteps.
+    :math:`t`    an unspecified time in the interval :math:`[0, T]`
+    :math:`n`    an unspecified timestep in the interval :math:`[0, N]`
+    ============ ======================================================
+
+    The importtant relations that hold are :math:`T = N \tau` and
+    in analogy :math:`t = n \tau`. There are also conversion routines
+    for :math:`t` and :math:`n`.
     Additionally the class contains some routines for determining
     if and when to save data. But we do not touch any data in here.
     """
@@ -52,10 +57,9 @@ class TimeManager(object):
             self.set_interval(1)
 
         #: List of timesteps when we have to save
+        self.savetimes = []
         if parameters.has_key("save_at"):
             self.add_to_savelist(parameters["save_at"])
-        else:
-            self.savetimes = []
 
 
     def __str__(self):
@@ -68,30 +72,34 @@ class TimeManager(object):
 
 
     def set_T(self, T):
-        """Set the simulation endtime T.
-        @param T: The simulation end time.
+        r"""Set the simulation endtime :math:`T`.
+        
+        :param T: The simulation end time.
         """
         self.T = T
 
 
     def set_dt(self, dt):
-        """Set the simulation timestep size dt.
-        @param dt: The simulation timestep size.
+        r"""Set the simulation timestep size :math:`\tau`.
+        
+        :param dt: The simulation timestep size.
         """
         self.dt = dt
 
 
     def set_nsteps(self, nsteps):
-        """Set the number of timesteps the simulation runs.
-        @param nsteps: The number timesteps we do.
+        r"""Set the number of timesteps the simulation runs.
+
+        :param nsteps: The number :math:`n` timesteps we do.
         """
         self.nsteps = nsteps
 
 
     def set_interval(self, interval):
-        """Set the inteval for saving results.
-        @param interval: The interval at which we save simulation results.
-        @note: A value of 0 means we never save data at any regular interval.
+        r"""Set the inteval for saving results.
+
+        :param interval: The interval at which we save simulation results.
+        Note that a value of ``0`` means we never save data at any regular interval.
         """
         self.interval = interval
 
@@ -103,7 +111,7 @@ class TimeManager(object):
 
 
     def compute_number_timesteps(self):
-        """Computes the number of time steps we will perform.
+        r"""Computes the number :math:`n` of time steps we will perform.
         """
         # This is independent from if, when and what data we save
         if self.nsteps is not None:
@@ -113,9 +121,12 @@ class TimeManager(object):
 
 
     def compute_timestep(self, t):
-        """Compute the timestep n from a time t such that t = n * dt holds.
-        @param t: The time t of which we want to find the timestep number.
-        @note: The user has to ensure that time is an integral multiple of dt.
+        r"""Compute the timestep :math:`n` from a time :math:`t` such that
+        :math:`t = n \tau` holds.
+
+        :param t: The time t of which we want to find the timestep number.
+        Note that the user has to ensure that time :math:`t` is an integral
+        multiple of :math:`\tau`.
         """
         stepo = t / self.dt
         step = round(stepo)
@@ -127,17 +138,22 @@ class TimeManager(object):
 
 
     def compute_time(self, n):
-        """Compute the time t from a timestep n such that t = n * dt holds.
-        @param n: The timestep n of which we want to find the corresponding time.
+        r"""Compute the time :math:`t` from a timestep :math:`n` such that
+        :math:`t = n \tau` holds.
+
+        :param n: The timestep n of which we want to find the corresponding time.
         """
         return 1.0 * n * self.dt
 
 
     def add_to_savelist(self, alist):
-        """Add a list of times and/or timesteps to the list of times
+        r"""Add a list of times and/or timesteps to the list of times
         which determine when to save data.
-        @param alist: A list with integers (interpreted as timesteps) and/or floats (interpreted as times)
-        @note: The times and timesteps can be mixed and needn't to be given in monotone order.
+
+        :param alist: A list with integers (interpreted as timesteps)
+                      and/or floats (interpreted as times)
+        Note that the times and timesteps can be mixed and needn't to be
+        given in monotone order.
         """
         timesteps = []
 
@@ -173,7 +189,7 @@ class TimeManager(object):
     # TODO: Save and savelist -> event and eventlist
 
     def compute_number_saves(self):
-        """Compute the number of saves we will perform during the simulation. This
+        r"""Compute the number of saves we will perform during the simulation. This
         can be used to determine how much space to allocate in the output files.
         """
         # We do not save at regular intervals
@@ -198,8 +214,9 @@ class TimeManager(object):
 
 
     def must_save(self, n):
-        """Determine if we have to save right now.
-        @param n: The current timestep in question.
+        r"""Determine if we have to save right now.
+        
+        :param n: The current timestep in question.
         """
         if self.interval == 1:
             # Save every timestep
