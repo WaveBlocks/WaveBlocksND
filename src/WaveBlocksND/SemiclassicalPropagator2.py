@@ -13,7 +13,7 @@ from numpy.linalg import inv
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
-from params4split import SplittingParameters
+from SplittingParameters import SplittingParameters
 
 __all__ = ["SemiclassicalPropagator2"]
 
