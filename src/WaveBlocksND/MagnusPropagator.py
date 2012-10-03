@@ -13,12 +13,12 @@ from numpy.linalg import inv
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
-from params4split import build, intsplit
+from params4split import SplittingParameters
 
 __all__ = ["MagnusPropagator"]
 
 
-class MagnusPropagator(Propagator):
+class MagnusPropagator(Propagator, SplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
     Hagedorn wavepackets neglecting interaction."""
@@ -71,7 +71,7 @@ class MagnusPropagator(Propagator):
         # Precalculate the potential splittings needed
         self._prepare_potential()
 
-        self._a, self._b = build(parameters["splitting_method"])
+        self._a, self._b = self.build(parameters["splitting_method"])
 
 
     def __str__(self):
@@ -172,7 +172,7 @@ class MagnusPropagator(Propagator):
             # Propagate until c1*dt
             h1 = (0.5-sqrt(3.)/6.)*dt
             nrN1 = max(1, 1 + int((h1**(1.0/2.0))*eps**-(3.0/8.0)))
-            intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))
 
             # Build a first matrix here with the current parameters of the wavepacket
             quadrature = packet.get_quadrature()
@@ -181,7 +181,7 @@ class MagnusPropagator(Propagator):
             # Propagate until c2*dt
             h2 = dt/sqrt(3.0)
             nrN2 = max(1, 1 + int((h2**(1.0/2.0))*eps**(-3.0/8.0)))
-            intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, packet, (packet,leading_chi))
         
             # Build a second matrix here with the current parameters of the wavepacket
             quadrature = packet.get_quadrature()
@@ -198,4 +198,4 @@ class MagnusPropagator(Propagator):
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt 
-            intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))

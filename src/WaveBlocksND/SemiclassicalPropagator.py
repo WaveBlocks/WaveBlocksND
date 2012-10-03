@@ -70,8 +70,6 @@ class SemiclassicalPropagator(Propagator):
         # Precalculate the potential splittings needed
         self._prepare_potential()
 
-        print '=====================SemiclassicalPropagator====================='
-
 
     def __str__(self):
         r"""Prepare a printable string representing the :py:class:`SemiclassicalPropagator` instance."""

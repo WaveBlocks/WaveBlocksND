@@ -13,12 +13,12 @@ from numpy.linalg import inv
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
-from params4split import build, intsplit
+from params4split import SplittingParameters
 
 __all__ = ["MagnusPropagator2"]
 
 
-class MagnusPropagator2(Propagator):
+class MagnusPropagator2(Propagator, SplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
     Hagedorn wavepackets neglecting interaction."""
@@ -70,7 +70,7 @@ class MagnusPropagator2(Propagator):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = build(parameters["splitting_method"])
+        self._a, self._b = self.build(parameters["splitting_method"])
 
 
     def __str__(self):
@@ -172,7 +172,7 @@ class MagnusPropagator2(Propagator):
             h1 = 0.5*dt
             nrtmp = int(sqrt(dt)*eps**(-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
             
             # Do a potential step with the local non-quadratic taylor remainder
             quadrature = packet.get_quadrature()
@@ -183,4 +183,4 @@ class MagnusPropagator2(Propagator):
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt 
-            intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
