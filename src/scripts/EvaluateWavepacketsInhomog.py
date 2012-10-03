@@ -1,7 +1,7 @@
 """The WaveBlocks Project
 
-Sample wavepackets at the nodes of a given grid and save the results back
-to the given simulation data file.
+Sample wavepackets at the nodes of a given grid and save
+the results back to the given simulation data file.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
@@ -9,12 +9,12 @@ to the given simulation data file.
 """
 
 from WaveBlocksND import BlockFactory
-from WaveBlocksND import HagedornWavepacket
 from WaveBlocksND import WaveFunction
+from WaveBlocksND import HagedornWavepacketInhomogeneous
 
 
 def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
-    """Evaluate a homogeneous Hagedorn wavepacket on a given grid for each timestep.
+    """Evaluate an in homogeneous Hagedorn wavepacket on a given grid for each timestep.
 
     :param pp: An :py:class:`ParameterProvider` instance providing the grid data.
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -24,13 +24,13 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
     parameters = iom.load_parameters()
 
     # Number of time steps we saved
-    timesteps = iom.load_wavepacket_timegrid(blockid=blockid)
+    timesteps = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
     nrtimesteps = timesteps.shape[0]
 
     # Prepare the potential for basis transformations
     Potential = BlockFactory().create_potential(parameters)
     grid = BlockFactory().create_grid(pp)
-    
+
     # We want to save wavefunctions, thus add a data slot to the data file
     d = {"ncomponents":parameters["ncomponents"],
          "number_nodes":pp["number_nodes"],
@@ -41,7 +41,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
     iom.save_grid(grid.get_nodes(), blockid=blockid)
 
     # Initialize a Hagedorn wavepacket with the data
-    descr = iom.load_wavepacket_description(blockid=blockid)
+    descr = iom.load_inhomogwavepacket_description(blockid=blockid)
     HAWP = BlockFactory().create_wavepacket(descr)
 
     # Basis transformator
@@ -50,7 +50,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
         BT.set_matrix_builder(HAWP.get_quadrature())
 
     # Basis shapes
-    BS_descr = iom.load_wavepacket_basisshapes()
+    BS_descr = iom.load_inhomogwavepacket_basisshapes()
     BS = {}
     for ahash, descr in BS_descr.iteritems():
         BS[ahash] = BlockFactory().create_basis_shape(descr)
@@ -60,11 +60,11 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Evaluating homogeneous wavepacket at timestep "+str(step))
+        print(" Evaluating inhomogeneous wavepacket at timestep "+str(step))
 
         # Retrieve simulation data
-        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
-        hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
+        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid)
+        hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
         HAWP.set_parameters(params)

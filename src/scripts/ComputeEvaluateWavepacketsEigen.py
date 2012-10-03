@@ -40,11 +40,11 @@ if __name__ == "__main__":
             continue
 
         # See if we have an inhomogeneous wavepacket in the current data block
-        #if iom.has_inhomogwavepacket(blockid=blockid):
-        #    import EvaluateWavepacketsInhomog
-        #    EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(iom, blockid=blockid)
+        if iom.has_inhomogwavepacket(blockid=blockid):
+            import EvaluateWavepacketsInhomog
+            EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(PP, iom, blockid=blockid, eigentrafo=False)
         # If not, we test for a homogeneous wavepacket next
-        if iom.has_wavepacket(blockid=blockid):
+        elif iom.has_wavepacket(blockid=blockid):
             import EvaluateWavepackets
             EvaluateWavepackets.compute_evaluate_wavepackets(PP, iom, blockid=blockid, eigentrafo=True)
         # If there is also no wavefunction, then there is nothing to compute the norm
