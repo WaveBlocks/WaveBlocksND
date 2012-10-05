@@ -19,7 +19,11 @@ def add_grid(self, parameters, blockid=0):
     """
     # TODO: Consider storing axes, extensions etc too
     # TODO: What about grid types other than tensor product grids?
-    self._srf[self._prefixb+str(blockid)].create_dataset("grid", [parameters["dimension"]] + list(parameters["number_nodes"]), np.floating)
+
+    # TODO: Remove quick hack:
+    overall_nr_nodes = np.prod(parameters["number_nodes"])
+    # Store gird as flattened array of nodes
+    self._srf[self._prefixb+str(blockid)].create_dataset("grid", [parameters["dimension"], overall_nr_nodes], np.floating)
 
 
 def delete_grid(self, blockid=0):
