@@ -16,7 +16,7 @@ import GlobalDefaults as GD
 
 
 def get_result_dirs(path):
-    """Lists all simulations (IDs) that can be found under the given path.
+    r"""Lists all simulations (IDs) that can be found under the given path.
 
     :param path: The filesystem path under which we search for simulations.
     :return: A list of simulation IDs.
@@ -26,7 +26,7 @@ def get_result_dirs(path):
 
 
 def get_parameters_file(path):
-    """Search for a configuration file containing the simulation parameters under a given path.
+    r"""Search for a configuration file containing the simulation parameters under a given path.
     Note that in case there are more than one .py file under the given path we just return the
     first one found!
 
@@ -48,7 +48,7 @@ def get_parameters_file(path):
 
 
 def get_results_file(path):
-    """Search for a file containing the simulation results under a given path.
+    r"""Search for a file containing the simulation results under a given path.
     Note that in case there are more than one .hdf5 file under the given path
     we just return the first one found!
 
@@ -71,7 +71,7 @@ def get_results_file(path):
 
 
 def get_number_simulations(path):
-    """Get the number of simulations at hand below the given path.
+    r"""Get the number of simulations at hand below the given path.
 
     :param path: The path under which we search for a output file.
     :return: The number of simulations result directories.
@@ -81,7 +81,7 @@ def get_number_simulations(path):
 
 
 def name_contains(name, pattern):
-    """Checks if a simulation ID contains a given pattern.
+    r"""Checks if a simulation ID contains a given pattern.
 
     :param name: The full simulation ID.
     :param pattern: The pattern in question.
@@ -91,10 +91,10 @@ def name_contains(name, pattern):
 
 
 def gather_all(stringlist, pattern):
-    """Collects all simulation IDs which contain a specific pattern from a given list.
+    r"""Collects all simulation IDs which contain a specific pattern from a given list.
 
-    :param stringlist: A list with the simulation IDs
-    :param pattern: The pattern
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern.
     :return: A list of simulation IDs that contain the given pattern.
     """
     gathered = [ s for s in stringlist if name_contains(s, pattern) ]
@@ -102,15 +102,15 @@ def gather_all(stringlist, pattern):
 
 
 def compare_by(namea, nameb, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=True):
-    """Compare two simulation IDs with respect to a (numerical) value in the ID.
+    r"""Compare two simulation IDs with respect to a (numerical) value in the ID.
 
-    :param namea: The first name in the comparison
-    :param nameb: The second name in the comparison
-    :param pattern: The pattern whose (numerical) value is used for sorting
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
-    :param as_string: Determines if the values for ``pattern`` get converted to floats
+    :param namea: The first name in the comparison.
+    :param nameb: The second name in the comparison.
+    :param pattern: The pattern whose (numerical) value is used for sorting.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A boolean answer if the IDs are the same w.r.t the pattern.
     """
     part1 = namea.partition(ldel + pattern + mdel)
@@ -128,13 +128,13 @@ def compare_by(namea, nameb, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=G
 
 
 def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=True):
-    """Groups simulation IDs with respect to a pattern.
+    r"""Groups simulation IDs with respect to a pattern.
 
-    :param stringlist: A list with the simulation IDs
-    :param pattern: The pattern used for grouping
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern used for grouping.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
     :param as_string: Determines if the values for ``pattern`` get converted to floats. Not used here.
     :return: A list of groups of simulation IDs.
     """
@@ -158,15 +158,15 @@ def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kv
 
 
 def intersect_by(lista, listb, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=True):
-    """Find the intersection of two lists containing simulation IDs.
+    r"""Find the intersection of two lists containing simulation IDs.
 
-    :param lista: A first list with the simulation IDs
-    :param listb: A second list with the simulation IDs
-    :param pattern: The pattern whose numerical value is used for sorting
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
-    :param as_string: Determines if the values for ``pattern`` get converted to floats
+    :param lista: A first list with the simulation IDs.
+    :param listb: A second list with the simulation IDs.
+    :param pattern: The pattern whose numerical value is used for sorting.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A sorted list of simulation IDs.
     """
     result = []
@@ -183,14 +183,14 @@ def intersect_by(lista, listb, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel
 
 
 def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
-    """Sorts simulation IDs with respect to a (numerical) value in the ID.
+    r"""Sorts simulation IDs with respect to a (numerical) value in the ID.
 
-    :param stringlist: A list with the simulation IDs
-    :param pattern: The pattern whose (numerical) value is used for sorting
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
-    :param as_string: Determines if the values for ``pattern`` get converted to floats
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern whose (numerical) value is used for sorting.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A sorted list of simulation IDs.
     """
     tmp = [ s.partition(ldel + pattern + mdel) for s in stringlist ]
@@ -223,16 +223,16 @@ def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp
 
 
 def get_max_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
-    """Get the maximum of a list with simulation IDs with respect to a (numerical) value in the ID.
+    r"""Get the maximum of a list with simulation IDs with respect to a (numerical) value in the ID.
     This is just a simple convenience function so that the user needs not to remember if the
     sort order is ascending or descending which plays no role for iteration.
 
-    :param stringlist: A list with the simulation IDs
-    :param pattern: The pattern whose (numerical) value is used for sorting
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
-    :param as_string: Determines if the values for ``pattern`` get converted to floats
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern whose (numerical) value is used for sorting.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A sorted list of simulation IDs.
     """
     sortedlist = sort_by(stringlist, pattern, ldel=ldel, mdel=mdel, rdel=rdel, as_string=as_string)
@@ -240,17 +240,97 @@ def get_max_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.
 
 
 def get_min_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
-    """Get the minimum of a list with simulation IDs with respect to a (numerical) value in the ID.
+    r"""Get the minimum of a list with simulation IDs with respect to a (numerical) value in the ID.
     This is just a simple convenience function so that the user needs not to remember if the
     sort order is ascending or descending which plays no role for iteration.
 
-    :param stringlist: A list with the simulation IDs
-    :param pattern: The pattern whose (numerical) value is used for sorting
-    :param ldel: Left delimiter of the pattern
-    :param mdel: Middle delimiter of the pattern
-    :param rdel: Right delimiter of the pattern
-    :param as_string: Determines if the values for ``pattern`` get converted to floats
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern whose (numerical) value is used for sorting.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A sorted list of simulation IDs.
     """
     sortedlist = sort_by(stringlist, pattern, ldel=ldel, mdel=mdel, rdel=rdel, as_string=as_string)
     return sortedlist[0]
+
+
+def get_items(name):
+    r"""Get a list of all the ``key=value`` items in the name.
+
+    :param name: The name from which to get the items.
+    :return: A list of all ``key=value`` items present in the ``name``.
+    """
+    parts = name.split(ldel)
+    items = [ ldel+p for p in parts if rdel in p ]
+    return items
+
+
+def get_item(name, pattern):
+    r"""Get a single ``key=value`` item out of the name.
+    The ``pattern`` specifies the ``key`` part.
+
+    :param name: The name from which to get the item.
+    :param pattern: The pattern whose value is used for ``key``.
+    :return: A (list of the) item(s) whose ``key`` part matches ``pattern``.
+    """
+    items = get_items(name)
+    result = filter(lambda item: pattern in item, items)
+    if len(result) == 1:
+        result = result[0]
+    return result
+
+
+def get_by_item(stringlist, item):
+    r"""Get a filtered list of simulation IDs containing a given ``key=value`` item.
+
+    :param stringlist: A list with the simulation IDs.
+    :param item: The ``key=value`` item to search for.
+    :return: A list of simulation IDs.
+    """
+    result = [ name for name in stringlist if item in name ]
+    return result
+
+
+def get_value(item, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
+    r"""Get the ``value`` part of a given ``key=value`` pair.
+
+    :param item: The ``key=value`` item.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :return: The ``value`` part of the given item.
+    """
+    rightpart = item.partition(mdel)
+    value = rightpart[-1].partition(rdel)
+    return value[0]
+    
+
+def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
+    r"""Get a filtered list of simulation IDs by specifying the ``key``
+    and ``value`` of some ``key=value`` pair.
+
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern that is used for ``key`.
+    :param value: The value that is used for ``value``.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :return: A list of IDs that contain a ``key`` with given ``value``.
+    """
+    result = []
+
+    for name in stringlist:
+        item = get_item(name, pattern)
+
+        if not type(item) == str:
+            print("Warning: ambiguous pattern "+pattern)
+            item = item[0]
+
+        val = get_value(item, ldel=ldel, mdel=mdel, rdel=rdel)
+
+        if val == value:
+            result.append(name)
+
+    return result

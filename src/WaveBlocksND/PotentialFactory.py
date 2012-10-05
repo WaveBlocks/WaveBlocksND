@@ -143,15 +143,15 @@ def create_potential(description):
     dimension = len(free_variables)
 
     # Debug:
-    print("====================================")
-    print("Potential:")
-    print("----------")
-    print(" Space dimension D is: " + str(dimension))
-    print(" Number N of levels:   " + str(nc))
-    print(" Free variables are:   " + str(free_variables))
-    print(" Potential matrix is:")
-    print(str(potential_matrix))
-    print("====================================")
+    # print("====================================")
+    # print("Potential:")
+    # print("----------")
+    # print(" Space dimension D is: " + str(dimension))
+    # print(" Number N of levels:   " + str(nc))
+    # print(" Free variables are:   " + str(free_variables))
+    # print(" Potential matrix is:")
+    # print(str(potential_matrix))
+    # print("====================================")
 
     # Create instances of MatrixPotential*
     if potential_description.has_key("type"):
