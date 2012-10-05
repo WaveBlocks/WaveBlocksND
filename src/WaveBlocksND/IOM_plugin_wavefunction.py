@@ -21,16 +21,18 @@ def add_wavefunction(self, parameters, timeslots=None, blockid=0):
     """
     grp_wf = self._srf[self._prefixb+str(blockid)].require_group("wavefunction")
 
+    # TODO: Remove quick hack:
+    overall_nr_nodes = np.prod(parameters["number_nodes"])
+
     # Create the dataset with appropriate parameters
     if timeslots is None:
         # This case is event based storing
-        daset_psi = grp_wf.create_dataset("Psi", [0, parameters["ncomponents"]] + list(parameters["number_nodes"]),
-                                          dtype=np.complexfloating, chunks=True,
+        daset_psi = grp_wf.create_dataset("Psi", [0, parameters["ncomponents"], overall_nr_nodes], dtype=np.complexfloating, chunks=True,
                                           maxshape=[None, parameters["ncomponents"]] + list(parameters["number_nodes"]))
         daset_psi_tg = grp_wf.create_dataset("timegrid", (0,), dtype=np.integer, chunks=True, maxshape=(None,))
     else:
         # User specified how much space is necessary.
-        daset_psi = grp_wf.create_dataset("Psi", [timeslots, parameters["ncomponents"]] + list(parameters["number_nodes"]), dtype=np.complexfloating)
+        daset_psi = grp_wf.create_dataset("Psi", [timeslots, parameters["ncomponents"], overall_nr_nodes], dtype=np.complexfloating)
         daset_psi_tg = grp_wf.create_dataset("timegrid", (timeslots,), dtype=np.integer)
 
     # Mark all steps as invalid
