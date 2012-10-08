@@ -11,6 +11,7 @@ import sys
 import os
 from glob import glob
 import subprocess as sp
+import time
 
 from WaveBlocksND import GlobalDefaults
 
@@ -51,8 +52,15 @@ def batch_run(call_simulation, call_for_each, call_once):
         print("Warning: The results directory already exists.")
         print("May overwrite older results.")
 
+    # UNBUFFERED timelog file
+    timelog = open("logtime", "w", 0)
+
     # Start the batch loop
     for configuration in configurations:
+        starttime = time.time()
+        timelog.writelines(["New simulation at: " + time.ctime(starttime) + "\n",
+                            "Current configuration is: " + configuration + "\n"])
+        print("Starting new simulation at timestamp: " + time.ctime(starttime))
         print("Current configuration is: " + configuration)
 
         filepath = os.path.join(configurationsdir, configuration)
@@ -67,6 +75,12 @@ def batch_run(call_simulation, call_for_each, call_once):
                 sp.call(["python"] + list(command))
             else:
                 sp.call(["python", command])
+
+        endtime = time.time()
+        timelog.writelines(["Simulation now finished at timestamp: " + time.ctime(endtime) + "\n",
+                            "Simulation took " + str(endtime-starttime) + " second to run\n\n"])
+        print("Simulation now finished at timestamp: " + time.ctime(endtime))
+        print("Simulation took " + str(endtime-starttime) + " second to run")
 
         # Clean up and move results
         simulationid = configuration[:-3]
@@ -83,6 +97,7 @@ def batch_run(call_simulation, call_for_each, call_once):
         for afile in glob("*.pdf"):
             sp.call(["mv", afile, resultspath])
 
+    timelog.close()
     print("Finished batch loop")
 
     # Postprocessing, call scripts that should get called once after all simulations finished
