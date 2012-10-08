@@ -94,8 +94,7 @@ class MatrixPotential2S(MatrixPotential):
         # TODO: Consider additional input types for "nodes":
         #       list of numpy ndarrays, list of single python scalars
         if not isinstance(grid, Grid):
-            if not type(grid) is numpy.ndarray:
-                grid = numpy.atleast_2d(grid)
+            grid = numpy.atleast_2d(grid)
             grid = GridWrapper(grid)
         return grid
 
