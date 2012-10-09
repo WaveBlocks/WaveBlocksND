@@ -11,6 +11,7 @@ python script for a bunch of simulation result files.
 import sys
 from glob import glob
 import subprocess as sp
+import time
 
 from WaveBlocksND.FileTools import get_result_dirs, get_results_file
 from WaveBlocksND import GlobalDefaults
@@ -30,7 +31,13 @@ def execute_for_all(resultspath, scriptcode, scriptargs):
     :param scriptcode: The python script that gets called for all simulations.
     :param scriptargs: Optional (constant) arguments to the script.
     """
+    # UNBUFFERED timelog file
+    timelog = open("logtime_forall", "w", 0)
+
     for simulationpath in get_result_dirs(resultspath):
+        starttime = time.time()
+        timelog.writelines(["New script starting at: " + time.ctime(starttime) + "\n",
+                            "Executing code for datafile in " + simulationpath + "\n"])
         print(" Executing code for datafile in " + simulationpath)
 
         # The file with the simulation data
@@ -39,9 +46,15 @@ def execute_for_all(resultspath, scriptcode, scriptargs):
         # Call the given script
         sp.call(["python", scriptcode, afile] + scriptargs)
 
+        endtime = time.time()
+        timelog.writelines(["Script now finished at timestamp: " + time.ctime(endtime) + "\n",
+                            "Script took " + str(endtime-starttime) + " second to run\n\n"])
+
         # Move plots away if any
         for afile in glob("*"+output_format):
             sp.call(["mv", afile, simulationpath])
+
+    timelog.close()
 
 
 
