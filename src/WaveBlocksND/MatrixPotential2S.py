@@ -751,6 +751,8 @@ class MatrixPotential2S(MatrixPotential):
             functions = self._remainder_eigen_ih_n
 
         grid = self._grid_wrap(grid)
+        position = numpy.atleast_2d(position)
+
         N = grid.get_number_nodes(overall=True)
         # Evaluate the remainder at the given nodes
         args = grid.get_nodes(split=True) + numpy.vsplit(position, position.shape[0])

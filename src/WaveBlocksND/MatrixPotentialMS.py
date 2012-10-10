@@ -586,6 +586,7 @@ class MatrixPotentialMS(MatrixPotential):
                  :math:`(1,|\Gamma|)`.
         """
         grid = self._grid_wrap(grid)
+        position = numpy.atleast_2d(position)
         nodes = grid.get_nodes()
         N = self._number_components
 
