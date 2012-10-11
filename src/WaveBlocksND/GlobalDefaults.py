@@ -47,7 +47,7 @@ write_nth = 0
 save_at = []
 
 # Propagator
-propagator = "Semiclassical"
+propagator = "semiclassical"
 
 #splitting_method = "KL8"  # Magnus
 splitting_method = "Y4"   # Semiclassical2, Magnus2
