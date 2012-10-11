@@ -1,6 +1,7 @@
 """The WaveBlocks Project
 
-Plot the wavefunctions probability densities for two-dimensional wavefunctions.
+Plot the wavefunctions probability densities
+for two-dimensional wavefunctions.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
