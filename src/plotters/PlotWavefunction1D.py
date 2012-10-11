@@ -31,8 +31,16 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
     """
     parameters = iom.load_parameters()
 
-    grid = iom.load_grid(blockid=blockid)
-    grid = grid.reshape((1, -1))
+    if not parameters["dimension"] == 1:
+        print("No wavefunction of one space dimensions, silent return!")
+        return
+
+    #grid = iom.load_grid(blockid="global")
+    #grid = grid.reshape((1, -1))
+    G = BlockFactory().create_grid(parameters)
+
+    print(G.get_extensions())
+
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
     # Precompute eigenvectors for efficiency
