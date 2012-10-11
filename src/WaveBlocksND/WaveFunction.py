@@ -63,7 +63,7 @@ class WaveFunction(object):
         self._grid = grid
 
 
-    def get_values(self, components=None):
+    def get_values(self, components=None, flat=None):
         r"""Get the wavefunction values :math:`\psi(\Gamma)` for each
         component :math:`\psi_i` of :math:`\Psi`.
 
@@ -71,15 +71,28 @@ class WaveFunction(object):
                            the wavefunction values :math:`\psi_i`.
         :type components: A single integer or a list of integers. If set to
                           `None` (default) we return the data for all components.
+        :param flat: Whether to return the wavefunction with a `hypercubic`
+                     :math:`(N, N_1, ..., N_D)` shape or a `flat`
+                     :math:`(N, \prod_i^D N_i)` shape.
+        :type flat: Boolean or ``None`` , default is ``None``.
         :return: A list of the values :math:`\psi_i` for all components :math:`i`.
         """
         if components is None:
             components = xrange(self._number_components)
 
-        return [ self._values[c] for c in atleast_1d(components) ]
-
-
-    def set_values(self, values, components=None):
+        if flat is None:
+            # Do not change the shape
+            return [ self._values[c] for c in atleast_1d(components) ]
+        elif flat is True:
+            # Return as flat array
+            return [ self._values[c].reshape((self._number_components, -1)) for c in atleast_1d(components) ]
+        elif flat is False:
+            # Return as non-flat array
+            # Not implemented yet, not needed yet
+            pass
+            
+            
+    def set_values(self, values, components=None, flat=None):
         r"""Assign new wavefunction values :math:`\psi_i(\Gamma)` for each component
         :math:`i` of :math:`\Psi` to the current :py:class:`WaveFunction` instance.
 
@@ -89,6 +102,10 @@ class WaveFunction(object):
                            the new wavefunction values :math:`\psi_i`.
         :type components: A single integer or a list of integers. If set to
                           `None` (default) we set the data for all components.
+        :param flat: Whether the wavefunction is given in `hypercubic`
+                     :math:`(N, N_1, ..., N_D)` shape or a `flat`
+                     :math:`(N, \prod_i^D N_i)` shape. Note that this has no effect yet.
+        :type flat: Boolean or ``None`` , default is ``None``.
 
         Note: This method does NOT copy the input data arrays.
 
