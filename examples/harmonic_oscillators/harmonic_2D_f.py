@@ -12,7 +12,8 @@ potential = "quadratic_2d"
 
 # The grid of our simulation domain
 limits = [(-6.283185307179586, 6.283185307179586), (-6.283185307179586, 6.283185307179586)]
-number_nodes = [512, 512]
+#number_nodes = [512, 512]
+number_nodes = [2048, 2048]
 
 # The parameter set of the initial wavepacket
 Q = [[1.0, 0.0],
@@ -57,5 +58,4 @@ wp0 = {
 initvals = [ wp0 ]
 
 # How often do we write data to disk
-# WARNING: Produces about 1GB of data!
 write_nth = 5
