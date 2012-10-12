@@ -115,16 +115,16 @@ def plot_parameters(data, index=0):
     ax.set_title(r"$\Re \det Q$")
 
     ax = fig.add_subplot(4,2,4)
-    for item in Qhist:
-        ax.plot(timegrid, imag(item))
-    ax.grid(True)
-    ax.set_title(r"$\Im \det Q$")
-
-    ax = fig.add_subplot(4,2,5)
     for item in Phist:
         ax.plot(timegrid, real(item))
     ax.grid(True)
     ax.set_title(r"$\Re \det P$")
+
+    ax = fig.add_subplot(4,2,5)
+    for item in Qhist:
+        ax.plot(timegrid, imag(item))
+    ax.grid(True)
+    ax.set_title(r"$\Im \det Q$")
 
     ax = fig.add_subplot(4,2,6)
     for item in Phist:
@@ -166,16 +166,16 @@ def plot_parameters(data, index=0):
     ax.set_title(r"$|\det Q|$")
 
     ax = fig.add_subplot(4,2,4)
-    for item in Qhist:
-        ax.plot(timegrid, ComplexMath.cont_angle(item))
-    ax.grid(True)
-    ax.set_title(r"$\arg \det Q$")
-
-    ax = fig.add_subplot(4,2,5)
     for item in Phist:
         ax.plot(timegrid, abs(item))
     ax.grid(True)
     ax.set_title(r"$|\det P|$")
+
+    ax = fig.add_subplot(4,2,5)
+    for item in Qhist:
+        ax.plot(timegrid, ComplexMath.cont_angle(item))
+    ax.grid(True)
+    ax.set_title(r"$\arg \det Q$")
 
     ax = fig.add_subplot(4,2,6)
     for item in Phist:

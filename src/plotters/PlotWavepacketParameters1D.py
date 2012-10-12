@@ -107,16 +107,16 @@ def plot_parameters(data, index=0):
     ax.set_title(r"$\Re Q$")
 
     ax = fig.add_subplot(4,2,4)
-    for item in Qhist:
-        ax.plot(timegrid, imag(item))
-    ax.grid(True)
-    ax.set_title(r"$\Im Q$")
-
-    ax = fig.add_subplot(4,2,5)
     for item in Phist:
         ax.plot(timegrid, real(item))
     ax.grid(True)
     ax.set_title(r"$\Re P$")
+
+    ax = fig.add_subplot(4,2,5)
+    for item in Qhist:
+        ax.plot(timegrid, imag(item))
+    ax.grid(True)
+    ax.set_title(r"$\Im Q$")
 
     ax = fig.add_subplot(4,2,6)
     for item in Phist:
@@ -158,16 +158,16 @@ def plot_parameters(data, index=0):
     ax.set_title(r"$|Q|$")
 
     ax = fig.add_subplot(4,2,4)
-    for item in Qhist:
-        ax.plot(timegrid, ComplexMath.cont_angle(item))
-    ax.grid(True)
-    ax.set_title(r"$\arg Q$")
-
-    ax = fig.add_subplot(4,2,5)
     for item in Phist:
         ax.plot(timegrid, abs(item))
     ax.grid(True)
     ax.set_title(r"$|P|$")
+
+    ax = fig.add_subplot(4,2,5)
+    for item in Qhist:
+        ax.plot(timegrid, ComplexMath.cont_angle(item))
+    ax.grid(True)
+    ax.set_title(r"$\arg Q$")
 
     ax = fig.add_subplot(4,2,6)
     for item in Phist:
