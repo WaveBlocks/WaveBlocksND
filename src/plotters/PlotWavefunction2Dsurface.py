@@ -19,7 +19,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND.Plot3D import surfcf
 
 
-def plot_frames(iom, blockid=0):
+def plot_frames(iom, blockid=0, load=False):
 
     parameters = iom.load_parameters()
 
@@ -27,7 +27,14 @@ def plot_frames(iom, blockid=0):
         print("No wavefunction of two space dimensions, silent return!")
         return
 
-    G = BlockFactory().create_grid(parameters)
+    if load is True:
+        # TODO: Implement reshaping
+        raise NotImplementedError("Loading of 2D grids is not implemented")
+        #G = iom.load_grid(blockid=blockid)
+        #G = grid.reshape((1, -1))
+    else:
+        G = BlockFactory().create_grid(parameters)
+
     V = BlockFactory().create_potential(parameters)
 
     WF = WaveFunction(parameters)

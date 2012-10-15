@@ -20,7 +20,7 @@ from WaveBlocksND.Plot import plotcf
 import GraphicsDefaults as GD
 
 
-def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, imgsize=(12,9)):
+def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, imgsize=(12,9)):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -35,17 +35,21 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
         print("No wavefunction of one space dimensions, silent return!")
         return
 
-    #grid = iom.load_grid(blockid="global")
-    #grid = grid.reshape((1, -1))
-    G = BlockFactory().create_grid(parameters)
-
-    print(G.get_extensions())
+    if load is True:
+        print("Loading grid data from datablock 'global'")
+        G = iom.load_grid(blockid="global")
+        G = G.reshape((1, -1))
+        grid = G
+    else:
+        print("Creating new grid")
+        G = BlockFactory().create_grid(parameters)
+        grid = G.get_nodes(flat=True)
 
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
     # Precompute eigenvectors for efficiency
     Potential = BlockFactory().create_potential(parameters)
-    eigenvectors = Potential.evaluate_eigenvectors_at(grid)
+    eigenvectors = Potential.evaluate_eigenvectors_at(G)
 
     for step in timegrid:
         print(" Plotting frame of timestep # " + str(step))
@@ -104,7 +108,7 @@ if __name__ == "__main__":
         print("Plotting frames of data block '"+str(blockid)+"'")
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
-            plot_frames(iom, blockid=blockid, view=view, plotphase=True, plotcomponents=False, plotabssqr=False)
+            plot_frames(iom, blockid=blockid, view=view, plotphase=True, plotcomponents=False, plotabssqr=False, load=False)
         else:
             print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
 
