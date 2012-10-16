@@ -20,7 +20,7 @@ from WaveBlocksND.Plot import plotcf
 import GraphicsDefaults as GD
 
 
-def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, imgsize=(12,9)):
+def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -37,7 +37,9 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
 
     if load is True:
         print("Loading grid data from datablock 'global'")
-        G = iom.load_grid(blockid="global")
+        if gridblockid is None:
+            gridblockid = blockid
+        G = iom.load_grid(blockid=gridblockid)
         G = G.reshape((1, -1))
         grid = G
     else:
