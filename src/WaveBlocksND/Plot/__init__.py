@@ -11,4 +11,7 @@ from stemcf import stemcf
 from plotcf2d import plotcf2d
 from contourcf import contourcf
 
+from stem3d import stem3d
+from stemcf3d import stemcf3d
+
 from legend import legend
