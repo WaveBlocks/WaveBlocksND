@@ -9,8 +9,7 @@ of Hagedorn wavepackets.
 """
 
 from functools import partial
-from numpy import zeros, complexfloating, conjugate, squeeze, sum
-from scipy import sqrt
+from numpy import conjugate, squeeze, sum
 
 from Observables import Observables
 from GradientHAWP import GradientHAWP
