@@ -82,6 +82,7 @@ class MatrixPotential1S(MatrixPotential):
         #       list of numpy ndarrays, list of single python scalars
         if not isinstance(grid, Grid):
             grid = numpy.atleast_2d(grid)
+            grid = grid.reshape(self._dimension, -1)
             grid = GridWrapper(grid)
         return grid
 
