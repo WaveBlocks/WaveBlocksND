@@ -1,4 +1,6 @@
 algorithm = "hagedorn"
+propagator = "semiclassical"
+splitting_method = "Y4"
 
 T = 12
 dt = 0.01
@@ -6,22 +8,23 @@ dt = 0.01
 dimension = 2
 ncomponents = 1
 
-eps = 0.1
+eps = 1.0
 
 potential = "quadratic_2d"
 
 # The parameter set of the initial wavepacket
-Q = [[1.0, 0.0],
-     [0.0, 1.0]]
+# Parameter values computed by 'ComputeGroundstate.py'
+Q = [[ 1.18920712+0.j,  0.00000000+0.j],
+     [ 0.00000000+0.j,  1.18920712+0.j]]
 
-P = [[1.0j, 0.0 ],
-     [0.0,  1.0j]]
+P = [[ 0.+0.84089642j,  0.+0.j        ],
+     [ 0.+0.j        ,  0.+0.84089642j]]
 
-q = [[-3.0],
-     [ 0.0]]
+q = [[ 9.90555981e-14],
+     [-4.51334304e-13]]
 
 p = [[0.0],
-     [0.5]]
+     [0.0]]
 
 S = [[0.0]]
 
