@@ -192,6 +192,7 @@ def plot_parameters(data, index=0):
     for item in Phist:
         ax.plot(real(item), imag(item), "-o")
     ax.grid(True)
+    ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $P$")
     fig.savefig("wavepacket_parameters_trajectoryP_block"+str(index)+GD.output_format)
     close(fig)
@@ -203,6 +204,7 @@ def plot_parameters(data, index=0):
     for item in Qhist:
         ax.plot(real(item), imag(item), "-o")
     ax.grid(True)
+    ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $Q$")
     fig.savefig("wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format)
     close(fig)
