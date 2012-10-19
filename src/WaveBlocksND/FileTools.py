@@ -21,8 +21,8 @@ def get_result_dirs(path):
     :param path: The filesystem path under which we search for simulations.
     :return: A list of simulation IDs.
     """
-    dirs = [ os.path.join(path, adir) for adir in os.listdir(path) if os.path.isdir(adir) ]
-    return dirs
+    dirs = [ os.path.join(path, adir) for adir in os.listdir(path) ]
+    return filter(os.path.isdir, dirs)
 
 
 def get_parameters_file(path):
@@ -304,7 +304,7 @@ def get_value(item, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     rightpart = item.partition(mdel)
     value = rightpart[-1].partition(rdel)
     return value[0]
-    
+
 
 def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     r"""Get a filtered list of simulation IDs by specifying the ``key``
