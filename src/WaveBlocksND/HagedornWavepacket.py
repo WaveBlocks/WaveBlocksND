@@ -7,7 +7,6 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
-import heapq as heap
 from numpy import zeros, complexfloating, array, sum, vstack, eye, prod, atleast_2d
 from scipy import sqrt, exp, conj, dot
 from scipy.linalg import inv, det
@@ -286,8 +285,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         # Book keeping
         todo = []
-        newtodo = []
-        heap.heappush(newtodo, Z)
+        newtodo = [Z]
         olddelete = []
         delete = []
         tmp = {}
@@ -303,8 +301,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         # Iterate for higher order states
         while len(newtodo) != 0:
             # Delete results that never will be used again
-            for i in range(len(olddelete)):
-                d = heap.heappop(olddelete)
+            for d in olddelete:
                 del tmp[d]
 
             # Exchange queus
@@ -314,9 +311,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
             delete = []
 
             # Compute new results
-            for i in range(len(todo)):
+            for k in todo:
                 # Center stencil at node k
-                k = heap.heappop(todo)
                 ki = vstack(k)
 
                 # Access predecessors
@@ -339,8 +335,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
                         # And update the result
                         psi = psi + self._coefficients[component][bas[n], 0] * tmp[n]
 
-                        heap.heappush(newtodo, n)
-                heap.heappush(delete, k)
+                        newtodo.append(n)
+                delete.append(k)
 
         if prefactor is True:
             psi = psi / self._sqrt(det(Q))
