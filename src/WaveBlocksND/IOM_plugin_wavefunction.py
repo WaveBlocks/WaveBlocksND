@@ -25,7 +25,7 @@ def add_wavefunction(self, parameters, flat=False, timeslots=None, blockid=0):
 
     # TODO: Remove quick hack:
     if flat:
-        datashape = [np.prod(parameters["number_nodes"])]
+        datashape = [parameters["ncomponents"], np.prod(parameters["number_nodes"])]
     else:
         datashape = [parameters["ncomponents"]] + list(parameters["number_nodes"])
 
