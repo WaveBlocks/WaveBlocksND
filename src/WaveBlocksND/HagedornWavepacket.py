@@ -7,6 +7,7 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
+import heapq as heap
 from numpy import zeros, complexfloating, array, sum, vstack, eye, prod, atleast_2d
 from scipy import sqrt, exp, conj, dot
 from scipy.linalg import inv, det
@@ -254,5 +255,119 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
                 basis = self.evaluate_basis_at(grid, component, prefactor=prefactor)
                 values.append( phase * sum(self._coefficients[component] * basis, axis=0) )
+
+        return values
+
+
+    def slim_recursion(self, grid, component=None, prefactor=False):
+        # The global phase part
+        phase = exp(1.0j * self._Pis[4] / self._eps**2)
+
+        D = self._dimension
+
+        # Precompute some constants
+        q, p, Q, P, S = self._Pis
+
+        Qinv = inv(Q)
+        Qbar = conj(Q)
+        QQ = dot(Qinv, Qbar)
+
+        # TODO: Consider putting this into the Grid class as 2nd level API
+        # Allow ndarrays for the 'grid' argument
+        if isinstance(grid, Grid):
+            # The overall number of nodes
+            nn = grid.get_number_nodes(overall=True)
+            # The grid nodes
+            nodes = grid.get_nodes()
+        else:
+            # The overall number of nodes
+            nn = prod(grid.shape[1:])
+            # The grid nodes
+            nodes = grid
+
+
+        if component is not None:
+            # The basis shape
+            bas = self._basis_shapes[component]
+            Z = tuple(D*[0])
+
+            # Book keeping
+            todo = []
+            newtodo = []
+            heap.heappush(newtodo, Z)
+            olddelete = []
+            delete = []
+            results = {}
+
+            # Compute phi0
+            results[Z] = self._evaluate_phi0(self._Pis, nodes, prefactor=False)
+            psi = self._coefficients[component][bas[Z], 0] * results[Z]
+
+            # Iterate for higher order states
+            finished = False
+
+            while not finished:
+                # Delete results that never will be used again
+                for i in range(len(olddelete)):
+                    d = heap.heappop(olddelete)
+                    del results[d]
+
+                # Exchange stacks
+                todo = newtodo
+                newtodo = []
+                olddelete = delete
+                delete = []
+
+                # Compute new results
+                for i in range(len(todo)):
+                    # Center stencil at node k
+                    k = heap.heappop(todo)
+                    # Current index vector
+                    ki = vstack(k)
+
+                    # Access predecessors
+                    phim = zeros((D, nn), dtype=complexfloating)
+                    for j, kpj in bas.get_neighbours(k, selection="backward"):
+                        phim[j,:] = results[kpj]
+
+                    # Try to compute the neighbours
+                    for d, n in bas.get_neighbours(k, selection="forward"):
+                        if not n in results.keys():
+                            # Compute 3-term recursion
+                            p1 = (nodes - q) * results[k]
+                            p2 = sqrt(ki) * phim
+
+                            t1 = sqrt(2.0/self._eps**2) * dot(Qinv[d,:], p1)
+                            t2 = dot(QQ[d,:], p2)
+
+                            # Store computed value
+                            results[n] = (t1 - t2) / sqrt(ki[d] + 1.0)
+                            # And update end result
+                            psi = psi + self._coefficients[component][bas[n], 0] * results[n]
+
+                            heap.heappush(newtodo, n)
+                    heap.heappush(delete, k)
+
+                if len(newtodo) == 0:
+                    finished = True
+
+            if prefactor is True:
+                psi = psi / self._sqrt(det(Q))
+
+            values = psi
+
+        else:
+            values = []
+
+#             for component in xrange(self._number_components):
+#                 # Note: This is very inefficient! We may evaluate the same basis functions multiple
+#                 #       times. But as long as we don't know that the basis shapes are true subsets
+#                 #       of the largest one, we can not evaluate just all functions in this
+#                 #       maximal set.
+
+#                 # TODO: Find more efficient way to do this
+
+#                 basis = self.evaluate_basis_at(grid, component, prefactor=prefactor)
+#                 values.append( phase * sum(self._coefficients[component] * basis, axis=0) )
 
         return values
