@@ -58,7 +58,7 @@ def get_results_file(path, fileext=GD.ext_resultdatafile):
     results_file = None
 
     for afile in os.listdir(path):
-        if os.path.isfile(afile) and afile.endswith(fileext):
+        if os.path.isfile(os.path.join(path, afile)) and afile.endswith(fileext):
             results_file = afile
             break
 
