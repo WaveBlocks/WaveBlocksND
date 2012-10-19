@@ -255,7 +255,7 @@ def get_min_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.
     return sortedlist[0]
 
 
-def get_items(name):
+def get_items(name, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     r"""Get a list of all the ``key=value`` items in the name.
 
     :param name: The name from which to get the items.
@@ -266,7 +266,7 @@ def get_items(name):
     return items
 
 
-def get_item(name, pattern):
+def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     r"""Get a single ``key=value`` item out of the name.
     The ``pattern`` specifies the ``key`` part.
 
@@ -274,7 +274,7 @@ def get_item(name, pattern):
     :param pattern: The pattern whose value is used for ``key``.
     :return: A (list of the) item(s) whose ``key`` part matches ``pattern``.
     """
-    items = get_items(name)
+    items = get_items(name, ldel=ldel, mdel=mdel, rdel=rdel)
     result = filter(lambda item: pattern in item, items)
     if len(result) == 1:
         result = result[0]
