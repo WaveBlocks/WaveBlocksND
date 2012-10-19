@@ -36,7 +36,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
          "number_nodes":pp["number_nodes"],
          "dimension":parameters["dimension"]}
     iom.add_grid(d, blockid=blockid)
-    iom.add_wavefunction(d, timeslots=nrtimesteps, blockid=blockid)
+    iom.add_wavefunction(d, timeslots=nrtimesteps, flat=True, blockid=blockid)
 
     iom.save_grid(grid.get_nodes(), blockid=blockid)
 

@@ -10,7 +10,7 @@ IOM plugin providing functions for handling wavefunction data.
 import numpy as np
 
 
-def add_wavefunction(self, parameters, timeslots=None, blockid=0):
+def add_wavefunction(self, parameters, flat=False, timeslots=None, blockid=0):
     r"""Add storage for the sampled wavefunction. The wavefunction is save
     in full hypercubic array shape with :math:`D` dimensions and :math:`N_d`
     data points in each direction.
@@ -24,22 +24,24 @@ def add_wavefunction(self, parameters, timeslots=None, blockid=0):
     grp_wf = self._srf[self._prefixb+str(blockid)].require_group("wavefunction")
 
     # TODO: Remove quick hack:
-    #overall_nr_nodes = np.prod(parameters["number_nodes"])
-    nn = list(parameters["number_nodes"])
+    if flat:
+        datashape = [np.prod(parameters["number_nodes"])]
+    else:
+        datashape = [parameters["ncomponents"]] + list(parameters["number_nodes"])
 
     # Create the dataset with appropriate parameters
     if timeslots is None:
         # This case is event based storing
-        daset_psi = grp_wf.create_dataset("Psi", [0, parameters["ncomponents"]] + nn, dtype=np.complexfloating, chunks=True,
-                                          maxshape=[None, parameters["ncomponents"]] + nn)
-        daset_psi_tg = grp_wf.create_dataset("timegrid", (0,), dtype=np.integer, chunks=True, maxshape=(None,))
+        daset_psi = grp_wf.create_dataset("Psi", [0]+datashape, dtype=np.complexfloating, chunks=True, maxshape=[None]+datashape)
+        daset_psi_tg = grp_wf.create_dataset("timegrid", [0], dtype=np.integer, chunks=True, maxshape=[None])
     else:
         # User specified how much space is necessary.
-        daset_psi = grp_wf.create_dataset("Psi", [timeslots, parameters["ncomponents"]] + nn, dtype=np.complexfloating)
-        daset_psi_tg = grp_wf.create_dataset("timegrid", (timeslots,), dtype=np.integer)
+        daset_psi = grp_wf.create_dataset("Psi", [timeslots]+datashape, dtype=np.complexfloating)
+        daset_psi_tg = grp_wf.create_dataset("timegrid", [timeslots], dtype=np.integer)
 
-    # Mark all steps as invalid
-    daset_psi_tg[...] = -1.0
+        # Mark all steps as invalid
+        daset_psi_tg[...] = -1.0
+
     daset_psi_tg.attrs["pointer"] = 0
 
 
