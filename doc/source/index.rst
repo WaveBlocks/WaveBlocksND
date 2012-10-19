@@ -52,7 +52,6 @@ Basic quantum mechanics
    waveblocks_classes/MatrixPotential2S
    waveblocks_classes/MatrixPotentialMS
 
-   waveblocks_classes/PotentialFactory
 
 Wavepackets
 ^^^^^^^^^^^
@@ -134,6 +133,9 @@ Other classes
    waveblocks_classes/ParameterProvider
    waveblocks_classes/TimeManager
    waveblocks_classes/FileTools
+
+   waveblocks_classes/BlockFactory
+
 
 Etc
 ===

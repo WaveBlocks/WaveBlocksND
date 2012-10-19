@@ -311,7 +311,7 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
     and ``value`` of some ``key=value`` pair.
 
     :param stringlist: A list with the simulation IDs.
-    :param pattern: The pattern that is used for ``key`.
+    :param pattern: The pattern that is used for ``key``.
     :param value: The value that is used for ``value``.
     :param ldel: Left delimiter of the pattern.
     :param mdel: Middle delimiter of the pattern.

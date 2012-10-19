@@ -20,7 +20,7 @@ class TimeManager(object):
 
     The important quantities here are:
 
-    ============ ====================================================== 
+    ============ ======================================================
     :math:`T`    the fixed simulation end time
     :math:`\tau` the size of the timestep
     :math:`N`    the overall number of timesteps.
@@ -73,7 +73,7 @@ class TimeManager(object):
 
     def set_T(self, T):
         r"""Set the simulation endtime :math:`T`.
-        
+
         :param T: The simulation end time.
         """
         self.T = T
@@ -81,7 +81,7 @@ class TimeManager(object):
 
     def set_dt(self, dt):
         r"""Set the simulation timestep size :math:`\tau`.
-        
+
         :param dt: The simulation timestep size.
         """
         self.dt = dt
@@ -99,6 +99,7 @@ class TimeManager(object):
         r"""Set the inteval for saving results.
 
         :param interval: The interval at which we save simulation results.
+
         Note that a value of ``0`` means we never save data at any regular interval.
         """
         self.interval = interval
@@ -125,6 +126,7 @@ class TimeManager(object):
         :math:`t = n \tau` holds.
 
         :param t: The time t of which we want to find the timestep number.
+
         Note that the user has to ensure that time :math:`t` is an integral
         multiple of :math:`\tau`.
         """
@@ -152,7 +154,8 @@ class TimeManager(object):
 
         :param alist: A list with integers (interpreted as timesteps)
                       and/or floats (interpreted as times)
-        Note that the times and timesteps can be mixed and needn't to be
+
+        Note that the times and timesteps can be mixed and need not to be
         given in monotone order.
         """
         timesteps = []
@@ -215,7 +218,7 @@ class TimeManager(object):
 
     def must_save(self, n):
         r"""Determine if we have to save right now.
-        
+
         :param n: The current timestep in question.
         """
         if self.interval == 1:
