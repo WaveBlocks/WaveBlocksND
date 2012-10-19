@@ -7,11 +7,13 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum
+from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum, atleast_2d
 from scipy import exp, sqrt, conjugate
 from scipy.linalg import det, inv, norm
 
 from Wavepacket import Wavepacket
+from Grid import Grid
+from GridWrapper import GridWrapper
 
 __all__ = ["HagedornWavepacketBase"]
 
@@ -230,6 +232,16 @@ class HagedornWavepacketBase(Wavepacket):
 
     # We can evaluate the ground state basis function phi_0 on a set of nodes
     # the same way for homogeneous and inhomogeneous Hagedorn wavepackets.
+
+
+    def _grid_wrap(self, grid):
+        # TODO: Consider additional input types for "nodes":
+        #       list of numpy ndarrays, list of single python scalars
+        if not isinstance(grid, Grid):
+            grid = atleast_2d(grid)
+            grid = grid.reshape(self._dimension, -1)
+            grid = GridWrapper(grid)
+        return grid
 
 
     def _evaluate_phi0(self, Pi, nodes, prefactor=False, root=sqrt):
