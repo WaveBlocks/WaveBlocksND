@@ -7,13 +7,12 @@ This file contains the class which represents an inhomogeneous Hagedorn wavepack
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, array, sum, eye, vstack, prod, atleast_2d
+from numpy import zeros, complexfloating, array, eye, vstack, atleast_2d
 from scipy import sqrt, exp, conj, dot
 from scipy.linalg import inv, det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
-from Grid import Grid
 from ComplexMath import ContinuousSqrt
 
 __all__ = ["HagedornWavepacketInhomogeneous"]
@@ -166,18 +165,10 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         bas = self._basis_shapes[component]
         bs = self._basis_sizes[component]
 
-        # TODO: Consider putting this into the Grid class as 2nd level API
-        # Allow ndarrays for the 'grid' argument
-        if isinstance(grid, Grid):
-            # The overall number of nodes
-            nn = grid.get_number_nodes(overall=True)
-            # The grid nodes
-            nodes = grid.get_nodes()
-        else:
-            # The overall number of nodes
-            nn = prod(grid.shape[1:])
-            # The grid nodes
-            nodes = grid
+        # The grid
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
+        nn = grid.get_number_nodes(overall=True)
 
         # Allocate the storage array
         phi = zeros((bs, nn), dtype=complexfloating)
@@ -243,20 +234,27 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :type prefactor: bool, default is ``False``.
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
         """
+
         if component is not None:
-            # Avoid the expensive evaluation of unused other bases
-            q, p, Q, P, S = self._Pis[component]
-            phase = exp(1.0j * S / self._eps**2)
-            basis = self.evaluate_basis_at(grid, component=component, prefactor=prefactor)
-            values = phase * sum(self._coefficients[component] * basis, axis=0)
+            phase = exp(1.0j * self._Pis[4][component] / self._eps**2)
+            #basis = self.evaluate_basis_at(grid, component=component, prefactor=prefactor)
+            #values = phase * sum(self._coefficients[component] * basis, axis=0)
+            values = phase * self.slim_recursion(grid, component, prefactor=prefactor)
 
         else:
             values = []
 
-            for index in xrange(self._number_components):
-                q, p, Q, P, S = self._Pis[index]
-                phase = exp(1.0j * S / self._eps**2)
-                basis = self.evaluate_basis_at(grid, component=index, prefactor=prefactor)
-                values.append( phase * sum(self._coefficients[index] * basis, axis=0) )
+            for component in xrange(self._number_components):
+                # Note: This is very inefficient! We may evaluate the same basis functions multiple
+                #       times. But as long as we don't know that the basis shapes are true subsets
+                #       of the largest one, we can not evaluate just all functions in this
+                #       maximal set.
+
+                # TODO: Find more efficient way to do this
+
+                phase = exp(1.0j * self._Pis[4][component] / self._eps**2)
+                #basis = self.evaluate_basis_at(grid, component=index, prefactor=prefactor)
+                #values.append( phase * sum(self._coefficients[index] * basis, axis=0) )
+                values.append( phase * self.slim_recursion(grid, component, prefactor=prefactor) )
 
         return values

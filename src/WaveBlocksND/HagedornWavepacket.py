@@ -228,9 +228,6 @@ class HagedornWavepacket(HagedornWavepacketBase):
         # The global phase part
         phase = exp(1.0j * self._Pis[4] / self._eps**2)
 
-        # The grid
-        grid = self._grid_wrap(grid)
-
         if component is not None:
             #basis = self.evaluate_basis_at(grid, component, prefactor=prefactor)
             #values = phase * sum(self._coefficients[component] * basis, axis=0)
@@ -252,93 +249,3 @@ class HagedornWavepacket(HagedornWavepacketBase):
                 values.append( phase * self.slim_recursion(grid, component, prefactor=prefactor) )
 
         return values
-
-
-    def slim_recursion(self, grid, component, prefactor=False):
-        r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
-        This routine is a slim version compared to the full basis evaluation. At every moment
-        we store only the data we really need to compute the next step until we hit the highest
-        order basis functions.
-
-        :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
-        :type grid: A class having a :py:meth:`get_nodes(...)` method.
-        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
-        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: bool, default is ``False``.
-        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i`
-                 at the nodes :math:`\gamma`.
-
-        Note that this function does not include the global phase :math:`\exp(\frac{i S}{\varepsilon^2})`.
-        """
-        D = self._dimension
-
-        # Precompute some constants
-        q, p, Q, P, S = self._Pis
-
-        Qinv = inv(Q)
-        Qbar = conj(Q)
-        QQ = dot(Qinv, Qbar)
-
-        # The basis shape
-        bas = self._basis_shapes[component]
-        Z = tuple(D*[0])
-
-        # Book keeping
-        todo = []
-        newtodo = [Z]
-        olddelete = []
-        delete = []
-        tmp = {}
-
-        # The grid nodes
-        nn = grid.get_number_nodes(overall=True)
-        nodes = grid.get_nodes()
-
-        # Evaluate phi0
-        tmp[Z] = self._evaluate_phi0(self._Pis, nodes, prefactor=False)
-        psi = self._coefficients[component][bas[Z], 0] * tmp[Z]
-
-        # Iterate for higher order states
-        while len(newtodo) != 0:
-            # Delete results that never will be used again
-            for d in olddelete:
-                del tmp[d]
-
-            # Exchange queus
-            todo = newtodo
-            newtodo = []
-            olddelete = delete
-            delete = []
-
-            # Compute new results
-            for k in todo:
-                # Center stencil at node k
-                ki = vstack(k)
-
-                # Access predecessors
-                phim = zeros((D, nn), dtype=complexfloating)
-                for j, kpj in bas.get_neighbours(k, selection="backward"):
-                    phim[j,:] = tmp[kpj]
-
-                # Compute the neighbours
-                for d, n in bas.get_neighbours(k, selection="forward"):
-                    if not n in tmp.keys():
-                        # Compute 3-term recursion
-                        p1 = (nodes - q) * tmp[k]
-                        p2 = sqrt(ki) * phim
-
-                        t1 = sqrt(2.0/self._eps**2) * dot(Qinv[d,:], p1)
-                        t2 = dot(QQ[d,:], p2)
-
-                        # Store computed value
-                        tmp[n] = (t1 - t2) / sqrt(ki[d] + 1.0)
-                        # And update the result
-                        psi = psi + self._coefficients[component][bas[n], 0] * tmp[n]
-
-                        newtodo.append(n)
-                delete.append(k)
-
-        if prefactor is True:
-            psi = psi / self._sqrt(det(Q))
-
-        return psi
