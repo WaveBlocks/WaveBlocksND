@@ -126,7 +126,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         :return: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         """
         if aslist is True:
-            return self._number_components * [ self._Pis ]
+            return self._number_components * [ self._Pis[:] ]
         return self._Pis[:]
 
 

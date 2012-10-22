@@ -129,9 +129,9 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                  The parameters :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` are always in this order.
         """
         if component is None:
-            return self._Pis[:]
+            return [ Pi[:] for Pi in self._Pis ]
         else:
-            return self._Pis[component]
+            return self._Pis[component][:]
 
 
     def set_parameters(self, Pi, component=None):
