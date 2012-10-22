@@ -7,13 +7,12 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, array, sum, vstack, eye, prod, atleast_2d
+from numpy import zeros, complexfloating, array, vstack, eye, atleast_2d
 from scipy import sqrt, exp, conj, dot
 from scipy.linalg import inv, det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
-from Grid import Grid
 from ComplexMath import ContinuousSqrt
 
 __all__ = ["HagedornWavepacket"]
@@ -159,6 +158,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         # The grid
         grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
         nn = grid.get_number_nodes(overall=True)
 
         # Allocate the storage array
