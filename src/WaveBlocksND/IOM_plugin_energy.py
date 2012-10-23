@@ -37,8 +37,8 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
         else:
             daset_ek = grp_en.create_dataset("kinetic", (timeslots, parameters["ncomponents"]), dtype=np.floating)
             daset_tgek = grp_en.create_dataset("timegrid_kin", (timeslots,), dtype=np.integer)
-        # Mark all steps as invalid
-        daset_tgek[...] = -1.0
+            # Mark all steps as invalid
+            daset_tgek[...] = -1.0
         daset_tgek.attrs["pointer"] = 0
 
     if "pot" in key and not "potential" in grp_en.keys():
@@ -48,8 +48,8 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
         else:
             daset_ep = grp_en.create_dataset("potential", (timeslots, parameters["ncomponents"]), dtype=np.floating)
             daset_tgep = grp_en.create_dataset("timegrid_pot", (timeslots,), dtype=np.integer)
-        # Mark all steps as invalid
-        daset_tgep[...] = -1.0
+            # Mark all steps as invalid
+            daset_tgep[...] = -1.0
         daset_tgep.attrs["pointer"] = 0
 
     if "tot" in key and not "total" in grp_en.keys():
@@ -59,8 +59,8 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
         else:
             daset_to = grp_en.create_dataset("total", (timeslots, 1), dtype=np.floating)
             daset_tget = grp_en.create_dataset("timegrid_tot", (timeslots,), dtype=np.integer)
-        # Mark all steps as invalid
-        daset_tget[...] = -1.0
+            # Mark all steps as invalid
+            daset_tget[...] = -1.0
         daset_tget.attrs["pointer"] = 0
 
 
