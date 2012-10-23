@@ -74,7 +74,7 @@ def save_autocorrelation(self, autocorrelations, timestep=None, blockid=0):
     timeslot = self._srf[pathtg].attrs["pointer"]
 
     # TODO: refactor, remove np.array
-    autocorrelations = np.array(autocorrelation)
+    autocorrelations = np.array(autocorrelations)
 
     # Write the data
     self.must_resize(pathd, timeslot)
