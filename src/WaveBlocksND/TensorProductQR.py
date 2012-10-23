@@ -52,6 +52,13 @@ class TensorProductQR(QuadratureRule):
         self._weights = weights.flatten()
 
 
+    def __str__(self):
+        s = "Tensor product quadrature rule consisting of:\n"
+        l = ["  " + str(rule) + "\n" for rule in self._qrs]
+        s += reduce(lambda x,y:x+y, l)
+        return s
+
+
     def get_description(self):
         r"""Return a description of this quadrature rule object.
         A description is a ``dict`` containing all key-value pairs
