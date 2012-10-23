@@ -85,7 +85,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
             BT.transform_to_eigen(HAWPt)
 
         # Measure autocorrelations in the eigenbasis
-        acs = IHQ.quadrature(HAWPo, HAWPt, summed=False)
+        acs = IHQ.quadrature(HAWPo, HAWPt, diagonal=True)
 
         # Save the autocorrelations
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)
@@ -161,7 +161,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
             BT.transform_to_eigen(HAWPt)
 
         # Measure autocorrelations in the eigenbasis
-        acs = IHQ.quadrature(HAWPo, HAWPt, summed=False)
+        acs = IHQ.quadrature(HAWPo, HAWPt, diagonal=True)
 
         # Save the autocorrelations
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)

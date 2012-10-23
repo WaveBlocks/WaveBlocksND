@@ -90,12 +90,13 @@ def plot_autocorrelations(data, index=0):
         ax.plot(timegrid, imag(datum), label=label_ii)
         ax.plot(timegrid, abs(datum), label=label_im)
 
-    ax.grid(True)
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
-    ax.set_title(r"Autocorrelations of $\Psi$")
+        ax.grid(True)
+        ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+        ax.set_xlabel(r"Time $t$")
+
     legend(loc="outer right")
-    ax.set_xlabel(r"Time $t$")
     ax.set_ylim([0,1.1*max(autocorrelations[:-1])])
+    fig.suptitle(r"Autocorrelations of $\Psi$")
     fig.savefig("autocorrelations_per_component_block"+str(index)+GD.output_format)
     close(fig)
 
