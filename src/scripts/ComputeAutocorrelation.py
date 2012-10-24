@@ -43,7 +43,7 @@ if __name__ == "__main__":
         # We have no wavepacket, then we try for a wavefunction
         elif iom.has_wavefunction(blockid=blockid):
             import AutocorrelationWavefunction
-            AutocorrelationWavefunction.compute_norm(iom, blockid=blockid)
+            AutocorrelationWavefunction.compute_autocorrelation(iom, blockid=blockid)
         # If there is also no wavefunction, then there is nothing to compute the autocorrelation
         else:
             print("Warning: Not computing any autocorrelations in block '"+str(blockid)+"'!")

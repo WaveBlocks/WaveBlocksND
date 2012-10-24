@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Compute the autocorrelationss of the homogeneous wavepackets.
+Compute the autocorrelationss of Hagedorn wavepackets.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2012 R. Bourquin
