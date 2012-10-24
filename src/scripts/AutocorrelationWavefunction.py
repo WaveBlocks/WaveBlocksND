@@ -1,7 +1,6 @@
 """The WaveBlocks Project
 
-Calculate the autocorrelations of the different wavefunctions
-as well as the sum of all autocorrelations.
+Compute the autocorrelations of wavefunctions.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2012 R. Bourquin
@@ -87,9 +86,6 @@ def compute_autocorrelation(iom, blockid=0, eigentrafo=True):
         # TODO: Consider splitting into cases `fft` versus `fftn`
         valueso = WFo.get_values()
         valuest = WFt.get_values()
-        acs = []
-
-        for component in xrange(parameters["ncomponents"]):
-            acs.append( prefactor * ifftn(sum(conjugate(valueso[component])*valuest[component])) )
+        acs = [prefactor*ifftn(sum(conjugate(valueso[n])*valuest[n])) for n in xrange(parameters["ncomponents"])]
 
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)

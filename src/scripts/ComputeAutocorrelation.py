@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Compute the auocorrelations of the different wavepackets or wavefunctions.
+Compute the autocorrelations of the different wavepackets or wavefunctions.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2012 R. Bourquin

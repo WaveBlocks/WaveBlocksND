@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Compute the auocorrelations of the different wavepackets or wavefunctions.
+Compute the autocorrelations of the different wavepackets or wavefunctions.
 This script does not do an eigentransformation of the data.
 
 @author: R. Bourquin
