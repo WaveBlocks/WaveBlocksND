@@ -250,19 +250,32 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
     else:
         index = slice(None)
 
+    # Number components
+    N = len(self._srf[pathd].keys())
+
+    # Single component requested
+    if component is not None:
+        components = [component]
+    else:
+        components = xrange(N)
+
+    # Load the hash data
     if get_hashes is True:
         hashes = self._srf[pathbs][index,...]
-        # Number of components
-        N = self._srf[pathbs].shape[1]
         hashes = np.hsplit(hashes, N)
+        # Only a single wanted
+        if component is not None:
+            hashes = hashes[component]
 
+    # Load the coefficient data
     data = []
-    for i in xrange(len(self._srf[pathd].keys())):
-        if timestep is not None:
+    if timestep is not None:
+        for i in components:
             size = self._srf[pathbsi][index,i]
-            data.append( self._srf[pathd+"c_"+str(i)][index,:size] )
-        else:
-            data.append( self._srf[pathd+"c_"+str(i)][index,...] )
+            data.append(self._srf[pathd+"c_"+str(i)][index,:size])
+    else:
+        for i in components:
+            data.append(self._srf[pathd+"c_"+str(i)][index,...])
 
     if get_hashes is True:
         return (hashes, data)
