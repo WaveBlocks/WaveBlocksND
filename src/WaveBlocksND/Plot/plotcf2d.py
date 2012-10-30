@@ -9,13 +9,13 @@ by the usual color code.
 @license: Modified BSD License
 """
 
-from numpy import real
+from numpy import real, where, meshgrid
 from matplotlib.pyplot import gca
 
 from color_map import color_map
 
 
-def plotcf2d(x, y, z, darken=None, axes=None, **kwargs):
+def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
     r"""Plot complex valued functions :math:`\mathbb{R}^2 \rightarrow \mathbb{C}`
     with the usual color code.
 
@@ -30,11 +30,18 @@ def plotcf2d(x, y, z, darken=None, axes=None, **kwargs):
     :type darken: Float or ``None`` to disable darkening of colors. Default is :math:`R = 1.0`.
     :param axes: The axes instance used for plotting.
     """
-    xmin = real(x).min()
-    xmax = real(x).max()
-    ymin = real(y).min()
-    ymax = real(y).max()
-    extent = [xmin, xmax, ymin, ymax]
+    if limits is None:
+        xmin = real(x).min()
+        xmax = real(x).max()
+        ymin = real(y).min()
+        ymax = real(y).max()
+        extent = [xmin, xmax, ymin, ymax]
+    else:
+        xmin = limits[0]
+        xmax = limits[1]
+        ymin = limits[2]
+        ymax = limits[3]
+        extent = [xmin, xmax, ymin, ymax]
 
     kw = {'extent': extent,
           'origin': 'lower',
@@ -46,5 +53,10 @@ def plotcf2d(x, y, z, darken=None, axes=None, **kwargs):
     if axes is None:
         axes = gca()
 
+    # Region to cut out
+    i = where((xmin <= x) & (x <= xmax))[0]
+    j = where((ymin <= y) & (y <= ymax))[0]
+    I, J = meshgrid(i,j)
+
     # Color code and plot the data
-    axes.imshow(color_map(z, darken=darken), **kw)
+    axes.imshow(color_map(z[I,J], darken=darken), **kw)
