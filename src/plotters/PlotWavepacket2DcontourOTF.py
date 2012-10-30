@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Plot the wavefunctions probability densities
+Plot the wavepackets probability densities
 for two-dimensional wavepackets.
 
 @author: R. Bourquin
@@ -25,7 +25,7 @@ def plot_frames(iom, blockid=0, load=False, limits=None):
     BF = BlockFactory()
 
     if not parameters["dimension"] == 2:
-        print("No wavefunction of two space dimensions, silent return!")
+        print("No wavepacket of two space dimensions, silent return!")
         return
 
     if load is True:
@@ -50,7 +50,7 @@ def plot_frames(iom, blockid=0, load=False, limits=None):
     for ahash, descr in BS_descr.iteritems():
         BS[ahash] = BF.create_basis_shape(descr)
 
-    timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
 
     N = HAWP.get_number_components()
 
@@ -82,7 +82,7 @@ def plot_frames(iom, blockid=0, load=False, limits=None):
             #plotcm(z.reshape(G.get_number_nodes()), darken=0.3)
             plotcf2d(u, v, z, darken=0.3, limits=limits)
 
-        savefig("wavefunction_level_"+str(level)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+".png")
+        savefig("wavepacket_level_"+str(level)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+".png")
         close(fig)
 
     print(" Plotting frames finished")
@@ -105,10 +105,10 @@ if __name__ == "__main__":
     # Iterate over all blocks and plot their data
     for blockid in iom.get_block_ids():
         print("Plotting frames of data block '"+str(blockid)+"'")
-        # See if we have wavefunction values
-        if iom.has_wavefunction(blockid=blockid):
+        # See if we have wavepacket values
+        if iom.has_wavepacket(blockid=blockid):
             plot_frames(iom, blockid=blockid, limits=view)
         else:
-            print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting any wavepackets in block '"+str(blockid)+"'!")
 
     iom.finalize()

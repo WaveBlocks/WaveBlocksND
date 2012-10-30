@@ -126,7 +126,11 @@ corral_ring["variables"] = ["x", "y"]
 corral_ring["potential"] = "sqrt(delta**2 + tanh(sqrt(x**2 + y**2) - R)**2*tanh(sqrt(x**2 + y**2) + R)**2)/2"
 corral_ring["defaults"] = {"delta":"1/32", "R":"3"}
 
-
+# A potential consisting of plane with a Gaussian hill
+gauss_hill_2d = {}
+gauss_hill_2d["variables"] = ["x", "y"]
+gauss_hill_2d["potential"] = "exp(-(sigmax*x**2+sigmay*y**2))"
+gauss_hill_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
 
 
 #######################################################################
