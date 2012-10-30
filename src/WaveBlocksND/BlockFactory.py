@@ -77,7 +77,7 @@ class BlockFactory(object):
             if description.has_key("basis_shapes"):
                 for component, shapedescr in enumerate(description["basis_shapes"]):
                     BS = self.create_basis_shape(shapedescr)
-                    WP.set_basis_shape(BS, component=component)
+                    WP.set_basis_shapes(BS, component=component)
 
             # Set coefficients
             if description.has_key("coefficients"):
@@ -109,7 +109,7 @@ class BlockFactory(object):
             if description.has_key("basis_shapes"):
                 for component, shapedescr in enumerate(description["basis_shapes"]):
                     BS = self.create_basis_shape(shapedescr)
-                    WP.set_basis_shape(BS, component=component)
+                    WP.set_basis_shapes(BS, component=component)
 
             # Set coefficients
             if description.has_key("coefficients"):

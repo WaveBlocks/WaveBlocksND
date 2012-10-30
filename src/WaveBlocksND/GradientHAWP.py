@@ -43,7 +43,7 @@ class GradientHAWP(Gradient):
         coeffs = wavepacket.get_coefficients(component=component)
 
         # Prepare storage for new coefficients
-        K = wavepacket.get_basis_shape(component=component)
+        K = wavepacket.get_basis_shapes(component=component)
         Ke = K.extend()
         size = Ke.get_basis_size()
         cnew = zeros((size,D), dtype=complexfloating)

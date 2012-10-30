@@ -81,7 +81,7 @@ def read_data_homogeneous(iom, blockid=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -134,7 +134,7 @@ def read_data_inhomogeneous(iom, blockid=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

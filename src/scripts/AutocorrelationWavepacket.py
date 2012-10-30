@@ -56,7 +56,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
     hashes, coeffs = iom.load_wavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWPo.set_parameters(params)
-    HAWPo.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+    HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
     HAWPo.set_coefficients(coeffs)
 
     # Set up the quadrature for solving the integrals <phi_0 | phi_t>
@@ -77,7 +77,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
 
         # Configure the wavepacket
         HAWPt.set_parameters(params)
-        HAWPt.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWPt.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWPt.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -136,7 +136,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
     hashes, coeffs = iom.load_wavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWPo.set_parameters(params)
-    HAWPo.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+    HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
     HAWPo.set_coefficients(coeffs)
 
     # Set up the quadrature for solving the integrals <phi_0 | phi_t>
@@ -153,7 +153,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
 
         # Configure the wavepacket
         HAWPt.set_parameters(params)
-        HAWPt.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWPt.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWPt.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

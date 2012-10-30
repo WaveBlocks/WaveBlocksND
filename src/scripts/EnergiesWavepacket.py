@@ -64,7 +64,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -135,7 +135,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

@@ -87,10 +87,10 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
             # Pi
             self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(), timestep=0)
             # Basis shapes
-            for shape in packet.get_basis_shape():
+            for shape in packet.get_basis_shapes():
                 self.IOManager.save_inhomogwavepacket_basisshapes(shape)
             # Coefficients
-            self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shape(), timestep=0)
+            self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=0)
 
 
     def run_simulation(self):
@@ -115,10 +115,10 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
                     # Pi
                     self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(), timestep=i)
                     # Basis shapes (in case they changed!)
-                    for shape in packet.get_basis_shape():
+                    for shape in packet.get_basis_shapes():
                         self.IOManager.save_inhomogwavepacket_basisshapes(shape)
                     # Coefficients
-                    self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shape(), timestep=i)
+                    self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=i)
 
 
     def end_simulation(self):

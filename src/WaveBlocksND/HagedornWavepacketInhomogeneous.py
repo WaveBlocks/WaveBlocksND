@@ -80,7 +80,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         r"""Compytibility method
         """
         return self._sqrt[component]
-        
+
 
     def get_description(self):
         r"""Return a description of this wavepacket object.
@@ -111,7 +111,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             other.set_id(self.get_id())
         # And copy over all (private) data
         # Basis shapes are immutable, no issues with sharing same instance
-        other.set_basis_shape(self.get_basis_shape())
+        other.set_basis_shapes(self.get_basis_shapes())
         other.set_parameters(self.get_parameters())
         other.set_coefficients(self.get_coefficients())
         # Quadratures are immutable, no issues with sharing same instance

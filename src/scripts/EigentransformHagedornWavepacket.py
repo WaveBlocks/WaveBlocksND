@@ -57,7 +57,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -67,10 +67,10 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
         # Pi
         iomout.save_wavepacket_parameters(HAWP.get_parameters(), timestep=step, blockid=blockidout)
         # Basis shapes (in case they changed!)
-        for shape in HAWP.get_basis_shape():
+        for shape in HAWP.get_basis_shapes():
             iomout.save_wavepacket_basisshapes(shape, blockid=blockidout)
         # Coefficients
-        iomout.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shape(), timestep=step, blockid=blockidout)
+        iomout.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=step, blockid=blockidout)
 
 
 def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
@@ -119,7 +119,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -129,7 +129,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
         # Pi
         iomout.save_inhomogwavepacket_parameters(HAWP.get_parameters(), timestep=step, blockid=blockidout)
         # Basis shapes (in case they changed!)
-        for shape in HAWP.get_basis_shape():
+        for shape in HAWP.get_basis_shapes():
             iomout.save_inhomogwavepacket_basisshapes(shape, blockid=blockidout)
         # Coefficients
-        iomout.save_inhomogwavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shape(), timestep=step, blockid=blockidout)
+        iomout.save_inhomogwavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=step, blockid=blockidout)

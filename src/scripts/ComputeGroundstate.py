@@ -91,7 +91,7 @@ def compute_groundstate(params):
     # The kinetic part
     MT = zeros_like(MV, dtype=complexfloating)
     GR = GradientHAWP()
-    BS = HAWP.get_basis_shape(N)
+    BS = HAWP.get_basis_shapes(N)
 
     vects = {}
     for i in BS:
@@ -122,10 +122,10 @@ def compute_groundstate(params):
     # Save all the wavepacket data
     IOM.add_wavepacket(params)
     IOM.save_wavepacket_description(HAWP.get_description())
-    for shape in HAWP.get_basis_shape():
+    for shape in HAWP.get_basis_shapes():
         IOM.save_wavepacket_basisshapes(shape)
     IOM.save_wavepacket_parameters(HAWP.get_parameters(), timestep=0)
-    IOM.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shape(), timestep=0)
+    IOM.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=0)
 
     IOM.finalize()
 

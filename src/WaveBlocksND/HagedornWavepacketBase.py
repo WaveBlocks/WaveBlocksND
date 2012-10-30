@@ -57,7 +57,7 @@ class HagedornWavepacketBase(Wavepacket):
         self._coefficients[component] = cnew
 
 
-    def get_basis_shape(self, component=None):
+    def get_basis_shapes(self, component=None):
         r"""Retrieve the basis shapes :math:`\mathcal{K}_i` for each component :math:`i`.
 
         :param component: The component :math:`i` whose basis shape we request. (Default is
@@ -71,7 +71,7 @@ class HagedornWavepacketBase(Wavepacket):
             return tuple(self._basis_shapes)
 
 
-    def set_basis_shape(self, basis_shape, component=None):
+    def set_basis_shapes(self, basis_shape, component=None):
         r"""Set the basis shape :math:`\mathcal{K}` of a given component or for all components.
 
         :param basis_shape: The basis shape for an individual component or a list with all :math:`N` shapes.

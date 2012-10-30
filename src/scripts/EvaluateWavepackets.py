@@ -68,7 +68,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
 
         # Configure the wavepacket
         HAWP.set_parameters(params)
-        HAWP.set_basis_shape([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

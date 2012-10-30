@@ -130,8 +130,8 @@ class InhomogeneousQuadrature(Quadrature):
         Nket = packet.get_number_components()
 
         # Packets can also have different basis sizes
-        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shape() ]
-        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shape() ]
+        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shapes() ]
+        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
 
         Pibra = pacbra.get_parameters(aslist=True)
         Piket = packet.get_parameters(aslist=True)
@@ -228,8 +228,8 @@ class InhomogeneousQuadrature(Quadrature):
         Nbra = pacbra.get_number_components()
         Nket = packet.get_number_components()
         # Packets can also have different basis size
-        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shape() ]
-        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shape() ]
+        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shapes() ]
+        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
         # The partition scheme of the block vectors and block matrix
         partitionb = [0] + list(cumsum(Kbra))
         partitionk = [0] + list(cumsum(Kket))
