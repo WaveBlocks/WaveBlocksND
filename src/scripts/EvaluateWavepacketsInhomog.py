@@ -22,6 +22,8 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
     :param eigentrafo: Whether or not do an eigentransformation before evaluation is done.
     """
     parameters = iom.load_parameters()
+    if pp is None:
+        pp = parameters
 
     # Number of time steps we saved
     timesteps = iom.load_inhomogwavepacket_timegrid(blockid=blockid)

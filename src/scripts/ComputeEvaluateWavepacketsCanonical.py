@@ -29,7 +29,7 @@ if __name__ == "__main__":
     try:
         PP = PL.load_from_file(sys.argv[2])
     except IndexError:
-        raise ValueError("No parameter file given")
+        PP = None
 
     # Iterate over all blocks
     for blockid in iom.get_block_ids():
