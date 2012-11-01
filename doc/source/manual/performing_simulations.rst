@@ -58,7 +58,7 @@ the file ``parameters_01.py``. The full content of this file is printed below
         "coefficients" : [[ ((0,), 1.0) ]],
         "quadrature" : {
             "type" : "HomogeneousQuadrature",
-    	'qr': {
+        'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
                 'qr_rules': [{'dimension': 1, 'order': 14, 'type': 'GaussHermiteQR'}]
@@ -185,3 +185,182 @@ prints
     Parameters[eps=0.5][delta=0.5eps].py
     Parameters[eps=0.5][delta=1.0eps].py
     Parameters[eps=0.5][delta=1.5eps].py
+
+and we find 6 configuration files. One file for each combination of a value for
+eps and one for delta. The filenames contain all local parameters as ``key=value``
+pairs. These can be used later in the post processing step by the functions from
+``FileTools.py`` for sorting and grouping the simulations with respect to almost
+arbitrary criteria.
+
+These configuration files can now be fed to the main simulation program one
+after another as shown in the last section. We could again do this manually but
+there is a better solution.
+
+
+The batch loop
+~~~~~~~~~~~~~~
+
+There is a simple python script ``Batch.py`` which does nothing else than running
+simulations for a set of configurations. The usage is really simple. First create
+a subdirectory called configurations by
+
+::
+
+    mkdir configurations
+
+Then we put all the configurations we want to run in the loop into this directory.
+For example if we created the configurations by the means described in the last
+section we just do
+
+::
+
+    mv autogen_configurations/* configurations/
+
+We can put as many simulations as we like into this directory. Each simulation
+is run totally independently from all others. At the moment we do not run the
+simulations in parallel but it would be possible to do this.
+
+Now it is time to call the ``Batch.py`` script. The most simple call looks like
+
+::
+
+    python Batch.py
+
+The first thing is does is to create a new directory called ``results``. This is
+the place where it will put all the simulation results. Then it will call the
+``Main.py`` script for each simulation configuration provided. After this it will
+run a bunch of data computation and plotting scripts. Finally it puts all the
+simulation results in a subdirectory of results whose name corresponds to the
+configuration file used. If we now look into the results directory by
+
+::
+
+    ls results
+
+we see the listing
+
+::
+
+    Parameters[eps=0.1][delta=0.5eps]
+    Parameters[eps=0.1][delta=1.0eps]
+    Parameters[eps=0.1][delta=1.5eps]
+    Parameters[eps=0.5][delta=0.5eps]
+    Parameters[eps=0.5][delta=1.0eps]
+    Parameters[eps=0.5][delta=1.5eps]
+
+and for the results of a single simulation (notice the necessary shell character
+escapes, you can also write the name without escapes in a pair of ".)
+
+::
+
+    ls results/Parameters\[eps\=0.1\]\[delta\=0.5eps\]
+
+we have the following bunch of files
+
+::
+
+    energies_block0.png
+    energy_drift_block0.png
+    norms_block0.png
+    norms_drift_block0.png
+    norms_sqr_block0.png
+    Parameters[eps=0.1][delta=0.5eps].py
+    simulation_results.hdf5
+
+Each directory within results contains at least the simulation parameters
+file (``Parameters[eps=0.1][delta=0.5eps].py``) and the simulation results
+file (``simulation results.hdf5``). If there were some plots generated,
+then these files are here too.
+
+
+Advanced configuration of the batch loop
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+In the last section we saw how to use the so called batch loop. Now we reveal the
+full power of this script. The script can be called with a further configuration
+file. We call this file the `batchconfiguration`. Please do not confuse this with
+the `simulation configuration` file holding the physical simulation parameters for
+a single simulation and the `metaconfiguration` file specifying how to generate a
+bunch of closely related simulation configuration files.
+
+The listing 2.3 shows the default batch configuration. The file is a plain python
+script file which contains only three lists. Each list holds the names of some
+other python scripts. The rest should be self-explanatory from the comments.
+
+::
+
+    # Default configuration of which scripts are run in the
+    # batch loop . Change the content of the lists as you like
+    # but never rename the variables .
+    # All scripts in this list are called for each simulation
+    # configuration and with the configuration file as first
+    # command line argument
+    call_simulation = ["Main.py"]
+
+    # All scripts in this list are called for each simulation
+    # configuration but without additional arguments . They can
+    # assume that the simulation results data file is available
+    # at the default location ( ’./ simulation_results . hdf5 ’) .
+
+    call_for_each = ["ComputeNorms.py" ,
+                     "ComputeEnergies.py",
+                     # "PlotPotential.py",
+                     "PlotNorms.py",
+                     "PlotEnergies.py",
+                     # "PlotWavepacketParameters.py",
+                     # "PlotWavepacketCoefficients.py",
+                     # "EvaluateWavepacketsEigen.py",
+                     # "PlotWavefunction.py",
+                     # "PlotWavepackets.py"
+                    ]
+
+    # The scripts in this list are called once after all
+    # simulations are finished and the results were moved
+    # to the final location ( default ’./ results /* ’) . Put
+    # all scripts that do comparisons between different
+    # simulations in here.
+    call_once = []
+
+
+Running more scripts
+~~~~~~~~~~~~~~~~~~~~
+
+Sometimes you may wish to run a script for a set of simulations long after the
+batch loop has terminated. Maybe you decided to compute a new observable or
+whatever. It would be tedious to call the script with each ``simulation_results.hdf5``
+and its correct file path manually. Exactly for this reason there is a script named
+``ForAll.py``. For example assume we want to plot the potential used in each simulation
+(which is identical in our example but never mind). Then we call
+
+::
+
+    python ForAll.py PlotPotential.py
+
+which starts by printing
+
+::
+
+    Will execute the code in 'PlotPotential.py' for all files in 'results'
+     Executing code for datafile in results/Parameters[eps=0.5][delta=1.0eps]
+     ...
+
+and after a while quits with the text ``Done`` on the last output line. The script
+can take the path of the directory where the results lie (in the example above
+this is ``./results/``) as a third command line argument.
+
+
+Computing more data
+-------------------
+
+
+Visualisation
+-------------
+
+
+Comparing data across Simulations
+---------------------------------
+
+Sorting and Grouping
+~~~~~~~~~~~~~~~~~~~~
+
+Usage of ``FileTools.py``

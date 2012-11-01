@@ -109,8 +109,9 @@ within your `python path`, otherwise you'll have to adapt the environment variab
 For example if you place these two directories below ``~/python`` then you have
 to adapt the python path as follows:
 
+::
 
-| export PYTHONPATH="$PYTHONPATH:~/python"
+    export PYTHONPATH="$PYTHONPATH:~/python"
 
 You can write this line into your .bashrc file or any comparable file for your
 default shell. (Otherwise this information is gone when you close the shell.)
@@ -122,24 +123,32 @@ If you want to check out the source code from the repository, the necessary
 steps are similar. First check out the code (we assume here you want to use
 the `master` branch) into a new directory (here ``~/WB``)
 
-| git clone https://github.com/raoulbq/WaveBlocksND.git ~/WB
+::
+
+    git clone https://github.com/raoulbq/WaveBlocksND.git ~/WB
 
 The directory listing should now look like
 
-| ls ~/WB/
-| doc  examples  src
+::
+
+    ls ~/WB/
+    doc  examples  src
 
 and we find the source code below src,
 
-| ls ~/WB/src
-| plotters  scripts  sh  tests  WaveBlocksND
+::
+
+    ls ~/WB/src
+    plotters  scripts  sh  tests  WaveBlocksND
 
 Assume we want to install any custom python software locally below ``~/python``
 so we create this directory and put all the things there. We start with the
 `numdifftools` python package.
 
-| mkdir ~/python
-| cp -r ~/WB/src/numdifftools/ ~/python
+::
+
+    mkdir ~/python
+    cp -r ~/WB/src/numdifftools/ ~/python
 
 We can just copy the files as they won't change in the git repository often. But
 it's a wise idea not to copy ``~/WB/src/WaveBlocks`` but to instead use symbolic
@@ -148,12 +157,16 @@ one will be used when you just type ``import WaveBlocksND`` at a python prompt.
 This is similar to the alternatives framework in Debian.) You may just follow
 the shell command given here for a working sample setup.
 
-| ln -s ~/WB/src/WaveBlocksND WaveBlocksND
+::
+
+    ln -s ~/WB/src/WaveBlocksND WaveBlocksND
 
 Finally we have to adapt the python path to include the directory ``~/python``
 which can be done as follows:
 
-| export PYTHONPATH="$PYTHONPATH:~/python"
+::
+
+    export PYTHONPATH="$PYTHONPATH:~/python"
 
 You can write this last line into your ``.bashrc`` file or any comparable file
 for your default shell. (Otherwise this information is gone when you close the shell.)
