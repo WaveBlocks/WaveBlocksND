@@ -12,6 +12,7 @@ import sys
 from numpy import real
 from matplotlib.pyplot import *
 
+from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
@@ -20,13 +21,17 @@ from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcm
 
 
-def plot_frames(iom, blockid=0, load=False):
-
+def plot_frames(PP, iom, blockid=0, load=False):
+    r"""
+    """
     parameters = iom.load_parameters()
 
     if not parameters["dimension"] == 2:
         print("No wavefunction of two space dimensions, silent return!")
         return
+
+    if PP is None:
+        PP = parameters
 
     if load is True:
         # TODO: Implement reshaping
@@ -34,7 +39,7 @@ def plot_frames(iom, blockid=0, load=False):
         #G = iom.load_grid(blockid=blockid)
         #G = grid.reshape((1, -1))
     else:
-        G = BlockFactory().create_grid(parameters)
+        G = BlockFactory().create_grid(PP)
 
     V = BlockFactory().create_potential(parameters)
 
@@ -73,6 +78,7 @@ def plot_frames(iom, blockid=0, load=False):
 
         for level in xrange(N):
             z = Psi[level]
+            z = z.reshape(G.get_number_nodes())
 
             subplot(N,1,level+1)
             plotcm(z, darken=0.3)
@@ -86,12 +92,19 @@ def plot_frames(iom, blockid=0, load=False):
 
 if __name__ == "__main__":
     iom = IOManager()
+    PL = ParameterLoader()
 
     # Read file with simulation data
     try:
         iom.open_file(filename=sys.argv[1])
     except IndexError:
         iom.open_file()
+
+    # Read file with parameter data for grid
+    try:
+        PP = PL.load_from_file(sys.argv[2])
+    except IndexError:
+        PP = None
 
     # The axes rectangle that is plotted
     #view = [-3.5, 3.5, -0.1, 3.5]
@@ -101,7 +114,7 @@ if __name__ == "__main__":
         print("Plotting frames of data block '"+str(blockid)+"'")
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
-            plot_frames(iom, blockid=blockid)
+            plot_frames(PP, iom, blockid=blockid)
         else:
             print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
 

@@ -9,9 +9,10 @@ for two-dimensional wavepackets.
 """
 
 import sys
-from numpy import real, squeeze
+from numpy import squeeze
 from matplotlib.pyplot import *
 
+from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
 from WaveBlocksND import IOManager
@@ -19,8 +20,9 @@ from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcf2d
 
 
-def plot_frames(iom, blockid=0, load=False, limits=None):
-
+def plot_frames(PP, iom, blockid=0, load=False, limits=None):
+    r"""
+    """
     parameters = iom.load_parameters()
     BF = BlockFactory()
 
@@ -28,13 +30,16 @@ def plot_frames(iom, blockid=0, load=False, limits=None):
         print("No wavepacket of two space dimensions, silent return!")
         return
 
+    if PP is None:
+        PP = parameters
+
     if load is True:
         # TODO: Implement reshaping
         raise NotImplementedError("Loading of 2D grids is not implemented")
         #G = iom.load_grid(blockid=blockid)
         #G = grid.reshape((1, -1))
     else:
-        G = BF.create_grid(parameters)
+        G = BF.create_grid(PP)
 
     u, v = map(squeeze, G.get_axes())
 
@@ -91,12 +96,19 @@ def plot_frames(iom, blockid=0, load=False, limits=None):
 
 if __name__ == "__main__":
     iom = IOManager()
+    PL = ParameterLoader()
 
     # Read file with simulation data
     try:
         iom.open_file(filename=sys.argv[1])
     except IndexError:
         iom.open_file()
+
+    # Read file with parameter data for grid
+    try:
+        PP = PL.load_from_file(sys.argv[2])
+    except IndexError:
+        PP = None
 
     # The axes rectangle that is plotted
     #view = [-3, 3, -3, 3]
@@ -107,7 +119,7 @@ if __name__ == "__main__":
         print("Plotting frames of data block '"+str(blockid)+"'")
         # See if we have wavepacket values
         if iom.has_wavepacket(blockid=blockid):
-            plot_frames(iom, blockid=blockid, limits=view)
+            plot_frames(PP, iom, blockid=blockid, limits=view)
         else:
             print("Warning: Not plotting any wavepackets in block '"+str(blockid)+"'!")
 

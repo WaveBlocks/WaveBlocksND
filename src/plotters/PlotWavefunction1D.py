@@ -12,15 +12,15 @@ import sys
 from numpy import angle, conj, real, imag, squeeze
 from matplotlib.pyplot import *
 
+from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import IOManager
-from WaveBlocksND import GridWrapper
 from WaveBlocksND.Plot import plotcf
 
 import GraphicsDefaults as GD
 
 
-def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
+def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -35,6 +35,9 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
         print("No wavefunction of one space dimensions, silent return!")
         return
 
+    if PP is None:
+        PP = parameters
+
     if load is True:
         print("Loading grid data from datablock 'global'")
         if gridblockid is None:
@@ -44,14 +47,10 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
         grid = G
     else:
         print("Creating new grid")
-        G = BlockFactory().create_grid(parameters)
+        G = BlockFactory().create_grid(PP)
         grid = G.get_nodes(flat=True)
 
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
-
-    # Precompute eigenvectors for efficiency
-    Potential = BlockFactory().create_potential(parameters)
-    eigenvectors = Potential.evaluate_eigenvectors_at(G)
 
     for step in timegrid:
         print(" Plotting frame of timestep # " + str(step))
@@ -95,12 +94,19 @@ def plot_frames(iom, blockid=0, view=None, plotphase=True, plotcomponents=False,
 
 if __name__ == "__main__":
     iom = IOManager()
+    PL = ParameterLoader()
 
     # Read file with simulation data
     try:
         iom.open_file(filename=sys.argv[1])
     except IndexError:
         iom.open_file()
+
+    # Read file with parameter data for grid
+    try:
+        PP = PL.load_from_file(sys.argv[2])
+    except IndexError:
+        PP = None
 
     # The axes rectangle that is plotted
     view = [-3.5, 3.5, -0.1, 3.5]
@@ -110,7 +116,7 @@ if __name__ == "__main__":
         print("Plotting frames of data block '"+str(blockid)+"'")
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
-            plot_frames(iom, blockid=blockid, view=view, plotphase=True, plotcomponents=False, plotabssqr=False, load=False)
+            plot_frames(PP, iom, blockid=blockid, view=view, plotphase=True, plotcomponents=False, plotabssqr=False, load=False)
         else:
             print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
 
