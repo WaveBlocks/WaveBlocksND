@@ -17,6 +17,8 @@ The source code documentation below is actually up to date.
 
    manual/first_glance
    manual/performing_simulations.rst
+   manual/the_core.rst
+   manual/extending_waveblocks.rst
    manual/interactive_use.rst
    citation
 
