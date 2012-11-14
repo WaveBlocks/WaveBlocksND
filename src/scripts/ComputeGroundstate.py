@@ -7,6 +7,7 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
+import sys
 from numpy import *
 from scipy import *
 from numpy import squeeze, real, zeros, zeros_like, conj, sum
@@ -134,34 +135,17 @@ def compute_groundstate(params):
 
 if __name__ == "__main__":
 
-    pa = {}
-    pa["dimension"] = 2
-    pa["ncomponents"] = 1
-    pa["groundstate_of_level"] = 0
-    pa["potential"] = "cosh_osc_2d"
-    pa["eps"] = 0.1
 
-    pa["hawp_template"] = {
-        "type" : "HagedornWavepacket",
-        "dimension" : pa["dimension"],
-        "ncomponents": 1,
-        "eps" : pa["eps"],
-        "basis_shapes" : [{
-                "type" : "HyperbolicCutShape",
-                "K" : 4,
-                "dimension" : 2
-                }]
-        }
+    # Read the path for the configuration file we use for this simulation.
+    try:
+        parametersfile = sys.argv[1]
+    except IndexError:
+        raise ValueError("No configuration file given!")
 
-    pa["quadrature"] = {
-        "type" : "HomogeneousQuadrature",
-	'qr': {
-            'type': 'TensorProductQR',
-            'dimension': 2,
-            'qr_rules': [{'dimension': 1, 'order': 8, 'type': 'GaussHermiteQR'},
-                         {'dimension': 1, 'order': 8, 'type': 'GaussHermiteQR'}],
-            }
-        }
+    print("Using configuration from file: " + parametersfile)
 
-    PP = ParameterLoader().load_from_dict(pa)
-    compute_groundstate(PP)
+    # Set up the parameter provider singleton
+    PA = ParameterLoader().load_from_file(parametersfile)
+    compute_groundstate(PA)
+
+    print("Groundstate computation finished")
