@@ -1,4 +1,6 @@
 algorithm = "hagedorn"
+propagator = "semiclassical"
+splitting_method = "Y4"
 
 ICH3 = {}
 ICH3["variables"] = ["x", "y", "z"]

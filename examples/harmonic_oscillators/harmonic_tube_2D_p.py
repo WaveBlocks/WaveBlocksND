@@ -1,4 +1,6 @@
 algorithm = "hagedorn"
+propagator = "semiclassical"
+splitting_method = "Y4"
 
 T = 10
 dt = 0.01
