@@ -181,6 +181,17 @@ def intersect_by(lista, listb, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel
     return result
 
 
+def exclude(lista, listb):
+    r"""Remove from a list of simulation IDs another such list of IDs.
+
+    :param lista: A first list with the simulation IDs.
+    :param listb: A second list with the simulation IDs.
+    :return: A list of all simulation IDs present in `lista` but not in `listb`.
+    """
+    result = list(set(lista) - set(listb))
+    return result
+
+
 def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
     r"""Sorts simulation IDs with respect to a (numerical) value in the ID.
 
