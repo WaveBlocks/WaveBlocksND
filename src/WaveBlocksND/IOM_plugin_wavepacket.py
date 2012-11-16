@@ -277,6 +277,8 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
         for i in components:
             data.append(self._srf[pathd+"c_"+str(i)][index,...])
 
+    # TODO: Consider unpacking data for single components
+
     if get_hashes is True:
         return (hashes, data)
     else:

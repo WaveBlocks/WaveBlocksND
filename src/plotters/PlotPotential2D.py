@@ -17,7 +17,7 @@ from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
 
 
-def plot_potential(grid, potential, along_axes=False, interactive=False, size=(800,700)):
+def plot_potential(grid, potential, along_axes=False, interactive=False, view=None, size=(800,700)):
     # The Grid
     u, v = grid.get_nodes(split=True, flat=False)
     u = real(u)
@@ -31,7 +31,10 @@ def plot_potential(grid, potential, along_axes=False, interactive=False, size=(8
     fig = mlab.figure(size=size)
 
     for level in potew:
-        mlab.surf(u, v, real(level))
+        if view is not None:
+            mlab.surf(u, v, real(level), extent=view)
+        else:
+            mlab.surf(u, v, real(level))
 
     fig.scene.parallel_projection = True
     fig.scene.isometric_view()
@@ -79,29 +82,31 @@ if __name__ == "__main__":
 
     parameters = iom.load_parameters()
 
+    # Read file with parameter data for grid
+    try:
+        gridparams = PL.load_from_file(sys.argv[2])
+    except IndexError:
+        gridparams = parameters
+
     # Manually adjust the plotting region
-    xmin = None
-    xmax = None
-    ymin = None
-    ymax = None
-    Nx = None
-    Ny = None
+    # view = [xmin, xmax, ymin, ymax, zmin, zmax]
+    view = [None, None, None, None, 0, 10]
 
-    if xmin is None or xmax is None or ymin is None or ymax is None:
-        limits = parameters["limits"]
-    else:
-        limits = [(xmin, xmax), (ymin, ymax)]
-    if Nx is None or Ny is None:
-        number_nodes = parameters["number_nodes"]
-    else:
-        number_nodes = [Nx, Ny]
+    if view[0] is None:
+        view[0] = gridparams["limits"][0][0]
+    if view[1] is None:
+        view[1] = gridparams["limits"][0][1]
+    if view[2] is None:
+        view[2] = gridparams["limits"][1][0]
+    if view[3] is None:
+        view[3] = gridparams["limits"][1][1]
 
-    print("Plotting in region: "+str(limits))
+    print("Plotting in region: "+str(view))
 
     if parameters["dimension"] == 2:
         Potential = BlockFactory().create_potential(parameters)
-        Grid = TensorProductGrid(limits, number_nodes)
-        plot_potential(Grid, Potential, interactive=True)
+        Grid = TensorProductGrid(gridparams["limits"], gridparams["number_nodes"])
+        plot_potential(Grid, Potential, interactive=True, view=view)
     else:
         print("Not a potential in two space dimensions, silent return!")
 
