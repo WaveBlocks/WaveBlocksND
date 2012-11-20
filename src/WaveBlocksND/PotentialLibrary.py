@@ -54,12 +54,17 @@ cosh_osc["defaults"] = {"a":"1", "b":"1"}
 morse = {}
 morse["variables"] = ["x"]
 morse["potential"] = "D * (1 - exp(-a*(x-x0)))**2"
-morse["defaults"] = {"D":3.0, "a":0.3, "x0":0.0}
+morse["defaults"] = {"D":3.0, "a":0.5, "x0":0.0}
 
 morse_zero = {}
 morse_zero["variables"] = ["x"]
-morse_zero["potential"] = "l**2 * (exp(-2*(x-x0)) - 2*exp(-(x-x0)))"
-morse_zero["defaults"] = {"l":1.0, "x0":0.0}
+morse_zero["potential"] = "D * (exp(-2*a*(x-x0)) - 2*exp(-a*(x-x0)))"
+morse_zero["defaults"] = {"D":3.0, "a":0.5, "x0":0.0}
+
+morse_zero_2 = {}
+morse_zero_2["variables"] = ["x"]
+morse_zero_2["potential"] = "l**2 * (exp(-2*(x-x0)) - 2*exp(-(x-x0)))"
+morse_zero_2["defaults"] = {"l":1.0, "x0":0.0}
 
 # A double well potential
 double_well = {}
