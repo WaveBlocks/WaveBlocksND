@@ -131,7 +131,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         """
         # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
         Pilist = self._Pis[:]
-        # Include the value of sqrtQ into the parameter list?
+        # Include the value of sqrtQ into the parameter list
         if sqrtQ is True:
             Pilist = Pilist + [self._get_sqrt(component).get()]
 

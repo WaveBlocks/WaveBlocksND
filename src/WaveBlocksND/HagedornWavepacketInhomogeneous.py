@@ -122,7 +122,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         return other
 
 
-    def get_parameters(self, component=None, aslist=False):
+    def get_parameters(self, component=None, aslist=False, sqrtQ=False):
         r"""Get the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -132,13 +132,25 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :return: A list with all parameter sets :math:`\Pi_i` or a single parameter set.
                  The parameters :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` are always in this order.
         """
+        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
         if component is None:
-            return [ Pi[:] for Pi in self._Pis ]
+            Pilist = []
+            for index, Pi in enumerate(self._Pis):
+                # Include the value of sqrtQ into the parameter list
+                if sqrtQ is True:
+                    Pilist.append(Pi[:] + [self._get_sqrt(index).get()])
+                else:
+                    Pilist.append(Pi[:])
+            return Pilist
         else:
-            return self._Pis[component][:]
+            # Include the value of sqrtQ into the parameter list
+            if sqrtQ is True:
+                return self._Pis[component][:] + [self._get_sqrt(component).get()]
+            else:
+                return self._Pis[component][:]
 
 
-    def set_parameters(self, Pi, component=None):
+    def set_parameters(self, Pi, component=None, sqrtQ=False):
         r"""Set the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -146,8 +158,15 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :type Pi: A single tuple or a list of tuples
         :param component: The index :math:`i` of the component :math:`\Phi_i` whose parameters :math:`\Pi_i` we want to update.
         """
+        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
         if component is None:
             for index, item in enumerate(Pi):
-                self._Pis[index] = [ atleast_2d(array(jtem, dtype=complexfloating)) for jtem in item ]
+                self._Pis[index] = [ atleast_2d(array(jtem, dtype=complexfloating)) for jtem in item[:5] ]
+                # Set the value of sqrtQ
+                if sqrtQ is True:
+                    self._get_sqrt(index).set(item[-1])
         else:
-            self._Pis[component] = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi ]
+            self._Pis[component] = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi[:5] ]
+            # Set the value of sqrtQ
+            if sqrtQ is True:
+                self._get_sqrt(component).set(Pi[-1])
