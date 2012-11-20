@@ -121,7 +121,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         return other
 
 
-    def get_parameters(self, component=None, aslist=False):
+    def get_parameters(self, component=None, aslist=False, sqrtQ=False):
         r"""Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
@@ -129,15 +129,25 @@ class HagedornWavepacket(HagedornWavepacketBase):
                        with inhomogeneous packets.
         :return: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         """
+        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
+        Pilist = self._Pis[:]
+        # Include the value of sqrtQ into the parameter list?
+        if sqrtQ is True:
+            Pilist = Pilist + [self._get_sqrt(component).get()]
+
         if aslist is True:
-            return self._number_components * [ self._Pis[:] ]
-        return self._Pis[:]
+            return self._number_components * [ Pilist ]
+        return Pilist
 
 
-    def set_parameters(self, Pi, component=None):
+    def set_parameters(self, Pi, component=None, sqrtQ=False):
         r"""Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
         """
-        self._Pis = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi ]
+        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
+        self._Pis = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi[:5] ]
+        # Set the value of sqrtQ
+        if sqrtQ is True:
+            self._get_sqrt(component).set(Pi[-1])
