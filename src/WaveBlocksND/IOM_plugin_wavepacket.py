@@ -22,7 +22,7 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q","p","Q"
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
-               Default is ``("q", "p", "Q", "P", "S", "sqrtQ")``.
+               Default is ``("q", "p", "Q", "P", "S")``.
     """
     N = parameters["ncomponents"]
     D = parameters["dimension"]
@@ -130,7 +130,7 @@ def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0, key=(
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
-               Default is ``("q", "p", "Q", "P", "S", "sqrtQ")``.
+               Default is ``("q", "p", "Q", "P", "S")``.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
@@ -246,7 +246,7 @@ def load_wavepacket_parameters(self, timestep=None, blockid=0, key=("q","p","Q",
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to load. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
-               Default is ``("q", "p", "Q", "P", "S", "sqrtQ")``.
+               Default is ``("q", "p", "Q", "P", "S")``.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
