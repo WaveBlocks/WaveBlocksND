@@ -79,13 +79,13 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
 
         for i in xrange(npackets):
             bid = self.IOManager.create_block()
-            self.IOManager.add_inhomogwavepacket(self.parameters, timeslots=slots, blockid=bid)
+            self.IOManager.add_inhomogwavepacket(self.parameters, timeslots=slots, blockid=bid, key=("q","p","Q","P","S","sqrtQ"))
 
         # Write some initial values to disk
         for packet in self.propagator.get_wavepackets():
             self.IOManager.save_inhomogwavepacket_description(packet.get_description())
             # Pi
-            self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(), timestep=0)
+            self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(sqrtQ=True), timestep=0, key=("q","p","Q","P","S","sqrtQ"))
             # Basis shapes
             for shape in packet.get_basis_shapes():
                 self.IOManager.save_inhomogwavepacket_basisshapes(shape)
@@ -113,7 +113,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
 
                 for packet in packets:
                     # Pi
-                    self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(), timestep=i)
+                    self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(sqrtQ=True), timestep=i, key=("q","p","Q","P","S","sqrtQ"))
                     # Basis shapes (in case they changed!)
                     for shape in packet.get_basis_shapes():
                         self.IOManager.save_inhomogwavepacket_basisshapes(shape)
