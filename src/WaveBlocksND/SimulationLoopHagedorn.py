@@ -94,7 +94,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Add storage for each packet
         npackets = len(self.parameters["initvals"])
         slots = self._tm.compute_number_saves()
-        key=("q","p","Q","P","S","sqrtQ")
+        key = ("q","p","Q","P","S","sqrtQ")
 
         for i in xrange(npackets):
             bid = self.IOManager.create_block()
