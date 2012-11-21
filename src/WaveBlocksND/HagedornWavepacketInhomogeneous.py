@@ -122,7 +122,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         return other
 
 
-    def get_parameters(self, component=None, aslist=False, sqrtQ=False):
+    def get_parameters(self, component=None, aslist=False, key=("q","p","Q","P","S")):
         r"""Get the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -132,25 +132,39 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :return: A list with all parameter sets :math:`\Pi_i` or a single parameter set.
                  The parameters :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` are always in this order.
         """
-        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
         if component is None:
-            Pilist = []
-            for index, Pi in enumerate(self._Pis):
-                # Include the value of sqrtQ into the parameter list
-                if sqrtQ is True:
-                    Pilist.append(Pi[:] + [self._get_sqrt(index).get()])
-                else:
-                    Pilist.append(Pi[:])
-            return Pilist
+            components = xrange(self._number_components)
         else:
-            # Include the value of sqrtQ into the parameter list
-            if sqrtQ is True:
-                return self._Pis[component][:] + [self._get_sqrt(component).get()]
-            else:
-                return self._Pis[component][:]
+            components = [component]
+
+        Pilist = []
+        for index in components:
+            tmp = []
+            for k in key:
+                if k == "q":
+                    tmp.append(self._Pis[index][0])
+                elif k == "p":
+                    tmp.append(self._Pis[index][1])
+                elif k == "Q":
+                    tmp.append(self._Pis[index][2])
+                elif k == "P":
+                    tmp.append(self._Pis[index][3])
+                elif k == "S":
+                    tmp.append(self._Pis[index][4])
+                elif k == "sqrtQ":
+                    tmp.append(self._get_sqrt(index).get())
+                else:
+                    raise KeyError("Invalid parameter key: "+str(key))
+
+            Pilist.append(tmp)
+
+        if component is not None:
+            return Pilist[0]
+
+        return Pilist
 
 
-    def set_parameters(self, Pi, component=None, sqrtQ=False):
+    def set_parameters(self, Pi, component=None, key=("q","p","Q","P","S")):
         r"""Set the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -158,15 +172,25 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :type Pi: A single tuple or a list of tuples
         :param component: The index :math:`i` of the component :math:`\Phi_i` whose parameters :math:`\Pi_i` we want to update.
         """
-        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
         if component is None:
-            for index, item in enumerate(Pi):
-                self._Pis[index] = [ atleast_2d(array(jtem, dtype=complexfloating)) for jtem in item[:5] ]
-                # Set the value of sqrtQ
-                if sqrtQ is True:
-                    self._get_sqrt(index).set(item[-1])
+            component = xrange(self._number_components)
         else:
-            self._Pis[component] = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi[:5] ]
-            # Set the value of sqrtQ
-            if sqrtQ is True:
-                self._get_sqrt(component).set(Pi[-1])
+            component = [component]
+            Pi = [Pi]
+
+        for index, pic in zip(component, Pi):
+            for k, item in zip(key, pic):
+                if k == "q":
+                    self._Pis[index][0] = atleast_2d(array(item, dtype=complexfloating))
+                elif k == "p":
+                    self._Pis[index][1] = atleast_2d(array(item, dtype=complexfloating))
+                elif k == "Q":
+                    self._Pis[index][2] = atleast_2d(array(item, dtype=complexfloating))
+                elif k == "P":
+                    self._Pis[index][3] = atleast_2d(array(item, dtype=complexfloating))
+                elif k == "S":
+                    self._Pis[index][4] = atleast_2d(array(item, dtype=complexfloating))
+                elif k == "sqrtQ":
+                    self._get_sqrt(index).set(item)
+                else:
+                    raise KeyError("Invalid parameter key: "+str(key))
