@@ -226,7 +226,8 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/Pi/"
 
-    index = self.find_timestep_index(pathtg, timestep)
+    if timestep is not None:
+        index = self.find_timestep_index(pathtg, timestep)
 
     data = []
     for i in xrange(len(self._srf[pathd].keys()) // int(self._srf[pathd].attrs["number_parameters"])):
@@ -234,8 +235,7 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
             data.append( tuple([ self._srf[pathd+k+"_"+str(i)][index,:,:] for k in key ]) )
         else:
             data.append( tuple([ self._srf[pathd+k+"_"+str(i)][...,:,:] for k in key ]) )
-
-    return data
+    return tuple(data)
 
 
 def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, component=None, blockid=0):
