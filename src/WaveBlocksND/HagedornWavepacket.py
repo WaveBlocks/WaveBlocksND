@@ -121,7 +121,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         return other
 
 
-    def get_parameters(self, component=None, aslist=False, sqrtQ=False):
+    def get_parameters(self, component=None, aslist=False, key=("q","p","Q","P","S")):
         r"""Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
@@ -129,25 +129,47 @@ class HagedornWavepacket(HagedornWavepacketBase):
                        with inhomogeneous packets.
         :return: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         """
-        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
-        Pilist = self._Pis[:]
-        # Include the value of sqrtQ into the parameter list
-        if sqrtQ is True:
-            Pilist = Pilist + [self._get_sqrt(component).get()]
+        Pilist = []
+        for k in key:
+            if k == "q":
+                Pilist.append(self._Pis[0])
+            elif k == "p":
+                Pilist.append(self._Pis[1])
+            elif k == "Q":
+                Pilist.append(self._Pis[2])
+            elif k == "P":
+                Pilist.append(self._Pis[3])
+            elif k == "S":
+                Pilist.append(self._Pis[4])
+            elif k == "sqrtQ":
+                Pilist.append(self._get_sqrt(component).get())
+            else:
+                raise KeyError("Invalid parameter key: "+str(key))
 
         if aslist is True:
             return self._number_components * [ Pilist ]
+
         return Pilist
 
 
-    def set_parameters(self, Pi, component=None, sqrtQ=False):
+    def set_parameters(self, Pi, component=None, key=("q","p","Q","P","S")):
         r"""Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
         """
-        # TODO: Do not assume the parameter set is sorted (q,p,Q,P,S,sqrtQ)
-        self._Pis = [ atleast_2d(array(item, dtype=complexfloating)) for item in Pi[:5] ]
-        # Set the value of sqrtQ
-        if sqrtQ is True:
-            self._get_sqrt(component).set(Pi[-1])
+        for k, item in zip(key, Pi):
+            if k == "q":
+                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating))
+            elif k == "p":
+                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating))
+            elif k == "Q":
+                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating))
+            elif k == "P":
+                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating))
+            elif k == "S":
+                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating))
+            elif k == "sqrtQ":
+                self._get_sqrt(component).set(item)
+            else:
+                raise KeyError("Invalid parameter key: "+str(key))
