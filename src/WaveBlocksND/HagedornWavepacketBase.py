@@ -244,7 +244,7 @@ class HagedornWavepacketBase(Wavepacket):
         return grid
 
 
-    def _evaluate_phi0(self, component, nodes, prefactor=False, root=sqrt):
+    def _evaluate_phi0(self, component, nodes, prefactor=False):
         r"""Evaluate the lowest order basis function :math:`\phi_0` on a
         grid :math:`\Gamma` of nodes.
 
