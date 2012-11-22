@@ -9,8 +9,8 @@ the results back to the given simulation data file.
 """
 
 from WaveBlocksND import BlockFactory
+from WaveBlocksND import BasisTransformationHAWP
 from WaveBlocksND import WaveFunction
-from WaveBlocksND import HagedornWavepacketInhomogeneous
 
 
 def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):

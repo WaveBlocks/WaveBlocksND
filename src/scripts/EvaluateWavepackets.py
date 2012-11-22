@@ -9,7 +9,7 @@ to the given simulation data file.
 """
 
 from WaveBlocksND import BlockFactory
-from WaveBlocksND import HagedornWavepacket
+from WaveBlocksND import BasisTransformationHAWP
 from WaveBlocksND import WaveFunction
 
 
