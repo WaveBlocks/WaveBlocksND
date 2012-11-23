@@ -9,11 +9,12 @@ This file contains the Hagedorn propagator class for homogeneous wavepackets.
 
 from functools import partial
 from numpy import dot, eye, atleast_2d, sqrt
-from numpy.linalg import inv
+from numpy.linalg import inv, det
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
 from SplittingParameters import SplittingParameters
+from ComplexMath import cont_angle
 
 __all__ = ["SemiclassicalPropagator2"]
 
@@ -133,12 +134,14 @@ class SemiclassicalPropagator2(Propagator, SplittingParameters):
     def _propkin(self, h, packet):
         """Do a kinetic step of size h.
         """
-        q, p, Q, P, S = packet.get_parameters()
         Mi = self._Minv
+        key = ("q", "p", "Q", "P", "S", "sqrtQ")
+        q, p, Q, P, S, adQ = packet.get_parameters(key=key)
         q = q + h * dot(Mi, p)
         Q = Q + h * dot(Mi, P)
         S = S + 0.5 * h * dot(p.T, dot(Mi, p))
-        packet.set_parameters((q, p, Q, P, S))
+        adQn = cont_angle(det(Q), reference=adQ)[0]
+        packet.set_parameters((q, p, Q, P, S, adQn), key=key)
 
 
     def _proppotquad(self, h, packet, leading_chi):
@@ -157,7 +160,7 @@ class SemiclassicalPropagator2(Propagator, SplittingParameters):
         wavepacket at time :math:`t + \tau`. We perform exactly one timestep of size
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
-        The smiclassical propagations scheme is used. 
+        The semiclassical propagations scheme is used.
         """
         # Cache some parameter values
         dt = 1.0*self._dt
@@ -182,5 +185,5 @@ class SemiclassicalPropagator2(Propagator, SplittingParameters):
             coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            # Finish current timestep and propagate until dt 
+            # Finish current timestep and propagate until dt
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
