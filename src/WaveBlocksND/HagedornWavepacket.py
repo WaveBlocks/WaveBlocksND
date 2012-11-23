@@ -142,7 +142,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
                 Pilist.append(self._Pis[3])
             elif k == "S":
                 Pilist.append(self._Pis[4])
-            elif k == "sqrtQ":
+            elif k == "adQ":
                 Pilist.append(array(self._get_sqrt(component).get(), dtype=complexfloating))
             else:
                 raise KeyError("Invalid parameter key: "+str(key))
@@ -170,7 +170,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
                 self._Pis[3] = atleast_2d(array(item, dtype=complexfloating))
             elif k == "S":
                 self._Pis[4] = atleast_2d(array(item, dtype=complexfloating))
-            elif k == "sqrtQ":
+            elif k == "adQ":
                 self._get_sqrt(component).set(item)
             else:
                 raise KeyError("Invalid parameter key: "+str(key))

@@ -136,7 +136,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
         """Do a kinetic step of size h.
         """
         Mi = self._Minv
-        key = ("q", "p", "Q", "P", "S", "sqrtQ")
+        key = ("q", "p", "Q", "P", "S", "adQ")
         q, p, Q, P, S, adQ = packet.get_parameters(key=key)
         q = q + h * dot(Mi, p)
         Q = Q + h * dot(Mi, P)

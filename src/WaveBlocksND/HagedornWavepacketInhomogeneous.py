@@ -152,7 +152,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                     tmp.append(self._Pis[index][3])
                 elif k == "S":
                     tmp.append(self._Pis[index][4])
-                elif k == "sqrtQ":
+                elif k == "adQ":
                     tmp.append(array(self._get_sqrt(index).get(), dtype=complexfloating))
                 else:
                     raise KeyError("Invalid parameter key: "+str(key))
@@ -191,7 +191,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                     self._Pis[index][3] = atleast_2d(array(item, dtype=complexfloating))
                 elif k == "S":
                     self._Pis[index][4] = atleast_2d(array(item, dtype=complexfloating))
-                elif k == "sqrtQ":
+                elif k == "adQ":
                     self._get_sqrt(index).set(item)
                 else:
                     raise KeyError("Invalid parameter key: "+str(key))

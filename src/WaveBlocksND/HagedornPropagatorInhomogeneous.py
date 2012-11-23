@@ -130,7 +130,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
             # Unpack, no codata:
             packet = packet[0]
             eps = packet.get_eps()
-            key = ("q", "p", "Q", "P", "S", "sqrtQ")
+            key = ("q", "p", "Q", "P", "S", "adQ")
 
             # Do a kinetic step of dt/2
             for component in xrange(self._number_components):

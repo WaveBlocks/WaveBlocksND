@@ -21,7 +21,7 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q","p","Q"
                       to get automatically growing datasets.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to save. All are independent.
-    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
+    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
     N = parameters["ncomponents"]
@@ -53,8 +53,8 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q","p","Q"
             daset_P = grp_pi.create_dataset("P", (0, D, D), dtype=np.complexfloating, chunks=True, maxshape=(None,D,D))
         if "S" in key and not "S" in grp_pi.keys():
             daset_S = grp_pi.create_dataset("S", (0, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,1,1))
-        if "sqrtQ" in key and not "sqrtQ" in grp_pi.keys():
-            daset_sqrtQ = grp_pi.create_dataset("sqrtQ", (0, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,1,1))
+        if "adQ" in key and not "adQ" in grp_pi.keys():
+            daset_adQ = grp_pi.create_dataset("adQ", (0, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,1,1))
 
         for i in xrange(N):
             daset_c_i = grp_ci.create_dataset("c_"+str(i), (0, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,None))
@@ -74,8 +74,8 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q","p","Q"
             daset_P = grp_pi.create_dataset("P", (timeslots, D, D), dtype=np.complexfloating)
         if "S" in key and not "S" in grp_pi.keys():
             daset_S = grp_pi.create_dataset("S", (timeslots, 1, 1), dtype=np.complexfloating)
-        if "sqrtQ" in key and not "sqrtQ" in grp_pi.keys():
-            daset_sqrtQ = grp_pi.create_dataset("sqrtQ", (timeslots, 1, 1), dtype=np.complexfloating)
+        if "adQ" in key and not "adQ" in grp_pi.keys():
+            daset_adQ = grp_pi.create_dataset("adQ", (timeslots, 1, 1), dtype=np.complexfloating)
 
         for i in xrange(N):
             daset_c_i = grp_ci.create_dataset("c_"+str(i), (timeslots, 1), dtype=np.complexfloating, chunks=True, maxshape=(None,None))
@@ -129,7 +129,7 @@ def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0, key=(
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to save. All are independent.
-    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
+    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
@@ -245,7 +245,7 @@ def load_wavepacket_parameters(self, timestep=None, blockid=0, key=("q","p","Q",
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which parameters to load. All are independent.
-    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``sqrtQ``.
+    :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"

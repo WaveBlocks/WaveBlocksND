@@ -138,7 +138,7 @@ class HagedornPropagator(Propagator):
         # Cache some parameter values
         dt = self._dt
         Mi = self._Minv
-        key = ("q", "p", "Q", "P", "S", "sqrtQ")
+        key = ("q", "p", "Q", "P", "S", "adQ")
 
         # Propagate all packets
         for packet, leading_chi in self._packets:

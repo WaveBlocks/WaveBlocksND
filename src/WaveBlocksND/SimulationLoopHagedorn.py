@@ -88,7 +88,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Add storage for each packet
         npackets = len(self.parameters["initvals"])
         slots = self._tm.compute_number_saves()
-        key = ("q","p","Q","P","S","sqrtQ")
+        key = ("q","p","Q","P","S","adQ")
 
         for i in xrange(npackets):
             bid = self.IOManager.create_block()
@@ -113,7 +113,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         nsteps = self._tm.compute_number_timesteps()
 
         # Which parameter data to save.
-        key=("q","p","Q","P","S","sqrtQ")
+        key=("q","p","Q","P","S","adQ")
 
         # Run the simulation for a given number of timesteps
         for i in xrange(1, nsteps+1):
