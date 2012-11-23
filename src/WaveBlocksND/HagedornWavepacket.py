@@ -7,7 +7,8 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, array, eye, atleast_2d
+from numpy import zeros, complexfloating, array, eye, atleast_2d, angle
+from numpy.linalg import det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
@@ -64,7 +65,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         self._QE = None
 
         # Function for taking continuous roots
-        self._sqrt = ContinuousSqrt()
+        self._sqrt = ContinuousSqrt(reference=angle(det(Q)))
 
 
     def __str__(self):
@@ -142,7 +143,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
             elif k == "S":
                 Pilist.append(self._Pis[4])
             elif k == "sqrtQ":
-                Pilist.append(self._get_sqrt(component).get())
+                Pilist.append(array(self._get_sqrt(component).get(), dtype=complexfloating))
             else:
                 raise KeyError("Invalid parameter key: "+str(key))
 

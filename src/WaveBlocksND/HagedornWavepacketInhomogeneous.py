@@ -7,7 +7,8 @@ This file contains the class which represents an inhomogeneous Hagedorn wavepack
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, array, eye, atleast_2d
+from numpy import zeros, complexfloating, array, eye, atleast_2d, angle
+from numpy.linalg import det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
 from HyperCubicShape import HyperCubicShape
@@ -65,7 +66,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         self._QE = None
 
         # Function for taking continuous roots
-        self._sqrt = [ ContinuousSqrt() for n in xrange(self._number_components) ]
+        self._sqrt = [ ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in xrange(self._number_components) ]
 
 
     def __str__(self):
@@ -152,7 +153,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                 elif k == "S":
                     tmp.append(self._Pis[index][4])
                 elif k == "sqrtQ":
-                    tmp.append(self._get_sqrt(index).get())
+                    tmp.append(array(self._get_sqrt(index).get(), dtype=complexfloating))
                 else:
                     raise KeyError("Invalid parameter key: "+str(key))
 
