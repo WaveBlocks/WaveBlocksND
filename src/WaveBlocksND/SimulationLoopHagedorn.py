@@ -68,9 +68,6 @@ class SimulationLoopHagedorn(SimulationLoop):
         elif self.parameters["propagator"] == "semiclassical":
             from SemiclassicalPropagator import SemiclassicalPropagator
             self.propagator = SemiclassicalPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "semiclassical2":
-            from SemiclassicalPropagator2 import SemiclassicalPropagator2
-            self.propagator = SemiclassicalPropagator2(self.parameters, potential)
         elif self.parameters["propagator"] == "hagedorn":
             from HagedornPropagator import HagedornPropagator
             self.propagator = HagedornPropagator(self.parameters, potential)
