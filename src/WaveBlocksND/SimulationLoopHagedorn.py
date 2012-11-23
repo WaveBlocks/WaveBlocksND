@@ -65,9 +65,6 @@ class SimulationLoopHagedorn(SimulationLoop):
         if self.parameters["propagator"] == "magnus_split":
             from MagnusPropagator import MagnusPropagator
             self.propagator = MagnusPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "magnus_split_2":
-            from MagnusPropagator2 import MagnusPropagator2
-            self.propagator = MagnusPropagator2(self.parameters, potential)
         elif self.parameters["propagator"] == "semiclassical":
             from SemiclassicalPropagator import SemiclassicalPropagator
             self.propagator = SemiclassicalPropagator(self.parameters, potential)
