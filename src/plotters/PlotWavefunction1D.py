@@ -9,7 +9,7 @@ for one-dimensional wavefunctions.
 """
 
 import sys
-from numpy import angle, conj, real, imag, squeeze
+from numpy import angle, conj, real, imag, squeeze, sqrt
 from matplotlib.pyplot import *
 
 from WaveBlocksND import ParameterLoader

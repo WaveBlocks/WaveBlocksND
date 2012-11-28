@@ -12,7 +12,7 @@ ncomponents = 1
 
 eps = 0.5
 
-potential ="morse_zero"
+potential ="morse_zero_2"
 l = 1.0
 x0 = 0.0
 

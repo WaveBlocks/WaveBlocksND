@@ -1,7 +1,7 @@
 dimension = 1
 ncomponents = 1
 
-potential = "morse_zero"
+potential = "morse_zero_2"
 l = 1.0
 x0 = 0.0
 
