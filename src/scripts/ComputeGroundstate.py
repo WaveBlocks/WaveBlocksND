@@ -23,15 +23,19 @@ from WaveBlocksND import IOManager
 
 def compute_groundstate(params):
     r"""
+    Special variables necessary in configuration:
+
+    * groundstate_of_level (default: 0)
+    * states_indices (default: [0])
     """
     D = params["dimension"]
+    # TODO: Rename this to 'states_of_level'?
     N = params["groundstate_of_level"]
 
     # Create output file now, in case this fails we did not waste computations
     IOM = IOManager()
     IOM.create_file(params, filename="groundstate.hdf5")
     gid = IOM.create_group()
-    IOM.create_block(groupid=gid)
 
     BF = BlockFactory()
     # Create the potential
@@ -58,7 +62,9 @@ def compute_groundstate(params):
     P0 = 1.0j * inv(Q0)
 
     #
+    print(70*"-")
     print("Parameter values are:")
+    print("---------------------")
     print(" q0:")
     print(str(q0))
     print(" p0:")
@@ -70,6 +76,7 @@ def compute_groundstate(params):
     # Consistency check
     print(" consistency:")
     print(str(conj(Q0)*P0 - conj(P0)*Q0))
+    print(70*"-")
 
     # Next find the new coefficients c'
     HAWP = BF.create_wavepacket(params["hawp_template"])
@@ -113,20 +120,43 @@ def compute_groundstate(params):
     M = MT + MV
     ew, ev = eigh(M)
     ind = argsort(ew)
-    emin_ind = ind[0]
-    cfinal = ev[:, emin_ind]
-    ew[emin_ind]
 
-    cfinal = cfinal.reshape((-1, 1))
-    HAWP.set_coefficient_vector(cfinal)
+    # Build the requested energy levels and states
+    if params.has_key("states_indices"):
+        states = params["states_indices"]
+    else:
+        # Groundstate only
+        states = [0]
 
-    # Save all the wavepacket data
-    IOM.add_wavepacket(params)
-    IOM.save_wavepacket_description(HAWP.get_description())
-    for shape in HAWP.get_basis_shapes():
-        IOM.save_wavepacket_basisshapes(shape)
-    IOM.save_wavepacket_parameters(HAWP.get_parameters(), timestep=0)
-    IOM.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=0)
+    BS = HAWP.get_basis_shapes(component=0)
+
+    print(70*"-")
+    for state in states:
+        if state > BS.get_basis_size():
+            print("Warning: can not compute energy level "+state+" with basis size of "+str(BS))
+            continue
+
+        index = ind[state]
+
+        coeffs = ev[:,index]
+        energy = ew[index]
+
+        print("Level: "+str(state))
+        print("Energy: "+str(energy))
+        print("Coefficients: \n")
+        print(str(coeffs))
+        print(70*"-")
+
+        HAWP.set_coefficient_vector(coeffs.reshape((-1, 1)))
+
+        # Save all the wavepacket data
+        bid = IOM.create_block(groupid=gid)
+        IOM.add_wavepacket(params, blockid=bid)
+        IOM.save_wavepacket_description(HAWP.get_description(), blockid=bid)
+        for shape in HAWP.get_basis_shapes():
+            IOM.save_wavepacket_basisshapes(shape, blockid=bid)
+        IOM.save_wavepacket_parameters(HAWP.get_parameters(), timestep=0, blockid=bid)
+        IOM.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=0, blockid=bid)
 
     IOM.finalize()
 
