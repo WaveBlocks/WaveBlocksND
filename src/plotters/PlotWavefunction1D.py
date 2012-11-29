@@ -9,7 +9,7 @@ for one-dimensional wavefunctions.
 """
 
 import sys
-from numpy import angle, conj, real, imag, squeeze, sqrt
+from numpy import angle, conj, real, imag, squeeze
 from matplotlib.pyplot import *
 
 from WaveBlocksND import ParameterLoader
@@ -73,8 +73,8 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
                 ax.plot(squeeze(grid), component*conj(component))
                 ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
             if plotphase is True:
-                plotcf(squeeze(grid), angle(component), sqrt(component*conj(component)))
-                ax.set_ylabel(r"$\sqrt{\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle}$")
+                plotcf(squeeze(grid), angle(component), component*conj(component))
+                ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
 
             ax.set_xlabel(r"$x$")
 
