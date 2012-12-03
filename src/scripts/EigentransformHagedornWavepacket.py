@@ -47,16 +47,18 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     for ahash, descr in BS_descr.iteritems():
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
+    KEY = ("q","p","Q","P","S","adQ")
+
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
         print(" Compute eigentransform at timestep # " + str(step))
 
         # Retrieve simulation data
-        params = iomin.load_wavepacket_parameters(timestep=step, blockid=blockidin)
+        params = iomin.load_wavepacket_parameters(timestep=step, blockid=blockidin, key=KEY)
         hashes, coeffs = iomin.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockidin)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params)
+        HAWP.set_parameters(params, key=KEY)
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
@@ -65,7 +67,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Save the transformed packet
         # Pi
-        iomout.save_wavepacket_parameters(HAWP.get_parameters(), timestep=step, blockid=blockidout)
+        iomout.save_wavepacket_parameters(HAWP.get_parameters(key=KEY), timestep=step, blockid=blockidout)
         # Basis shapes (in case they changed!)
         for shape in HAWP.get_basis_shapes():
             iomout.save_wavepacket_basisshapes(shape, blockid=blockidout)
@@ -109,16 +111,18 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     for ahash, descr in BS_descr.iteritems():
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
+    KEY = ("q","p","Q","P","S","adQ")
+
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
         print(" Compute eigentransform at timestep # " + str(step))
 
         # Retrieve simulation data
-        params = iomin.load_inhomogwavepacket_parameters(timestep=step, blockid=blockidin)
+        params = iomin.load_inhomogwavepacket_parameters(timestep=step, blockid=blockidin, key=KEY)
         hashes, coeffs = iomin.load_inhomogwavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockidin)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params)
+        HAWP.set_parameters(params, key=KEY)
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
@@ -127,7 +131,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Save the transformed packet
         # Pi
-        iomout.save_inhomogwavepacket_parameters(HAWP.get_parameters(), timestep=step, blockid=blockidout)
+        iomout.save_inhomogwavepacket_parameters(HAWP.get_parameters(key=KEY), timestep=step, blockid=blockidout)
         # Basis shapes (in case they changed!)
         for shape in HAWP.get_basis_shapes():
             iomout.save_inhomogwavepacket_basisshapes(shape, blockid=blockidout)

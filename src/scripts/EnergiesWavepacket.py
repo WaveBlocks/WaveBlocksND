@@ -53,17 +53,18 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
     O = ObservablesHAWP()
+    KEY = ("q","p","Q","P","S","adQ")
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
         print(" Computing energies of timestep "+str(step))
 
         # Retrieve simulation data
-        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
+        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
         hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params)
+        HAWP.set_parameters(params, key=KEY)
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
@@ -124,17 +125,18 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
     O = ObservablesHAWP()
+    KEY = ("q","p","Q","P","S","adQ")
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
         print(" Computing energies of timestep "+str(step))
 
         # Retrieve simulation data
-        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid)
+        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
         hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params)
+        HAWP.set_parameters(params, key=KEY)
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
