@@ -39,7 +39,11 @@ def batch_run(call_simulation, call_for_each, call_once):
 
     # Check if the cofigurations are available
     if os.path.lexists(configurationsdir) and os.path.isdir(configurationsdir):
-        configurations = os.listdir(configurationsdir)
+        allfiles = os.listdir(configurationsdir)
+        # Only python files can be valid configurations
+        configurations = filter(lambda x: x.endswith(".py"), allfiles)
+
+
         if len(configurations) == 0:
             raise ValueError("There are no configurations!")
     else:
@@ -90,7 +94,7 @@ def batch_run(call_simulation, call_for_each, call_once):
             os.mkdir(resultspath)
 
         sp.call(["cp", filepath, resultspath])
-        for afile in glob("*.hdf5"):
+        for afile in glob("simulation*.hdf5"):
             sp.call(["mv", afile, resultspath])
         for afile in glob("*.png"):
             sp.call(["mv", afile, resultspath])
