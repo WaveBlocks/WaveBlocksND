@@ -44,6 +44,8 @@ def sort_statements(alist):
             alist.remove(item)
 
         if len(alist) == curlen:
+            print(50*"=")
+            print("Last item was: "+str(item))
             raise ValueError("Could not sort configuration statements. Maybe an unescaped string? Or possibly a dependency cycle?")
 
     return ordered_statements
