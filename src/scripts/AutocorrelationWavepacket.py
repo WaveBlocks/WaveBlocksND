@@ -51,11 +51,12 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
     # Comfigure the original wavepacket
+    KEY = ("q","p","Q","P","S","adQ")
     # Retrieve simulation data
-    params = iom.load_wavepacket_parameters(timestep=0, blockid=blockid)
+    params = iom.load_wavepacket_parameters(timestep=0, blockid=blockid, key=KEY)
     hashes, coeffs = iom.load_wavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
-    HAWPo.set_parameters(params)
+    HAWPo.set_parameters(params, key=KEY)
     HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
     HAWPo.set_coefficients(coeffs)
 
@@ -72,11 +73,11 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
         print(" Computing autocorrelation of timestep "+str(step))
 
         # Retrieve simulation data
-        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
+        paramst = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
         hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
-        HAWPt.set_parameters(params)
+        HAWPt.set_parameters(paramst, key=KEY)
         HAWPt.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWPt.set_coefficients(coeffs)
 

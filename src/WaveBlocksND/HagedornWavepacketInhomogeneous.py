@@ -7,7 +7,7 @@ This file contains the class which represents an inhomogeneous Hagedorn wavepack
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, array, eye, atleast_2d, angle
+from numpy import zeros, complexfloating, array, eye, atleast_2d, angle, squeeze
 from numpy.linalg import det
 
 from HagedornWavepacketBase import HagedornWavepacketBase
@@ -192,6 +192,6 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                 elif k == "S":
                     self._Pis[index][4] = atleast_2d(array(item, dtype=complexfloating))
                 elif k == "adQ":
-                    self._get_sqrt(index).set(item)
+                    self._get_sqrt(index).set(squeeze(item))
                 else:
                     raise KeyError("Invalid parameter key: "+str(key))
