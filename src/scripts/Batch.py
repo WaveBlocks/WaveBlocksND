@@ -16,7 +16,7 @@ import time
 from WaveBlocksND import GlobalDefaults
 
 
-def batch_run(call_simulation, call_for_each, call_once):
+def batch_run(call_prerun, call_simulation, call_for_each, call_postrun, result_files):
     # Gather cmd line arguments or use defaults if none given
     if len(sys.argv) >= 3:
         configpath = sys.argv[2]
@@ -59,7 +59,17 @@ def batch_run(call_simulation, call_for_each, call_once):
     # UNBUFFERED timelog file
     timelog = open("logtime", "w", 0)
 
-    # Start the batch loop
+
+    # Preprocessing
+    # Call scripts that should get called once before all simulations finished
+    for command in call_prerun:
+        if type(command) == list or type(command) == tuple:
+            sp.call(["python"] + list(command))
+        else:
+            sp.call(["python", command])
+
+
+    # Start the main batch loop
     for configuration in configurations:
         starttime = time.time()
         timelog.writelines(["New simulation at: " + time.ctime(starttime) + "\n",
@@ -94,24 +104,28 @@ def batch_run(call_simulation, call_for_each, call_once):
             os.mkdir(resultspath)
 
         sp.call(["cp", filepath, resultspath])
-        for afile in glob("simulation*.hdf5"):
-            sp.call(["mv", afile, resultspath])
-        for afile in glob("*.png"):
-            sp.call(["mv", afile, resultspath])
-        for afile in glob("*.pdf"):
-            sp.call(["mv", afile, resultspath])
+
+        # Copy output files away
+        for spec in result_files:
+            for afile in glob(spec):
+                sp.call(["mv", afile, resultspath])
 
     timelog.close()
     print("Finished batch loop")
 
-    # Postprocessing, call scripts that should get called once after all simulations finished
-    for command in call_once:
+
+    # Postprocessing
+    # Call scripts that should get called once after all simulations finished
+    for command in call_postrun:
         if type(command) == list or type(command) == tuple:
             sp.call(["python"] + list(command))
         else:
             sp.call(["python", command])
 
+
     print("All simulations finished")
+
+
 
 
 if __name__ == "__main__":
@@ -127,9 +141,15 @@ if __name__ == "__main__":
     f.close()
 
     # Execute the batchconfiguration file
-    # Assuming that it defines the three lists 'call_simulation',
-    # 'call_for_each', 'call_once' in the toplevel namespace.
+    # Assuming that it defines the four lists with script commands
+    #  'call_prerun'
+    #  'call_simulation'
+    #  'call_for_each'
+    #  'call_postrun'
+    # and the list with output file regexp patterns
+    #  'result_files'
+    # in the toplevel namespace.
     exec(content)
 
     # Really start the scripts
-    batch_run(call_simulation, call_for_each, call_once)
+    batch_run(call_prerun, call_simulation, call_for_each, call_postrun, result_files)
