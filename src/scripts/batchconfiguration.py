@@ -60,5 +60,6 @@ call_postrun = []
 # directory containing the results (default './results/*'). This avoids
 # overwriting during the next simulation run.
 result_files = ["simulation_results.hdf5",
+                "simulation_results_eigen.hdf5",
                 "*.pdf",
                 "*.png"]
