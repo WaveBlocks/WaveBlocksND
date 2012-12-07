@@ -61,7 +61,7 @@ def batch_run(call_prerun, call_simulation, call_for_each, call_postrun, result_
 
 
     # Preprocessing
-    # Call scripts that should get called once before all simulations finished
+    # Call scripts that should get called once before any simulations start
     for command in call_prerun:
         if type(command) == list or type(command) == tuple:
             sp.call(["python"] + list(command))
