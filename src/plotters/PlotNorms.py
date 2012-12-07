@@ -65,6 +65,7 @@ def plot_norms(data, index=0):
     # Plot the sum of all norms
     ax.plot(timegrid, norms[-1], color=(1,0,0), label=r"${\sqrt{\sum_i {\| \Phi_i \|^2}}}$")
 
+    ax.set_xlim(min(timegrid), max(timegrid))
     ax.grid(True)
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.set_title(r"Norms of $\Psi$")
@@ -86,6 +87,7 @@ def plot_norms(data, index=0):
     # Plot the squared sum of all norms
     ax.plot(timegrid, norms[-1]**2, color=(1,0,0), label=r"${\sum_i {\| \Phi_i \|^2}}$")
 
+    ax.set_xlim(min(timegrid), max(timegrid))
     ax.grid(True)
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.set_title(r"Squared norms of $\Psi$")
@@ -102,6 +104,7 @@ def plot_norms(data, index=0):
 
     ax.plot(timegrid, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
 
+    ax.set_xlim(min(timegrid), max(timegrid))
     ax.grid(True)
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.set_title(r"Drift of $\| \Psi \|$")
@@ -117,6 +120,7 @@ def plot_norms(data, index=0):
 
     ax.semilogy(timegrid, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
 
+    ax.set_xlim(min(timegrid), max(timegrid))
     ax.grid(True)
     ax.set_title(r"Drift of $\| \Psi \|$")
     legend(loc="outer right")

@@ -66,6 +66,7 @@ def plot_autocorrelations(data, index=0):
     # Plot the sum of all autocorrelations
     ax.plot(timegrid, abs(autocorrelations[-1]), color=(1,0,0), label=r"$\sum_i {|\langle \Phi_i(0) | \Phi_i(t) \rangle|}$")
 
+    ax.set_xlim(min(timegrid), max(timegrid))
     ax.grid(True)
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.set_title(r"Autocorrelations of $\Psi$")
@@ -90,6 +91,7 @@ def plot_autocorrelations(data, index=0):
         ax.plot(timegrid, imag(datum), label=label_ii)
         ax.plot(timegrid, abs(datum), label=label_im)
 
+        ax.set_xlim(min(timegrid), max(timegrid))
         ax.grid(True)
         ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
         ax.set_xlabel(r"Time $t$")

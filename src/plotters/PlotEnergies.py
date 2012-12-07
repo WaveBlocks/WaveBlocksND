@@ -80,6 +80,7 @@ def plot_energies(data, index=0):
     # Plot the overall energy of all wave packets
     ax.plot(timegridk, ekin[-1] + epot[-1], label=r"$\sum_i E^{kin}_i + \sum_i E^{pot}_i$")
 
+    ax.set_xlim(min(min(timegridk),min(timegridp)), max(max(timegridk),max(timegridp)))
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.grid(True)
     ax.set_xlabel(r"Time $t$")
@@ -99,6 +100,7 @@ def plot_energies(data, index=0):
 
     ax.plot(timegridk, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
 
+    ax.set_xlim(min(timegridk), max(timegridk))
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.grid(True)
     ax.set_xlabel(r"Time $t$")
@@ -113,6 +115,8 @@ def plot_energies(data, index=0):
     ax = fig.gca()
 
     ax.semilogy(timegridk, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
+
+    ax.set_xlim(min(timegridk), max(timegridk))
     ax.grid(True)
     ax.set_xlabel(r"Time $t$")
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
