@@ -11,7 +11,13 @@ This function makes a 3D surface plot.
 
 from numpy import linspace, pi, squeeze, ones, real, fmod
 from matplotlib.colors import hsv_to_rgb
-from mayavi import mlab
+
+try:
+    # New Mayavi version
+    from mayavi import mlab
+except ImportError:
+    # Older Mayavi versions
+    from enthought.mayavi import mlab
 
 
 def compute_color_map():
