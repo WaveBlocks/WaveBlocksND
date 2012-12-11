@@ -138,20 +138,20 @@ is ``metaconfiguration_02.py``, its content is reprinted below
 ::
 
     # Global parameters that stay the same for all simulations :
-    GP = { }
-    GP [ " algorithm " ] = " \" fourier \" "
-    GP [ " potential " ] = " \" delta_gap \" "
-    GP [ " T" ] = 3
-    GP [ " dt " ] = 0 . 02
-    GP [ " parameters " ] = " [ (), () ] "
-    GP [ " coefficients " ] = [ [ (0 , 1 . 0 ) ] , [ (0 , 0 . 0 ) ]
-    GP [ " basis_size " ] = 2
-    GP [ " ngn " ] = 2 * * 12
-    GP [ " f" ] = 4 . 0
-    GP [ " write_nth " ] = 2
+    GP = {}
+    GP["algorithm"] = "\"fourier\""
+    GP["potential"] = "\"delta_gap\""
+    GP["T"] = 3
+    GP["dt"] = 0.02
+    GP["parameters"] = "[ (1.0j, 1.0-6.0j, 0.0, 1.0, -6.0), (1.0j, 1.0-6.0j, 0.0, 1.0, -6.0) ]"
+    GP["coefficients"] = [ [(0 ,1.0)], [(0,0.0)] ]
+    GP["basis_size"] = 2
+    GP["ngn"] = 2**12
+    GP["f"] = 4.0
+    GP["write_nth"] = 2
 
     # Local parameters that change with each simulation
-    LP = { }
+    LP = {}
     LP["eps"] = [0.1, 0.5]
     LP["delta"] = ["0.5*eps", "1.0*eps", "1.5*eps"]
 
@@ -162,7 +162,12 @@ set of configuration. While the second one, ``LP``, contains lists of the
 parameters that vary with each simulation. The configuration generator then
 computes the cartesian product of all these lists in ``LP``. Then, for each
 tuple of this cartesian product it adds all parameters from ``GP``, yielding
-a single configuration. We can run the configuration generator as:
+a single configuration. Additionally to these two variables there can be
+another one which is used for global preambles. This variable has to be called
+``PA`` and holds a (multi-line) python string of valid python code. These
+statements are written to the very top of every configuration file generated.
+
+We can run the configuration generator as:
 
 ::
 
