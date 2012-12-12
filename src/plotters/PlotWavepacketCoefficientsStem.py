@@ -112,7 +112,7 @@ def plot_coefficients(k, c, step, dt, index=0):
     for n in xrange(N):
         ax = fig.add_subplot(N,1,n+1)
 
-        stemcf(k[n], angle(c[n]), abs(c[n]), darken=False)
+        stemcf(k[n], angle(c[n]), abs(c[n]))
 
         # axis formatting:
         m = max(abs(c[n]))

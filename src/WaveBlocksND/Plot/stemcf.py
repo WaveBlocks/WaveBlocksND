@@ -16,7 +16,7 @@ from matplotlib.pyplot import gca
 from color_map import color_map
 
 
-def stemcf(grid, phase, modulus, darken=False, axes=None, linestylep="solid", linewidthp=2, color=None, markerp="o", **kwargs):
+def stemcf(grid, phase, modulus, darken=None, axes=None, linestylep="solid", linewidthp=2, color=None, markerp="o", **kwargs):
     r"""Stemplot the modulus of a complex valued function :math:`f:I -> \mathbb{C}` together with its phase in a color coded fashion.
     Additional keyword arguments are passed to the plot function.
 
