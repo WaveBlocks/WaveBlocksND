@@ -69,12 +69,6 @@ def plot_frames(PP, iom, blockid=0, load=False, limits=None):
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hi ])
         HAWP.set_coefficients(ci)
 
-        # Transform the values to the eigenbasis
-        if parameters["algorithm"] == "fourier":
-            BT.transform_to_eigen(WF)
-        else:
-            pass
-
         psi = HAWP.evaluate_at(G, prefactor=True, component=0)
 
         fig = figure()
