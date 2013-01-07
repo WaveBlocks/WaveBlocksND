@@ -163,6 +163,14 @@ class BlockFactory(object):
             assert type(order) == int
             QR = GaussHermiteQR(order)
 
+        elif qr_type == "TrapezoidalQR":
+            from TrapezoidalQR import TrapezoidalQR
+            left = description["left"]
+            right = description["right"]
+            order = description["order"]
+            assert type(order) == int
+            QR = TrapezoidalQR(left, right, order)
+
         elif qr_type == "TensorProductQR":
             from TensorProductQR import TensorProductQR
             # Iteratively create all quadrature rules necessary

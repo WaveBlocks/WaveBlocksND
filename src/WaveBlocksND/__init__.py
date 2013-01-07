@@ -51,6 +51,7 @@ from GradientHAWP import GradientHAWP
 
 # Quadrature rules
 from QuadratureRule import QuadratureRule
+from TrapezoidalQR import TrapezoidalQR
 from GaussHermiteQR import GaussHermiteQR
 from TensorProductQR import TensorProductQR
 
