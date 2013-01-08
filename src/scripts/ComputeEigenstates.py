@@ -126,8 +126,8 @@ def compute_eigenstate(params):
     ind = argsort(ew)
 
     # Build the requested energy levels and states
-    if params.has_key("states_indices"):
-        states = params["states_indices"]
+    if params.has_key("eigenstates_indices"):
+        states = params["eigenstates_indices"]
     else:
         # Groundstate only
         states = [0]
