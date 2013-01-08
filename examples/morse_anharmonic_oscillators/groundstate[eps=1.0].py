@@ -5,7 +5,7 @@ potential = "morse_zero_2"
 l = 1.0
 x0 = 0.0
 
-groundstate_of_level = 0
+eigenstate_of_level = 0
 
 eps = 1.0
 

@@ -1,11 +1,11 @@
 dimension = 1
 ncomponents = 1
 
-potential ="morse_zero_2"
+potential = "morse_zero_2"
 l = 1.0
 x0 = 0.0
 
-groundstate_of_level = 0
+eigenstate_of_level = 0
 
 eps = 0.1
 
