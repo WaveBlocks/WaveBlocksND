@@ -21,20 +21,24 @@ from WaveBlocksND import GradientHAWP
 from WaveBlocksND import IOManager
 
 
-def compute_groundstate(params):
+def compute_eigenstate(params):
     r"""
     Special variables necessary in configuration:
 
-    * groundstate_of_level (default: 0)
+    * eigenstate_of_level (default: 0)
     * states_indices (default: [0])
     """
     D = params["dimension"]
-    # TODO: Rename this to 'states_of_level'?
-    N = params["groundstate_of_level"]
+
+    if params.has_key("eigenstate_of_level"):
+        N = params["eigenstate_of_level"]
+    else:
+        # Upper-most potential surface
+        N = 0
 
     # Create output file now, in case this fails we did not waste computations
     IOM = IOManager()
-    IOM.create_file(params, filename="groundstate.hdf5")
+    IOM.create_file(params, filename="eigenstates.hdf5")
     gid = IOM.create_group()
 
     BF = BlockFactory()
@@ -176,6 +180,6 @@ if __name__ == "__main__":
 
     # Set up the parameter provider singleton
     PA = ParameterLoader().load_from_file(parametersfile)
-    compute_groundstate(PA)
+    compute_eigenstate(PA)
 
-    print("Groundstate computation finished")
+    print("Eigenstate computation finished")
