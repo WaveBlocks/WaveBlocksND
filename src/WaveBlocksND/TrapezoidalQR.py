@@ -18,21 +18,21 @@ class TrapezoidalQR(QuadratureRule):
     r"""This class implements a trapezoidal quadrature rule.
     """
 
-    def __init__(self, left, right, order):
+    def __init__(self, left, right, number_nodes):
         r"""Initialize a new quadrature rule.
 
-        :param order: The order :math:`R` of the trapezoidal quadrature rule.
+        :param number_nodes: The order :math:`R` of the trapezoidal quadrature rule.
 
-        :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.
+        :raise: :py:class:`ValueError` if the ``number_nodes`` is not 1 or above.
         """
         # The space dimension of the quadrature rule.
         self._dimension = 1
 
         # The order R of the trapezoidal quadrature rule.
-        self._order = order
+        self._number_nodes = number_nodes
 
         # Qudrature has to have at least a single (node,weight) pair.
-        if self._order < 1:
+        if self._number_nodes < 1:
             raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         self._left = left
@@ -41,7 +41,7 @@ class TrapezoidalQR(QuadratureRule):
 
 
     def __str__(self):
-        return "Trapezoidal quadrature rule of order " + str(self._order)
+        return "Trapezoidal quadrature rule of number_nodes " + str(self._number_nodes)
 
 
     def get_description(self):
@@ -55,7 +55,7 @@ class TrapezoidalQR(QuadratureRule):
         d["dimension"] = self._dimension
         d["left"] = self._left
         d["right"] = self._right
-        d["order"] = self._order
+        d["order"] = self._number_nodes
         return d
 
 
@@ -76,10 +76,10 @@ class TrapezoidalQR(QuadratureRule):
 
 
     def _compute_qr(self):
-        nodes = linspace(self._left, self._right, self._order)
+        nodes = linspace(self._left, self._right, self._number_nodes)
         # The number of nodes in this quadrature rule
         self._number_nodes = nodes.size
-        dx = abs(self._right-self._left) / (1.0*self._number_nodes)
+        dx = abs(self._right-self._left) / (1.0*self._number_nodes-1.0)
         weights = ones(nodes.shape)
         weights[0] = 0.5
         weights[-1] = 0.5
