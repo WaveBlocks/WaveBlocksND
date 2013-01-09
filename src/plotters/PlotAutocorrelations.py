@@ -98,7 +98,7 @@ def plot_autocorrelations(data, index=0):
 
     legend(loc="outer right")
     ax.set_ylim([0,1.1*max(autocorrelations[:-1])])
-    fig.suptitle(r"Autocorrelations of $\Psi$")
+    ax.set_title(r"Autocorrelations of $\Psi$")
     fig.savefig("autocorrelations_per_component_block"+str(index)+GD.output_format)
     close(fig)
 
