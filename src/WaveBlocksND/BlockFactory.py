@@ -82,8 +82,12 @@ class BlockFactory(object):
             # Set coefficients
             if description.has_key("coefficients"):
                 for component, data in enumerate(description["coefficients"]):
+                    BS = WP.get_basis_shapes(component=component)
                     for index, value in data:
-                        WP.set_coefficient(component, index, value)
+                        if BS.contains(index):
+                            WP.set_coefficient(component, index, value)
+                        else:
+                            print("Warning: dropped coefficient with index "+str(index))
 
             # And the quadrature
             if description.has_key("quadrature"):
