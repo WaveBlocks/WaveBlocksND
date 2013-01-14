@@ -340,7 +340,7 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
 
         val = get_value(item, ldel=ldel, mdel=mdel, rdel=rdel)
 
-        if val == value:
+        if val == str(value):
             result.append(name)
 
     return result
