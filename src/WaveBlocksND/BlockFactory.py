@@ -166,7 +166,8 @@ class BlockFactory(object):
         if description.has_key("options"):
             op = deepcopy(description["options"])
         else:
-            op = {}
+            # Per default, adapt qr to follow dynamics
+            op = {"transform":True}
 
         if qr_type == "GaussHermiteQR":
             from GaussHermiteQR import GaussHermiteQR

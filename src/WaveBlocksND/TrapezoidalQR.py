@@ -37,7 +37,7 @@ class TrapezoidalQR(QuadratureRule):
             raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         # Set the options
-        self.options = options
+        self._options = options
 
         self._left = left
         self._right = right

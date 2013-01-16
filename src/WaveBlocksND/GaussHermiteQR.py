@@ -39,7 +39,7 @@ class GaussHermiteQR(QuadratureRule):
             raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         # Set the options
-        self.options = options
+        self._options = options
 
         nodes, weights = h_roots(self._order)
 

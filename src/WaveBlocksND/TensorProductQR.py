@@ -41,7 +41,7 @@ class TensorProductQR(QuadratureRule):
         # TODO: Compute the order from the orders of the input QRs
 
         # Set the options
-        self.options = options
+        self._options = options
 
         # The number of nodes in this quadrature rule.
         self._number_nodes = reduce(op.mul, [ rule.get_number_nodes() for rule in rules ])
