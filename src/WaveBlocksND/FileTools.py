@@ -344,3 +344,21 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
             result.append(name)
 
     return result
+
+
+def get_value_of(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
+    r"""Get the ``value`` part corresponding to a given ``key`` of an item.
+
+    :param name: The name from which to get the value.
+    :param pattern: The pattern whose value is used for ``key``.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :return: The ``value`` part of the found item. (If there
+             are multiple matching items, return all values.)
+    """
+    items = get_item(name, pattern, ldel=ldel, mdel=mdel, rdel=rdel)
+    values = [get_value(i, ldel=ldel, mdel=mdel, rdel=rdel) for i in items]
+    if len(values) == 1:
+        values = values[0]
+    return values
