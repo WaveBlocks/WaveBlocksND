@@ -71,7 +71,7 @@ class GaussHermiteQR(QuadratureRule):
         d["type"] = "GaussHermiteQR"
         d["dimension"] = self._dimension
         d["order"] = self._order
-        d["options"] = deepcopy(self.options)
+        d["options"] = deepcopy(self._options)
         return d
 
 

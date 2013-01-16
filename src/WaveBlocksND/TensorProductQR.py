@@ -73,7 +73,7 @@ class TensorProductQR(QuadratureRule):
         d["type"] = "TensorProductQR"
         d["dimension"] = self._dimension
         d["qr_rules"] = [ qr.get_description() for qr in self._qrs ]
-        d["options"] = deepcopy(self.options)
+        d["options"] = deepcopy(self._options)
         return d
 
 

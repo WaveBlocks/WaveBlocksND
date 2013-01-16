@@ -60,7 +60,7 @@ class TrapezoidalQR(QuadratureRule):
         d["left"] = self._left
         d["right"] = self._right
         d["order"] = self._number_nodes
-        d["options"] = deepcopy(self.options)
+        d["options"] = deepcopy(self._options)
         return d
 
 
