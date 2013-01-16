@@ -113,13 +113,19 @@ cosh_osc_2d["variables"] = ["x", "y"]
 cosh_osc_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
 cosh_osc_2d["defaults"] = {"a":"1", "b":"1"}
 
-# A potential consisting of a hyperbolic cosine
+# A parabolic channel potential
+channel_2d = {}
+channel_2d["variables"] = ["x", "y"]
+channel_2d["potential"] = "sigmax*x + 1/2*sigmay*y**2"
+channel_2d["defaults"] = {"sigmax": "0.0", "sigmay": "0.45"}
+
+# A potential consisting of circular pit of radius R with steep walls
 corral_rotsym_2d = {}
 corral_rotsym_2d["variables"] = ["x", "y"]
 corral_rotsym_2d["potential"] = "atan(sigma*(sqrt(x**2+y**2) - R)) + pi/2"
 corral_rotsym_2d["defaults"] = {"sigma":"10", "R":"8"}
 
-# A potential consisting of circular pit of radius R
+# A potential consisting of circular pit of radius R with steep walls
 circle_pit_2d = {}
 circle_pit_2d["variables"] = ["x", "y"]
 circle_pit_2d["potential"] = "atan(sigma*(sqrt(x**2+y**2) - R)) + pi/2"
