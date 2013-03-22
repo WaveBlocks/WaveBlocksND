@@ -53,6 +53,7 @@ from GradientHAWP import GradientHAWP
 from QuadratureRule import QuadratureRule
 from TrapezoidalQR import TrapezoidalQR
 from GaussHermiteQR import GaussHermiteQR
+from GaussLaguerreQR import GaussLaguerreQR
 from TensorProductQR import TensorProductQR
 
 # Inner products
