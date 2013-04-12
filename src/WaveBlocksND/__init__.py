@@ -57,9 +57,9 @@ from GaussLaguerreQR import GaussLaguerreQR
 from TensorProductQR import TensorProductQR
 
 # Inner products
-from Quadrature import Quadrature
-from HomogeneousQuadrature import HomogeneousQuadrature
-from InhomogeneousQuadrature import InhomogeneousQuadrature
+from InnerProduct import InnerProduct
+from HomogeneousInnerProduct import HomogeneousInnerProduct
+from InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
 # Basis transformations
 from BasisTransformation import BasisTransformation
