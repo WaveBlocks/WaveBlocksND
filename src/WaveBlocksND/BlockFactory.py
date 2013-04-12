@@ -137,6 +137,8 @@ class BlockFactory(object):
 
 
     def create_quadrature(self, description):
+        # NOTE: The difference between Quadrature and InnerProduct here
+        #       is for backward compatibility but will be removed soon.
         try:
             qe_type = description["type"]
         except:
@@ -144,18 +146,18 @@ class BlockFactory(object):
             qe_type = "InhomogeneousQuadrature"
 
         # TODO: Maybe denest QR initialization?
-        if qe_type == "HomogeneousQuadrature":
-            from HomogeneousQuadrature import HomogeneousQuadrature
+        if qe_type == "HomogeneousInnerProduct" or qe_type == "HomogeneousQuadrature":
+            from HomogeneousInnerProduct import HomogeneousInnerProduct
             QR = self.create_quadrature_rule(description["qr"])
-            QE = HomogeneousQuadrature(QR)
+            QE = HomogeneousInnerProduct(QR)
 
-        elif qe_type == "InhomogeneousQuadrature":
-            from InhomogeneousQuadrature import InhomogeneousQuadrature
+        elif qe_type == "InhomogeneousInnerProduct" or qe_type == "InhomogeneousQuadrature":
+            from InhomogeneousInnerProduct import InhomogeneousInnerProduct
             QR = self.create_quadrature_rule(description["qr"])
-            QE = InhomogeneousQuadrature(QR)
+            QE = InhomogeneousInnerProduct(QR)
 
         else:
-            raise ValueError("Unknown basis shape type "+str(qe_type))
+            raise ValueError("Unknown quadrature type "+str(qe_type))
 
         return QE
 
