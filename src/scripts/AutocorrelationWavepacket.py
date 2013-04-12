@@ -9,7 +9,7 @@ Compute the autocorrelations of Hagedorn wavepackets.
 
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
-from WaveBlocksND import InhomogeneousQuadrature
+from WaveBlocksND import InhomogeneousInnerProduct
 
 
 def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
@@ -62,7 +62,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
 
     # Set up the quadrature for solving the integrals <phi_0 | phi_t>
     QR = HAWPo.get_quadrature().get_qr()
-    IHQ = InhomogeneousQuadrature(QR)
+    IHQ = InhomogeneousInnerProduct(QR)
 
     # Transform to the eigenbasis.
     if eigentrafo is True:
@@ -142,7 +142,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
 
     # Set up the quadrature for solving the integrals <phi_0 | phi_t>
     QR = HAWPo.get_quadrature().get_qr()
-    IHQ = InhomogeneousQuadrature(QR)
+    IHQ = InhomogeneousInnerProduct(QR)
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
