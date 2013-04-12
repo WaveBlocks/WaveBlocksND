@@ -197,13 +197,19 @@ class HagedornWavepacketBase(Wavepacket):
             return self._coefficients[component].copy()
 
 
-    def get_coefficient_vector(self):
+    def get_coefficient_vector(self, component=None):
         r"""Retrieve the coefficients for all components :math:`\Phi_i` simultaneously.
 
+        :param component: The component :math:`i` whose coefficients we request. (Default is
+                          ``None`` which means to return the coefficients for all components.
+        :type component: int
         :return: The coefficients :math:`c^i` of all components
                  :math:`\Phi_i` stacked into a single long column vector.
         """
-        return vstack(self._coefficients)
+        if component is None:
+            return vstack(self._coefficients)
+        else:
+            return self._coefficients[component]
 
 
     def set_coefficient_vector(self, vector):
