@@ -3,7 +3,7 @@
 This file contains the interface for general quadratures.
 Do not confuse quadratures with quadrature rules! Quadrature rules
 are structs containing just nodes and weights and some convenience
-methods. Quadratures are classes that really can compute things
+methods. InnerProducts are classes that really can compute things
 like inner products (brakets) etc.
 
 @author: R. Bourquin
@@ -11,10 +11,10 @@ like inner products (brakets) etc.
 @license: Modified BSD License
 """
 
-__all__ = ["Quadrature"]
+__all__ = ["InnerProduct"]
 
 
-class Quadrature(object):
+class InnerProduct(object):
     r"""This class is an abstract interface to quadratures in general.
     """
 
@@ -23,11 +23,11 @@ class Quadrature(object):
 
         :raise NotImplementedError: Abstract interface.
         """
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
+        raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
 
     def __str__(self):
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
+        raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
 
     def get_description(self):
@@ -36,11 +36,11 @@ class Quadrature(object):
         necessary to reconstruct the current instance. A description
         never contains any data.
         """
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
+        raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
 
     def set_qr(self, QR):
-        r"""Set the :py:class:`QuadratureRule` subclass instance used for quadrature.
+        r"""Set the :py:class:`InnerProductRule` subclass instance used for quadrature.
 
         :param QR: The new :py:class:`QuadratureRule` instance.
         """
@@ -56,15 +56,6 @@ class Quadrature(object):
         return self._QR
 
 
-    def transform_nodes(self):
-        r"""Transform the quadrature nodes such that they fit the given wavepacket.
-        Note that the arguments may vary through subclasses!
-
-        :raise NotImplementedError: Abstract interface.
-        """
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
-
-
     def quadrature(self):
         r"""Performs the quadrature of :math:`\langle\Psi|f|\Psi\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
@@ -72,7 +63,7 @@ class Quadrature(object):
 
         :raise NotImplementedError: Abstract interface.
         """
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
+        raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
 
     def build_matrix(self):
@@ -82,4 +73,4 @@ class Quadrature(object):
 
         :raise NotImplementedError: Abstract interface.
         """
-        raise NotImplementedError("'Quadrature' is an abstract interface.")
+        raise NotImplementedError("'InnerProduct' is an abstract interface.")

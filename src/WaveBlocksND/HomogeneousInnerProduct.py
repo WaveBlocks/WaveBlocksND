@@ -12,12 +12,12 @@ values and the matrix elements of an arbitrary operator.
 from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer
 from scipy.linalg import sqrtm, inv, svd, diagsvd
 
-from Quadrature import Quadrature
+from InnerProduct import InnerProduct
 
-__all__ = ["HomogeneousQuadrature"]
+__all__ = ["HomogeneousInnerProduct"]
 
 
-class HomogeneousQuadrature(Quadrature):
+class HomogeneousInnerProduct(InnerProduct):
 
     def __init__(self, QR=None):
         if QR is not None:
@@ -37,7 +37,7 @@ class HomogeneousQuadrature(Quadrature):
         never contains any data.
         """
         d = {}
-        d["type"] = "HomogeneousQuadrature"
+        d["type"] = "HomogeneousInnerProduct"
         d["qr"] = self._QR.get_description()
         return d
 

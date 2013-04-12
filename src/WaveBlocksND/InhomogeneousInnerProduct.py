@@ -13,12 +13,12 @@ from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, imag, conj
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
-from Quadrature import Quadrature
+from InnerProduct import InnerProduct
 
-__all__ = ["InhomogeneousQuadrature"]
+__all__ = ["InhomogeneousInnerProduct"]
 
 
-class InhomogeneousQuadrature(Quadrature):
+class InhomogeneousInnerProduct(InnerProduct):
 
     def __init__(self, QR=None):
         if QR is not None:
@@ -38,7 +38,7 @@ class InhomogeneousQuadrature(Quadrature):
         never contains any data.
         """
         d = {}
-        d["type"] = "InhomogeneousQuadrature"
+        d["type"] = "InhomogeneousInnerProduct"
         d["qr"] = self._QR.get_description()
         return d
 
