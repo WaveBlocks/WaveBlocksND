@@ -15,7 +15,7 @@ __all__ = ["InnerProduct"]
 
 
 class InnerProduct(object):
-    r"""This class is an abstract interface to quadratures in general.
+    r"""This class is an abstract interface to inner products in general.
     """
 
     def __init__(self):
@@ -39,21 +39,21 @@ class InnerProduct(object):
         raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
 
-    def set_qr(self, QR):
+    def set_quadrature(self, quad):
         r"""Set the :py:class:`InnerProductRule` subclass instance used for quadrature.
 
         :param QR: The new :py:class:`QuadratureRule` instance.
         """
         # TODO: Allow a list of QRs, one QR for each component of Psi
-        self._QR = QR
+        self._quad = quad
 
 
-    def get_qr(self):
+    def get_quadrature(self):
         r"""Return the :py:class:`QuadratureRule` subclass instance used for quadrature.
 
         :return: The current instance of the quadrature rule.
         """
-        return self._QR
+        return self._quad
 
 
     def quadrature(self):
