@@ -62,7 +62,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         self._Pis = [q, p, Q, P, S]
 
         # No quadrature set
-        self._QE = None
+        self._IP = None
 
         # Function for taking continuous roots
         self._sqrt = ContinuousSqrt(reference=angle(det(Q)))
@@ -93,8 +93,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
         d["dimension"] = self._dimension
         d["ncomponents"] = self._number_components
         d["eps"] = self._eps
-        if self._QE is not None:
-            d["quadrature"] = self._QE.get_description()
+        if self._IP is not None:
+            d["innerproduct"] = self._IP.get_description()
         return d
 
 

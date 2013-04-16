@@ -522,13 +522,13 @@ class HagedornWavepacketBase(Wavepacket):
     # TODO: Rethink if wavepackets should contain a QR
 
 
-    def set_quadrature(self, quadrature):
+    def set_quadrature(self, innerproduct):
         """Set the :py:class:`InnerProduct` subclass instance used for computing
         inner products and evaluating brakets.
 
-        :param quadrature: The new :py:class:`InnerProduct` subclass instance.
+        :param innerproduct: The new :py:class:`InnerProduct` subclass instance.
         """
-        self._QE = quadrature
+        self._IP = innerproduct
 
 
     def get_quadrature(self):
@@ -537,4 +537,4 @@ class HagedornWavepacketBase(Wavepacket):
 
         :return: The current :py:class:`InnerProduct` subclass instance.
         """
-        return self._QE
+        return self._IP

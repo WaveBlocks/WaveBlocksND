@@ -92,11 +92,11 @@ class BlockFactory(object):
                             print("Warning: dropped coefficient with index "+str(index))
 
             # And the quadrature
-            if description.has_key("quadrature"):
-                QE = self.create_quadrature(description["quadrature"])
-                WP.set_quadrature(QE)
+            if description.has_key("innerproduct"):
+                IP = self.create_inner_product(description["innerproduct"])
+                WP.set_quadrature(IP)
             else:
-                print("Warning: no quadrature specified!")
+                print("Warning: no inner product specified!")
 
         elif wp_type == "HagedornWavepacketInhomogeneous":
             from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
@@ -125,7 +125,7 @@ class BlockFactory(object):
 
             # And the quadrature
             if description.has_key("innerproduct"):
-                IP = self.create_innerproduct(description["innerproduct"])
+                IP = self.create_inner_product(description["innerproduct"])
                 WP.set_quadrature(IP)
             else:
                 print("Warning: no inner product specified!")

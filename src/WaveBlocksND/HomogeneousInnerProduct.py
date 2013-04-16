@@ -116,7 +116,7 @@ class HomogeneousInnerProduct(InnerProduct):
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
 
         self._quad.initialize_packet(packet)
-        self._quad.initialize_operator(operator)
+        self._quad.initialize_operator_matrix(operator)
 
         N = packet.get_number_components()
         K = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]

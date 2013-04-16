@@ -63,7 +63,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
 
         # No quadrature set
-        self._QE = None
+        self._IP = None
 
         # Function for taking continuous roots
         self._sqrt = [ ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in xrange(self._number_components) ]
@@ -94,8 +94,8 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         d["dimension"] = self._dimension
         d["ncomponents"] = self._number_components
         d["eps"] = self._eps
-        if self._QE is not None:
-            d["quadrature"] = self._QE.get_description()
+        if self._IP is not None:
+            d["innerproduct"] = self._IP.get_description()
         return d
 
 
