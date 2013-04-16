@@ -523,18 +523,18 @@ class HagedornWavepacketBase(Wavepacket):
 
 
     def set_quadrature(self, quadrature):
-        """Set the :py:class:`Quadrature` subclass instance used for computing
+        """Set the :py:class:`InnerProduct` subclass instance used for computing
         inner products and evaluating brakets.
 
-        :param quadrature: The new :py:class:`Quadrature` subclass instance.
+        :param quadrature: The new :py:class:`InnerProduct` subclass instance.
         """
         self._QE = quadrature
 
 
     def get_quadrature(self):
-        """Return the :py:class:`Quadrature` subclass instance used computing
-        inner rpoducts and evaluating brakets.
+        """Return the :py:class:`InnerProduct` subclass instance used computing
+        inner products and evaluating brakets.
 
-        :return: The current :py:class:`Quadrature` subclass instance.
+        :return: The current :py:class:`InnerProduct` subclass instance.
         """
         return self._QE

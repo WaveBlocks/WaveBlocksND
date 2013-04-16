@@ -95,7 +95,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
     def prepare(self, rows, cols):
         r"""Precompute some values needed for evaluating the quadrature
         :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding
-        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi_j`.
+        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.
 
         :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
                      selecting the :math:`\Phi_i` for which te precompute values.
