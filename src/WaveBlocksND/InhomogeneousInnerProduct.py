@@ -27,7 +27,7 @@ class InhomogeneousInnerProduct(InnerProduct):
 
 
     def __str__(self):
-        return "Inhomogeneous inner product using a " + str(self._quad)
+        return "Inhomogeneous inner product computed by " + str(self._quad)
 
 
     def get_description(self):
@@ -38,7 +38,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         """
         d = {}
         d["type"] = "InhomogeneousInnerProduct"
-        d["quad"] = self._quad.get_description()
+        d["delegate"] = self._quad.get_description()
         return d
 
 

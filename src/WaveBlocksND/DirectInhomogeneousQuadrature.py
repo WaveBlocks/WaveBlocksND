@@ -30,6 +30,22 @@ class DirectInhomogeneousQuadrature(Quadrature):
             self._QR = None
 
 
+    def __str__(self):
+        return "Inhomogeneous direct quadrature using a " + str(self._QR)
+
+
+    def get_description(self):
+        r"""Return a description of this quadrature object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current instance. A description
+        never contains any data.
+        """
+        d = {}
+        d["type"] = "DirectInhomogeneousQuadrature"
+        d["qr"] = self._QR.get_description()
+        return d
+
+
     def initialize_packet(self, pacbra, packet=None):
         r"""
         Provide the wavepacket parts of the inner product to evaluate.
