@@ -124,16 +124,41 @@ class BlockFactory(object):
                         WP.set_coefficient(component, index, value)
 
             # And the quadrature
-            if description.has_key("quadrature"):
-                QE = self.create_quadrature(description["quadrature"])
-                WP.set_quadrature(QE)
+            if description.has_key("innerproduct"):
+                IP = self.create_innerproduct(description["innerproduct"])
+                WP.set_quadrature(IP)
             else:
-                print("Warning: no quadrature specified!")
+                print("Warning: no inner product specified!")
 
         else:
             raise ValueError("Unknown wavepacket type "+str(wp_type))
 
         return WP
+
+
+    def create_inner_product(self, description):
+        #
+        try:
+            ip_type = description["type"]
+        except:
+            # Default setting
+            # TODO: Maybe change to homogeneous one?
+            ip_type = "InhomogeneousInnerProduct"
+
+        if ip_type == "HomogeneousInnerProduct":
+            from HomogeneousInnerProduct import HomogeneousInnerProduct
+            QE = self.create_quadrature(description["delegate"])
+            IP = HomogeneousInnerProduct(QE)
+
+        elif ip_type == "InhomogeneousInnerProduct":
+            from InhomogeneousInnerProduct import InhomogeneousInnerProduct
+            QE = self.create_quadrature(description["delegate"])
+            IP = InhomogeneousInnerProduct(QE)
+
+        else:
+            raise ValueError("Unknown inner product type "+str(ip_type))
+
+        return IP
 
 
     def create_quadrature(self, description):
@@ -143,18 +168,18 @@ class BlockFactory(object):
             qe_type = description["type"]
         except:
             # Default setting
-            qe_type = "InhomogeneousQuadrature"
+            qe_type = "DirectInhomogeneousQuadrature"
 
         # TODO: Maybe denest QR initialization?
-        if qe_type == "HomogeneousInnerProduct" or qe_type == "HomogeneousQuadrature":
-            from HomogeneousInnerProduct import HomogeneousInnerProduct
+        if qe_type == "DirectHomogeneousQuadrature":
+            from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
             QR = self.create_quadrature_rule(description["qr"])
-            QE = HomogeneousInnerProduct(QR)
+            QE = DirectHomogeneousQuadrature(QR)
 
-        elif qe_type == "InhomogeneousInnerProduct" or qe_type == "InhomogeneousQuadrature":
-            from InhomogeneousInnerProduct import InhomogeneousInnerProduct
+        elif qe_type == "DirectInhomogeneousQuadrature":
+            from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
             QR = self.create_quadrature_rule(description["qr"])
-            QE = InhomogeneousInnerProduct(QR)
+            QE = DirectInhomogeneousQuadrature(QR)
 
         else:
             raise ValueError("Unknown quadrature type "+str(qe_type))
