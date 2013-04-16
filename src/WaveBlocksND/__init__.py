@@ -61,6 +61,9 @@ from InnerProduct import InnerProduct
 from HomogeneousInnerProduct import HomogeneousInnerProduct
 from InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
+from Quadrature import Quadrature
+from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
+
 # Basis transformations
 from BasisTransformation import BasisTransformation
 from BasisTransformationWF import BasisTransformationWF

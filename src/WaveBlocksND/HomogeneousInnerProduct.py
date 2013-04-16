@@ -9,8 +9,7 @@ values and the matrix elements of an arbitrary operator.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, conjugate, dot, outer
-from scipy.linalg import sqrtm, inv, svd, diagsvd
+from numpy import zeros, complexfloating, sum, cumsum
 
 from InnerProduct import InnerProduct
 
@@ -18,12 +17,15 @@ __all__ = ["HomogeneousInnerProduct"]
 
 
 class HomogeneousInnerProduct(InnerProduct):
+    r"""
+    """
 
-    def __init__(self, QR=None):
-        if QR is not None:
-            self.set_qr(QR)
+    def __init__(self, quad=None):
+        # Pure convenience to allow setting of quadrature instance in constructor
+        if quad is not None:
+            self.set_quadrature(quad)
         else:
-            self._QR = None
+            self._quad = None
 
 
     def __str__(self):
@@ -40,42 +42,6 @@ class HomogeneousInnerProduct(InnerProduct):
         d["type"] = "HomogeneousInnerProduct"
         d["qr"] = self._QR.get_description()
         return d
-
-
-    def transform_nodes(self, Pi, eps, QR=None):
-        r"""Transform the quadrature nodes :math:`\gamma` such that they
-        fit the given wavepacket :math:`\Phi\left[\Pi\right]`.
-
-        :param Pi: The parameter set :math:`\Pi` of the wavepacket.
-        :param eps: The value of :math:`\varepsilon` of the wavepacket.
-        :param QR: An optional quadrature rule :math:`\Gamma = (\gamma, \omega)` providing
-                   the nodes. If not given the internal quadrature rule will be used.
-        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where
-                 :math:`|\Gamma|` denotes the total number of quadrature nodes.
-        """
-        if QR is None:
-            QR = self._QR
-
-        if QR["transform"] is not True:
-            return QR.get_nodes()
-
-        q, p, Q, P, S = Pi
-
-        # Compute the affine transformation
-        Q0 = inv(dot(Q, conjugate(Q.T)))
-        Qs = inv(sqrtm(Q0))
-
-        # TODO: Avoid sqrtm and inverse computation, use svd
-        # Untested code:
-        # D = Q.shape[0]
-        # U, S, Vh = svd(inv(Q))
-        # Sinv = 1.0 / S
-        # Sinv = diagsvd(Sinv, D, D)
-        # Qs = dot(conjugate(Vh.T), dot(Sinv, Vh))
-
-        # And transform the nodes
-        nodes = q + eps * dot(Qs, QR.get_nodes())
-        return nodes.copy()
 
 
     def quadrature(self, packet, operator=None, summed=False, component=None, diag_component=None, diagonal=False):
@@ -95,18 +61,12 @@ class HomogeneousInnerProduct(InnerProduct):
                  a list of :math:`N^2` scalar elements depending on the value of ``summed``.
         """
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
-        D = packet.get_dimension()
-        eps = packet.get_eps()
 
-        nodes = self.transform_nodes(packet.get_parameters(), eps)
-        weights = self._QR.get_weights()
-
-        N = packet.get_number_components()
-        K = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
-
-        coeffs = packet.get_coefficients()
+        self._quad.initialize_packet(packet)
+        self._quad.initialize_operator(operator)
 
         # Avoid unnecessary computations of other components
+        N  = packet.get_number_components()
         if component is not None:
             rows = [ component // N ]
             cols = [ component % N ]
@@ -117,45 +77,15 @@ class HomogeneousInnerProduct(InnerProduct):
             rows = xrange(N)
             cols = xrange(N)
 
-        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the 'component=(r,c)' option.
-        if operator is None:
-            # Operator is None is interpreted as identity transformation
-            operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-            values = tuple([ operator(nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
-        else:
-            values = tuple( operator(nodes) )
-
-        # Recheck what we got
-        assert type(values) is tuple
-        assert len(values) == N**2
-
-        # Evaluate only the bases we need:
-        bases = [ None for n in xrange(N) ]
-
-        for row in rows:
-            if bases[row] is None:
-                bases[row] = packet.evaluate_basis_at(nodes, component=row, prefactor=False)
-
-        for col in cols:
-            if bases[col] is None:
-                bases[col] = packet.evaluate_basis_at(nodes, component=col, prefactor=False)
+        self._quad.prepare(rows, cols)
 
         # Compute the quadrature
         result = []
 
         for row in rows:
             for col in cols:
-                M = zeros((K[row],K[col]), dtype=complexfloating)
-
-                factor = squeeze(eps**D * weights * values[row*N + col])
-
-                # Summing up matrices over all quadrature nodes
-                for r in xrange(self._QR.get_number_nodes()):
-                    M += factor[r] * outer(conjugate(bases[row][:,r]), bases[col][:,r])
-
-                # And include the coefficients as conj(c).T*M*c
-                result.append(dot(conjugate(coeffs[row]).T, dot(M, coeffs[col])))
+                I = self._quad.perform_quadrature(row, col)
+                result.append(I)
 
         if summed is True:
             result = sum(result)
@@ -184,48 +114,23 @@ class HomogeneousInnerProduct(InnerProduct):
         :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
         """
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
-        D = packet.get_dimension()
-        eps = packet.get_eps()
 
-        nodes = self.transform_nodes(packet.get_parameters(), eps)
-        weights = self._QR.get_weights()
+        self._quad.initialize_packet(packet)
+        self._quad.initialize_operator(operator)
 
         N = packet.get_number_components()
         K = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
-
-        bases = [ packet.evaluate_basis_at(nodes, component=n, prefactor=False) for n in xrange(N) ]
-
         # The partition scheme of the block vectors and block matrix
         partition = [0] + list(cumsum(K))
 
-        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the 'entry=(r,c)' option.
-        if operator is None:
-            # Operator is None is interpreted as identity transformation
-            operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-            values = tuple([ operator(nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
-        else:
-            # TODO: operator should be only f(nodes) but we can not fix this currently
-            q, p, Q, P, S = packet.get_parameters()
-            values = tuple( operator(nodes, q) )
-
-        # Recheck what we got
-        assert type(values) is tuple
-        assert len(values) == N**2
+        self._quad.prepare(range(N), range(N))
 
         # Compute the matrix elements
         result = zeros((sum(K),sum(K)), dtype=complexfloating)
 
         for row in xrange(N):
             for col in xrange(N):
-                M = zeros((K[row],K[col]), dtype=complexfloating)
-
-                factor = squeeze(eps**D * weights * values[row*N + col])
-
-                # Sum up matrices over all quadrature nodes
-                for r in xrange(self._QR.get_number_nodes()):
-                    M += factor[r] * outer(conjugate(bases[row][:,r]), bases[col][:,r])
-
+                M = self._quad.perform_build_matrix(row, col)
                 # Put the result into the global storage
                 result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = M
 
