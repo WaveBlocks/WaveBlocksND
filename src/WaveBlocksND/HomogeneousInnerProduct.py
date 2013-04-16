@@ -29,7 +29,7 @@ class HomogeneousInnerProduct(InnerProduct):
 
 
     def __str__(self):
-        return "Homogeneous quadrature using a " + str(self._QR)
+        return "Homogeneous inner product using a " + str(self._quad)
 
 
     def get_description(self):
@@ -40,7 +40,7 @@ class HomogeneousInnerProduct(InnerProduct):
         """
         d = {}
         d["type"] = "HomogeneousInnerProduct"
-        d["qr"] = self._QR.get_description()
+        d["quad"] = self._quad.get_description()
         return d
 
 

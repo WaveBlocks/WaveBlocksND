@@ -69,13 +69,13 @@ class DirectHomogeneousQuadrature(Quadrature):
         N  = self._packet.get_number_components()
         if operator is None:
             # Operator is None is interpreted as identity transformation
-            self._operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-            self._values = tuple([ self._operator(self._nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
+            self._operatorm = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._values = tuple([ self._operatorm(self._nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
         else:
-            self._operator = operator
+            self._operatorm = operator
             # TODO: operator should be only f(nodes) but we can not fix this currently
             q, p, Q, P, S = self._packet.get_parameters()
-            self._values = tuple( self._operator(self._nodes, q) )
+            self._values = tuple( self._operatorm(self._nodes, q) )
 
 
     def prepare(self, rows, cols):

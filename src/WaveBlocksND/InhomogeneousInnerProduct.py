@@ -9,9 +9,7 @@ expectation values and the matrix elements of an arbitrary operator.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, sum, cumsum, squeeze, imag, conjugate, outer, dot, ndarray
-from scipy import exp
-from scipy.linalg import sqrtm, inv, det
+from numpy import zeros, complexfloating, sum, cumsum
 
 from InnerProduct import InnerProduct
 
@@ -20,15 +18,16 @@ __all__ = ["InhomogeneousInnerProduct"]
 
 class InhomogeneousInnerProduct(InnerProduct):
 
-    def __init__(self, QR=None):
-        if QR is not None:
-            self.set_qr(QR)
+    def __init__(self, quad=None):
+        # Pure convenience to allow setting of quadrature instance in constructor
+        if quad is not None:
+            self.set_quadrature(quad)
         else:
-            self._QR = None
+            self._quad = None
 
 
     def __str__(self):
-        return "Inhomogeneous quadrature using a " + str(self._QR)
+        return "Inhomogeneous inner product using a " + str(self._quad)
 
 
     def get_description(self):
@@ -39,64 +38,8 @@ class InhomogeneousInnerProduct(InnerProduct):
         """
         d = {}
         d["type"] = "InhomogeneousInnerProduct"
-        d["qr"] = self._QR.get_description()
+        d["quad"] = self._quad.get_description()
         return d
-
-
-    def transform_nodes(self, Pibra, Piket, eps, QR=None):
-        r"""Transform the quadrature nodes :math:`\gamma` such that they
-        fit the given wavepackets :math:`\Phi\left[\Pi_i\right]` and
-        :math:`\Phi^\prime\left[\Pi_j\right]` best.
-
-        :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.
-        :param Piket: The parameter set :math:`\Pi_j` from the ket part wavepacket.
-        :param eps: The value of :math:`\varepsilon` of the wavepacket.
-        :param QR: An optional quadrature rule :math:`\Gamma = (\gamma, \omega)` providing
-                   the nodes. If not given the internal quadrature rule will be used.
-        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where
-                 :math:`|\Gamma|` denotes the total number of quadrature nodes.
-        """
-        if QR is None:
-            QR = self._QR
-
-        if QR["transform"] is not True:
-            return QR.get_nodes()
-
-        # Mix the parameters to compute the affine transformation
-        q0, Qs = self.mix_parameters(Pibra, Piket)
-
-        # And transform the nodes
-        nodes = q0 + eps * dot(Qs, QR.get_nodes())
-        return nodes.copy()
-
-
-    def mix_parameters(self, Pibra, Piket):
-        r"""Mix the two parameter sets :math:`\Pi_i` and :math:`\Pi_j`
-        from the bra and the ket wavepackets :math:`\Phi\left[\Pi_i\right]`
-        and :math:`\Phi^\prime\left[\Pi_j\right]`.
-
-        :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.
-        :param Piket: The parameter set :math:`\Pi_j` from the ket part wavepacket.
-        :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)
-        """
-        # <Pibra | ... | Piket>
-        (qr, pr, Qr, Pr, Sr) = Pibra
-        (qc, pc, Qc, Pc, Sc) = Piket
-
-        # Mix the parameters
-        Gr = dot(Pr, inv(Qr))
-        Gc = dot(Pc, inv(Qc))
-
-        r = imag(Gc - conjugate(Gr.T))
-        s = imag(dot(Gc, qc) - dot(conjugate(Gr.T), qr))
-
-        q0 = dot(inv(r), s)
-        Q0 = 0.5 * r
-
-        # Here we can not avoid the matrix root by using svd
-        Qs = inv(sqrtm(Q0))
-
-        return (q0, Qs)
 
 
     def quadrature(self, pacbra, packet=None, operator=None, summed=False, component=None, diag_component=None, diagonal=False):
@@ -123,24 +66,13 @@ class InhomogeneousInnerProduct(InnerProduct):
 
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
-        D = packet.get_dimension()
-        eps = packet.get_eps()
 
-        weights = self._QR.get_weights()
+        self._quad.initialize_packet(pacbra, packet)
+        self._quad.initialize_operator(operator)
 
         # Packets can have different number of components
         Nbra = pacbra.get_number_components()
         Nket = packet.get_number_components()
-
-        # Packets can also have different basis sizes
-        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shapes() ]
-        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
-
-        Pibra = pacbra.get_parameters(aslist=True)
-        Piket = packet.get_parameters(aslist=True)
-
-        coeffbra = pacbra.get_coefficients()
-        coeffket = packet.get_coefficients()
 
         # Avoid unnecessary computations of other components
         if component is not None:
@@ -153,41 +85,15 @@ class InhomogeneousInnerProduct(InnerProduct):
             rows = xrange(Nbra)
             cols = xrange(Nket)
 
-        # Operator is None is interpreted as identity transformation
-        if operator is None:
-            operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+        self._quad.prepare(rows, cols)
 
         # Compute the quadrature
         result = []
 
         for row in rows:
             for col in cols:
-                M = zeros((Kbra[row],Kket[col]), dtype=complexfloating)
-
-                # Transform nodes and evaluate bases
-                nodes = self.transform_nodes(Pibra[row], Piket[col], eps)
-                basisr = pacbra.evaluate_basis_at(nodes, component=row, prefactor=True)
-                basisc = packet.evaluate_basis_at(nodes, component=col, prefactor=True)
-
-                # Operator should support the component notation for efficiency
-                values = operator(nodes, entry=(row,col))
-
-                # Recheck what we got
-                assert type(values) is ndarray
-                assert values.shape == (1,self._QR.get_number_nodes())
-
-                Pimix = self.mix_parameters(Pibra[row], Piket[col])
-                factor = squeeze(eps**D * values * weights * det(Pimix[1]))
-
-                # Summing up matrices over all quadrature nodes
-                for r in xrange(self._QR.get_number_nodes()):
-                    M += factor[r] * outer(conjugate(basisr[:,r]), basisc[:,r])
-
-                # Compute global phase difference
-                phase = exp(1.0j/eps**2 * (Piket[col][4]-conjugate(Pibra[row][4])))
-
-                # And include the coefficients as conj(c).T*M*c
-                result.append(phase * dot(conjugate(coeffbra[row]).T, dot(M, coeffket[col])))
+                I = self._quad.perform_quadrature(row, col)
+                result.append(I)
 
         if summed is True:
             result = sum(result)
@@ -222,10 +128,9 @@ class InhomogeneousInnerProduct(InnerProduct):
 
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
-        D = packet.get_dimension()
-        eps = packet.get_eps()
 
-        weights = self._QR.get_weights()
+        self._quad.initialize_packet(pacbra, packet)
+        self._quad.initialize_operator_matrix(operator)
 
         # Packets can have different number of components
         Nbra = pacbra.get_number_components()
@@ -237,42 +142,14 @@ class InhomogeneousInnerProduct(InnerProduct):
         partitionb = [0] + list(cumsum(Kbra))
         partitionk = [0] + list(cumsum(Kket))
 
-        Pibra = pacbra.get_parameters(aslist=True)
-        Piket = packet.get_parameters(aslist=True)
+        self._quad.prepare(range(Nbra), range(Nket))
 
         result = zeros((sum(Kbra),sum(Kket)), dtype=complexfloating)
 
-        # Operator is None is interpreted as identity transformation
-        if operator is None:
-            operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-
         for row in xrange(Nbra):
             for col in xrange(Nket):
-                M = zeros((Kbra[row],Kket[col]), dtype=complexfloating)
-
-                # Transform nodes and evaluate bases
-                nodes = self.transform_nodes(Pibra[row], Piket[col], eps)
-                basisr = pacbra.evaluate_basis_at(nodes, component=row, prefactor=True)
-                basisc = packet.evaluate_basis_at(nodes, component=col, prefactor=True)
-
-                Pimix = self.mix_parameters(Pibra[row], Piket[col])
-                # Operator should support the component notation for efficiency
-                # TODO: operator should be only f(nodes) but we can not fix this currently
-                values = operator(nodes, Pimix[0], entry=(row,col))
-
-                # Recheck what we got
-                assert type(values) is ndarray
-                assert values.shape == (1,self._QR.get_number_nodes())
-
-                factor = squeeze(eps**D * values * weights * det(Pimix[1]))
-
-                # Sum up matrices over all quadrature nodes
-                for r in xrange(self._QR.get_number_nodes()):
-                    M += factor[r] * outer(conjugate(basisr[:,r]), basisc[:,r])
-
-                # Compute global phase difference
-                phase = exp(1.0j/eps**2 * (Piket[col][4]-conjugate(Pibra[row][4])))
-
-                result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = phase * M
+                M = self._quad.perform_build_matrix(row, col)
+                # Put the result into the global storage
+                result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = M
 
         return result

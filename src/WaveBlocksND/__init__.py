@@ -63,6 +63,7 @@ from InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
 from Quadrature import Quadrature
 from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
+from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
 # Basis transformations
 from BasisTransformation import BasisTransformation
