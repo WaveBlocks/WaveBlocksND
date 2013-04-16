@@ -1,5 +1,8 @@
 """The WaveBlocks Project
 
+This file contains code for evaluating inner products
+and matrix elements by using standard quadrature rules.
+Here we handle the inhomogeneous case.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2013 R. Bourquin
@@ -29,6 +32,12 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
     def initialize_packet(self, pacbra, packet=None):
         r"""
+        Provide the wavepacket parts of the inner product to evaluate.
+        Since the quadrature is homogeneous the same wavepacket is used
+        for the 'bra' as well as the 'ket' part.
+
+        :param pacbra: The packet that is used for the 'bra' part.
+        :param packet: The packet that is used for the 'ket' part.
         """
         # Allow to ommit the ket if it is the same as the bra
         if packet is None:
@@ -47,6 +56,13 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
     def initialize_operator(self, operator=None):
         r"""
+        Provide the operator part of the inner product to evaluate.
+        This function initializes the operator used for quadratures.
+        For nasty technical reasons there are two functions for
+        setting up the opartors.
+
+        :param operator: The operator of the inner product.
+                         If 'None' a suitable identity is used.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
@@ -59,6 +75,13 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
     def initialize_operator_matrix(self, operator=None):
         r"""
+        Provide the operator part of the inner product to evaluate.
+        This function initializes the operator used for building matrices.
+        For nasty technical reasons there are two functions for
+        setting up the opartors.
+
+        :param operator: The operator of the inner product.
+                         If 'None' a suitable identity is used.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         # For this, 'operator' must support the 'entry=(r,c)' option.
@@ -70,7 +93,14 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def prepare(self, rows, cols):
-        r"""
+        r"""Precompute some values needed for evaluating the quadrature
+        :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding
+        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi_j`.
+
+        :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
+                     selecting the :math:`\Phi_i` for which te precompute values.
+        :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`
+                     selecting the :math:`\Phi^\prime_j` for which te precompute values.
         """
         # Coefficients
         self._coeffbra = self._pacbra.get_coefficients()
@@ -141,7 +171,13 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def perform_quadrature(self, row, col):
-        r"""
+        r"""Evaluates by standard quadrature the integral
+        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a general
+        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
+
+        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
+        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
+        :return: A single complex floating point number.
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
@@ -182,7 +218,13 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def perform_build_matrix(self, row, col):
-        r"""
+        r"""Computes by standard quadrature the matrix elements
+        :math:`\langle\Phi_i | f |\Phi^\prime_j\rangle` for a general function
+        :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
+
+        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
+        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
+        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()

@@ -1,11 +1,11 @@
 """The WaveBlocks Project
 
-This file contains code for the inhomogeneous (or mixing) quadrature of two
-wavepackets. The class defined here can compute brakets, inner products and
-expectation values and the matrix elements of an arbitrary operator.
+This file contains code for the delegation of the evaluation of inhomogeneous (or mixing)
+inner products of two wavepackets. The class defined here can compute brakets, inner products
+and expectation values and the matrix elements of an arbitrary operator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -31,7 +31,7 @@ class InhomogeneousInnerProduct(InnerProduct):
 
 
     def get_description(self):
-        r"""Return a description of this quadrature object.
+        r"""Return a description of this inner product object.
         A description is a ``dict`` containing all key-value pairs
         necessary to reconstruct the current instance. A description
         never contains any data.
@@ -43,7 +43,7 @@ class InhomogeneousInnerProduct(InnerProduct):
 
 
     def quadrature(self, pacbra, packet=None, operator=None, summed=False, component=None, diag_component=None, diagonal=False):
-        r"""Performs the quadrature of :math:`\langle\Psi|f|\Psi^\prime\rangle` for a general
+        r"""Delegates the evaluation of :math:`\langle\Psi|f|\Psi^\prime\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param pacbra: The wavepacket :math:`\Psi` from the bra with :math:`N` components.
@@ -113,7 +113,7 @@ class InhomogeneousInnerProduct(InnerProduct):
 
 
     def build_matrix(self, pacbra, packet=None, operator=None):
-        r"""Calculate the matrix elements of :math:`\langle\Psi|f|\Psi^\prime\rangle`
+        r"""Delegates the computation of the matrix elements :math:`\langle\Psi|f|\Psi^\prime\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c^i_k`.
 

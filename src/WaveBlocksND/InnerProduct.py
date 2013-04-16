@@ -40,18 +40,19 @@ class InnerProduct(object):
 
 
     def set_quadrature(self, quad):
-        r"""Set the :py:class:`InnerProductRule` subclass instance used for quadrature.
+        r"""Set the :py:class:`Quadrature` subclass instance used for quadrature.
 
-        :param QR: The new :py:class:`QuadratureRule` instance.
+        :param quad: The new :py:class:`Quadrature` instance.
         """
-        # TODO: Allow a list of QRs, one QR for each component of Psi
+        # TODO: Allow a list of quads, one quad for each component of Psi
         self._quad = quad
 
 
     def get_quadrature(self):
-        r"""Return the :py:class:`QuadratureRule` subclass instance used for quadrature.
+        r"""Return the :py:class:`Quadrature` subclass instance
+        used for evaluation of this inner product.
 
-        :return: The current instance of the quadrature rule.
+        :return: The current instance of the quadrature.
         """
         return self._quad
 
