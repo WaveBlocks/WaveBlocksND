@@ -80,6 +80,8 @@ Wavepackets
    waveblocks_classes/DirectHomogeneousQuadrature
    waveblocks_classes/DirectInhomogeneousQuadrature
 
+   waveblocks_classes/NSDInhomogeneous
+
    waveblocks_classes/BasisTransformation
    waveblocks_classes/BasisTransformationWF
    waveblocks_classes/BasisTransformationHAWP
