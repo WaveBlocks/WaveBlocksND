@@ -36,8 +36,6 @@ Basic numerics
    waveblocks_classes/GaussHermiteQR
    waveblocks_classes/TensorProductQR
 
-   waveblocks_classes/InhomogeneousNSD
-
    waveblocks_classes/MatrixExponential
 
    waveblocks_classes/Utils

@@ -65,6 +65,8 @@ from Quadrature import Quadrature
 from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
 from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
+from NSDInhomogeneous import NSDInhomogeneous
+
 # Basis transformations
 from BasisTransformation import BasisTransformation
 from BasisTransformationWF import BasisTransformationWF
