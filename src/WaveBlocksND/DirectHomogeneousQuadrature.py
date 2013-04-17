@@ -71,7 +71,7 @@ class DirectHomogeneousQuadrature(Quadrature):
         Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures.
         For nasty technical reasons there are two functions for
-        setting up the opartors.
+        setting up the operators.
 
         :param operator: The operator of the inner product.
                          If 'None' a suitable identity is used.
@@ -97,7 +97,7 @@ class DirectHomogeneousQuadrature(Quadrature):
         Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for building matrices.
         For nasty technical reasons there are two functions for
-        setting up the opartors.
+        setting up the operators.
 
         :param operator: The operator of the inner product.
                          If 'None' a suitable identity is used.

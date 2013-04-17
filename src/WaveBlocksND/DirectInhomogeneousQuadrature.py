@@ -49,8 +49,8 @@ class DirectInhomogeneousQuadrature(Quadrature):
     def initialize_packet(self, pacbra, packet=None):
         r"""
         Provide the wavepacket parts of the inner product to evaluate.
-        Since the quadrature is homogeneous the same wavepacket is used
-        for the 'bra' as well as the 'ket' part.
+        Since the quadrature is inhomogeneous different wavepackets can be
+        used for the 'bra' as well as the 'ket' part.
 
         :param pacbra: The packet that is used for the 'bra' part.
         :param packet: The packet that is used for the 'ket' part.
@@ -75,7 +75,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures.
         For nasty technical reasons there are two functions for
-        setting up the opartors.
+        setting up the operators.
 
         :param operator: The operator of the inner product.
                          If 'None' a suitable identity is used.
@@ -94,7 +94,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for building matrices.
         For nasty technical reasons there are two functions for
-        setting up the opartors.
+        setting up the operators.
 
         :param operator: The operator of the inner product.
                          If 'None' a suitable identity is used.

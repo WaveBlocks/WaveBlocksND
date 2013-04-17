@@ -46,8 +46,8 @@ class NSDInhomogeneous(Quadrature):
 
     def initialize_packet(self, pacbra, packet=None):
         r"""Provide the wavepacket parts of the inner product to evaluate.
-        Since the quadrature is homogeneous the same wavepacket is used
-        for the 'bra' as well as the 'ket' part.
+        Since the quadrature is inhomogeneous different wavepackets can be
+        used for the 'bra' as well as the 'ket' part.
 
         :param pacbra: The packet that is used for the 'bra' part.
         :param packet: The packet that is used for the 'ket' part.
@@ -67,7 +67,7 @@ class NSDInhomogeneous(Quadrature):
         r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures.
         For nasty technical reasons there are two functions for
-        setting up the opartors.
+        setting up the operators.
 
         :param operator: The operator of the inner product.
                          If 'None' a suitable identity is used.
@@ -79,6 +79,26 @@ class NSDInhomogeneous(Quadrature):
             self._operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
         else:
             self._operator = operator
+
+
+    def initialize_operator_matrix(self, operator=None):
+        r"""
+        Provide the operator part of the inner product to evaluate.
+        This function initializes the operator used for building matrices.
+        For nasty technical reasons there are two functions for
+        setting up the operators.
+
+        :param operator: The operator of the inner product.
+                         If 'None' a suitable identity is used.
+        """
+        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
+        # For this, 'operator' must support the 'entry=(r,c)' option.
+        N  = self._packet.get_number_components()
+        if operator is None:
+            # Operator is None is interpreted as identity transformation
+            self._operatorm = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+        else:
+            self._operatorm = operator
 
 
     def build_bilinear(self, Pibra, Piket):
@@ -116,8 +136,8 @@ class NSDInhomogeneous(Quadrature):
 
 
     def update_oscillator(T, i):
-        r"""Given a upper triangular matrix :math:`T` representing the oscillator
-        :math:`g(x) = \underline{x}^{\mathrm{H}} \mathbf{T} \underline{x}`, update
+        r"""Given a upper triangular matrix :math:`\mathbf{T} \in \mathbb{C}^{D \times D}` representing
+        the oscillator :math:`g(x) = \underline{x}^{\mathrm{H}} \mathbf{T} \underline{x}`, update
         its entries according to:
 
         .. math::
@@ -127,14 +147,14 @@ class NSDInhomogeneous(Quadrature):
 
         :param: The matrix :math:`\mathbf{T}` we want to update. (Note that the matrix
                 is not modified and a copy returned.)
-        :param: The row :math:`i` which is taken as base for the updates.
+        :param: The row :math:`0 \leq i \leq D-1` which is taken as base for the updates.
         :return: The updated matrix :math:`\mathbf{T}`.
         """
         Ti = T.copy()
         rr, cc = T.shape
 
         if T[i-1,i-1] == 0:
-            print("RESIDUE")
+            print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
             return Ti
 
         # Diagonal Elements
@@ -165,8 +185,12 @@ class NSDInhomogeneous(Quadrature):
 
 
     def do_nsd(self, row, col):
-        r"""Evalute a single integral :math:`\langle \phi_k | f(x) | \phi_l\rangle`
+        r"""Evaluate a single integral :math:`\langle \phi_k | f(x) | \phi_l\rangle`
         by numerical steepest descent.
+
+        :param row: The index :math:`k` of the basis function :math:`\phi_k` of :math:`\Phi`.
+        :param col: The index :math:`l` of the basis function :math:`\phi^\prime_l` of :math:`\Phi^\prime`.
+        :return: A single complex floating point number.
         """
         # TODO: Inline this function
         D = self._packet.get_dimension()
