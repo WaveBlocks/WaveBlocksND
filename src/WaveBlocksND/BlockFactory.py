@@ -181,6 +181,11 @@ class BlockFactory(object):
             QR = self.create_quadrature_rule(description["qr"])
             QE = DirectInhomogeneousQuadrature(QR)
 
+        elif qe_type == "NSDInhomogeneous":
+            from NSDInhomogeneous import NSDInhomogeneous
+            QR = self.create_quadrature_rule(description["qr"])
+            QE = NSDInhomogeneous(QR)
+
         else:
             raise ValueError("Unknown quadrature type "+str(qe_type))
 
@@ -210,10 +215,20 @@ class BlockFactory(object):
             assert type(order) == int
             QR = TrapezoidalQR(left, right, order, options=op)
 
+        if qr_type == "GaussLaguerreQR":
+            from GaussLaguerreQR import GaussLaguerreQR
+            order = description["order"]
+            a = description["a"]
+            assert type(order) == int
+            QR = GaussLaguerreQR(order, a=a, options=op)
+
         elif qr_type == "TensorProductQR":
             from TensorProductQR import TensorProductQR
             # Iteratively create all quadrature rules necessary
             qrs = [ self.create_quadrature_rule(desc) for desc in description["qr_rules"] ]
             QR = TensorProductQR(qrs, options=op)
+
+        else:
+            raise ValueError("Unknown quadrature rule type "+str(qr_type))
 
         return QR
