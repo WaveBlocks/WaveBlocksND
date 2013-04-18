@@ -215,7 +215,7 @@ class BlockFactory(object):
             assert type(order) == int
             QR = TrapezoidalQR(left, right, order, options=op)
 
-        if qr_type == "GaussLaguerreQR":
+        elif qr_type == "GaussLaguerreQR":
             from GaussLaguerreQR import GaussLaguerreQR
             order = description["order"]
             a = description["a"]
