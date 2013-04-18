@@ -3,22 +3,25 @@
 Various small utility functions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import squeeze, asarray
+from numpy import squeeze, asarray, atleast_1d
 
 
 def meshgrid_nd(arrays):
     """Like 'meshgrid()' but for arbitrary number of dimensions.
+
+    :param arrays: A list of arrays to form the tensor grid.
+                   All arrays have to be 1 oder 0 dimensional.
+    :return: The full tensor product mesh grid.
     """
-    arrays = tuple(map(squeeze, arrays))
+    arrays = map(squeeze, arrays)
+    arrays = tuple(map(atleast_1d, arrays))
 
     if not len([ None for a in arrays if a.ndim != 1 ]) == 0:
         raise ValueError("Arrays must be 1-dimensional")
-
-    # TODO: Handle one-element arrays!
 
     # The dimension
     D = len(arrays)
