@@ -8,8 +8,8 @@
 
 from numpy import (zeros, ones, sum, diag, squeeze,  conjugate, transpose, dot,
                    zeros_like, ones_like, product, indices, flipud, array)
-from scipy import exp, sqrt
-from scipy.linalg import inv, schur
+from scipy import exp, sqrt, pi
+from scipy.linalg import inv, schur, det
 
 from Quadrature import Quadrature
 
@@ -26,6 +26,8 @@ class NSDInhomogeneous(Quadrature):
             self.set_qr(QR)
         else:
             self._QR = None
+
+        self._oscillator = None
 
 
     def __str__(self):
@@ -59,6 +61,7 @@ class NSDInhomogeneous(Quadrature):
         self._pacbra = pacbra
         self._packet = packet
 
+        self._oscillator = {}
         # TODO: Handle non-oscillatory polynomial part
         self._envelope = lambda V: ones_like(V[0,:])
 
@@ -129,13 +132,13 @@ class NSDInhomogeneous(Quadrature):
             )
         b = conjugate(b)
         c = (0.5 * (  dot(conjugate(transpose(ql)), dot(Gl, ql))
-                    - dot(conjugate(transpose(qk)), dot(conjugate(transpose(Gk), qk))))
+                    - dot(conjugate(transpose(qk)), dot(conjugate(transpose(Gk)), qk)))
                  + (dot(conjugate(transpose(qk)),pk) - dot(conjugate(transpose(pl)),ql))
             )
         return A, b, c
 
 
-    def update_oscillator(T, i):
+    def update_oscillator(self, T, i):
         r"""Given a upper triangular matrix :math:`\mathbf{T} \in \mathbb{C}^{D \times D}` representing
         the oscillator :math:`g(x) = \underline{x}^{\mathrm{H}} \mathbf{T} \underline{x}`, update
         its entries according to:
@@ -173,10 +176,9 @@ class NSDInhomogeneous(Quadrature):
         r"""
         """
         # Unpack quadrature rules
-        nodes = self._QR.get_nodes()
-        weights = self._QR.get_weights()
-        self._sqrtnodes = product(sqrt(nodes), axis=0)
-        self._allweights = product(weights, axis=0)
+        self._nodes = self._QR.get_nodes()
+        self._weights = self._QR.get_weights()
+        self._sqrtnodes = product(sqrt(self._nodes), axis=0)
 
         # Signs
         D = self._packet.get_dimension()
@@ -217,7 +219,7 @@ class NSDInhomogeneous(Quadrature):
             # Non-oscillatory parts
             fpath = self._envelope(h)
             opath = self._operator(h, entry=(row,col))
-            #QQ = osign * pf * sum(fpath * dhts * sqrtnodes * allweights) / w**D
+            #QQ = osign * pf * sum(fpath * dhts * sqrtnodes * weights) / w**D
             QQ = sum(opath * fpath * self._quadrand)
             results.append(QQ)
 
@@ -254,9 +256,6 @@ class NSDInhomogeneous(Quadrature):
             T = self.update_oscillator(T, i)
         self._oscillator["T"] = T
 
-        # Take out diagonals
-        Dk = diag(T).reshape((D,1))
-
         #
         X = inv(A + transpose(A))
         self._oscillator["X"] = X
@@ -267,6 +266,8 @@ class NSDInhomogeneous(Quadrature):
         w = 1.0 / eps**2
         self._prefactor = exp(1.0j * w * ctilde)
 
+        # Take out diagonals
+        Dk = diag(T).reshape((D,1))
         # Tau
         tk = self._nodes / w
         # Paths
@@ -275,16 +276,19 @@ class NSDInhomogeneous(Quadrature):
         dht = sqrt(1.0j / (4.0 * Dk * tk))
         dhtp = product(dht, axis=0)
 
-        self._quadrand = dhtp * self._sqrtnodes * self._allweights / w**D
-
+        self._quadrand = dhtp * self._sqrtnodes * self._weights / w**D
 
         # TODO: for all pairs <phi_k | ... | phi_l> do
-        result = []
+        # result = []
         # self._envelope = ...
-        I = self.perform_nsd(row, col)
-        result.append(I)
+        I = self.do_nsd(row, col)
 
-        return sum(I)
+        # Dont forget the global prefactor
+        ck = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
+        cl = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
+        normfact = conjugate(ck)*cl
+
+        return squeeze(normfact * I)
 
 
     def perform_build_matrix(self, row, col):
