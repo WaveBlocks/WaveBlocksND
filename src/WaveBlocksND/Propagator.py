@@ -58,7 +58,7 @@ class Propagator(object):
 
     def propagate(self):
         r"""Given the wavefunction :math:`\psi` at time :math:`t`, calculate
-        the new :math:\psi` at time :math:`t + \tau`. We do exactly one timestep
+        the new :math:`\psi` at time :math:`t + \tau`. We do exactly one timestep
         of size :math:`\tau` here.
 
         :raise NotImplementedError: This is an abstract base class.

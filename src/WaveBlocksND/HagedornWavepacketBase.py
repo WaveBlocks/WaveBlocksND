@@ -110,7 +110,7 @@ class HagedornWavepacketBase(Wavepacket):
 
     def set_coefficient(self, component, index, value):
         r"""Set a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`
-        of :math:\Psi`.
+        of :math:`\Psi`.
 
         :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.
         :type components: int
@@ -131,7 +131,7 @@ class HagedornWavepacketBase(Wavepacket):
 
     def get_coefficient(self, component, index):
         r"""Retrieve a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`
-        of :math:\Psi`.
+        of :math:`\Psi`.
 
         :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.
         :type components: int
@@ -287,7 +287,7 @@ class HagedornWavepacketBase(Wavepacket):
     def evaluate_basis_at(self, grid, component, prefactor=False):
         r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
 
-        :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
@@ -365,7 +365,7 @@ class HagedornWavepacketBase(Wavepacket):
         we store only the data we really need to compute the next step until we hit the highest
         order basis functions.
 
-        :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
@@ -454,7 +454,7 @@ class HagedornWavepacketBase(Wavepacket):
     def evaluate_at(self, grid, component=None, prefactor=False):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
 
-        :param grid: The grid :math:\Gamma` containing the nodes :math:`\gamma`.
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
                           (Defaults to ``None`` for evaluating all components.)
