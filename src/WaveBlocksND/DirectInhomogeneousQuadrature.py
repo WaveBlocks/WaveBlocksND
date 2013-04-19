@@ -175,7 +175,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         if QR is None:
             QR = self._QR
 
-        if QR["transform"] is not True:
+        if QR["transform"] is not None and QR["transform"] is False:
             return QR.get_nodes()
 
         # Mix the parameters to compute the affine transformation
