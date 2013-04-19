@@ -7,7 +7,7 @@
 """
 
 from numpy import (zeros, ones, sum, diag, squeeze,  conjugate, transpose, dot,
-                   zeros_like, ones_like, product, indices, flipud, array)
+                   zeros_like, product, indices, flipud, array)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det
 
@@ -62,8 +62,6 @@ class NSDInhomogeneous(Quadrature):
         self._packet = packet
 
         self._oscillator = {}
-        # TODO: Handle non-oscillatory polynomial part
-        self._envelope = lambda V: ones_like(V[0,:])
 
 
     def initialize_operator(self, operator=None):
@@ -96,7 +94,6 @@ class NSDInhomogeneous(Quadrature):
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         # For this, 'operator' must support the 'entry=(r,c)' option.
-        N  = self._packet.get_number_components()
         if operator is None:
             # Operator is None is interpreted as identity transformation
             self._operatorm = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
@@ -202,6 +199,9 @@ class NSDInhomogeneous(Quadrature):
         X = self._oscillator["X"]
         b = self._oscillator["b"]
 
+        cbra = self._pacbra.get_coefficients(component=row)
+        cket = self._packet.get_coefficients(component=col)
+
         # Compute all contour integrals
         results = []
 
@@ -217,7 +217,17 @@ class NSDInhomogeneous(Quadrature):
             # Back transformation
             h = dot(conjugate(transpose(U)), ht) - dot(X, b)
             # Non-oscillatory parts
-            fpath = self._envelope(h)
+            # Wavepacket
+            # TODO: This is a huge hack
+            bravals = self._pacbra.evaluate_basis_at(h, row, prefactor=False)
+            bravals = bravals / bravals[0,:]
+
+            ketvals = self._packet.evaluate_basis_at(h, col, prefactor=False)
+            ketvals = ketvals / ketvals[0,:]
+
+            fpath = conjugate(cbra) * cket * conjugate(bravals) * ketvals
+            fpath = sum(fpath, axis=0)
+            # Operator
             opath = self._operator(h, entry=(row,col))
             #QQ = osign * pf * sum(fpath * dhts * sqrtnodes * weights) / w**D
             QQ = sum(opath * fpath * self._quadrand)
@@ -238,10 +248,10 @@ class NSDInhomogeneous(Quadrature):
         D = self._packet.get_dimension()
 
         # Combine oscillators
-        Pibra = self._pacbra.get_parameters(key=("q", "p", "Q", "P"), component=row)
-        Piket = self._packet.get_parameters(key=("q", "p", "Q", "P"), component=col)
+        Pibra = self._pacbra.get_parameters(component=row)
+        Piket = self._packet.get_parameters(component=col)
 
-        A, b, c = self.build_bilinear(Pibra, Piket)
+        A, b, c = self.build_bilinear(Pibra[:4], Piket[:4])
         self._oscillator["A"] = A
         self._oscillator["b"] = b
 
@@ -266,9 +276,9 @@ class NSDInhomogeneous(Quadrature):
         w = 1.0 / eps**2
         self._prefactor = exp(1.0j * w * ctilde)
 
-        # Take out diagonals
+        # Take out diagonals of T
         Dk = diag(T).reshape((D,1))
-        # Tau
+        # Tau (path parametrization variable)
         tk = self._nodes / w
         # Paths
         self._pathsqrtpart = sqrt(1.0j * tk / Dk)
@@ -279,16 +289,17 @@ class NSDInhomogeneous(Quadrature):
         self._quadrand = dhtp * self._sqrtnodes * self._weights / w**D
 
         # TODO: for all pairs <phi_k | ... | phi_l> do
-        # result = []
-        # self._envelope = ...
         I = self.do_nsd(row, col)
 
-        # Dont forget the global prefactor
-        ck = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
-        cl = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
-        normfact = conjugate(ck)*cl
+        # Compute global prefactor
+        fk = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
+        fl = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
+        normfact = conjugate(fk)*fl
 
-        return squeeze(normfact * I)
+        # Compute global phase difference
+        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+
+        return squeeze(phase * normfact * I)
 
 
     def perform_build_matrix(self, row, col):
