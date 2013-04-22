@@ -9,7 +9,7 @@ Here we handle the homogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, squeeze, conjugate, dot
+from numpy import zeros, ones, squeeze, conjugate, dot, einsum
 from scipy.linalg import sqrtm, inv #, svd, diagsvd
 
 from Quadrature import Quadrature
@@ -200,16 +200,11 @@ class DirectHomogeneousQuadrature(Quadrature):
         eps = self._packet.get_eps()
 
         N  = self._packet.get_number_components()
-        Kr = self._packet.get_basis_shapes(component=row).get_basis_size()
-        Kc = self._packet.get_basis_shapes(component=col).get_basis_size()
-
-        M = zeros((Kr,Kc), dtype=complexfloating)
 
         factor = squeeze(eps**D * self._weights * self._values[row*N + col])
 
         # Summing up matrices over all quadrature nodes
-        for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * dot(conjugate(self._bases[row][:,r].reshape(-1,1)), self._bases[col][:,r].reshape(1,-1))
+        M = einsum("k,ik,jk", factor, conjugate(self._bases[row]), self._bases[col])
 
         # And include the coefficients as conj(c).T*M*c
         return dot(conjugate(self._coeffs[row]).T, dot(M, self._coeffs[col]))
@@ -228,15 +223,10 @@ class DirectHomogeneousQuadrature(Quadrature):
         eps = self._packet.get_eps()
 
         N  = self._packet.get_number_components()
-        Kr = self._packet.get_basis_shapes(component=row).get_basis_size()
-        Kc = self._packet.get_basis_shapes(component=col).get_basis_size()
-
-        M = zeros((Kr,Kc), dtype=complexfloating)
 
         factor = squeeze(eps**D * self._weights * self._values[row*N + col])
 
         # Sum up matrices over all quadrature nodes
-        for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * dot(conjugate(self._bases[row][:,r].reshape(-1,1)), self._bases[col][:,r].reshape(1,-1))
+        M = einsum("k,ik,jk", factor, conjugate(self._bases[row]), self._bases[col])
 
         return M

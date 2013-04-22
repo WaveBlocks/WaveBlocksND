@@ -9,7 +9,7 @@ Here we handle the inhomogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, squeeze, imag, conjugate, dot, ndarray
+from numpy import zeros, ones, squeeze, imag, conjugate, dot, ndarray, einsum
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
@@ -198,14 +198,8 @@ class DirectInhomogeneousQuadrature(Quadrature):
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
 
-        # Packets can also have different basis sizes
-        Kbra = self._pacbra.get_basis_shapes(component=row).get_basis_size()
-        Kket = self._packet.get_basis_shapes(component=col).get_basis_size()
-
         Pibra = self._pacbra.get_parameters(component=row)
         Piket = self._packet.get_parameters(component=col)
-
-        M = zeros((Kbra,Kket), dtype=complexfloating)
 
         # Transform nodes and evaluate bases
         nodes = self.transform_nodes(Pibra, Piket, eps)
@@ -223,8 +217,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         factor = squeeze(eps**D * values * self._weights * det(Pimix[1]))
 
         # Summing up matrices over all quadrature nodes
-        for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * dot(conjugate(basisr[:,r].reshape(-1,1)), basisc[:,r].reshape(1,-1))
+        M = einsum("k,ik,jk", factor, conjugate(basisr), basisc)
 
         # Compute global phase difference
         phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
@@ -245,14 +238,8 @@ class DirectInhomogeneousQuadrature(Quadrature):
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
 
-        # Packets can also have different basis sizes
-        Kbra = self._pacbra.get_basis_shapes(component=row).get_basis_size()
-        Kket = self._packet.get_basis_shapes(component=col).get_basis_size()
-
         Pibra = self._pacbra.get_parameters(component=row)
         Piket = self._packet.get_parameters(component=col)
-
-        M = zeros((Kbra,Kket), dtype=complexfloating)
 
         # Transform nodes and evaluate bases
         nodes = self.transform_nodes(Pibra, Piket, eps)
@@ -271,8 +258,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         factor = squeeze(eps**D * values * self._weights * det(Pimix[1]))
 
         # Sum up matrices over all quadrature nodes
-        for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * dot(conjugate(basisr[:,r].reshape(-1,1)), basisc[:,r].reshape(1,-1))
+        M = einsum("k,ik,jk", factor, conjugate(basisr), basisc)
 
         # Compute global phase difference
         phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
