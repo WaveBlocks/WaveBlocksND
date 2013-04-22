@@ -9,7 +9,7 @@ Here we handle the inhomogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, squeeze, imag, conjugate, outer, dot, ndarray
+from numpy import zeros, ones, complexfloating, squeeze, imag, conjugate, dot, ndarray
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
@@ -224,7 +224,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
         # Summing up matrices over all quadrature nodes
         for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * outer(conjugate(basisr[:,r]), basisc[:,r])
+            M += factor[r] * dot(conjugate(basisr[:,r].reshape(-1,1)), basisc[:,r].reshape(1,-1))
 
         # Compute global phase difference
         phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
@@ -272,7 +272,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
         # Sum up matrices over all quadrature nodes
         for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * outer(conjugate(basisr[:,r]), basisc[:,r])
+            M += factor[r] * dot(conjugate(basisr[:,r].reshape(-1,1)), basisc[:,r].reshape(1,-1))
 
         # Compute global phase difference
         phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))

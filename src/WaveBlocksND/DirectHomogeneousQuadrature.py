@@ -9,7 +9,7 @@ Here we handle the homogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, complexfloating, squeeze, conjugate, dot, outer
+from numpy import zeros, ones, complexfloating, squeeze, conjugate, dot
 from scipy.linalg import sqrtm, inv #, svd, diagsvd
 
 from Quadrature import Quadrature
@@ -209,7 +209,7 @@ class DirectHomogeneousQuadrature(Quadrature):
 
         # Summing up matrices over all quadrature nodes
         for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * outer(conjugate(self._bases[row][:,r]), self._bases[col][:,r])
+            M += factor[r] * dot(conjugate(self._bases[row][:,r].reshape(-1,1)), self._bases[col][:,r].reshape(1,-1))
 
         # And include the coefficients as conj(c).T*M*c
         return dot(conjugate(self._coeffs[row]).T, dot(M, self._coeffs[col]))
@@ -237,6 +237,6 @@ class DirectHomogeneousQuadrature(Quadrature):
 
         # Sum up matrices over all quadrature nodes
         for r in xrange(self._QR.get_number_nodes()):
-            M += factor[r] * outer(conjugate(self._bases[row][:,r]), self._bases[col][:,r])
+            M += factor[r] * dot(conjugate(self._bases[row][:,r].reshape(-1,1)), self._bases[col][:,r].reshape(1,-1))
 
         return M
