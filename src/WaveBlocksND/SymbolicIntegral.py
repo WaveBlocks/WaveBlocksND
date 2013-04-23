@@ -214,7 +214,7 @@ class SymbolicIntegral(Quadrature):
         Kbra = self._pacbra.get_basis_shapes(component=row)
         Kket = self._packet.get_basis_shapes(component=col)
 
-        M = zeros((Kbra,Kket), dtype=complexfloating)
+        M = zeros((Kbra.get_basis_size(),Kket.get_basis_size()), dtype=complexfloating)
 
         for r in Kbra:
             for c in Kket:
