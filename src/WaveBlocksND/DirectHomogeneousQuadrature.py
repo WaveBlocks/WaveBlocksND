@@ -46,8 +46,7 @@ class DirectHomogeneousQuadrature(Quadrature):
 
 
     def initialize_packet(self, packet):
-        r"""
-        Provide the wavepacket part of the inner product to evaluate.
+        r"""Provide the wavepacket part of the inner product to evaluate.
         Since the quadrature is homogeneous the same wavepacket is used
         for the 'bra' as well as the 'ket' part.
 
@@ -67,8 +66,7 @@ class DirectHomogeneousQuadrature(Quadrature):
 
 
     def initialize_operator(self, operator=None):
-        r"""
-        Provide the operator part of the inner product to evaluate.
+        r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures.
         For nasty technical reasons there are two functions for
         setting up the operators.
@@ -93,8 +91,7 @@ class DirectHomogeneousQuadrature(Quadrature):
 
 
     def initialize_operator_matrix(self, operator=None):
-        r"""
-        Provide the operator part of the inner product to evaluate.
+        r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for building matrices.
         For nasty technical reasons there are two functions for
         setting up the operators.
@@ -142,13 +139,6 @@ class DirectHomogeneousQuadrature(Quadrature):
 
         # Coefficients
         self._coeffs = self._packet.get_coefficients()
-
-
-    def prepare_for_row(self, row, col):
-        pass
-
-    def preprare_for_col(self, row, col):
-        pass
 
 
     def transform_nodes(self, Pi, eps, QR=None):

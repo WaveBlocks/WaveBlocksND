@@ -47,8 +47,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def initialize_packet(self, pacbra, packet=None):
-        r"""
-        Provide the wavepacket parts of the inner product to evaluate.
+        r"""Provide the wavepacket parts of the inner product to evaluate.
         Since the quadrature is inhomogeneous different wavepackets can be
         used for the 'bra' as well as the 'ket' part.
 
@@ -71,8 +70,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def initialize_operator(self, operator=None):
-        r"""
-        Provide the operator part of the inner product to evaluate.
+        r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures.
         For nasty technical reasons there are two functions for
         setting up the operators.
@@ -90,8 +88,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
 
 
     def initialize_operator_matrix(self, operator=None):
-        r"""
-        Provide the operator part of the inner product to evaluate.
+        r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for building matrices.
         For nasty technical reasons there are two functions for
         setting up the operators.
@@ -121,13 +118,6 @@ class DirectInhomogeneousQuadrature(Quadrature):
         # Coefficients
         self._coeffbra = self._pacbra.get_coefficients()
         self._coeffket = self._packet.get_coefficients()
-
-
-    def prepare_for_row(self, row, col):
-        pass
-
-    def preprare_for_col(self, row, col):
-        pass
 
 
     def mix_parameters(self, Pibra, Piket):
