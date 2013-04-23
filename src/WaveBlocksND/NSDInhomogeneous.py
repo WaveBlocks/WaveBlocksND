@@ -330,6 +330,9 @@ class NSDInhomogeneous(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
         :return: A single complex floating point number.
         """
+        if not self._QR.get_dimension() == self._packet.get_dimension():
+            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
+
         M = self.perform_nsd(row, col)
         # Include the coefficients as c^H M c
         cbra = self._pacbra.get_coefficients(component=row)
@@ -347,5 +350,8 @@ class NSDInhomogeneous(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
+        if not self._QR.get_dimension() == self._packet.get_dimension():
+            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
+
         M = self.perform_nsd(row, col)
         return M

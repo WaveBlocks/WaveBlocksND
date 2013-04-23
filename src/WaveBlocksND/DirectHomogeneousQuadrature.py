@@ -186,6 +186,9 @@ class DirectHomogeneousQuadrature(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
         :return: A single complex floating point number.
         """
+        if not self._QR.get_dimension() == self._packet.get_dimension():
+            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
+
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
 
@@ -209,6 +212,9 @@ class DirectHomogeneousQuadrature(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}_j|`.
         """
+        if not self._QR.get_dimension() == self._packet.get_dimension():
+            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
+
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
 
