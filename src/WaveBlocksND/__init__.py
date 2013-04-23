@@ -1,7 +1,7 @@
 """The WaveBlocks Project
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -65,6 +65,7 @@ from Quadrature import Quadrature
 from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
 from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
+from SymbolicIntegral import SymbolicIntegral
 from NSDInhomogeneous import NSDInhomogeneous
 
 # Basis transformations
