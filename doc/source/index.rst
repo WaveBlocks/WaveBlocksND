@@ -78,6 +78,7 @@ Wavepackets
    waveblocks_classes/DirectHomogeneousQuadrature
    waveblocks_classes/DirectInhomogeneousQuadrature
 
+   waveblocks_classes/SymbolicIntegral
    waveblocks_classes/NSDInhomogeneous
 
    waveblocks_classes/BasisTransformation
