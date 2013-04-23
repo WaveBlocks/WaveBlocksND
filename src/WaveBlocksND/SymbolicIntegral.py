@@ -65,41 +65,22 @@ class SymbolicIntegral(Quadrature):
         self._packet = packet
 
 
-    def initialize_operator(self, operator=None):
+    def initialize_operator(self, operator=None, matrix=False):
         r"""Provide the operator part of the inner product to evaluate.
-        This function initializes the operator used for quadratures.
-        For nasty technical reasons there are two functions for
-        setting up the operators.
+        This function initializes the operator used for quadratures
+        and for building matrices.
 
         Note that the symbolic solution can not handle operators at all.
 
         :param operator: The operator of the inner product.
                          If `None` a suitable identity is used.
+        :param matrix: Set this to ``True`` (Default is ``False``) in case
+                       we want to compute the matrix elements.
+                       For nasty technical reasons we can not yet unify
+                       the operator call syntax.
         """
-        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        #       For this, 'operator' must support the 'component=(r,c)' option.
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-        else:
-            raise ValueError("The 'SymbolicIntegral' can not handle operators.")
-
-
-    def initialize_operator_matrix(self, operator=None):
-        r"""Provide the operator part of the inner product to evaluate.
-        This function initializes the operator used for building matrices.
-        For nasty technical reasons there are two functions for
-        setting up the operators.
-
-        Note that the symbolic solution can not handle operators at all.
-
-        :param operator: The operator of the inner product.
-                         If `None` a suitable identity is used.
-        """
-        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        # For this, 'operator' must support the 'entry=(r,c)' option.
-        if operator is None:
-            # Operator is None is interpreted as identity transformation
             self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
         else:
             raise ValueError("The 'SymbolicIntegral' can not handle operators.")

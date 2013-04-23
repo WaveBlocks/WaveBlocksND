@@ -130,7 +130,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
 
         self._quad.initialize_packet(pacbra, packet)
-        self._quad.initialize_operator_matrix(operator)
+        self._quad.initialize_operator(operator, matrix=True)
 
         # Packets can have different number of components
         Nbra = pacbra.get_number_components()

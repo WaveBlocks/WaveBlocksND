@@ -65,52 +65,28 @@ class DirectHomogeneousQuadrature(Quadrature):
         self._coeffs = None
 
 
-    def initialize_operator(self, operator=None):
+    def initialize_operator(self, operator=None, matrix=False):
         r"""Provide the operator part of the inner product to evaluate.
-        This function initializes the operator used for quadratures.
-        For nasty technical reasons there are two functions for
-        setting up the operators.
+        This function initializes the operator used for quadratures
+        and for building matrices.
 
         :param operator: The operator of the inner product.
                          If `None` a suitable identity is used.
+        :param matrix: Set this to ``True`` (Default is ``False``) in case
+                       we want to compute the matrix elements.
+                       For nasty technical reasons we can not yet unify
+                       the operator call syntax.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
-        N  = self._packet.get_number_components()
+        # Operator is None is interpreted as identity transformation
         if operator is None:
-            # Operator is None is interpreted as identity transformation
-            self._operator = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-            self._values = tuple([ self._operator(self._nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
+            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
         else:
-            self._operator = operator
-            self._values = tuple( self._operator(self._nodes) )
-
-        # Recheck what we got
-        assert type(self._values) is tuple
-        assert len(self._values) == N**2
-
-
-    def initialize_operator_matrix(self, operator=None):
-        r"""Provide the operator part of the inner product to evaluate.
-        This function initializes the operator used for building matrices.
-        For nasty technical reasons there are two functions for
-        setting up the operators.
-
-        :param operator: The operator of the inner product.
-                         If `None` a suitable identity is used.
-        """
-        # TODO: Make this more efficient, only compute values needed at each (r,c) step.
-        # For this, 'operator' must support the 'entry=(r,c)' option.
-        N  = self._packet.get_number_components()
-        if operator is None:
-            # Operator is None is interpreted as identity transformation
-            self._operatorm = lambda nodes, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
-            self._values = tuple([ self._operatorm(self._nodes, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
-        else:
-            self._operatorm = operator
-            # TODO: operator should be only f(nodes) but we can not fix this currently
-            q, p, Q, P, S = self._packet.get_parameters()
-            self._values = tuple( self._operatorm(self._nodes, q) )
+            if matrix is False:
+                self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
+            else:
+                self._operator = operator
 
 
     def prepare(self, rows, cols):
@@ -136,6 +112,14 @@ class DirectHomogeneousQuadrature(Quadrature):
                 bases[col] = self._packet.evaluate_basis_at(self._nodes, component=col, prefactor=False)
 
         self._bases = bases
+
+        # Operator
+        q, p, Q, P, S = self._packet.get_parameters()
+        self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
+
+        # Recheck what we got
+        assert type(self._values) is tuple
+        assert len(self._values) == N**2
 
         # Coefficients
         self._coeffs = self._packet.get_coefficients()
