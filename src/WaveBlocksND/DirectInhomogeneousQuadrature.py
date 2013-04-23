@@ -76,7 +76,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         setting up the operators.
 
         :param operator: The operator of the inner product.
-                         If 'None' a suitable identity is used.
+                         If `None` a suitable identity is used.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
@@ -94,7 +94,7 @@ class DirectInhomogeneousQuadrature(Quadrature):
         setting up the operators.
 
         :param operator: The operator of the inner product.
-                         If 'None' a suitable identity is used.
+                         If `None` a suitable identity is used.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         # For this, 'operator' must support the 'entry=(r,c)' option.
