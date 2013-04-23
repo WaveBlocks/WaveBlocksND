@@ -47,7 +47,7 @@ class SymbolicIntegral(Quadrature):
 
     def initialize_packet(self, pacbra, packet=None):
         r"""Provide the wavepacket parts of the inner product to evaluate.
-        Since the formula is for the inhomogeneous explicitly, different
+        Since the formula is for the inhomogeneous case explicitly, different
         wavepackets can be used for the 'bra' as well as the 'ket' part.
 
         :param pacbra: The packet that is used for the 'bra' part.
@@ -106,16 +106,15 @@ class SymbolicIntegral(Quadrature):
 
 
     def prepare(self, rows, cols):
-        r"""Precompute some values needed for evaluating the quadrature
-        :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding
+        r"""Precompute some values needed for evaluating the integral
+        :math:`\langle \Phi_i | \Phi^\prime_j \rangle` or the corresponding
         matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.
+        Note that this function does nothing in the current implementation.
 
         :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
                      selecting the :math:`\Phi_i` for which te precompute values.
         :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`
                      selecting the :math:`\Phi^\prime_j` for which te precompute values.
-
-        Note that this function does nothing in the current implementation.
         """
         pass
 
@@ -168,9 +167,8 @@ class SymbolicIntegral(Quadrature):
 
 
     def perform_quadrature(self, row, col):
-        r"""Evaluates by numerical steepest descent the integral
-        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
-        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
+        r"""Evaluates the integral :math:`\langle \Phi_i | \Phi^\prime_j \rangle`
+        by an exact symbolic formula.
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
@@ -199,9 +197,8 @@ class SymbolicIntegral(Quadrature):
 
 
     def perform_build_matrix(self, row, col):
-        r"""Computes by standard quadrature the matrix elements
-        :math:`\langle\Phi_i | f |\Phi^\prime_j\rangle` for a general function
-        :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
+        r"""Computes the matrix elements :math:`\langle\Phi_i |\Phi^\prime_j\rangle`
+        by an exact symbolic formula.
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
