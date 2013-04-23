@@ -1,5 +1,8 @@
 """The WaveBlocks Project
 
+This file contains code for evaluating inner products
+and matrix elements by using a specially adapted
+numerical steepest descent technique.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2013 R. Bourquin
@@ -27,8 +30,6 @@ class NSDInhomogeneous(Quadrature):
         else:
             self._QR = None
 
-        self._oscillator = None
-
 
     def __str__(self):
         return "Inhomogeneous numerical steepest descent using a " + str(self._QR)
@@ -48,7 +49,7 @@ class NSDInhomogeneous(Quadrature):
 
     def initialize_packet(self, pacbra, packet=None):
         r"""Provide the wavepacket parts of the inner product to evaluate.
-        Since the quadrature is inhomogeneous different wavepackets can be
+        Since the quadrature is inhomogeneous, different wavepackets can be
         used for the 'bra' as well as the 'ket' part.
 
         :param pacbra: The packet that is used for the 'bra' part.
@@ -60,8 +61,6 @@ class NSDInhomogeneous(Quadrature):
 
         self._pacbra = pacbra
         self._packet = packet
-
-        self._oscillator = {}
 
 
     def initialize_operator(self, operator=None):
@@ -82,12 +81,13 @@ class NSDInhomogeneous(Quadrature):
         if operator is None:
             self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
         else:
+            # Wrap the operator inside a lambda ignoring the dummy parameter
+            # This allows to use the same nsd code for quadrature and matrix construction.
             self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
 
 
     def initialize_operator_matrix(self, operator=None):
-        r"""
-        Provide the operator part of the inner product to evaluate.
+        r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for building matrices.
         For nasty technical reasons there are two functions for
         setting up the operators.
@@ -109,7 +109,7 @@ class NSDInhomogeneous(Quadrature):
 
     def mix_parameters(self, Pibra, Piket):
         r"""Mix the two parameter sets :math:`\Pi_i` and :math:`\Pi_j`
-        from the bra and the ket wavepackets :math:`\Phi\left[\Pi_i\right]`
+        from the 'bra' and the 'ket' wavepackets :math:`\Phi\left[\Pi_i\right]`
         and :math:`\Phi^\prime\left[\Pi_j\right]`.
 
         :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.
@@ -117,8 +117,8 @@ class NSDInhomogeneous(Quadrature):
         :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)
         """
         # <Pibra | ... | Piket>
-        (qr, pr, Qr, Pr, Sr) = Pibra
-        (qc, pc, Qc, Pc, Sc) = Piket
+        qr, pr, Qr, Pr = Pibra
+        qc, pc, Qc, Pc = Piket
 
         # Mix the parameters
         Gr = dot(Pr, inv(Qr))
@@ -147,25 +147,25 @@ class NSDInhomogeneous(Quadrature):
         :return: Three arrays: a matrix :math:`\mathbf{A}` of shape :math:`D \times D`,
                  a vector :math:`\underline{b}` of shape :math:`D \times 1` and a scalar value :math:`c`.
         """
-        qk, pk, Qk, Pk = Pibra
-        ql, pl, Ql, Pl = Piket
+        qr, pr, Qr, Pr = Pibra
+        qc, pc, Qc, Pc = Piket
 
-        Gk = dot(Pk, inv(Qk))
-        Gl = dot(Pl, inv(Ql))
+        Gr = dot(Pr, inv(Qr))
+        Gc = dot(Pc, inv(Qc))
 
         # Merge into a single oscillator
-        A = 0.5 * (Gl - conjugate(transpose(Gk)))
-        b = (0.5 * (  dot(Gk, qk)
-                    - dot(conjugate(transpose(Gl)), ql)
-                    + dot(transpose(Gk), conjugate(qk))
-                    - dot(conjugate(Gl), conjugate(ql))
+        A = 0.5 * (Gc - conjugate(transpose(Gr)))
+        b = (0.5 * (  dot(Gr, qr)
+                    - dot(conjugate(transpose(Gc)), qc)
+                    + dot(transpose(Gr), conjugate(qr))
+                    - dot(conjugate(Gc), conjugate(qc))
                    )
-             + (pl - conjugate(pk))
+             + (pc - conjugate(pr))
             )
         b = conjugate(b)
-        c = (0.5 * (  dot(conjugate(transpose(ql)), dot(Gl, ql))
-                    - dot(conjugate(transpose(qk)), dot(conjugate(transpose(Gk)), qk)))
-                 + (dot(conjugate(transpose(qk)),pk) - dot(conjugate(transpose(pl)),ql))
+        c = (0.5 * (  dot(conjugate(transpose(qc)), dot(Gc, qc))
+                    - dot(conjugate(transpose(qr)), dot(conjugate(transpose(Gr)), qr)))
+                 + (dot(conjugate(transpose(qr)),pr) - dot(conjugate(transpose(pc)),qc))
             )
         return A, b, c
 
@@ -189,6 +189,7 @@ class NSDInhomogeneous(Quadrature):
         rr, cc = T.shape
 
         if T[i-1,i-1] == 0:
+            # TODO: Prove that this never happens or handle it correctly!
             print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
             return Ti
 
@@ -205,7 +206,16 @@ class NSDInhomogeneous(Quadrature):
 
 
     def prepare(self, rows, cols):
-        r"""
+        r"""Precompute some values needed for evaluating the quadrature
+        :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding
+        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.
+
+        :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
+                     selecting the :math:`\Phi_i` for which te precompute values.
+        :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`
+                     selecting the :math:`\Phi^\prime_j` for which te precompute values.
+
+        Note that the two arguments are not used in the current implementation.
         """
         # Unpack quadrature rules
         self._nodes = self._QR.get_nodes()
@@ -218,54 +228,7 @@ class NSDInhomogeneous(Quadrature):
         self._allsigns = -2.0*(flipud((y>>x) & 1)-0.5)
 
 
-    def prepare_nsd(self, row, col):
-        r"""
-        """
-        D = self._packet.get_dimension()
-
-        # Combine oscillators
-        Pibra = self._pacbra.get_parameters(component=row)
-        Piket = self._packet.get_parameters(component=col)
-
-        A, b, c = self.build_bilinear(Pibra[:4], Piket[:4])
-        self._oscillator["A"] = A
-        self._oscillator["b"] = b
-
-        # Schur decomposition of A:
-        #   A = U^H T U
-        T, U = schur(A, output="complex")
-        U = conjugate(transpose(U))
-        self._oscillator["U"] = U
-
-        # Oscillator updates
-        for i in xrange(1, D):
-            T = self.update_oscillator(T, i)
-        self._oscillator["T"] = T
-
-        #
-        X = inv(A + transpose(A))
-        self._oscillator["X"] = X
-        ctilde = c - 0.5 * dot(transpose(b), dot(X, b))
-
-        # Prefactor
-        eps = self._packet.get_eps()
-        w = 1.0 / eps**2
-        self._prefactor = exp(1.0j * w * ctilde)
-
-        # Take out diagonals of T
-        Dk = diag(T).reshape((D,1))
-        # Tau (path parametrization variable)
-        tk = self._nodes / w
-        # Paths
-        self._pathsqrtpart = sqrt(1.0j * tk / Dk)
-        # Path derivatives
-        dht = sqrt(1.0j / (4.0 * Dk * tk))
-        dhtp = product(dht, axis=0)
-
-        self._quadrand = dhtp * self._sqrtnodes * self._weights / w**D
-
-
-    def do_nsd(self, row, col):
+    def perform_nsd(self, row, col):
         r"""Evaluate a single integral :math:`\langle \phi_k | f(x) | \phi_l\rangle`
         by numerical steepest descent.
 
@@ -273,31 +236,59 @@ class NSDInhomogeneous(Quadrature):
         :param col: The index :math:`l` of the basis function :math:`\phi^\prime_l` of :math:`\Phi^\prime`.
         :return: A single complex floating point number.
         """
-        # TODO: Inline this function
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
+        Pibra = self._pacbra.get_parameters(component=row)
+        Piket = self._packet.get_parameters(component=col)
+        Pimix = self.mix_parameters(Pibra[:4], Piket[:4])
 
-        T = self._oscillator["T"]
-        U = self._oscillator["U"]
-        X = self._oscillator["X"]
-        b = self._oscillator["b"]
+        # Combine oscillators
+        A, b, c = self.build_bilinear(Pibra[:4], Piket[:4])
+
+        # Schur decomposition of A = U^H T U
+        T, U = schur(A, output="complex")
+        U = conjugate(transpose(U))
+
+        # Oscillator updates
+        for i in xrange(1, D):
+            T = self.update_oscillator(T, i)
+
+        X = inv(A + transpose(A))
+        ctilde = c - 0.5 * dot(transpose(b), dot(X, b))
+
+        # Prefactor originating from constant term c
+        eps = self._packet.get_eps()
+        w = 1.0 / eps**2
+        prefactor = exp(1.0j * w * ctilde)
+
+        # Take out diagonals of T
+        Dk = diag(T).reshape((D,1))
+        # Tau (path parametrization variable)
+        tk = self._nodes / w
+        # Paths
+        pathsqrtpart = sqrt(1.0j * tk / Dk)
+        # Path derivatives
+        dht = sqrt(1.0j / (4.0 * Dk * tk))
+        dhtp = product(dht, axis=0)
+
+        # The path-independent but non-constant part of the integrand
+        quadrand = dhtp * self._sqrtnodes * self._weights / w**D
+
+        # Another normalization prefactor
+        # This is what differs the constant part of phi_0 from 1.
+        # We loose it when dividing by phi_0 hence manually add it again.
+        # TODO: Do we need mixing parameters here?
+        #       Preliminary answer: no
+        fr = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
+        fc = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
+        normfactor = conjugate(fr)*fc
+
+        # Compute global phase difference
+        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
 
         # Packets can also have different basis sizes
         Kbra = self._pacbra.get_basis_shapes(component=row).get_basis_size()
         Kket = self._packet.get_basis_shapes(component=col).get_basis_size()
-
-        Pibra = self._pacbra.get_parameters(component=row)
-        Piket = self._packet.get_parameters(component=col)
-        Pimix = self.mix_parameters(Pibra, Piket)
-
-        # A normalizing prefactor
-        # This is what differs the constant part of phi_0 from 1
-        fk = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
-        fl = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
-        normfact = conjugate(fk)*fl
-
-        # Compute global phase difference
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
 
         # Compute all contour integrals
         M = zeros((Kbra,Kket), dtype=complexfloating)
@@ -306,28 +297,28 @@ class NSDInhomogeneous(Quadrature):
             # Signs
             signs = self._allsigns[:,i].reshape((D,))
             # Construct full paths
-            ht = zeros_like(self._pathsqrtpart)
+            ht = zeros_like(pathsqrtpart)
             for k in reversed(xrange(D)):
-                ht[k,:] = ht[k,:] + signs[k] * self._pathsqrtpart[k,:]
+                ht[k,:] = ht[k,:] + signs[k] * pathsqrtpart[k,:]
                 for j in xrange(k+1, D):
                     ht[k,:] = ht[k,:] - 0.5*T[k,j]/T[k,k] * ht[j,:]
             # Back transformation
             h = dot(conjugate(transpose(U)), ht) - dot(X, b)
             # Non-oscillatory parts
             # Wavepacket
-            # TODO: This is a huge hack
-            bravals = self._pacbra.evaluate_basis_at(conjugate(h), row, prefactor=False)
-            bravals = bravals / bravals[0,:]
-            ketvals = self._packet.evaluate_basis_at(h, col, prefactor=False)
-            ketvals = ketvals / ketvals[0,:]
+            # TODO: This is a huge hack: division by phi_0 not stable?
+            basisr = self._pacbra.evaluate_basis_at(conjugate(h), row, prefactor=False)
+            basisr = basisr / basisr[0,:]
+            basisc = self._packet.evaluate_basis_at(h, col, prefactor=False)
+            basisc = basisc / basisc[0,:]
             # Operator
             opath = self._operator(h, Pimix[0], entry=(row,col))
             # Do the quadrature
-            factor = (opath * self._quadrand).reshape((-1,))
+            factor = (opath * quadrand).reshape((-1,))
             # Sum up matrices over all quadrature nodes
-            M = M + einsum("k,ik,jk", factor, conjugate(bravals), ketvals)
+            M = M + einsum("k,ik,jk", factor, conjugate(basisr), basisc)
 
-        return phase * normfact * self._prefactor * M
+        return phase * normfactor * prefactor * M
 
 
     def perform_quadrature(self, row, col):
@@ -339,9 +330,8 @@ class NSDInhomogeneous(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
         :return: A single complex floating point number.
         """
-        self.prepare_nsd(row, col)
-        M = self.do_nsd(row, col)
-        # Include the coefficients as conj(c).T * M * c
+        M = self.perform_nsd(row, col)
+        # Include the coefficients as c^H M c
         cbra = self._pacbra.get_coefficients(component=row)
         cket = self._packet.get_coefficients(component=col)
         I = squeeze(dot(transpose(conjugate(cbra)), dot(M, cket)))
@@ -357,6 +347,5 @@ class NSDInhomogeneous(Quadrature):
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
-        self.prepare_nsd(row, col)
-        M = self.do_nsd(row, col)
+        M = self.perform_nsd(row, col)
         return M
