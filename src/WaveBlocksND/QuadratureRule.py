@@ -20,7 +20,7 @@ class QuadratureRule(object):
 
     def __init__(self):
         r"""General interface for quadrature rules.
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'QuadratureRule' is an abstract interface.")
 

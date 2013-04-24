@@ -20,7 +20,7 @@ class BasisShape(object):
 
     def __init__(self):
         r"""
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -36,7 +36,7 @@ class BasisShape(object):
     def __contains__(self, k):
         r"""
         Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathcal{K}`.
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -54,7 +54,7 @@ class BasisShape(object):
 
         :param k: The multi-index we want to test.
         :type k: tuple
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         return k in self
 
@@ -97,7 +97,7 @@ class BasisShape(object):
                      for lexicographical order. Supported is also 'chain', for
                      the chain-like mode, details see the manual.
         :type mode: string
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -114,6 +114,6 @@ class BasisShape(object):
                           the neighbours :math:`k \pm e_d`.
         :type direction: int
         :return: A list containing the pairs :math:`(d, k^\prime)`.
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")

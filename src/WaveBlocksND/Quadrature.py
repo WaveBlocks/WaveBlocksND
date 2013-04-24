@@ -16,7 +16,7 @@ class Quadrature(object):
     def __init__(self):
         r"""General interface for quadratures.
 
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'Quadrature' is an abstract interface.")
 

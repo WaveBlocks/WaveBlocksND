@@ -21,7 +21,7 @@ class InnerProduct(object):
     def __init__(self):
         r"""General interface for quadratures.
 
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
@@ -62,7 +62,7 @@ class InnerProduct(object):
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         Note that the arguments may vary through subclasses!
 
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'InnerProduct' is an abstract interface.")
 
@@ -72,6 +72,6 @@ class InnerProduct(object):
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         Note that the arguments may vary through subclasses!
 
-        :raise NotImplementedError: Abstract interface.
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'InnerProduct' is an abstract interface.")

@@ -117,7 +117,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
         :type index: A tuple of :math:`D` integers.
         :param value: The new value of the coefficient :math:`c^i_k`.
-        :raise ValueError: For invalid indices :math:`i` or :math:`k`.
+        :raise: :py:ckass:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if component > self._number_components-1 or component < 0:
             raise ValueError("There is no component with index "+str(component)+".")
@@ -138,6 +138,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
         :type index: A tuple of :math:`D` integers.
         :return: A single complex number.
+        :raise: :py:ckass:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if component > self._number_components-1 or component < 0:
             raise ValueError("There is no component with index "+str(component)+".")
@@ -159,7 +160,7 @@ class HagedornWavepacketBase(Wavepacket):
         :type values: An ndarray of suitable shape or a list of ndarrays.
         :param component: The index :math:`i` of the component we want to update with new coefficients.
         :type component: int (Default is ``None`` meaning all)
-        :raise ValueError: For invalid component indices :math:`i`.
+        :raise: :py:class:`ValueError` For invalid component indices :math:`i`.
         """
         if component is None:
             if len(values) != self._number_components:
@@ -187,6 +188,7 @@ class HagedornWavepacketBase(Wavepacket):
         :return: A single ndarray with the coefficients of the given component or
                  a list containing the ndarrays for each component. Each ndarray
                  is two-dimensional with a shape of :math:`(|\mathcal{K}_i|, 1)`.
+        :raise: :py:class:`ValueError` For invalid component indices :math:`i`.
         """
         if component is None:
             return [ item.copy() for item in self._coefficients ]

@@ -90,8 +90,8 @@ class WaveFunction(object):
             # Return as non-flat array
             # Not implemented yet, not needed yet
             pass
-            
-            
+
+
     def set_values(self, values, components=None, flat=None):
         r"""Assign new wavefunction values :math:`\psi_i(\Gamma)` for each component
         :math:`i` of :math:`\Psi` to the current :py:class:`WaveFunction` instance.
@@ -109,7 +109,7 @@ class WaveFunction(object):
 
         Note: This method does NOT copy the input data arrays.
 
-        :raise ValueError: If the list of `values` has the wrong length.
+        :raise: :py:class:`ValueError` If the list of `values` has the wrong length.
         """
         if components is None:
             assert len(values) == self._number_components

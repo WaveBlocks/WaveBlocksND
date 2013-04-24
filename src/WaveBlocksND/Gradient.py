@@ -19,7 +19,7 @@ class Gradient(object):
 
     def __init__(self):
         r"""
-        :raise NotImplementedError: This is an abstract base class.
+        :raise: :py:class:`NotImplementedError` This is an abstract base class.
         """
         raise NotImplementedError("'Gradient' is an abstract base class.")
 

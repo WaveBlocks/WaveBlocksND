@@ -52,7 +52,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         r"""Set up a Hagedorn propagator for the simulation loop. Set the
         potential and initial values according to the configuration.
 
-        :raise ValueError: For invalid or missing input data.
+        :raise: :py:class:`ValueError` For invalid or missing input data.
         """
         # The potential instance
         potential = BlockFactory().create_potential(self.parameters)
