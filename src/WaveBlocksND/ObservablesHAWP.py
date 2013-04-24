@@ -59,7 +59,7 @@ class ObservablesHAWP(Observables):
                           computation is performed for all :math:`N` components.
         :type component: Integer or ``None``.
         :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual
-                       components :math:`\Phi_i`. Default is `False`.
+                       components :math:`\Phi_i`. Default is ``False``.
         :type summed: Boolean
         :return: A list with the kinetic energies of the individual components or the
                  overall kinetic energy of the wavepacket. (Depending on the optional arguments.)
@@ -97,7 +97,7 @@ class ObservablesHAWP(Observables):
                           computation is performed for all :math:`N` components.
         :type component: Integer or ``None``.
         :param summed: Whether to sum up the potential energies :math:`E_i` of the individual
-                       components :math:`\Phi_i`. Default is `False`.
+                       components :math:`\Phi_i`. Default is ``False``.
         :type summed: Boolean
         :return: A list with the potential energies of the individual components or the
                  overall potential energy of the wavepacket. (Depending on the optional arguments.)

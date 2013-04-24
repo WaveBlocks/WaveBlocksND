@@ -75,7 +75,7 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         and for building matrices.
 
         :param operator: The operator of the inner product.
-                         If `None` a suitable identity is used.
+                         If ``None`` a suitable identity is used.
         :param matrix: Set this to ``True`` (Default is ``False``) in case
                        we want to compute the matrix elements.
                        For nasty technical reasons we can not yet unify

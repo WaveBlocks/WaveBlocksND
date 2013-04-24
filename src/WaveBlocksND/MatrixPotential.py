@@ -53,7 +53,7 @@ class MatrixPotential(object):
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the potential at.
         :param entry: The indices :math:`(i,j)` of the component :math:`V_{i,j}(x)`
-                      we want to evaluate or `None` to evaluate all entries.
+                      we want to evaluate or ``None`` to evaluate all entries.
         :raise: :py:class:`NotImplementedError` This is an abstract base class.
         """
         raise NotImplementedError("evaluate_at(...)")
@@ -73,7 +73,7 @@ class MatrixPotential(object):
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvalues at.
         :param entry: The index :math:`i` of the eigenvalue :math:`\lambda_i(x)`
-                      we want to evaluate or `None` to evaluate all eigenvalues.
+                      we want to evaluate or ``None`` to evaluate all eigenvalues.
         :raise: :py:class:`NotImplementedError` This is an abstract base class.
         """
         raise NotImplementedError("evaluate_eigenvalues_at(...)")
@@ -93,7 +93,7 @@ class MatrixPotential(object):
         :param grid: The grid containing the nodes :math:`\gamma_i` we want
                      to evaluate the eigenvectors at.
         :param entry: The index :math:`i` of the eigenvector :math:`\nu_i(x)`
-                      we want to evaluate or `None` to evaluate all eigenvectors.
+                      we want to evaluate or ``None`` to evaluate all eigenvectors.
         :raise: :py:class:`NotImplementedError` This is an abstract base class.
         """
         raise NotImplementedError("evaluate_eigenvectors_at(...)")
