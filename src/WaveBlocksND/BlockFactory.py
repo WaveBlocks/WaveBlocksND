@@ -126,7 +126,7 @@ class BlockFactory(object):
             # And the quadrature
             if description.has_key("innerproduct"):
                 IP = self.create_inner_product(description["innerproduct"])
-                WP.set_quadrature(IP)
+                WP.set_innerproduct(IP)
             else:
                 print("Warning: no inner product specified!")
 

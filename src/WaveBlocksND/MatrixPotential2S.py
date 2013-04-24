@@ -291,7 +291,7 @@ class MatrixPotential2S(MatrixPotential):
         :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)
         :param entry: The index :math:`i` of the eigenvector :math:`\nu_i(x)`
                       we want to evaluate or ``None`` to evaluate all eigenvectors.
-        :type entry: A singly python  integer.
+        :type entry: A single python  integer.
         :return: A list containing the numpy ndarrays, all of shape :math:`(N, |\Gamma|)`.
         """
         # TODO: Rethink about the 'entry' parameter here. Do we need it?
