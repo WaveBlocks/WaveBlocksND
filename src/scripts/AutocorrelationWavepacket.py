@@ -42,7 +42,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
     HAWPt = BlockFactory().create_wavepacket(descr)
 
     if eigentrafo is True:
-        BT.set_matrix_builder(HAWPo.get_quadrature())
+        BT.set_matrix_builder(HAWPo.get_innerproduct())
 
     # Basis shapes
     BS_descr = iom.load_wavepacket_basisshapes()
@@ -60,8 +60,8 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
     HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
     HAWPo.set_coefficients(coeffs)
 
-    # Set up the quadrature for solving the integrals <phi_0 | phi_t>
-    QR = HAWPo.get_quadrature().get_qr()
+    # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
+    QR = HAWPo.get_innerproduct().get_qr()
     IHQ = InhomogeneousInnerProduct(QR)
 
     # Transform to the eigenbasis.
@@ -123,7 +123,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
     HAWPt = BlockFactory().create_wavepacket(descr)
 
     if eigentrafo is True:
-        BT.set_matrix_builder(HAWPo.get_quadrature())
+        BT.set_matrix_builder(HAWPo.get_innerproduct())
 
     # Basis shapes
     BS_descr = iom.load_inhomogwavepacket_basisshapes()
@@ -140,8 +140,8 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
     HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
     HAWPo.set_coefficients(coeffs)
 
-    # Set up the quadrature for solving the integrals <phi_0 | phi_t>
-    QR = HAWPo.get_quadrature().get_qr()
+    # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
+    QR = HAWPo.get_innerproduct().get_qr()
     IHQ = InhomogeneousInnerProduct(QR)
 
     # Iterate over all timesteps
