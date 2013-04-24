@@ -75,6 +75,8 @@ Wavepackets
    waveblocks_classes/InhomogeneousInnerProduct
 
    waveblocks_classes/Quadrature
+
+   waveblocks_classes/DirectQuadrature
    waveblocks_classes/DirectHomogeneousQuadrature
    waveblocks_classes/DirectInhomogeneousQuadrature
 

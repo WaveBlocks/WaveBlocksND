@@ -19,6 +19,15 @@ class DirectQuadrature(Quadrature):
     r"""
     """
 
+    def get_description(self):
+        r"""Return a description of this quadrature object.
+        A description is a ``dict`` containing all key-value pairs
+        necessary to reconstruct the current instance. A description
+        never contains any data.
+        """
+        raise NotImplementedError("'DirectQuadrature' is an abstract interface.")
+
+
     def perform_quadrature(self, row, col):
         r"""Evaluates by numerical steepest descent the integral
         :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
@@ -46,7 +55,7 @@ class DirectQuadrature(Quadrature):
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
-        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.        
+        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
         if not self._QR.get_dimension() == self._packet.get_dimension():
             raise ValueError("Quadrature dimension does not match the wavepacket dimension")

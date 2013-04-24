@@ -163,12 +163,12 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
 
     def do_quadrature(self, row, col):
         r"""Evaluates by standard quadrature the integral
-        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
+        :math:`\langle \Phi_i | f | \Phi_j \rangle` for a polynomial
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
-        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
-        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
+        :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
+        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}_j|`.
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()

@@ -31,6 +31,7 @@ from KineticOperator import KineticOperator
 from Propagator import Propagator
 from FourierPropagator import FourierPropagator
 from HagedornPropagator import HagedornPropagator
+from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 
 from IOManager import IOManager
 
@@ -62,6 +63,7 @@ from HomogeneousInnerProduct import HomogeneousInnerProduct
 from InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
 from Quadrature import Quadrature
+from DirectQuadrature import DirectQuadrature
 from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
 from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
