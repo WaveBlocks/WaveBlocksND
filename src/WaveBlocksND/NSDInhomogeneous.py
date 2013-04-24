@@ -213,13 +213,14 @@ class NSDInhomogeneous(Quadrature):
         self._allsigns = -2.0*(flipud((y>>x) & 1)-0.5)
 
 
-    def perform_nsd(self, row, col):
-        r"""Evaluate a single integral :math:`\langle \phi_k | f(x) | \phi_l\rangle`
-        by numerical steepest descent.
+    def do_nsd(self, row, col):
+        r"""Evaluates by numerical steepest descent the integral
+        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
+        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
-        :param row: The index :math:`k` of the basis function :math:`\phi_k` of :math:`\Phi`.
-        :param col: The index :math:`l` of the basis function :math:`\phi^\prime_l` of :math:`\Phi^\prime`.
-        :return: A single complex floating point number.
+        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
+        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
+        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
@@ -318,7 +319,7 @@ class NSDInhomogeneous(Quadrature):
         if not self._QR.get_dimension() == self._packet.get_dimension():
             raise ValueError("Quadrature dimension does not match the wavepacket dimension")
 
-        M = self.perform_nsd(row, col)
+        M = self.do_nsd(row, col)
         # Include the coefficients as c^H M c
         cbra = self._pacbra.get_coefficients(component=row)
         cket = self._packet.get_coefficients(component=col)
@@ -338,5 +339,5 @@ class NSDInhomogeneous(Quadrature):
         if not self._QR.get_dimension() == self._packet.get_dimension():
             raise ValueError("Quadrature dimension does not match the wavepacket dimension")
 
-        M = self.perform_nsd(row, col)
+        M = self.do_nsd(row, col)
         return M

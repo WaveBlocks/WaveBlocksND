@@ -13,12 +13,12 @@ from numpy import zeros, ones, squeeze, imag, conjugate, dot, ndarray, einsum
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
-from Quadrature import Quadrature
+from DirectQuadrature import DirectQuadrature
 
 __all__ = ["DirectInhomogeneousQuadrature"]
 
 
-class DirectInhomogeneousQuadrature(Quadrature):
+class DirectInhomogeneousQuadrature(DirectQuadrature):
     r"""
     """
 
@@ -164,87 +164,34 @@ class DirectInhomogeneousQuadrature(Quadrature):
         return nodes.copy()
 
 
-    def perform_quadrature(self, row, col):
+    def do_quadrature(self, row, col):
         r"""Evaluates by standard quadrature the integral
-        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a general
+        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
-
-        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
-        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
-        :return: A single complex floating point number.
-        """
-        if not self._QR.get_dimension() == self._packet.get_dimension():
-            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
-
-        D = self._packet.get_dimension()
-        eps = self._packet.get_eps()
-
-        Pibra = self._pacbra.get_parameters(component=row)
-        Piket = self._packet.get_parameters(component=col)
-
-        # Transform nodes and evaluate bases
-        nodes = self.transform_nodes(Pibra, Piket, eps)
-        basisr = self._pacbra.evaluate_basis_at(nodes, component=row, prefactor=True)
-        basisc = self._packet.evaluate_basis_at(nodes, component=col, prefactor=True)
-
-        # Operator should support the component notation for efficiency
-        values = self._operator(nodes, None, entry=(row,col))
-
-        # Recheck what we got
-        assert type(values) is ndarray
-        assert values.shape == (1,self._QR.get_number_nodes())
-
-        Pimix = self.mix_parameters(Pibra, Piket)
-        factor = squeeze(eps**D * values * self._weights * det(Pimix[1]))
-
-        # Summing up matrices over all quadrature nodes
-        M = einsum("k,ik,jk", factor, conjugate(basisr), basisc)
-
-        # Compute global phase difference
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
-
-        # And include the coefficients as conj(c).T*M*c
-        return phase * dot(conjugate(self._coeffbra[row]).T, dot(M, self._coeffket[col]))
-
-
-    def perform_build_matrix(self, row, col):
-        r"""Computes by standard quadrature the matrix elements
-        :math:`\langle\Phi_i | f |\Phi^\prime_j\rangle` for a general function
-        :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
         :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
-        if not self._QR.get_dimension() == self._packet.get_dimension():
-            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
-
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
-
+        # Mix wavepacket parameters
         Pibra = self._pacbra.get_parameters(component=row)
         Piket = self._packet.get_parameters(component=col)
-
+        Pimix = self.mix_parameters(Pibra, Piket)
         # Transform nodes and evaluate bases
         nodes = self.transform_nodes(Pibra, Piket, eps)
         basisr = self._pacbra.evaluate_basis_at(nodes, component=row, prefactor=True)
         basisc = self._packet.evaluate_basis_at(nodes, component=col, prefactor=True)
-
-        Pimix = self.mix_parameters(Pibra, Piket)
         # Operator should support the component notation for efficiency
-        # TODO: operator should be only f(nodes) but we can not fix this currently
         values = self._operator(nodes, Pimix[0], entry=(row,col))
-
         # Recheck what we got
         assert type(values) is ndarray
         assert values.shape == (1,self._QR.get_number_nodes())
-
+        # Main part of the integrand
         factor = squeeze(eps**D * values * self._weights * det(Pimix[1]))
-
         # Sum up matrices over all quadrature nodes
         M = einsum("k,ik,jk", factor, conjugate(basisr), basisc)
-
         # Compute global phase difference
         phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
-
         return phase * M

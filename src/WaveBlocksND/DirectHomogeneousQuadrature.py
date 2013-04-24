@@ -12,12 +12,12 @@ Here we handle the homogeneous case.
 from numpy import zeros, ones, squeeze, conjugate, dot, einsum
 from scipy.linalg import sqrtm, inv #, svd, diagsvd
 
-from Quadrature import Quadrature
+from DirectQuadrature import DirectQuadrature
 
 __all__ = ["DirectHomogeneousQuadrature"]
 
 
-class DirectHomogeneousQuadrature(Quadrature):
+class DirectHomogeneousQuadrature(DirectQuadrature):
     r"""
     """
 
@@ -161,52 +161,20 @@ class DirectHomogeneousQuadrature(Quadrature):
         return nodes.copy()
 
 
-    def perform_quadrature(self, row, col):
+    def do_quadrature(self, row, col):
         r"""Evaluates by standard quadrature the integral
-        :math:`\langle \Phi_i | f | \Phi_j \rangle` for a general
+        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
-        :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
-        :return: A single complex floating point number.
+        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.
+        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
-        if not self._QR.get_dimension() == self._packet.get_dimension():
-            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
-
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
-
         N  = self._packet.get_number_components()
-
+        # Main part of the integrand
         factor = squeeze(eps**D * self._weights * self._values[row*N + col])
-
-        # Summing up matrices over all quadrature nodes
-        M = einsum("k,ik,jk", factor, conjugate(self._bases[row]), self._bases[col])
-
-        # And include the coefficients as conj(c).T*M*c
-        return dot(conjugate(self._coeffs[row]).T, dot(M, self._coeffs[col]))
-
-
-    def perform_build_matrix(self, row, col):
-        r"""Computes by standard quadrature the matrix elements
-        :math:`\langle\Phi_i | f |\Phi_j\rangle` for a general function
-        :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
-
-        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
-        :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
-        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}_j|`.
-        """
-        if not self._QR.get_dimension() == self._packet.get_dimension():
-            raise ValueError("Quadrature dimension does not match the wavepacket dimension")
-
-        D = self._packet.get_dimension()
-        eps = self._packet.get_eps()
-
-        N  = self._packet.get_number_components()
-
-        factor = squeeze(eps**D * self._weights * self._values[row*N + col])
-
         # Sum up matrices over all quadrature nodes
         M = einsum("k,ik,jk", factor, conjugate(self._bases[row]), self._bases[col])
-
         return M
