@@ -62,7 +62,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         # Cache basis sizes
         self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
 
-        # No quadrature set
+        # No inner product set
         self._IP = None
 
         # Function for taking continuous roots
@@ -115,8 +115,9 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         other.set_basis_shapes(self.get_basis_shapes())
         other.set_parameters(self.get_parameters())
         other.set_coefficients(self.get_coefficients())
-        # Quadratures are immutable, no issues with sharing same instance
-        other.set_quadrature(self.get_quadrature())
+        # Innerproducts are stateless and finally immutable,
+        # no issues with sharing same instance
+        other.set_innerproduct(self.get_innerproduct())
         # The complex root caches
         other._sqrt = [ item.clone() for item in self._sqrt ]
 

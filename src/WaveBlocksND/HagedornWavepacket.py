@@ -61,7 +61,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         # The parameter set Pi
         self._Pis = [q, p, Q, P, S]
 
-        # No quadrature set
+        # No inner product set
         self._IP = None
 
         # Function for taking continuous roots
@@ -114,8 +114,9 @@ class HagedornWavepacket(HagedornWavepacketBase):
         other.set_basis_shapes(self.get_basis_shapes())
         other.set_parameters(self.get_parameters())
         other.set_coefficients(self.get_coefficients())
-        # Quadratures are immutable, no issues with sharing same instance
-        other.set_quadrature(self.get_quadrature())
+        # Innerproducts are stateless and finally immutable,
+        # no issues with sharing same instance
+        other.set_innerproduct(self.get_innerproduct())
         # The complex root cache
         other._sqrt = self._sqrt.clone()
 
