@@ -65,7 +65,7 @@ class SymbolicIntegral(Quadrature):
         self._packet = packet
 
 
-    def initialize_operator(self, operator=None, matrix=False):
+    def initialize_operator(self, operator=None, matrix=False, eval_at_once=False):
         r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures
         and for building matrices.
@@ -78,6 +78,9 @@ class SymbolicIntegral(Quadrature):
                        we want to compute the matrix elements.
                        For nasty technical reasons we can not yet unify
                        the operator call syntax.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+                             Since we do not support operators at all, it has no effect.
+        :type eval_at_once: Boolean, default is ``False``.):
         """
         # Operator is None is interpreted as identity transformation
         if operator is None:

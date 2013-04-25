@@ -69,7 +69,7 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         self._coeffket = None
 
 
-    def initialize_operator(self, operator=None, matrix=False):
+    def initialize_operator(self, operator=None, matrix=False, eval_at_once=False):
         r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures
         and for building matrices.
@@ -80,6 +80,8 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
                        we want to compute the matrix elements.
                        For nasty technical reasons we can not yet unify
                        the operator call syntax.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
@@ -91,6 +93,7 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
                 self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
             else:
                 self._operator = operator
+        self._eval_at_once = eval_at_once
 
 
     def prepare(self, rows, cols):
@@ -174,6 +177,7 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
         D = self._packet.get_dimension()
+        N = self._packet.get_number_components()
         eps = self._packet.get_eps()
         # Mix wavepacket parameters
         Pibra = self._pacbra.get_parameters(component=row)
@@ -184,7 +188,11 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         basisr = self._pacbra.evaluate_basis_at(nodes, component=row, prefactor=True)
         basisc = self._packet.evaluate_basis_at(nodes, component=col, prefactor=True)
         # Operator should support the component notation for efficiency
-        values = self._operator(nodes, Pimix[0], entry=(row,col))
+        if self._eval_at_once is True:
+            # TODO: Sure, this is inefficient, but we can not do better right now.
+            values = self._operator(nodes, Pimix[0])[row*N+col]
+        else:
+            values = self._operator(nodes, Pimix[0], entry=(row,col))
         # Recheck what we got
         assert type(values) is ndarray
         assert values.shape == (1,self._QR.get_number_nodes())

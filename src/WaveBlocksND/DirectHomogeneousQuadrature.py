@@ -53,6 +53,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         :param packet: The packet that is used for the 'bra' and 'ket' part.
         """
         self._packet = packet
+        self._pacbra = packet
 
         # Adapt the quadrature nodes and weights
         eps = self._packet.get_eps()
@@ -65,7 +66,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         self._coeffs = None
 
 
-    def initialize_operator(self, operator=None, matrix=False):
+    def initialize_operator(self, operator=None, matrix=False, eval_at_once=False):
         r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures
         and for building matrices.
@@ -76,6 +77,8 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
                        we want to compute the matrix elements.
                        For nasty technical reasons we can not yet unify
                        the operator call syntax.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
@@ -87,6 +90,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
                 self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
             else:
                 self._operator = operator
+        self._eval_at_once = eval_at_once
 
 
     def prepare(self, rows, cols):
@@ -115,8 +119,10 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
 
         # Operator
         q, p, Q, P, S = self._packet.get_parameters()
-        self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
-
+        if self._eval_at_once is True:
+            self._values = tuple(self._operator(self._nodes, q))
+        else:
+            self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
         # Recheck what we got
         assert type(self._values) is tuple
         assert len(self._values) == N**2

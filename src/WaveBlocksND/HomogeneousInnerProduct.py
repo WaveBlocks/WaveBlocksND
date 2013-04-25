@@ -44,26 +44,28 @@ class HomogeneousInnerProduct(InnerProduct):
         return d
 
 
-    def quadrature(self, packet, operator=None, summed=False, component=None, diag_component=None, diagonal=False):
+    def quadrature(self, packet, operator=None, summed=False, component=None, diag_component=None, diagonal=False, eval_at_once=False):
         r"""Delegates the evaluation of :math:`\langle\Psi|f|\Psi\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param packet: The wavepacket :math:`\Psi`.
         :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :param summed: Whether to sum up the individual integrals :math:`\langle\Phi_i|f_{i,j}|\Phi_j\rangle`.
-        :type summed: bool, default is ``False``.
+        :type summed: Boolean, default is ``False``.
         :param component: Request only the i-th component of the result. Remember that :math:`i \in [0, N^2-1]`.
         :param diag_component: Request only the i-th component from the diagonal entries, here :math:`i \in [0, N-1]`.
                                Note that ``component`` takes precedence over ``diag_component`` if both are supplied. (Which is discouraged)
-        :param: diagonal: Only return the diagonal elements :math:`\langle\Phi_i|f_{i,i}|\Phi_i\rangle`.
-                          This is useful for diagonal operators :math:`f`.
+        :param diagonal: Only return the diagonal elements :math:`\langle\Phi_i|f_{i,i}|\Phi_i\rangle`.
+                         This is useful for diagonal operators :math:`f`.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         :return: The value of the braket :math:`\langle\Psi|f|\Psi\rangle`. This is either a scalar value or
                  a list of :math:`N^2` scalar elements depending on the value of ``summed``.
         """
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
 
         self._quad.initialize_packet(packet)
-        self._quad.initialize_operator(operator)
+        self._quad.initialize_operator(operator, eval_at_once=eval_at_once)
 
         # Avoid unnecessary computations of other components
         N  = packet.get_number_components()
@@ -104,19 +106,21 @@ class HomogeneousInnerProduct(InnerProduct):
         return result
 
 
-    def build_matrix(self, packet, operator=None):
+    def build_matrix(self, packet, operator=None, eval_at_once=False):
         r"""Delegates the computation of the matrix elements :math:`\langle\Psi|f|\Psi\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c^i_k`.
 
         :param packet: The wavepacket :math:`\Psi`.
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
         """
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
 
         self._quad.initialize_packet(packet)
-        self._quad.initialize_operator(operator, matrix=True)
+        self._quad.initialize_operator(operator, matrix=True, eval_at_once=eval_at_once)
 
         N = packet.get_number_components()
         K = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]

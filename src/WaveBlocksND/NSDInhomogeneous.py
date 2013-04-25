@@ -63,7 +63,7 @@ class NSDInhomogeneous(Quadrature):
         self._packet = packet
 
 
-    def initialize_operator(self, operator=None, matrix=False):
+    def initialize_operator(self, operator=None, matrix=False, eval_at_once=False):
         r"""Provide the operator part of the inner product to evaluate.
         This function initializes the operator used for quadratures
         and for building matrices.
@@ -77,6 +77,8 @@ class NSDInhomogeneous(Quadrature):
                        we want to compute the matrix elements.
                        For nasty technical reasons we can not yet unify
                        the operator call syntax.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         """
         # TODO: Make this more efficient, only compute values needed at each (r,c) step.
         #       For this, 'operator' must support the 'component=(r,c)' option.
@@ -90,6 +92,7 @@ class NSDInhomogeneous(Quadrature):
                 self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
             else:
                 self._operator = operator
+        self._eval_at_once = eval_at_once
 
 
     def mix_parameters(self, Pibra, Piket):
@@ -165,9 +168,9 @@ class NSDInhomogeneous(Quadrature):
             t_{j,j} & := t_{j,j} - \frac{t_{i,j}^2}{4 t_{i,i}} \\
             t_{j,k} & := t_{j,k} - \frac{t_{i,j} t_{i,k}}{2 t_{i,i}} \,, \quad k > j \,.
 
-        :param: The matrix :math:`\mathbf{T}` we want to update. (Note that the matrix
-                is not modified and a copy returned.)
-        :param: The row :math:`0 \leq i \leq D-1` which is taken as base for the updates.
+        :param T: The matrix :math:`\mathbf{T}` we want to update. (Note that the matrix
+                  is not modified and a copy returned.)
+        :param i: The row :math:`0 \leq i \leq D-1` which is taken as base for the updates.
         :return: The updated matrix :math:`\mathbf{T}`.
         """
         Ti = T.copy()
@@ -223,6 +226,7 @@ class NSDInhomogeneous(Quadrature):
         :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}^\prime_j|`.
         """
         D = self._packet.get_dimension()
+        N = self._packet.get_number_components()
         eps = self._packet.get_eps()
         Pibra = self._pacbra.get_parameters(component=row)
         Piket = self._packet.get_parameters(component=col)
@@ -297,8 +301,12 @@ class NSDInhomogeneous(Quadrature):
             basisr = basisr / basisr[0,:]
             basisc = self._packet.evaluate_basis_at(h, col, prefactor=False)
             basisc = basisc / basisc[0,:]
-            # Operator
-            opath = self._operator(h, Pimix[0], entry=(row,col))
+            # Operator should support the component notation for efficiency
+            if self._eval_at_once is True:
+                # TODO: Sure, this is inefficient, but we can not do better right now.
+                opath = self._operator(h, Pimix[0])[row*N+col]
+            else:
+                opath = self._operator(h, Pimix[0], entry=(row,col))
             # Do the quadrature
             factor = (opath * quadrand).reshape((-1,))
             # Sum up matrices over all quadrature nodes

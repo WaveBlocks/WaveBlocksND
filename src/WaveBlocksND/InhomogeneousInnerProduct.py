@@ -42,7 +42,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         return d
 
 
-    def quadrature(self, pacbra, packet=None, operator=None, summed=False, component=None, diag_component=None, diagonal=False):
+    def quadrature(self, pacbra, packet=None, operator=None, summed=False, component=None, diag_component=None, diagonal=False, eval_at_once=False):
         r"""Delegates the evaluation of :math:`\langle\Psi|f|\Psi^\prime\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
@@ -50,13 +50,14 @@ class InhomogeneousInnerProduct(InnerProduct):
         :param packet: The wavepacket :math:`\Psi^\prime` from the ket with :math:`N^\prime` components.
         :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :param summed: Whether to sum up the individual integrals :math:`\langle\Phi_i|f_{i,j}|\Phi^\prime_j\rangle`.
-        :type summed: bool, default is ``False``.
-
+        :type summed: Boolean, default is ``False``.
         :param component: Request only the i-th component of the result. Remember that :math:`i \in [0, N \cdot N^\prime-1]`.
         :param diag_component: Request only the i-th component from the diagonal entries, here :math:`i \in [0, N^\prime-1]`.
                                Note that ``component`` takes precedence over ``diag_component`` if both are supplied. (Which is discouraged)
-        :param: diagonal: Only return the diagonal elements :math:`\langle\Phi_i|f_{i,i}|\Phi^\prime_i\rangle`.
-                          This is useful for diagonal operators :math:`f`.
+        :param diagonal: Only return the diagonal elements :math:`\langle\Phi_i|f_{i,i}|\Phi^\prime_i\rangle`.
+                         This is useful for diagonal operators :math:`f`.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         :return: The value of the braket :math:`\langle\Psi|f|\Psi^\prime\rangle`. This is either a scalar value or
                  a list of :math:`N \cdot N^\prime` scalar elements depending on the value of ``summed``.
         """
@@ -68,7 +69,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
 
         self._quad.initialize_packet(pacbra, packet)
-        self._quad.initialize_operator(operator)
+        self._quad.initialize_operator(operator, eval_at_once=eval_at_once)
 
         # Packets can have different number of components
         Nbra = pacbra.get_number_components()
@@ -112,7 +113,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         return result
 
 
-    def build_matrix(self, pacbra, packet=None, operator=None):
+    def build_matrix(self, pacbra, packet=None, operator=None, eval_at_once=False):
         r"""Delegates the computation of the matrix elements :math:`\langle\Psi|f|\Psi^\prime\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c^i_k`.
@@ -120,6 +121,8 @@ class InhomogeneousInnerProduct(InnerProduct):
         :param pacbra: The wavepacket :math:`\Psi` from the bra with :math:`N` components.
         :param packet: The wavepacket :math:`\Psi^\prime` from the ket with :math:`N^\prime` components.
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
+        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
+        :type eval_at_once: Boolean, default is ``False``.
         :return: A matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^{N^\prime} |\mathcal{K}^\prime_j|`.
         """
         # Allow to ommit the ket if it is the same as the bra
@@ -130,7 +133,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         # TODO: Should raise Exceptions if pacbra and packet are incompatible wrt N, K etc
 
         self._quad.initialize_packet(pacbra, packet)
-        self._quad.initialize_operator(operator, matrix=True)
+        self._quad.initialize_operator(operator, matrix=True, eval_at_once=eval_at_once)
 
         # Packets can have different number of components
         Nbra = pacbra.get_number_components()
