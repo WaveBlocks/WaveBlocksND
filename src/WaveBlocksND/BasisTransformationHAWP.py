@@ -95,7 +95,7 @@ class BasisTransformationHAWP(BasisTransformation):
         f = F(self._potential)
 
         # And now compute the transformation
-        F = transpose(conjugate(self._builder.build_matrix(wavepacket, f)))
+        F = transpose(conjugate(self._builder.build_matrix(wavepacket, operator=f)))
         c = wavepacket.get_coefficient_vector()
         d = dot(F, c)
 
@@ -145,7 +145,7 @@ class BasisTransformationHAWP(BasisTransformation):
         f = F(self._potential)
 
         # And now compute the transformation
-        F = self._builder.build_matrix(wavepacket, f)
+        F = self._builder.build_matrix(wavepacket, operator=f)
         c = wavepacket.get_coefficient_vector()
         d = dot(F, c)
 
