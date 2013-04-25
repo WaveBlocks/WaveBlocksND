@@ -243,7 +243,8 @@ class MatrixPotential2S(MatrixPotential):
         for ent in entries:
             (row, col) = ent
             if row == col:
-                result.append( tmp[row] )
+                # Assumes the diagonal entries are computed and requested 'in order'
+                result.append( tmp.pop(0) )
             else:
                 # Evaluate an off-diagonal entry which equals zero by definition
                 result.append( numpy.zeros((1,grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating) )
