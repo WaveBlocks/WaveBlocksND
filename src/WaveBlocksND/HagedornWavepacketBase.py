@@ -260,7 +260,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param nodes: The nodes we evaluate :math:`\phi_0` at.
         :type nodes: An ndarray of shape ``(D, |\Gamma|)``.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: bool, default is ``False``.
+        :type prefactor: Boolean, default is ``False``.
         :param root: The function used to compute the square root in the prefactor.
                      Defaults to the ``sqrt`` function of ``numpy`` but can be any
                      callable object and especially an instance of :py:class:`ContinuousSqrt`.
@@ -293,7 +293,7 @@ class HagedornWavepacketBase(Wavepacket):
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: bool, default is ``False``.
+        :type prefactor: Boolean, default is ``False``.
         :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathcal{K}_i|, |\Gamma|)` where
                  the entry :math:`H[\mu(k), i]` is the value of :math:`\phi_k(\gamma_i)`.
         """
@@ -371,7 +371,7 @@ class HagedornWavepacketBase(Wavepacket):
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: bool, default is ``False``.
+        :type prefactor: Boolean, default is ``False``.
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i`
                  at the nodes :math:`\gamma`.
 
@@ -461,7 +461,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
                           (Defaults to ``None`` for evaluating all components.)
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: bool, default is ``False``.
+        :type prefactor: Boolean, default is ``False``.
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
         """
         Pis = self.get_parameters(component=component, aslist=True)

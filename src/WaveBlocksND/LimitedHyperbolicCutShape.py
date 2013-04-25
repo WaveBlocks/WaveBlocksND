@@ -125,7 +125,7 @@ class LimitedHyperbolicCutShape(BasisShape):
         boundary nodes are included in the extended basis shape.
 
         :param tight: Whether to cut off the long tails.
-        :param: Boolean, default is ``False``
+        :type tight: Boolean, default is ``False``
         """
         D = self._dimension
         K = self._sparsity
