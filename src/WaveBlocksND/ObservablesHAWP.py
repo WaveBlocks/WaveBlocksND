@@ -110,9 +110,9 @@ class ObservablesHAWP(Observables):
 
         # Compute the brakets for each component
         if component is not None:
-            Q = self._innerproduct.quadrature(wavepacket, operator=f, diag_component=component)
+            Q = self._innerproduct.quadrature(wavepacket, operator=f, diag_component=component, eval_at_once=True)
         else:
-            Q = self._innerproduct.quadrature(wavepacket, operator=f)
+            Q = self._innerproduct.quadrature(wavepacket, operator=f, eval_at_once=True)
 
         # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
         # TODO: Should this go inside the innerproduct?
