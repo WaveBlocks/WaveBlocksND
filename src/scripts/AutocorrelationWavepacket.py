@@ -3,19 +3,20 @@
 Compute the autocorrelations of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
-from WaveBlocksND import InhomogeneousInnerProduct
 
 
-def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
+def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     """Compute the autocorrelation of a wavepacket timeseries.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
+    :param obsconfig: Configuration parameters describing f.e. the inner product to use.
+    :type obsconfig: A :py:class:`ParameterProvider` instance.
     :param blockid: The data block from which the values are read.
     :type blockid: Integer, Default is ``0``
     :param eigentrafo: Whether to make a transformation into the eigenbasis.
@@ -61,8 +62,7 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
-    QR = HAWPo.get_innerproduct().get_qr()
-    IHQ = InhomogeneousInnerProduct(QR)
+    IP = BlockFactory().create_inner_product(obsconfig["innerproduct"])
 
     # Transform to the eigenbasis.
     if eigentrafo is True:
@@ -86,17 +86,19 @@ def compute_autocorrelation_hawp(iom, blockid=0, eigentrafo=True):
             BT.transform_to_eigen(HAWPt)
 
         # Measure autocorrelations in the eigenbasis
-        acs = IHQ.quadrature(HAWPo, HAWPt, diagonal=True)
+        acs = IP.quadrature(HAWPo, HAWPt, diagonal=True)
 
         # Save the autocorrelations
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)
 
 
-def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
+def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     """Compute the autocorrelation of a wavepacket timeseries.
     This function is for inhomogeneous wavepackets.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
+    :param obsconfig: Configuration parameters describing f.e. the inner product to use.
+    :type obsconfig: A :py:class:`ParameterProvider` instance.
     :param blockid: The data block from which the values are read.
     :type blockid: Integer, Default is ``0``
     :param eigentrafo: Whether to make a transformation into the eigenbasis.
@@ -141,8 +143,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
-    QR = HAWPo.get_innerproduct().get_qr()
-    IHQ = InhomogeneousInnerProduct(QR)
+    IP = BlockFactory().create_inner_product(obsconfig["innerproduct"])
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
@@ -162,7 +163,7 @@ def compute_autocorrelation_inhawp(iom, blockid=0, eigentrafo=True):
             BT.transform_to_eigen(HAWPt)
 
         # Measure autocorrelations in the eigenbasis
-        acs = IHQ.quadrature(HAWPo, HAWPt, diagonal=True)
+        acs = IP.quadrature(HAWPo, HAWPt, diagonal=True)
 
         # Save the autocorrelations
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)
