@@ -142,6 +142,7 @@ class BlockFactory(object):
             ip_type = description["type"]
         except:
             # Default setting
+            print("Warning: Using fall-back inner product of type 'InhomogeneousInnerProduct'!")
             # TODO: Maybe change to homogeneous one?
             ip_type = "InhomogeneousInnerProduct"
 

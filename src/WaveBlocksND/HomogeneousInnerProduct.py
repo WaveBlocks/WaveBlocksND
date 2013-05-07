@@ -29,7 +29,7 @@ class HomogeneousInnerProduct(InnerProduct):
 
 
     def __str__(self):
-        return "Inhomogeneous inner product computed by " + str(self._quad)
+        return "Homogeneous inner product computed by " + str(self._quad)
 
 
     def get_description(self):
