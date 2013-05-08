@@ -134,15 +134,23 @@ class SymbolicIntegral(Quadrature):
 
         S = 0.0j
 
+        H1 = {k-j:eval_hermite(k-j,  1.0/eps * arg1) for j in xrange(0, min(l,k)+1)}
+        H2 = {l-j:eval_hermite(l-j, -1.0/eps * arg2) for j in xrange(0, min(l,k)+1)}
+        pf1 = {k-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((k-j)/2.0) for j in xrange(0, min(l,k)+1)}
+        pf2 = {l-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0) for j in xrange(0, min(l,k)+1)}
+
         for j in xrange(0, min(l,k)+1):
-            s = (binom(l,j)*binom(k,j) * factorial(j) * 4**j *
-                 (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((k-j)/2.0) *
-                 (1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0))
+            # s = (binom(l,j)*binom(k,j) * factorial(j) * 4**j *
+            #      (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((k-j)/2.0) *
+            #      (1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0))
 
-            h1 = eval_hermite(k-j,  1.0/eps * arg1)
-            h2 = eval_hermite(l-j, -1.0/eps * arg2)
+            # h1 = eval_hermite(k-j,  1.0/eps * arg1)
+            # h2 = eval_hermite(l-j, -1.0/eps * arg2)
 
-            S = S + s*h1*h2
+            # S = S + s*h1*h2
+            s = (binom(l,j)*binom(k,j) * factorial(j) * 4**j
+                 * pf1[k-j] * pf2[l-j] * H1[k-j] * H2[l-j])
+            S = S + s
         #else:
         #    S = 1.0
 
