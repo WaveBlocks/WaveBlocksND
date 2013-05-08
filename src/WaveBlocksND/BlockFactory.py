@@ -187,6 +187,10 @@ class BlockFactory(object):
             QR = self.create_quadrature_rule(description["qr"])
             QE = NSDInhomogeneous(QR)
 
+        elif qe_type == "SymbolicIntegral":
+            from SymbolicIntegral import SymbolicIntegral
+            QE = SymbolicIntegral()
+
         else:
             raise ValueError("Unknown quadrature type "+str(qe_type))
 
