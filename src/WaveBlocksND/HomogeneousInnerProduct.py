@@ -115,7 +115,7 @@ class HomogeneousInnerProduct(InnerProduct):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}`.
         :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
         :type eval_at_once: Boolean, default is ``False``.
-        :return: A square matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^N |\mathcal{K}_j|`.
+        :return: A square matrix of size :math:`\sum_i^N |\mathfrak{K}_i| \times \sum_j^N |\mathfrak{K}_j|`.
         """
         # TODO: Consider adding 'is_diagonal' flag to make computations cheaper if we know the operator is diagonal
 

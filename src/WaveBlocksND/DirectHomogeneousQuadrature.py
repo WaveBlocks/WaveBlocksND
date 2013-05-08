@@ -174,7 +174,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
 
         :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.
         :param row: The index :math:`j` of the component :math:`\Phi_j` of :math:`\Psi`.
-        :return: A complex valued matrix of shape :math:`|\mathcal{K}_i| \times |\mathcal{K}_j|`.
+        :return: A complex valued matrix of shape :math:`|\mathfrak{K}_i| \times |\mathfrak{K}_j|`.
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()

@@ -13,7 +13,7 @@ __all__ = ["BasisShape"]
 class BasisShape(object):
     r"""This class defines the abstract interface to basis shapes.
     A basis shape is essentially all information and operations
-    related to the set :math:`\mathcal{K}` of multi-indices :math:`k`.
+    related to the set :math:`\mathfrak{K}` of multi-indices :math:`k`.
 
     Basis shapes must be immutable objects.
     """
@@ -21,6 +21,12 @@ class BasisShape(object):
     def __init__(self):
         r"""
         :raise: :py:class:`NotImplementedError` Abstract interface.
+        """
+        raise NotImplementedError("'BasisShape' is an abstract interface.")
+
+
+    def __str__(self):
+        r""":return: A string describing the basis shape :math:`\mathfrak{K}`.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -35,7 +41,7 @@ class BasisShape(object):
 
     def __contains__(self, k):
         r"""
-        Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathcal{K}`.
+        Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathfrak{K}`.
         :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
@@ -43,14 +49,14 @@ class BasisShape(object):
 
     def __iter__(self):
         r"""Implements iteration over the multi-indices :math:`k` of the non-extended
-        basis set :math:`\mathcal{K}`.
+        basis set :math:`\mathfrak{K}`.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
 
     def contains(self, k):
         r"""
-        Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathcal{K}`.
+        Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathfrak{K}`.
 
         :param k: The multi-index we want to test.
         :type k: tuple
@@ -61,7 +67,7 @@ class BasisShape(object):
 
     def get_dimension(self):
         r"""
-        Returns the dimension :math:`D` of the basis shape :math:`\mathcal{K}`.
+        Returns the dimension :math:`D` of the basis shape :math:`\mathfrak{K}`.
         This is defined as the number of components each multi-index
         :math:`k = (k_0, \ldots, k_{D-1})` has.
         """
@@ -70,9 +76,9 @@ class BasisShape(object):
 
     def get_basis_size(self, extended=False):
         r"""
-        Returns the size :math:`|\mathcal{K}|` of the basis. The size is the
+        Returns the size :math:`|\mathfrak{K}|` of the basis. The size is the
         number of distinct multi-indices :math:`k` that belong to the basis
-        :math:`\mathcal{K}`.
+        :math:`\mathfrak{K}`.
         """
         if not extended:
             return self._basissize

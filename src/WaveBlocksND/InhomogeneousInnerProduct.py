@@ -123,7 +123,7 @@ class InhomogeneousInnerProduct(InnerProduct):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
         :type eval_at_once: Boolean, default is ``False``.
-        :return: A matrix of size :math:`\sum_i^N |\mathcal{K}_i| \times \sum_j^{N^\prime} |\mathcal{K}^\prime_j|`.
+        :return: A matrix of size :math:`\sum_i^N |\mathfrak{K}_i| \times \sum_j^{N^\prime} |\mathfrak{K}^\prime_j|`.
         """
         # Allow to ommit the ket if it is the same as the bra
         if packet is None:

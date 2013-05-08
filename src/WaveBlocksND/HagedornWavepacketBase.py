@@ -58,7 +58,7 @@ class HagedornWavepacketBase(Wavepacket):
 
 
     def get_basis_shapes(self, component=None):
-        r"""Retrieve the basis shapes :math:`\mathcal{K}_i` for each component :math:`i`.
+        r"""Retrieve the basis shapes :math:`\mathfrak{K}_i` for each component :math:`i`.
 
         :param component: The component :math:`i` whose basis shape we request. (Default is
                           ``None`` which means to return the basis shapes for all components.
@@ -72,7 +72,7 @@ class HagedornWavepacketBase(Wavepacket):
 
 
     def set_basis_shapes(self, basis_shape, component=None):
-        r"""Set the basis shape :math:`\mathcal{K}` of a given component or for all components.
+        r"""Set the basis shape :math:`\mathfrak{K}` of a given component or for all components.
 
         :param basis_shape: The basis shape for an individual component or a list with all :math:`N` shapes.
         :type basis_shape: A subclass of :py:class:`BasisShape`.
@@ -187,7 +187,7 @@ class HagedornWavepacketBase(Wavepacket):
         :type component: int (Default is ``None`` meaning all)
         :return: A single ndarray with the coefficients of the given component or
                  a list containing the ndarrays for each component. Each ndarray
-                 is two-dimensional with a shape of :math:`(|\mathcal{K}_i|, 1)`.
+                 is two-dimensional with a shape of :math:`(|\mathfrak{K}_i|, 1)`.
         :raise: :py:class:`ValueError` For invalid component indices :math:`i`.
         """
         if component is None:
@@ -294,7 +294,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
         :type prefactor: Boolean, default is ``False``.
-        :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathcal{K}_i|, |\Gamma|)` where
+        :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathfrak{K}_i|, |\Gamma|)` where
                  the entry :math:`H[\mu(k), i]` is the value of :math:`\phi_k(\gamma_i)`.
         """
         D = self._dimension

@@ -31,5 +31,5 @@ class Gradient(object):
         :param wavepacket: The wavepacket :math:`\Psi` containing :math:`\Phi_i`.
         :param component: The index :math:`i` of the component :math:`\Phi_i`.
         :type component: int
-        :return: Extended basis shape :math:`\mathcal{\dot{K}}` and new coefficients :math:`c^\prime`.
+        :return: Extended basis shape :math:`\mathfrak{\dot{K}}` and new coefficients :math:`c^\prime`.
         """
