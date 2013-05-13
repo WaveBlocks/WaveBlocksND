@@ -6,7 +6,7 @@ Note: The terms 'path' and 'ID' are used as synonyms here. Each simulation
 ID is just the basename of the path or the configuration file.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -334,7 +334,7 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
     for name in stringlist:
         item = get_item(name, pattern)
 
-        if not type(item) == str:
+        if not isinstance(item, basestring):
             print("Warning: ambiguous pattern "+pattern)
             item = item[0]
 
