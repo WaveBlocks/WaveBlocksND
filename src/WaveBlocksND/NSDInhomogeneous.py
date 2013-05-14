@@ -10,7 +10,7 @@ numerical steepest descent technique.
 """
 
 from numpy import (zeros, ones, diag, squeeze,  conjugate, transpose, dot, einsum,
-                   zeros_like, product, indices, flipud, complexfloating, imag)
+                   zeros_like, product, indices, flipud, complexfloating, imag, nan_to_num)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
@@ -301,6 +301,10 @@ class NSDInhomogeneous(Quadrature):
             basisr = basisr / basisr[0,:]
             basisc = self._packet.evaluate_basis_at(h, col, prefactor=False)
             basisc = basisc / basisc[0,:]
+            # Basis division by phi0 may introduce NaNs
+            #basisr = nan_to_num(basisr)
+            #basisc = nan_to_num(basisc)
+
             # Operator should support the component notation for efficiency
             if self._eval_at_once is True:
                 # TODO: Sure, this is inefficient, but we can not do better right now.
@@ -332,6 +336,8 @@ class NSDInhomogeneous(Quadrature):
         cbra = self._pacbra.get_coefficients(component=row)
         cket = self._packet.get_coefficients(component=col)
         I = squeeze(dot(transpose(conjugate(cbra)), dot(M, cket)))
+        # Handle NaNs if any
+        I = nan_to_num(I)
         return I
 
 
@@ -348,4 +354,6 @@ class NSDInhomogeneous(Quadrature):
             raise ValueError("Quadrature dimension does not match the wavepacket dimension")
 
         M = self.do_nsd(row, col)
+        # Handle NaNs if any
+        M = nan_to_num(M)
         return M
