@@ -119,6 +119,18 @@ class SymbolicIntegral(Quadrature):
         q1, p1, Q1, P1 = Pibra
         q2, p2, Q2, P2 = Piket
 
+        # If both parameter sets are identical, we are back in the
+        # homogeneous case where the phi are orthonormal.
+        # This early returns just serves to avoid introducing NaN
+        # elements in arg1 and arg2 further below. It is allowed to
+        # compare floats on exact equality because the inhomogeneous
+        # formula works even if the floats differ only by tiny amounts.
+        if q1 == q2 and p1 == p2 and Q1 == Q2 and P1 == P2:
+            return 1.0 if k == l else 0.0
+
+        # Note that the formula can still fail if Q1 = Q2 and P1 = P2
+        # but q1 \neq q2 and p1 \neq p2.
+
         I0 = self.exact_result_ground(Pibra, Piket, eps)
         pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(l+k)/2.0) * I0 *
               (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(l+k)/2.0))
@@ -130,7 +142,8 @@ class SymbolicIntegral(Quadrature):
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
         arg2 = ((1.0j*Q2*(p1-p2) - 1.0j*P2*(q1 - q2)) /
-                (sqrt(1.0j*Q2*P1 - 1.0j*Q1*P2)*sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
+                (sqrt(1.0j*Q2*P1 - 1.0j*Q1*P2) *
+                 sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
         S = 0.0j
 
@@ -140,19 +153,8 @@ class SymbolicIntegral(Quadrature):
         pf2 = {l-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0) for j in xrange(0, min(l,k)+1)}
 
         for j in xrange(0, min(l,k)+1):
-            # s = (binom(l,j)*binom(k,j) * factorial(j) * 4**j *
-            #      (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((k-j)/2.0) *
-            #      (1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0))
-
-            # h1 = eval_hermite(k-j,  1.0/eps * arg1)
-            # h2 = eval_hermite(l-j, -1.0/eps * arg2)
-
-            # S = S + s*h1*h2
-            s = (binom(l,j)*binom(k,j) * factorial(j) * 4**j
-                 * pf1[k-j] * pf2[l-j] * H1[k-j] * H2[l-j])
-            S = S + s
-        #else:
-        #    S = 1.0
+            S = S + (binom(l,j)*binom(k,j) * factorial(j) * 4**j
+                     * pf1[k-j] * pf2[l-j] * H1[k-j] * H2[l-j])
 
         Ikl = pf * S
         return squeeze(Ikl)
