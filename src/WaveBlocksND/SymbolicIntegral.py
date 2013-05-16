@@ -128,12 +128,28 @@ class SymbolicIntegral(Quadrature):
         if q1 == q2 and p1 == p2 and Q1 == Q2 and P1 == P2:
             return 1.0 if k == l else 0.0
 
-        # Note that the formula can still fail if Q1 = Q2 and P1 = P2
-        # but q1 \neq q2 and p1 \neq p2.
-
-        I0 = self.exact_result_ground(Pibra, Piket, eps)
-        pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(l+k)/2.0) * I0 *
+        # TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2
+        #       but q1 \neq q2 and p1 \neq p2.
+        pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(l+k)/2.0) * self._I0 *
               (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(l+k)/2.0))
+
+        S = 0.0j
+        for j in xrange(0, min(l,k)+1):
+            S = S + (binom(l,j)*binom(k,j) * factorial(j) * 4**j *
+                     self._pf1[k-j] * self._pf2[l-j] * self._H1[k-j] * self._H2[l-j])
+
+        Ikl = pf * S
+        return squeeze(Ikl)
+
+
+    def _cache_factors(self, Pibra, Piket, Kbra, Kket, eps):
+        q1, p1, Q1, P1 = Pibra
+        q2, p2, Q2, P2 = Piket
+
+        # If both parameter sets are identical, we are back in the homogeneous case.
+        if q1 == q2 and p1 == p2 and Q1 == Q2 and P1 == P2:
+            self._H1 = None
+            self._H2 = None
 
         # TODO: Note: formula currently fails for non-inhomogeneous case
         #       because of divisions by zero in the two args below.
@@ -145,19 +161,23 @@ class SymbolicIntegral(Quadrature):
                 (sqrt(1.0j*Q2*P1 - 1.0j*Q1*P2) *
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
-        S = 0.0j
+        # Because of k in [0, 1, ..., |K|-1] we set K = |K|-1
+        # where |K| is the basis size and K the maximal index.
+        K = Kbra.get_basis_size() -1
+        L = Kket.get_basis_size() -1
 
-        H1 = {k-j:eval_hermite(k-j,  1.0/eps * arg1) for j in xrange(0, min(l,k)+1)}
-        H2 = {l-j:eval_hermite(l-j, -1.0/eps * arg2) for j in xrange(0, min(l,k)+1)}
-        pf1 = {k-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((k-j)/2.0) for j in xrange(0, min(l,k)+1)}
-        pf2 = {l-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((l-j)/2.0) for j in xrange(0, min(l,k)+1)}
+        # The parameter j varies in the range [0, 1, ..., min(K,L)]
+        # hence we have that k-j can be in [K, K-1, ..., K-min(K,L)]
+        # and similar for l-j we have [L, L-1, ..., L-min(K,L)]
+        # where both K-min(K,L) and L-min(K,L) are non-negative.
+        self._H1 = {K-j:eval_hermite(K-j,  1.0/eps * arg1) for j in xrange(0, min(L,K)+1)}
+        self._H2 = {L-j:eval_hermite(L-j, -1.0/eps * arg2) for j in xrange(0, min(L,K)+1)}
 
-        for j in xrange(0, min(l,k)+1):
-            S = S + (binom(l,j)*binom(k,j) * factorial(j) * 4**j
-                     * pf1[k-j] * pf2[l-j] * H1[k-j] * H2[l-j])
+        self._pf1 = {K-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((K-j)/2.0) for j in xrange(0, min(L,K)+1)}
+        self._pf2 = {L-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((L-j)/2.0) for j in xrange(0, min(L,K)+1)}
 
-        Ikl = pf * S
-        return squeeze(Ikl)
+        # And the groundstate value
+        self._I0 = self.exact_result_ground(Pibra, Piket, eps)
 
 
     def perform_quadrature(self, row, col):
@@ -176,6 +196,8 @@ class SymbolicIntegral(Quadrature):
         cket = self._packet.get_coefficient_vector(component=col)
         Kbra = self._pacbra.get_basis_shapes(component=row)
         Kket = self._packet.get_basis_shapes(component=col)
+
+        self._cache_factors(Pibra[:4], Piket[:4], Kbra, Kket, eps)
 
         result = 0.0j
 
@@ -204,6 +226,8 @@ class SymbolicIntegral(Quadrature):
         Piket = self._packet.get_parameters(component=col)
         Kbra = self._pacbra.get_basis_shapes(component=row)
         Kket = self._packet.get_basis_shapes(component=col)
+
+        self._cache_factors(Pibra[:4], Piket[:4], Kbra, Kket, eps)
 
         M = zeros((Kbra.get_basis_size(),Kket.get_basis_size()), dtype=complexfloating)
 
