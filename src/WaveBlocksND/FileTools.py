@@ -286,7 +286,9 @@ def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel
     :return: A (list of the) item(s) whose ``key`` part matches ``pattern``.
     """
     items = get_items(name, ldel=ldel, mdel=mdel, rdel=rdel)
-    result = filter(lambda item: pattern in item, items)
+    searchfor = ldel + pattern + mdel
+    result = filter(lambda item: searchfor in item, items)
+
     if len(result) == 1:
         result = result[0]
     return result
