@@ -13,7 +13,7 @@ from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating
 from scipy import exp
 from scipy.misc import factorial
 from scipy.special import binom
-from scipy.special.orthogonal import eval_hermite
+#from scipy.special.orthogonal import eval_hermite
 
 from Quadrature import Quadrature
 
@@ -103,7 +103,50 @@ class SymbolicIntegral(Quadrature):
         pass
 
 
+    def _evaluate_hermite(self, N, x):
+        r"""Evaluate the first `N` Hermite polynomials at once by exploiting
+        the recursion relation.
+
+        :param N: The maximal order :math:`N` for which we evaluate :math:`H_N`.
+        :param x: The argument :math:`x` of the Hermite polynomial :math:`H_n(x)`.
+        :return: A list :math:`[H_0, H_1, \ldots, H_N]` of all Hermite polynomials
+                 up to order :math:`N` inclusive.
+        """
+        H = {}
+        H[-1] = 0.0
+        H[0] = 1.0
+        for n in xrange(N+1):
+            H[n+1] = 2.0*x*H[n] - 2.0*n*H[n-1]
+
+        H.pop(-1)
+        return H
+
+
     def exact_result_ground(self, Pibra, Piket, eps):
+        r"""Compute the overlap integral :math:`\langle \phi_0 | \phi_0 \rangle` of
+        the groundstate :math:`\phi_0` by using the symbolic formula:
+
+        .. math::
+            \langle \phi_0 | \phi_0 \rangle =
+            \sqrt{\frac{-2 i}{Q_2 \overline{P_1} - P_2 \overline{Q_1}}} \cdot
+              \exp \Biggl(
+                \frac{i}{2 \varepsilon^2}
+                \frac{Q_2 \overline{Q_1} \left(p_2-p_1\right)^2 + P_2 \overline{P_1} \left(q_2-q_1\right)^2}
+                      {\left(Q_2 \overline{P_1} - P_2 \overline{Q_1}\right)}
+              \\
+              -\frac{i}{\varepsilon^2}
+              \frac{\left(q_2-q_1\right) \left( Q_2 \overline{P_1} p_2 - P_2 \overline{Q_1} p_1\right)}
+                   {\left(Q_2 \overline{P_1} - P_2 \overline{Q_1}\right)}
+              \Biggr)
+
+        Note that this is an internal method and usually there is no
+        reason to call it from outside.
+
+        :param Pibra: The parameter set :math:`\Pi = \{q_1,p_1,Q_1,P_1\}` of the bra :math:`\langle \phi_0 |`.
+        :param Piket: The parameter set :math:`\Pi^\prime = \{q_2,p_2,Q_2,P_2\}` of the ket :math:`| \phi_0 \rangle`.
+        :param eps: The semi-classical scaling parameter :math:`\varepsilon`.
+        :return: The value of the integral :math:`\langle \phi_0 | \phi_0 \rangle`.
+        """
         q1, p1, Q1, P1 = Pibra
         q2, p2, Q2, P2 = Piket
         hbar = eps**2
@@ -114,8 +157,40 @@ class SymbolicIntegral(Quadrature):
         return I
 
 
-    def exact_result_higher(self, Pibra, Piket, eps, l, k):
-        # < phi_l[Pi1] | phi_k[Pi2] >
+    def exact_result_higher(self, Pibra, Piket, eps, k, l):
+        r"""Compute the overlap integral :math:`\langle \phi_k | \phi_l \rangle` of
+        two states :math:`\phi_k` and :math:`\phi_l` by using the symbolic formula:
+
+        .. math::
+            \langle \phi_k | \phi_l \rangle =
+            \frac{1}{\sqrt{l!k!}} 2^{-\frac{l+k}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
+            \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{k+l}{2}} \cdot \\
+            \sum_{j=0}^{\min\left(k,l\right)}
+              \Biggl(
+                \binom{k}{j} \binom{l}{j} j! 4^j
+                \left(i Q_2  P_1 - i Q_1  P_2\right)^{\frac{k-j}{2}}
+                \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l-j}{2}}
+                \\
+                \cdot H_{k-j}\left(-\frac{1}{\varepsilon}
+                              \frac{Q_2\left(p_1-p_2\right)-P_2\left(q_1-q_2\right)}
+                                   {\sqrt{Q_2 P_1 - Q_1 P_2}\sqrt{\overline{P_1}Q_2-\overline{Q_1} P_2}}\right)
+                \\
+                \cdot H_{l-j}\left(\frac{1}{\varepsilon}
+                             \frac{\overline{ P_1}\left(q_1-q_2\right)-\overline{Q_1}\left(p_1-p_2\right)}
+                                  {\sqrt{\overline{Q_2 P_1}-\overline{Q_1 P_2}}\sqrt{\overline{ P_1}Q_2-\overline{Q_1} P_2}}\right)
+              \Biggr)
+
+        Note that this is an internal method and usually there is no
+        reason to call it from outside.
+
+        :param Pibra: The parameter set :math:`\Pi = \{q_1,p_1,Q_1,P_1\}` of the bra :math:`\langle \phi_k |`.
+        :param Piket: The parameter set :math:`\Pi^\prime = \{q_2,p_2,Q_2,P_2\}` of the ket :math:`| \phi_l \rangle`.
+        :param eps: The semi-classical scaling parameter :math:`\varepsilon`.
+        :param k: Index :math:`k` of the wavepacket basis function :math:`\phi_k`.
+        :param l: Index :math:`l` of the wavepacket basis function :math:`\phi_l`.
+        :return: The value of the integral :math:`\langle \phi_k | \phi_l \rangle`.
+        """
+        # < phi_k[Pi1] | phi_l[Pi2] >
         q1, p1, Q1, P1 = Pibra
         q2, p2, Q2, P2 = Piket
 
@@ -130,35 +205,45 @@ class SymbolicIntegral(Quadrature):
 
         # TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2
         #       but q1 \neq q2 and p1 \neq p2.
-        pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(l+k)/2.0) * self._I0 *
-              (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(l+k)/2.0))
+        pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(k+l)/2.0) * self._I0 *
+              (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(k+l)/2.0))
 
         S = 0.0j
-        for j in xrange(0, min(l,k)+1):
-            S = S + (binom(l,j)*binom(k,j) * factorial(j) * 4**j *
-                     self._pf1[k-j] * self._pf2[l-j] * self._H1[k-j] * self._H2[l-j])
+        for j in xrange(0, min(k,l)+1):
+            S = S + (binom(k,j)*binom(l,j) * factorial(j) * 4**j *
+                     self._pfk[k-j] * self._pfl[l-j] * self._Hk[k-j] * self._Hl[l-j])
 
         Ikl = pf * S
         return squeeze(Ikl)
 
 
     def _cache_factors(self, Pibra, Piket, Kbra, Kket, eps):
+        r"""Cache some summands to speed up the computation of the sum.
+
+        :param Pibra: The parameter set :math:`\Pi` of the bra :math:`\langle \Phi |`.
+        :param Piket: The parameter set :math:`\Pi^\prime` of the ket :math:`| \Phi^\prime \rangle`.
+        :param Kbra: The basis shape :math:`\mathfrak{K}` of the bra :math:`\langle \Phi |`.
+        :type Kbra: A :py:class:`BasisShape` instance.
+        :param Kket: The basis shape :math:`\mathfrak{K}^\prime` of the ket :math:`| \Phi^\prime \rangle`.
+        :type Kket: A :py:class:`BasisShape` instance.
+        :param eps: The semi-classical scaling parameter :math:`\varepsilon`.
+        """
         q1, p1, Q1, P1 = Pibra
         q2, p2, Q2, P2 = Piket
 
         # If both parameter sets are identical, we are back in the homogeneous case.
         if q1 == q2 and p1 == p2 and Q1 == Q2 and P1 == P2:
-            self._H1 = None
-            self._H2 = None
+            self._Hk = None
+            self._Hl = None
 
         # TODO: Note: formula currently fails for non-inhomogeneous case
         #       because of divisions by zero in the two args below.
-        arg1 = ((1.0j*conjugate(P1)*(q1-q2) - 1.0j*conjugate(Q1)*(p1-p2)) /
-                (sqrt(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) *
+        argk = ((1.0j*Q2*(p1-p2) - 1.0j*P2*(q1-q2)) /
+                (sqrt(1.0j*Q2*P1 - 1.0j*Q1*P2) *
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
-        arg2 = ((1.0j*Q2*(p1-p2) - 1.0j*P2*(q1 - q2)) /
-                (sqrt(1.0j*Q2*P1 - 1.0j*Q1*P2) *
+        argl = ((1.0j*conjugate(P1)*(q1-q2) - 1.0j*conjugate(Q1)*(p1-p2)) /
+                (sqrt(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) *
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
         # Because of k in [0, 1, ..., |K|-1] we set K = |K|-1
@@ -170,11 +255,13 @@ class SymbolicIntegral(Quadrature):
         # hence we have that k-j can be in [K, K-1, ..., K-min(K,L)]
         # and similar for l-j we have [L, L-1, ..., L-min(K,L)]
         # where both K-min(K,L) and L-min(K,L) are non-negative.
-        self._H1 = {K-j:eval_hermite(K-j,  1.0/eps * arg1) for j in xrange(0, min(L,K)+1)}
-        self._H2 = {L-j:eval_hermite(L-j, -1.0/eps * arg2) for j in xrange(0, min(L,K)+1)}
+        #self._H1 = {K-j:eval_hermite(K-j,  1.0/eps * arg1) for j in xrange(0, min(L,K)+1)}
+        #self._H2 = {L-j:eval_hermite(L-j, -1.0/eps * arg2) for j in xrange(0, min(L,K)+1)}
+        self._Hk = self._evaluate_hermite(K, -1.0/eps * argk)
+        self._Hl = self._evaluate_hermite(L,  1.0/eps * argl)
 
-        self._pf1 = {K-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((K-j)/2.0) for j in xrange(0, min(L,K)+1)}
-        self._pf2 = {L-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((L-j)/2.0) for j in xrange(0, min(L,K)+1)}
+        self._pfk = {K-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-j)/2.0) for j in xrange(0, min(L,K)+1)}
+        self._pfl = {L-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-j)/2.0) for j in xrange(0, min(L,K)+1)}
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)
