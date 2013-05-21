@@ -277,17 +277,24 @@ def get_items(name, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     return items
 
 
-def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
+def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, unpack=True):
     r"""Get a single ``key=value`` item out of the name.
     The ``pattern`` specifies the ``key`` part.
 
     :param name: The name from which to get the item.
     :param pattern: The pattern whose value is used for ``key``.
+    :param unpack: Whether to unpack a single unique result instead of returning it inside a list.
+    :type unpack: Boolean, default is ``True``.
     :return: A (list of the) item(s) whose ``key`` part matches ``pattern``.
     """
     items = get_items(name, ldel=ldel, mdel=mdel, rdel=rdel)
-    result = filter(lambda item: pattern in item, items)
-    if len(result) == 1:
+    searchfor = ldel + pattern + mdel
+    result = filter(lambda item: searchfor in item, items)
+
+    if len(result) == 0:
+        print("Warning: pattern '"+pattern+"' not found in: "+str(name))
+
+    if unpack and len(result) == 1:
         result = result[0]
     return result
 
@@ -332,16 +339,16 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
     result = []
 
     for name in stringlist:
-        item = get_item(name, pattern)
+        items = get_item(name, pattern, unpack=False)
 
-        if not isinstance(item, basestring):
-            print("Warning: ambiguous pattern "+pattern)
-            item = item[0]
+        if len(items) > 1:
+            print("Warning: ambiguous pattern '"+pattern+"' in: "+str(name))
 
-        val = get_value(item, ldel=ldel, mdel=mdel, rdel=rdel)
-
-        if str(val) == str(value):
-            result.append(name)
+        for item in items:
+            val = get_value(item, ldel=ldel, mdel=mdel, rdel=rdel)
+            if str(val) == str(value):
+                result.append(name)
+                break
 
     return result
 
