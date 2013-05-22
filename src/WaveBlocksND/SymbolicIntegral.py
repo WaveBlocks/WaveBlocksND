@@ -9,7 +9,7 @@ constructed explicitely for the inhomogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating
+from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating, arange
 from scipy import exp
 from scipy.misc import factorial
 from scipy.special import binom
@@ -205,12 +205,12 @@ class SymbolicIntegral(Quadrature):
 
         # TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2
         #       but q1 \neq q2 and p1 \neq p2.
-        pf = (1.0/sqrt(factorial(k)*factorial(l)) * 2**(-(k+l)/2.0) * self._I0 *
+        pf = (self._f[(k,l)] * 2**(-(k+l)/2.0) * self._I0 *
               (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(k+l)/2.0))
 
         S = 0.0j
         for j in xrange(0, min(k,l)+1):
-            S = S + (binom(k,j)*binom(l,j) * factorial(j) * 4**j *
+            S = S + (self._bk[k,j] * self._bl[l,j] * self._jf[j] *
                      self._pfk[k-j] * self._pfl[l-j] * self._Hk[k-j] * self._Hl[l-j])
 
         Ikl = pf * S
@@ -236,6 +236,28 @@ class SymbolicIntegral(Quadrature):
             self._Hk = None
             self._Hl = None
 
+        # Because of k in [0, 1, ..., |K|-1] we set K = |K|-1
+        # where |K| is the basis size and K the maximal index.
+        K = Kbra.get_basis_size() -1
+        L = Kket.get_basis_size() -1
+
+        mip1 = min(K,L) +1
+        map1 = max(K,L) +1
+
+        # Factorials
+        f = factorial(arange(map1))
+        self._f = 1.0 / sqrt(f[:(K+1)].reshape(-1,1) * f[:(L+1)].reshape(1,-1))
+
+        # These prefactors depend only on j
+        self._jf = f[:mip1] * 4**arange(mip1)
+
+        # Binomials depend on k or l and j
+        ik = arange(K+1).reshape(-1,1)
+        il = arange(L+1).reshape(-1,1)
+        ij = arange(mip1).reshape(1,-1)
+        self._bk = binom(ik, ij)
+        self._bl = binom(il, ij)
+
         # TODO: Note: formula currently fails for non-inhomogeneous case
         #       because of divisions by zero in the two args below.
         argk = ((1.0j*Q2*(p1-p2) - 1.0j*P2*(q1-q2)) /
@@ -246,22 +268,17 @@ class SymbolicIntegral(Quadrature):
                 (sqrt(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) *
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
-        # Because of k in [0, 1, ..., |K|-1] we set K = |K|-1
-        # where |K| is the basis size and K the maximal index.
-        K = Kbra.get_basis_size() -1
-        L = Kket.get_basis_size() -1
-
         # The parameter j varies in the range [0, 1, ..., min(K,L)]
         # hence we have that k-j can be in [K, K-1, ..., K-min(K,L)]
         # and similar for l-j we have [L, L-1, ..., L-min(K,L)]
         # where both K-min(K,L) and L-min(K,L) are non-negative.
-        #self._H1 = {K-j:eval_hermite(K-j,  1.0/eps * arg1) for j in xrange(0, min(L,K)+1)}
-        #self._H2 = {L-j:eval_hermite(L-j, -1.0/eps * arg2) for j in xrange(0, min(L,K)+1)}
         self._Hk = self._evaluate_hermite(K, -1.0/eps * argk)
         self._Hl = self._evaluate_hermite(L,  1.0/eps * argl)
 
-        self._pfk = {K-j:(1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-j)/2.0) for j in xrange(0, min(L,K)+1)}
-        self._pfl = {L-j:(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-j)/2.0) for j in xrange(0, min(L,K)+1)}
+        self._pfk = zeros((K+1,), dtype=complexfloating)
+        self._pfl = zeros((L+1,), dtype=complexfloating)
+        self._pfk[K-ij] = (1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-ij)/2.0)
+        self._pfl[L-ij] = (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-ij)/2.0)
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)
