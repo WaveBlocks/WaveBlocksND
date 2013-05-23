@@ -236,25 +236,25 @@ class SymbolicIntegral(Quadrature):
             self._Hk = None
             self._Hl = None
 
-        # Because of k in [0, 1, ..., |K|-1] we set K = |K|-1
-        # where |K| is the basis size and K the maximal index.
-        K = Kbra.get_basis_size() -1
-        L = Kket.get_basis_size() -1
+        # We have k in [0, 1, ..., K-1] where |K| is the basis size
+        # hence K-1 is the maximal index.
+        K = Kbra.get_basis_size()
+        L = Kket.get_basis_size()
 
-        mip1 = min(K,L) +1
-        map1 = max(K,L) +1
+        mikl = min(K,L)
+        makl = max(K,L)
 
         # Factorials
-        f = factorial(arange(map1))
-        self._f = 1.0 / sqrt(f[:(K+1)].reshape(-1,1) * f[:(L+1)].reshape(1,-1))
+        f = factorial(arange(makl))
+        self._f = 1.0 / sqrt(f[:K].reshape(-1,1) * f[:L].reshape(1,-1))
 
         # These prefactors depend only on j
-        self._jf = f[:mip1] * 4**arange(mip1)
+        self._jf = f[:mikl] * 4**arange(mikl)
 
         # Binomials depend on k or l and j
-        ik = arange(K+1).reshape(-1,1)
-        il = arange(L+1).reshape(-1,1)
-        ij = arange(mip1).reshape(1,-1)
+        ik = arange(K).reshape(-1,1)
+        il = arange(L).reshape(-1,1)
+        ij = arange(mikl).reshape(1,-1)
         self._bk = binom(ik, ij)
         self._bl = binom(il, ij)
 
@@ -268,17 +268,17 @@ class SymbolicIntegral(Quadrature):
                 (sqrt(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) *
                  sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
 
-        # The parameter j varies in the range [0, 1, ..., min(K,L)]
-        # hence we have that k-j can be in [K, K-1, ..., K-min(K,L)]
-        # and similar for l-j we have [L, L-1, ..., L-min(K,L)]
-        # where both K-min(K,L) and L-min(K,L) are non-negative.
-        self._Hk = self._evaluate_hermite(K, -1.0/eps * argk)
-        self._Hl = self._evaluate_hermite(L,  1.0/eps * argl)
+        # The parameter j varies in the range [0, 1, ..., min(K-1,L-1)]
+        # hence we have that k-j can be in [K-1, K-2, ..., K-1-min(K-1,L-1)]
+        # and similar for l-j we have [L-1, L-2, ..., L-1-min(K-1,L-1)]
+        # where both K-1-min(K-1,L-1) and L-1-min(K-1,L-1) are non-negative.
+        self._Hk = self._evaluate_hermite(K-1, -1.0/eps * argk)
+        self._Hl = self._evaluate_hermite(L-1,  1.0/eps * argl)
 
-        self._pfk = zeros((K+1,), dtype=complexfloating)
-        self._pfl = zeros((L+1,), dtype=complexfloating)
-        self._pfk[K-ij] = (1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-ij)/2.0)
-        self._pfl[L-ij] = (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-ij)/2.0)
+        self._pfk = zeros((K,), dtype=complexfloating)
+        self._pfl = zeros((L,), dtype=complexfloating)
+        self._pfk[K-1-ij] = (1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-1-ij)/2.0)
+        self._pfl[L-1-ij] = (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-1-ij)/2.0)
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)
