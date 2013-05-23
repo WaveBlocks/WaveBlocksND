@@ -163,7 +163,7 @@ class SymbolicIntegral(Quadrature):
 
         .. math::
             \langle \phi_k | \phi_l \rangle =
-            \frac{1}{\sqrt{l!k!}} 2^{-\frac{l+k}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
+            \frac{1}{\sqrt{k!l!}} 2^{-\frac{k+l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
             \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{k+l}{2}} \cdot \\
             \sum_{j=0}^{\min\left(k,l\right)}
               \Biggl(
