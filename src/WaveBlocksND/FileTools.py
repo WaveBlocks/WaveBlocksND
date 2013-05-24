@@ -25,48 +25,58 @@ def get_result_dirs(path):
     return filter(os.path.isdir, dirs)
 
 
-def get_parameters_file(path):
-    r"""Search for a configuration file containing the simulation parameters under a given path.
-    Note that in case there are more than one .py file under the given path we just return the
-    first one found!
+def get_parameters_file(path, unpack=True):
+    r"""Search for a configuration file containing the simulation parameters
+    under a given path. Note that in case there are more than one .py file
+    under the given path we return a list of all.
 
     :parameter path: The path under which we search for a configuration file.
+    :param unpack: Whether to unpack a single unique result instead of returning it inside a list.
+    :type unpack: Boolean, default is ``True``.
     :return: The path (filename) of the configuration file.
     """
-    parameters_file = None
+    parameters_files = []
 
     for afile in os.listdir(path):
         if afile.endswith(".py"):
-            parameters_file = afile
-            break
+            parameters_files.append(afile)
 
-    if parameters_file is None:
+    if len(parameters_files) == 0:
         raise IOError("No configuration .py file found!")
 
-    parameters_file = os.path.join(path, parameters_file)
-    return parameters_file
+    parameters_files = [os.path.join(path, rf) for rf in parameters_files ]
+
+    if unpack and len(parameters_files) == 1:
+        parameters_files = parameters_files[0]
+
+    return parameters_files
 
 
-def get_results_file(path, fileext=GD.ext_resultdatafile):
+def get_results_file(path, fileext=GD.ext_resultdatafile, unpack=True):
     r"""Search for a file containing the simulation results under a given path.
     Note that in case there are more than one .hdf5 file under the given path
-    we just return the first one found!
+    we return a list of all.
 
     :param path: The path under which we search for a output file.
+    :param unpack: Whether to unpack a single unique result instead of returning it inside a list.
+    :type unpack: Boolean, default is ``True``.
     :return: The path (filename) of the output file.
     """
-    results_file = None
+    results_files = []
 
     for afile in os.listdir(path):
         if os.path.isfile(os.path.join(path, afile)) and afile.endswith(fileext):
-            results_file = afile
-            break
+            results_files.append(afile)
 
-    if results_file is None:
+    if len(results_files) == 0:
         raise IOError("No results .hdf5 file found!")
 
-    results_file = os.path.join(path, results_file)
-    return results_file
+    results_files = [os.path.join(path, rf) for rf in results_files ]
+
+    if unpack and len(results_files) == 1:
+        results_files = results_files[0]
+
+    return results_files
 
 
 def get_number_simulations(path):
