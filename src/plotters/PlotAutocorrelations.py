@@ -70,7 +70,7 @@ def plot_autocorrelations(data, index=0):
     ax.grid(True)
     ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
     ax.set_title(r"Autocorrelations of $\Psi$")
-    legend(loc="outer right")
+    legend(loc="upper right")
     ax.set_xlabel(r"Time $t$")
     ax.set_ylim(0, 1.1)
     fig.savefig("autocorrelations_block"+str(index)+GD.output_format)
@@ -96,7 +96,7 @@ def plot_autocorrelations(data, index=0):
         ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
         ax.set_xlabel(r"Time $t$")
 
-    legend(loc="outer right")
+        legend(loc="upper right")
     ax.set_ylim(0, 1.1)
     ax.set_title(r"Autocorrelations of $\Psi$")
     fig.savefig("autocorrelations_per_component_block"+str(index)+GD.output_format)
