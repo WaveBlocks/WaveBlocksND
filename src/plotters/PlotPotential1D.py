@@ -16,6 +16,7 @@ from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
+from WaveBlocksND.Plot import legend
 
 import GraphicsDefaults as GD
 
