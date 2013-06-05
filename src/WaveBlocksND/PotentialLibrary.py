@@ -90,6 +90,11 @@ v_shape["variables"] = ["x"]
 v_shape["potential"] = "1/2 * sqrt(tanh(x)**2+4*delta**2)"
 v_shape["defaults"] = {"delta":0.2}
 
+# Kratzer
+kratzer = {}
+kratzer["variables"] = ["x"]
+kratzer["potential"] = "1/2 * (x**2 + b*(b-1) * x**(-2))"
+kratzer["defaults"] = {"b":2.0}
 
 #####################################################################
 # Potentials in two dimensions and with one energy level (D=2, N=1) #
