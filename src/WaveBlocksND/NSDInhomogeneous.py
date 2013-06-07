@@ -135,8 +135,8 @@ class NSDInhomogeneous(Quadrature):
         :return: Three arrays: a matrix :math:`\mathbf{A}` of shape :math:`D \times D`,
                  a vector :math:`\underline{b}` of shape :math:`D \times 1` and a scalar value :math:`c`.
         """
-        qr, pr, Qr, Pr = Pibra
-        qc, pc, Qc, Pc = Piket
+        qr, pr, Qr, Pr = Pibra[:4]
+        qc, pc, Qc, Pc = Piket[:4]
 
         Gr = dot(Pr, inv(Qr))
         Gc = dot(Pc, inv(Qc))
