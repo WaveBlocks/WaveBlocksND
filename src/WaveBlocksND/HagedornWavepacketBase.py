@@ -7,7 +7,7 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, sum, atleast_2d
+from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, atleast_2d, einsum
 from scipy import exp, sqrt, conjugate
 from scipy.linalg import det, inv, norm
 
@@ -272,9 +272,8 @@ class HagedornWavepacketBase(Wavepacket):
 
         # TODO: Use LU instead of inv(...)
         df = nodes - q
-        pr1 = sum(df * dot(dot(P,inv(Q)), df), axis=0)
-        pr2 = sum(p * df, axis=0)
-
+        pr1 = einsum("ik,ij,jk->k", df, dot(P,inv(Q)), df)
+        pr2 = einsum("ij,ik", p, df)
         exponent = 1.0j / eps**2 * (0.5 * pr1 + pr2)
 
         # The problematic prefactor cancels in inner products
