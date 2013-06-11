@@ -6,7 +6,7 @@ without any code. To load the potentials, use the methods of
 :py:class:`BlockFactory`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -188,7 +188,7 @@ delta_gap["potential"] = [["1/2 * tanh(x)", "delta"         ],
 
 # Diagonalized single avoided crossing
 delta_gap_diag = {}
-delta_gap["variables"] = ["x"]
+delta_gap_diag["variables"] = ["x"]
 delta_gap_diag["potential"] = [["sqrt(delta**2 + tanh(x)**2/4)", "0"                             ],
                                ["0",                             "-sqrt(delta**2 + tanh(x)**2/4)"]]
 
