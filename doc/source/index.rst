@@ -22,6 +22,15 @@ The source code documentation below is actually up to date.
    manual/interactive_use.rst
    citation
 
+Potential Library
+=================
+
+.. toctree::
+   :maxdepth: 1
+
+   potlib/potentials.rst
+
+
 Source code documentation
 =========================
 
