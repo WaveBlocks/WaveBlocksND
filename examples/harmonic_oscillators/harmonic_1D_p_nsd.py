@@ -58,13 +58,15 @@ matrix_exponential = "pade"
 
 observables = {
     "autocorrelation" : {
-        "type" : "InhomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "NSDInhomogeneous",
-            'qr': {
-                'type': 'GaussLaguerreQR',
-                'order': 5,
-                'a': -0.5
+        "innerproduct" : {
+            "type" : "InhomogeneousInnerProduct",
+            "delegate" : {
+                "type" : "NSDInhomogeneous",
+                'qr': {
+                    'type': 'GaussLaguerreQR',
+                    'order': 5,
+                    'a': -0.5
+                }
             }
         }
     }
