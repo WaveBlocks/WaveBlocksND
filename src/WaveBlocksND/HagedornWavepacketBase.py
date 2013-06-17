@@ -3,7 +3,7 @@
 This file contains the basic interface for general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -174,7 +174,7 @@ class HagedornWavepacketBase(Wavepacket):
                 raise ValueError("There is no component with index "+str(component)+".")
 
             bs = self._basis_sizes[component]
-            self._coefficients[component] = value.copy().reshape((bs,1))
+            self._coefficients[component] = values.copy().reshape((bs,1))
 
 
     def get_coefficients(self, component=None):
