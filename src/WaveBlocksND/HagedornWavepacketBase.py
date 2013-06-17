@@ -117,7 +117,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
         :type index: A tuple of :math:`D` integers.
         :param value: The new value of the coefficient :math:`c^i_k`.
-        :raise: :py:ckass:`ValueError` For invalid indices :math:`i` or :math:`k`.
+        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if component > self._number_components-1 or component < 0:
             raise ValueError("There is no component with index "+str(component)+".")
@@ -138,7 +138,7 @@ class HagedornWavepacketBase(Wavepacket):
         :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
         :type index: A tuple of :math:`D` integers.
         :return: A single complex number.
-        :raise: :py:ckass:`ValueError` For invalid indices :math:`i` or :math:`k`.
+        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if component > self._number_components-1 or component < 0:
             raise ValueError("There is no component with index "+str(component)+".")
