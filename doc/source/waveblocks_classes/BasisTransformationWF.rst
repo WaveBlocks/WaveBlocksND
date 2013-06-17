@@ -15,6 +15,7 @@ Class documentation
 -------------------
 
 .. autoclass:: BasisTransformationWF
-   :special-members:
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

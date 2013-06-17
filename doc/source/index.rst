@@ -34,6 +34,7 @@ Basic numerics
    waveblocks_classes/QuadratureRule
    waveblocks_classes/TrapezoidalQR
    waveblocks_classes/GaussHermiteQR
+   waveblocks_classes/GaussLaguerreQR
    waveblocks_classes/TensorProductQR
 
    waveblocks_classes/MatrixExponential

@@ -15,6 +15,7 @@ Class documentation
 -------------------
 
 .. autoclass:: BasisTransformation
-   :special-members:
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

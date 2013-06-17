@@ -21,7 +21,7 @@ class GaussLaguerreQR(QuadratureRule):
     r"""This class implements a (generalized) Gauss-Laguerre quadrature rule.
     """
 
-    def __init__(self, order, a=0, options={}):
+    def __init__(self, order, a=-0.5, options={}):
         r"""Initialize a new quadrature rule.
 
         :param order: The order :math:`R` of the Gauss-Laguerre quadrature.
@@ -29,6 +29,12 @@ class GaussLaguerreQR(QuadratureRule):
                   This value defaults to `0` resulting in classical Gauss-Laguerre quadrature.
 
         :raise: :py:class:`ValueError` if order ``order`` is not 1 or above.
+
+        .. warning::
+
+		This quadrature is made specifically for our needs. Therefore the default
+		values of :math:`\alpha` is not 0 but set to :math:`-\frac{1}{2}`. There
+		is hope that this will give less confusion and hidden errors.
         """
         # The space dimension of the quadrature rule.
         self._dimension = 1

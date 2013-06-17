@@ -1,20 +1,20 @@
-KineticOperator
+GaussLaguerreQR
 ===============
 
-About the ``KineticOperator`` class
---------------------------------------
+About the ``GaussLaguerreQR`` class
+-----------------------------------
 
 .. automodule:: WaveBlocksND
 
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: KineticOperator
+.. inheritance-diagram:: GaussLaguerreQR
 
 Class documentation
 -------------------
 
-.. autoclass:: KineticOperator
+.. autoclass:: GaussLaguerreQR
    :members:
    :inherited-members:
 

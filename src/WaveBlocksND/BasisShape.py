@@ -3,7 +3,7 @@
 This file contains the abstract class for representing basis shapes.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -27,6 +27,8 @@ class BasisShape(object):
 
     def __str__(self):
         r""":return: A string describing the basis shape :math:`\mathfrak{K}`.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -35,6 +37,8 @@ class BasisShape(object):
         r"""
         Implement a custom hash function for basis shapes.
         This is important for storing wavepackets.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("No custom hash function defined.")
 
@@ -42,6 +46,7 @@ class BasisShape(object):
     def __contains__(self, k):
         r"""
         Checks if a given multi-index :math:`k` is part of the basis set :math:`\mathfrak{K}`.
+
         :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
@@ -50,6 +55,8 @@ class BasisShape(object):
     def __iter__(self):
         r"""Implements iteration over the multi-indices :math:`k` of the non-extended
         basis set :math:`\mathfrak{K}`.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 
@@ -70,6 +77,8 @@ class BasisShape(object):
         Returns the dimension :math:`D` of the basis shape :math:`\mathfrak{K}`.
         This is defined as the number of components each multi-index
         :math:`k = (k_0, \ldots, k_{D-1})` has.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         return self._dimension
 
@@ -79,6 +88,8 @@ class BasisShape(object):
         Returns the size :math:`|\mathfrak{K}|` of the basis. The size is the
         number of distinct multi-indices :math:`k` that belong to the basis
         :math:`\mathfrak{K}`.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         if not extended:
             return self._basissize
@@ -91,6 +102,8 @@ class BasisShape(object):
         A description is a ``dict`` containing all key-value pairs
         necessary to reconstruct the current basis shape. A description
         never contains any data.
+
+        :raise: :py:class:`NotImplementedError` Abstract interface.
         """
         raise NotImplementedError("'BasisShape' is an abstract interface.")
 

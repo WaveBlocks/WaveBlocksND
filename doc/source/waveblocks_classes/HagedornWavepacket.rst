@@ -15,6 +15,8 @@ Class documentation
 -------------------
 
 .. autoclass:: HagedornWavepacket
-   :special-members:
    :members:
    :inherited-members:
+
+   .. automethod:: __init__
+   .. automethod:: __str__
