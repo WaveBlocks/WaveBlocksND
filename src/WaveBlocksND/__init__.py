@@ -34,6 +34,7 @@ from HagedornPropagator import HagedornPropagator
 from MagnusPropagator import MagnusPropagator
 from SemiclassicalPropagator import SemiclassicalPropagator
 from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
+from SplittingParameters import SplittingParameters
 
 from IOManager import IOManager
 

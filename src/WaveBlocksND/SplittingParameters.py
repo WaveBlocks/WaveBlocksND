@@ -4,18 +4,37 @@ This file contains data to build several closely
 related splitting methods.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
 from numpy import zeros, flipud, double
 
-# TODO: Document methods and method names
+__all__ = ["SplittingParameters"]
+
 
 class SplittingParameters(object):
 
 
     def build(self, method):
+        r"""
+        :param method: A string specifying the method for time integration.
+        :return: Two arrays :math:`a` and :math:`b`.
+
+        ====== ===== =====================
+        Method Order Authors and Reference
+        ====== ===== =====================
+        LT
+        S2
+        SS
+        BM42   4     BM4-2, Blanes/Moan, Table 3, SRKNb6
+        Y4     4     Yoshida, see Hairer/Lubich/Wanner, p. 40, (4.4)
+        Y61    6     Yoshida, see Hairer/Lubich/Wanner, p. 144, (3.11)
+        BM63   3 <   BM6-3, Blanes/Moan, Table 3, SRKNa14
+        KL6    6     Kahan/Li, see Hairer/Lubich/Wanner, p. 144, (3.12)
+        KL8    8     Kahan/Li, see Hairer/Lubich/Wanner, (3.14)
+        ====== ===== =====================
+        """
         if method == "LT":
             s = 1
             a = zeros(s)
@@ -49,7 +68,7 @@ class SplittingParameters(object):
             b[1] = 0.396309801498368
             b[2] = -0.0390563049223486
             b[3] = 1.0 - 2.0*b[:3].sum()
-            b[4:] = flipud(b[:3])            
+            b[4:] = flipud(b[:3])
         elif method == "Y4":
             # Order 4 (Yoshida, see Hairer/Lubich/Wanner, p. 40, (4.4))
             s = 4
@@ -119,8 +138,8 @@ class SplittingParameters(object):
             b[3] = 0.5*a[3:5].sum()
             b[4] = 0.5*(1-2*a[1:4].sum()-a[4])
             b[5:] = flipud(b[0:5])
-        elif method == "KL8": 
-            # Order 8 (Kahan/Li, see see Hairer/Lubich/Wanner (3.14))
+        elif method == "KL8":
+            # Order 8 (Kahan/Li, see Hairer/Lubich/Wanner (3.14))
             s = 18
             a = zeros(s)
             b = zeros(s)
@@ -144,13 +163,15 @@ class SplittingParameters(object):
 
 
     def intsplit(self, psi1, psi2, a, b, tspan, N, args1=(), args2=()):
+        r"""
+        """
         if type(args1) != type(()): args1 = (args1,)
         if type(args2) != type(()): args2 = (args2,)
-    
+
         s = a.shape[0]
         h = (tspan[1]-tspan[0])/(1.0*N)
-    
+
         for k in xrange(N):
             for j in xrange(s):
-                psi1(a[j]*h,*args1)
-                psi2(b[j]*h,*args2)
+                psi1(a[j]*h, *args1)
+                psi2(b[j]*h, *args2)

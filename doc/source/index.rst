@@ -70,6 +70,9 @@ Wavepackets
    waveblocks_classes/HagedornWavepacket
    waveblocks_classes/HagedornWavepacketInhomogeneous
 
+   waveblocks_classes/Gradient
+   waveblocks_classes/GradientHAWP
+
    waveblocks_classes/InnerProduct
    waveblocks_classes/HomogeneousInnerProduct
    waveblocks_classes/InhomogeneousInnerProduct
@@ -105,10 +108,16 @@ Time propagation
    :maxdepth: 1
 
    waveblocks_classes/KineticOperator
+
+   waveblocks_classes/SplittingParameters
+
    waveblocks_classes/Propagator
    waveblocks_classes/FourierPropagator
    waveblocks_classes/HagedornPropagator
    waveblocks_classes/HagedornPropagatorInhomogeneous
+   waveblocks_classes/MagnusPropagator
+   waveblocks_classes/SemiclassicalPropagator
+
    waveblocks_classes/SimulationLoop
    waveblocks_classes/SimulationLoopFourier
    waveblocks_classes/SimulationLoopHagedorn
@@ -132,8 +141,8 @@ Simulation result storage I/O
    waveblocks_classes/IOM_plugin_energy
 
 
-Other classes
-^^^^^^^^^^^^^
+Other classes and functions
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 .. toctree::
    :maxdepth: 1
@@ -145,6 +154,16 @@ Other classes
    waveblocks_classes/FileTools
 
    waveblocks_classes/BlockFactory
+
+
+Plot
+^^^^
+
+.. toctree::
+   :maxdepth: 2
+
+   waveblocks_classes/plot/plot
+   waveblocks_classes/plot3d/plot3d
 
 
 Etc
