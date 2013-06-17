@@ -160,7 +160,7 @@ Plot
 ^^^^
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    waveblocks_classes/plot/plot
    waveblocks_classes/plot3d/plot3d
