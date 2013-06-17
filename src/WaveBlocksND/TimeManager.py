@@ -4,7 +4,7 @@ Provides several computation routines for
 handling time and timesteps.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,24 +13,29 @@ from scipy import floor
 __all__ = ["TimeManager"]
 
 
-# TODO: Clean up and allow for calculation of all time related quantities given a subset
-
 class TimeManager(object):
-    r"""This class performs several computation with time, timesteps and so for.
+    r"""This class performs several computations with time, timesteps and so forth.
 
     The important quantities here are:
 
-    ============ ======================================================
-    :math:`T`    the fixed simulation end time
-    :math:`\tau` the size of the timestep
-    :math:`N`    the overall number of timesteps.
-    :math:`t`    an unspecified time in the interval :math:`[0, T]`
-    :math:`n`    an unspecified timestep in the interval :math:`[0, N]`
-    ============ ======================================================
+    ============ ============== ======================================================
+    Quantity     Parameter Name Description
+    ============ ============== ======================================================
+    :math:`T`    T              the fixed simulation end time
+    :math:`\tau` dt             the size of the timestep
+    :math:`N`    nsteps         the overall number of timesteps.
+    :math:`t`                   an unspecified time in the interval :math:`[0, T]`
+    :math:`n`                   an unspecified timestep in the interval :math:`[0, N]`
+    ============ ============== ======================================================
 
-    The importtant relations that hold are :math:`T = N \tau` and
+    The important relations that hold are :math:`T = N \tau` and
     in analogy :math:`t = n \tau`. There are also conversion routines
     for :math:`t` and :math:`n`.
+
+    The simulation parameters handed over to the constructor must contain at least
+    two out of the three values :math:`T`, :math:`\tau` and :math:`N`. If all three
+    are given, the user is responsible for compatible values.
+
     Additionally the class contains some routines for determining
     if and when to save data. But we do not touch any data in here.
     """
@@ -39,35 +44,55 @@ class TimeManager(object):
         if parameters is None:
             parameters = {}
 
-        if parameters.has_key("T") and parameters.has_key("dt"):
-            self.set_T(parameters["T"])
-            self.set_dt(parameters["dt"])
+        # We need two out of three: T, dt and nsteps
+        have_enough = 0
+
+        if parameters.has_key("T"):
+            self._T = parameters["T"]
+            have_enough += 1
         else:
-            raise KeyError("Parameters provide to little data to construct a 'TimeManager'.")
+            self._T = None
+
+        if parameters.has_key("dt"):
+            self._dt = parameters["dt"]
+            have_enough += 1
+        else:
+            self._dt = None
 
         if parameters.has_key("nsteps"):
-            self.set_nsteps(parameters["nsteps"])
+            self._nsteps = parameters["nsteps"]
+            have_enough += 1
         else:
-            self.set_nsteps(None)
+            self._nsteps = None
 
-        #: Interval for saving
+        if have_enough < 2:
+            raise KeyError("Parameters provide to little data to construct a 'TimeManager'.")
+
+        if self._T is None:
+            self._T = self.compute_endtime()
+
+        if self._dt is None:
+            self._dt = self.compute_timestep_size()
+
+        if self._nsteps is None:
+            self._nsteps = self.compute_number_timesteps()
+
+        # Interval for saving
+        self._interval = 1
         if parameters.has_key("write_nth"):
             self.set_interval(parameters["write_nth"])
-        else:
-            self.set_interval(1)
 
-        #: List of timesteps when we have to save
-        self.savetimes = []
+        # List of timesteps when we have to save
+        self._savetimes = []
         if parameters.has_key("save_at"):
             self.add_to_savelist(parameters["save_at"])
 
 
     def __str__(self):
         s  = "TimeManager configured with:\n"
-        s += " Final time     T: " +str(self.T) +"\n"
-        s += " Timestep size dt: " +str(self.dt) +"\n"
-        s += " Interval        : " +str(self.interval) +"\n"
-        s += " List            : " +str(self.savetimes) +"\n"
+        s += " Final time     T: " +str(self._T) +"\n"
+        s += " Timestep size dt: " +str(self._dt) +"\n"
+        s += " Number of steps : " +str(self._nsteps) +"\n"
         return s
 
 
@@ -76,7 +101,7 @@ class TimeManager(object):
 
         :param T: The simulation end time.
         """
-        self.T = T
+        self._T = T
 
 
     def set_dt(self, dt):
@@ -84,7 +109,7 @@ class TimeManager(object):
 
         :param dt: The simulation timestep size.
         """
-        self.dt = dt
+        self._dt = dt
 
 
     def set_nsteps(self, nsteps):
@@ -92,33 +117,64 @@ class TimeManager(object):
 
         :param nsteps: The number :math:`n` timesteps we do.
         """
-        self.nsteps = nsteps
+        self._nsteps = nsteps
 
 
-    def set_interval(self, interval):
-        r"""Set the inteval for saving results.
+    def get_T(self):
+        r"""Set the simulation endtime :math:`T`.
 
-        :param interval: The interval at which we save simulation results.
-
-        Note that a value of ``0`` means we never save data at any regular interval.
+        :returns: The endtime :math:`T`.
         """
-        self.interval = interval
+        return self._T
+
+
+    def get_dt(self):
+        r"""Get the simulation timestep size :math:`\tau`.
+
+        :returns: The timestep :math:`\tau`.
+        """
+        return self._dt
 
 
     def get_nsteps(self):
-        if self.nsteps is None:
-            self.nsteps = self.compute_number_timesteps(self)
-        return self.nsteps
+        r"""Get the number :math:`n` of timesteps the simulation runs.
+
+        :returns: the number :math:`n` of timesteps.
+        """
+        return self._nsteps
+
+
+    def compute_endtime(self):
+        r"""Computes the simulation endtime :math:`T`.
+
+        :returns: The endtime :math:`T`.
+        """
+        if self._T is not None:
+            return self._T
+        else:
+            return self._nsteps * self._dt
+
+
+    def compute_timestep_size(self):
+        r"""Computes the simulation timestep size :math:`\tau`.
+
+        :returns: The timestep :math:`\tau`.
+        """
+        if self._dt is not None:
+            return self._dt
+        else:
+            return self._T / (1.0 * self._nsteps)
 
 
     def compute_number_timesteps(self):
         r"""Computes the number :math:`n` of time steps we will perform.
+
+        :returns: the number :math:`n` of timesteps.
         """
-        # This is independent from if, when and what data we save
-        if self.nsteps is not None:
-            return self.nsteps
+        if self._nsteps is not None:
+            return self._nsteps
         else:
-            return int( floor(self.T / self.dt) )
+            return int( floor(self._T / (1.0 * self._dt)) )
 
 
     def compute_timestep(self, t):
@@ -126,11 +182,12 @@ class TimeManager(object):
         :math:`t = n \tau` holds.
 
         :param t: The time t of which we want to find the timestep number.
+        :returns: The corresponding timestep :math:`n`.
 
         Note that the user has to ensure that time :math:`t` is an integral
         multiple of :math:`\tau`.
         """
-        stepo = t / self.dt
+        stepo = t / self._dt
         step = round(stepo)
 
         if abs(stepo - step) > 10**-10:
@@ -144,8 +201,19 @@ class TimeManager(object):
         :math:`t = n \tau` holds.
 
         :param n: The timestep n of which we want to find the corresponding time.
+        :returns: The corresponding time :math:`t`.
         """
-        return 1.0 * n * self.dt
+        return 1.0 * n * self._dt
+
+
+    def set_interval(self, interval):
+        r"""Set the inteval for saving results.
+
+        :param interval: The interval at which we save simulation results.
+
+        Note that a value of ``0`` means we never save data at any regular interval.
+        """
+        self._interval = interval
 
 
     def add_to_savelist(self, alist):
@@ -173,20 +241,19 @@ class TimeManager(object):
 
         # Validate timesteps and check if n in [0,...,N]
         tmp = len(timesteps)
-        nsteps = self.compute_number_timesteps()
-        timesteps = [ i for i in timesteps if i > 0 and i <= nsteps ]
+        timesteps = [ i for i in timesteps if i > 0 and i <= self._nsteps ]
 
         if tmp != len(timesteps):
             print("Warning: Dropped some save timesteps due to invalidity!")
 
         # Assure unique elements, just silently remove duplicates
-        oldlist = set(self.savetimes)
+        oldlist = set(self._savetimes)
         newlist = set(timesteps)
         times = list(oldlist.union(newlist))
         # Sort in ascending order
         times.sort()
         # Write back
-        self.savetimes = times
+        self._savetimes = times
 
 
     # TODO: Save and savelist -> event and eventlist
@@ -194,21 +261,22 @@ class TimeManager(object):
     def compute_number_saves(self):
         r"""Compute the number of saves we will perform during the simulation. This
         can be used to determine how much space to allocate in the output files.
+
+        :returns: The number of times we will save something.
         """
         # We do not save at regular intervals
-        if self.interval == 0:
+        if self._interval == 0:
             # Determine the number of saves resulting from saving at a regular interval is zero.
             n_si = 0
             # Determine the number of saves resulting from the savelist
-            n_sl = len(self.savetimes)
+            n_sl = len(self._savetimes)
         # We do save at regular intervals
         else:
             # Determine the number of saves resulting from saving at a regular interval
-            n_ts = self.compute_number_timesteps()
-            n_si = n_ts // self.interval
+            n_si = self._nsteps // self._interval
             # Determine the number of saves resulting from the savelist and
             # exclude the timesteps which coincide with the regular intervals.
-            n_sl = len( [ i for i in self.savetimes if i % self.interval != 0 ] )
+            n_sl = len( [ i for i in self._savetimes if i % self._interval != 0 ] )
 
         # Total number of saves we will perform is given by the sum plus the initial value
         number_saves = 1 + n_si + n_sl
@@ -220,14 +288,15 @@ class TimeManager(object):
         r"""Determine if we have to save right now.
 
         :param n: The current timestep in question.
+        :returns: ``True`` or ``False``.
         """
-        if self.interval == 1:
+        if self._interval == 1:
             # Save every timestep
             return True
-        elif self.interval != 0  and  n % self.interval == 0:
+        elif self._interval != 0  and  n % self._interval == 0:
             # Save every k-th timestep specified by the inetrval
             return True
-        elif n in self.savetimes:
+        elif n in self._savetimes:
             # Save if the n is in the list of timesteps
             return True
 
