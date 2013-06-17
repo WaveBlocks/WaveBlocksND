@@ -99,9 +99,9 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi_j`.
 
         :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
-                     selecting the :math:`\Phi_i` for which te precompute values.
+                     selecting the :math:`\Phi_i` for which we precompute values.
         :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`
-                     selecting the :math:`\Phi_j` for which te precompute values.
+                     selecting the :math:`\Phi_j` for which we precompute values.
         """
         # Evaluate only the bases we need
         N  = self._packet.get_number_components()

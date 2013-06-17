@@ -102,9 +102,9 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.
 
         :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`
-                     selecting the :math:`\Phi_i` for which te precompute values.
+                     selecting the :math:`\Phi_i` for which we precompute values.
         :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`
-                     selecting the :math:`\Phi^\prime_j` for which te precompute values.
+                     selecting the :math:`\Phi^\prime_j` for which we precompute values.
         """
         # Coefficients
         self._coeffbra = self._pacbra.get_coefficients()
