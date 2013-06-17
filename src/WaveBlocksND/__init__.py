@@ -31,6 +31,8 @@ from KineticOperator import KineticOperator
 from Propagator import Propagator
 from FourierPropagator import FourierPropagator
 from HagedornPropagator import HagedornPropagator
+from MagnusPropagator import MagnusPropagator
+from SemiclassicalPropagator import SemiclassicalPropagator
 from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 
 from IOManager import IOManager
