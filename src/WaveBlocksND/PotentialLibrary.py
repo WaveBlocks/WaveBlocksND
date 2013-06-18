@@ -72,6 +72,11 @@ double_well["variables"] = ["x"]
 double_well["potential"] = "sigma * (x**2 - 1)**2"
 double_well["defaults"] = {"sigma":1.0}
 
+double_well2 = {}
+double_well2["variables"] = ["x"]
+double_well2["potential"] = "a*x**4 - b*x**2"
+double_well2["defaults"] = {"a":1.0, "b":1.0}
+
 # The Eckart potential
 eckart = {}
 eckart["variables"] = ["x"]
