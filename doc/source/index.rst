@@ -8,12 +8,16 @@ solving the time-dependent Schrödinger equation.
 
 Contents:
 
+Please note that some section of the manual are still outdated.
+The source code documentation below is actually up to date.
+
 .. toctree::
    :maxdepth: 2
 
+   manual/interactive_use.rst
+
 Source code documentation
 =========================
-
 
 WaveBlocks Classes
 -------------------
