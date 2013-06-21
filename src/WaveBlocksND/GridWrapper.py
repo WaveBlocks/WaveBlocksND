@@ -4,9 +4,11 @@ This file contains a tiny wrapper to wrap
 numpy ndarrays into Grid instances.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
+
+from numpy import atleast_1d, abs
 
 from Grid import Grid
 
@@ -26,6 +28,10 @@ class GridWrapper(Grid):
         # Shape is (D, #nodes)
         self._data = anarray
         self._dimension = self._data.shape[0]
+        # Compute some additional data
+        # TODO: Note that these values are only correct for closed, aperiodic grids
+        self._limits = [ (anarray[d,0], anarray[d,-1]) for d in xrange(self._dimension) ]
+        self._extensions = [ abs(l[-1] - l[0]) for l in self._limits ]
 
 
     def get_number_nodes(self, overall=False):
@@ -58,9 +64,37 @@ class GridWrapper(Grid):
         :return: Depends of the optional arguments.
         """
         if flat is False:
-            raise NotImplementedError("Grid wrapping for hypercubic storageB")
+            raise NotImplementedError("Grid wrapping for hypercubic storage.")
 
         if split is True:
             return [ self._data[i,...] for i in xrange(self._data.shape[0]) ]
         else:
             return self._data
+
+
+    def get_limits(self, axes=None):
+        r"""Returns the limits of the bounding box.
+
+        :param axes: The axes for which we want to get the limits.
+        :type axes: A single integer or a list of integers. If set
+                    to ``None`` (default) we return the limits for all axes.
+        :return: A list of :math:`(min_i, max_i)` ndarrays.
+        """
+        if axes is None:
+            axes = range(self._dimension)
+
+        return [ self._limits[i] for i in atleast_1d(axes) ]
+
+
+    def get_extensions(self, axes=None):
+        r"""Returns the extensions (length of the edges) of the bounding box.
+
+        :param axes: The axes for which we want to get the extensions.
+        :type axes: A single integer or a list of integers. If set
+                    to ``None`` (default) we return the extensions for all axes.
+        :return: A list of :math:`|max_i-min_i|` values.
+        """
+        if axes is None:
+            axes = range(self._dimension)
+
+        return [ self._extensions[i] for i in atleast_1d(axes) ]
