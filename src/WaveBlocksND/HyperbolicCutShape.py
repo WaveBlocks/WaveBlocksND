@@ -68,7 +68,8 @@ class HyperbolicCutShape(BasisShape):
     def __getitem__(self, k):
         r"""Make map lookups.
         """
-        if type(k) is tuple:
+        if type(k) is tuple or type(k) is list:
+            k = tuple(k)
             assert len(k) == self._dimension
             if k in self._lima:
                 return self._lima[k]
