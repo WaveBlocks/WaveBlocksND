@@ -6,7 +6,8 @@ Welcome to WaveBlocksND's documentation!
 Reusable building blocks for simulations with semiclassical wavepackets for
 solving the time-dependent Schrödinger equation.
 
-Contents:
+User Manual
+===========
 
 Please note that some section of the manual are still outdated.
 The source code documentation below is actually up to date.
