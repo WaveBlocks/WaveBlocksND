@@ -9,6 +9,7 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 import argparse
 from numpy import complexfloating, squeeze, real, ones, zeros_like, conj, sum, argsort
+
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh
 
