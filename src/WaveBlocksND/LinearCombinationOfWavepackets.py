@@ -58,8 +58,7 @@ class LinearCombinationOfWavepackets(object):
 
     def get_number_packets(self):
         r"""
-        :return: The number :math:`J` of wavepackets in the linear combination
-                 :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.
+        :return: The number :math:`J` of wavepackets in the linear combination :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.
         """
         return self._number_packets
 
