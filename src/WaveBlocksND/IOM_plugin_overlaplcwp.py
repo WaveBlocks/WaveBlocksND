@@ -36,10 +36,15 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
     :type key: Tuple of valid identifier strings that are ``ov``, ``ovkin`` and ``ovpot``.
                Default is ``("ov", "ovkin", "ovpot")``.
     """
+    valid_keys = ("ov", "ovkin", "ovpot")
+
     # Create the dataset with appropriate parameters
     grp_ov = self._srf[self._prefixb+str(blockid)].create_group("overlaplcwp")
 
     for k in key:
+        if not k in valied_keys:
+            raise ValueError("Unknown key value "+str(item))
+
         name = k[2:]
         if timeslots is None:
             # This case is event based storing
@@ -83,9 +88,9 @@ def has_overlaplcwp(self, blockid=0, key=("ov", "ovkin", "ovpot")):
     if r and "ov" in key:
         r &= ("overlap" in self._srf[self._prefixb+str(blockid)]["overlaplcwp"].keys())
     if r and "ovpot" in key:
-        r &= ("overlap_pot" in self._srf[self._prefixb+str(blockid)]["overlaplcwp"].keys())
+        r &= ("overlappot" in self._srf[self._prefixb+str(blockid)]["overlaplcwp"].keys())
     if r and "ovkin" in key:
-        r &= ("overlap_kin" in self._srf[self._prefixb+str(blockid)]["overlaplcwp"].keys())
+        r &= ("overlapkin" in self._srf[self._prefixb+str(blockid)]["overlaplcwp"].keys())
 
     return r
 
@@ -106,15 +111,17 @@ def save_overlaplcwp(self, data, timestep=None, blockid=0, key=("ov", "ovkin", "
         if item == "ov":
             pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid"
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape"
-            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap"
+            pathd  = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap"
         elif item == "ovkin":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_kin"
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_kin"
-            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap_kin"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridkin"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapekin"
+            pathd  = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlapkin"
         elif item == "ovpot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_pot"
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_pot"
-            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap_pot"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridpot"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
+            pathd  = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlappot"
+        else:
+            raise ValueError("Unknown key value "+str(item))
 
         timeslot = self._srf[pathtg].attrs["pointer"]
 
@@ -151,11 +158,13 @@ def load_overlaplcwp_timegrid(self, blockid=0, key=("ov", "ovkin", "ovpot")):
             pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid"
             tg.append(self._srf[pathtg][:])
         elif item == "ovkin":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_kin"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridkin"
             tg.append(self._srf[pathtg][:])
         elif item == "ovpot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_pot"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridpot"
             tg.append(self._srf[pathtg][:])
+        else:
+            raise ValueError("Unknown key value "+str(item))
 
     if len(tg) == 1:
         print(tg)
@@ -179,11 +188,13 @@ def load_overlaplcwp_shape(self, blockid=0, key=("ov", "ovkin", "ovpot")):
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape"
             tg.append(self._srf[pathsh][:])
         elif item == "ovkin":
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_kin"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapekin"
             tg.append(self._srf[pathsh][:])
         elif item == "ovpot":
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_pot"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
             tg.append(self._srf[pathsh][:])
+        else:
+            raise ValueError("Unknown key value "+str(item))
 
     if len(tg) == 1:
         print(tg)
@@ -212,13 +223,15 @@ def load_overlaplcwp(self, timestep=None, blockid=0, key=("ov", "ovkin", "ovpot"
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape"
             pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap"
         elif item == "ovkin":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_kin"
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_kin"
-            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap_kin"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridkin"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapekin"
+            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlapkin"
         elif item == "ovpot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegrid_pot"
-            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shape_pot"
-            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlap_pot"
+            pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridpot"
+            pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
+            pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlappot"
+        else:
+            raise ValueError("Unknown key value "+str(item))
 
         if timestep is not None:
             index = self.find_timestep_index(pathtg, timestep)
