@@ -42,7 +42,7 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
     grp_ov = self._srf[self._prefixb+str(blockid)].create_group("overlaplcwp")
 
     for k in key:
-        if not k in valied_keys:
+        if not k in valid_keys:
             raise ValueError("Unknown key value "+str(item))
 
         name = k[2:]

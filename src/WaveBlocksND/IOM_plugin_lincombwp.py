@@ -356,7 +356,7 @@ def load_lincombwp(self, timestep, blockid=0):
     return LC
 
 
-def save_lincombwp(self, lincomb, timestep, blockid=None):
+def save_lincombwp(self, lincomb, timestep, blockid=0):
     r"""Save a linear combination of general wavepackets at a given timestep and read
     all data to save from the :py:class:`LinearCombinationOfWPs` instance provided. This
     method just calls some other :py:class:`IOManager` methods in the correct order.
