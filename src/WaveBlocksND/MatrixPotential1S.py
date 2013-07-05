@@ -103,7 +103,7 @@ class MatrixPotential1S(MatrixPotential):
         grid = self._grid_wrap(grid)
 
         # Evaluate the potential at the given nodes
-        values = self._potential_n(*grid.get_nodes(split=True))
+        values = self._potential_n(*map(numpy.real, grid.get_nodes(split=True)))
 
         # Test for potential being constant
         if numpy.atleast_1d(values).shape == (1,):
@@ -213,7 +213,7 @@ class MatrixPotential1S(MatrixPotential):
             self.calculate_exponential()
 
         # Evaluate the exponential at the given nodes
-        values = self._exponential_n(*grid.get_nodes(split=True))
+        values = self._exponential_n(*map(numpy.real, grid.get_nodes(split=True)))
 
         # Test for potential being constant
         if numpy.atleast_1d(values).shape == (1,):
@@ -262,7 +262,7 @@ class MatrixPotential1S(MatrixPotential):
         J = numpy.zeros((D,N), dtype=numpy.complexfloating)
 
         for row in xrange(D):
-            J[row, :] = self._jacobian_n[row](*nodes)
+            J[row, :] = self._jacobian_n[row](*map(numpy.real, nodes))
 
         return J
 
@@ -300,7 +300,7 @@ class MatrixPotential1S(MatrixPotential):
 
         for row in xrange(D):
             for col in xrange(D):
-                H[:, row, col] = self._hessian_n[row*D+col](*nodes)
+                H[:, row, col] = self._hessian_n[row*D+col](*map(numpy.real, nodes))
 
         # 'squeeze' would be dangerous here, make sure it works in the 1D case too
         if N == 1:
@@ -412,7 +412,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Evaluate the remainder at the given nodes
         args = grid.get_nodes(split=True) + numpy.vsplit(position, position.shape[0])
-        values = self._remainder_n[0](*args)
+        values = self._remainder_n[0](*map(numpy.real, args))
 
         # Test for potential being constant
         if numpy.atleast_1d(values).shape == (1,):
