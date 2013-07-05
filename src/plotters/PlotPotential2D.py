@@ -10,11 +10,18 @@ This script is only for two-dimensional potentials.
 
 import sys
 from numpy import real
-from mayavi import mlab
+
+try:
+    # New Mayavi version
+    from mayavi import mlab
+except ImportError:
+    # Older Mayavi versions
+    from enthought.mayavi import mlab
 
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
+from WaveBlocksND import ParameterLoader
 
 
 def plot_potential(grid, potential, along_axes=False, interactive=False, view=None, size=(800,700)):
@@ -84,6 +91,7 @@ if __name__ == "__main__":
 
     # Read file with parameter data for grid
     try:
+        PL = ParameterLoader()
         gridparams = PL.load_from_file(sys.argv[2])
     except IndexError:
         gridparams = parameters
