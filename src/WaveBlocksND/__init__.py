@@ -80,6 +80,10 @@ from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 from SymbolicIntegral import SymbolicIntegral
 from NSDInhomogeneous import NSDInhomogeneous
 
+from SparsityOracle import SparsityOracle
+from SparsityOracleTrue import SparsityOracleTrue
+from SparsityOraclePSHAWP import SparsityOraclePSHAWP
+
 # Basis transformations
 from BasisTransformation import BasisTransformation
 from BasisTransformationWF import BasisTransformationWF

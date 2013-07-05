@@ -19,7 +19,7 @@ __all__ = ["InhomogeneousInnerProductLCWP"]
 
 class InhomogeneousInnerProductLCWP(InnerProduct):
 
-    def __init__(self, ip=None):
+    def __init__(self, ip=None, oracle=None):
         r"""
         This class computes the inhomogeneous inner product
         :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` of two linear combinations
@@ -29,12 +29,16 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
 
         :param ip: The delegate inner product.
         :type ip: A :py:class:`InnerProduct` subclass instance.
+        :param oracle: The sparsity oracle to use. If the variable is ``None``
+                       no oracle is used and all integrals are computed.
         """
         # Pure convenience to allow setting of quadrature instance in constructor
         if ip is not None:
             self.set_quadrature(ip)
         else:
             self._quad = None
+
+        self.set_oracle(oracle)
 
 
     def __str__(self):
@@ -51,6 +55,26 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         d["type"] = "InhomogeneousInnerProductLCWP"
         d["delegate"] = self._quad.get_description()
         return d
+
+
+    def get_oracle(self):
+        r"""Return the sparsity oracle in use or ``None``.
+        """
+        return self._oracle
+
+
+    def set_oracle(self, new_oracle):
+        r"""Set the sparsity oracle.
+
+        :param new_oracle: The new oracle to use. If the variable is ``None``
+                           no oracle is used and all integrals are computed.
+        """
+        if new_oracle is not None:
+            self._oracle = new_oracle
+            self._obey_oracle = True
+        else:
+            self._oracle = None
+            self._obey_oracle = False
 
 
     def quadrature(self, lcbra, lcket=None, operator=None, component=None):
@@ -74,8 +98,13 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
 
         for row, pacbra in enumerate(lcbra.get_wavepackets()):
             for col, packet in enumerate(lcket.get_wavepackets()):
-                # TODO: Handle multi-component packets
-                M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
+                if self._obey_oracle:
+                    if self._oracle.is_not_zero(pacbra, packet):
+                        # TODO: Handle multi-component packets
+                        M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
+                else:
+                    # TODO: Handle multi-component packets
+                    M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
 
         cbra = lcbra.get_coefficients()
         cket = lcket.get_coefficients()
@@ -105,7 +134,12 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
 
         for row, pacbra in enumerate(lcbra.get_wavepackets()):
             for col, packet in enumerate(lcket.get_wavepackets()):
-                # TODO: Handle multi-component packets
-                M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
+                if self._obey_oracle:
+                    if self._oracle.is_not_zero(pacbra, packet):
+                        # TODO: Handle multi-component packets
+                        M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
+                else:
+                    # TODO: Handle multi-component packets
+                    M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
 
         return M
