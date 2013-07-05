@@ -111,10 +111,7 @@ Inner Products
    waveblocks_classes/NSDInhomogeneous
 
    waveblocks_classes/SparsityOracle.rst
-<<<<<<< HEAD
    waveblocks_classes/SparsityOracleTrue.rst
-=======
->>>>>>> 932e26d... Document the sparsity oracle
    waveblocks_classes/SparsityOraclePSHAWP.rst
 
 
