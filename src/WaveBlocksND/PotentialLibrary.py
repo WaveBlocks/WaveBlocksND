@@ -153,6 +153,11 @@ gauss_hill_2d["variables"] = ["x", "y"]
 gauss_hill_2d["potential"] = "exp(-(sigmax*x**2+sigmay*y**2))"
 gauss_hill_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
 
+# A threefold morse potential
+morse_threefold = {}
+morse_threefold["variables"] = ["x", "y"]
+morse_threefold["potential"] = "(1 - exp((x**2+y**2) * (-sigma-(1-cos(3*atan2(y,x)))**2/16)))**2"
+morse_threefold["defaults"] = {"sigma":"0.05"}
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #
