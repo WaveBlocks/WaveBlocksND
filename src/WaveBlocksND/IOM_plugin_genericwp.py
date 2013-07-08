@@ -35,7 +35,7 @@ def delete_genericwp(self, blockid=0):
     self.delete_inhomogwavepacket(blockid=blockid)
 
 
-def has_wavepacket(self, blockid=0):
+def has_genericwp(self, blockid=0):
     r"""Ask if the specified data block has the desired data tensor.
 
     :param blockid: The ID of the data block to operate on.
