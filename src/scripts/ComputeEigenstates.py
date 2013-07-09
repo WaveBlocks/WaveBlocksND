@@ -7,7 +7,7 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import complexfloating, squeeze, real, ones, zeros_like, conj, sum, argsort
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh
@@ -175,16 +175,19 @@ def compute_eigenstate(parameters):
 
 if __name__ == "__main__":
 
-    # Read the path for the configuration file we use for this simulation.
-    try:
-        parametersfile = sys.argv[1]
-    except IndexError:
-        raise ValueError("No configuration file given!")
+    parser = argparse.ArgumentParser()
 
-    print("Using configuration from file: " + parametersfile)
+    parser.add_argument("parametersfile",
+                        type = str,
+                        help = "The configuration parameters file")
+
+    args = parser.parse_args()
+
+    # Read the path for the configuration file we use for this simulation.
+    print("Using configuration from file: " + args.parametersfile)
 
     # Set up the parameter provider singleton
-    PA = ParameterLoader().load_from_file(parametersfile)
+    PA = ParameterLoader().load_from_file(args.parametersfile)
     compute_eigenstate(PA)
 
     print("Eigenstate computation finished")

@@ -4,7 +4,7 @@ Compute the energies of the different wavepackets or wavefunctions.
 This script does not do an eigentransformation of the data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -52,7 +52,7 @@ for blockid in blocks_to_handle:
         print("Datablock '"+str(blockid)+"' already contains energy data, silent skip.")
         continue
 
-    # TODO: Add new algorithms here
+    # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
         import EnergiesWavepacket

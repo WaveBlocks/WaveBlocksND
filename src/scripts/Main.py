@@ -10,7 +10,6 @@ This file is main script for running simulations with WaveBlocks.
 import argparse
 
 from WaveBlocksND import ParameterLoader
-from WaveBlocksND import GlobalDefaults as GD
 
 parser = argparse.ArgumentParser()
 
@@ -41,7 +40,7 @@ elif PA["algorithm"] == "hagedorn_inhomog":
     from WaveBlocksND import SimulationLoopHagedornInhomogeneous
     SL = SimulationLoopHagedornInhomogeneous(PA)
 
-# TODO: Add new algorithms here
+# NOTE: Add new algorithms here
 
 else:
     raise ValueError("Invalid propagator algorithm.")

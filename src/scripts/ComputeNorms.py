@@ -51,7 +51,7 @@ for blockid in blocks_to_handle:
         print("Datablock '"+str(blockid)+"' already contains norm data, silent skip.")
         continue
 
-    # TODO: Add new algorithms here
+    # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
         import NormWavepacket

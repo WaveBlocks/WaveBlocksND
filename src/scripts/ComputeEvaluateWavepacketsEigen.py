@@ -57,7 +57,7 @@ for blockid in blocks_to_handle:
         print("Datablock '"+str(blockid)+"' already contains wavefunction data, silent skip.")
         continue
 
-    # TODO: Add new algorithms here
+    # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
         import EvaluateWavepackets
