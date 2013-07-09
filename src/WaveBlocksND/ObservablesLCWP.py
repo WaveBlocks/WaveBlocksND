@@ -60,7 +60,7 @@ class ObservablesLCWP(Observables):
         return OM
 
 
-    def norm(self, lincomb, component=None, summed=False, return_matrix=False):
+    def norm(self, lincomb, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the :math:`L^2` norm :math:`\langle\Upsilon|\Upsilon\rangle`
         of a linear combination :math:`\Upsilon` of wavepackets.
 
@@ -70,7 +70,10 @@ class ObservablesLCWP(Observables):
         :type return_matrix: Boolean, default is ``False``.
         :return: The norm of :math:`\Upsilon` and optionally the overlap matrix :math:`M`.
         """
-        OM = self.overlap_matrix(lincomb, component=component)
+        if matrix is None:
+            OM = self.overlap_matrix(lincomb, component=component)
+        else:
+            OM = matrix
         c = lincomb.get_coefficients()
         norm = dot(conjugate(transpose(c)), dot(OM, c))
 

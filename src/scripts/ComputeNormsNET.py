@@ -7,7 +7,6 @@ Compute the norms of the different wavepackets or wavefunctions.
 @license: Modified BSD License
 """
 
-import sys
 import argparse
 
 from WaveBlocksND import IOManager
@@ -53,19 +52,15 @@ for blockid in blocks_to_handle:
 
     # TODO: Add new algorithms here
 
-    # We test for a homogeneous wavepacket next
     if iom.has_wavepacket(blockid=blockid):
         import NormWavepacket
         NormWavepacket.compute_norm_hawp(iom, blockid=blockid, eigentrafo=False)
-        # We have no wavepacket, then we try for a wavefunction
     elif iom.has_wavefunction(blockid=blockid):
         import NormWavefunction
         NormWavefunction.compute_norm(iom, blockid=blockid, eigentrafo=False)
-    # We test for an inhomogeneous wavepacket next
     elif iom.has_inhomogwavepacket(blockid=blockid):
         import NormWavepacket
         NormWavepacket.compute_norm_inhawp(iom, blockid=blockid, eigentrafo=False)
-    # If there is also no wavefunction, then there is nothing to compute the norm
     else:
         print("Warning: Not computing any norm in block '"+str(blockid)+"'!")
 
