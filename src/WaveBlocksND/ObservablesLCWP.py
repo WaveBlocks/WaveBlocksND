@@ -66,6 +66,8 @@ class ObservablesLCWP(Observables):
 
         :param lincomb: The linear combination :math:`\Upsilon` of which we compute the norm.
         :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.
+        :param matrix: The overlap matrix. If ``None`` the matrix is computed internally.
+        :type matrix: An ``ndarray`` or ``None`` (default).
         :param return_matrix: Whether to return the overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The norm of :math:`\Upsilon` and optionally the overlap matrix :math:`M`.
@@ -103,17 +105,22 @@ class ObservablesLCWP(Observables):
         return OMT
 
 
-    def kinetic_energy(self, lincomb, component=None, summed=False, return_matrix=False):
+    def kinetic_energy(self, lincomb, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the kinetic energy :math:`E_{\text{kin}} := \langle\Upsilon|T|\Upsilon\rangle`
         of a linear combination :math:`\Upsilon` of wavepackets.
 
         :param linbomc: The linear combination :math:`\Upsilon` of which we compute the kinetic energy.
         :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.
+        :param matrix: The kinetic overlap matrix. If ``None`` the matrix is computed internally.
+        :type matrix: An ``ndarray`` or ``None`` (default).
         :param return_matrix: Whether to return the kinetic overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The kinetic energy of :math:`\Upsilon` and optionally the kinetic overlap matrix :math:`M_T`.
         """
-        OMT = self.kinetic_overlap_matrix(lincomb, component=component)
+        if matrix is None:
+            OMT = self.kinetic_overlap_matrix(lincomb, component=component)
+        else:
+            OMT = matrix
         c = lincomb.get_coefficients()
         ekin = 0.5 * dot(conjugate(transpose(c)), dot(OMT, c))
 
@@ -136,7 +143,7 @@ class ObservablesLCWP(Observables):
         return OMV
 
 
-    def potential_energy(self, lincomb, potential, component=None, summed=False, return_matrix=False):
+    def potential_energy(self, lincomb, potential, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the potential energy :math:`E_{\text{pot}} := \langle\Upsilon|V|\Upsilon\rangle`.
         of a linear combination :math:`\Upsilon` of wavepackets.
 
@@ -144,11 +151,16 @@ class ObservablesLCWP(Observables):
         :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.
         :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself
                           but one of its ``V.evaluate_*`` methods.)
+        :param matrix: The potential overlap matrix. If ``None`` the matrix is computed internally.
+        :type matrix: An ``ndarray`` or ``None`` per default.
         :param return_matrix: Whether to return the potential overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The potential energy of :math:`\Upsilon` and optionally the potential overlap matrix :math:`M_V`.
         """
-        OMV = self.potential_overlap_matrix(lincomb, potential, component=component)
+        if matrix is None:
+            OMV = self.potential_overlap_matrix(lincomb, potential, component=component)
+        else:
+            OMV = matrix
         c = lincomb.get_coefficients()
         epot = dot(conjugate(transpose(c)), dot(OMV, c))
 
