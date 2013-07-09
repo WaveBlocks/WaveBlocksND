@@ -3,25 +3,27 @@
 This file is main script for running simulations with WaveBlocks.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 
 from WaveBlocksND import ParameterLoader
+from WaveBlocksND import GlobalDefaults as GD
 
+parser = argparse.ArgumentParser()
 
-# Read the path for the configuration file we use for this simulation.
-try:
-    parametersfile = sys.argv[1]
-except IndexError:
-    raise ValueError("No configuration file given!")
+parser.add_argument("parametersfile",
+                    type = str,
+                    help = "The simulation configuration parameters file")
 
-print("Using configuration from file: " + parametersfile)
+args = parser.parse_args()
+
+print("Using configuration from file: " + args.parametersfile)
 
 # Set up the parameter provider singleton
-PA = ParameterLoader().load_from_file(parametersfile)
+PA = ParameterLoader().load_from_file(args.parametersfile)
 
 # Print the parameters that apply for this simulation
 print(PA)
