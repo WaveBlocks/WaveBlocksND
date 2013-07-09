@@ -18,6 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument("simfile",
                     type = str,
                     help = "The simulation data file",
+                    nargs = "?",
                     default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
