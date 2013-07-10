@@ -219,14 +219,17 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
 
         # Split one off to get the result array shape
         if self._number_packets > 0:
-            result = self._packets[0].evaluate_at(grid, component=component, prefactor=True)
+            vals = self._packets[0].evaluate_at(grid, component=component, prefactor=True)
+            if component is None:
+                result = [ self._coefficients[0] * val for val in vals ]
+            else:
+                result = self._coefficients[0] * vals
 
-        for packet in self._packets[1:]:
+        for index, packet in enumerate(self._packets[1:]):
             vals = packet.evaluate_at(grid, component=component, prefactor=True)
             if component is None:
-                for index, val in enumerate(vals):
-                    result[index] = result[index] + val
+                result = [ res + self._coefficients[index+1] * val for res, val in zip(result, vals) ]
             else:
-                result = result + vals
+                result = result + self._coefficients[index+1] * vals
 
         return result
