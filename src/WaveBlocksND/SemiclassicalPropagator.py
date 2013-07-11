@@ -173,7 +173,9 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
 
             # Propagate until 0.5*dt
             h1 = 0.5*dt
-            nrtmp = int(sqrt(dt)*eps**(-0.75))
+            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for Y4, better BM42, error eps time (Delta t)^3
+            nrtmp = int(sqrt(dt*eps)) # less steps, for L43, error eps**2 times (Delta t)**3
+            #nrtmp =  int(dt*eps**(-0.75))# much more steps, for L43, error eps times (Delta t)**5
             nrlocalsteps = max(1, 1+nrtmp)
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
 
