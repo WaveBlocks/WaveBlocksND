@@ -159,6 +159,12 @@ morse_threefold["variables"] = ["x", "y"]
 morse_threefold["potential"] = "(1 - exp((x**2+y**2) * (-sigma-(1-cos(3*atan2(y,x)))**2/16)))**2"
 morse_threefold["defaults"] = {"sigma":"0.05"}
 
+# A 2D tunneling example called the 'Eckart bottleneck potential'
+eckart_bn = {}
+eckart_bn["variables"] = ["x", "y"]
+eckart_bn["potential"] = "v0*cosh(a*x)**(-2) + k/2*(1-sigma*exp(-lam*x**2)) * y**2"
+eckart_bn["defaults"] = {"v0":"0.425", "a":"1.3624", "k":"0.06784", "sigma":"0.5", "lam":"0.25"}
+
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #
 #######################################################################
