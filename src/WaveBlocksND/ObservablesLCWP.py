@@ -8,7 +8,7 @@ of linear combinations of general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, transpose, dot
+from numpy import zeros, complexfloating, conjugate, transpose, dot, sqrt
 
 from Observables import Observables
 from LinearCombinationOfWPs import LinearCombinationOfWPs
@@ -78,6 +78,7 @@ class ObservablesLCWP(Observables):
             OM = matrix
         c = lincomb.get_coefficients()
         norm = dot(conjugate(transpose(c)), dot(OM, c))
+        norm = sqrt(norm)
 
         # Allow to return the overlap matrix.
         if return_matrix:
