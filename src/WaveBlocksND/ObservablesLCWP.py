@@ -8,7 +8,7 @@ of linear combinations of general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import conjugate, transpose, dot
+from numpy import zeros, complexfloating, conjugate, transpose, dot
 
 from Observables import Observables
 from LinearCombinationOfWPs import LinearCombinationOfWPs
@@ -94,14 +94,23 @@ class ObservablesLCWP(Observables):
         """
         D = lincomb.get_dimension()
         N = lincomb.get_number_components()
-        grad_lc = LinearCombinationOfWPs(D, N)
+
+        # TODO: Optimizing this. For large linear combinations, computing
+        #       and storing *all* gradient packets is inefficient. Maybe
+        #       better go packet by packet.
+        grad_lcs = [ LinearCombinationOfWPs(D, N) for d in xrange(D) ]
         for packet in lincomb.get_wavepackets():
             G = packet.get_gradient_operator()
-            gradient = G.apply_gradient(packet, as_packet=True)
+            gradient_wps = G.apply_gradient(packet, as_packet=True)
             # Coefficient c_i=1.0 is wrong but won't be used for building the matrix anyway.
-            grad_lc.add_wavepacket(gradient)
+            for d, grad_wp in enumerate(gradient_wps):
+                grad_lcs[d].add_wavepacket(grad_wp)
 
-        OMT = self._innerproduct.build_matrix(grad_lc)
+        J = lincomb.get_number_packets()
+        OMT = zeros((J,J), dtype=complexfloating)
+        for grad_lc in grad_lcs:
+            OMT = OMT + self._innerproduct.build_matrix(grad_lc)
+
         return OMT
 
 
