@@ -55,7 +55,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             p = zeros((self._dimension, 1), dtype=complexfloating)
             Q = eye(self._dimension, dtype=complexfloating)
             P = 1.0j * eye(self._dimension, dtype=complexfloating)
-            S = 0.0j
+            S = zeros((1, 1), dtype=complexfloating)
 
             self._Pis.append([q, p, Q, P, S])
 
