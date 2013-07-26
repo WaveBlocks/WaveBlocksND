@@ -61,6 +61,8 @@ Basic numerics
 
    waveblocks_classes/Utils
 
+   waveblocks_classes/PhaseSpaceLattice
+
 Basic quantum mechanics
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -73,7 +75,6 @@ Basic quantum mechanics
    waveblocks_classes/MatrixPotential1S
    waveblocks_classes/MatrixPotential2S
    waveblocks_classes/MatrixPotentialMS
-
 
 Wavepackets
 ^^^^^^^^^^^
@@ -104,7 +105,6 @@ Wavepackets
 
    waveblocks_classes/GradientLinearCombinationHAWP
 
-
 Inner Products
 ^^^^^^^^^^^^^^
 
@@ -133,7 +133,6 @@ Inner Products
    waveblocks_classes/SparsityOracleTrue.rst
    waveblocks_classes/SparsityOraclePSHAWP.rst
 
-
 Observables
 ^^^^^^^^^^^
 
@@ -143,7 +142,6 @@ Observables
    waveblocks_classes/Observables
    waveblocks_classes/ObservablesHAWP
    waveblocks_classes/ObservablesLCWP
-
 
 Time propagation
 ^^^^^^^^^^^^^^^^
@@ -167,7 +165,6 @@ Time propagation
    waveblocks_classes/SimulationLoopHagedorn
    waveblocks_classes/SimulationLoopHagedornInhomogeneous
 
-
 Simulation result storage I/O
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
@@ -187,7 +184,6 @@ Simulation result storage I/O
    waveblocks_classes/IOM_plugin_norm
    waveblocks_classes/IOM_plugin_energy
 
-
 Other classes and functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -202,7 +198,6 @@ Other classes and functions
 
    waveblocks_classes/BlockFactory
 
-
 Plot
 ^^^^
 
@@ -212,7 +207,6 @@ Plot
    waveblocks_classes/plot/plot
    waveblocks_classes/plot3d/plot3d
 
-
 Etc
 ===
 
@@ -220,7 +214,6 @@ Etc
    :maxdepth: 2
 
    citation
-
 
 Indices and tables
 ==================
