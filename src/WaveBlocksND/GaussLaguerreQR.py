@@ -8,13 +8,12 @@ This file contains the class for (generalized) Gauss-Laguerre quadrature.
 """
 
 from copy import deepcopy
-from numpy import zeros, floating, real
-from scipy import pi, exp, sqrt
+from numpy import real
 from scipy.special.orthogonal import la_roots
 
 from QuadratureRule import QuadratureRule
 
-__all__ = ["GaussHermiteQR"]
+__all__ = ["GaussLaguerreQR"]
 
 
 class GaussLaguerreQR(QuadratureRule):

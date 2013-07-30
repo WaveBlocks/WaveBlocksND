@@ -139,20 +139,6 @@ def create_potential(description):
 
         free_variables = tuple(map(sympy.sympify, potential_description["variables"]))
 
-    # The space dimension is just the number of free variables
-    dimension = len(free_variables)
-
-    # Debug:
-    # print("====================================")
-    # print("Potential:")
-    # print("----------")
-    # print(" Space dimension D is: " + str(dimension))
-    # print(" Number N of levels:   " + str(nc))
-    # print(" Free variables are:   " + str(free_variables))
-    # print(" Potential matrix is:")
-    # print(str(potential_matrix))
-    # print("====================================")
-
     # Create instances of MatrixPotential*
     if potential_description.has_key("type"):
         class_type = potential_description["type"]
