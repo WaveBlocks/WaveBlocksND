@@ -32,9 +32,8 @@ Name           Description
 fourier        Fourier propagation / Operator splitting
 hagedorn       Homogeneous Hagedorn wavepackets
 multihagedorn  Inhomogeneous Hagedorn wavepackets
-spawn          Spawning propagation for tunneling problems
 =============  ===========================================
-
+.. spawn       ..   Spawning propagation for tunneling problems
 
 Specifying initial values
 -------------------------
@@ -45,6 +44,11 @@ initial packets are just propagated. The two configuration variables ``parameter
 and ``coefficients`` are responsible for specifying the initial wavepackets.
 Their values are interpreted as usual but let's look at this important part
 a bit closer.
+
+.. warning::
+
+  The following sections describe the settings of the old WaveBlocks
+  code and do not apply to `WaveBlocksND`.
 
 For the ``fourier`` Propagator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -122,10 +126,6 @@ where there are as many inner tuples as energy levels. The coefficients :math:`c
 are specified the same way as in the homogeneous case above.
 
 
-
-
-
-
 Required parameter sets
 -----------------------
 
@@ -138,91 +138,83 @@ In this section all parameters that can be provided are listed.
 You are free to define additional parameters and use them in a data evaluation
 script. Just make sure there is no variable name clash.
 
-% \begin{description}
-%   \item[\texttt{}]
-%   \begin{itemize}
-%     \item
-%     \item
-%   \end{itemize}
-% \end{description}
-
 Parameters for all propagation algorithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-\begin{description}
-  \item[\texttt{algorithm}] The simulation algorithm
-  \begin{itemize}
-    \item Possible values: \texttt{fourier}, \texttt{hagedorn}, \texttt{multihagedorn}
-    \item Data type: string
-  \end{itemize}
+``algorithm``
+  The simulation algorithm.
 
-  \item[\texttt{potential}] The potential
-  \begin{itemize}
-    \item Possible values: see Section \ref{sec:ready_made_potentials}
-    \item Data type: string or dict
-  \end{itemize}
+  * Possible values: ``fourier``, ``hagedorn``, ``multihagedorn``
+  * Data type: string
 
-  \item[\texttt{T}] The time when the simulation stops
-  \begin{itemize}
-    \item Possible values: Non-negative float
-    \item Data type: float
-  \end{itemize}
+``potential``
+  The potential
 
-  \item[\texttt{dt}] The size of a single time step
-  \begin{itemize}
-    \item Possible values: Non-negative float
-    \item Data type: float
-  \end{itemize}
+  * Possible values: see Section \ref{sec:ready_made_potentials}
+  * Data type: string or dict
 
-  \item[\texttt{eps}] The semi-classical scaling parameter
-  \begin{itemize}
-    \item Possible values: Non-negative float
-    \item Data type: float
-  \end{itemize}
+``T``
+  The time when the simulation stops
 
-  \item[\texttt{parameters}] The Hagedorn parameters $\{P, Q, S, p, q \}$ of the
-    initial wave packets. The exact format of this variable depends on the
-    simulation algorithm used, see above.
+  * Possible values: Non-negative float
+  * Data type: float
 
-  \item[\texttt{coefficients}] A list with the lists of (index,value) tuples that
-    set the coefficients of the basis functions for the initial wavepackets. The
-    exact format of this variable depends on the simulation algorithm used, see above.
+``dt``
+  The size of a single time step
 
-  \item[\texttt{write\_nth}] Save simulation data every n-th timestep
-  \begin{itemize}
-    \item Possible values: Positive Integer where the case 0 is interpreted as
-          \emph{never}. In this case only the initial values are saved.
-    \item Data type: integer
-    \item Default value: is 0 if no other value is provided.
-  \end{itemize}
+  * Possible values: Non-negative float
+  * Data type: float
 
-  \item[\texttt{save\_at}] A list of times and/or timesteps when saving of the
-    simulation data takes place. (Which data are saved depends on the implementation
-    of the respective \texttt{SimulationLoop} subclass.)
-  \begin{itemize}
-    \item Possible values: A list of integers and/or floats. Integers are interpreted
-    as timesteps and floats as (absolute) times. Always be aware of this difference
-    in interpretation!
-    \item Data type: integer or float
-    \item Default value: an empty list, thus saving at special points in time
-    is not enabled.
-  \end{itemize}
+``eps``
+  The semi-classical scaling parameter
 
-  \item[\texttt{matrix\_exponential}] Choose the algorithm used for computing the matrix exponential.
-  \begin{itemize}
-    \item Possible values: \texttt{"pade"}, \texttt{"arnoldi"}
-    \item Data type: string
-    \item Default value: \texttt{"arnoldi"}
-  \end{itemize}
+  * Possible values: Non-negative float
+  * Data type: float
 
-  \item[\texttt{arnoldi\_steps}] The number of arnoldi steps performed. Use this together with
-  the parameter \texttt{matrix\_exponential} set to \texttt{"arnoldi"}.
-  \begin{itemize}
-    \item Possible values: positive integers
-    \item Data type: integer
-    \item Default value: 20
-  \end{itemize}
-\end{description}
+``parameters``
+  The Hagedorn parameters :math:`\{P, Q, S, p, q \}` of the
+  initial wavepackets. The exact format of this variable depends on the
+  simulation algorithm used, see above.
+
+``coefficients``
+  A list with the lists of (index,value) tuples that
+  set the coefficients of the basis functions for the initial wavepackets. The
+  exact format of this variable depends on the simulation algorithm used, see above.
+
+``write_nth``
+  Save simulation data every n-th timestep
+
+  * Possible values: Positive Integer where the case 0 is interpreted as
+                     *never*. In this case only the initial values are saved.
+  * Data type: integer
+  * Default value: is 0 if no other value is provided.
+
+``save_at``
+  A list of times and/or timesteps when saving of the
+  simulation data takes place. (Which data are saved depends on the implementation
+  of the respective ``SimulationLoop`` subclass.)
+
+  * Possible values: A list of integers and/or floats. Integers are interpreted
+                     as timesteps and floats as (absolute) times. Always be aware
+                     of this difference in interpretation!
+  * Data type: integer or float
+  * Default value: an empty list, thus saving at special points in time
+                   is not enabled.
+
+``matrix_exponential``
+  Choose the algorithm used for computing the matrix exponential.
+
+  * Possible values: ``"pade"``, ``"arnoldi"``
+  * Data type: string
+  * Default value: ``"arnoldi"``
+
+``arnoldi_steps``
+  The number of arnoldi steps performed. Use this together with
+  the parameter ``matrix_exponential`` set to ``"arnoldi"``.
+
+  * Possible values: positive integers
+  * Data type: integer
+  * Default value: 20
 
 
 Parameters for the \texttt{fourier} propagator
