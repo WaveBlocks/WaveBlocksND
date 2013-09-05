@@ -1,6 +1,7 @@
 The Core and User scripts
 =========================
 
+
 The big picture
 ---------------
 
@@ -12,6 +13,7 @@ code from the ``WaveBlocks`` package via python's ``import`` statement and perfo
 simulations, do data evaluation, plotting and much more. Some of these scripts
 are fairly general (for example the one responsible for plotting energies) while
 others originated from a single very specific research question ...
+
 
 In the Core
 -----------
@@ -26,14 +28,16 @@ Time propagation algorithms
 At the moment, three algorithms for time propagation of initial values are
 implemented.
 
-=============  ===========================================
+=============  ========================================
 Name           Description
-=============  ===========================================
+=============  ========================================
 fourier        Fourier propagation / Operator splitting
 hagedorn       Homogeneous Hagedorn wavepackets
 multihagedorn  Inhomogeneous Hagedorn wavepackets
-=============  ===========================================
+=============  ========================================
+
 .. spawn          Spawning propagation for tunneling problems
+
 
 Specifying initial values
 -------------------------
@@ -49,6 +53,7 @@ a bit closer.
 
   The following sections describe the settings of the old WaveBlocks
   code and do not apply to `WaveBlocksND`.
+
 
 For the ``fourier`` Propagator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -115,7 +120,7 @@ wish to have no wavepacket on an energy level just provide the dummy pair ``[ (0
 
 
 For the ``multihagedorn`` Propagator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 This propagator needs a set of parameters for each energy level. Thus
 the data structure must look like::
@@ -138,6 +143,7 @@ In this section all parameters that can be provided are listed.
 You are free to define additional parameters and use them in a data evaluation
 script. Just make sure there is no variable name clash.
 
+
 Parameters for all propagation algorithms
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -150,7 +156,7 @@ Parameters for all propagation algorithms
 ``potential``
   The potential
 
-  * Possible values: see Section `Ready made Potentials`_
+  * Possible values: see Section :ref:`Ready made Potentials`
   * Data type: string or dict
 
 ``T``
@@ -460,6 +466,7 @@ Data storage
 
 What data are written to disk. How can we retrieve data, IOM basics, usage, etc
 
+
 How IOM works
 ^^^^^^^^^^^^^
 
@@ -489,30 +496,27 @@ data that are identical for the whole simulation (for example space domain grids
 simulation parameters etc). Then there can be an arbitrary number of normal data
 blocks which can store various data related to wavepackets, wavefunctions and observables.
 Each of these data sets is optional and there are functions to query if specified
-data is available. Figure \ref{fig:hdfschema} shows the coarse structure of any
-simulation results file.
+data is available. The next figure shows the coarse structure of any simulation
+results file.
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.75]{./fig/structure_result_file.pdf}
-  \caption{Coarse structure of a file containing simulation results.}
-  \label{fig:hdfschema}
-\end{figure}
+.. figure:: ./fig/structure_result_file.png
+   :align: center
 
-Figure \ref{fig:blockschema} shows the internal structure of a single data
-block. The dark blocks are at the level of individual data tensors while the
-lighter grey boxes represent hdf groups. Note that not all data sets may exist
-at all and that each group can have different subsets. For example if you never
-computed observables, then this entire block is missing. The wavefunction data
-can come from a simulation with the Fourier propagator or from the evaluation
-of wavepackets on a given domain-wide grid.
+   Coarse structure of a file containing simulation results.
 
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.75]{./fig/structure_datablock.pdf}
-  \caption{Possible structure of a single data block. Not all data always exist.}
-  \label{fig:blockschema}
-\end{figure}
+The figure below shows the internal structure of a single data block.
+In this structure not all data objects always exist depending on what
+computations were performed. The dark blocks are at the level of individual data
+tensors while the lighter grey boxes represent hdf groups. Note that not all data
+sets may exist at all and that each group can have different subsets. For example
+if you never computed observables, then this entire block is missing. The
+wavefunction data can come from a simulation with the Fourier propagator or from
+the evaluation of wavepackets on a given domain-wide grid.
+
+.. figure:: ./fig/structure_datablock.png
+   :align: center
+
+   Possible structure of a single data block. Not all data always exist.
 
 
 Saving data at times and timesteps
@@ -609,9 +613,9 @@ session shows the basics which can of course be used in a user script too::
   ------------------------------------
   [...]
 
-
 With only three trivial lines of code we get back all the parameters
 that were used for the simulation!
+
 
 Load simulation data
 ^^^^^^^^^^^^^^^^^^^^
@@ -652,10 +656,10 @@ A sample of such an interactive session could look like this::
 
   >>> plot(tg, ekin)                         # Plot the kinetic energy over time
 
-
 Of course all this works exactly the same inside any regular python script.
 For a complete list of all the ``load_`` functions please see the API
 documentation or the docstrings.
+
 
 Working with simulation data
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -681,9 +685,16 @@ Do an explicit example walk through somewhere.
 Preparing simulations
 ^^^^^^^^^^^^^^^^^^^^^
 
+Preparing a whole bunch of simulations is easy. Given the `metaconfiguration`
+file we call the script `ConfigurationGenerator.py` like:
+
 ::
 
   python ConfigurationGenerator.py  <metaconfiguration.py> <configurations_dir>
+
+where the ``configurations_dir`` is optional. If not given a directory called
+``autogen_configurations`` will be created. Remember to move the configuration
+to the ``configurations`` directory if you plan to use the ``Batch.py`` script.
 
 
 Generating Configurations
@@ -697,19 +708,23 @@ Manually
 Meta-configurations
 '''''''''''''''''''
 
-::
-    - You can use any valid python statement as value
-    - All statements are written to a pure python code file
-    - You can write numbers, lists etc as plain text strings
-    - All that is not in string form gets evaluated *right now*
-    - Remember to escape python strings twice
-    - You can use variable references but with great care!
-    - The ordering of the statements in the output file is such that
-      all statements can be executed w.r.t. local variables. This is
-      some kind of topological sorting. Be warned, it's implemented
-      using black magic and may fail now and then!
+The best approach to write a `metaconfiguration` file is to
+copy an existing one from the ``examples`` directory.
 
-      That should be all ...
+The rules for valid files are as follows:
+
+* You can use any valid python statement as value
+* All statements are written to a pure python code file
+* You can write numbers, lists etc as plain text strings
+* All that is not in string form gets evaluated **right now**
+* Remember to escape python strings twice
+* You can use variable references but with great care!
+* The ordering of the statements in the output file is such that
+  all statements can be executed w.r.t. local variables. This is
+  some kind of topological sorting. Be warned, it's implemented
+  using black magic and may fail now and then!
+
+That should be all ...
 
 
 Running simulations
@@ -720,11 +735,11 @@ argument is the simulation configuration file (with an arbitrary file path)::
 
   python Main.py path/to/the/simulationparameters.py
 
-The results will be written to the file ``simulation_results.hdf5``
-in the `local` directory where the script was called and `not`
-where the configuration file was loaded from. The script refuses to run if there
-is already a file ``simulation_results.hdf5`` in the local directory.
-This is to prevent you from data loss.
+The results will be written to the file ``simulation_results.hdf5`` in the
+`local` directory where the script was called and `not` where the configuration
+file was loaded from. The script refuses to run if there is already a file
+``simulation_results.hdf5`` in the local directory. This is to prevent you
+from data loss.
 
 To run a bunch of simulations, use the script called ``Batch.py``. It
 has three command line parameters and all are optional with sensible defaults.
@@ -761,4 +776,5 @@ Further computations
 Plot data
 ^^^^^^^^^
 
-Call plot scripts which load the simulation data from a file and plot the values.
+Call plot scripts which load the simulation data from a file and plot
+some values.

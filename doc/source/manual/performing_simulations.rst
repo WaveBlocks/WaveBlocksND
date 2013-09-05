@@ -76,7 +76,7 @@ the file ``parameters_01.py``. The full content of this file is printed below
 
     matrix_exponential = "pade"
 
-For an overview of the available settings, see ??.
+For an overview of the available settings, see :ref:`Required parameter sets`.
 
 Now we have to run the main simulation program. This is done by the following
 command
