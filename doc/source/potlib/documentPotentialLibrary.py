@@ -10,6 +10,12 @@ Plot all potentials and put the definitions into a rest file.
 from sympy import *
 from numpy import *
 from matplotlib.pyplot import *
+try:
+    # New Mayavi version
+    from mayavi import mlab
+except ImportError:
+    # Older Mayavi versions
+    from enthought.mayavi import mlab
 
 from WaveBlocksND import BlockFactory
 import WaveBlocksND.PotentialLibrary as PL
@@ -27,7 +33,12 @@ def potential_sorter(pota, potb):
     elif len(pota["variables"]) > len(potb["variables"]):
         return 1
     else:
-        return 0
+        if pota["number_levels"] < potb["number_levels"]:
+            return -1
+        elif pota["number_levels"] > potb["number_levels"]:
+            return 1
+        else:
+            return 0
 
 potentials = sorted(potentialdefs, cmp=potential_sorter)
 
@@ -46,7 +57,17 @@ have additional parameters, the default values for these are also Name.
 file.write(header.encode("UTF-8"))
 
 params = {"delta":0.2, "delta1":0.2, "delta2":0.2}
-x = linspace(-5,5,5000)
+
+# Grids
+N = 5000
+x = linspace(-5,5,N)
+
+Nx = 200
+Ny = 200
+x2 = linspace(-5, 5, Nx)
+y2 = linspace(-5, 5, Ny)
+X2, Y2 = meshgrid(x2, y2)
+G = vstack([X2.reshape(1,-1), Y2.reshape(1, -1)])
 
 for potdef in potentials:
     print("Potential is: " + potdef["name"])
@@ -71,16 +92,25 @@ for potdef in potentials:
 
     if len(potdef["variables"]) == 1:
         # Plot the potential
-        y = P.evaluate_eigenvalues_at(x)
+        values = P.evaluate_eigenvalues_at(x)
 
         figure(figsize=(4,3))
-        for yvals in y:
-            plot(squeeze(x), squeeze(yvals))
+        for value in values:
+            plot(squeeze(x), squeeze(value))
         grid(True)
         xlabel(r"$x$")
         ylabel(r"$\lambda_i\left(x\right)$")
         xlim(min(x), max(x))
         savefig(potdef["name"] + ".png")
+
+    elif len(potdef["variables"]) == 2:
+        values = P.evaluate_eigenvalues_at(G)
+
+        f = mlab.figure()
+        for value in values:
+            mlab.surf(x2, y2, real(value.reshape(Nx, Ny)))
+        mlab.savefig(potdef["name"] + ".png")
+        mlab.close(f)
 
     # The latex code
     ls = []
@@ -102,7 +132,7 @@ for potdef in potentials:
 
     ls.append("\n")
 
-    if len(potdef["variables"]) == 1:
+    if len(potdef["variables"]) < 3:
         ls.append(".. image:: fig/" + potdef["name"] + ".png\n\n")
 
     ls = reduce(lambda x,y: x+y, ls)

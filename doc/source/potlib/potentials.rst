@@ -33,26 +33,6 @@ Potential ``cosh_osc``
 
 .. image:: fig/cosh_osc.png
 
-Potential ``delta_gap``
-^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{1}{2} \tanh{\left (x \right )} & \delta\\\delta & - \frac{1}{2} \tanh{\left (x \right )}\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-
-.. image:: fig/delta_gap.png
-
-Potential ``delta_gap_diag``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\sqrt{\delta^{2} + \frac{1}{4} \tanh^{2}{\left (x \right )}} & 0\\0 & - \sqrt{\delta^{2} + \frac{1}{4} \tanh^{2}{\left (x \right )}}\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-
-.. image:: fig/delta_gap_diag.png
-
 Potential ``double_well``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -93,45 +73,6 @@ Potential ``eckart``
   * :math:`\sigma = 0.038088`
 
 .. image:: fig/eckart.png
-
-Potential ``five_quadratic``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & 0 & \frac{\sigma x^{2}}{2} & 0 & 0\\0 & 0 & 0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & 0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-* Default values:
-
-  * :math:`\sigma = 0.05`
-
-.. image:: fig/five_quadratic.png
-
-Potential ``four_powers``
-^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & \frac{\sigma x^{4}}{4} & 0 & 0\\0 & 0 & \frac{\sigma x^{6}}{6} & 0\\0 & 0 & 0 & \frac{\sigma x^{8}}{8}\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-* Default values:
-
-  * :math:`\sigma = 0.05`
-
-.. image:: fig/four_powers.png
-
-Potential ``four_quadratic``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0 & 0\\0 & 0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-* Default values:
-
-  * :math:`\sigma = 0.05`
-
-.. image:: fig/four_quadratic.png
 
 Potential ``free_particle``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -243,31 +184,51 @@ Potential ``quartic``
 
 .. image:: fig/quartic.png
 
-Potential ``three_levels``
-^^^^^^^^^^^^^^^^^^^^^^^^^^
+Potential ``v_shape``
+^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \left[\begin{matrix}\tanh{\left (- \rho + x \right )} + \tanh{\left (\rho + x \right )} & \delta_{1} & \delta_{2}\\\delta_{1} & - \tanh{\left (\rho + x \right )} & 0\\\delta_{2} & 0 & - \tanh{\left (- \rho + x \right )} + 1\end{matrix}\right]`
-
-* Variables: :math:`x`
-
-* Default values:
-
-  * :math:`\rho = 3.0`
-
-.. image:: fig/three_levels.png
-
-Potential ``three_quadratic``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
+* Formula: :math:`V(x) = \frac{1}{2} \sqrt{4 \delta^{2} + \tanh^{2}{\left (x \right )}}`
 
 * Variables: :math:`x`
 
 * Default values:
 
-  * :math:`\sigma = 0.05`
+  * :math:`\delta = 0.2`
 
-.. image:: fig/three_quadratic.png
+.. image:: fig/v_shape.png
+
+Potential ``wall``
+^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \operatorname{atan}{\left (\sigma x \right )} + \frac{\pi}{2}`
+
+* Variables: :math:`x`
+
+* Default values:
+
+  * :math:`\sigma = 10.0`
+
+.. image:: fig/wall.png
+
+Potential ``delta_gap``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{1}{2} \tanh{\left (x \right )} & \delta\\\delta & - \frac{1}{2} \tanh{\left (x \right )}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+
+.. image:: fig/delta_gap.png
+
+Potential ``delta_gap_diag``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\sqrt{\delta^{2} + \frac{1}{4} \tanh^{2}{\left (x \right )}} & 0\\0 & - \sqrt{\delta^{2} + \frac{1}{4} \tanh^{2}{\left (x \right )}}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+
+.. image:: fig/delta_gap_diag.png
 
 Potential ``two_crossings``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -308,31 +269,70 @@ Potential ``two_quartic``
 
 .. image:: fig/two_quartic.png
 
-Potential ``v_shape``
-^^^^^^^^^^^^^^^^^^^^^
+Potential ``three_levels``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \frac{1}{2} \sqrt{4 \delta^{2} + \tanh^{2}{\left (x \right )}}`
-
-* Variables: :math:`x`
-
-* Default values:
-
-  * :math:`\delta = 0.2`
-
-.. image:: fig/v_shape.png
-
-Potential ``wall``
-^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \operatorname{atan}{\left (\sigma x \right )} + \frac{\pi}{2}`
+* Formula: :math:`V(x) = \left[\begin{matrix}\tanh{\left (- \rho + x \right )} + \tanh{\left (\rho + x \right )} & \delta_{1} & \delta_{2}\\\delta_{1} & - \tanh{\left (\rho + x \right )} & 0\\\delta_{2} & 0 & - \tanh{\left (- \rho + x \right )} + 1\end{matrix}\right]`
 
 * Variables: :math:`x`
 
 * Default values:
 
-  * :math:`\sigma = 10.0`
+  * :math:`\rho = 3.0`
 
-.. image:: fig/wall.png
+.. image:: fig/three_levels.png
+
+Potential ``three_quadratic``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/three_quadratic.png
+
+Potential ``four_powers``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & \frac{\sigma x^{4}}{4} & 0 & 0\\0 & 0 & \frac{\sigma x^{6}}{6} & 0\\0 & 0 & 0 & \frac{\sigma x^{8}}{8}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/four_powers.png
+
+Potential ``four_quadratic``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0 & 0\\0 & 0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/four_quadratic.png
+
+Potential ``five_quadratic``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{\sigma x^{2}}{2} & 0 & 0 & 0 & 0\\0 & \frac{\sigma x^{2}}{2} & 0 & 0 & 0\\0 & 0 & \frac{\sigma x^{2}}{2} & 0 & 0\\0 & 0 & 0 & \frac{\sigma x^{2}}{2} & 0\\0 & 0 & 0 & 0 & \frac{\sigma x^{2}}{2}\end{matrix}\right]`
+
+* Variables: :math:`x`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/five_quadratic.png
 
 Potential ``channel_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -346,6 +346,8 @@ Potential ``channel_2d``
   * :math:`sigmay = 0.45`
   * :math:`sigmax = 0.0`
 
+.. image:: fig/channel_2d.png
+
 Potential ``circle_pit_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -358,32 +360,7 @@ Potential ``circle_pit_2d``
   * :math:`R = 8`
   * :math:`\sigma = 10`
 
-Potential ``conic``
-^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}x & y\\y & - x\end{matrix}\right]`
-
-* Variables: :math:`x`, :math:`y`
-
-
-Potential ``conic_avoided``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}x & \sqrt{\delta^{2} + y^{2}}\\\sqrt{\delta^{2} + y^{2}} & - x\end{matrix}\right]`
-
-* Variables: :math:`x`, :math:`y`
-
-* Default values:
-
-  * :math:`\delta = 1.0`
-
-Potential ``conic_avoided_c``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}x & i \delta + y\\- i \delta + y & - x\end{matrix}\right]`
-
-* Variables: :math:`x`, :math:`y`
-
+.. image:: fig/circle_pit_2d.png
 
 Potential ``corral_ring``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -397,6 +374,8 @@ Potential ``corral_ring``
   * :math:`R = 3`
   * :math:`\delta = 1/32`
 
+.. image:: fig/corral_ring.png
+
 Potential ``corral_rotsym_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -408,6 +387,8 @@ Potential ``corral_rotsym_2d``
 
   * :math:`R = 8`
   * :math:`\sigma = 10`
+
+.. image:: fig/corral_rotsym_2d.png
 
 Potential ``cos_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -423,6 +404,8 @@ Potential ``cos_osc_2d``
   * :math:`bx = 1`
   * :math:`by = 1`
 
+.. image:: fig/cos_osc_2d.png
+
 Potential ``cosh_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -435,13 +418,7 @@ Potential ``cosh_osc_2d``
   * :math:`a = 1`
   * :math:`b = 1`
 
-Potential ``delta_gap_rotsym``
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-* Formula: :math:`V(x) = \left[\begin{matrix}\frac{1}{2} \tanh{\left (\sqrt{x^{2} + y^{2}} \right )} & \delta\\\delta & - \frac{1}{2} \tanh{\left (\sqrt{x^{2} + y^{2}} \right )}\end{matrix}\right]`
-
-* Variables: :math:`x`, :math:`y`
-
+.. image:: fig/cosh_osc_2d.png
 
 Potential ``gauss_hill_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -455,6 +432,8 @@ Potential ``gauss_hill_2d``
   * :math:`sigmay = 1`
   * :math:`sigmax = 1`
 
+.. image:: fig/gauss_hill_2d.png
+
 Potential ``morse_threefold``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -465,6 +444,8 @@ Potential ``morse_threefold``
 * Default values:
 
   * :math:`\sigma = 0.05`
+
+.. image:: fig/morse_threefold.png
 
 Potential ``quadratic_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -477,6 +458,51 @@ Potential ``quadratic_2d``
 
   * :math:`sigmay = 1/2`
   * :math:`sigmax = 1/2`
+
+.. image:: fig/quadratic_2d.png
+
+Potential ``conic``
+^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}x & y\\y & - x\end{matrix}\right]`
+
+* Variables: :math:`x`, :math:`y`
+
+
+.. image:: fig/conic.png
+
+Potential ``conic_avoided``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}x & \sqrt{\delta^{2} + y^{2}}\\\sqrt{\delta^{2} + y^{2}} & - x\end{matrix}\right]`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`\delta = 1.0`
+
+.. image:: fig/conic_avoided.png
+
+Potential ``conic_avoided_c``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}x & i \delta + y\\- i \delta + y & - x\end{matrix}\right]`
+
+* Variables: :math:`x`, :math:`y`
+
+
+.. image:: fig/conic_avoided_c.png
+
+Potential ``delta_gap_rotsym``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left[\begin{matrix}\frac{1}{2} \tanh{\left (\sqrt{x^{2} + y^{2}} \right )} & \delta\\\delta & - \frac{1}{2} \tanh{\left (\sqrt{x^{2} + y^{2}} \right )}\end{matrix}\right]`
+
+* Variables: :math:`x`, :math:`y`
+
+
+.. image:: fig/delta_gap_rotsym.png
 
 Potential ``quadratic_3d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
