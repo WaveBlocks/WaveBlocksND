@@ -30,7 +30,6 @@ Potential Library
 
    potlib/potentials.rst
 
-
 Source code documentation
 =========================
 

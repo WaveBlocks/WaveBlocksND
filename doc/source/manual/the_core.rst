@@ -33,7 +33,7 @@ fourier        Fourier propagation / Operator splitting
 hagedorn       Homogeneous Hagedorn wavepackets
 multihagedorn  Inhomogeneous Hagedorn wavepackets
 =============  ===========================================
-.. spawn       ..   Spawning propagation for tunneling problems
+.. spawn          Spawning propagation for tunneling problems
 
 Specifying initial values
 -------------------------
@@ -150,7 +150,7 @@ Parameters for all propagation algorithms
 ``potential``
   The potential
 
-  * Possible values: see Section \ref{sec:ready_made_potentials}
+  * Possible values: see Section `Ready made Potentials`_
   * Data type: string or dict
 
 ``T``
@@ -217,95 +217,93 @@ Parameters for all propagation algorithms
   * Default value: 20
 
 
-Parameters for the \texttt{fourier} propagator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Parameters for the ``fourier`` propagator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-\begin{description}
+``initial_values``
+  A specific input format for the initial values. This allows to
+  place an arbitrary number of wavepackets on any energy level.
+  A valid configuration must either have this variable set or both of
+  ``parameters`` and ``coefficients``. If all three are given, this
+  takes precedence.
 
-  \item[\texttt{initial\_values}] A specific input format for the initial values.
-    This allows to place an arbitrary number of wavepackets on any energy level.
-    A valid configuration must either have this variable set or both of
-    \texttt{parameters} and \texttt{coefficients}. If all three are given, this
-    takes precedence.
+``ngn``
+  The number of grid nodes used for the Fourier transformation.
 
-  \item[\texttt{ngn}] The number of grid nodes used for the Fourier transformation.
-  \begin{itemize}
-    \item Possible values: Integer, optimal is a power of 2 but this is not necessary.
-    \item Data type: integer
-  \end{itemize}
+  * Possible values: Integer, optimal is a power of 2 but this is not necessary.
+  * Data type: integer
 
-  \item[\texttt{f}] A scalar number that determines the extension of the computational domain.
-  \begin{itemize}
-    \item Possible values: A non-negative float
-    \item Data type: float
-  \end{itemize}
-\end{description}
+``f``
+  A scalar number that determines the extension of the computational domain.
 
-Note: You must specify a \texttt{basis\_size} (see below) for the Fourier propagator too
-because we compute initial values from wavepackets.
+  * Possible values: A non-negative float
+  * Data type: float
+
+.. Note::
+   You must specify a ``basis_size`` (see below) for the Fourier
+   propagator too because we compute initial values from wavepackets.
 
 
-Parameters for the \texttt{hagedorn} propagator
+Parameters for the ``hagedorn`` propagator
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+``basis_size``
+  Number of basis functions used for homogeneous Hagedorn wavepackets.
+
+  * Possible values: Non-negative integer larger than 2.
+  * Data type: integer
+
+``leading_component``
+  The leading component is the eigenvalue that governs the propagation
+  of the wavepackets' parameters.
+
+  * Possible values: Integer in the range 0 to :math:`N-1` inclusive,
+                     where :math:`N` is the number of energy levels the
+                     given potential supports.
+  * Data type: integer
+
+
+Parameters for the ``multihagedorn`` propagator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-\begin{description}
-  \item[\texttt{basis\_size}] Number of basis functions used for homogeneous Hagedorn wavepackets.
-  \begin{itemize}
-    \item Possible values: Non-negative integer larger than $2$.
-    \item Data type: integer
-  \end{itemize}
+``basis_size``
+  Number of basis functions used for inhomogeneous Hagedorn packets.
 
-  \item[\texttt{leading\_component}] The leading component is the eigenvalue that
-    governs the propagation of the wavepackets' parameters.
-  \begin{itemize}
-    \item Possible values: Integer in the range $0$ to $N-1$ inclusive, where $N$
-      is the number of energy levels the given potential supports.
-    \item Data type: integer
-  \end{itemize}
-\end{description}
-
-
-Parameters for the \texttt{multihagedorn} propagator
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-
-\begin{description}
-  \item[\texttt{basis\_size}] Number of basis functions used for inhomogeneous hagedorn packets.
-  \begin{itemize}
-    \item Possible values: Non-negative integer larger than $2$.
-    \item Data type: integer
-  \end{itemize}
-\end{description}
+  * Possible values: Non-negative integer larger than 2.
+  * Data type: integer
 
 
 Optional parameters
 ^^^^^^^^^^^^^^^^^^^
 
 All variables that appear as parameters of some potential can be specified
-here. For example, the \texttt{quadratic} potential has a parameter \texttt{sigma}
+here. For example, the ``quadratic`` potential has a parameter ``sigma``
 which can be given in the simulation configuration. (Otherwise a default value
 would be used.) For potentials that contain parameters for which no default
 values are specified, these parameters must be given in the configuration file.
-An example of such a parameter is the \texttt{delta} of the \texttt{delta\_gap} potential.
+An example of such a parameter is the ``delta`` of the ``delta_gap`` potential.
 
 
 Parameters related to spawning
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
+.. warning::
+
+   The spawning algorithms are not supported in the new ``WaveBlocksND`` code yet.
+
 There are a number of parameters which are all related to the different
 spawning techniques. The name of these parameters always starts with the prefix
-\texttt{spawn}. It is beyond the scope of this document to explain the details
+``spawn``. It is beyond the scope of this document to explain the details
 of the spawning techniques and also the theoretical origin of the various parameters.
 
-To enable spawning, the configuration parameter \texttt{algorithm} can be set
+To enable spawning, the configuration parameter ``algorithm`` can be set
 to additional values not mentioned above.
 
-\begin{description}
-  \item[\texttt{algorithm}] The simulation algorithm
-  \begin{itemize}
-    \item Possible values: \texttt{"spawning\_adiabatic"}, \texttt{"spawning\_nonadiabatic"}
-    \item Data type: string
-  \end{itemize}
-\end{description}
+``algorithm``
+  The simulation algorithm
+
+  * Possible values: ``"spawning_adiabatic"``, ``"spawning_nonadiabatic"``
+  * Data type: string
 
 Since these algorithms make use of the homogeneous Hagedorn propagation internally,
 all variables related to this propagator must be set additionally.
@@ -314,164 +312,147 @@ Then there is a bunch of parameters controlling the details of the spawning
 process. Most of these variables must be set properly, some are optional
 depending on specific choices for others.
 
-\begin{description}
-  \item[\texttt{spawn\_method}] Specify the spawning method used.
-  If set to \texttt{lumping} we just spawn a normed wavepacket by copying over
-  the norm of the \emph{spawn candidate}. If set to \texttt{projection} a full
-  basis projection is done up to the maximal order given by the parameter
-  \texttt{spawn\_max\_order}. (Always set this value too.)
-  \begin{itemize}
-    \item Possible values: \texttt{"lumping"} or \texttt{"projection"}
-    \item Data type: string
-  \end{itemize}
+``spawn_method``
+  Specify the spawning method used. If set to ``lumping`` we just spawn a
+  normed wavepacket by copying over the norm of the `spawn candidate`. If
+  set to ``projection`` a full basis projection is done up to the maximal
+  order given by the parameter ``spawn_max_order``. (Always set this value
+  too.)
 
-  \item[\texttt{spawn\_max\_order}] The maximal order (size) of the spawned wavepacket
-  i.e. on how many new basis functions the basis projection is performed.
-  This only makes sense in combination with the \texttt{spawn\_method} parameter
-  set to \texttt{projection}. Note: this is \emph{not} the basis size of the
-  spawned wavepacket. (Which we currently can not control.)
-  \begin{itemize}
-    \item Possible values: Non-negative integer in the range $\left[0, \ldots, K\right]$
-                           where $K$ is the basis size given by \texttt{basis\_size}.
-    \item Data type: integer
-  \end{itemize}
+  * Possible values: ``"lumping"`` or ``"projection"``
+  * Data type: string
 
-  \item[\texttt{spawn\_order}]
-  The spawned wavepacket is assumed to be of the form of $\phi_k$ at leading order.
-  This is not always true but we need the value of $k$ in the algorithms for formal
-  reasons. If the value of $k$ is wrong then the results may be much worse.
-  (Consider this to be a limitation of the current algorithms.)
-  \begin{itemize}
-    \item Possible values: Non-negative integer in the range $\left[0, \ldots, K\right]$
-                           where $K$ is the basis size given by \texttt{basis\_size}.
-    \item Data type: integer
-  \end{itemize}
-\end{description}
+``spawn_max_order``
+  The maximal order (size) of the spawned wavepacket i.e. on how many new basis
+  functions the basis projection is performed. This only makes sense in
+  combination with the ``spawn_method`` parameter set to ``projection``.
 
+  * Possible values: Non-negative integer in the range :math:`\left[0, \ldots, K\right]`
+                     where :math:`K` is the basis size given by ``basis_size``.
+  * Data type: integer
+
+.. Note::
+   This ``spawn_max_order`` is *not* the basis size of the spawned wavepacket.
+   (Which we currently can not control.)
+
+``spawn_order``
+  The spawned wavepacket is assumed to be of the form of :math:`\phi_k` at leading
+  order. This is not always true but we need the value of :math:`k` in the algorithms
+  for formal reasons. If the value of :math:`k` is wrong then the results may be
+  much worse. (Consider this to be a limitation of the current algorithms.)
+
+  * Possible values: Non-negative integer in the range :math:`\left[0, \ldots, K\right]`
+                     where :math:`K` is the basis size given by ``basis_size``.
+  * Data type: integer
 
 Finally, we have several possibilities how we decide if and when to spawn. This
-criterion or \emph{oracle} has to be set by the following variable. There is an
+criterion or `oracle` has to be set by the following variable. There is an
 open set of possibilities, more criteria may be added in the future. All values
 are class names of the classes that implement the corresponding condition. The
-implementations can be found in the file \texttt{SpawnConditions.py}.
+implementations can be found in the file ``SpawnConditions.py``.
 
-\begin{description}
-  \item[\texttt{spawn\_condition}] Specify the spawning condition used to decide
-  if and when spawning should occur.
-  \begin{itemize}
-    \item Possible values: \texttt{"spawn\_at\_time"},
-                           \texttt{"norm\_threshold"},
-                           \texttt{"high\_k\_norm\_threshold"},
-                           \texttt{"high\_k\_norm\_derivative\_threshold"},
-                           \texttt{"norm\_derivative\_threshold\_l2"},
-                           \texttt{"norm\_derivative\_threshold\_max"}
-    \item Data type: string
-  \end{itemize}
-  Note: if in doubt, try using \texttt{norm\_threshold} or \texttt{norm\_derivative\_threshold\_l2}
-  with sensible values for the related parameters. (Choosing good values for these
-  parameters is the most difficult part.)
-\end{description}
+``spawn_condition``
+  Specify the spawning condition used to decide if and when spawning should occur.
+
+  * Possible values: ``"spawn_at_time"``, ``"norm_threshold"``, ``"high_k_norm_threshold"``,
+                     ``"high_k_norm_derivative_threshold"``, ``"norm_derivative_threshold_l2"``,
+                     ``"norm_derivative_threshold_max"``
+  * Data type: string
+
+.. Note::
+   If in doubt, try using ``norm_threshold`` or ``norm_derivative_threshold_l2``
+   with sensible values for the related parameters. (Choosing good values for these
+   parameters is the most difficult part.)
 
 Each of these methods depend on one or several more parameters configuring their
 behaviour in detail. These parameters are described in the following list.
 
-\begin{description}
-  \item[\texttt{spawn\_threshold}] The spawning threshold is compared to
-  the norm of the fragment or \emph{spawning candidate} examined. Its norm
-  has to exceed this value in order to initiate the spawning process.
-  \begin{itemize}
-    \item Possible values: Non-negative float (should be between 0.0 and 1.0)
-  \item Data type: float
-  \item Used by: All methods. (Because it is used in the parameter estimation
-                 process to avoid division by zero.) The methods \texttt{norm\_threshold}
-                 and \texttt{high\_k\_norm\_threshold} decide solely on this
-                 value. The methods \texttt{*\_derivative\_*} use this value
-                 as a first hint in combination with others.
-  \end{itemize}
+``spawn_threshold``
+  The spawning threshold is compared to the norm of the fragment or `spawning candidate`
+  examined. Its norm has to exceed this value in order to initiate the spawning process.
 
-  \item[\texttt{spawn\_K0}] The index of the coefficient $c_{K0}$ where splitting
-  in low and high coefficients is applied. ($c_{K0}$ is included into the set of
-  high ones.)
-  \begin{itemize}
-    \item Possible values: Non-negative integer in the range $\left[0, \ldots, K\right]$
-                           where $K$ is the basis size given by \texttt{basis\_size}.
-    \item Data type: integer
-    \item Used by: The conditions \texttt{high\_k\_norm\_threshold} and
-                   \texttt{high\_k\_norm\_derivative\_threshold}. This
-                   parameter is also used by all method that do a low/high
-                   filtering.
-  \end{itemize}
+  * Possible values: Non-negative float (should be between 0.0 and 1.0)
+  * Data type: float
+  * Used by: All methods. (Because it is used in the parameter estimation process
+             to avoid division by zero.) The methods ``norm_threshold`` and
+             ``high_k_norm_threshold`` decide solely on this value. The methods
+             ``*_derivative_*`` use this value as a first hint in combination with others.
 
-  \item[\texttt{spawn\_hist\_len}] The length of the history measured in number of samples.
-  \begin{itemize}
-    \item Possible values: Positive integers. Values in the range of 5 up to
-                           about 30 are probably good choices.
-    \item Data type: integer
-    \item Used by: All methods that keep a history and remember their past.
-                   In particular these are
-                   \texttt{high\_k\_norm\_derivative\_threshold},
-                   \texttt{norm\_derivative\_threshold\_l2},
-                   \texttt{norm\_derivative\_threshold\_max}.
-  \end{itemize}
+``spawn_K0``
+  The index of the coefficient :math:`c_{K0}` where splitting in low and high
+  coefficients is applied. (:math:`c_{K0}` is included into the set of high ones.)
 
-  \item[\texttt{spawn\_deriv\_threshold}] The threshold applied to the derivative
-  of the norm of the fragment examined for spawning. The derivative is usually
-  approximated by simple finite differences.
-  \begin{itemize}
-    \item Possible values: (Small) real positive values
-    \item Data type: float
-    \item Used by: The methods
-                   \texttt{high\_k\_norm\_derivative\_threshold},
-                   \texttt{norm\_derivative\_threshold\_l2},
-                   \texttt{norm\_derivative\_threshold\_max}
-  \end{itemize}
+  * Possible values: Non-negative integer in the range :math:`\left[0, \ldots, K\right]`
+                     where :math:`K` is the basis size given by :math:`basis_size`.
+  * Data type: integer
+  * Used by: The conditions ``high_k_norm_threshold`` and ``high_k_norm_derivative_threshold``.
+             This parameter is also used by all method that do a low/high filtering.
 
-  \item[\texttt{spawn\_time}] The time when we want to spawn.
-  \begin{itemize}
-    \item Possible values: Real values in the range $[0, T]$. The values will
-                           be rounded to the nearest timestep interval.
-    \item Data type: float
-    \item Used by: The method \texttt{spawn\_at\_time}.
-  \end{itemize}
-\end{description}
+``spawn_hist_len``
+  The length of the history measured in number of samples.
+
+  * Possible values: Positive integers. Values in the range of 5 up to
+                     about 30 are probably good choices.
+  * Data type: integer
+  * Used by: All methods that keep a history and remember their past.
+             In particular these are:
+             ``high_k_norm_derivative_threshold``,
+             ``norm_derivative_threshold_l2``,
+             ``norm_derivative_threshold_max``.
+
+``spawn_deriv_threshold``
+  The threshold applied to the derivative of the norm of the fragment examined for
+  spawning. The derivative is usually approximated by simple finite differences.
+
+  * Possible values: (Small) real positive values
+  * Data type: float
+  * Used by: The methods
+             ``high_k_norm_derivative_threshold``,
+             ``norm_derivative_threshold_l2``,
+             ``norm_derivative_threshold_max``
+
+``spawn_time``
+  The time when we want to spawn.
+
+  * Possible values: Real values in the range :math:`[0, T]`. The values will
+                     be rounded to the nearest timestep interval.
+  * Data type: float
+  * Used by: The method ``spawn_at_time``.
 
 
 Parameters related to aposteriori spawning
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In addition to the algorithms that combine propagation with spawning there are
-also algorithms which perform an aposteriori analysis of spawning methods. They can be
-chosen by the following values for the parameter \texttt{algorithm}.
+also algorithms which perform an aposteriori analysis of spawning methods. They
+can be chosen by the following values for the parameter ``algorithm``.
 
-\begin{description}
-  \item[\texttt{algorithm}] The simulation algorithm
-  \begin{itemize}
-    \item Possible values: \texttt{"spawning\_apost"} and \texttt{"spawning\_apost\_na"}
-    \item Data type: string
-  \end{itemize}
-  Note: currently unused.
-\end{description}
+``algorithm``
+  The simulation algorithm
+
+  * Possible values: ``"spawning_apost"`` and ``"spawning_apost_na"``
+  * Data type: string
+
+.. Note::
+   These values are currently unused.
 
 In the non-adiabatic case we might be interested on specific energy levels only.
 These level can be set by the following variable. (This does not apply to the
 algorithms from the last section.)
 
-\begin{description}
-  \item[\texttt{spawn\_components}] The energy levels on which spawning is tried.
-  \begin{itemize}
-    \item Possible values: List of integers between 0 and the number of energy levels.
-    \item Data type: list or tuple
-  \end{itemize}
-\end{description}
+``spawn_components``
+  The energy levels on which spawning is tried.
+
+  * Possible values: List of integers between 0 and the number of energy levels.
+  * Data type: list or tuple
 
 All other parameters from the last section must be used additionally to configure
 the details of the spawning process.
 
 For this very specialised problem setting you have to use the scripts
-\texttt{AposterioriSpawning.py} and \texttt{AposterioriSpawningNA.py}.
-These scripts perform the aposteriori analysis on some given simulation
-data. They produce new data files which then can be evaluated with the
-usual tools.
+``AposterioriSpawning.py`` and ``AposterioriSpawningNA.py``. These scripts
+perform the aposteriori analysis on some given simulation data. They produce
+new data files which then can be evaluated with the usual tools.
 
 
 Data storage
