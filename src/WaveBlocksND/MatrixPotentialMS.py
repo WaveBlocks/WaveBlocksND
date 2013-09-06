@@ -403,8 +403,6 @@ class MatrixPotentialMS(MatrixPotential):
         else:
             levels = [component]
 
-        nodes = grid.get_nodes(split=True)
-
         # Compute eigenvectors
         EV = self.evaluate_eigenvectors_at(grid, sorted=False)
 
@@ -453,8 +451,6 @@ class MatrixPotentialMS(MatrixPotential):
         D = self._dimension
         N = self._number_components
         n = grid.get_number_nodes(overall=True)
-
-        nodes = grid.get_nodes(split=True)
 
         # For which eigenvalues do we need to do the computation
         if component is None:

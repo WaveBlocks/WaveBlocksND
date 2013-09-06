@@ -8,7 +8,7 @@ related splitting methods.
 @license: Modified BSD License
 """
 
-from numpy import zeros, flipud, double
+from numpy import zeros, flipud
 
 __all__ = ["SplittingParameters"]
 
