@@ -36,7 +36,7 @@ class GradientHAWP(Gradient):
         :param as_packet: Whether to return a full packet.
         :type as_packet: Boolean, default is ``False``.
         :return: Extended basis shape :math:`\mathfrak{\dot{K}}` and new coefficients :math:`c^\prime`.
-                 If requested, copies of the original wavepacket is returned with these new values set.
+                 If requested, copies of the original wavepacket are returned with these new values set.
                  There is one packet for each component of the gradient.
         """
         # TODO: Consider moving this method into the HAWP class?

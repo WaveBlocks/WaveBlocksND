@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Thie file contains the interface for general sparsity oracles.
+This file contains the interface for general sparsity oracles.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2013 R. Bourquin

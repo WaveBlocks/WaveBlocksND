@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Thie file contains the code for a sparsity oracle
+This file contains the code for a sparsity oracle
 always saying the integrals are non-zero.
 
 

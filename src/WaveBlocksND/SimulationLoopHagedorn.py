@@ -63,7 +63,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Project the initial values to the canonical basis
         BT = BasisTransformationHAWP(potential)
 
-        # Finally create and initialize the propagator instace
+        # Finally create and initialize the propagator instance
         # TODO: Attach the "leading_component to the hawp as codata
         # TODO: Clean up this ugly if tree
         if self.parameters["propagator"] == "magnus_split":

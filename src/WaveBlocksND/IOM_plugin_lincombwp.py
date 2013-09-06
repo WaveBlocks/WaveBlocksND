@@ -103,7 +103,7 @@ def save_lincombwp_coefficients(self, coefficients, timestep=None, blockid=0):
     r"""Save the coefficients of the linear combination to a file.
 
     :param coefficients: The coefficients of the linear combination of wavepackets.
-    :type coefficients: A single, suitable ``ndarray``.
+    :type coefficients: A single, suitable :py:class:`ndarray`.
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
@@ -133,7 +133,7 @@ def save_lincombwp_coefficients(self, coefficients, timestep=None, blockid=0):
 def save_lincombwp_wavepackets(self, packetlist, timestep=None, blockid=0):
     r"""Save the wavepackets being part of this linear combination.
 
-    Note that this is quite an expensive operation.
+    .. warning:: This is quite an expensive operation.
 
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
@@ -150,7 +150,7 @@ def save_lincombwp_wavepackets(self, packetlist, timestep=None, blockid=0):
     if not K == 0:
         self.must_resize(pathd, K-1, axis=1)
 
-    # Save that packets
+    # Save the packets
     known_packets = self.get_block_ids(groupid=gid)
     for k, packet in enumerate(packetlist):
         bid = "LC"+str(blockid)+"WP"+str(packet.get_id())
@@ -191,7 +191,7 @@ def load_lincombwp_timegrid(self, blockid=0, key=("coeffs", "packets")):
 
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which linear combination timegrids to load. All are independent.
-    :type key: Tuple of valid identifier strings that are ``ceoffs`` and ``packets``.
+    :type key: Tuple of valid identifier strings that are ``coeffs`` and ``packets``.
                Default is ``("coeffs", "packets")``.
     """
     tg = []
@@ -309,7 +309,7 @@ def load_lincombwp_wavepacket_refs(self, timestep=None, blockid=0):
 
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
-    :return: An ``ndarray`` of strings.
+    :return: A :py:class:`ndarray` of strings.
     """
     pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_packets"
     pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/packet_refs"

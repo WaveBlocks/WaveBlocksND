@@ -95,7 +95,7 @@ eckart["potential"] = "sigma * cosh(x/a)**(-2)"
 eckart["defaults"] = {"sigma":100*3.8088*10**(-4), "a":1.0/(2.0*0.52918)}
 eckart["number_levels"] = 1
 
-# A smooth unitstep like wall
+# A smooth unit step like wall
 wall = {}
 wall["variables"] = ["x"]
 wall["potential"] = "atan(sigma*x) + pi/2"
@@ -186,8 +186,9 @@ morse_threefold["number_levels"] = 1
 # A 2D tunneling example called the 'Eckart bottleneck potential'
 eckart_bn = {}
 eckart_bn["variables"] = ["x", "y"]
-eckart_bn["potential"] = "v0*cosh(a*x)**(-2) + k/2*(1-sigma*exp(-lam*x**2)) * y**2"
-eckart_bn["defaults"] = {"v0":"0.425", "a":"1.3624", "k":"0.06784", "sigma":"0.5", "lam":"0.25"}
+eckart_bn["potential"] = "v0*cosh(a*x)**(-2) + k/2*(1-sigma*exp(-l*x**2)) * y**2"
+eckart_bn["defaults"] = {"v0":"0.425", "a":"1.3624", "k":"0.06784", "sigma":"0.5", "l":"0.25"}
+eckart_bn["number_levels"] = 1
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #

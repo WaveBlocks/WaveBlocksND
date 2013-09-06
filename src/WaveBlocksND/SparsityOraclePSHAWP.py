@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Thie file contains the code for a sparsity oracle looking
+This file contains the code for a sparsity oracle looking
 at the phase space distance between both packets.
 
 

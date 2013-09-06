@@ -413,7 +413,7 @@ class HagedornWavepacketBase(Wavepacket):
             for d in olddelete:
                 del tmp[d]
 
-            # Exchange queus
+            # Exchange queues
             todo = newtodo
             newtodo = []
             olddelete = delete

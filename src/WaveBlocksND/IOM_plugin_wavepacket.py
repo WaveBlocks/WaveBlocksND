@@ -331,9 +331,11 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             descrs[int(ahash[12:])] = descr
         return descrs
     else:
+        # Be sure the hash is a plain number and not something
+        # else like a numpy array with one element.
         the_hash = int(the_hash)
         name = "basis_shape_"+str(the_hash)
-        # Chech if we already stored this basis shape
+        # Check if we already stored this basis shape
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
@@ -354,7 +356,7 @@ def load_wavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     This method just calls some other :py:class:`IOManager` methods in the correct
     order. It is included only for convenience and is not particularly efficient.
 
-    :param timestep: The timestep :math:`n` we load the wavepacket.
+    :param timestep: The timestep :math:`n` at which we load the wavepacket.
     :param key: Specify which parameters to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.

@@ -151,7 +151,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
                 S = S - dt * V[0]
                 packet.set_parameters((q, p, Q, P, S), component=component)
 
-            # Do a potential step with the local non-quadratic taylor remainder
+            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, packet, self._potential.evaluate_local_remainder_at)
 

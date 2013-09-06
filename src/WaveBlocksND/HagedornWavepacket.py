@@ -56,7 +56,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         p = zeros((self._dimension, 1), dtype=complexfloating)
         Q = eye(self._dimension, dtype=complexfloating)
         P = 1.0j * eye(self._dimension, dtype=complexfloating)
-        S = 0.0j
+        S = zeros((1, 1), dtype=complexfloating)
 
         # The parameter set Pi
         self._Pis = [q, p, Q, P, S]
@@ -77,7 +77,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
 
     def _get_sqrt(self, component):
-        r"""Compytibility method
+        r"""Compatibility method
         """
         return self._sqrt
 

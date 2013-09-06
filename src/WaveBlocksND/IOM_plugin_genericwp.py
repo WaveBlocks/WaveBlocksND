@@ -7,8 +7,10 @@ IOM plugin providing functions for handling of generic wavepacket data.
 @license: Modified BSD License
 """
 
-def add_genericwp(self, description, timeslots=None, blockid=0, key=("q","p","Q","P","S")):
-    r"""Add storage for the homogeneous wavepackets.
+def add_genericwp(self, description, timeslots=None, blockid=0):
+    r"""Add storage for generic unspecified wavepackets. This method
+    delegates the call to another appropriate method depending on
+    the wavepacket type.
 
     :param description: An :py:class:`ParameterProvider` instance with at
                        least the keys ``dimension`` and ``ncomponents``.
@@ -23,7 +25,7 @@ def add_genericwp(self, description, timeslots=None, blockid=0, key=("q","p","Q"
     elif packet_type == "HagedornWavepacketInhomogeneous":
         self.add_inhomogwavepacket(description, timeslots=timeslots, blockid=blockid)
     else:
-        raise ValueError("Unknown waavepacket type: "+str(packet_type))
+        raise ValueError("Unknown wavepacket type: "+str(packet_type))
 
 
 def delete_genericwp(self, blockid=0):
@@ -66,15 +68,15 @@ def load_genericwp(self, timestep, blockid=0):
     elif self.has_inhomogwavepacket(blockid=blockid):
         return self.load_inhomogwavepacket(timestep=timestep, blockid=blockid)
     else:
-        raise ValueError("No wavepacket of know type found in block "+str(blockid))
+        raise ValueError("No wavepacket of known type found in block "+str(blockid))
 
 
-def save_genericwp(self, packet, timestep, blockid=None):
+def save_genericwp(self, packet, timestep, blockid=0):
     r"""Save a wavepacket at a given timestep and read all data to save from the
     :py:class:`Wavepacket` subclass instance provided. This method just calls some
     other :py:class:`IOManager` methods in the correct order. It is included only
     for convenience and is not particularly efficient. We assume the wavepacket
-    is already set up with the correct :py:meth:`add` method call.
+    storage space is already set up with the correct :py:meth:`add` method call.
 
     :param packet: A generic :py:class:`Wavepacket` subclass instance we want to save.
     :param timestep: The timestep :math:`n` at which we save the wavepacket.
@@ -87,4 +89,4 @@ def save_genericwp(self, packet, timestep, blockid=None):
     elif packet_type == "HagedornWavepacketInhomogeneous":
         self.save_inhomogwavepacket(packet, timestep=timestep, blockid=blockid)
     else:
-        raise ValueError("Unknown waavepacket type: "+str(packet_type))
+        raise ValueError("Unknown wavepacket type: "+str(packet_type))

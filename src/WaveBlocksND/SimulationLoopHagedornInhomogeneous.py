@@ -64,7 +64,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         # Project the initial values to the canonical basis
         BT = BasisTransformationHAWP(potential)
 
-        # Finally create and initialize the propagator instace
+        # Finally create and initialize the propagator instance
         # TODO: Attach the "leading_component to the hawp as codata
         self.propagator = HagedornPropagatorInhomogeneous(self.parameters, potential)
 
