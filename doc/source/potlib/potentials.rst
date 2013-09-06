@@ -423,7 +423,7 @@ Potential ``cosh_osc_2d``
 Potential ``eckart_bn``
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \frac{k y^{2}}{2} \left(- \sigma e^{- lam x^{2}} + 1\right) + \frac{v_{0}}{\cosh^{2}{\left (a x \right )}}`
+* Formula: :math:`V(x) = \frac{k y^{2}}{2} \left(- \sigma e^{- l x^{2}} + 1\right) + \frac{v_{0}}{\cosh^{2}{\left (a x \right )}}`
 
 * Variables: :math:`x`, :math:`y`
 
@@ -433,7 +433,7 @@ Potential ``eckart_bn``
   * :math:`a = 1.3624`
   * :math:`k = 0.06784`
   * :math:`\sigma = 0.5`
-  * :math:`lam = 0.25`
+  * :math:`l = 0.25`
 
 .. image:: fig/eckart_bn.png
 
