@@ -28,7 +28,7 @@ Download
 
 The WaveBlocks project has its home at GitHub
 
-http://github.com/raoulbq/WaveBlocksND
+https://github.com/raoulbq/WaveBlocksND
 
 and the latest version can be found in the git
 repository at the same place.

@@ -18,8 +18,8 @@ others originated from a single very specific research question ...
 In the Core
 -----------
 
-In this section we describe the important parts of the ``WaveBlocks`` package from
-a user point of view. (For the developers point of view, see Chapter ?)
+In this section we describe the important parts of the ``WaveBlocks``
+package from a user point of view.
 
 
 Time propagation algorithms
@@ -42,17 +42,17 @@ multihagedorn  Inhomogeneous Hagedorn wavepackets
 Specifying initial values
 -------------------------
 
+.. warning::
+
+  The following sections describe the settings of the old WaveBlocks
+  code and do not apply to `WaveBlocksND`.
+
 Initial values are always specified as wavepackets. For the Fourier propagator,
 the packets are sampled at the grid nodes and for packet based algorithms, these
 initial packets are just propagated. The two configuration variables ``parameters``
 and ``coefficients`` are responsible for specifying the initial wavepackets.
 Their values are interpreted as usual but let's look at this important part
 a bit closer.
-
-.. warning::
-
-  The following sections describe the settings of the old WaveBlocks
-  code and do not apply to `WaveBlocksND`.
 
 
 For the ``fourier`` Propagator
