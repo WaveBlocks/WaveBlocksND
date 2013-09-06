@@ -20,7 +20,7 @@ __all__ = ["IOManager"]
 class IOManager(object):
     """An IOManager class that can save various simulation results into data
     files. For storing the data we use the well established HDF5 file format.
-    An IOManager instace abstracts the input and output operations and translates
+    An IOManager instance abstracts the input and output operations and translates
     requests into low-level operations.
     """
 
@@ -261,7 +261,7 @@ class IOManager(object):
         number of data groups per file.
 
         :param groupid: The ID for the new data group. If not given the group ID will
-                        be choosen automatically. The group ID has to be unique.
+                        be chosen automatically. The group ID has to be unique.
         :return: The group ID of the created group.
         """
         if self._srf is None:

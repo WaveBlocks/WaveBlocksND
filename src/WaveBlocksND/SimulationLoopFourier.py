@@ -73,7 +73,7 @@ class SimulationLoopFourier(SimulationLoop):
         BT.set_grid(grid)
         BT.transform_to_canonical(initialvalues)
 
-        # Finally create and initialize the propagator instace
+        # Finally create and initialize the propagator instance
         self.propagator = FourierPropagator(potential, initialvalues, self.parameters)
 
         # Write some initial values to disk

@@ -47,7 +47,7 @@ class Wavepacket(object):
     def gen_id(self):
         r"""Generate an (unique) ID per wavepacket instance.
         """
-        # Generate the packet ID from the currect time as well as
+        # Generate the packet ID from the current time as well as
         # memory location and take the md5 hash. The hash can be
         # assumed collision free for this usecase. The 'id' part
         # assures that different instances get different IDs even

@@ -78,7 +78,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
 
 
     def _get_sqrt(self, component):
-        r"""Compytibility method
+        r"""Compatibility method
         """
         return self._sqrt[component]
 

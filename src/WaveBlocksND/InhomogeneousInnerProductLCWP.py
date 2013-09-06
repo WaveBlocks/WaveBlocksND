@@ -87,7 +87,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :return: The value of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`.
         :type: An :py:class:`ndarray`.
         """
-        # Allow to ommit the ket if it is the same as the bra
+        # Allow to omit the ket if it is the same as the bra
         if lcket is None:
             lcket = lcbra
 
@@ -123,7 +123,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :return: A matrix of size :math:`J \times J^\prime`.
         :type: An :py:class:`ndarray`.
         """
-        # Allow to ommit the ket if it is the same as the bra
+        # Allow to omit the ket if it is the same as the bra
         if lcket is None:
             lcket = lcbra
 

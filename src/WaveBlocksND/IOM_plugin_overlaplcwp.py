@@ -14,7 +14,7 @@ import numpy as np
 
 def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovkin", "ovpot")):
     r"""Add storage for various overlap matrices. We can store one matrix type
-    per keys.
+    per key.
 
     ========= ======
     Key name  Matrix
@@ -25,7 +25,7 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
     ========= ======
 
     Note that 'strange' errors occur if we later try to load or save
-    matrices for a type we did not initialise with this function.
+    matrices for a key we did not initialise with this function.
 
     :param parameters: A :py:class:`ParameterProvider` instance. It can
                        be empty and is not used at the moment.

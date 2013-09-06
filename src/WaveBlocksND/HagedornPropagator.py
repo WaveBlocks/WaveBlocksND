@@ -96,7 +96,7 @@ class HagedornPropagator(Propagator):
         self._prepare_potential()
 
 
-    # TODO: Consider removig this, duplicate
+    # TODO: Consider removing this, duplicate
     def get_number_components(self):
         r""":return: The number :math:`N` of components :math:`\Phi_i` of :math:`\Psi`.
         """
@@ -161,7 +161,7 @@ class HagedornPropagator(Propagator):
             S = S - dt * V[0]
             packet.set_parameters((q, p, Q, P, S))
 
-            # Do a potential step with the local non-quadratic taylor remainder
+            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 

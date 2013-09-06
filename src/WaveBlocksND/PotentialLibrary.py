@@ -95,7 +95,7 @@ eckart["potential"] = "sigma * cosh(x/a)**(-2)"
 eckart["defaults"] = {"sigma":100*3.8088*10**(-4), "a":1.0/(2.0*0.52918)}
 eckart["number_levels"] = 1
 
-# A smooth unitstep like wall
+# A smooth unit step like wall
 wall = {}
 wall["variables"] = ["x"]
 wall["potential"] = "atan(sigma*x) + pi/2"
