@@ -43,7 +43,7 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
 
     for k in key:
         if not k in valid_keys:
-            raise ValueError("Unknown key value "+str(item))
+            raise ValueError("Unknown key value "+str(k))
 
         name = k[2:]
         if timeslots is None:
