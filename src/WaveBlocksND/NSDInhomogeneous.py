@@ -10,7 +10,7 @@ numerical steepest descent technique.
 """
 
 from numpy import (zeros, ones, diag, squeeze,  conjugate, transpose, dot, einsum,
-                   zeros_like, product, indices, flipud, complexfloating, imag, nan_to_num)
+                   zeros_like, product, complexfloating, imag, nan_to_num)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
@@ -158,41 +158,6 @@ class NSDInhomogeneous(Quadrature):
         return A, b, c
 
 
-    def update_oscillator(self, T, i):
-        r"""Given a upper triangular matrix :math:`\mathbf{T} \in \mathbb{C}^{D \times D}` representing
-        the oscillator :math:`g(x) = \underline{x}^{\mathrm{H}} \mathbf{T} \underline{x}`, update
-        its entries according to:
-
-        .. math::
-
-            t_{j,j} & := t_{j,j} - \frac{t_{i,j}^2}{4 t_{i,i}} \\
-            t_{j,k} & := t_{j,k} - \frac{t_{i,j} t_{i,k}}{2 t_{i,i}} \,, \quad k > j \,.
-
-        :param T: The matrix :math:`\mathbf{T}` we want to update. (Note that the matrix
-                  is not modified and a copy returned.)
-        :param i: The row :math:`0 \leq i \leq D-1` which is taken as base for the updates.
-        :return: The updated matrix :math:`\mathbf{T}`.
-        """
-        Ti = T.copy()
-        rr, cc = T.shape
-
-        if T[i-1,i-1] == 0:
-            # TODO: Prove that this never happens or handle it correctly!
-            print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
-            return Ti
-
-        # Diagonal Elements
-        for j in xrange(i,rr):
-            Ti[j,j] = T[j,j] - T[i-1,j]**2 / (4.0*T[i-1,i-1])
-
-        # Others
-        for r in xrange(i,rr):
-            for c in xrange(r+1,cc):
-                Ti[r,c] = T[r,c] - T[i-1,r]*T[i-1,c] / (2*T[i-1,i-1])
-
-        return Ti
-
-
     def prepare(self, rows, cols):
         r"""Precompute some values needed for evaluating the quadrature
         :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding
@@ -208,7 +173,6 @@ class NSDInhomogeneous(Quadrature):
         # Unpack quadrature rules
         self._nodes = self._QR.get_nodes()
         self._weights = self._QR.get_weights()
-
 
 
     def do_nsd(self, row, col):
@@ -234,7 +198,6 @@ class NSDInhomogeneous(Quadrature):
         T, U = schur(A, output="complex")
         U = conjugate(transpose(U))
 
-
         # Oscillator updates
         for i in xrange(1, D):
             if T[i-1,i-1] == 0:
@@ -250,7 +213,7 @@ class NSDInhomogeneous(Quadrature):
                 for c in xrange(r+1,D):
                     T[r,c] = T[r,c] - T[i-1,r]*T[i-1,c] / (2*T[i-1,i-1])
 
-        #
+        # Compute remaining parts
         X = inv(A + transpose(A))
         ctilde = c - 0.5 * dot(transpose(b), dot(X, b))
 
@@ -311,7 +274,6 @@ class NSDInhomogeneous(Quadrature):
 
         # Do the quadrature
         quadrand = (opath * pdp * self._weights).reshape((-1,))
-
         # Sum up matrices over all quadrature nodes
         M = einsum("k,ik,jk", quadrand, conjugate(basisr), basisc)
 
