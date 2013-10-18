@@ -10,7 +10,7 @@ numerical steepest descent technique.
 """
 
 from numpy import (zeros, ones, diag, squeeze,  conjugate, transpose, dot, einsum,
-                   zeros_like, product, complexfloating, imag, nan_to_num)
+                   zeros_like, product, complexfloating, imag, nan_to_num, triu)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
@@ -226,14 +226,11 @@ class NSDInhomogeneous(Quadrature):
         Dk = diag(T).reshape((D,1))
         # Tau (path parametrization variable)
         tk = self._nodes / w
-        # Paths
-        pathsqrtpart = sqrt(1.0j * tk / Dk)
-        # Precomposition
-        paths = zeros_like(pathsqrtpart, dtype=complexfloating)
+        # Path Precomposition
+        Tu = 0.5 * triu(T, 1) / Dk
+        paths = sqrt(1.0j * tk / Dk).astype(complexfloating)
         for i in reversed(xrange(D)):
-            paths[i,:] = pathsqrtpart[i,:]
-            for j in xrange(i+1, D):
-                paths[i,:] = paths[i,:] - 0.5*T[i,j]/T[i,i] * paths[j,:]
+            paths[i,:] = paths[i,:] - dot(Tu[i,:], paths)
 
         # Path derivatives
         pathderivs = sqrt(1.0j / Dk)
