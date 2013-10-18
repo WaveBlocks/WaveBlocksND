@@ -225,10 +225,11 @@ class NSDInhomogeneous(Quadrature):
         # Take out diagonals of T
         Dk = diag(T).reshape((D,1))
         # Tau (path parametrization variable)
-        tk = self._nodes / w
+        tk = self._nodes / sqrt(w)
+
         # Path Precomposition
         Tu = 0.5 * triu(T, 1) / Dk
-        paths = sqrt(1.0j * tk / Dk).astype(complexfloating)
+        paths = (sqrt(1.0j / Dk) * tk).astype(complexfloating)
         for i in reversed(xrange(D)):
             paths[i,:] = paths[i,:] - dot(Tu[i,:], paths)
 
