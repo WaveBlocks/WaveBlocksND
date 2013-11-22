@@ -56,6 +56,28 @@ class Propagator(object):
         return self._potential
 
 
+    def pre_propagate(self):
+        r"""Given the wavefunction :math:`\psi` at initial time :math:`t_0`,
+        perform some computations exactly once before running the ordinary
+        time propagation.
+
+        This method does not raise an exception but instead just does
+        nothing and returns.
+        """
+        pass
+
+
+    def post_propagate(self):
+        r"""Given the wavefunction :math:`\psi` at final time :math:`T`,
+        perform some computations exactly once after running the ordinary
+        time propagation.
+
+        This method does not raise an exception but instead just does
+        nothing and returns.
+        """
+        pass
+
+
     def propagate(self):
         r"""Given the wavefunction :math:`\psi` at time :math:`t`, calculate
         the new :math:`\psi` at time :math:`t + \tau`. We do exactly one timestep
