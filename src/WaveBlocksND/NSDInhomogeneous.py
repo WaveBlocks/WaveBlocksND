@@ -153,7 +153,7 @@ class NSDInhomogeneous(Quadrature):
         b = conjugate(b)
         c = (0.5 * (  dot(conjugate(transpose(qc)), dot(Gc, qc))
                     - dot(conjugate(transpose(qr)), dot(conjugate(transpose(Gr)), qr)))
-                 + (dot(conjugate(transpose(qr)),pr) - dot(conjugate(transpose(pc)),qc))
+                 + (dot(conjugate(transpose(qr)), pr) - dot(conjugate(transpose(pc)), qc))
             )
         return A, b, c
 
