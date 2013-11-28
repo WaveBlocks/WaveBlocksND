@@ -120,6 +120,7 @@ Inner Products
    waveblocks_classes/DirectHomogeneousQuadrature
    waveblocks_classes/DirectInhomogeneousQuadrature
 
+   waveblocks_classes/GaussianIntegral
    waveblocks_classes/SymbolicIntegral
    waveblocks_classes/NSDInhomogeneous
 
