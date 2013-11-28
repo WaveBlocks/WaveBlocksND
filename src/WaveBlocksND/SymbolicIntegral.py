@@ -26,7 +26,10 @@ class SymbolicIntegral(Quadrature):
     """
 
     def __init__(self, doraise=False, *unused, **kunused):
-        r"""
+        r"""Use a symbolic exact formula for computing the inner product
+        between two semi-classical wavepackets. The formula is
+        constructed explicitly for the inhomogeneous case.
+
         :param doraise: Raise an :py:class:`InnerProductException` exception
                         in case the symbolic formula will fail due to a
                         inherent mathematical singularity. Default is ``False``.
