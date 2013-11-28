@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: SymbolicIntegral
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

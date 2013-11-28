@@ -9,7 +9,7 @@ constructed explicitly for the inhomogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating, arange, isnan
+from numpy import array, squeeze, conjugate, sqrt, ones, zeros, complexfloating, arange, isnan
 from scipy import exp
 from scipy.misc import factorial
 from scipy.special import binom
@@ -27,9 +27,12 @@ class SymbolicIntegral(Quadrature):
 
     def __init__(self, doraise=False, *unused, **kunused):
         r"""
+        :param doraise: Raise an :py:class:`InnerProductException` exception
+                        in case the symbolic formula will fail due to a
+                        inherent mathematical singularity. Default is ``False``.
         """
         self._doraise = doraise
-        # Drop any argument, we do not need a qr instance.
+        # Drop any other argument, we do not need a qr instance.
 
 
     def __str__(self):
@@ -281,10 +284,8 @@ class SymbolicIntegral(Quadrature):
         self._Hk = self._evaluate_hermite(K-1, -1.0/eps * argk)
         self._Hl = self._evaluate_hermite(L-1,  1.0/eps * argl)
 
-        self._pfk = zeros((K,), dtype=complexfloating)
-        self._pfl = zeros((L,), dtype=complexfloating)
-        self._pfk[K-1-ij] = (1.0j*Q2*P1 - 1.0j*Q1*P2)**((K-1-ij)/2.0)
-        self._pfl[L-1-ij] = (1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2))**((L-1-ij)/2.0)
+        self._pfk = ((1.0j*Q2*P1 - 1.0j*Q1*P2) ** (ik/2.0)).reshape(K)
+        self._pfl = ((1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) ** (il/2.0)).reshape(L)
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)
@@ -309,7 +310,7 @@ class SymbolicIntegral(Quadrature):
 
         self._cache_factors(Pibra[:4], Piket[:4], Kbra, Kket, eps)
 
-        result = 0.0j
+        result = array([[0.0j]], dtype=complexfloating)
 
         for r in Kbra:
             for c in Kket:
