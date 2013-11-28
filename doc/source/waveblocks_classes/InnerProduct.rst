@@ -17,3 +17,6 @@ Class documentation
 .. autoclass:: InnerProduct
    :members:
    :inherited-members:
+
+.. autoclass:: InnerProductException
+   :members:

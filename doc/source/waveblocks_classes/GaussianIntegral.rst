@@ -1,7 +1,7 @@
-SymbolicIntegral
+GaussianIntegral
 ================
 
-About the ``SymbolicIntegral`` class
+About the ``GaussianIntegral`` class
 ------------------------------------
 
 .. automodule:: WaveBlocksND
@@ -9,13 +9,11 @@ About the ``SymbolicIntegral`` class
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: SymbolicIntegral
+.. inheritance-diagram:: GaussianIntegral
 
 Class documentation
 -------------------
 
-.. autoclass:: SymbolicIntegral
+.. autoclass:: GaussianIntegral
    :members:
    :inherited-members:
-
-   .. automethod:: __init__

@@ -76,6 +76,6 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
         # We load at most 'sizeK' coefficients.
         # Note that this does NOT specify which
         # ones in terms of multi-indices.
-        C = [ci[:sizeK] for ci in C]
+        C = [c[:sizeK] for c in C]
 
     return Pi, C
