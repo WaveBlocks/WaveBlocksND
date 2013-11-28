@@ -9,7 +9,7 @@ constructed explicitely for the inhomogeneous case.
 @license: Modified BSD License
 """
 
-from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating, arange, isnan
+from numpy import array, squeeze, conjugate, sqrt, ones, zeros, complexfloating, arange, isnan
 from scipy import exp
 from scipy.misc import factorial
 from scipy.special import binom
@@ -309,7 +309,7 @@ class SymbolicIntegral(Quadrature):
 
         self._cache_factors(Pibra[:4], Piket[:4], Kbra, Kket, eps)
 
-        result = 0.0j
+        result = array([[0.0j]], dtype=complexfloating)
 
         for r in Kbra:
             for c in Kket:
