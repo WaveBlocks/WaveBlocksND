@@ -27,9 +27,12 @@ class SymbolicIntegral(Quadrature):
 
     def __init__(self, doraise=False, *unused, **kunused):
         r"""
+        :param doraise: Raise an :py:class:`InnerProductException` exception
+                        in case the symbolic formula will fail due to a
+                        inherent mathematical singularity. Default is ``False``.
         """
         self._doraise = doraise
-        # Drop any argument, we do not need a qr instance.
+        # Drop any other argument, we do not need a qr instance.
 
 
     def __str__(self):
