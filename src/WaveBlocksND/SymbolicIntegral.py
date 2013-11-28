@@ -75,7 +75,7 @@ class SymbolicIntegral(Quadrature):
         This function initializes the operator used for quadratures
         and for building matrices.
 
-        Note that the symbolic solution can not handle operators at all.
+        .. note:: The symbolic solution can not handle operators at all.
 
         :param operator: The operator of the inner product.
                          If ``None`` a suitable identity is used.
@@ -85,7 +85,7 @@ class SymbolicIntegral(Quadrature):
                        the operator call syntax.
         :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
                              Since we do not support operators at all, it has no effect.
-        :type eval_at_once: Boolean, default is ``False``.):
+        :type eval_at_once: Boolean, default is ``False``.
         """
         # Operator is None is interpreted as identity transformation
         if operator is None:
