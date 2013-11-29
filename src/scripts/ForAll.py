@@ -16,10 +16,20 @@ import time
 from WaveBlocksND.FileTools import get_result_dirs, get_results_file
 from WaveBlocksND import GlobalDefaults
 
+
+# Move files with these extensions back to the simulationpath
+# NOTE: It is the responsability of the code in the
+#       'scriptcode' script to produce filenames that
+#       do not yield collisions. Otherwise the files
+#       will beoverwritten without any warning!
+
+save_extensions = [ GlobalDefaults.ext_resultdatafile ]
+
 try:
     from GraphicsDefaults import output_format
+    save_extensions.append(output_format)
 except:
-    output_format = ".png"
+    save_extensions.append(".png")
 
 
 def execute_for_all(resultspath, scriptcode, scriptargs):
@@ -50,9 +60,14 @@ def execute_for_all(resultspath, scriptcode, scriptargs):
             timelog.writelines(["Script now finished at timestamp: " + time.ctime(endtime) + "\n",
                                 "Script took " + str(endtime-starttime) + " second to run\n\n"])
 
-            # Move plots away if any
-            for afile in glob("*"+output_format):
-                sp.call(["mv", afile, simulationpath])
+            # Move newly created files back to the simulation path.
+            # NOTE: It is the responsability of the code in the
+            #       'scriptcode' script to produce filenames that
+            #       do not yield collisions. Otherwise the files
+            #       will beoverwritten without any warning!
+            for ext in save_extensions:
+                for afile in glob("*"+ext):
+                    sp.call(["mv", afile, simulationpath])
 
 
 
