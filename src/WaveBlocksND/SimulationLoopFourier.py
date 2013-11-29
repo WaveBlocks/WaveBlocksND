@@ -102,7 +102,11 @@ class SimulationLoopFourier(SimulationLoop):
 
             # Save some simulation data
             if self._tm.must_save(i):
+                # Run the postpropagate step
+                self.propagator.post_propagate()
                 self.IOManager.save_wavefunction(self.propagator.get_wavefunction().get_values(), timestep=i)
+                # Run the prepropagate step
+                self.propagator.pre_propagate()
 
         # Run the postpropagate step
         self.propagator.post_propagate()

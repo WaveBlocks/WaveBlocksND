@@ -127,6 +127,9 @@ class SimulationLoopHagedorn(SimulationLoop):
 
             # Save some simulation data
             if self._tm.must_save(i):
+                # Run the postpropagate step
+                self.propagator.post_propagate()
+
                 # TODO: Generalize for arbitrary number of wavepackets
                 packets = self.propagator.get_wavepackets()
                 assert len(packets) == 1
@@ -139,6 +142,9 @@ class SimulationLoopHagedorn(SimulationLoop):
                         self.IOManager.save_wavepacket_basisshapes(shape)
                     # Coefficients
                     self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=i)
+
+                # Run the prepropagate step
+                self.propagator.pre_propagate()
 
         # Run the postpropagate step
         self.propagator.post_propagate()
