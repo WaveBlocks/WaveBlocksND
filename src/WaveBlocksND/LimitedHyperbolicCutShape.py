@@ -32,6 +32,9 @@ class LimitedHyperbolicCutShape(BasisShape):
 
     def __init__(self, D, K, limits):
         r"""
+        :param D: The dimension :math:`D`
+        :param K: The sparsity parameter :math:`S`
+        :param limits: The list of all limits :math:`\{K_d\}_{d=0}^{D-1}`
         """
         # The dimension of K
         self._dimension = D
