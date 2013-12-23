@@ -54,7 +54,7 @@ class TensorProductQR(QuadratureRule):
         r"""Compute the tensor product of the given quadrature rules.
 
         :param rules: A list of one dimensional quadrature rules.
-        :return: The nodes :math:`\gamma` and weights :math:`omega` of
+        :return: The nodes :math:`\gamma` and weights :math:`\omega` of
                  the tensor product quadrature rule. The array of all
                  nodes has a shape of :math:`(D, |\Gamma|)` and the
                  array of weights is of shape :math:`(|\Gamma|)`.
@@ -90,7 +90,7 @@ class TensorProductQR(QuadratureRule):
 
 
     def get_nodes(self, flat=True, split=False):
-        r"""Returns the quadrature nodes :math:`\gamma_i`.
+        r"""Return the quadrature nodes :math:`\gamma_i`.
 
         :param flat: Dummy parameter for API compatibility with Grids.
         :type flat: Boolean, default is ``True``.
