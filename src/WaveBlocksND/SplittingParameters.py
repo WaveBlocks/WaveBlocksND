@@ -27,10 +27,10 @@ class SplittingParameters(object):
         LT
         S2
         SS
-        BM42   4     BM4-2, Blanes/Moan, Table 3, SRKNb6
-        Y4     4     Yoshida, see Hairer/Lubich/Wanner, p. 40, (4.4)
-        Y61    6     Yoshida, see Hairer/Lubich/Wanner, p. 144, (3.11)
-        BM63   3 <   BM6-3, Blanes/Moan, Table 3, SRKNa14
+        BM42   4     BM4-2,    see Blanes/Moan, Table 3, SRKNb6
+        Y4     4     Yoshida,  see Hairer/Lubich/Wanner, p. 40, (4.4)
+        Y61    6     Yoshida,  see Hairer/Lubich/Wanner, p. 144, (3.11)
+        BM63   3 <   BM6-3,    see Blanes/Moan, Table 3, SRKNa14
         KL6    6     Kahan/Li, see Hairer/Lubich/Wanner, p. 144, (3.12)
         KL8    8     Kahan/Li, see Hairer/Lubich/Wanner, (3.14)
         ====== ===== =====================
