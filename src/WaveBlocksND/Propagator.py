@@ -59,7 +59,7 @@ class Propagator(object):
     def pre_propagate(self):
         r"""Given the wavefunction :math:`\psi` at initial time :math:`t_0`,
         perform some computations exactly once before running the ordinary
-        time propagation.
+        time propagation and after each time simulation data was saved.
 
         This method does not raise an exception but instead just does
         nothing and returns.
@@ -70,7 +70,7 @@ class Propagator(object):
     def post_propagate(self):
         r"""Given the wavefunction :math:`\psi` at final time :math:`T`,
         perform some computations exactly once after running the ordinary
-        time propagation.
+        time propagation and before each time simulation data will be saved.
 
         This method does not raise an exception but instead just does
         nothing and returns.
