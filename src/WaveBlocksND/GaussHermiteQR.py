@@ -79,17 +79,17 @@ class GaussHermiteQR(QuadratureRule):
 
 
     def get_nodes(self):
-        r"""Returns the quadrature nodes :math:`\gamma_i`.
+        r"""Returns the quadrature nodes :math:`\{\gamma_i\}_i`.
 
-        :return: An array containing the quadrature nodes :math:`\gamma_i`.
+        :return: An array containing the quadrature nodes :math:`\{\gamma_i\}_i`.
         """
         return self._nodes.copy()
 
 
     def get_weights(self):
-        r"""Returns the quadrature weights :math:`\omega_i`.
+        r"""Returns the quadrature weights :math:`\{\omega_i\}_i`.
 
-        :return: An array containing the quadrature weights :math:`\omega_i`.
+        :return: An array containing the quadrature weights :math:`\{\omega_i\}_i`.
         """
         return self._weights.copy()
 
@@ -98,8 +98,8 @@ class GaussHermiteQR(QuadratureRule):
         r"""Evaluate the Hermite functions recursively up to the order :math:`R` on the given nodes.
 
         :param nodes: The points at which the Hermite functions are evaluated.
-        :return: Returns a two dimensional array :math:`H` where the entry :math:`H[k,i]` is the value
-                 of the :math:`k`-th Hermite function evaluated at the node :math:`\gamma_i`.
+        :return: A two dimensional array :math:`H` where the entry :math:`H[k,i]` is the value
+                 of the :math:`k`-th Hermite function evaluated at the node :math:`\{\gamma_i\}_i`.
         """
         H = zeros((self._order, nodes.size), dtype=floating)
 

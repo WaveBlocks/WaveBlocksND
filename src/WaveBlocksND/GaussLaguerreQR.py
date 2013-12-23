@@ -83,16 +83,16 @@ class GaussLaguerreQR(QuadratureRule):
 
 
     def get_nodes(self):
-        r"""Returns the quadrature nodes :math:`\gamma_i`.
+        r"""Returns the quadrature nodes :math:`\{\gamma_i\}_i`.
 
-        :return: An array containing the quadrature nodes :math:`\gamma_i`.
+        :return: An array containing the quadrature nodes :math:`\{\gamma_i\}_i`.
         """
         return self._nodes.copy()
 
 
     def get_weights(self):
-        r"""Returns the quadrature weights :math:`\omega_i`.
+        r"""Returns the quadrature weights :math:`\{\omega_i\}_i`.
 
-        :return: An array containing the quadrature weights :math:`\omega_i`.
+        :return: An array containing the quadrature weights :math:`\{\omega_i\}_i`.
         """
         return self._weights.copy()

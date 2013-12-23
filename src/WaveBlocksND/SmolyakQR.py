@@ -38,7 +38,7 @@ class SmolyakQR(QuadratureRule):
                       individual rules :math:`Q_i` are exact up to
                       :math:`2 i - 1`. The level has to be larger than
                       or equal 1.
-        :param rules: A list of :py:class:`QuadratureRule` subclass
+        :param rules: A collection of :py:class:`QuadratureRule` subclass
                       instances. Their nodes and weights will be used
                       in the Smolyak construction.
 
@@ -50,8 +50,8 @@ class SmolyakQR(QuadratureRule):
         .. warning:: This implementation uses a special optimization that
                      speeds up the computation of all quadrature nodes, especially
                      in high dimension, but is only valid if all one dimensional
-                     rules have symmetric nodes and weights. For every node weight
-                     pair :math:`(\gamma, \omega)` that is part of the rule
+                     rules have symmetric nodes and weights. That is, for every node
+                     weight pair :math:`(\gamma, \omega)` that is part of the rule,
                      the pair :math:`(-\gamma, \omega)` is also contained
                      in the quadrature rule.
         """
@@ -104,13 +104,13 @@ class SmolyakQR(QuadratureRule):
 
 
     def get_nodes(self, flat=True, split=False):
-        r"""Returns the quadrature nodes :math:`\gamma_i`.
+        r"""Returns the quadrature nodes :math:`\{\gamma_i\}_i`.
 
         :param flat: Dummy parameter for API compatibility with Grids.
         :type flat: Boolean, default is ``True``.
         :param split: Dummy parameter for API compatibility with Grids.
         :type split: Boolean, default is ``False``.
-        :return: An ndarray containing the quadrature nodes :math:`\gamma_i`.
+        :return: An ndarray containing the quadrature nodes :math:`\{\gamma_i\}_i`.
         """
         if self._nodes is None:
             self.construct_rule()
@@ -118,9 +118,9 @@ class SmolyakQR(QuadratureRule):
 
 
     def get_weights(self):
-        r"""Returns the quadrature weights :math:`\omega_i`.
+        r"""Returns the quadrature weights :math:`\{\omega_i\}_i`.
 
-        :return: An ndarray containing the quadrature weights :math:`\omega_i`.
+        :return: An ndarray containing the quadrature weights :math:`\{\omega_i\}_i`.
         """
         if self._weights is None:
             self.construct_rule()
