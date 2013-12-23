@@ -5,7 +5,7 @@
 @license: Modified BSD License
 """
 
-__version__ = 0.1
+__version__ = 0.2
 
 # Math
 from ComplexMath import ContinuousSqrt
@@ -60,9 +60,11 @@ from LinearCombinationOfWPs import LinearCombinationOfWPs
 # Quadrature rules
 from QuadratureRule import QuadratureRule
 from TrapezoidalQR import TrapezoidalQR
+from GaussHermiteOriginalQR import GaussHermiteOriginalQR
 from GaussHermiteQR import GaussHermiteQR
 from GaussLaguerreQR import GaussLaguerreQR
 from TensorProductQR import TensorProductQR
+from SmolyakQR import SmolyakQR
 
 # Inner products
 from InnerProduct import InnerProduct

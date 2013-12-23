@@ -94,6 +94,10 @@ class SimulationLoopFourier(SimulationLoop):
         # The number of time steps we will perform.
         nsteps = self._tm.compute_number_timesteps()
 
+        # Run the prepropagate step
+        self.propagator.pre_propagate()
+        # Note: We do not save any data here
+
         # Run the simulation for a given number of timesteps
         for i in xrange(1, nsteps+1):
             print(" doing timestep "+str(i))
@@ -102,7 +106,15 @@ class SimulationLoopFourier(SimulationLoop):
 
             # Save some simulation data
             if self._tm.must_save(i):
+                # Run the postpropagate step
+                self.propagator.post_propagate()
                 self.IOManager.save_wavefunction(self.propagator.get_wavefunction().get_values(), timestep=i)
+                # Run the prepropagate step
+                self.propagator.pre_propagate()
+
+        # Run the postpropagate step
+        self.propagator.post_propagate()
+        # Note: We do not save any data here
 
 
     def end_simulation(self):

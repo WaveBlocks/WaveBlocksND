@@ -30,6 +30,8 @@ class HyperbolicCutShape(BasisShape):
 
     def __init__(self, D, K):
         r"""
+        :param D: The dimension :math:`D`
+        :param K: The sparsity parameter :math:`K`
         """
         # TODO: Do we really want to have limits here?
 

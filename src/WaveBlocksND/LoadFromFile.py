@@ -31,7 +31,6 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
                   packet's current basis shape. We then pick the first `sizeK`
                   ones.
     """
-
     IOM = IOManager()
     IOM.open_file(filepath)
 

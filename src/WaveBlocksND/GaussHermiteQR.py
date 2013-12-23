@@ -24,14 +24,17 @@ class GaussHermiteQR(QuadratureRule):
     def __init__(self, order, options={}):
         r"""Initialize a new quadrature rule.
 
-        :param order: The order :math:`R` of the Gauss-Hermite quadrature.
+        :param order: The order :math:`k` of the Gauss-Hermite quadrature.
+                      From theory we know that a Gauss quadrature rule
+                      of order :math:`k` is exact for polynomials up to
+                      degree :math:`2 k - 1`.
 
         :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.
         """
         # The space dimension of the quadrature rule.
         self._dimension = 1
 
-        # The order R of the Gauss-Hermite quadrature.
+        # The order of the Gauss-Hermite quadrature.
         self._order = order
 
         # Quadrature has to have at least a single (node,weight) pair.
@@ -47,13 +50,13 @@ class GaussHermiteQR(QuadratureRule):
         self._number_nodes = nodes.size
 
         # We deal with real values only, but the array we get from h_roots is of complex dtype
-        h = self._hermite_recursion(real(nodes))
+        h = self._hermite_recursion(real(nodes))[-1,:]
         weights = 1.0/((h**2) * self._order)
 
         # The quadrature nodes \gamma.
         self._nodes = nodes.reshape((1,self._number_nodes))
         # The quadrature weights \omega.
-        self._weights = weights[-1,:]
+        self._weights = weights
         self._weights = self._weights.reshape((1,self._number_nodes))
 
 
@@ -76,17 +79,17 @@ class GaussHermiteQR(QuadratureRule):
 
 
     def get_nodes(self):
-        r"""Returns the quadrature nodes :math:`\gamma_i`.
+        r"""Returns the quadrature nodes :math:`\{\gamma_i\}_i`.
 
-        :return: An array containing the quadrature nodes :math:`\gamma_i`.
+        :return: An array containing the quadrature nodes :math:`\{\gamma_i\}_i`.
         """
         return self._nodes.copy()
 
 
     def get_weights(self):
-        r"""Returns the quadrature weights :math:`\omega_i`.
+        r"""Returns the quadrature weights :math:`\{\omega_i\}_i`.
 
-        :return: An array containing the quadrature weights :math:`\omega_i`.
+        :return: An array containing the quadrature weights :math:`\{\omega_i\}_i`.
         """
         return self._weights.copy()
 
@@ -95,8 +98,8 @@ class GaussHermiteQR(QuadratureRule):
         r"""Evaluate the Hermite functions recursively up to the order :math:`R` on the given nodes.
 
         :param nodes: The points at which the Hermite functions are evaluated.
-        :return: Returns a two dimensional array :math:`H` where the entry :math:`H[k,i]` is the value
-                 of the :math:`k`-th Hermite function evaluated at the node :math:`\gamma_i`.
+        :return: A two dimensional array :math:`H` where the entry :math:`H[k,i]` is the value
+                 of the :math:`k`-th Hermite function evaluated at the node :math:`\{\gamma_i\}_i`.
         """
         H = zeros((self._order, nodes.size), dtype=floating)
 

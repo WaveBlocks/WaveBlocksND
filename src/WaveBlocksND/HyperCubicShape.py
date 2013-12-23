@@ -20,10 +20,17 @@ class HyperCubicShape(BasisShape):
     which is the full dense basis set.
     A basis shape is essentially all information and operations
     related to the set :math:`\mathfrak{K}` of multi-indices :math:`k`.
+    The hypercubic shape in :math:`D` dimensions and with limit :math:`K_d`
+    in dimension :math:`d` is defined as the set
+
+    .. math::
+        \mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) \in \mathbb{N}_0^D |
+                                 k_d < K_d \forall d \in [0,\ldots,D-1] \}
     """
 
     def __init__(self, limits):
         r"""
+        :param limits: The list of all limits :math:`\{K_d\}_{d=0}^{D-1}`
         """
         # The dimension of K
         self._dimension = len(limits)
