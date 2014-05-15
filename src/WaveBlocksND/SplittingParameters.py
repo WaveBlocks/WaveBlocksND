@@ -4,7 +4,7 @@ This file contains data to build several closely
 related splitting methods.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -24,13 +24,13 @@ class SplittingParameters(object):
         ====== ===== =====================
         Method Order Authors and Reference
         ====== ===== =====================
-        LT
-        S2
-        SS
+        LT     1     Lie-Trotter
+        S2     2     Strang
+        SS     2     Strang
         BM42   4     BM4-2,    see Blanes/Moan, Table 3, SRKNb6
         Y4     4     Yoshida,  see Hairer/Lubich/Wanner, p. 40, (4.4)
         Y61    6     Yoshida,  see Hairer/Lubich/Wanner, p. 144, (3.11)
-        BM63   3 <   BM6-3,    see Blanes/Moan, Table 3, SRKNa14
+        BM63   >= 4  BM6-3,    see Blanes/Moan, Table 3, SRKNa14
         KL6    6     Kahan/Li, see Hairer/Lubich/Wanner, p. 144, (3.12)
         KL8    8     Kahan/Li, see Hairer/Lubich/Wanner, (3.14)
         ====== ===== =====================
@@ -155,7 +155,7 @@ class SplittingParameters(object):
             a[9] = -0.60550853383003451169892108
             a[10:] = flipud(a[1:9])
             b[0:-1] = 0.5*(a[:-1]+a[1:])
-            b[-1] = 1.*b[0]
+            b[-1] = 1.0*b[0]
         else:
             raise NotImplementedError("Unknown method: " + method)
 
@@ -164,12 +164,22 @@ class SplittingParameters(object):
 
     def intsplit(self, psi1, psi2, a, b, tspan, N, args1=(), args2=()):
         r"""
+        Compute a single, full propagation step by operator splitting.
+
+        :param psi1: First evolution operator :math:`\Psi_a`
+        :param psi2: Second evolution operator :math:`\Psi_b`
+        :param a: Parameters for evolution with :math:`\Psi_a`
+        :param b: Parameters for evolution with :math:`\Psi_b`
+        :param tspan: Timespan :math:`t` of a single, full splitting step
+        :param N: Number of substeps to perform
+        :param args1: Additional optional arguments of :math:`\Psi_a`
+        :param args2: Additional optional arguments of :math:`\Psi_b`
         """
-        if type(args1) != type(()): args1 = (args1,)
-        if type(args2) != type(()): args2 = (args2,)
+        if not type(args1) is tuple: args1 = tuple(args1)
+        if not type(args2) is tuple: args2 = tuple(args2)
 
         s = a.shape[0]
-        h = (tspan[1]-tspan[0])/(1.0*N)
+        h = (tspan[1] - tspan[0]) / float(N)
 
         for k in xrange(N):
             for j in xrange(s):
