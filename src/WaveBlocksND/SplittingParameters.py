@@ -17,23 +17,44 @@ class SplittingParameters(object):
 
 
     def build(self, method):
-        r"""
+        u"""
         :param method: A string specifying the method for time integration.
         :return: Two arrays :math:`a` and :math:`b`.
 
-        ====== ===== =====================
-        Method Order Authors and Reference
-        ====== ===== =====================
-        LT     1     Lie-Trotter
-        S2     2     Strang
-        SS     2     Strang
-        BM42   4     BM4-2,    see Blanes/Moan, Table 3, SRKNb6
-        Y4     4     Yoshida,  see Hairer/Lubich/Wanner, p. 40, (4.4)
-        Y61    6     Yoshida,  see Hairer/Lubich/Wanner, p. 144, (3.11)
-        BM63   >= 4  BM6-3,    see Blanes/Moan, Table 3, SRKNa14
-        KL6    6     Kahan/Li, see Hairer/Lubich/Wanner, p. 144, (3.12)
-        KL8    8     Kahan/Li, see Hairer/Lubich/Wanner, (3.14)
-        ====== ===== =====================
+        ====== ===== =========== =========
+        Method Order Authors     Reference
+        ====== ===== =========== =========
+        LT     1     Lie/Trotter [1]_, [3]_ page 42, equation 5.2
+        S2     2     Strang      [2]_, [3]_ page 42, equation 5.3
+        SS     2     Strang      [2]_, [3]_ page 42, equation 5.3
+        BM42   4     Blanes/Moan [4]_ page 318, table 3, 'SRKNb6'
+        Y4     4     Yoshida     [5]_, [3]_ page 40, equation 4.4
+        Y61    6     Yoshida     [5]_, [3]_ page 144, equation 3.11
+        BM63   6     Blanes/Moan [4]_ page 318, table 3, 'SRKNa14'
+        KL6    6     Kahan/Li    [6]_, [3]_ page 144, equation 3.12
+        KL8    8     Kahan/Li    [6]_, [3]_ page 145, equation 3.14
+        ====== ===== =========== =========
+
+        .. [1] H.F. Trotter, "On the product of semi-groups of operators",
+               Proc. Am. Math. Soc.1O (1959) 545-551.
+
+        .. [2] G. Strang, "On the construction and comparison of difference schemes",
+               SIAM J. Numer. Anal. 5 (1968) 506-517.
+
+        .. [3] E. Hairer, C. Lubich, and G. Wanner, "Geometric Numerical Integration -
+               Structure-Preserving Algorithms for Ordinary Differential Equations",
+               Springer-Verlag, New York, 2002.
+
+        .. [4] S. Blanes and P.C. Moan, "Practical Symplectic Partitioned
+               Runge-Kutta and Runge-Kutta-Nyström Methods", J. Computational and
+               Applied Mathematics, Volume 142, Issue 2, (2002) 313-330.
+
+        .. [5] H. Yoshida, "Construction of higher order symplectic integrators",
+               Phys. Lett. A 150 (1990) 262-268.
+
+        .. [6] W. Kahan and  R.-c. Li, "Composition constants for raising the orders
+               of unconventional schemes for ordinary differential equations",
+               Math. Comput. 66 (1997) 1089-1099.
         """
         if method == "LT":
             s = 1
@@ -56,7 +77,6 @@ class SplittingParameters(object):
             a[1] = 0.5
             b[0] = 1.0
         elif method == "BM42":
-            # Order 4 (BM4-2, Blanes/Moan, Table 3, SRKNb6)
             s = 7
             a = zeros(s)
             b = zeros(s)
@@ -70,7 +90,6 @@ class SplittingParameters(object):
             b[3] = 1.0 - 2.0*b[:3].sum()
             b[4:] = flipud(b[:3])
         elif method == "Y4":
-            # Order 4 (Yoshida, see Hairer/Lubich/Wanner, p. 40, (4.4))
             s = 4
             a = zeros(s)
             b = zeros(s)
@@ -85,7 +104,6 @@ class SplittingParameters(object):
             b[1] = 0.5*(vi+theta)
             b[2:] = flipud(b[:2])
         elif method == "Y61":
-            # Order 6 (Yoshida, see Hairer/Lubich/Wanner, p. 144, (3.11), s = 8)
             s = 8
             a = zeros(s)
             b = zeros(s)
@@ -100,7 +118,6 @@ class SplittingParameters(object):
             b[3] = 0.5*(1-4*b[1]-a[3])
             b[4:] = flipud(b[0:4])
         elif method == "BM63":
-            # Order 4... (BM6-3, Blanes/Moan, Table 3, SRKNa14)
             s = 15
             a = zeros(s)
             b = zeros(s)
@@ -122,7 +139,6 @@ class SplittingParameters(object):
             b[7] = 1.0 - 2.0*b[:7].sum()
             b[8:] = flipud(b[:7])
         elif method == "KL6":
-            # Order 6 (Kahan/Li, see Hairer/Lubich/Wanner, p. 144, (3.12))
             s = 10
             a = zeros(s)
             b = zeros(s)
@@ -139,7 +155,6 @@ class SplittingParameters(object):
             b[4] = 0.5*(1-2*a[1:4].sum()-a[4])
             b[5:] = flipud(b[0:5])
         elif method == "KL8":
-            # Order 8 (Kahan/Li, see Hairer/Lubich/Wanner (3.14))
             s = 18
             a = zeros(s)
             b = zeros(s)
