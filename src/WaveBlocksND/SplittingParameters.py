@@ -46,7 +46,7 @@ class SplittingParameters(object):
 
         .. [3] E. Hairer, C. Lubich, and G. Wanner, "Geometric Numerical Integration -
                Structure-Preserving Algorithms for Ordinary Differential Equations",
-               Springer-Verlag, New York, 2002.
+               Springer-Verlag, New York, 2002 (Corrected second printing 2004).
 
         .. [4] S. Blanes and P.C. Moan, "Practical Symplectic Partitioned
                Runge-Kutta and Runge-Kutta-Nystrom Methods", J. Computational and
