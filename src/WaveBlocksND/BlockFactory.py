@@ -3,7 +3,7 @@
 This file contains a the block factory.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -211,6 +211,12 @@ class BlockFactory(object):
             order = description["order"]
             assert type(order) == int
             QR = GaussHermiteQR(order, options=op)
+
+        elif qr_type == "GaussHermiteOriginalQR":
+            from GaussHermiteOriginalQR import GaussHermiteOriginalQR
+            order = description["order"]
+            assert type(order) == int
+            QR = GaussHermiteOriginalQR(order, options=op)
 
         elif qr_type == "TrapezoidalQR":
             from TrapezoidalQR import TrapezoidalQR

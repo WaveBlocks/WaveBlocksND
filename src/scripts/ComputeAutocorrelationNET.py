@@ -4,7 +4,7 @@ Compute the autocorrelations of the different wavepackets or wavefunctions.
 This script does not do an eigentransformation of the data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -81,12 +81,11 @@ if PA is None:
         "delegate" : {
             "type" : "NSDInhomogeneous",
             'qr': {
-                'type': 'GaussLaguerreQR',
-                'order': 5,
-                'a': -0.5
+                'type': 'GaussHermiteOriginalQR',
+                'order': 5
+                }
             }
         }
-    }
 
 # Iterate over all blocks
 for blockid in blocks_to_handle:
