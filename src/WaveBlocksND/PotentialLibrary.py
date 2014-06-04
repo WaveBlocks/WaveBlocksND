@@ -6,7 +6,7 @@ without any code. To load the potentials, use the methods of
 :py:class:`BlockFactory`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -145,8 +145,15 @@ cosh_osc_2d["number_levels"] = 1
 channel_2d = {}
 channel_2d["variables"] = ["x", "y"]
 channel_2d["potential"] = "sigmax*x + 1/2*sigmay*y**2"
-channel_2d["defaults"] = {"sigmax": "0.0", "sigmay": "0.45"}
+channel_2d["defaults"] = {"sigmax":"0.0", "sigmay":"0.45"}
 channel_2d["number_levels"] = 1
+
+# Another harmonic channel potential
+harmonic_channel = {}
+harmonic_channel["variables"] = ["x", "y"]
+harmonic_channel["potential"] = "1/2*w**2*x**2 + sigma*y"
+harmonic_channel["defaults"] = {"w":"1.0", "sigma":"-0.1"}
+harmonic_channel["number_levels"] = 1
 
 # A potential consisting of circular pit of radius R with steep walls
 corral_rotsym_2d = {}
@@ -200,6 +207,31 @@ quadratic_3d["variables"] = ["x", "y", "z"]
 quadratic_3d["potential"] = "1/2 * (sigmax * x**2 + sigmay * y**2 + sigmaz * z**2)"
 quadratic_3d["defaults"] = {"sigmax":"1/2", "sigmay":"1/2", "sigmaz":"1/2"}
 quadratic_3d["number_levels"] = 1
+
+# A harmonic tube potential
+harmonic_tube = {}
+harmonic_tube["variables"] = ["x", "y", "z"]
+harmonic_tube["potential"] = "1/2*wx**2*x**2 + 1/2*wy**2*y**2 + sigma*z"
+harmonic_tube["defaults"] = {"wx":"1.0", "wy":"1.0", "sigma":"-0.1"}
+harmonic_tube["number_levels"] = 1
+
+######################################################################
+# Potentials in four dimensions and with one energy level (D=4, N=1) #
+######################################################################
+
+# Simple harmonic potential 4D
+quadratic_4d = {}
+quadratic_4d["variables"] = ["x1", "x2", "x3", "x4"]
+quadratic_4d["potential"] = "1/2 * (sigma1 * 1**2 + sigma2 * x2**2 + sigma3 * x3**2 + sigma4 * x4**2)"
+quadratic_4d["defaults"] = {"sigma1":"1/2", "sigma2":"1/2", "sigma3":"1/2", "sigma4":"1/2"}
+quadratic_4d["number_levels"] = 1
+
+# A harmonic hyper-tube potential
+harmonic_hypertube = {}
+harmonic_hypertube["variables"] = ["x1", "x2", "x3", "x4"]
+harmonic_hypertube["potential"] = "1/2*w1**2*x1**2 + 1/2*w2**2*x2**2 + 1/2*w3**2*x3**2 + sigma*x4"
+harmonic_hypertube["defaults"] = {"w1":"1.0", "w2":"1.0", "w3":"1.0", "sigma":"-0.1"}
+harmonic_hypertube["number_levels"] = 1
 
 
 
