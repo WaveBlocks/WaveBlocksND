@@ -5,7 +5,7 @@ and matrix elements by using a specially adapted
 numerical steepest descent technique.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -24,6 +24,11 @@ class NSDInhomogeneous(Quadrature):
     """
 
     def __init__(self, QR=None):
+        r"""Initialize the numerical steepest descent transformation
+        for quadrature of highly oscillatory overlap integrals.
+
+        :param QR: Typically one uses an instance of :py:class:`GaussHermiteOriginalQR`.
+        """
         # Pure convenience to allow setting of quadrature rule in constructor
         if QR is not None:
             self.set_qr(QR)
