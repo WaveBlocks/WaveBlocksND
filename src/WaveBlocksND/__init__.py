@@ -81,6 +81,7 @@ from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
 from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
 from SymbolicIntegral import SymbolicIntegral
+from SymbolicIntegral0 import SymbolicIntegral0
 from GaussianIntegral import GaussianIntegral
 from NSDInhomogeneous import NSDInhomogeneous
 
