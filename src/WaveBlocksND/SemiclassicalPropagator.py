@@ -175,7 +175,7 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
             h1 = 0.5*dt
             nrtmp = int(sqrt(dt)*eps**(-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
@@ -186,4 +186,4 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])

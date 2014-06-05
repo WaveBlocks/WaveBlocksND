@@ -3,7 +3,7 @@
 This file contains the Hagedorn propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2012 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2012, 2014 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -175,7 +175,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
             # Propagate until c1*dt
             h1 = (0.5-sqrt(3.)/6.)*dt
             nrN1 = max(1, 1 + int((h1**(1.0/2.0))*eps**-(3.0/8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, [packet], [packet,leading_chi])
 
             # Build a first matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
@@ -184,7 +184,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
             # Propagate until c2*dt
             h2 = dt/sqrt(3.0)
             nrN2 = max(1, 1 + int((h2**(1.0/2.0))*eps**(-3.0/8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, [packet], [packet,leading_chi])
 
             # Build a second matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
@@ -201,4 +201,4 @@ class MagnusPropagator(Propagator, SplittingParameters):
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, packet, (packet,leading_chi))
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, [packet], [packet,leading_chi])

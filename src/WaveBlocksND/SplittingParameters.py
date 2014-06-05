@@ -219,7 +219,7 @@ class SplittingParameters(object):
         return a, b
 
 
-    def intsplit(self, psi1, psi2, a, b, tspan, N, args1=(), args2=()):
+    def intsplit(self, psi1, psi2, a, b, tspan, N, args1=[], args2=[]):
         r"""
         Compute a single, full propagation step by operator splitting.
 
@@ -231,10 +231,10 @@ class SplittingParameters(object):
         :param N: Number of substeps to perform
         :param args1: Additional optional arguments of :math:`\Psi_a`
         :param args2: Additional optional arguments of :math:`\Psi_b`
-        """
-        if not type(args1) is tuple: args1 = tuple(args1)
-        if not type(args2) is tuple: args2 = tuple(args2)
 
+        .. note:: The values for ``args1`` and ``args2`` have to be
+                  ``list``s even in case of single items.
+        """
         s = a.shape[0]
         h = (tspan[1] - tspan[0]) / float(N)
 
