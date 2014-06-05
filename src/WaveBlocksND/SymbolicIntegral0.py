@@ -38,37 +38,30 @@ class SymbolicIntegral0(SymbolicIntegral):
 
 
     def exact_result_higher(self, Pibra, Piket, eps, k, l):
-        r"""Compute the overlap integral :math:`\langle \phi_k | \phi_l \rangle` of
-        two states :math:`\phi_k` and :math:`\phi_l` by using the symbolic formula:
+        r"""Compute the overlap integral :math:`\langle \phi_0 | \phi_l \rangle` of
+        two states :math:`\phi_0` and :math:`\phi_l` by using the symbolic formula:
 
         .. math::
-            \langle \phi_k | \phi_l \rangle =
-            \frac{1}{\sqrt{k!l!}} 2^{-\frac{k+l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
-            \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{k+l}{2}} \cdot \\
-            \sum_{j=0}^{\min\left(k,l\right)}
-              \Biggl(
-                \binom{k}{j} \binom{l}{j} j! 4^j
-                \left(i Q_2  P_1 - i Q_1  P_2\right)^{\frac{k-j}{2}}
-                \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l-j}{2}}
-                \\
-                \cdot H_{k-j}\left(-\frac{1}{\varepsilon}
-                              \frac{Q_2\left(p_1-p_2\right)-P_2\left(q_1-q_2\right)}
-                                   {\sqrt{Q_2 P_1 - Q_1 P_2}\sqrt{\overline{P_1}Q_2-\overline{Q_1} P_2}}\right)
-                \\
-                \cdot H_{l-j}\left(\frac{1}{\varepsilon}
-                             \frac{\overline{ P_1}\left(q_1-q_2\right)-\overline{Q_1}\left(p_1-p_2\right)}
-                                  {\sqrt{\overline{Q_2 P_1}-\overline{Q_1 P_2}}\sqrt{\overline{ P_1}Q_2-\overline{Q_1} P_2}}\right)
-              \Biggr)
+            \langle \phi_0 | \phi_l \rangle =
+            \frac{1}{\sqrt{l!}} 2^{-\frac{l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
+            \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{l}{2}} \cdot
+            \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l}{2}}
+            \cdot
+            \\
+            H_{l}\left(
+              \frac{1}{\varepsilon}
+              \frac{\overline{ P_1}\left(q_1-q_2\right)-\overline{Q_1}\left(p_1-p_2\right)}
+                   {\sqrt{\overline{Q_2 P_1}-\overline{Q_1 P_2}}\sqrt{\overline{ P_1}Q_2-\overline{Q_1} P_2}}\right)
 
         Note that this is an internal method and usually there is no
         reason to call it from outside.
 
-        :param Pibra: The parameter set :math:`\Pi = \{q_1,p_1,Q_1,P_1\}` of the bra :math:`\langle \phi_k |`.
+        :param Pibra: The parameter set :math:`\Pi = \{q_1,p_1,Q_1,P_1\}` of the bra :math:`\langle \phi_0 |`.
         :param Piket: The parameter set :math:`\Pi^\prime = \{q_2,p_2,Q_2,P_2\}` of the ket :math:`| \phi_l \rangle`.
         :param eps: The semi-classical scaling parameter :math:`\varepsilon`.
-        :param k: Index :math:`k` of the wavepacket basis function :math:`\phi_k`.
+        :param k: Index :math:`k=0` of the wavepacket basis function :math:`\phi_0`.
         :param l: Index :math:`l` of the wavepacket basis function :math:`\phi_l`.
-        :return: The value of the integral :math:`\langle \phi_k | \phi_l \rangle`.
+        :return: The value of the integral :math:`\langle \phi_0 | \phi_l \rangle`.
         """
         # Do not raise because wavepackets might have a larger basis shape
         # but only the 0 coefficient set.

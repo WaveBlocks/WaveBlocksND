@@ -31,7 +31,7 @@ class SymbolicIntegral(Quadrature):
         constructed explicitly for the inhomogeneous case.
 
         :param doraise: Raise an :py:class:`InnerProductException` exception
-                        in case the symbolic formula will fail due to a
+                        in case the symbolic formula will fail due to an
                         inherent mathematical singularity. Default is ``False``.
         """
         self._doraise = doraise
