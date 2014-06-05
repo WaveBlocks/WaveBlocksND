@@ -64,9 +64,10 @@ class SymbolicIntegral0(SymbolicIntegral):
         :return: The value of the integral :math:`\langle \phi_0 | \phi_l \rangle`.
         """
         # Do not raise because wavepackets might have a larger basis shape
-        # but only the 0 coefficient set.
-        #if not k == 0:
-        #    raise ValueError("This integral is only valid for Gaussian Packets in the bra part.")
+        # with only the coefficient 0 having a non-zero value. Returning
+        # a value 0.0j for k > 0 seems to be a safe default behaviour.
+        if not k == 0:
+            return 0.0j
 
         # < phi_0[Pi1] | phi_l[Pi2] >
         q1, p1, Q1, P1 = Pibra
