@@ -3,7 +3,7 @@
 Plot all potentials and put the definitions into a rest file.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2013 R. Bourquin
+@copyright: Copyright (C) 2011, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -133,7 +133,8 @@ for potdef in potentials:
     ls.append("\n")
 
     if len(potdef["variables"]) < 3:
-        ls.append(".. image:: fig/" + potdef["name"] + ".png\n\n")
+        ls.append(".. image:: fig/" + potdef["name"] + ".png\n")
+        ls.append("   :width: 400px\n\n")
 
     ls = reduce(lambda x,y: x+y, ls)
     ls.encode("UTF-8")
