@@ -10,8 +10,8 @@ we evaluate the data and (optionally) create visualisations. We will see that th
 post processing step consists of many small and independent substeps reflecting
 the various options of what to do with the data obtained.
 
-Set up and run a single simulation
-----------------------------------
+Set up and run a simulation
+---------------------------
 
 Let's first show how to set up a single simulation. The basic workflow consists
 of several steps. First we have to prepare the simulation, then we run the main
@@ -89,30 +89,6 @@ where we have to provide the configuration file as the first command line option
 of the ``Main.py`` program. When the program terminates, it leaves a file called
 ``simulation_results.hdf5`` which contains all the simulation data. We can use
 the program ``hdfview`` to gain some insight of the contents of the file.
-
-Now we can start with the post processing of the data. Assume we want to plot
-the norms and energies of the wave function during the time evolution. These
-are not computed during the simulation, but we can get them from the stored
-information. The following two commands will compute these data and store
-them in ``simulation_results.hdf5``
-
-::
-
-    python ComputeNorms.py
-    python ComputeEnergies.py
-
-What remains is the visualization the data. This is done by two plot scripts
-
-::
-
-    python PlotNorms.py
-    python PlotEnergies.py
-
-The post processing step usually splits into two substeps. First we compute
-additional data and then we visualise these data. The two substeps are performed
-by individual scripts. All these scripts optionally take the filename or filepath
-of the ``simulation_results.hdf5`` as a further command line argument.
-
 
 Running multiple simulations
 ----------------------------
@@ -357,9 +333,156 @@ this is ``./results/``) as a third command line argument.
 Computing more data
 -------------------
 
+After we have run a simulation the output file ``simulation_results.hdf5``
+contains all data that were computed during the simulation. This is for example
+wavefunction values or wavepacket parameters etc. depending on the exact setup
+run. Usually we want also to compute some properties of the time evolution. This
+is done in a second step called `post processing` of the data. There are several
+scripts in the ``scripts/`` subdirectory which post-process the simulation data.
+
+Assume we want to compute the norms and energies of the wave function during its
+time evolution. These properties are not computed while running the simulation,
+but we can get them easily from the stored information. The following sections
+will show how to compute these data and store them in the output file
+``simulation_results.hdf5`` too.
+
+All post-processing scripts can be called with an argument ``--help``
+
+::
+
+    python ComputeNorms.py --help
+
+and will print a help message:
+
+::
+
+    usage: ComputeNorms.py [-h] [-b [BLOCKID [BLOCKID ...]]] [simfile]
+
+    positional arguments:
+      simfile               The simulation data file
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                            The data block to handle
+
+
+Norms
+~~~~~
+
+Computing norms is trivial and fast. Just run the script:
+
+::
+
+    python ComputeNorms.py
+
+This will compute the norms of all wavepackets or wave functions
+depending on what the simulation setup was and what is already stored
+in ``simulation_results.hdf5``.
+
+Energies
+~~~~~~~~
+
+Asking for the energies is almost equally trivial as computing norms.
+All we need is to run:
+
+::
+
+    python ComputeEnergies.py
+
+which will compute kinetic and potential energies.
+
+Autocorrelations
+~~~~~~~~~~~~~~~~
+
+The computation of auto-correlations is a bit more complicated. What
+we want to compute is the following overlap integral (here discussed
+in case of wavepackets):
+
+.. math::
+   \langle \Psi(0) | \Psi(t) \rangle
+
+which compares the wavepacket at time :math:`t` with the initial value
+:math:`\Psi(0)` at time 0. Because this involves wavepackets at two different
+times we need a specialised quadrature to get accurate results.  We have to tell
+the script which quadrature we would like to use. This is done best by adding a
+top-level snippet like the following to the original simulation setup
+configuration *before* the simulation is run. This will choose the
+:py:class:`NSDInhomogeneous` quadrature transformation using
+:py:class:`GaussHermiteOriginalQR` with 4 nodes and is for a one-dimensional
+setup:
+
+::
+
+    # Configurations needed for computation of observables
+    observables = {
+        "autocorrelation" : {
+            "innerproduct" : {
+                "type" : "InhomogeneousInnerProduct",
+                "delegate" : {
+                    "type" : "NSDInhomogeneous",
+		    "qr" : {"dimension": 1, "order": 4, "type": "GaussHermiteOriginalQR"}
+                    }
+                }
+            }
+        }
+
+.. warning::
+   It is essential to take :py:class:`GaussHermiteOriginalQR` as quadrature rule
+   used by the :py:class:`NSDInhomogeneous` transformation.
+
+As a second example we show the corresponding snippet in case of a three
+dimensional simlation setup:
+
+::
+
+    # Configurations needed for computation of observables
+    observables = {
+        "autocorrelation" : {
+            "innerproduct" : {
+                "type" : "InhomogeneousInnerProduct",
+                "delegate" : {
+                    "type" : "NSDInhomogeneous",
+                    "qr": {
+                        "type": "TensorProductQR",
+                        "dimension": 3,
+                        "qr_rules": [
+                            {"dimension": 1, "order": 5, "type": "GaussHermiteOriginalQR"},
+                            {"dimension": 1, "order": 5, "type": "GaussHermiteOriginalQR"},
+                            {"dimension": 1, "order": 5, "type": "GaussHermiteOriginalQR"}],
+                        }
+                    }
+                }
+            }
+        }
+
+The only thing we have to do then is to call the corresponding post-processor script:
+
+::
+
+    python ComputeAutocorrelation.py
+
 
 Visualisation
 -------------
+
+What remains is the visualization the data. This is done by two plot scripts
+
+::
+
+    python PlotNorms.py
+    python PlotEnergies.py
+
+The post processing step usually splits into two substeps. First we compute
+additional data and then we visualise these data. The two substeps are performed
+by individual scripts. All these scripts optionally take the filename or
+filepath of the ``simulation_results.hdf5`` as a further command line argument.
+
+
+Other plot tools
+^^^^^^^^^^^^^^^^
+
+What can we plot?
 
 
 Comparing data across Simulations
