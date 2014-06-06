@@ -51,23 +51,23 @@ the following packages will not (yet) work with the latest python version. All
 necessary dependencies are listed here together with a brief statement of why
 we need the package.
 
-* Numpy, available from http://www.numpy.org/
+* Numpy, available from http://www.numpy.org
 
   Numpy provides fast multidimensional arrays.
 
-* Scipy, available from http://www.scipy.org/
+* Scipy, available from http://www.scipy.org
 
   Scipy interfaces to fast numerical subroutines (BLAS, LAPACK, FFTW).
 
-* Sympy, available from http://sympy.org/
+* Sympy, available from http://sympy.org
 
   Sympy gives rise to (limited) symbolic calculation.
 
-* Matplotlib, available from http://matplotlib.sourceforge.net/
+* Matplotlib, available from http://matplotlib.org
 
   Matplotlib is used for two-dimensional plotting.
 
-* h5py, available from http://h5py.alfven.org/
+* h5py, available from http://h5py.org
 
   H5py is the interface to the Hierarchical Data Format `hdf`.
 
