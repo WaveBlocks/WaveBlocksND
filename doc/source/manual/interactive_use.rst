@@ -181,3 +181,13 @@ Finally, plot the values::
 and get:
 
 .. image:: fig/tunneling_probability_fourier.png
+
+
+Computing Eigenstates
+---------------------
+
+Use:
+
+::
+
+    python ComputeEigenstates.py

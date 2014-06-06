@@ -463,6 +463,87 @@ The only thing we have to do then is to call the corresponding post-processor sc
     python ComputeAutocorrelation.py
 
 
+Wavepacket sampling
+~~~~~~~~~~~~~~~~~~~
+
+If we made a simulation with wavepackets only and want to sample them
+on a regular grid for example for plotting then there is a script for this purpose:
+
+::
+
+    python EvaluateWavepackets.py
+
+This script is for homogeneous Hagedorn wavepackets only. For the
+inhomogeneous variant there is another script:
+
+::
+
+    python EvaluateWavepacketsInhomog.py
+
+
+Eigentransformations
+~~~~~~~~~~~~~~~~~~~~
+
+For potentials with multiple energy levels it matters in which basis we compute
+observables. Since the simulation is done in the canonical basis and the
+observables usually should be computed in the eigenbasis there is a
+transformation involved. The scripts shown above do this transformation
+internally and there is no need to worry.
+
+However, in case we explicitely do not want the transformation to take place
+(for example when working with single-level potentials) there are suitable
+post-processing scripts which can be recognised by a ``NET`` in their name:
+
+::
+
+    ComputeNormsNET.py
+    ComputeEnergiesNET.py
+    ComputeAutocorrelationNET.py
+
+The ``NET`` (No-Eigen-Transformation) variants never do a basis transformation
+and compute the requested observables on the data given assuming a correct
+basis. There is also a ``CAN`` variant which computes explicitely in the
+canonical basis:
+
+::
+
+    ComputeEnergiesCAN.py
+
+The reason why this script exists is that it makes a difference whether
+we use :math:`V(x)` or :math:`\Lambda(x)` in the code.
+
+
+Explicit Eigentransformation
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+In case we want to convert all the simulation data (think: wavefunction values
+or wavepacket data) once to the eigenbasis there is this script:
+
+::
+
+    python ComputeTransformToEigen.py --help
+
+According to its help text:
+
+::
+
+    usage: ComputeTransformToEigen.py [-h] [-i INPUTFILE] [-o OUTPUTFILE]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -i INPUTFILE, --inputfile INPUTFILE
+                            The data file to read the data from.
+      -o OUTPUTFILE, --outputfile OUTPUTFILE
+                            The data file to write the transformed data.
+
+it will read the input file ``simulation_results.hdf5`` and write output into a
+new data file. A typical invoke could look like:
+
+::
+
+    python ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
+
+
 Visualisation
 -------------
 
