@@ -662,4 +662,7 @@ Comparing data across Simulations
 Sorting and Grouping
 ~~~~~~~~~~~~~~~~~~~~
 
-Usage of ``FileTools.py``
+When comparing results from many different simulations one often wants
+to sort and group the individual runs and corresponding output
+files. For this purpose there is a submodule called
+:py:class:`FileTools` which contains numerous handy functions.
