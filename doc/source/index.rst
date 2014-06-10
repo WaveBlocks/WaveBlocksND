@@ -9,7 +9,7 @@ solving the time-dependent Schrödinger equation.
 User Manual
 ===========
 
-Please note that some section of the manual are still outdated.
+Please note that some sections of the manual are still outdated.
 The source code documentation below is actually up to date.
 
 .. toctree::
@@ -220,5 +220,4 @@ Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`
