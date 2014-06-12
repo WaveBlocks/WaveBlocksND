@@ -115,6 +115,7 @@ from SimulationLoopHagedornInhomogeneous import SimulationLoopHagedornInhomogene
 
 from Observables import Observables
 from ObservablesHAWP import ObservablesHAWP
+from ObservablesMixedHAWP import ObservablesMixedHAWP
 from ObservablesLCWP import ObservablesLCWP
 
 # Enable dynamic plugin loading for IOManager
