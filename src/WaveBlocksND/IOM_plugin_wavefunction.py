@@ -3,7 +3,7 @@
 IOM plugin providing functions for handling wavefunction data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -11,9 +11,9 @@ import numpy as np
 
 
 def add_wavefunction(self, parameters, flat=False, timeslots=None, blockid=0):
-    r"""Add storage for the sampled wavefunction. The wavefunction is save
-    in full hypercubic array shape with :math:`D` dimensions and :math:`N_d`
-    data points in each direction.
+    r"""Add storage for sampled wavefunctions. The wavefunction is
+    saved in full hypercubic array shape with :math:`D` dimensions and
+    :math:`N_d` data points in each direction.
 
     :param parameters: A :py:class:`ParameterProvider` instance containing
                        at least the keys `number_nodes` and `ncomponents`.
