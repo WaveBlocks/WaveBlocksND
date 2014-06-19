@@ -117,13 +117,10 @@ class ObservablesMixedHAWP(Observables):
 
         for nr in componentsbra:
             for nc in componentsket:
-                #Kprimebra, cnewbra = self._gradient.apply_gradient(pacbra, nr, as_packet=True)
-                #Kprimeket, cnewket = self._gradient.apply_gradient(packet, nc, as_packet=True)
-                #ekin.append(0.5 * sum(sum(conjugate(cnewbra)*cnewket, axis=1), axis=0))
                 gradpacbra = self._gradient.apply_gradient(pacbra, nr, as_packet=True)
                 gradpacket = self._gradient.apply_gradient(packet, nc, as_packet=True)
-                Q = self._innerproduct.quadrature(gradpacbra[0], gradpacket[0], summed=True)
-                ekin.append(0.5*Q)
+                Q = [self._innerproduct.quadrature(gpb, gpk, summed=True) for gpb, gpk in zip(gradpacbra, gradpacket)]
+                ekin.append(0.5*sum(Q))
 
         if summed is True:
             ekin = sum(ekin)

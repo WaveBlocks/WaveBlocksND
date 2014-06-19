@@ -143,6 +143,7 @@ Observables
 
    waveblocks_classes/Observables
    waveblocks_classes/ObservablesHAWP
+   waveblocks_classes/ObservablesMixedHAWP
    waveblocks_classes/ObservablesLCWP
 
 Time propagation
