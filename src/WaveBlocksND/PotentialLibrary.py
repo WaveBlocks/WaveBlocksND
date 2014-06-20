@@ -153,6 +153,27 @@ cosh_osc_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
 cosh_osc_2d["defaults"] = {"a":"1", "b":"1"}
 cosh_osc_2d["number_levels"] = 1
 
+# A quad well potential with 4 wells
+quad_well = {}
+quad_well["variables"] = ["x", "y"]
+quad_well["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+quad_well["defaults"] = {"ax":1.0, "ay":1.0, "bx":3.0, "by":3.0, "cx":0.0, "cy":0.0}
+quad_well["number_levels"] = 1
+
+# A two dimensional double well potential
+double_well_2d = {}
+double_well_2d["variables"] = ["x", "y"]
+double_well_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+double_well_2d["defaults"] = {"ax":1.0, "ay":1.0, "bx":4.0, "by":0.0, "cx":0.0, "cy":0.0}
+double_well_2d["number_levels"] = 1
+
+# A two dimensional harmonic double well potential
+double_well_2d = {}
+double_well_2d["variables"] = ["x", "y"]
+double_well_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+double_well_2d["defaults"] = {"ax":1.0, "ay":0.0, "bx":4.0, "by":-1.0, "cx":0.0, "cy":0.0}
+double_well_2d["number_levels"] = 1
+
 # A parabolic channel potential
 channel_2d = {}
 channel_2d["variables"] = ["x", "y"]

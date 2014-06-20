@@ -24,16 +24,18 @@ def add_autocorrelation(self, parameters, timeslots=None, blockid=0):
     if timeslots is None:
         T = 0
         Ts = None
+        csTs = 64
     else:
         T = timeslots
         Ts = timeslots
+        csTs = min(64, Ts)
 
     # Check that the "observables" group is present
     grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
     # Create the dataset with appropriate parameters
     grp_ac = grp_ob.create_group("autocorrelation")
     daset_tg = grp_ac.create_dataset("timegrid", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,))
-    grp_ac.create_dataset("autocorrelation", (T,N), dtype=np.complexfloating, chunks=(64,N), maxshape=(Ts,N))
+    grp_ac.create_dataset("autocorrelation", (T,N), dtype=np.complexfloating, chunks=(csTs,N), maxshape=(Ts,N))
     daset_tg.attrs["pointer"] = 0
 
 

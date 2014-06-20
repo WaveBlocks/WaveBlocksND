@@ -26,9 +26,11 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
     if timeslots is None:
         T = 0
         Ts = None
+        csTs = 64
     else:
         T = timeslots
         Ts = timeslots
+        csTs = min(64, Ts)
 
     # Check that the "observables" group is present
     grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
@@ -38,17 +40,17 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
     # Add all requested data sets
     if "kin" in key and not "kinetic" in grp_en.keys():
         daset_tgek = grp_en.create_dataset("timegrid_kin", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("kinetic", (T,N), dtype=np.floating, chunks=(64,N), maxshape=(Ts,N))
+        grp_en.create_dataset("kinetic", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
         daset_tgek.attrs["pointer"] = 0
 
     if "pot" in key and not "potential" in grp_en.keys():
         daset_tgep = grp_en.create_dataset("timegrid_pot", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("potential", (T,N), dtype=np.floating, chunks=(64,N), maxshape=(Ts,N))
+        grp_en.create_dataset("potential", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
         daset_tgep.attrs["pointer"] = 0
 
     if "tot" in key and not "total" in grp_en.keys():
         daset_tget = grp_en.create_dataset("timegrid_tot", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("total", (T,1), dtype=np.floating, chunks=(64,1), maxshape=(Ts,1))
+        grp_en.create_dataset("total", (T,1), dtype=np.floating, chunks=(csTs,1), maxshape=(Ts,1))
         daset_tget.attrs["pointer"] = 0
 
 

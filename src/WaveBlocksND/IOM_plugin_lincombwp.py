@@ -38,9 +38,11 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None,blockid=0):
     if lincombsize is None:
         J = 0
         Js = None
+        csJs = 32
     else:
         J = lincombsize
         Js = lincombsize
+        csJs = min(32, Js)
 
     # The overall group containing all lincombwp data
     grp_lc = self._srf[self._prefixb+str(blockid)].require_group("lincombwp")
@@ -50,9 +52,9 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None,blockid=0):
     daset_tg_p = grp_lc.create_dataset("timegrid_packets", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
     grp_lc.create_dataset("lincomb_size", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,))
     # Coefficients
-    grp_lc.create_dataset("coefficients", (T, J), dtype=np.complexfloating, chunks=(1,32), maxshape=(Ts,Js))
+    grp_lc.create_dataset("coefficients", (T, J), dtype=np.complexfloating, chunks=(1,csJs), maxshape=(Ts,Js))
     # Packet IDs
-    daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str,32)), chunks=(1,32), maxshape=(Ts,Js))
+    daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str,32)), chunks=(1,csJs), maxshape=(Ts,Js))
 
     gid = self.create_group(groupid="wavepacketsLCblock"+str(blockid))
     daset_refs.attrs["packet_gid"] = gid
