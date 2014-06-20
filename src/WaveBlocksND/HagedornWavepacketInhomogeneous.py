@@ -3,7 +3,7 @@
 This file contains the class which represents an inhomogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -144,15 +144,15 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             tmp = []
             for k in key:
                 if k == "q":
-                    tmp.append(self._Pis[index][0])
+                    tmp.append(self._Pis[index][0].copy())
                 elif k == "p":
-                    tmp.append(self._Pis[index][1])
+                    tmp.append(self._Pis[index][1].copy())
                 elif k == "Q":
-                    tmp.append(self._Pis[index][2])
+                    tmp.append(self._Pis[index][2].copy())
                 elif k == "P":
-                    tmp.append(self._Pis[index][3])
+                    tmp.append(self._Pis[index][3].copy())
                 elif k == "S":
-                    tmp.append(self._Pis[index][4])
+                    tmp.append(self._Pis[index][4].copy())
                 elif k == "adQ":
                     tmp.append(array(self._get_sqrt(index).get(), dtype=complexfloating))
                 else:

@@ -3,7 +3,7 @@
 This file contains the basic interface for general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -203,6 +203,9 @@ class HagedornWavepacketBase(Wavepacket):
     def get_coefficient_vector(self, component=None):
         r"""Retrieve the coefficients for all components :math:`\Phi_i` simultaneously.
 
+        .. warning:: This function does *not* copy the input data!
+                     This is for efficiency as this routine is used in the innermost loops.
+
         :param component: The component :math:`i` whose coefficients we request. (Default is
                           ``None`` which means to return the coefficients for all components.
         :type component: int
@@ -218,8 +221,8 @@ class HagedornWavepacketBase(Wavepacket):
     def set_coefficient_vector(self, vector):
         """Set the coefficients for all components :math:`\Phi_i` simultaneously.
 
-        Note: This function does *NOT* copy the input data! This is for efficiency
-        as this routine is used in the innermost loops.
+        .. warning:: This function does *not* copy the input data!
+                     This is for efficiency as this routine is used in the innermost loops.
 
         :param vector: The coefficients of all components as a single long column vector.
         :type vector: A two-dimensional ndarray of appropriate shape.

@@ -3,7 +3,7 @@
 This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -134,15 +134,15 @@ class HagedornWavepacket(HagedornWavepacketBase):
         Pilist = []
         for k in key:
             if k == "q":
-                Pilist.append(self._Pis[0])
+                Pilist.append(self._Pis[0].copy())
             elif k == "p":
-                Pilist.append(self._Pis[1])
+                Pilist.append(self._Pis[1].copy())
             elif k == "Q":
-                Pilist.append(self._Pis[2])
+                Pilist.append(self._Pis[2].copy())
             elif k == "P":
-                Pilist.append(self._Pis[3])
+                Pilist.append(self._Pis[3].copy())
             elif k == "S":
-                Pilist.append(self._Pis[4])
+                Pilist.append(self._Pis[4].copy())
             elif k == "adQ":
                 Pilist.append(array(self._get_sqrt(component).get(), dtype=complexfloating))
             else:
