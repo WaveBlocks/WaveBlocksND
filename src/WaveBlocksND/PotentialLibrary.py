@@ -132,12 +132,14 @@ quartic_2d = {}
 quartic_2d["variables"] = ["x", "y"]
 quartic_2d["potential"] = "sigmax * x**4 + sigmay * y**4"
 quartic_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
+quartic_2d["number_levels"] = 1
 
 # A simple fourth order anharmonic potential
 quartic_2d_rotsym = {}
 quartic_2d_rotsym["variables"] = ["x", "y"]
 quartic_2d_rotsym["potential"] = "sigmax**2 * x**4 + 2*sigmax*sigmay * x**2*y**2 + sigmay**2 * y**4"
 quartic_2d_rotsym["defaults"] = {"sigmax":"1", "sigmay":"1"}
+quartic_2d_rotsym["number_levels"] = 1
 
 # A potential consisting of a cosine wave part in 2D
 cos_osc_2d = {}
@@ -168,11 +170,11 @@ double_well_2d["defaults"] = {"ax":1.0, "ay":1.0, "bx":4.0, "by":0.0, "cx":0.0, 
 double_well_2d["number_levels"] = 1
 
 # A two dimensional harmonic double well potential
-double_well_2d = {}
-double_well_2d["variables"] = ["x", "y"]
-double_well_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
-double_well_2d["defaults"] = {"ax":1.0, "ay":0.0, "bx":4.0, "by":-1.0, "cx":0.0, "cy":0.0}
-double_well_2d["number_levels"] = 1
+double_well_harmonic_2d = {}
+double_well_harmonic_2d["variables"] = ["x", "y"]
+double_well_harmonic_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+double_well_harmonic_2d["defaults"] = {"ax":1.0, "ay":0.0, "bx":4.0, "by":-1.0, "cx":0.0, "cy":0.0}
+double_well_harmonic_2d["number_levels"] = 1
 
 # A parabolic channel potential
 channel_2d = {}
@@ -238,6 +240,7 @@ morse_threefold_2["variables"] = ["x", "y"]
 morse_threefold_2["potential"] = """(1 - exp( (-16*sigma*(x**2+y**2)**3-(x*(x**2-3*y**2)-(x**2+y**2)**(3/2))**2)
                                               /(16*(x**2 + y**2)**2) ) )**2"""
 morse_threefold_2["defaults"] = {"sigma":"0.05"}
+morse_threefold_2["number_levels"] = 1
 
 # A 2D tunneling example called the 'Eckart bottleneck potential'
 eckart_bn = {}
@@ -251,6 +254,7 @@ henon_heiles = {}
 henon_heiles["variables"] = ["x", "y"]
 henon_heiles["potential"] = "1/2*a*(x**2 + y**2) + b*(x**2*y - y**3/3.0)"
 henon_heiles["defaults"] = {"a":"1", "b":"1/2"}
+henon_heiles["number_levels"] = 1
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #

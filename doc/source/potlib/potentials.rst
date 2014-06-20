@@ -392,14 +392,14 @@ Potential ``circle_pit_2d``
 Potential ``corral_ring``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
+* Formula: :math:`V(x) = - \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
 
 * Variables: :math:`x`, :math:`y`
 
 * Default values:
 
   * :math:`R = 3`
-  * :math:`\delta = 1/32`
+  * :math:`\delta = 1`
 
 .. image:: fig/corral_ring.png
    :width: 400px
@@ -451,6 +451,44 @@ Potential ``cosh_osc_2d``
 .. image:: fig/cosh_osc_2d.png
    :width: 400px
 
+Potential ``double_well_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 1.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 4.0`
+  * :math:`by = 0.0`
+
+.. image:: fig/double_well_2d.png
+   :width: 400px
+
+Potential ``double_well_harmonic_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 0.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 4.0`
+  * :math:`by = -1.0`
+
+.. image:: fig/double_well_harmonic_2d.png
+   :width: 400px
+
 Potential ``eckart_bn``
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -499,6 +537,21 @@ Potential ``harmonic_channel``
 .. image:: fig/harmonic_channel.png
    :width: 400px
 
+Potential ``henon_heiles``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - 0.333333333333333 y^{3}\right)`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1/2`
+
+.. image:: fig/henon_heiles.png
+   :width: 400px
+
 Potential ``morse_threefold``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -511,6 +564,39 @@ Potential ``morse_threefold``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/morse_threefold.png
+   :width: 400px
+
+Potential ``morse_threefold_2``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left(- e^{\frac{1}{16 \left(x^{2} + y^{2}\right)^{2}} \left(- 16 \sigma \left(x^{2} + y^{2}\right)^{3} - \left(x \left(x^{2} - 3 y^{2}\right) - \left(x^{2} + y^{2}\right)^{\frac{3}{2}}\right)^{2}\right)} + 1\right)^{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/morse_threefold_2.png
+   :width: 400px
+
+Potential ``quad_well``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 1.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 3.0`
+  * :math:`by = 3.0`
+
+.. image:: fig/quad_well.png
    :width: 400px
 
 Potential ``quadratic_2d``
@@ -526,6 +612,51 @@ Potential ``quadratic_2d``
   * :math:`sigmax = 1/2`
 
 .. image:: fig/quadratic_2d.png
+   :width: 400px
+
+Potential ``quartic_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{4} + sigmay y^{4}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_2d.png
+   :width: 400px
+
+Potential ``quartic_2d_rotsym``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax^{2} x^{4} + 2 sigmax sigmay x^{2} y^{2} + sigmay^{2} y^{4}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_2d_rotsym.png
+   :width: 400px
+
+Potential ``ring_valley``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`R = 3`
+  * :math:`\delta = 1`
+
+.. image:: fig/ring_valley.png
    :width: 400px
 
 Potential ``conic``
