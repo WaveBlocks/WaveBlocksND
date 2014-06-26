@@ -319,6 +319,7 @@ delta_gap = {}
 delta_gap["variables"] = ["x"]
 delta_gap["potential"] = [["1/2 * tanh(x)", "delta"         ],
                           ["delta",         "-1/2 * tanh(x)"]]
+delta_gap["defaults"] = {"delta":"0.2"}
 delta_gap["number_levels"] = 2
 
 # Diagonalized single avoided crossing
