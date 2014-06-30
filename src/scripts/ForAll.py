@@ -4,14 +4,13 @@ This file contains code some simple code to call a given
 python script for a bunch of simulation result files.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
 from glob import glob
 import subprocess as sp
-import time
 
 from WaveBlocksND.FileTools import get_result_dirs, get_results_file
 from WaveBlocksND import GlobalDefaults
@@ -21,7 +20,7 @@ from WaveBlocksND import GlobalDefaults
 # NOTE: It is the responsability of the code in the
 #       'scriptcode' script to produce filenames that
 #       do not yield collisions. Otherwise the files
-#       will beoverwritten without any warning!
+#       will be overwritten without any warning!
 
 save_extensions = [ GlobalDefaults.ext_resultdatafile ]
 
@@ -41,30 +40,27 @@ def execute_for_all(resultspath, scriptcode, scriptargs):
     :param scriptcode: The python script that gets called for all simulations.
     :param scriptargs: Optional (constant) arguments to the script.
     """
-    # UNBUFFERED timelog file
-    with open("logtime_forall", "w", 0) as timelog:
+    for simulationpath in get_result_dirs(resultspath):
+        print(" Executing code for datafile in " + simulationpath)
 
-        for simulationpath in get_result_dirs(resultspath):
-            starttime = time.time()
-            timelog.writelines(["New script starting at: " + time.ctime(starttime) + "\n",
-                                "Executing code for datafile in " + simulationpath + "\n"])
-            print(" Executing code for datafile in " + simulationpath)
+        # The file(s) with the simulation data
+        resfiles = get_results_file(simulationpath)
 
-            # The file with the simulation data
-            afile = get_results_file(simulationpath)
+        # Handle case where multiple hdf5 files are found
+        if type(resfiles) is list:
+            print("  Warning: more than one results file found!")
+        else:
+            resfiles = [resfiles]
 
-            # Call the given script
-            sp.call(["python", scriptcode, afile] + scriptargs)
-
-            endtime = time.time()
-            timelog.writelines(["Script now finished at timestamp: " + time.ctime(endtime) + "\n",
-                                "Script took " + str(endtime-starttime) + " second to run\n\n"])
+        # For each file call the given script
+        for resfile in resfiles:
+            sp.call(["python", scriptcode, resfile] + scriptargs)
 
             # Move newly created files back to the simulation path.
             # NOTE: It is the responsability of the code in the
             #       'scriptcode' script to produce filenames that
             #       do not yield collisions. Otherwise the files
-            #       will beoverwritten without any warning!
+            #       will be overwritten without any warning!
             for ext in save_extensions:
                 for afile in glob("*"+ext):
                     sp.call(["mv", afile, simulationpath])
@@ -82,10 +78,12 @@ if __name__ == "__main__":
 
     parser.add_argument("-r", "--results",
                         type = str,
-                        help = "The script file to execute.",
+                        help = "Path where the results are.",
                         default = GlobalDefaults.path_to_results)
 
-    parser.add_argument("scriptargs",
+    parser.add_argument("-a", "--scriptargs",
+                        help = "Additional arguments passed to the script.",
+                        default = [],
                         nargs=argparse.REMAINDER)
 
     args = parser.parse_args()
