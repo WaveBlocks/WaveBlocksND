@@ -23,7 +23,7 @@ class SymbolicIntegral0(SymbolicIntegral):
     """
 
     def __str__(self):
-        return "Inhomogeneous inner product <0|k> computed using a symbolic exact formula."
+        return "Inhomogeneous inner product <0|l> computed using a symbolic exact formula."
 
 
     def get_description(self):
