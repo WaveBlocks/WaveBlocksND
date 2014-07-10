@@ -89,7 +89,7 @@ class ParameterProvider(object):
     def set_parameters(self, params):
         r"""Overwrite the dict containing all parameters with a
         newly provided dict with (possibly) changed parameters.
-        
+
         :param params: A :py:class:`ParameterProvider` instance or a dict
                        with new parameters. The values will be deep-copied.
                        No old values will remain.
@@ -110,8 +110,8 @@ class ParameterProvider(object):
     def update_parameters(self, params):
         r"""Overwrite the dict containing all parameters with a
         newly provided dict with (possibly) changed parameters.
-        
-        :param params: A :py:class`ParameterProvider` instance or a dict
+
+        :param params: A :py:class:`ParameterProvider` instance or a dict
                        with new parameters. The values will be deep-copied.
                        Old values are only overwritten if we have got new values.
         """
@@ -128,7 +128,7 @@ class ParameterProvider(object):
 
 
     def get_timemanager(self):
-        r"""Return the embedded :py:class`TimeManager` instance.
+        r"""Return the embedded :py:class:`TimeManager` instance.
         """
         #try:
         return TimeManager(self._params)
@@ -138,7 +138,7 @@ class ParameterProvider(object):
 
     def get_parameters(self):
         """Return a copy of the dict containing all parameters.
-        
+
         :return: A copy of the dict containing all parameters. The dict will be copied.
         """
         return deepcopy(self._params)

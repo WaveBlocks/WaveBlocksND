@@ -18,6 +18,7 @@ Potential ``cos_osc``
   * :math:`b = 1.0`
 
 .. image:: fig/cos_osc.png
+   :width: 400px
 
 Potential ``cosh_osc``
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -32,6 +33,7 @@ Potential ``cosh_osc``
   * :math:`b = 1`
 
 .. image:: fig/cosh_osc.png
+   :width: 400px
 
 Potential ``double_well``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -45,6 +47,7 @@ Potential ``double_well``
   * :math:`\sigma = 1.0`
 
 .. image:: fig/double_well.png
+   :width: 400px
 
 Potential ``double_well2``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -59,6 +62,7 @@ Potential ``double_well2``
   * :math:`b = 1.0`
 
 .. image:: fig/double_well2.png
+   :width: 400px
 
 Potential ``eckart``
 ^^^^^^^^^^^^^^^^^^^^
@@ -73,6 +77,7 @@ Potential ``eckart``
   * :math:`\sigma = 0.038088`
 
 .. image:: fig/eckart.png
+   :width: 400px
 
 Potential ``free_particle``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -86,6 +91,7 @@ Potential ``free_particle``
   * :math:`c = 0`
 
 .. image:: fig/free_particle.png
+   :width: 400px
 
 Potential ``kratzer``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -99,6 +105,7 @@ Potential ``kratzer``
   * :math:`b = 2.0`
 
 .. image:: fig/kratzer.png
+   :width: 400px
 
 Potential ``morse``
 ^^^^^^^^^^^^^^^^^^^
@@ -114,6 +121,7 @@ Potential ``morse``
   * :math:`D = 3.0`
 
 .. image:: fig/morse.png
+   :width: 400px
 
 Potential ``morse_zero``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -129,6 +137,7 @@ Potential ``morse_zero``
   * :math:`D = 3.0`
 
 .. image:: fig/morse_zero.png
+   :width: 400px
 
 Potential ``morse_zero_2``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -143,6 +152,7 @@ Potential ``morse_zero_2``
   * :math:`l = 1.0`
 
 .. image:: fig/morse_zero_2.png
+   :width: 400px
 
 Potential ``pert_quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -157,6 +167,7 @@ Potential ``pert_quadratic``
   * :math:`\delta = 0.2`
 
 .. image:: fig/pert_quadratic.png
+   :width: 400px
 
 Potential ``quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -170,6 +181,7 @@ Potential ``quadratic``
   * :math:`\sigma = 1/2`
 
 .. image:: fig/quadratic.png
+   :width: 400px
 
 Potential ``quartic``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -183,6 +195,7 @@ Potential ``quartic``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/quartic.png
+   :width: 400px
 
 Potential ``v_shape``
 ^^^^^^^^^^^^^^^^^^^^^
@@ -196,6 +209,7 @@ Potential ``v_shape``
   * :math:`\delta = 0.2`
 
 .. image:: fig/v_shape.png
+   :width: 400px
 
 Potential ``wall``
 ^^^^^^^^^^^^^^^^^^
@@ -209,6 +223,7 @@ Potential ``wall``
   * :math:`\sigma = 10.0`
 
 .. image:: fig/wall.png
+   :width: 400px
 
 Potential ``delta_gap``
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -219,6 +234,7 @@ Potential ``delta_gap``
 
 
 .. image:: fig/delta_gap.png
+   :width: 400px
 
 Potential ``delta_gap_diag``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -229,6 +245,7 @@ Potential ``delta_gap_diag``
 
 
 .. image:: fig/delta_gap_diag.png
+   :width: 400px
 
 Potential ``two_crossings``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -242,6 +259,7 @@ Potential ``two_crossings``
   * :math:`\rho = 3.0`
 
 .. image:: fig/two_crossings.png
+   :width: 400px
 
 Potential ``two_quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -255,6 +273,7 @@ Potential ``two_quadratic``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/two_quadratic.png
+   :width: 400px
 
 Potential ``two_quartic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -268,6 +287,7 @@ Potential ``two_quartic``
   * :math:`\sigma = 1`
 
 .. image:: fig/two_quartic.png
+   :width: 400px
 
 Potential ``three_levels``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -281,6 +301,7 @@ Potential ``three_levels``
   * :math:`\rho = 3.0`
 
 .. image:: fig/three_levels.png
+   :width: 400px
 
 Potential ``three_quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -294,6 +315,7 @@ Potential ``three_quadratic``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/three_quadratic.png
+   :width: 400px
 
 Potential ``four_powers``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -307,6 +329,7 @@ Potential ``four_powers``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/four_powers.png
+   :width: 400px
 
 Potential ``four_quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -320,6 +343,7 @@ Potential ``four_quadratic``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/four_quadratic.png
+   :width: 400px
 
 Potential ``five_quadratic``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -333,6 +357,7 @@ Potential ``five_quadratic``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/five_quadratic.png
+   :width: 400px
 
 Potential ``channel_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -347,6 +372,7 @@ Potential ``channel_2d``
   * :math:`sigmax = 0.0`
 
 .. image:: fig/channel_2d.png
+   :width: 400px
 
 Potential ``circle_pit_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -361,20 +387,22 @@ Potential ``circle_pit_2d``
   * :math:`\sigma = 10`
 
 .. image:: fig/circle_pit_2d.png
+   :width: 400px
 
 Potential ``corral_ring``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
+* Formula: :math:`V(x) = - \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
 
 * Variables: :math:`x`, :math:`y`
 
 * Default values:
 
   * :math:`R = 3`
-  * :math:`\delta = 1/32`
+  * :math:`\delta = 1`
 
 .. image:: fig/corral_ring.png
+   :width: 400px
 
 Potential ``corral_rotsym_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -389,6 +417,7 @@ Potential ``corral_rotsym_2d``
   * :math:`\sigma = 10`
 
 .. image:: fig/corral_rotsym_2d.png
+   :width: 400px
 
 Potential ``cos_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^
@@ -405,6 +434,7 @@ Potential ``cos_osc_2d``
   * :math:`by = 1`
 
 .. image:: fig/cos_osc_2d.png
+   :width: 400px
 
 Potential ``cosh_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -419,6 +449,45 @@ Potential ``cosh_osc_2d``
   * :math:`b = 1`
 
 .. image:: fig/cosh_osc_2d.png
+   :width: 400px
+
+Potential ``double_well_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 1.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 4.0`
+  * :math:`by = 0.0`
+
+.. image:: fig/double_well_2d.png
+   :width: 400px
+
+Potential ``double_well_harmonic_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 0.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 4.0`
+  * :math:`by = -1.0`
+
+.. image:: fig/double_well_harmonic_2d.png
+   :width: 400px
 
 Potential ``eckart_bn``
 ^^^^^^^^^^^^^^^^^^^^^^^
@@ -436,6 +505,7 @@ Potential ``eckart_bn``
   * :math:`l = 0.25`
 
 .. image:: fig/eckart_bn.png
+   :width: 400px
 
 Potential ``gauss_hill_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -450,11 +520,42 @@ Potential ``gauss_hill_2d``
   * :math:`sigmax = 1`
 
 .. image:: fig/gauss_hill_2d.png
+   :width: 400px
+
+Potential ``harmonic_channel``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \sigma y + \frac{w^{2} x^{2}}{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`\sigma = -0.1`
+  * :math:`w = 1.0`
+
+.. image:: fig/harmonic_channel.png
+   :width: 400px
+
+Potential ``henon_heiles``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - 0.333333333333333 y^{3}\right)`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1/2`
+
+.. image:: fig/henon_heiles.png
+   :width: 400px
 
 Potential ``morse_threefold``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \left(- e^{\left(- \sigma - \frac{1}{16} \left(- \cos{\left (3 \operatorname{atan2}{\left (y,x \right )} \right )} + 1\right)^{2}\right) \left(x^{2} + y^{2}\right)} + 1\right)^{2}`
+* Formula: :math:`V(x) = \left(- e^{\left(- \sigma - \frac{1}{16} \left(- \cos{\left (3 \operatorname{atan_{2}}{\left (y,x \right )} \right )} + 1\right)^{2}\right) \left(x^{2} + y^{2}\right)} + 1\right)^{2}`
 
 * Variables: :math:`x`, :math:`y`
 
@@ -463,6 +564,40 @@ Potential ``morse_threefold``
   * :math:`\sigma = 0.05`
 
 .. image:: fig/morse_threefold.png
+   :width: 400px
+
+Potential ``morse_threefold_2``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \left(- e^{\frac{1}{16 \left(x^{2} + y^{2}\right)^{2}} \left(- 16 \sigma \left(x^{2} + y^{2}\right)^{3} - \left(x \left(x^{2} - 3 y^{2}\right) - \left(x^{2} + y^{2}\right)^{\frac{3}{2}}\right)^{2}\right)} + 1\right)^{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`\sigma = 0.05`
+
+.. image:: fig/morse_threefold_2.png
+   :width: 400px
+
+Potential ``quad_well``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax x^{4} + ay y^{4} - bx x^{2} - by y^{2} - cx x - cy y`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`cy = 0.0`
+  * :math:`cx = 0.0`
+  * :math:`ay = 1.0`
+  * :math:`ax = 1.0`
+  * :math:`bx = 3.0`
+  * :math:`by = 3.0`
+
+.. image:: fig/quad_well.png
+   :width: 400px
 
 Potential ``quadratic_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -477,6 +612,52 @@ Potential ``quadratic_2d``
   * :math:`sigmax = 1/2`
 
 .. image:: fig/quadratic_2d.png
+   :width: 400px
+
+Potential ``quartic_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{4} + sigmay y^{4}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_2d.png
+   :width: 400px
+
+Potential ``quartic_2d_rotsym``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax^{2} x^{4} + 2 sigmax sigmay x^{2} y^{2} + sigmay^{2} y^{4}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_2d_rotsym.png
+   :width: 400px
+
+Potential ``ring_valley``
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \frac{1}{2} \sqrt{\delta^{2} + \tanh^{2}{\left (- R + \sqrt{x^{2} + y^{2}} \right )} \tanh^{2}{\left (R + \sqrt{x^{2} + y^{2}} \right )}}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`R = 3`
+  * :math:`\delta = 1`
+
+.. image:: fig/ring_valley.png
+   :width: 400px
 
 Potential ``conic``
 ^^^^^^^^^^^^^^^^^^^
@@ -487,6 +668,7 @@ Potential ``conic``
 
 
 .. image:: fig/conic.png
+   :width: 400px
 
 Potential ``conic_avoided``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -500,6 +682,7 @@ Potential ``conic_avoided``
   * :math:`\delta = 1.0`
 
 .. image:: fig/conic_avoided.png
+   :width: 400px
 
 Potential ``conic_avoided_c``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -510,6 +693,7 @@ Potential ``conic_avoided_c``
 
 
 .. image:: fig/conic_avoided_c.png
+   :width: 400px
 
 Potential ``delta_gap_rotsym``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -520,6 +704,20 @@ Potential ``delta_gap_rotsym``
 
 
 .. image:: fig/delta_gap_rotsym.png
+   :width: 400px
+
+Potential ``harmonic_tube``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \sigma z + \frac{wx^{2} x^{2}}{2} + \frac{wy^{2} y^{2}}{2}`
+
+* Variables: :math:`x`, :math:`y`, :math:`z`
+
+* Default values:
+
+  * :math:`\sigma = -0.1`
+  * :math:`wy = 1.0`
+  * :math:`wx = 1.0`
 
 Potential ``quadratic_3d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -533,4 +731,32 @@ Potential ``quadratic_3d``
   * :math:`sigmay = 1/2`
   * :math:`sigmax = 1/2`
   * :math:`sigmaz = 1/2`
+
+Potential ``harmonic_hypertube``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \sigma x_{4} + \frac{w_{1}^{2} x_{1}^{2}}{2} + \frac{w_{2}^{2} x_{2}^{2}}{2} + \frac{w_{3}^{2} x_{3}^{2}}{2}`
+
+* Variables: :math:`x_{1}`, :math:`x_{2}`, :math:`x_{3}`, :math:`x_{4}`
+
+* Default values:
+
+  * :math:`\sigma = -0.1`
+  * :math:`w_{3} = 1.0`
+  * :math:`w_{2} = 1.0`
+  * :math:`w_{1} = 1.0`
+
+Potential ``quadratic_4d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \frac{\sigma_{1}}{2} + \frac{\sigma_{2} x_{2}^{2}}{2} + \frac{\sigma_{3} x_{3}^{2}}{2} + \frac{\sigma_{4} x_{4}^{2}}{2}`
+
+* Variables: :math:`x_{1}`, :math:`x_{2}`, :math:`x_{3}`, :math:`x_{4}`
+
+* Default values:
+
+  * :math:`\sigma_{4} = 1/2`
+  * :math:`\sigma_{1} = 1/2`
+  * :math:`\sigma_{3} = 1/2`
+  * :math:`\sigma_{2} = 1/2`
 

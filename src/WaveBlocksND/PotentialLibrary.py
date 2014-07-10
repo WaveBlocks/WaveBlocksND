@@ -6,7 +6,7 @@ without any code. To load the potentials, use the methods of
 :py:class:`BlockFactory`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -127,6 +127,20 @@ quadratic_2d["potential"] = "1/2 * (sigmax * x**2 + sigmay * y**2)"
 quadratic_2d["defaults"] = {"sigmax":"1/2", "sigmay":"1/2"}
 quadratic_2d["number_levels"] = 1
 
+# A simple fourth order anharmonic potential
+quartic_2d = {}
+quartic_2d["variables"] = ["x", "y"]
+quartic_2d["potential"] = "sigmax * x**4 + sigmay * y**4"
+quartic_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
+quartic_2d["number_levels"] = 1
+
+# A simple fourth order anharmonic potential
+quartic_2d_rotsym = {}
+quartic_2d_rotsym["variables"] = ["x", "y"]
+quartic_2d_rotsym["potential"] = "sigmax**2 * x**4 + 2*sigmax*sigmay * x**2*y**2 + sigmay**2 * y**4"
+quartic_2d_rotsym["defaults"] = {"sigmax":"1", "sigmay":"1"}
+quartic_2d_rotsym["number_levels"] = 1
+
 # A potential consisting of a cosine wave part in 2D
 cos_osc_2d = {}
 cos_osc_2d["variables"] = ["x", "y"]
@@ -141,12 +155,40 @@ cosh_osc_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
 cosh_osc_2d["defaults"] = {"a":"1", "b":"1"}
 cosh_osc_2d["number_levels"] = 1
 
+# A quad well potential with 4 wells
+quad_well = {}
+quad_well["variables"] = ["x", "y"]
+quad_well["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+quad_well["defaults"] = {"ax":1.0, "ay":1.0, "bx":3.0, "by":3.0, "cx":0.0, "cy":0.0}
+quad_well["number_levels"] = 1
+
+# A two dimensional double well potential
+double_well_2d = {}
+double_well_2d["variables"] = ["x", "y"]
+double_well_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+double_well_2d["defaults"] = {"ax":1.0, "ay":1.0, "bx":4.0, "by":0.0, "cx":0.0, "cy":0.0}
+double_well_2d["number_levels"] = 1
+
+# A two dimensional harmonic double well potential
+double_well_harmonic_2d = {}
+double_well_harmonic_2d["variables"] = ["x", "y"]
+double_well_harmonic_2d["potential"] = "ax*x**4 + ay*y**4 - bx*x**2 - by*y**2 -cx*x - cy*y"
+double_well_harmonic_2d["defaults"] = {"ax":1.0, "ay":0.0, "bx":4.0, "by":-1.0, "cx":0.0, "cy":0.0}
+double_well_harmonic_2d["number_levels"] = 1
+
 # A parabolic channel potential
 channel_2d = {}
 channel_2d["variables"] = ["x", "y"]
 channel_2d["potential"] = "sigmax*x + 1/2*sigmay*y**2"
-channel_2d["defaults"] = {"sigmax": "0.0", "sigmay": "0.45"}
+channel_2d["defaults"] = {"sigmax":"0.0", "sigmay":"0.45"}
 channel_2d["number_levels"] = 1
+
+# Another harmonic channel potential
+harmonic_channel = {}
+harmonic_channel["variables"] = ["x", "y"]
+harmonic_channel["potential"] = "1/2*w**2*x**2 + sigma*y"
+harmonic_channel["defaults"] = {"w":"1.0", "sigma":"-0.1"}
+harmonic_channel["number_levels"] = 1
 
 # A potential consisting of circular pit of radius R with steep walls
 corral_rotsym_2d = {}
@@ -165,9 +207,16 @@ circle_pit_2d["number_levels"] = 1
 # A potential consisting of a ring like corral
 corral_ring = {}
 corral_ring["variables"] = ["x", "y"]
-corral_ring["potential"] = "sqrt(delta**2 + tanh(sqrt(x**2 + y**2) - R)**2*tanh(sqrt(x**2 + y**2) + R)**2)/2"
-corral_ring["defaults"] = {"delta":"1/32", "R":"3"}
+corral_ring["potential"] = "-sqrt(delta**2 + tanh(sqrt(x**2 + y**2) - R)**2 * tanh(sqrt(x**2 + y**2) + R)**2)/2"
+corral_ring["defaults"] = {"delta":"1", "R":"3"}
 corral_ring["number_levels"] = 1
+
+# A potential consisting of a ring like valley
+ring_valley = {}
+ring_valley["variables"] = ["x", "y"]
+ring_valley["potential"] = "sqrt(delta**2 + tanh(sqrt(x**2 + y**2) - R)**2 * tanh(sqrt(x**2 + y**2) + R)**2)/2"
+ring_valley["defaults"] = {"delta":"1", "R":"3"}
+ring_valley["number_levels"] = 1
 
 # A potential consisting of plane with a Gaussian hill
 gauss_hill_2d = {}
@@ -177,11 +226,21 @@ gauss_hill_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
 gauss_hill_2d["number_levels"] = 1
 
 # A threefold morse potential
+# This formula is for real inputs only due to atan2
 morse_threefold = {}
 morse_threefold["variables"] = ["x", "y"]
 morse_threefold["potential"] = "(1 - exp((x**2+y**2) * (-sigma-(1-cos(3*atan2(y,x)))**2/16)))**2"
 morse_threefold["defaults"] = {"sigma":"0.05"}
 morse_threefold["number_levels"] = 1
+
+# A threefold morse potential
+# This formula has a singularity at (0,0)
+morse_threefold_2 = {}
+morse_threefold_2["variables"] = ["x", "y"]
+morse_threefold_2["potential"] = """(1 - exp( (-16*sigma*(x**2+y**2)**3-(x*(x**2-3*y**2)-(x**2+y**2)**(3/2))**2)
+                                              /(16*(x**2 + y**2)**2) ) )**2"""
+morse_threefold_2["defaults"] = {"sigma":"0.05"}
+morse_threefold_2["number_levels"] = 1
 
 # A 2D tunneling example called the 'Eckart bottleneck potential'
 eckart_bn = {}
@@ -189,6 +248,13 @@ eckart_bn["variables"] = ["x", "y"]
 eckart_bn["potential"] = "v0*cosh(a*x)**(-2) + k/2*(1-sigma*exp(-l*x**2)) * y**2"
 eckart_bn["defaults"] = {"v0":"0.425", "a":"1.3624", "k":"0.06784", "sigma":"0.5", "l":"0.25"}
 eckart_bn["number_levels"] = 1
+
+# Henon-Heiles 2D
+henon_heiles = {}
+henon_heiles["variables"] = ["x", "y"]
+henon_heiles["potential"] = "1/2*a*(x**2 + y**2) + b*(x**2*y - y**3/3.0)"
+henon_heiles["defaults"] = {"a":"1", "b":"1/2"}
+henon_heiles["number_levels"] = 1
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #
@@ -200,6 +266,31 @@ quadratic_3d["variables"] = ["x", "y", "z"]
 quadratic_3d["potential"] = "1/2 * (sigmax * x**2 + sigmay * y**2 + sigmaz * z**2)"
 quadratic_3d["defaults"] = {"sigmax":"1/2", "sigmay":"1/2", "sigmaz":"1/2"}
 quadratic_3d["number_levels"] = 1
+
+# A harmonic tube potential
+harmonic_tube = {}
+harmonic_tube["variables"] = ["x", "y", "z"]
+harmonic_tube["potential"] = "1/2*wx**2*x**2 + 1/2*wy**2*y**2 + sigma*z"
+harmonic_tube["defaults"] = {"wx":"1.0", "wy":"1.0", "sigma":"-0.1"}
+harmonic_tube["number_levels"] = 1
+
+######################################################################
+# Potentials in four dimensions and with one energy level (D=4, N=1) #
+######################################################################
+
+# Simple harmonic potential 4D
+quadratic_4d = {}
+quadratic_4d["variables"] = ["x1", "x2", "x3", "x4"]
+quadratic_4d["potential"] = "1/2 * (sigma1 * 1**2 + sigma2 * x2**2 + sigma3 * x3**2 + sigma4 * x4**2)"
+quadratic_4d["defaults"] = {"sigma1":"1/2", "sigma2":"1/2", "sigma3":"1/2", "sigma4":"1/2"}
+quadratic_4d["number_levels"] = 1
+
+# A harmonic hyper-tube potential
+harmonic_hypertube = {}
+harmonic_hypertube["variables"] = ["x1", "x2", "x3", "x4"]
+harmonic_hypertube["potential"] = "1/2*w1**2*x1**2 + 1/2*w2**2*x2**2 + 1/2*w3**2*x3**2 + sigma*x4"
+harmonic_hypertube["defaults"] = {"w1":"1.0", "w2":"1.0", "w3":"1.0", "sigma":"-0.1"}
+harmonic_hypertube["number_levels"] = 1
 
 
 

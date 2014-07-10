@@ -31,7 +31,7 @@ class SymbolicIntegral(Quadrature):
         constructed explicitly for the inhomogeneous case.
 
         :param doraise: Raise an :py:class:`InnerProductException` exception
-                        in case the symbolic formula will fail due to a
+                        in case the symbolic formula will fail due to an
                         inherent mathematical singularity. Default is ``False``.
         """
         self._doraise = doraise
@@ -39,7 +39,7 @@ class SymbolicIntegral(Quadrature):
 
 
     def __str__(self):
-        return "Inhomogeneous inner product computed using a symbolic exact formula."
+        return "Inhomogeneous inner product <k|l> computed using a symbolic exact formula."
 
 
     def get_description(self):

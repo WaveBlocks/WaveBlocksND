@@ -376,7 +376,7 @@ def get_value_of(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_
     :return: The ``value`` part of the found item. (If there
              are multiple matching items, return all values.)
     """
-    items = get_item(name, pattern, ldel=ldel, mdel=mdel, rdel=rdel)
+    items = get_item(name, pattern, ldel=ldel, mdel=mdel, rdel=rdel, unpack=False)
     values = [get_value(i, ldel=ldel, mdel=mdel, rdel=rdel) for i in items]
     if unpack and len(values) == 1:
         values = values[0]

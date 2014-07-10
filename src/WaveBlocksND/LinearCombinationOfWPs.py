@@ -37,9 +37,6 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         self._number_packets = number_packets
         self._coefficients = zeros((number_packets,1), dtype=complexfloating)
 
-        # TODO: Handle multi-component packets
-        assert number_components == 1
-
 
     def __str__(self):
         r"""
@@ -99,7 +96,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
 
 
     def add_wavepackets(self, packetlist, coefficients=None):
-        r"""Add a list of new wavepacket to the linear combination.
+        r"""Add a list of new wavepackets to the linear combination.
 
         :param packetlist: A list of new wavepackets :math:`\{\Psi_j\}`.
         :type packetlist: A list of :py:class:`Wavepacket` subclass instances.
@@ -181,6 +178,15 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         return self._coefficients[index]
 
 
+    def set_coefficient(self, index, coefficient):
+        r"""Set the coefficient :math:`c_j` of the wavepacket :math:`\Psi_j`.
+
+        :param index: The index :math:`0 \leq j < J` of the coefficient to retrieve.
+        :param coefficient: The coefficient :math:`c_j`.
+        """
+        self._coefficients[index] = coefficient
+
+
     def get_coefficients(self):
         r"""Get the vector with all coefficients :math:`c_j` of all wavepackets :math:`\Psi_j`.
 
@@ -208,7 +214,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
-        :type grid: A class having a :py:meth:`get_nodes` method.
+        :type grid: A class having a ``get_nodes`` method.
         :param component: The index :math:`i` of a single component to evaluate.
                           (Defaults to ``None`` for evaluating all components.)
         :return: A list of arrays or a single array containing the values of the

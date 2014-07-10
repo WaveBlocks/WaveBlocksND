@@ -3,7 +3,7 @@
 This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -134,15 +134,15 @@ class HagedornWavepacket(HagedornWavepacketBase):
         Pilist = []
         for k in key:
             if k == "q":
-                Pilist.append(self._Pis[0])
+                Pilist.append(self._Pis[0].copy())
             elif k == "p":
-                Pilist.append(self._Pis[1])
+                Pilist.append(self._Pis[1].copy())
             elif k == "Q":
-                Pilist.append(self._Pis[2])
+                Pilist.append(self._Pis[2].copy())
             elif k == "P":
-                Pilist.append(self._Pis[3])
+                Pilist.append(self._Pis[3].copy())
             elif k == "S":
-                Pilist.append(self._Pis[4])
+                Pilist.append(self._Pis[4].copy())
             elif k == "adQ":
                 Pilist.append(array(self._get_sqrt(component).get(), dtype=complexfloating))
             else:
@@ -160,17 +160,18 @@ class HagedornWavepacket(HagedornWavepacketBase):
         :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
         """
+        D = self._dimension
         for k, item in zip(key, Pi):
             if k == "q":
-                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating))
+                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
             elif k == "p":
-                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating))
+                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
             elif k == "Q":
-                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating))
+                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
             elif k == "P":
-                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating))
+                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
             elif k == "S":
-                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating))
+                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1,1)
             elif k == "adQ":
                 self._get_sqrt(component).set(squeeze(item))
             else:

@@ -12,7 +12,7 @@ wavepackets.
 import numpy as np
 
 
-def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovkin", "ovpot")):
+def add_overlaplcwp(self, parameters, timeslots=None, matrixsize=None, blockid=0, key=("ov", "ovkin", "ovpot")):
     r"""Add storage for various overlap matrices. We can store one matrix type
     per key.
 
@@ -29,8 +29,12 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
 
     :param parameters: A :py:class:`ParameterProvider` instance. It can
                        be empty and is not used at the moment.
-    :param timeslots: The number of time slots we need. Can be ``None``
+    :param timeslots: The number of time slots we need. Can be set to ``None``
                       to get automatically growing datasets.
+    :param matrixsize: The (maximal) size of each of the overlap matrices. If specified
+                       this remains fixed for all timeslots. Can be set to ``None`` (default)
+                       to get automatically growing datasets.
+    :type matrixsize: Pair of integers or ``None``.
     :param blockid: The ID of the data block to operate on.
     :param key: Specify which overlap matrices to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``ov``, ``ovkin`` and ``ovpot``.
@@ -41,24 +45,37 @@ def add_overlaplcwp(self, parameters, timeslots=None, blockid=0, key=("ov", "ovk
     # Create the dataset with appropriate parameters
     grp_ov = self._srf[self._prefixb+str(blockid)].create_group("overlaplcwp")
 
+    if timeslots is None:
+        T = 0
+        Ts = None
+        csTs = 128
+    else:
+        T = timeslots
+        Ts = timeslots
+        csTs = min(128, Ts)
+
+    if matrixsize is None:
+        Jr = 0
+        Jc = 0
+        Jrs = None
+        Jcs = None
+        csJrs = 128
+        csJcs = 128
+    else:
+        Jr, Jc = matrixsize
+        Jrs, Jcs = matrixsize
+        csJrs = min(128, Jrs)
+        csJcs = min(128, Jcs)
+
     for k in key:
         if not k in valid_keys:
             raise ValueError("Unknown key value "+str(k))
 
         name = k[2:]
-        if timeslots is None:
-            # This case is event based storing
-            daset_tg = grp_ov.create_dataset("timegrid"+name, (0,), dtype=np.integer, chunks=True, maxshape=(None,))
-            daset_shape = grp_ov.create_dataset("shape"+name, (0,2), dtype=np.integer, chunks=True, maxshape=(None,2))
-            daset_ov = grp_ov.create_dataset("overlap"+name, (0,0,0), dtype=np.complexfloating, chunks=True, maxshape=(None,None,None))
-        else:
-            # User specified how much space is necessary.
-            daset_tg = grp_ov.create_dataset("timegrid"+name, (timeslots,), dtype=np.integer)
-            daset_shape = grp_ov.create_dataset("shape"+name, (timeslots,2), dtype=np.integer)
-            daset_ov = grp_ov.create_dataset("overlap"+name, (timeslots,0,0), dtype=np.complexfloating)
 
-            # Mark all steps as invalid
-            daset_tg[...] = -1.0
+        daset_tg = grp_ov.create_dataset("timegrid"+name, (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
+        grp_ov.create_dataset("shape"+name, (T,2), dtype=np.integer, chunks=(csTs,2), maxshape=(Ts,2))
+        grp_ov.create_dataset("overlap"+name, (T,Jr,Jc), dtype=np.complexfloating, chunks=(1,csJrs,csJcs), maxshape=(Ts,Jrs,Jcs))
 
         daset_tg.attrs["pointer"] = 0
 

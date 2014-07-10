@@ -9,7 +9,7 @@ solving the time-dependent Schrödinger equation.
 User Manual
 ===========
 
-Please note that some section of the manual are still outdated.
+Please note that some sections of the manual are still outdated.
 The source code documentation below is actually up to date.
 
 .. toctree::
@@ -61,6 +61,8 @@ Basic numerics
 
    waveblocks_classes/Utils
 
+   waveblocks_classes/PhaseSpaceLattice
+
 Basic quantum mechanics
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -73,7 +75,6 @@ Basic quantum mechanics
    waveblocks_classes/MatrixPotential1S
    waveblocks_classes/MatrixPotential2S
    waveblocks_classes/MatrixPotentialMS
-
 
 Wavepackets
 ^^^^^^^^^^^
@@ -100,7 +101,9 @@ Wavepackets
 
    waveblocks_classes/LinearCombinationOfWavepackets
    waveblocks_classes/LinearCombinationOfWPs
+   waveblocks_classes/LinearCombinationOfHAWPs
 
+   waveblocks_classes/GradientLinearCombinationHAWP
 
 Inner Products
 ^^^^^^^^^^^^^^
@@ -123,13 +126,14 @@ Inner Products
    waveblocks_classes/DirectInhomogeneousQuadrature
 
    waveblocks_classes/GaussianIntegral
+   waveblocks_classes/SymbolicIntegral0
    waveblocks_classes/SymbolicIntegral
    waveblocks_classes/NSDInhomogeneous
 
    waveblocks_classes/SparsityOracle.rst
    waveblocks_classes/SparsityOracleTrue.rst
    waveblocks_classes/SparsityOraclePSHAWP.rst
-
+   waveblocks_classes/SparsityOracleGIHAWP.rst
 
 Observables
 ^^^^^^^^^^^
@@ -140,7 +144,6 @@ Observables
    waveblocks_classes/Observables
    waveblocks_classes/ObservablesHAWP
    waveblocks_classes/ObservablesLCWP
-
 
 Time propagation
 ^^^^^^^^^^^^^^^^
@@ -164,7 +167,6 @@ Time propagation
    waveblocks_classes/SimulationLoopHagedorn
    waveblocks_classes/SimulationLoopHagedornInhomogeneous
 
-
 Simulation result storage I/O
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 .. toctree::
@@ -179,10 +181,10 @@ Simulation result storage I/O
    waveblocks_classes/IOM_plugin_wavepacket
    waveblocks_classes/IOM_plugin_inhomogwavepacket
    waveblocks_classes/IOM_plugin_lincombwp
+   waveblocks_classes/IOM_plugin_lincombhawp
    waveblocks_classes/IOM_plugin_overlaplcwp
    waveblocks_classes/IOM_plugin_norm
    waveblocks_classes/IOM_plugin_energy
-
 
 Other classes and functions
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -198,7 +200,6 @@ Other classes and functions
 
    waveblocks_classes/BlockFactory
 
-
 Plot
 ^^^^
 
@@ -208,7 +209,6 @@ Plot
    waveblocks_classes/plot/plot
    waveblocks_classes/plot3d/plot3d
 
-
 Etc
 ===
 
@@ -217,10 +217,8 @@ Etc
 
    citation
 
-
 Indices and tables
 ==================
 
 * :ref:`genindex`
-* :ref:`modindex`
 * :ref:`search`

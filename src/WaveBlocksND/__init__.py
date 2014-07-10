@@ -16,6 +16,8 @@ from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
 from GridWrapper import GridWrapper
 
+from PhaseSpaceLattice import PhaseSpaceLattice
+
 # Wavefunctions
 from WaveFunction import WaveFunction
 
@@ -56,6 +58,9 @@ from GradientHAWP import GradientHAWP
 #
 from LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from LinearCombinationOfWPs import LinearCombinationOfWPs
+from LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
+
+from GradientLinearCombinationHAWP import GradientLinearCombinationHAWP
 
 # Quadrature rules
 from QuadratureRule import QuadratureRule
@@ -81,12 +86,14 @@ from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
 from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
 
 from SymbolicIntegral import SymbolicIntegral
+from SymbolicIntegral0 import SymbolicIntegral0
 from GaussianIntegral import GaussianIntegral
 from NSDInhomogeneous import NSDInhomogeneous
 
 from SparsityOracle import SparsityOracle
 from SparsityOracleTrue import SparsityOracleTrue
 from SparsityOraclePSHAWP import SparsityOraclePSHAWP
+from SparsityOracleGIHAWP import SparsityOracleGIHAWP
 
 # Basis transformations
 from BasisTransformation import BasisTransformation
