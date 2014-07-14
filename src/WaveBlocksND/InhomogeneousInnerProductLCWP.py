@@ -31,6 +31,8 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :type delegate: A :py:class:`InnerProduct` subclass instance.
         :param oracle: The sparsity oracle to use. If the variable is ``None``
                        no oracle is used and all integrals are computed.
+
+        .. warning:: Wavepackets consisting of multiple components are not yet supported.
         """
         # Pure convenience to allow setting of quadrature instance in constructor
         self.set_delegate(delegate)
@@ -103,6 +105,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
                     # TODO: Handle multi-component packets
                     M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, component=0)
 
+        # TODO: Handle multi-component packets
         cbra = lcbra.get_coefficients()
         cket = lcket.get_coefficients()
 

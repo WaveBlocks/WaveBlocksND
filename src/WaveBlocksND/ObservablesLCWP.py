@@ -31,6 +31,8 @@ class ObservablesLCWP(Observables):
         :param innerproduct: An inner product for computing the integrals. The inner product is
                              used for the computation of brakets :math:`\langle\Psi|\cdot|\Psi\rangle`.
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
+
+        .. warning:: Wavepackets consisting of multiple components are not yet supported.
         """
         # A innerproduct to compute the integrals
         if innerproduct is not None:
