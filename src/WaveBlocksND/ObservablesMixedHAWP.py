@@ -102,7 +102,7 @@ class ObservablesMixedHAWP(Observables):
         return wavepacket.norm(component=component, summed=summed)
 
 
-    def kinetic_overlap_energy(self, pacbra, packet, componentbra=None, componentket=None, summed=False):
+    def kinetic_overlap_energy(self, pacbra, packet, component=None, summed=False):
         r"""Compute the kinetic energy overlap :math:`\langle \Psi | T | \Psi^\prime \rangle`
         of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
         wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
@@ -111,43 +111,39 @@ class ObservablesMixedHAWP(Observables):
         :type pacbra: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param packet: The wavepacket :math:`\Psi^\prime` which takes part in the kinetic energy integral.
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
-        :param componentbra: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`
-                             which takes part in the kinetic energy integral. If set to ``None`` the
-                             computation is performed for all :math:`N` components of :math:`\Psi`.
-        :type componentbra: Integer or ``None``.
-        :param componentket: The index :math:`i` of the component :math:`\Phi_i^\prime` of :math:`\Psi^\prime`
-                             which takes part in the kinetic energy integral. If set to ``None`` the
-                             computation is performed for all :math:`N^\prime` components of :math:`\Psi^\prime`.
-        :type componentket: Integer or ``None``.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
+                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` which take part in the
+                          kinetic energy integral. If set to ``None`` the computation is performed for
+                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^\prime`.
+        :type component: Integer or ``None``.
         :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual
                        components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
         :type summed: Boolean, default is ``False``.
         :return: A list of the kinetic energy overlap integrals of the individual components or
                  the overall kinetic energy overlap of the wavepackets. (Depending on the optional arguments.)
         """
-        if componentbra is None:
-            Nbra = pacbra.get_number_components()
-            componentsbra = xrange(Nbra)
+        Nbra = pacbra.get_number_components()
+        Nket = packet.get_number_components()
+        if not Nbra == Nket:
+            # TODO: Drop this requirement, should be easy when zip(...) exhausts
+            raise ValueError("Number of components in bra (%d) and ket (%d) differs!" % (Nbra, Nket))
+
+        if component is None:
+            components = xrange(Nbra)
         else:
-            componentsbra = [componentbra]
-        if componentket is None:
-            Nket = packet.get_number_components()
-            componentsket = xrange(Nket)
-        else:
-            componentsket = [componentket]
+            components = [component]
 
         ekin = []
 
-        for nr in componentsbra:
-            for nc in componentsket:
-                gradpacbra = self._gradient.apply_gradient(pacbra, nr, as_packet=True)
-                gradpacket = self._gradient.apply_gradient(packet, nc, as_packet=True)
-                Q = [self._innerproduct.quadrature(gpb, gpk, summed=True) for gpb, gpk in zip(gradpacbra, gradpacket)]
-                ekin.append(0.5*sum(Q))
+        for n in components:
+            gradpacbra = self._gradient.apply_gradient(pacbra, component=n, as_packet=True)
+            gradpacket = self._gradient.apply_gradient(packet, component=n, as_packet=True)
+            Q = [self._innerproduct.quadrature(gpb, gpk, diag_component=n) for gpb, gpk in zip(gradpacbra, gradpacket)]
+            ekin.append(0.5*sum(Q))
 
         if summed is True:
             ekin = sum(ekin)
-        elif componentbra is not None or componentket is not None:
+        elif component is not None:
             # Do not return a list for specific single components
             ekin = ekin[0]
 
@@ -173,7 +169,7 @@ class ObservablesMixedHAWP(Observables):
         .. note:: This method just expands to a call of the :py:meth:`ObservablesMixedHAWP.kinetic_overlap_energy`
                   method. Better use :py:meth:`ObservablesHAWP.kinetic_energy`.
         """
-        return self.kinetic_overlap_energy(wavepacket, wavepacket, componentbra=component, componentket=component, summed=summed)
+        return self.kinetic_overlap_energy(wavepacket, wavepacket, component=component, summed=summed)
 
 
     def potential_overlap_energy(self, pacbra, packet, potential, componentbra=None, componentket=None, summed=False):
