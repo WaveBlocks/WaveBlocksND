@@ -76,7 +76,7 @@ class ObservablesMixedHAWP(Observables):
                  with :math:`\Phi_i^\prime` or a list with the :math:`N` overlaps of all components.
                  (Depending on the optional arguments.)
         """
-        return self._innerproduct.quadrature(pacbra, packet, component=component, summed=summed)
+        return self._innerproduct.quadrature(pacbra, packet, diag_component=component, diagonal=True, summed=summed)
 
 
     def norm(self, wavepacket, component=None, summed=False):
