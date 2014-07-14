@@ -5,7 +5,7 @@ inner products of two wavepackets. The class defined here can compute brakets, i
 and expectation values and the matrix elements of an arbitrary operator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -71,8 +71,8 @@ class HomogeneousInnerProduct(InnerProduct):
         self._delegate.initialize_packet(packet)
         self._delegate.initialize_operator(operator, eval_at_once=eval_at_once)
 
-        # Avoid unnecessary computations of other components
         N  = packet.get_number_components()
+        # Avoid unnecessary computations of other components
         if component is not None:
             rows = [ component // N ]
             cols = [ component % N ]
@@ -100,12 +100,7 @@ class HomogeneousInnerProduct(InnerProduct):
             result = result[0]
         elif diagonal is True:
             # Only keep the diagonal elements
-            res = []
-            i = 1
-            while i <= N**2:
-                res.append(result[i-1])
-                i = i + 2*i
-            result = res
+            result = [result[i*N+i] for i in xrange(N)]
 
         return result
 
