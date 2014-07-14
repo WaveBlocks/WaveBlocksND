@@ -172,7 +172,7 @@ class ObservablesMixedHAWP(Observables):
         return self.kinetic_overlap_energy(wavepacket, wavepacket, component=component, summed=summed)
 
 
-    def potential_overlap_energy(self, pacbra, packet, potential, componentbra=None, componentket=None, summed=False):
+    def potential_overlap_energy(self, pacbra, packet, potential, component=None, summed=False):
         r"""Compute the potential energy overlap :math:`\langle \Psi | V(x) | \Psi^\prime \rangle`
         of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
         wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
@@ -183,14 +183,11 @@ class ObservablesMixedHAWP(Observables):
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself
                           but one of its ``V.evaluate_*`` methods.)
-        :param componentbra: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`
-                             which takes part in the potential energy integral. If set to ``None`` the
-                             computation is performed for all :math:`N` components of :math:`\Psi`.
-        :type componentbra: Integer or ``None``.
-        :param componentket: The index :math:`i` of the component :math:`\Phi_i^\prime` of :math:`\Psi^\prime`
-                             which takes part in the potential energy integral. If set to ``None`` the
-                             computation is performed for all :math:`N^\prime` components of :math:`\Psi^\prime`.
-        :type componentket: Integer or ``None``.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
+                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` which take part in the
+                          potential energy integral. If set to ``None`` the computation is performed for
+                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^\prime`.
+        :type component: Integer or ``None``.
         :param summed: Whether to sum up the potential energies :math:`E_i` of the individual
                        components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
         :type summed: Boolean, default is ``False``.
@@ -199,18 +196,9 @@ class ObservablesMixedHAWP(Observables):
         """
         Nbra = pacbra.get_number_components()
         Nket = packet.get_number_components()
-
-        if componentbra is None:
-            componentsbra = xrange(Nbra)
-        else:
-            componentsbra = [componentbra]
-        if componentket is None:
-            componentsket = xrange(Nket)
-        else:
-            componentsket = [componentket]
-
-        # TODO: Fix
-        component = None
+        if not Nbra == Nket:
+            # TODO: Drop this requirement, should be easy when zip(...) exhausts
+            raise ValueError("Number of components in bra (%d) and ket (%d) differs!" % (Nbra, Nket))
 
         # TODO: Better take 'V' instead of 'V.evaluate_at' as argument?
         #f = partial(potential.evaluate_at, as_matrix=True)
@@ -258,4 +246,4 @@ class ObservablesMixedHAWP(Observables):
         .. note:: This method just expands to a call of the :py:meth:`ObservablesMixedHAWP.potential_overlap_energy`
                   method. Better use :py:meth:`ObservablesHAWP.potential_energy`.
         """
-        return self.potential_overlap_energy(wavepacket, wavepacket, potential, componentbra=component, componentket=component, summed=summed)
+        return self.potential_overlap_energy(wavepacket, wavepacket, potential, component=component, summed=summed)
