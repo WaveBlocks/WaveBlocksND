@@ -60,7 +60,7 @@ class ObservablesMixedHAWP(Observables):
         self._innerproduct = innerproduct
 
 
-    def overlap(self, pacbra, packet, componentbra=None, componentket=None, summed=False):
+    def overlap(self, pacbra, packet, component=None, summed=False):
         r"""Calculate the overlap :math:`\langle \Psi | \Psi^\prime \rangle` of the wavepackets
         :math:`\Psi` and :math:`\Psi^\prime`.
 
@@ -68,14 +68,11 @@ class ObservablesMixedHAWP(Observables):
         :type pacbra: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param packet: The wavepacket :math:`\Psi^\prime` which takes part in the overlap integral.
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
-        :param componentbra: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`
-                             whose overlap is computed. The default value is ``None`` which means
-                             to compute the overlaps with all :math:`N` components of :math:`\Psi`.
-        :type componentbra: Integer or ``None``.
-        :param componentket: The index :math:`i` of the component :math:`\Phi_i^\prime` of :math:`\Psi^\prime`
-                             whose overlap is computed. The default value is ``None`` which means
-                             to compute the overlaps with all :math:`N^\prime` components of :math:`\Psi^\prime`.
-        :type componentket: Integer or ``None``.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
+                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` whose overlap is
+                          computed. The default value is ``None`` which means to compute the
+                          overlaps with all :math:`N` components involved.
+        :type component: Integer or ``None``.
         :param summed: Whether to sum up the overlaps :math:`\langle \Phi_i | \Phi_i^\prime \rangle`
                        of the individual components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
         :type summed: Boolean, default is ``False``.
@@ -83,7 +80,7 @@ class ObservablesMixedHAWP(Observables):
                  with :math:`\Phi_i^\prime` or a list with the :math:`N` overlaps of all components.
                  (Depending on the optional arguments.)
         """
-        return self._innerproduct.quadrature(pacbra, packet, component=0, summed=summed)
+        return self._innerproduct.quadrature(pacbra, packet, component=component, summed=summed)
 
 
     def norm(self, wavepacket, component=None, summed=False):
@@ -100,10 +97,9 @@ class ObservablesMixedHAWP(Observables):
         :return: The norm of :math:`\Psi` or the norm of :math:`\Phi_i` or a list with the :math:`N`
                  norms of all components. (Depending on the optional arguments.)
 
-        .. note:: This method just expands to a call of the :py:meth:`ObservablesMixedHAWP.overlap`
-                  method. Better use :py:meth:`ObservablesHAWP.norm`.
+        .. note:: This method just redirects to a call to :py:meth:`HagedornWavepacketBase.norm`.
         """
-        return self.overlap(wavepacket, wavepacket, componentbra=component, componentket=component, summed=summed)
+        return wavepacket.norm(component=component, summed=summed)
 
 
     def kinetic_overlap_energy(self, pacbra, packet, componentbra=None, componentket=None, summed=False):
