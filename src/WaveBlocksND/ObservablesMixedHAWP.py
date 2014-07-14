@@ -23,11 +23,7 @@ class ObservablesMixedHAWP(Observables):
     :math:`\langle \Psi | \cdot | \Psi^\prime \rangle` for Hagedorn
     wavepackets :math:`\Psi` where the bra :math:`\Psi` does not equal
     the ket :math:`\Psi^\prime`.
-
-    .. warning:: Wavepackets consisting of multiple components are not yet supported.
     """
-
-    # TODO: Support multi-component wavepackets
 
     def __init__(self, innerproduct=None):
         r"""Initialize a new :py:class:`ObservablesMixedHAWP` instance for observable computation of
