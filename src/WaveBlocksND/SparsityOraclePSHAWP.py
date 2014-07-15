@@ -3,9 +3,8 @@
 This file contains the code for a sparsity oracle looking
 at the phase space distance between both packets.
 
-
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -51,6 +50,7 @@ class SparsityOraclePSHAWP(SparsityOracle):
 
         :param pacbra: The packet :math:`\Psi_k` that is used for the 'bra' part.
         :param packet: The packet :math:`\Psi_l` that is used for the 'ket' part.
+        :param component: The component of the packet that is considered.
         :return: ``True`` or ``False`` whether the inner product is negligible.
         """
         eps = packet.get_eps()

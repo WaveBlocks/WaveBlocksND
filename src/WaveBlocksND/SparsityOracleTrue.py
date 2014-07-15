@@ -3,9 +3,8 @@
 This file contains the code for a sparsity oracle
 always saying the integrals are non-zero.
 
-
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -32,6 +31,7 @@ class SparsityOracleTrue(SparsityOracle):
 
         :param pacbra: The packet :math:`\Psi_k` that is used for the 'bra' part.
         :param packet: The packet :math:`\Psi_l` that is used for the 'ket' part.
+        :param component: The component of the packet that is considered.
         :return: ``True`` independent of any input or condition.
         """
         return True
