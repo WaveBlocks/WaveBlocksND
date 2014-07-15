@@ -86,6 +86,9 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :return: The value of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`.
         :type: An :py:class:`ndarray`.
         """
+        # Allow to omit the ket if it is the same as the bra
+        if lcket is None:
+            lcket = lcbra
 
         M = self.build_matrix(lcbra, lcket, operator=operator, component=component)
         cbra = lcbra.get_coefficients()
