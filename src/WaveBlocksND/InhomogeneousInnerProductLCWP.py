@@ -6,7 +6,7 @@ brakets, inner products and expectation values and the matrix elements of an
 arbitrary operator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -31,12 +31,9 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :type delegate: A :py:class:`InnerProduct` subclass instance.
         :param oracle: The sparsity oracle to use. If the variable is ``None``
                        no oracle is used and all integrals are computed.
-
-        .. warning:: Wavepackets consisting of multiple components are not yet supported.
         """
         # Pure convenience to allow setting of quadrature instance in constructor
         self.set_delegate(delegate)
-
         self.set_oracle(oracle)
 
 
@@ -76,43 +73,27 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
             self._obey_oracle = False
 
 
-    def quadrature(self, lcbra, lcket=None, operator=None, component=None):
+    def quadrature(self, lcbra, lcket=None, operator=None, component=0):
         r"""Delegates the evaluation of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
         :param lcbra: The linear combination :math:`\Upsilon` from the bra with :math:`J` summands :math:`\Psi_j`.
         :param lcket: The linear combination :math:`\Upsilon^\prime` from the ket with :math:`J^\prime` summands :math:`\Psi_j^\prime`.
         :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
+        :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those
+                          components will be taken into account for the computation.
+        :type component: Integer or ``None``, default is ``0``.
         :return: The value of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`.
         :type: An :py:class:`ndarray`.
         """
-        # Allow to omit the ket if it is the same as the bra
-        if lcket is None:
-            lcket = lcbra
 
-        Jbra = lcbra.get_number_packets()
-        Jket = lcket.get_number_packets()
-
-        M = zeros((Jbra, Jket), dtype=complexfloating)
-
-        for row, pacbra in enumerate(lcbra.get_wavepackets()):
-            for col, packet in enumerate(lcket.get_wavepackets()):
-                if self._obey_oracle:
-                    if self._oracle.is_not_zero(pacbra, packet):
-                        # TODO: Handle multi-component packets
-                        M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
-                else:
-                    # TODO: Handle multi-component packets
-                    M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, component=0)
-
-        # TODO: Handle multi-component packets
+        M = self.build_matrix(lcbra, lcket, operator=operator, component=component)
         cbra = lcbra.get_coefficients()
         cket = lcket.get_coefficients()
-
         return dot(conjugate(transpose(cbra)), dot(M, cket))
 
 
-    def build_matrix(self, lcbra, lcket=None, operator=None):
+    def build_matrix(self, lcbra, lcket=None, operator=None, component=0):
         r"""Delegates the computation of the matrix elements of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c_j` and :math:`c_j^\prime`.
@@ -120,6 +101,9 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :param lcbra: The linear combination :math:`\Upsilon` from the bra with :math:`J` summands :math:`\Psi_j`.
         :param lcket: The linear combination :math:`\Upsilon^\prime` from the ket with :math:`J^\prime` summands :math:`\Psi_j^\prime`.
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
+        :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those
+                          components will be taken into account for the computation.
+        :type component: Integer or ``None``, default is ``0``.
         :return: A matrix of size :math:`J \times J^\prime`.
         :type: An :py:class:`ndarray`.
         """
@@ -135,11 +119,9 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         for row, pacbra in enumerate(lcbra.get_wavepackets()):
             for col, packet in enumerate(lcket.get_wavepackets()):
                 if self._obey_oracle:
-                    if self._oracle.is_not_zero(pacbra, packet):
-                        # TODO: Handle multi-component packets
-                        M[row, col] = self._quad.quadrature(pacbra, packet, operator=operator, component=0)
+                    if self._oracle.is_not_zero(pacbra, packet, component=component):
+                        M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component)
                 else:
-                    # TODO: Handle multi-component packets
-                    M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, component=0)
+                    M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component)
 
         return M
