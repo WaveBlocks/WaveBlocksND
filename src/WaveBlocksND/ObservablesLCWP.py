@@ -4,11 +4,11 @@ Compute some observables like norm, kinetic and potential energy
 of linear combinations of general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, transpose, dot, sqrt
+from numpy import zeros, complexfloating, conjugate, transpose, dot, sqrt, array, repeat
 
 from Observables import Observables
 from LinearCombinationOfWPs import LinearCombinationOfWPs
@@ -22,8 +22,6 @@ class ObservablesLCWP(Observables):
     :math:`\Psi_j` in :math:`\Upsilon := \sum_{j=0}^J c_j \Psi_j`.
     """
 
-    # TODO: Support multi-component wavepackets
-
     def __init__(self, innerproduct=None):
         r"""Initialize a new :py:class:`ObservablesLCWP` instance for observable computation
         of linear combinations :math:`\Upsilon` of wavepackets :math:`\Psi_j`.
@@ -32,7 +30,7 @@ class ObservablesLCWP(Observables):
                              used for the computation of brakets :math:`\langle\Psi|\cdot|\Psi\rangle`.
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
 
-        .. warning:: Wavepackets consisting of multiple components are not yet supported.
+        .. note:: Make sure to use an inhomogeneous inner product here.
         """
         # A innerproduct to compute the integrals
         if innerproduct is not None:
@@ -45,6 +43,8 @@ class ObservablesLCWP(Observables):
         :param innerproduct: An inner product for computing the integrals. The inner product is
                              used for the computation of brakets :math:`\langle\Psi|\cdot|\Psi\rangle`.
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
+
+        .. note:: Make sure to use an inhomogeneous inner product here.
         """
         self._innerproduct = innerproduct
 
@@ -78,7 +78,12 @@ class ObservablesLCWP(Observables):
             OM = self.overlap_matrix(lincomb, component=component)
         else:
             OM = matrix
+
+        # Prepare the coefficients in case of multiple components
+        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
+        c = repeat(c, N)
+        # Compute the norm
         norm = dot(conjugate(transpose(c)), dot(OM, c))
         norm = sqrt(norm)
 
