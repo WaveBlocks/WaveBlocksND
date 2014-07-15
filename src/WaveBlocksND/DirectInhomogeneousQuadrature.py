@@ -5,11 +5,11 @@ and matrix elements by using standard quadrature rules.
 Here we handle the inhomogeneous case.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, squeeze, imag, conjugate, dot, ndarray, einsum
+from numpy import zeros, ones, imag, conjugate, dot, ndarray, einsum
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
