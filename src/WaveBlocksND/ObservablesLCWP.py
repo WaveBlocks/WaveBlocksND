@@ -138,7 +138,12 @@ class ObservablesLCWP(Observables):
             OMT = self.kinetic_overlap_matrix(lincomb, component=component)
         else:
             OMT = matrix
+
+        # Prepare the coefficients in case of multiple components
+        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
+        c = repeat(c, N)
+        # Compute the kinetic energy
         ekin = 0.5 * dot(conjugate(transpose(c)), dot(OMT, c))
 
         # Allow to return the overlap matrix.
@@ -178,7 +183,12 @@ class ObservablesLCWP(Observables):
             OMV = self.potential_overlap_matrix(lincomb, potential, component=component)
         else:
             OMV = matrix
+
+        # Prepare the coefficients in case of multiple components
+        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
+        c = repeat(c, N)
+        # Compute the potential energy
         epot = dot(conjugate(transpose(c)), dot(OMV, c))
 
         # Allow to return the overlap matrix.
