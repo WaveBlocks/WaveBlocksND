@@ -10,7 +10,7 @@ arbitrary operator.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, transpose, dot
+from numpy import zeros, complexfloating, conjugate, transpose, dot, sum, cumsum, array, repeat
 
 from InnerProduct import InnerProduct
 
@@ -73,7 +73,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
             self._obey_oracle = False
 
 
-    def quadrature(self, lcbra, lcket=None, operator=None, component=0):
+    def quadrature(self, lcbra, lcket=None, operator=None, component=None):
         r"""Delegates the evaluation of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` for a general
         function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
 
@@ -82,7 +82,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those
                           components will be taken into account for the computation.
-        :type component: Integer or ``None``, default is ``0``.
+        :type component: Integer or ``None``, default is ``None``.
         :return: The value of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`.
         :type: An :py:class:`ndarray`.
         """
@@ -91,12 +91,16 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
             lcket = lcbra
 
         M = self.build_matrix(lcbra, lcket, operator=operator, component=component)
+        Nbra = array([ wp.get_number_components() for wp in lcbra.get_wavepackets() ])
+        Nket = array([ wp.get_number_components() for wp in lcket.get_wavepackets() ])
         cbra = lcbra.get_coefficients()
         cket = lcket.get_coefficients()
+        cbra = repeat(cbra, Nbra)
+        cket = repeat(cket, Nket)
         return dot(conjugate(transpose(cbra)), dot(M, cket))
 
 
-    def build_matrix(self, lcbra, lcket=None, operator=None, component=0):
+    def build_matrix(self, lcbra, lcket=None, operator=None, component=None):
         r"""Delegates the computation of the matrix elements of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`
         for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.
         The matrix is computed without including the coefficients :math:`c_j` and :math:`c_j^\prime`.
@@ -106,7 +110,7 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those
                           components will be taken into account for the computation.
-        :type component: Integer or ``None``, default is ``0``.
+        :type component: Integer or ``None``, default is ``None``.
         :return: A matrix of size :math:`J \times J^\prime`.
         :type: An :py:class:`ndarray`.
         """
@@ -114,17 +118,25 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         if lcket is None:
             lcket = lcbra
 
-        Jbra = lcbra.get_number_packets()
-        Jket = lcket.get_number_packets()
+        # Packets can in principle have different number of components
+        Nbra = [ wp.get_number_components() for wp in lcbra.get_wavepackets() ]
+        Nket = [ wp.get_number_components() for wp in lcket.get_wavepackets() ]
+        # The partition scheme of the block vectors and block matrix
+        partitionb = [0] + list(cumsum(Nbra))
+        partitionk = [0] + list(cumsum(Nket))
 
-        M = zeros((Jbra, Jket), dtype=complexfloating)
+        result = zeros((sum(Nbra),sum(Nket)), dtype=complexfloating)
 
         for row, pacbra in enumerate(lcbra.get_wavepackets()):
             for col, packet in enumerate(lcket.get_wavepackets()):
                 if self._obey_oracle:
                     if self._oracle.is_not_zero(pacbra, packet, component=component):
-                        M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component)
+                        M = self._delegate.build_matrix(pacbra, packet, operator=operator)
+                        # Put the result into the global storage
+                        result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = M
                 else:
-                    M[row, col] = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component)
+                    M = self._delegate.build_matrix(pacbra, packet, operator=operator)
+                    # Put the result into the global storage
+                    result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = M
 
-        return M
+        return result
