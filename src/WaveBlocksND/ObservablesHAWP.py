@@ -4,7 +4,7 @@ Compute some observables like norm, kinetic and potential energy
 of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -93,7 +93,7 @@ class ObservablesHAWP(Observables):
         ekin = []
 
         for n in components:
-            Kprime, cnew = self._gradient.apply_gradient(wavepacket, n)
+            Kprime, cnew = self._gradient.apply_gradient(wavepacket, component=n)
             ekin.append(0.5 * sum(sum(conjugate(cnew)*cnew, axis=1), axis=0))
 
         if summed is True:

@@ -8,7 +8,7 @@ of linear combinations of general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, transpose, dot, sqrt, array, repeat
+from numpy import conjugate, transpose, dot, sqrt, array, repeat
 
 from Observables import Observables
 from LinearCombinationOfWPs import LinearCombinationOfWPs
@@ -114,10 +114,10 @@ class ObservablesLCWP(Observables):
             for d, grad_wp in enumerate(gradient_wps):
                 grad_lcs[d].add_wavepacket(grad_wp)
 
-        J = lincomb.get_number_packets()
-        OMT = zeros((J,J), dtype=complexfloating)
-        for grad_lc in grad_lcs:
-            OMT = OMT + self._innerproduct.build_matrix(grad_lc)
+        # Compute the matrices and sum up
+        OMT = self._innerproduct.build_matrix(grad_lcs[0])
+        for grad_lc in grad_lcs[1:]:
+            OMT += self._innerproduct.build_matrix(grad_lc)
 
         return OMT
 
