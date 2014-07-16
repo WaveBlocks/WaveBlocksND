@@ -131,19 +131,15 @@ class ObservablesHAWP(Observables):
 
         # Compute the brakets for each component
         if component is not None:
-            Q = self._innerproduct.quadrature(wavepacket, operator=f, diag_component=component, eval_at_once=True)
+            epot = self._innerproduct.quadrature(wavepacket, operator=f, diag_component=component, eval_at_once=True)
         else:
             Q = self._innerproduct.quadrature(wavepacket, operator=f, eval_at_once=True)
-
-        # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
-        # TODO: Should this go inside the innerproduct?
-        tmp = map(squeeze, Q)
-        epot = [ sum(tmp[i*N:(i+1)*N]) for i in xrange(N) ]
+            # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
+            # TODO: Should this go inside the innerproduct?
+            tmp = map(squeeze, Q)
+            epot = [ sum(tmp[i*N:(i+1)*N]) for i in xrange(N) ]
 
         if summed is True:
             epot = sum(epot)
-        elif component is not None:
-            # Do not return a list for specific single components
-            epot = epot[0]
 
         return epot
