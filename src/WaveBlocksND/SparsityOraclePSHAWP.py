@@ -44,7 +44,7 @@ class SparsityOraclePSHAWP(SparsityOracle):
         self._bias_ket = False
 
 
-    def is_not_zero(self, pacbra, packet, component=0):
+    def is_not_zero(self, pacbra, packet, component=None):
         r"""Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`
         is zero or at least negligible.
 
@@ -71,8 +71,12 @@ class SparsityOraclePSHAWP(SparsityOracle):
         #kket = indices.max(axis=0)
 
         # Third strategy
-        kbra = array(pacbra.get_basis_shapes(component=component).find_largest_index())
-        kket = array(packet.get_basis_shapes(component=component).find_largest_index())
+        if component is not None:
+            kbra = array(pacbra.get_basis_shapes(component=component).find_largest_index())
+            kket = array(packet.get_basis_shapes(component=component).find_largest_index())
+        else:
+            kbra = array(max([K.find_largest_index() for K in pacbra.get_basis_shapes()]))
+            kket = array(max([K.find_largest_index() for K in packet.get_basis_shapes()]))
 
         # Bias for small k
         if self._bias_bra:

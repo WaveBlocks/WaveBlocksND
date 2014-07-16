@@ -22,7 +22,7 @@ class SparsityOracle(object):
         raise NotImplementedError("'SparsityOracle' is an abstract interface.")
 
 
-    def is_not_zero(self, pacbra, packet, component=0):
+    def is_not_zero(self, pacbra, packet, component=None):
         r"""Try to estimate if the overlap integral between the two
         given packets is zero or at least negligible.
 

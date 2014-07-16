@@ -23,9 +23,10 @@ class SparsityOracleTrue(SparsityOracle):
         :math:`\langle \Psi_k | \Psi_l \rangle` is approximately zero. This
         oracle always returns ``False``.
         """
+        pass
 
 
-    def is_not_zero(self, pacbra, packet, component=0):
+    def is_not_zero(self, pacbra, packet, component=None):
         r"""Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`
         is zero or at least negligible.
 

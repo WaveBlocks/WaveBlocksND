@@ -42,7 +42,7 @@ class SparsityOracleGIHAWP(SparsityOracle):
         self._ip = InhomogeneousInnerProduct(GaussianIntegral())
 
 
-    def is_not_zero(self, pacbra, packet, component=0):
+    def is_not_zero(self, pacbra, packet, component=None):
         r"""Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`
         is zero or at least negligible.
 
@@ -51,5 +51,5 @@ class SparsityOracleGIHAWP(SparsityOracle):
         :param component: The component of the packet that is considered.
         :return: ``True`` or ``False`` whether the inner product is negligible.
         """
-        Q = self._ip.quadrature(pacbra, packet, component=component)
+        Q = self._ip.quadrature(pacbra, packet, diag_component=component, summed=True)
         return abs(abs(Q) > self._threshold)
