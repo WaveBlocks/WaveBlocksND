@@ -56,9 +56,13 @@ class ObservablesLCWP(Observables):
         product evaluator directly.
 
         :param lincomb: The linear combination :math:`\Upsilon`.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose overlap
+                          is calculated. The default value is ``None`` which means to compute
+                          overlaps of all :math:`N` components.
+        :type component: int or ``None``.
         :return: The matrix :math:`M`.
         """
-        OM = self._innerproduct.build_matrix(lincomb)
+        OM = self._innerproduct.build_matrix(lincomb, component=component)
         return OM
 
 
@@ -70,6 +74,9 @@ class ObservablesLCWP(Observables):
         :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.
         :param matrix: The overlap matrix. If ``None`` the matrix is computed internally.
         :type matrix: An ``ndarray`` or ``None`` (default).
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose norm
+                          is calculated. The default value is ``None`` which means to compute
+                          norms of all :math:`N` components.
         :param return_matrix: Whether to return the overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The norm of :math:`\Upsilon` and optionally the overlap matrix :math:`M`.
@@ -79,10 +86,15 @@ class ObservablesLCWP(Observables):
         else:
             OM = matrix
 
+        if component is not None:
+            N = array([1] * lincomb.get_number_packets())
+        else:
+            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+
         # Prepare the coefficients in case of multiple components
-        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
         c = repeat(c, N)
+
         # Compute the norm
         norm = dot(conjugate(transpose(c)), dot(OM, c))
         norm = sqrt(norm)
@@ -98,6 +110,10 @@ class ObservablesLCWP(Observables):
         r"""Compute the kinetic overlap matrix :math:`{M_T}_{r,c} = \langle\Upsilon_r|T|\Upsilon_c\rangle`.
 
         :param lincomb: The linear combination :math:`\Upsilon`.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose
+                          kinetic energy we want to compute. If set to ``None`` the
+                          computation is performed for all :math:`N` components.
+        :type component: Integer or ``None``.
         :return: The matrix :math:`M_T`.
         """
         D = lincomb.get_dimension()
@@ -115,9 +131,9 @@ class ObservablesLCWP(Observables):
                 grad_lcs[d].add_wavepacket(grad_wp)
 
         # Compute the matrices and sum up
-        OMT = self._innerproduct.build_matrix(grad_lcs[0])
+        OMT = self._innerproduct.build_matrix(grad_lcs[0], component=component)
         for grad_lc in grad_lcs[1:]:
-            OMT += self._innerproduct.build_matrix(grad_lc)
+            OMT += self._innerproduct.build_matrix(grad_lc, component=component)
 
         return OMT
 
@@ -130,6 +146,10 @@ class ObservablesLCWP(Observables):
         :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.
         :param matrix: The kinetic overlap matrix. If ``None`` the matrix is computed internally.
         :type matrix: An ``ndarray`` or ``None`` (default).
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose
+                          kinetic energy we want to compute. If set to ``None`` the
+                          computation is performed for all :math:`N` components.
+        :type component: Integer or ``None``.
         :param return_matrix: Whether to return the kinetic overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The kinetic energy of :math:`\Upsilon` and optionally the kinetic overlap matrix :math:`M_T`.
@@ -139,10 +159,15 @@ class ObservablesLCWP(Observables):
         else:
             OMT = matrix
 
+        if component is not None:
+            N = array([1] * lincomb.get_number_packets())
+        else:
+            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+
         # Prepare the coefficients in case of multiple components
-        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
         c = repeat(c, N)
+
         # Compute the kinetic energy
         ekin = 0.5 * dot(conjugate(transpose(c)), dot(OMT, c))
 
@@ -159,9 +184,13 @@ class ObservablesLCWP(Observables):
         :param lincomb: The linear combination :math:`\Upsilon`.
         :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself
                           but one of its ``V.evaluate_*`` methods.)
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose
+                          potential energy we want to compute. If set to ``None`` the
+                          computation is performed for all :math:`N` components.
+        :type component: Integer or ``None``.
         :return: The matrix :math:`M_V`.
         """
-        OMV = self._innerproduct.build_matrix(lincomb, operator=potential)
+        OMV = self._innerproduct.build_matrix(lincomb, operator=potential, component=component)
         return OMV
 
 
@@ -175,6 +204,10 @@ class ObservablesLCWP(Observables):
                           but one of its ``V.evaluate_*`` methods.)
         :param matrix: The potential overlap matrix. If ``None`` the matrix is computed internally.
         :type matrix: An ``ndarray`` or ``None`` per default.
+        :param component: The index :math:`i` of the components :math:`\Phi_i` whose
+                          potential energy we want to compute. If set to ``None`` the
+                          computation is performed for all :math:`N` components.
+        :type component: Integer or ``None``.
         :param return_matrix: Whether to return the potential overlap matrix used internally.
         :type return_matrix: Boolean, default is ``False``.
         :return: The potential energy of :math:`\Upsilon` and optionally the potential overlap matrix :math:`M_V`.
@@ -184,10 +217,15 @@ class ObservablesLCWP(Observables):
         else:
             OMV = matrix
 
+        if component is not None:
+            N = array([1] * lincomb.get_number_packets())
+        else:
+            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+
         # Prepare the coefficients in case of multiple components
-        N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
         c = lincomb.get_coefficients()
         c = repeat(c, N)
+
         # Compute the potential energy
         epot = dot(conjugate(transpose(c)), dot(OMV, c))
 
