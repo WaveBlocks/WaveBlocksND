@@ -5,12 +5,12 @@ The quadrature is not transformed to exclude the exponential
 weight factor.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 from copy import deepcopy
-from scipy.special.orthogonal import h_roots
+from orthogonal import h_roots
 
 from QuadratureRule import QuadratureRule
 

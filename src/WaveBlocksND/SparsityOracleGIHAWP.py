@@ -1,19 +1,16 @@
 """The WaveBlocks Project
 
-Thie file contains the code for a sparsity oracle looking
-at Gaussian integral of both packets.
-
+Thie file contains code for a sparsity oracle looking
+at the Gaussian integral of both packets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import array, ones, abs, sqrt, dot, atleast_1d
-from numpy.linalg import norm
-
 from SparsityOracle import SparsityOracle
 from GaussianIntegral import GaussianIntegral
+from InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
 __all__ = ["SparsityOracleGIHAWP"]
 
@@ -41,17 +38,18 @@ class SparsityOracleGIHAWP(SparsityOracle):
         :param threshold: The threshold :math:`\tau` in the Gaussian integral criterion.
                           The default value of :math:`10^{-8}` should be reasonable in most cases.
         """
-        self._threshols = threshold
-        self._gi = GaussianIntegral()
+        self._threshold = threshold
+        self._ip = InhomogeneousInnerProduct(GaussianIntegral())
 
 
-    def is_not_zero(self, pacbra, packet, component=0):
+    def is_not_zero(self, pacbra, packet, component=None):
         r"""Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`
         is zero or at least negligible.
 
         :param pacbra: The packet :math:`\Psi_k` that is used for the 'bra' part.
         :param packet: The packet :math:`\Psi_l` that is used for the 'ket' part.
+        :param component: The component of the packet that is considered.
         :return: ``True`` or ``False`` whether the inner product is negligible.
         """
-        Q = self._gi.preform_quadratur(pacbra, packet)
+        Q = self._ip.quadrature(pacbra, packet, diag_component=component, summed=True)
         return abs(abs(Q) > self._threshold)

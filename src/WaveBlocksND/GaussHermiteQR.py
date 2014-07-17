@@ -3,14 +3,15 @@
 This file contains the class for Gauss-Hermite quadrature.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 from copy import deepcopy
 from numpy import zeros, floating, real
 from scipy import pi, exp, sqrt
-from scipy.special.orthogonal import h_roots
+
+from orthogonal import h_roots
 
 from QuadratureRule import QuadratureRule
 

@@ -5,11 +5,11 @@ of two real variables with the values encoded
 by the usual color code.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import real, where, meshgrid
+from numpy import real, where, meshgrid, atleast_2d
 from matplotlib.pyplot import gca
 
 from color_map import color_map
@@ -54,7 +54,9 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
         axes = gca()
 
     # Region to cut out
-    i = where((xmin <= x) & (x <= xmax))[0]
+    x = atleast_2d(x)
+    y = atleast_2d(y)
+    i = where((xmin <= x) & (x <= xmax))[1]
     j = where((ymin <= y) & (y <= ymax))[0]
     I, J = meshgrid(i,j)
 

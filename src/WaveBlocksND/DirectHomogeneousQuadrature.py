@@ -5,11 +5,11 @@ and matrix elements by using standard quadrature rules.
 Here we handle the homogeneous case.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, ones, squeeze, conjugate, dot, einsum
+from numpy import zeros, ones, conjugate, dot, einsum
 from scipy.linalg import sqrtm, inv #, svd, diagsvd
 
 from DirectQuadrature import DirectQuadrature
