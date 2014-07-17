@@ -131,13 +131,16 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         if lcket is None:
             lcket = lcbra
 
+        pacbras = lcbra.get_wavepackets()
+        packets = lcket.get_wavepackets()
+
         # Packets can in principle have different number of components
         if component is not None:
             Nbra = [1] * lcbra.get_number_packets()
             Nket = [1] * lcket.get_number_packets()
         else:
-            Nbra = [ wp.get_number_components() for wp in lcbra.get_wavepackets() ]
-            Nket = [ wp.get_number_components() for wp in lcket.get_wavepackets() ]
+            Nbra = [ wp.get_number_components() for wp in pacbras ]
+            Nket = [ wp.get_number_components() for wp in packets ]
 
         # The partition scheme of the block vectors and block matrix
         partitionb = [0] + list(cumsum(Nbra))
@@ -145,15 +148,17 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
 
         result = zeros((sum(Nbra), sum(Nket)), dtype=complexfloating)
 
-        for row, pacbra in enumerate(lcbra.get_wavepackets()):
-            for col, packet in enumerate(lcket.get_wavepackets()):
-                if self._obey_oracle:
+        if self._obey_oracle:
+            for row, pacbra in enumerate(pacbras):
+                for col, packet in enumerate(packets):
                     if self._oracle.is_not_zero(pacbra, packet, component=component):
                         Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                         Q = reshape(Q, (Nbra[row], Nket[col]))
                         # Put the result into the global storage
                         result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = reshape(Q, (Nbra[row], Nket[col]))
-                else:
+        else:
+            for row, pacbra in enumerate(pacbras):
+                for col, packet in enumerate(packets):
                     Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                     Q = reshape(Q, (Nbra[row], Nket[col]))
                     # Put the result into the global storage
