@@ -11,7 +11,7 @@ of linear combinations of general wavepackets.
 from numpy import conjugate, transpose, dot, sqrt, array, repeat
 
 from Observables import Observables
-from LinearCombinationOfWPs import LinearCombinationOfWPs
+from GradientLCWP import GradientLCWP
 
 __all__ = ["ObservablesLCWP"]
 
@@ -35,6 +35,8 @@ class ObservablesLCWP(Observables):
         # A innerproduct to compute the integrals
         if innerproduct is not None:
             self._innerproduct = innerproduct
+
+        self._gradient = GradientLCWP()
 
 
     def set_innerproduct(self, innerproduct):
@@ -116,24 +118,12 @@ class ObservablesLCWP(Observables):
         :type component: Integer or ``None``.
         :return: The matrix :math:`M_T`.
         """
-        D = lincomb.get_dimension()
-        N = lincomb.get_number_components()
-
-        # TODO: Optimizing this. For large linear combinations, computing
-        #       and storing *all* gradient packets is inefficient. Maybe
-        #       better go packet by packet.
-        grad_lcs = [ LinearCombinationOfWPs(D, N) for d in xrange(D) ]
-        for packet in lincomb.get_wavepackets():
-            G = packet.get_gradient_operator()
-            gradient_wps = G.apply_gradient(packet, as_packet=True)
-            # Coefficient c_i=1.0 is wrong but won't be used for building the matrix anyway.
-            for d, grad_wp in enumerate(gradient_wps):
-                grad_lcs[d].add_wavepacket(grad_wp)
+        gradients = self._gradient.apply_gradient(lincomb, component=component)
 
         # Compute the matrices and sum up
-        OMT = self._innerproduct.build_matrix(grad_lcs[0], component=component)
-        for grad_lc in grad_lcs[1:]:
-            OMT += self._innerproduct.build_matrix(grad_lc, component=component)
+        OMT = self._innerproduct.build_matrix(gradients[0], component=component)
+        for gradient in gradients[1:]:
+            OMT += self._innerproduct.build_matrix(gradient, component=component)
 
         return OMT
 
