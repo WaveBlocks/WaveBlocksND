@@ -31,6 +31,8 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         :type delegate: A :py:class:`InnerProduct` subclass instance.
         :param oracle: The sparsity oracle to use. If the variable is ``None``
                        no oracle is used and all integrals are computed.
+
+        .. note:: Make sure to use an inhomogeneous inner product here.
         """
         # Pure convenience to allow setting of quadrature instance in constructor
         self.set_delegate(delegate)
@@ -116,13 +118,13 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
 
         :param lcbra: The linear combination :math:`\Upsilon` from the bra with :math:`J` summands :math:`\Psi_j`.
         :param lcket: The linear combination :math:`\Upsilon^\prime` from the ket with :math:`J^\prime` summands :math:`\Psi_j^\prime`.
-        :param operator: A matrix-valued function :math:`f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
+        :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.
         :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those
                           components will be taken into account for the computation.
         :type component: Integer or ``None``, default is ``None``.
         :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.
         :type eval_at_once: Boolean, default is ``False``.
-        :return: A matrix of size :math:`J \times J^\prime`.
+        :return: A matrix of size :math:`\sum_{j\in J} N_j \times \sum_{j^\prime\in J^\prime} N_{j^\prime}`.
         :type: An :py:class:`ndarray`.
         """
         # Allow to omit the ket if it is the same as the bra
