@@ -103,6 +103,7 @@ Wavepackets
    waveblocks_classes/LinearCombinationOfWPs
    waveblocks_classes/LinearCombinationOfHAWPs
 
+   waveblocks_classes/GradientLCWP
    waveblocks_classes/GradientLinearCombinationHAWP
 
 Inner Products

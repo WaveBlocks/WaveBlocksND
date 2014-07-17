@@ -55,11 +55,12 @@ from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 from Gradient import Gradient
 from GradientHAWP import GradientHAWP
 
-#
+# Linear combinations
 from LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from LinearCombinationOfWPs import LinearCombinationOfWPs
 from LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
 
+from GradientLCWP import GradientLCWP
 from GradientLinearCombinationHAWP import GradientLinearCombinationHAWP
 
 # Quadrature rules
