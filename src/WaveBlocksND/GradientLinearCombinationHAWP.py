@@ -55,7 +55,7 @@ class GradientLinearCombinationHAWP(Gradient):
         # Handle each wavepacket individually
         for j in xrange(J):
             packet = lincomb.get_wavepacket(j)
-            grads = G.apply_gradient(packet, component=component, as_packet=True)
+            grads = G.apply_gradient(packet, component=component)
 
             for d, grad in enumerate(grads):
                 new_lincombs[d].add_wavepacket(grad, Cj[j])

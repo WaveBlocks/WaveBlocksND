@@ -114,7 +114,7 @@ def compute_eigenstate(parameters):
         z = zeros_like(HAWP.get_coefficient_vector(), dtype=complexfloating)
         HAWP.set_coefficient_vector(z)
         HAWP.set_coefficient(N, i, 1.0)
-        Kn, cnew = GR.apply_gradient(HAWP, component=N)
+        Kn, cnew = GR.apply_gradient(HAWP, component=N, as_packet=False)
         vects[i] = cnew
 
     for j in BS:

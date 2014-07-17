@@ -132,8 +132,8 @@ class ObservablesMixedHAWP(Observables):
         ekin = []
 
         for n in components:
-            gradpacbra = self._gradient.apply_gradient(pacbra, component=n, as_packet=True)
-            gradpacket = self._gradient.apply_gradient(packet, component=n, as_packet=True)
+            gradpacbra = self._gradient.apply_gradient(pacbra, component=n)
+            gradpacket = self._gradient.apply_gradient(packet, component=n)
             Q = [self._innerproduct.quadrature(gpb, gpk, diag_component=n) for gpb, gpk in zip(gradpacbra, gradpacket)]
             ekin.append(0.5*sum(Q))
 
