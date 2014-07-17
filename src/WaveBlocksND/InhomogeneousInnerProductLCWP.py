@@ -92,9 +92,16 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
         if lcket is None:
             lcket = lcbra
 
-        M = self.build_matrix(lcbra, lcket, operator=operator, eval_at_once=eval_at_once)
-        Nbra = array([ wp.get_number_components() for wp in lcbra.get_wavepackets() ])
-        Nket = array([ wp.get_number_components() for wp in lcket.get_wavepackets() ])
+        # Packets can in principle have different number of components
+        if component is not None:
+            Nbra = array([1] * lcbra.get_number_packets())
+            Nket = array([1] * lcket.get_number_packets())
+        else:
+            Nbra = array([ wp.get_number_components() for wp in lcbra.get_wavepackets() ])
+            Nket = array([ wp.get_number_components() for wp in lcket.get_wavepackets() ])
+
+        M = self.build_matrix(lcbra, lcket, operator=operator, component=component, eval_at_once=eval_at_once)
+
         cbra = lcbra.get_coefficients()
         cket = lcket.get_coefficients()
         cbra = repeat(cbra, Nbra)
