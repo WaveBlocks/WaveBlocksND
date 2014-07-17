@@ -103,6 +103,7 @@ Wavepackets
    waveblocks_classes/LinearCombinationOfWPs
    waveblocks_classes/LinearCombinationOfHAWPs
 
+   waveblocks_classes/GradientLCWP
    waveblocks_classes/GradientLinearCombinationHAWP
 
 Inner Products
@@ -143,6 +144,7 @@ Observables
 
    waveblocks_classes/Observables
    waveblocks_classes/ObservablesHAWP
+   waveblocks_classes/ObservablesMixedHAWP
    waveblocks_classes/ObservablesLCWP
 
 Time propagation

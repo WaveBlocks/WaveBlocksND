@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: ObservablesLCWP
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

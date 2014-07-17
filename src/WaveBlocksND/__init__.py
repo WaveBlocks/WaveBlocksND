@@ -1,7 +1,7 @@
 """The WaveBlocks Project
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -55,11 +55,12 @@ from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 from Gradient import Gradient
 from GradientHAWP import GradientHAWP
 
-#
+# Linear combinations
 from LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from LinearCombinationOfWPs import LinearCombinationOfWPs
 from LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
 
+from GradientLCWP import GradientLCWP
 from GradientLinearCombinationHAWP import GradientLinearCombinationHAWP
 
 # Quadrature rules
@@ -115,6 +116,7 @@ from SimulationLoopHagedornInhomogeneous import SimulationLoopHagedornInhomogene
 
 from Observables import Observables
 from ObservablesHAWP import ObservablesHAWP
+from ObservablesMixedHAWP import ObservablesMixedHAWP
 from ObservablesLCWP import ObservablesLCWP
 
 # Enable dynamic plugin loading for IOManager
