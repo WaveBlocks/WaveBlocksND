@@ -117,29 +117,31 @@ class HomogeneousInnerProductLCWP(InnerProduct):
         :return: A matrix of size :math:`\sum_{j\in J} N_j \times \sum_{j\in J} N_{j}`.
         :type: An :py:class:`ndarray`.
         """
+        packets = lcket.get_wavepackets()
+
         # Packets can in principle have different number of components
         if component is not None:
             N = [1] * lcket.get_number_packets()
         else:
-            N = [ wp.get_number_components() for wp in lcket.get_wavepackets() ]
+            N = [ wp.get_number_components() for wp in packets ]
 
         # The partition scheme of the block vectors and block matrix
         partition = [0] + list(cumsum(N))
 
         result = zeros((sum(N), sum(N)), dtype=complexfloating)
 
-        packets = lcket.get_wavepackets()
-
         # Elements below the diagonal
-        for row, pacbra in enumerate(packets):
-            for col, packet in enumerate(packets[:row]):
-                if self._obey_oracle:
+        if self._obey_oracle:
+            for row, pacbra in enumerate(packets):
+                for col, packet in enumerate(packets[:row]):
                     if self._oracle.is_not_zero(pacbra, packet, component=component):
                         Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                         Q = reshape(Q, (N[row], N[col]))
                         # Put the result into the global storage
                         result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = Q
-                else:
+        else:
+            for row, pacbra in enumerate(packets):
+                for col, packet in enumerate(packets[:row]):
                     Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                     Q = reshape(Q, (N[row], N[col]))
                     # Put the result into the global storage
