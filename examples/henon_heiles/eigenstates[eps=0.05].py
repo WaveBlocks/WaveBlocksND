@@ -9,7 +9,7 @@ eigenstates_indices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
 
 starting_point = [0, 0]
 
-eps = 0.5
+eps = 0.05
 
 hawp_template = {
     "type" : "HagedornWavepacket",
@@ -18,7 +18,7 @@ hawp_template = {
     "eps" : eps,
     "basis_shapes" : [{
             "type" : "HyperCubicShape",
-            "limits" : [20,20],
+            "limits" : [10,10],
             }]
     }
 
@@ -29,12 +29,12 @@ innerproduct = {
         'qr': {
             'type': 'TensorProductQR',
             'dimension': dimension,
-            'qr_rules': [{'dimension': 1, 'order': 25, 'type': 'GaussHermiteQR'},
-                         {'dimension': 1, 'order': 25, 'type': 'GaussHermiteQR'}]
+            'qr_rules': [{'dimension': 1, 'order': 15, 'type': 'GaussHermiteQR'},
+                         {'dimension': 1, 'order': 15, 'type': 'GaussHermiteQR'}]
         }
     }
 }
 
 # Grid for evaluation and plotting
-limits = [[-2, 2], [-2,2]]
+limits = [[-0.5, 0.5], [-0.5,0.5]]
 number_nodes = [500, 500]
