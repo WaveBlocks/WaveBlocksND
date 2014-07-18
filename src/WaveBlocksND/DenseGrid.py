@@ -3,16 +3,16 @@
 This file contains the abstract class for representing dense grids.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 
 __all__ = ["DenseGrid"]
 
 
-class DenseGrid(Grid):
+class DenseGrid(AbstractGrid):
     """This class is an abstract interface to dense grids in general.
     """
 

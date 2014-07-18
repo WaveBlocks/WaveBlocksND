@@ -5,7 +5,7 @@ Hagedorn wavepackets in a more efficient and storage friendly way
 than the general linear combination class.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -16,7 +16,7 @@ from scipy.linalg import det, inv
 
 from LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from HagedornWavepacket import HagedornWavepacket
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 from GridWrapper import GridWrapper
 
 __all__ = ["LinearCombinationOfHAWPs"]
@@ -520,14 +520,14 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
     # TODO: Put all evaluation functions into common class
 
-    def _grid_wrap(self, grid):
+    def _grid_wrap(self, agrid):
         # TODO: Consider additional input types for "nodes":
         #       list of numpy ndarrays, list of single python scalars
-        if not isinstance(grid, Grid):
-            grid = atleast_2d(grid)
-            grid = grid.reshape(self._dimension, -1)
-            grid = GridWrapper(grid)
-        return grid
+        if not isinstance(agrid, AbstractGrid):
+            agrid = atleast_2d(agrid)
+            agrid = agrid.reshape(self._dimension, -1)
+            agrid = GridWrapper(agrid)
+        return agrid
 
 
     def _evaluate_phi0(self, nodes, packetindex, prefactor=False):

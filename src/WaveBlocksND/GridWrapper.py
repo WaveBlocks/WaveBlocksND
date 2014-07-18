@@ -4,18 +4,18 @@ This file contains a tiny wrapper to wrap
 numpy ndarrays into Grid instances.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 from numpy import atleast_1d, abs
 
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 
 __all__ = ["GridWrapper"]
 
 
-class GridWrapper(Grid):
+class GridWrapper(AbstractGrid):
     r"""This class constructs a thin layer around an ``ndarray`` and wraps
     it as :py:class:`Grid` subclass for API compatibility. The array must
     have a shape of :math:`(D, N)` with :math:`N` the overall number of nodes.

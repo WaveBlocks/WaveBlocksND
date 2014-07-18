@@ -5,7 +5,7 @@ that contain exactly two energy levels :math:`\lambda_i`. The number
 of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,7 +13,7 @@ import sympy
 import numpy
 
 from MatrixPotential import MatrixPotential
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 from GridWrapper import GridWrapper
 import GlobalDefaults
 
@@ -90,14 +90,14 @@ class MatrixPotential2S(MatrixPotential):
         self._remainder_eigen_ih_n = None
 
 
-    def _grid_wrap(self, grid):
+    def _grid_wrap(self, agrid):
         # TODO: Consider additional input types for "nodes":
         #       list of numpy ndarrays, list of single python scalars
-        if not isinstance(grid, Grid):
-            grid = numpy.atleast_2d(grid)
-            grid = grid.reshape(self._dimension, -1)
-            grid = GridWrapper(grid)
-        return grid
+        if not isinstance(agrid, AbstractGrid):
+            agrid = numpy.atleast_2d(agrid)
+            agrid = agrid.reshape(self._dimension, -1)
+            agrid = GridWrapper(agrid)
+        return agrid
 
 
     def evaluate_at(self, grid, entry=None, as_matrix=True):

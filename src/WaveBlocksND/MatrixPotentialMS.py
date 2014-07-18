@@ -6,7 +6,7 @@ the code works also with 1 or 2 levels, but it is not used that way.)
 The number of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -15,7 +15,7 @@ import numpy
 from scipy import linalg
 
 from MatrixPotential import MatrixPotential
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 from GridWrapper import GridWrapper
 import GlobalDefaults
 
@@ -67,14 +67,14 @@ class MatrixPotentialMS(MatrixPotential):
         self._HV_n = None
 
 
-    def _grid_wrap(self, grid):
+    def _grid_wrap(self, agrid):
         # TODO: Consider additional input types for "nodes":
         #       list of numpy ndarrays, list of single python scalars
-        if not isinstance(grid, Grid):
-            grid = numpy.atleast_2d(grid)
-            grid = grid.reshape(self._dimension, -1)
-            grid = GridWrapper(grid)
-        return grid
+        if not isinstance(agrid, AbstractGrid):
+            agrid = numpy.atleast_2d(agrid)
+            agrid = agrid.reshape(self._dimension, -1)
+            agrid = GridWrapper(agrid)
+        return agrid
 
 
     def evaluate_at(self, grid, entry=None, as_matrix=True):
@@ -342,7 +342,7 @@ class MatrixPotentialMS(MatrixPotential):
 
     def _evaluate_jacobian_of_matrix(self, variable, grid, entry=None):
         # Note: We assume grid is already of supertype Grid
-        #issubclass(type(grid), Grid)
+        #issubclass(type(grid), AbstractGrid)
         n = grid.get_number_nodes(overall=True)
         N = self._number_components
         nodes = grid.get_nodes(split=True)
@@ -357,7 +357,7 @@ class MatrixPotentialMS(MatrixPotential):
 
     def _evaluate_hessian_of_matrix(self, variables, grid, entry=None):
         # Note: We assume grid is already of supertype Grid
-        #issubclass(type(grid), Grid)
+        #issubclass(type(grid), AbstractGrid)
         n = grid.get_number_nodes(overall=True)
         N = self._number_components
         nodes = grid.get_nodes(split=True)
