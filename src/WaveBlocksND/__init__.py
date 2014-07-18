@@ -11,7 +11,7 @@ __version__ = 0.2
 from ComplexMath import ContinuousSqrt
 
 # Grids
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 from DenseGrid import DenseGrid
 from TensorProductGrid import TensorProductGrid
 from GridWrapper import GridWrapper

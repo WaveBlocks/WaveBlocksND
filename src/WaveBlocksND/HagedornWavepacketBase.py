@@ -7,12 +7,12 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import vstack, vsplit, cumsum, zeros, array, complexfloating, pi, dot, atleast_2d, einsum
-from scipy import exp, sqrt, conjugate
+from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, vsplit, vstack, zeros
+from scipy import conjugate, exp, sqrt
 from scipy.linalg import det, inv, norm
 
 from Wavepacket import Wavepacket
-from Grid import Grid
+from AbstractGrid import AbstractGrid
 from GridWrapper import GridWrapper
 from GradientHAWP import GradientHAWP
 
@@ -246,14 +246,14 @@ class HagedornWavepacketBase(Wavepacket):
     # the same way for homogeneous and inhomogeneous Hagedorn wavepackets.
 
 
-    def _grid_wrap(self, grid):
+    def _grid_wrap(self, agrid):
         # TODO: Consider additional input types for "nodes":
         #       list of numpy ndarrays, list of single python scalars
-        if not isinstance(grid, Grid):
-            grid = atleast_2d(grid)
-            grid = grid.reshape(self._dimension, -1)
-            grid = GridWrapper(grid)
-        return grid
+        if not isinstance(agrid, AbstractGrid):
+            agrid = atleast_2d(agrid)
+            agrid = agrid.reshape(self._dimension, -1)
+            agrid = GridWrapper(agrid)
+        return agrid
 
 
     def _evaluate_phi0(self, component, nodes, prefactor=False):
