@@ -1,21 +1,22 @@
 """The WaveBlocks Project
 
-This file contains the class which represents a homogeneous Hagedorn wavepacket.
+This file contains code for computing the eigenstates of a given
+potential in terms of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
-from numpy import complexfloating, squeeze, real, ones, zeros_like, conj, sum, argsort
+from numpy import argsort, atleast_1d, complexfloating, conjugate, dot, ones, real, squeeze, sum, transpose, zeros_like
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh
 
 from WaveBlocksND import BlockFactory
-from WaveBlocksND import ParameterLoader
 from WaveBlocksND import GradientHAWP
 from WaveBlocksND import IOManager
+from WaveBlocksND import ParameterLoader
 
 
 def compute_eigenstate(parameters):
@@ -23,7 +24,10 @@ def compute_eigenstate(parameters):
     Special variables necessary in configuration:
 
     * eigenstate_of_level (default: 0)
-    * states_indices (default: [0])
+    * eigenstates_indices (default: [0])
+    * starting_point (default: (2, ..., 2))
+    * hawp_template
+    * innerproduct
     """
     D = parameters["dimension"]
 
@@ -55,7 +59,11 @@ def compute_eigenstate(parameters):
     # the minimizer will always stay away from zero a tiny bit.
     # The current starting point can give issues if the potential
     # is stationary at the point (2, ..., 2) but that is less likely.
-    x0 = 2.0*ones(D)
+    if parameters.has_key("starting_point"):
+        x0 = atleast_1d(parameters["starting_point"])
+    else:
+        x0 = 2.0*ones(D)
+
     q0 = fmin(f, x0, xtol=1e-12)
     q0 = q0.reshape((D,1))
 
@@ -66,10 +74,10 @@ def compute_eigenstate(parameters):
     # Q_0 = H^(-1/4)
     H = V.evaluate_hessian_at(q0)
     Q0 = inv(sqrtm(sqrtm(H)))
-    # Take P_00 = i Q_0^(-1)
+    # Take P_0 = i Q_0^(-1)
     P0 = 1.0j * inv(Q0)
 
-    #
+    # The parameter set Pi is ...
     print(70*"-")
     print("Parameter values are:")
     print("---------------------")
@@ -82,9 +90,11 @@ def compute_eigenstate(parameters):
     print(" P0:")
     print(str(P0))
     # Consistency check
-    print(" consistency:")
-    print(str(conj(Q0)*P0 - conj(P0)*Q0))
-    print(70*"-")
+    print(" Consistency check:")
+    print("   P^T Q - Q^T P  =?=  0")
+    print(dot(P0.T,Q0) - dot(Q0.T,P0))
+    print("   Q^H P - P^H Q  =?=  2i")
+    print(dot(transpose(conjugate(Q0)), P0) - dot(transpose(conjugate(P0)), Q0))
 
     # Next find the new coefficients c'
     HAWP = BF.create_wavepacket(parameters["hawp_template"])
@@ -121,7 +131,7 @@ def compute_eigenstate(parameters):
         for k in BS:
             cj = vects[j]
             ck = vects[k]
-            entry = 0.5 * squeeze(sum(conj(cj) * ck))
+            entry = 0.5 * squeeze(sum(conjugate(cj) * ck))
             MT[BS[j], BS[k]] = entry
 
     # Find eigenvalues and eigenvectors of the whole matrix
@@ -162,11 +172,7 @@ def compute_eigenstate(parameters):
         # Save all the wavepacket data
         bid = IOM.create_block(groupid=gid)
         IOM.add_wavepacket(parameters, blockid=bid, key=KEY)
-        IOM.save_wavepacket_description(HAWP.get_description(), blockid=bid)
-        for shape in HAWP.get_basis_shapes():
-            IOM.save_wavepacket_basisshapes(shape, blockid=bid)
-        IOM.save_wavepacket_parameters(HAWP.get_parameters(key=KEY), timestep=0, blockid=bid, key=KEY)
-        IOM.save_wavepacket_coefficients(HAWP.get_coefficients(), HAWP.get_basis_shapes(), timestep=0, blockid=bid)
+        IOM.save_wavepacket(HAWP, 0, blockid=bid)
 
     IOM.finalize()
 
