@@ -93,7 +93,7 @@ class ObservablesHAWP(Observables):
         ekin = []
 
         for n in components:
-            Kprime, cnew = self._gradient.apply_gradient(wavepacket, component=n)
+            Kprime, cnew = self._gradient.apply_gradient(wavepacket, component=n, as_packet=False)
             ekin.append(0.5 * sum(sum(conjugate(cnew)*cnew, axis=1), axis=0))
 
         if summed is True:

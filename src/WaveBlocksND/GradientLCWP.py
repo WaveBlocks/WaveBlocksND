@@ -49,7 +49,7 @@ class GradientLCWP(Gradient):
 
         for i, packet in enumerate(lincomb.get_wavepackets()):
             G = packet.get_gradient_operator()
-            gradient_wps = G.apply_gradient(packet, component=component, as_packet=True)
+            gradient_wps = G.apply_gradient(packet, component=component)
             for d, grad_wp in enumerate(gradient_wps):
                 gradients[d].add_wavepacket(grad_wp, coefficient=coefficients[i,0])
 
