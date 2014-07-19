@@ -3,14 +3,14 @@
 This file contains the abstract class for representing grids.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-__all__ = ["Grid"]
+__all__ = ["AbstractGrid"]
 
 
-class Grid(object):
+class AbstractGrid(object):
     """This class is an abstract interface to grids in general.
     """
 

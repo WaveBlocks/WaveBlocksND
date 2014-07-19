@@ -4,12 +4,12 @@ This file contains a class for representing
 dense regular tensor product grids.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 import operator
-from numpy import mgrid, ogrid, atleast_1d, array, diff, squeeze, hstack, floating, complexfloating
+from numpy import array, atleast_1d, complexfloating, diff, floating, hstack, mgrid, ogrid, squeeze
 
 from DenseGrid import DenseGrid
 

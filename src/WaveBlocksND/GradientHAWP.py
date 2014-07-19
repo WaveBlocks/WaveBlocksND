@@ -73,7 +73,7 @@ class GradientHAWP(Gradient):
         return (Ke, cnew)
 
 
-    def apply_gradient(self, wavepacket, component=None, as_packet=False):
+    def apply_gradient(self, wavepacket, component=None, as_packet=True):
         r"""Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x` on the basis
         functions :math:`\phi(x)` of a component :math:`\Phi_i` of the Hagedorn wavepacket :math:`\Psi`.
 
@@ -82,7 +82,7 @@ class GradientHAWP(Gradient):
         :param component: The index :math:`i` of the component :math:`\Phi_i`.
         :type component: Integer or ``None``.
         :param as_packet: Whether to return a full packet.
-        :type as_packet: Boolean, default is ``False``.
+        :type as_packet: Boolean, default is ``True``.
         :return: A list of length :math:`N` or a single pair of extended basis shapes :math:`\mathfrak{\dot{K}}_i`
                  and new coefficients :math:`c^\prime_i`.
                  If requested, copies of the original wavepacket are returned with these new values set.

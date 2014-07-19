@@ -9,7 +9,7 @@ by the usual color code.
 @license: Modified BSD License
 """
 
-from numpy import real, where, meshgrid, atleast_2d
+from numpy import meshgrid, real, where
 from matplotlib.pyplot import gca
 
 from color_map import color_map
@@ -54,8 +54,8 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
         axes = gca()
 
     # Region to cut out
-    x = atleast_2d(x)
-    y = atleast_2d(y)
+    x = x.reshape(1,-1)
+    y = y.reshape(-1,1)
     i = where((xmin <= x) & (x <= xmax))[1]
     j = where((ymin <= y) & (y <= ymax))[0]
     I, J = meshgrid(i,j)
