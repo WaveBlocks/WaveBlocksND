@@ -43,7 +43,7 @@ def surfcf(gridx, gridy, phase, modulus, colormap=None):
         colormap = compute_color_map()
 
     # The real(.) is necessary just to get an array with dtype real
-    mesh = mlab.mesh(gridx, gridy, real(modulus), scalars=phase)
+    mesh = mlab.mesh(real(gridx), real(gridy), real(modulus), scalars=real(phase))
 
     # Set the custom color map
     mesh.module_manager.scalar_lut_manager.use_default_range = False
