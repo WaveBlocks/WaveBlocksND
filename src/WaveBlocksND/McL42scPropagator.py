@@ -1,9 +1,9 @@
 """The WaveBlocks Project
 
-This file contains the semiclassical propagator class for homogeneous wavepackets.
+This file contains a propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2012, 2014 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2013, 2014 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -16,13 +16,14 @@ from BlockFactory import BlockFactory
 from SplittingParameters import SplittingParameters
 from ComplexMath import cont_angle
 
-__all__ = ["SemiclassicalPropagator"]
+__all__ = ["McL42scPropagator"]
 
 
-class SemiclassicalPropagator(Propagator, SplittingParameters):
+class McL42scPropagator(Propagator, SplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
-    Hagedorn wavepackets neglecting interaction."""
+    Hagedorn wavepackets neglecting interaction. It uses the MCL42 and the idea of the
+    semiclassical splitting"""
 
     def __init__(self, parameters, potential, packets=[]):
         r"""Initialize a new :py:class:`SemiclassicalPropagator` instance.
@@ -167,24 +168,36 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
         a = self._a
         b = self._b
 
-        # Propagate all packets
+        # Propagate all packets via "L42"
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
 
             # Propagate until 0.5*dt
-            h1 = 0.5*dt
-            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for Y4, better BM42, error: eps * (Delta t)^3
-            #nrtmp =  int(dt*eps**(-0.75)) # much more steps, for L42, error: eps * (Delta t)^5
-            nrtmp = int(sqrt(dt*eps)) # less steps, for L42, error: eps^2 * (Delta t)^3
+            h1 = dt*0.21132486540518713 # (3 - sqrt(3))/6
+            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for L42, error: eps * (Delta t)^3
+            #nrtmp = int(sqrt(dt*eps)) # less steps, for L42, error: eps^2 * (Delta t)^3
+            #nrtmp = int(dt**0.75*eps**(-0.5))# even less steps, for L42, error: eps * (Delta t)^5
+            nrtmp = int(sqrt(dt*eps**-0.75)) # less steps, for L42, error: eps * (Delta t)^5
             nrlocalsteps = max(1, 1+nrtmp)
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
+
+            # Do a potential step with the local non-quadratic taylor remainder
+            innerproduct = packet.get_innerproduct()
+            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, 0.5*dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
+
+            h2 = dt*0.5773502691896258 # 1/sqrt(3)
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, 0.5*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
