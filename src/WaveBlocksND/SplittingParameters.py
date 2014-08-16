@@ -3,7 +3,7 @@
 This file contains data to build several closely
 related splitting methods.
 
-@author: V. Gradinaru
+@author: V. Gradinaru, R. Bourquin
 @copyright: Copyright (C) 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
