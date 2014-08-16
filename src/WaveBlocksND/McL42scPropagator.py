@@ -22,7 +22,7 @@ __all__ = ["McL42scPropagator"]
 class McL42scPropagator(Propagator, SplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
-    Hagedorn wavepackets neglecting interaction. It uses the MCL42 and the idea of the
+    Hagedorn wavepackets neglecting interaction. It uses the McL42 and the idea of the
     semiclassical splitting"""
 
     def __init__(self, parameters, potential, packets=[]):
@@ -72,7 +72,7 @@ class McL42scPropagator(Propagator, SplittingParameters):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = self.build(parameters["splitting_method"])
+        self._a, self._b = self.build("L42")
 
 
     def __str__(self):
@@ -172,7 +172,7 @@ class McL42scPropagator(Propagator, SplittingParameters):
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
 
-            # Propagate until 0.5*dt
+            # Propagate
             h1 = dt*0.21132486540518713 # (3 - sqrt(3))/6
             #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for L42, error: eps * (Delta t)^3
             #nrtmp = int(sqrt(dt*eps)) # less steps, for L42, error: eps^2 * (Delta t)^3
