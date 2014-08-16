@@ -14,6 +14,7 @@ from numpy.linalg import inv, det
 from Propagator import Propagator
 from BlockFactory import BlockFactory
 from SplittingParameters import SplittingParameters
+from ProcessingSplittingParameters import ProcessingSplittingParameters
 from ComplexMath import cont_angle
 
 __all__ = ["Pre764scPropagator"]
@@ -73,7 +74,8 @@ class Pre764scPropagator(Propagator, SplittingParameters):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = self.build(parameters["splitting_method"])
+        self._a, self._b = SplittingParameters().build(parameters["splitting_method"])
+        self._A, self._B, self._Y, self._Z = ProcessingSplittingParameters().build("BCR764")
 
 
     def __str__(self):
@@ -167,20 +169,8 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         a = self._a
         b = self._b
         # Processor
-        z4Abig = zeros(6)
-        z4Abig[0] = -0.3346222298730
-        z4Abig[1] = 1.097567990732164
-        z4Abig[2] = -1.038088746096783
-        z4Abig[3] = 0.6234776317921379
-        z4Abig[4] = -1.102753206303191
-        z4Abig[5] = -0.0141183222088869
-        y4Beps = zeros(6)
-        y4Beps[0] = -1.621810118086801
-        y4Beps[1] = 0.0061709468110142
-        y4Beps[2] = 0.8348493592472594
-        y4Beps[3] = -0.0511253369989315
-        y4Beps[4] = 0.5633782670698199
-        y4Beps[5] = -0.5
+        Z = self._Z
+        Y = self._Y
         # Apply preprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
@@ -188,10 +178,10 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             nrlocalsteps = max(1, 1+nrtmp)
             for j in xrange(6):
                 # Step with Abig
-                h1 = -z4Abig[j]*dt
+                h1 = -Z[j]*dt
                 self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
                 # Step with Beps
-                h2 = -y4Beps[j]*dt
+                h2 = -Y[j]*dt
                 # Do a potential step with the local non-quadratic taylor remainder
                 innerproduct = packet.get_innerproduct()
                 F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
@@ -211,20 +201,8 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         a = self._a
         b = self._b
         # Postprocessor
-        z4Abig = zeros(6)
-        z4Abig[0] = -0.3346222298730
-        z4Abig[1] = 1.097567990732164
-        z4Abig[2] = -1.038088746096783
-        z4Abig[3] = 0.6234776317921379
-        z4Abig[4] = -1.102753206303191
-        z4Abig[5] = -0.0141183222088869
-        y4Beps = zeros(6)
-        y4Beps[0] = -1.621810118086801
-        y4Beps[1] = 0.0061709468110142
-        y4Beps[2] = 0.8348493592472594
-        y4Beps[3] = -0.0511253369989315
-        y4Beps[4] = 0.5633782670698199
-        y4Beps[5] = -0.5
+        Z = self._Z
+        Y = self._Y
         # Apply postprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
@@ -232,7 +210,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             nrlocalsteps = max(1, 1+nrtmp)
             for j in xrange(6-1,-1,-1):
                 # Step with Beps
-                h2 = y4Beps[j]*dt
+                h2 = Y[j]*dt
                 # Do a potential step with the local non-quadratic taylor remainder
                 innerproduct = packet.get_innerproduct()
                 F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
@@ -241,7 +219,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
                 coefficients = self._matrix_exponential(F, coefficients, h2/eps**2)
                 packet.set_coefficient_vector(coefficients)
                 # Step with Abig
-                h1 = z4Abig[j]*dt
+                h1 = Z[j]*dt
                 self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
 
 
@@ -257,15 +235,8 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         a = self._a
         b = self._b
         # Kernel Pattern ABA
-        Beps = zeros(4)
-        Beps[1] = 1.5171479707207228
-        Beps[2] = 1.0 - 2.0 * Beps[1]
-        Beps[3] = 1.0 * Beps[1]
-        Abig = zeros(4)
-        Abig[0] = 0.5600879810924619
-        Abig[1] = 0.5 - Abig[0]
-        Abig[2] = 1.0 * Abig[1]
-        Abig[3] = 1.0 * Abig[0]
+        Beps = self._A
+        Abig = self._B
         # Propagate all packets
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
@@ -274,8 +245,9 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             for j in xrange(4):
                 # Step with Beps
                 h2 = Beps[j]*dt
-                # Do a potential step with the local non-quadratic taylor remainder
-                if j>0: # Beps[0] = 0, hence nothing to to
+                # Do a potential step with the local non-quadratic Taylor remainder
+                # Beps[0] = 0, hence nothing to do
+                if j>0:
                     innerproduct = packet.get_innerproduct()
                     F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
@@ -283,5 +255,5 @@ class Pre764scPropagator(Propagator, SplittingParameters):
                     coefficients = self._matrix_exponential(F, coefficients, h2/eps**2)
                     packet.set_coefficient_vector(coefficients)
                 # Step with Abig
-                h = Abig[j]*dt
-                self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h], nrlocalsteps, [packet], [packet,leading_chi])
+                h1 = Abig[j]*dt
+                self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
