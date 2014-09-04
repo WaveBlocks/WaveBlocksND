@@ -19,7 +19,7 @@ class ProcessingSplittingParameters(object):
     def build(self, method):
         r"""
         :param method: A string specifying the method for time integration.
-        :return: Two arrays :math:`a` and :math:`b`.
+        :return: Four arrays :math:`a`, :math:`b` and :math:`y`, :math:`z`.
 
         ====== ======= ================= =========
         Method Order   Authors           Reference
@@ -72,8 +72,10 @@ class ProcessingSplittingParameters(object):
 
         :param psi1: First evolution operator :math:`\Psi_a`
         :param psi2: Second evolution operator :math:`\Psi_b`
-        :param a: Parameters for evolution with :math:`\Psi_a`
-        :param b: Parameters for evolution with :math:`\Psi_b`
+        :param a: Parameters for evolution with operator :math:`\Psi_a`
+        :param b: Parameters for evolution with operator :math:`\Psi_b`
+        :param y: Parameters for evolution with processor :math:`\Pi_y`
+        :param z: Parameters for evolution with processor :math:`\Pi_z`
         :param tspan: Timespan :math:`t` of a single, full splitting step
         :param N: Number of substeps to perform
         :param args1: Additional optional arguments of :math:`\Psi_a`

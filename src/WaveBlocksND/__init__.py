@@ -41,6 +41,7 @@ from Pre764scPropagator import Pre764scPropagator
 from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 from SplittingParameters import SplittingParameters
 from PerturbedSplittingParameters import PerturbedSplittingParameters
+from ProcessingSplittingParameters import ProcessingSplittingParameters
 
 from IOManager import IOManager
 
