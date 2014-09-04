@@ -40,6 +40,7 @@ from McL84scPropagator import McL84scPropagator
 from Pre764scPropagator import Pre764scPropagator
 from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 from SplittingParameters import SplittingParameters
+from PerturbedSplittingParameters import PerturbedSplittingParameters
 
 from IOManager import IOManager
 
