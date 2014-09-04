@@ -157,6 +157,7 @@ Time propagation
 
    waveblocks_classes/SplittingParameters
    waveblocks_classes/PerturbedSplittingParameters
+   waveblocks_classes/ProcessingSplittingParameters
 
    waveblocks_classes/Propagator
    waveblocks_classes/FourierPropagator
