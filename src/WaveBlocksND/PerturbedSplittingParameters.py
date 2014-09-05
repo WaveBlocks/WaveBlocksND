@@ -8,7 +8,7 @@ related splitting methods for perturbed operators.
 @license: Modified BSD License
 """
 
-from numpy import zeros
+from numpy import zeros, floating
 
 __all__ = ["PerturbedSplittingParameters"]
 
@@ -119,26 +119,31 @@ class PerturbedSplittingParameters(object):
         return a, b
 
 
-    def intsplit(self, psi1, psi2, a, b, tspan, N, args1=[], args2=[]):
+    def intsplit(self, psia, psib, a, b, tspan, N, argsa=[], argsb=[]):
         r"""
         Compute a single, full propagation step by operator splitting.
 
-        :param psi1: First evolution operator :math:`\Psi_a`
-        :param psi2: Second evolution operator :math:`\Psi_b`
+        :param psia: First evolution operator :math:`\Psi_a`
+        :param psib: Second evolution operator :math:`\Psi_b`
         :param a: Parameters for evolution with :math:`\Psi_a`
         :param b: Parameters for evolution with :math:`\Psi_b`
         :param tspan: Timespan :math:`t` of a single, full splitting step
         :param N: Number of substeps to perform
-        :param args1: Additional optional arguments of :math:`\Psi_a`
-        :param args2: Additional optional arguments of :math:`\Psi_b`
+        :param argsa: Additional optional arguments of :math:`\Psi_a`
+        :param argsb: Additional optional arguments of :math:`\Psi_b`
 
-        .. note:: The values for ``args1`` and ``args2`` have to be
+        .. note:: The values for ``argsa`` and ``argsb`` have to be
                   ``list``s even in case of single items.
         """
-        s = a.shape[0]
+        psi = (psia, psib)
+        args = (argsa, argsb)
         h = (tspan[1] - tspan[0]) / float(N)
+        sa = a.shape[0]
+        sb = b.shape[0]
+        c = zeros(sa+sb, dtype=floating)
+        c[::2] = a
+        c[1::2] = b
 
         for k in xrange(N):
-            for j in xrange(s):
-                psi1(a[j]*h, *args1)
-                psi2(b[j]*h, *args2)
+            for j in xrange(sa+sb):
+                psi[j%2](c[j]*h, *args[j%2])
