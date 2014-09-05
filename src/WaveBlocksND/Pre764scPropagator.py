@@ -8,7 +8,7 @@ This file contains a propagator class for homogeneous wavepackets.
 """
 
 from functools import partial
-from numpy import dot, eye, atleast_2d, sqrt, zeros
+from numpy import dot, eye, atleast_2d, sqrt
 from numpy.linalg import inv, det
 
 from Propagator import Propagator

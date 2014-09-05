@@ -13,13 +13,13 @@ from numpy.linalg import inv, det
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
-from SplittingParameters import SplittingParameters
+from PerturbedSplittingParameters import PerturbedSplittingParameters
 from ComplexMath import cont_angle
 
 __all__ = ["McL84scPropagator"]
 
 
-class McL84scPropagator(Propagator, SplittingParameters):
+class McL84scPropagator(Propagator, PerturbedSplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
     Hagedorn wavepackets neglecting interaction. It uses the McL84 and the idea of the
@@ -72,7 +72,7 @@ class McL84scPropagator(Propagator, SplittingParameters):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = self.build("L84")
+        self._a, self._b = PerturbedSplittingParameters().build("L84")
 
 
     def __str__(self):
