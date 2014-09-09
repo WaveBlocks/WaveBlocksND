@@ -27,7 +27,7 @@ class PerturbedSplittingParameters(object):
         L42    (4,2)  McLachlan [1]_ page 6
         L62    (6,2)  McLachlan [1]_ page 6
         L82    (8,2)  McLachlan [1]_ page 6
-        L10    (10,2) McLachlan [1]_ page 6
+        L102   (10,2) McLachlan [1]_ page 6
         L84    (8,4)  McLachlan [1]_ page 8
         ====== ====== ========= =========
 
