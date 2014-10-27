@@ -35,8 +35,13 @@ from FourierPropagator import FourierPropagator
 from HagedornPropagator import HagedornPropagator
 from MagnusPropagator import MagnusPropagator
 from SemiclassicalPropagator import SemiclassicalPropagator
+from McL42scPropagator import McL42scPropagator
+from McL84scPropagator import McL84scPropagator
+from Pre764scPropagator import Pre764scPropagator
 from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 from SplittingParameters import SplittingParameters
+from PerturbedSplittingParameters import PerturbedSplittingParameters
+from ProcessingSplittingParameters import ProcessingSplittingParameters
 
 from IOManager import IOManager
 

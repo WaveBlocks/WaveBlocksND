@@ -1,9 +1,9 @@
 """The WaveBlocks Project
 
-This file contains the semiclassical propagator class for homogeneous wavepackets.
+This file contains a propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2012, 2014 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2013, 2014 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,16 +13,17 @@ from numpy.linalg import inv, det
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
-from SplittingParameters import SplittingParameters
+from PerturbedSplittingParameters import PerturbedSplittingParameters
 from ComplexMath import cont_angle
 
-__all__ = ["SemiclassicalPropagator"]
+__all__ = ["McL84scPropagator"]
 
 
-class SemiclassicalPropagator(Propagator, SplittingParameters):
+class McL84scPropagator(Propagator, PerturbedSplittingParameters):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
-    Hagedorn wavepackets neglecting interaction."""
+    Hagedorn wavepackets neglecting interaction. It uses the McL84 and the idea of the
+    semiclassical splitting"""
 
     def __init__(self, parameters, potential, packets=[]):
         r"""Initialize a new :py:class:`SemiclassicalPropagator` instance.
@@ -71,7 +72,7 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = self.build(parameters["splitting_method"])
+        self._a, self._b = PerturbedSplittingParameters().build("L84")
 
 
     def __str__(self):
@@ -98,7 +99,7 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
         self._prepare_potential()
 
 
-    # TODO: Consider removing this, duplicate
+    # TODO: Consider removig this, duplicate
     def get_number_components(self):
         r""":return: The number :math:`N` of components :math:`\Phi_i` of :math:`\Psi`.
         """
@@ -160,32 +161,72 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
         wavepacket at time :math:`t + \tau`. We perform exactly one timestep of size
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
-        The semiclassical propagation scheme is used.
+        The semiclassical propagations scheme is used.
         """
         # Cache some parameter values
         dt = 1.0*self._dt
         a = self._a
         b = self._b
 
-        # Propagate all packets
+        # Propagate all packets via "L84"
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
 
-            # Propagate until 0.5*dt
-            h1 = 0.5*dt
-            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for Y4, better BM42, error: eps * (Delta t)^3
-            #nrtmp =  int(dt*eps**(-0.75)) # much more steps, for L42, error: eps * (Delta t)^5
-            nrtmp = int(sqrt(dt*eps)) # less steps, for L42, error: eps^2 * (Delta t)^3
+            # Propagate
+            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for L42, error: eps^4 * (Delta t)^5
+            #nrtmp = int(dt**0.75*eps**(-0.5)) # even less steps, for L42, error: eps^2 * (Delta t)^3
+            #nrtmp = int(sqrt(dt/eps)) # less steps, for L84, error: eps^2 * (Delta t)^5
+            nrtmp = int(sqrt(dt*eps**-0.75)) # less steps, for L42, error: eps * (Delta t)^5
             nrlocalsteps = max(1, 1+nrtmp)
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
+
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+
+            # Do a potential step with the local non-quadratic Taylor remainder
+            innerproduct = packet.get_innerproduct()
+            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, b[0]*dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
+
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, b[1]*dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
+
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+
+            # Do a potential step with the local non-quadratic Taylor remainder
+            innerproduct = packet.get_innerproduct()
+            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, b[2]*dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
+
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+
+            # Do a potential step with the local non-quadratic Taylor remainder
+            innerproduct = packet.get_innerproduct()
+            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, b[1]*dt/eps**2)
+            packet.set_coefficient_vector(coefficients)
+
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+
+            # Do a potential step with the local non-quadratic Taylor remainder
+            innerproduct = packet.get_innerproduct()
+            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            coefficients = packet.get_coefficient_vector()
+            coefficients = self._matrix_exponential(F, coefficients, b[0]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])

@@ -1,19 +1,19 @@
-Grid
-====
+AbstractGrid
+============
 
-About the ``Grid`` class
-------------------------
+About the ``AbstractGrid`` class
+--------------------------------
 
 .. automodule:: WaveBlocksND
 
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: Grid
+.. inheritance-diagram:: AbstractGrid
 
 Class documentation
 -------------------
 
-.. autoclass:: Grid
+.. autoclass:: AbstractGrid
    :members:
    :inherited-members:
