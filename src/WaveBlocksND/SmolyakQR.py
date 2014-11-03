@@ -15,6 +15,7 @@ from numpy.linalg import norm
 from scipy.special import binom
 
 from QuadratureRule import QuadratureRule
+from Combinatorics import lattice_points_norm
 from Utils import meshgrid_nd
 
 __all__ = ["SmolyakQR"]
@@ -124,37 +125,6 @@ class SmolyakQR(QuadratureRule):
         return self._weights.copy()
 
 
-    def enumerate_lattice_points(self, N, D=None):
-        r"""This method enumerates all lattice points of a lattice
-        :math:`\Lambda \subset \mathbb{N}^D` in :math:`D` dimensions
-        having fixed :math:`l_1` norm :math:`N`.
-
-        :param N: The :math:`l_1` norm of the lattice points.
-        :param D: The dimension :math:`D` of the lattice.
-        """
-        if D is None:
-            D = self._dimension
-
-        k = zeros(D, dtype=integer)
-        k[0] = N
-        yield tuple(k)
-
-        c = 1
-        while k[D-1] < N:
-            if c == D:
-                for i in xrange(c-1,0,-1):
-                    c = i
-                    if not k[i-1] == 0:
-                        break
-            k[c-1] = k[c-1] - 1
-            c += 1
-            k[c-1] = N - sum(k[0:c-1])
-            if c < D:
-                k[c:D] = zeros(D-c, dtype=integer)
-
-            yield tuple(k)
-
-
     def construct_rule(self, level=None, tolerance=1e-15):
         r"""Compute the quadrature nodes :math:`\{\gamma_i\}_i` and quadrature
         weights :math:`\{\omega_i\}_i`.
@@ -183,7 +153,7 @@ class SmolyakQR(QuadratureRule):
 
         # Index Set
         for q in xrange(max(0, k-D), k):
-            S = self.enumerate_lattice_points(q)
+            S = lattice_points_norm(D, q)
             for j, s in enumerate(S):
                 # Only use non-negative nodes for the construction.
                 # The quadrature nodes \gamma.

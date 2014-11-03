@@ -39,6 +39,34 @@ def partitions(D, K):
                 yield P.copy()
 
 
+def lattice_points_norm(D, N):
+    r"""Enumerate all lattice points of an integer lattice
+    :math:`\Lambda \subset \mathbb{N}^D` in :math:`D` dimensions
+    having fixed :math:`l_1` norm :math:`N`.
+
+    :param D: The dimension :math:`D` of the lattice.
+    :param N: The :math:`l_1` norm of the lattice points.
+    """
+    k = zeros(D, dtype=integer)
+    k[0] = N
+    yield tuple(k)
+
+    c = 1
+    while k[D-1] < N:
+        if c == D:
+            for i in xrange(c-1, 0, -1):
+                c = i
+                if not k[i-1] == 0:
+                    break
+        k[c-1] = k[c-1] - 1
+        c += 1
+        k[c-1] = N - sum(k[0:c-1])
+        if c < D:
+            k[c:D] = zeros(D-c, dtype=integer)
+
+        yield tuple(k)
+
+
 def lattice_points(D, N):
     r"""Enumerate all lattice points of an integer lattice
     :math:`\Lambda \subset \mathbb{N}^D` in :math:`D` dimensions
@@ -48,22 +76,8 @@ def lattice_points(D, N):
     :param N: The maximal :math:`l_1` norm of the lattice points.
     """
     for n in xrange(N+1):
-        k = zeros(D, dtype=integer)
-        k[0] = n
-        yield tuple(k)
-        c = 1
-        while k[D-1] < n:
-            if c == D:
-                for i in xrange(c-1, 0, -1):
-                    c = i
-                    if not k[i-1] == 0:
-                        break
-            k[c-1] = k[c-1] - 1
-            c += 1
-            k[c-1] = n - sum(k[0:c-1])
-            if c < D:
-                k[c:D] = zeros(D-c, dtype=integer)
-            yield tuple(k)
+        for l in lattice_points_norm(D, n):
+            yield l
 
 
 def permutations(P):
