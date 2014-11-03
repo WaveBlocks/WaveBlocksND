@@ -35,12 +35,6 @@ class GenzKeisterQR(QuadratureRule):
                for Multiple Integrals over Infinite Regions with Gaussian Weight",
                J. Comp. Appl. Math. 71 (1996), pp. 299-309.
         """
-        if not level >= 1:
-            raise ValueError("Genz-Keister level has to be 1 at least.")
-
-        if not level <= 18:
-            raise ValueError("Genz-Keister quadrature rule not available for level %d" % level)
-
         # The space dimension of the quadrature rule.
         self._dimension = dimension
 
@@ -58,6 +52,9 @@ class GenzKeisterQR(QuadratureRule):
 
         # The quadrature weights \omega.
         self._weights = None
+
+        # Actually compute the nodes and weights
+        self.construct_rule(level)
 
 
     def __str__(self):
@@ -140,11 +137,24 @@ class GenzKeisterQR(QuadratureRule):
         return W
 
 
-    def construct_rule(self):
+    def construct_rule(self, K):
         r"""Compute a Genz-Keister quadrature rule.
+
+        :param K: The level :math:`K` of the Genz-Keister construction.
+
+        .. warning:: This method can be expensive and may take some time
+                     to finish. Also, the quadrature nodes may use large amounts
+                     of memory depending on the dimension and level parameters.
         """
+        # Check for valid level parameter
+        if not K >= 1:
+            raise ValueError("Genz-Keister level has to be 1 at least.")
+        if not K <= 18:
+            raise ValueError("Genz-Keister quadrature rule not available for level %d" % K)
+
+        self._level = K
         D = self._dimension
-        K = self._level
+
         # Note: K is shifted by 1 wrt the original paper
         # This makes K=3 equal to the Gauss-Hermite Rule of 3 nodes.
         K -= 1
@@ -161,8 +171,8 @@ class GenzKeisterQR(QuadratureRule):
                 nodes.append(p)
                 weights.append(w)
 
-        self._nodes = hstack(nodes)
-        self._weights = hstack(weights)
+        self._nodes = hstack(nodes).reshape(D,-1)
+        self._weights = hstack(weights).reshape(1,-1)
         self._number_nodes = self._weights.size
 
 

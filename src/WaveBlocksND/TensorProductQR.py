@@ -42,11 +42,17 @@ class TensorProductQR(QuadratureRule):
         # The number of nodes in this quadrature rule.
         self._number_nodes = reduce(op.mul, [ rule.get_number_nodes() for rule in rules ])
 
-        # Nodes and weights
-        self._nodes, self._weights = self.tensor_product(rules)
+        # The quadrature nodes \gamma.
+        self._nodes = None
+
+        # The quadrature weights \omega.
+        self._weights = None
+
+        # Actually compute the nodes and weights
+        self.construct_rule(rules)
 
 
-    def tensor_product(self, rules):
+    def construct_rule(self, rules):
         r"""Compute the tensor product of the given quadrature rules.
 
         :param rules: A list of one dimensional quadrature rules.
@@ -57,11 +63,11 @@ class TensorProductQR(QuadratureRule):
         """
         # The quadrature nodes \gamma.
         nodes = meshgrid_nd([ rule.get_nodes() for rule in rules ])
-        nodes = vstack([ node.flatten() for node in nodes ])
+        self._nodes = vstack([ node.reshape(1,-1) for node in nodes ])
         # The quadrature weights \omega.
         weights = meshgrid_nd([ rule.get_weights() for rule in rules ])
         weights = reduce(lambda x,y: x*y, weights)
-        return nodes, weights.flatten()
+        self._weights = weights.reshape(1,-1)
 
 
     def __str__(self):

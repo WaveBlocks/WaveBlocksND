@@ -5,12 +5,12 @@ quadrature rules from one-dimensional ones by using the
 Smolyak construction.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 from copy import deepcopy
-from numpy import zeros, hstack, vsplit, squeeze, lexsort, integer, where, vstack
+from numpy import hstack, vsplit, squeeze, lexsort, where, vstack
 from numpy.linalg import norm
 from scipy.special import binom
 
@@ -61,8 +61,6 @@ class SmolyakQR(QuadratureRule):
 
         # The level of the Smolyak construction.
         self._level = level
-        if not self._level >= 1:
-            raise ValueError("Smolyak level has to be 1 at least.")
 
         # The individual quadrature rules.
         self._rules = rules
@@ -78,6 +76,9 @@ class SmolyakQR(QuadratureRule):
 
         # The quadrature weights \omega.
         self._weights = None
+
+        # Actually compute the nodes and weights
+        self.construct_rule(level)
 
 
     def __str__(self):
@@ -125,34 +126,32 @@ class SmolyakQR(QuadratureRule):
         return self._weights.copy()
 
 
-    def construct_rule(self, level=None, tolerance=1e-15):
+    def construct_rule(self, K, tolerance=1e-15):
         r"""Compute the quadrature nodes :math:`\{\gamma_i\}_i` and quadrature
         weights :math:`\{\omega_i\}_i`.
 
-        :param level: The level :math:`k` of the Smolyak construction.
-        :param tolerance: Tolerance for dropping identical
-                          quadrature nodes.
+        :param K: The level :math:`K` of the Smolyak construction.
+        :param tolerance: Tolerance for dropping identical quadrature nodes.
 
         .. warning:: This method is very expensive and may take a long time
                      to finish. Also, the quadrature nodes may use large amounts
                      of memory depending on the dimension and level parameters.
         """
+        # Check for valid level parameter
+        if not K >= 1:
+            raise ValueError("Smolyak level has to be 1 at least.")
+        if K > max(self._rules.keys()):
+            raise ValueError("Not enough quadrature rules to build Smolyak grid of level %d" % K)
+
+        self._level = K
         D = self._dimension
-
-        if level is None:
-            k = self._level
-        else:
-            k = level
-
-        if k > max(self._rules.keys()):
-            raise ValueError("Not enough quadrature rules to build Smolyak grid of level "+str(k))
 
         allnodes = []
         allweights = []
         factors = []
 
         # Index Set
-        for q in xrange(max(0, k-D), k):
+        for q in xrange(max(0, K-D), K):
             S = lattice_points_norm(D, q)
             for j, s in enumerate(S):
                 # Only use non-negative nodes for the construction.
@@ -161,14 +160,14 @@ class SmolyakQR(QuadratureRule):
                 nodes = [ rule.get_nodes() for rule in rules ]
                 indices = [ where(n >= 0) for n in nodes ]
                 nodes = meshgrid_nd([ n[i] for n, i in zip(nodes, indices) ])
-                nodes = vstack([ node.flatten() for node in nodes ])
+                nodes = vstack([ node.reshape(-1) for node in nodes ])
                 # The quadrature weights \omega.
                 weights = [ rule.get_weights() for rule in rules ]
                 weights = meshgrid_nd([ w[i] for w, i in zip(weights, indices) ])
                 weights = reduce(lambda x,y: x*y, weights)
                 allnodes.append(nodes)
-                allweights.append(weights.flatten())
-                factors.append((-1)**(k-1-q) * binom(D-1, k-1-q))
+                allweights.append(weights.reshape(-1))
+                factors.append((-1)**(K-1-q) * binom(D-1, K-1-q))
 
         # Sort
         allnodes = hstack(allnodes).reshape(D,-1)
