@@ -77,7 +77,7 @@ class SmolyakQR(QuadratureRule):
         # The quadrature weights \omega.
         self._weights = None
 
-        # Actually compute the nodes and weights
+        # Actually compute the nodes and weights.
         self.construct_rule(level)
 
 
