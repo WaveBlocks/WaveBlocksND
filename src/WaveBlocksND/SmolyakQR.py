@@ -55,10 +55,10 @@ class SmolyakQR(QuadratureRule):
                      the pair :math:`(-\gamma, \omega)` is also contained
                      in the quadrature rule.
         """
-        # The dimension of the quadrature rule.
+        # The space dimension of the quadrature rule.
         self._dimension = dimension
 
-        # The construction level
+        # The level of the Smolyak construction.
         self._level = level
         if not self._level >= 1:
             raise ValueError("Smolyak level has to be 1 at least.")
@@ -66,7 +66,7 @@ class SmolyakQR(QuadratureRule):
         # The individual quadrature rules.
         self._rules = rules
 
-        # The level of the Smolyak sparse grid quadrature
+        # The order of the Smolyak sparse grid quadrature.
         self._order = level
 
         # Set the options
