@@ -26,7 +26,7 @@ class GenzKeisterQR(QuadratureRule):
         :param dimension: The dimension :math:`D` of the Genz-Keister quadrature.
         :param level: The level :math:`K` of the Genz-Keister quadrature.
 
-        :raise: :py:class:`ValueError` if the `level` is not in the range :math:`[1, \ldots, 18]`.
+        :raise: :py:class:`ValueError` if the :math:`K` is not in the range :math:`[1, \ldots, 18]`.
 
         References
         ----------

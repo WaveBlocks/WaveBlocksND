@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: GenzKeisterQR
    :members:
    :inherited-members:
+
+   .. automethod:: __init__
