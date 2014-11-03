@@ -58,6 +58,9 @@ class TensorProductQR(QuadratureRule):
     def construct_rule(self):
         r"""Compute the tensor product of the given quadrature rules.
 
+        .. note:: This is an internal method and there should be no reason
+                  to explicitely call it manually.
+
         :return: The nodes :math:`\{\gamma_i\}_i` and weights :math:`\{\omega_i\}_i`
                  of the tensor product quadrature rule. The array of all
                  nodes has a shape of :math:`(D, |\Gamma|)` and the

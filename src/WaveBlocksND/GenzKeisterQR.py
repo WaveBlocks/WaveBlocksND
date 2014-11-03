@@ -142,6 +142,9 @@ class GenzKeisterQR(QuadratureRule):
 
         :param K: The level :math:`K` of the Genz-Keister construction.
 
+        .. note:: This is an internal method and there should be no reason
+                  to explicitely call it manually.
+
         .. warning:: This method can be expensive and may take some time
                      to finish. Also, the quadrature nodes may use large amounts
                      of memory depending on the dimension and level parameters.

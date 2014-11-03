@@ -133,6 +133,9 @@ class SmolyakQR(QuadratureRule):
         :param K: The level :math:`K` of the Smolyak construction.
         :param tolerance: Tolerance for dropping identical quadrature nodes.
 
+        .. note:: This is an internal method and there should be no reason
+                  to explicitely call it manually.
+
         .. warning:: This method is very expensive and may take a long time
                      to finish. Also, the quadrature nodes may use large amounts
                      of memory depending on the dimension and level parameters.
