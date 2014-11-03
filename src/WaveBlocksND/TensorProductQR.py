@@ -36,10 +36,6 @@ class TensorProductQR(QuadratureRule):
         # The individual quadrature rules.
         self._qrs = tuple(rules)
 
-        # The order R of the tensor product quadrature.
-        self._order = None
-        # TODO: Compute the order from the orders of the input QRs
-
         # Set the options
         self._options = options
 

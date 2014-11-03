@@ -32,15 +32,15 @@ class GaussHermiteQR(QuadratureRule):
 
         :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.
         """
+        # Quadrature has to have at least a single (node,weight) pair.
+        if not order > 0:
+            raise ValueError("Quadrature rule has to be of order 1 at least.")
+
         # The space dimension of the quadrature rule.
         self._dimension = 1
 
         # The order of the Gauss-Hermite quadrature.
         self._order = order
-
-        # Quadrature has to have at least a single (node,weight) pair.
-        if not self._order > 0:
-            raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         # Set the options
         self._options = options
@@ -52,17 +52,18 @@ class GaussHermiteQR(QuadratureRule):
 
         # We deal with real values only, but the array we get from h_roots is of complex dtype
         h = self._hermite_recursion(real(nodes))[-1,:]
-        weights = 1.0/((h**2) * self._order)
+        weights = 1.0/(h**2 * self._order)
 
         # The quadrature nodes \gamma.
         self._nodes = nodes.reshape((1,self._number_nodes))
+
         # The quadrature weights \omega.
         self._weights = weights
         self._weights = self._weights.reshape((1,self._number_nodes))
 
 
     def __str__(self):
-        return "Gauss-Hermite quadrature rule of order " + str(self._order)
+        return "Gauss-Hermite quadrature rule of order %d" % self._order
 
 
     def get_description(self):

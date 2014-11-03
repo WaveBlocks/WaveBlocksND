@@ -7,7 +7,7 @@ methods. Quadratures are classes that really can compute things
 like inner products (brakets) etc.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -51,12 +51,6 @@ class QuadratureRule(object):
         r""":return: The space dimension :math:`D` of the quadrature rule.
         """
         return self._dimension
-
-
-    def get_order(self):
-        r""":return: The order :math:`R` of the quadrature rule.
-        """
-        return self._order
 
 
     def get_number_nodes(self):

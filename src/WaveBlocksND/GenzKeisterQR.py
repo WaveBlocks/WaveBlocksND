@@ -39,16 +39,13 @@ class GenzKeisterQR(QuadratureRule):
             raise ValueError("Genz-Keister level has to be 1 at least.")
 
         if not level <= 18:
-            raise ValueError("Genz-Keister quadrature rule not available for order %d" % level)
+            raise ValueError("Genz-Keister quadrature rule not available for level %d" % level)
 
         # The space dimension of the quadrature rule.
         self._dimension = dimension
 
         # The level of the Genz-Keister construction.
         self._level = level
-
-        # The order of the Genz-Keister quadrature.
-        self._order = level
 
         # Set the options
         self._options = options
@@ -76,7 +73,7 @@ class GenzKeisterQR(QuadratureRule):
         d = {}
         d["type"] = "GenzKeisterQR"
         d["dimension"] = self._dimension
-        d["order"] = self._level
+        d["level"] = self._level
         d["options"] = deepcopy(self._options)
         return d
 

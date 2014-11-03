@@ -66,9 +66,6 @@ class SmolyakQR(QuadratureRule):
         # The individual quadrature rules.
         self._rules = rules
 
-        # The order of the Smolyak sparse grid quadrature.
-        self._order = level
-
         # Set the options
         self._options = options
 
