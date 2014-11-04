@@ -20,7 +20,7 @@ __all__ = ["GaussHermiteOriginalQR"]
 class GaussHermiteOriginalQR(QuadratureRule):
     r"""This class implements a Gauss-Hermite quadrature rule.
     The quadrature is not transformed to exclude the exponential
-    weight factor.
+    weight factor :math:`\exp(-x^2)`.
     """
 
     def __init__(self, order, options={}):

@@ -21,7 +21,7 @@ __all__ = ["GenzKeisterOriginalQR"]
 class GenzKeisterOriginalQR(QuadratureRule):
     r"""This class implements a Genz-Keister quadrature rule.
     The quadrature is not transformed to exclude the exponential
-    weight factor.
+    weight factor :math:`\exp(-x^2)`.
     """
 
     def __init__(self, dimension, level, options={}):
