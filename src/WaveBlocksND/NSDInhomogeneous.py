@@ -9,8 +9,8 @@ numerical steepest descent technique.
 @license: Modified BSD License
 """
 
-from numpy import (zeros, ones, diag, squeeze,  conjugate, transpose, dot, einsum,
-                   product, complexfloating, imag, nan_to_num, triu)
+from numpy import (array, zeros, ones, diag, squeeze,  conjugate, transpose, dot,
+                   einsum, product, complexfloating, imag, nan_to_num, triu)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
@@ -301,7 +301,7 @@ class NSDInhomogeneous(Quadrature):
         cket = self._packet.get_coefficients(component=col)
         I = squeeze(dot(transpose(conjugate(cbra)), dot(M, cket)))
         # Handle NaNs if any
-        I = nan_to_num(I)
+        I = array(nan_to_num(I))
         return I
 
 
@@ -319,5 +319,5 @@ class NSDInhomogeneous(Quadrature):
 
         M = self.do_nsd(row, col)
         # Handle NaNs if any
-        M = nan_to_num(M)
+        M = array(nan_to_num(M))
         return M
