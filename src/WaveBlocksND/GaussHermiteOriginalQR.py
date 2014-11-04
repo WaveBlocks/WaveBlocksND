@@ -33,7 +33,7 @@ class GaussHermiteOriginalQR(QuadratureRule):
 
         :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.
         """
-        # Qudrature has to have at least a single (node,weight) pair.
+        # Quadrature has to have at least a single (node,weight) pair.
         if not order > 0:
             raise ValueError("Quadrature rule has to be of order 1 at least.")
 
