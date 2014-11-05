@@ -30,47 +30,55 @@ class TensorProductQR(QuadratureRule):
         :param rules: A list of :py:class:`QuadratureRule` subclass instances. Their
                       nodes and weights will be used to compute the tensor product.
         """
+        if len(rules) < 1:
+            raise ValueError("Can not build tensor product rule with no rules given.")
+
         # The dimension of the quadrature rule.
         self._dimension = len(rules)
 
         # The individual quadrature rules.
-        self._qrs = tuple(rules)
-
-        # The order R of the tensor product quadrature.
-        self._order = None
-        # TODO: Compute the order from the orders of the input QRs
+        self._rules = tuple(rules)
 
         # Set the options
         self._options = options
 
         # The number of nodes in this quadrature rule.
-        self._number_nodes = reduce(op.mul, [ rule.get_number_nodes() for rule in rules ])
+        self._number_nodes = None
 
-        # Nodes and weights
-        self._nodes, self._weights = self.tensor_product(rules)
+        # The quadrature nodes \gamma.
+        self._nodes = None
+
+        # The quadrature weights \omega.
+        self._weights = None
+
+        # Actually compute the nodes and weights.
+        self.construct_rule()
 
 
-    def tensor_product(self, rules):
+    def construct_rule(self):
         r"""Compute the tensor product of the given quadrature rules.
 
-        :param rules: A list of one dimensional quadrature rules.
+        .. note:: This is an internal method and there should be no reason
+                  to explicitely call it manually.
+
         :return: The nodes :math:`\{\gamma_i\}_i` and weights :math:`\{\omega_i\}_i`
                  of the tensor product quadrature rule. The array of all
                  nodes has a shape of :math:`(D, |\Gamma|)` and the
                  array of weights is of shape :math:`(|\Gamma|)`.
         """
+        self._number_nodes = reduce(op.mul, [ rule.get_number_nodes() for rule in self._rules ])
         # The quadrature nodes \gamma.
-        nodes = meshgrid_nd([ rule.get_nodes() for rule in rules ])
-        nodes = vstack([ node.flatten() for node in nodes ])
+        nodes = meshgrid_nd([ rule.get_nodes() for rule in self._rules ])
+        self._nodes = vstack([ node.reshape(1,-1) for node in nodes ])
         # The quadrature weights \omega.
-        weights = meshgrid_nd([ rule.get_weights() for rule in rules ])
+        weights = meshgrid_nd([ rule.get_weights() for rule in self._rules ])
         weights = reduce(lambda x,y: x*y, weights)
-        return nodes, weights.flatten()
+        self._weights = weights.reshape(1,-1)
 
 
     def __str__(self):
         s = "Tensor product quadrature rule consisting of:\n"
-        l = ["  " + str(rule) + "\n" for rule in self._qrs]
+        l = ["  " + str(rule) + "\n" for rule in self._rules]
         s += reduce(lambda x,y:x+y, l)
         return s
 
@@ -84,7 +92,7 @@ class TensorProductQR(QuadratureRule):
         d = {}
         d["type"] = "TensorProductQR"
         d["dimension"] = self._dimension
-        d["qr_rules"] = [ qr.get_description() for qr in self._qrs ]
+        d["qr_rules"] = [ qr.get_description() for qr in self._rules ]
         d["options"] = deepcopy(self._options)
         return d
 

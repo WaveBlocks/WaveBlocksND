@@ -38,16 +38,16 @@ class GaussLaguerreQR(QuadratureRule):
 		values of :math:`\alpha` is not 0 but set to :math:`-\frac{1}{2}`. There
 		is hope that this will give less confusion and hidden errors.
         """
+        # Quadrature has to have at least a single (node,weight) pair.
+        if not order > 0:
+            raise ValueError("Quadrature rule has to be of order 1 at least.")
+
         # The space dimension of the quadrature rule.
         self._dimension = 1
 
         # The order of the Gauss-Laguerre quadrature.
         self._order = order
         self._a = a
-
-        # Quadrature has to have at least a single (node,weight) pair.
-        if not self._order > 0:
-            raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         # Set the options
         self._options = options
@@ -59,12 +59,13 @@ class GaussLaguerreQR(QuadratureRule):
 
         # The quadrature nodes \gamma.
         self._nodes = real(nodes).reshape((1,self._number_nodes))
+
         # The quadrature weights \omega.
         self._weights = real(weights).reshape((1,self._number_nodes))
 
 
     def __str__(self):
-        return "Gauss-Laguerre quadrature rule of order " + str(self._order) + " with a=" + str(self._a)
+        return "Gauss-Laguerre quadrature rule of order %d with a = %f" % (self._order, self._a)
 
 
     def get_description(self):

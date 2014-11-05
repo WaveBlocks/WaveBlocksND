@@ -9,8 +9,8 @@ numerical steepest descent technique.
 @license: Modified BSD License
 """
 
-from numpy import (zeros, ones, diag, squeeze,  conjugate, transpose, dot, einsum,
-                   product, complexfloating, imag, nan_to_num, triu)
+from numpy import (array, zeros, ones, diag, squeeze,  conjugate, transpose, dot,
+                   einsum, product, complexfloating, imag, nan_to_num, triu)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
@@ -210,12 +210,12 @@ class NSDInhomogeneous(Quadrature):
                 print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
 
             # Diagonal Elements
-            for j in xrange(i,D):
+            for j in xrange(i, D):
                 T[j,j] = T[j,j] - T[i-1,j]**2 / (4.0*T[i-1,i-1])
 
             # Others
-            for rowi in xrange(i,D):
-                for coli in xrange(rowi+1,D):
+            for rowi in xrange(i, D):
+                for coli in xrange(rowi+1, D):
                     T[rowi,coli] = T[rowi,coli] - T[i-1,rowi]*T[i-1,coli] / (2*T[i-1,i-1])
 
         # Compute remaining parts
@@ -301,7 +301,7 @@ class NSDInhomogeneous(Quadrature):
         cket = self._packet.get_coefficients(component=col)
         I = squeeze(dot(transpose(conjugate(cbra)), dot(M, cket)))
         # Handle NaNs if any
-        I = nan_to_num(I)
+        I = array(nan_to_num(I))
         return I
 
 
@@ -319,5 +319,5 @@ class NSDInhomogeneous(Quadrature):
 
         M = self.do_nsd(row, col)
         # Handle NaNs if any
-        M = nan_to_num(M)
+        M = array(nan_to_num(M))
         return M

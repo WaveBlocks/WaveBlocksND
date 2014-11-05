@@ -208,7 +208,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
             nrtmp = int(sqrt(dt*eps**-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            for j in xrange(6-1,-1,-1):
+            for j in xrange(6-1, -1, -1):
                 # Step with Beps
                 h2 = Y[j]*dt
                 # Do a potential step with the local non-quadratic taylor remainder

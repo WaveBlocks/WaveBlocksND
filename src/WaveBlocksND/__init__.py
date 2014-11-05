@@ -74,6 +74,8 @@ from TrapezoidalQR import TrapezoidalQR
 from GaussHermiteOriginalQR import GaussHermiteOriginalQR
 from GaussHermiteQR import GaussHermiteQR
 from GaussLaguerreQR import GaussLaguerreQR
+from GenzKeisterOriginalQR import GenzKeisterOriginalQR
+from GenzKeisterQR import GenzKeisterQR
 from TensorProductQR import TensorProductQR
 from SmolyakQR import SmolyakQR
 

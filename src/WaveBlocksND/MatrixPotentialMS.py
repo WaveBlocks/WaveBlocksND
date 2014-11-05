@@ -237,7 +237,7 @@ class MatrixPotentialMS(MatrixPotential):
                 tmppot[:, row, col] = values[N*row + col]
 
         # Calculate eigenvectors assuming hermitian matrix (eigh for stability!)
-        for i in xrange(0, n):
+        for i in xrange(n):
             ew, ev = linalg.eigh(tmppot[i,:,:])
             if sorted is True:
                 # Sorting the eigenvectors in the same order as the eigenvalues.
@@ -252,8 +252,8 @@ class MatrixPotentialMS(MatrixPotential):
         # A trick due to G. Hagedorn to get continuous eigenvectors
         # TODO: Not sure if it works in higher dimensions too! (Probably it does not)
         if self._continuous_eigenvectors is True:
-            for i in xrange(1,n):
-                for ev in xrange(0,N):
+            for i in xrange(1, n):
+                for ev in xrange(N):
                     if numpy.dot(tmpev[i,:,ev],tmpev[i-1,:,ev]) < 0:
                         tmpev[i,:,ev] *= -1
 

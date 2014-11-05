@@ -20,7 +20,7 @@ __all__ = ["GaussHermiteOriginalQR"]
 class GaussHermiteOriginalQR(QuadratureRule):
     r"""This class implements a Gauss-Hermite quadrature rule.
     The quadrature is not transformed to exclude the exponential
-    weight factor.
+    weight factor :math:`\exp(-x^2)`.
     """
 
     def __init__(self, order, options={}):
@@ -33,15 +33,15 @@ class GaussHermiteOriginalQR(QuadratureRule):
 
         :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.
         """
+        # Quadrature has to have at least a single (node,weight) pair.
+        if not order > 0:
+            raise ValueError("Quadrature rule has to be of order 1 at least.")
+
         # The space dimension of the quadrature rule.
         self._dimension = 1
 
         # The order of the Gauss-Hermite quadrature.
         self._order = order
-
-        # Qudrature has to have at least a single (node,weight) pair.
-        if not self._order > 0:
-            raise ValueError("Quadrature rule has to be of order 1 at least.")
 
         # Set the options
         self._options = options
@@ -53,12 +53,13 @@ class GaussHermiteOriginalQR(QuadratureRule):
 
         # The quadrature nodes \gamma.
         self._nodes = nodes.reshape((1,self._number_nodes))
+
         # The quadrature weights \omega.
         self._weights = weights.reshape((1,self._number_nodes))
 
 
     def __str__(self):
-        return "Gauss-Hermite quadrature rule (untransformed) of order " + str(self._order)
+        return "Gauss-Hermite quadrature rule (untransformed) of order %d" % self._order
 
 
     def get_description(self):

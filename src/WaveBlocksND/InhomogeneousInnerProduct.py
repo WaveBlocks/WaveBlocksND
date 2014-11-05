@@ -108,7 +108,7 @@ class InhomogeneousInnerProduct(InnerProduct):
             result = result[0]
         elif diagonal is True:
             # Only keep the diagonal elements
-            result = [result[i*Nket+i] for i in xrange(min(Nbra,Nket))]
+            result = [result[i*Nket+i] for i in xrange(min(Nbra, Nket))]
 
         return result
 
