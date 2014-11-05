@@ -10,7 +10,8 @@ Smolyak construction.
 """
 
 from copy import deepcopy
-from numpy import hstack, vsplit, squeeze, lexsort, where, vstack
+import operator as op
+from numpy import hstack, vsplit, squeeze, lexsort, where, vstack, multiply
 from numpy.linalg import norm
 from scipy.special import binom
 
@@ -84,7 +85,7 @@ class SmolyakQR(QuadratureRule):
     def __str__(self):
         s = "Sparse grid (Smolyak) quadrature rule consisting of:\n"
         l = ["  " + str(rule) + "\n" for k,rule in self._rules.iteritems() if k <= self._level]
-        s += reduce(lambda x,y: x+y, l)
+        s += reduce(op.add, l)
         return s
 
 
@@ -167,7 +168,7 @@ class SmolyakQR(QuadratureRule):
                 # The quadrature weights \omega.
                 weights = [ rule.get_weights() for rule in rules ]
                 weights = meshgrid_nd([ w[i] for w, i in zip(weights, indices) ])
-                weights = reduce(lambda x,y: x*y, weights)
+                weights = reduce(multiply, weights)
                 allnodes.append(nodes)
                 allweights.append(weights.reshape(-1))
                 factors.append((-1)**(K-1-q) * binom(D-1, K-1-q))

@@ -11,7 +11,7 @@ are some methods for calculating obervables as for example
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, atleast_1d, product, array, conjugate, sum
+from numpy import zeros, complexfloating, atleast_1d, product, array, conjugate, sum, square
 from numpy.fft import fftn
 from scipy import sqrt
 from scipy import linalg as la
@@ -155,7 +155,7 @@ class WaveFunction(object):
 
         # Sum the individual norms if requested
         if summed is True:
-            norms = map(lambda x: x**2, norms)
+            norms = map(square, norms)
             return sqrt(sum(norms))
         else:
             return norms

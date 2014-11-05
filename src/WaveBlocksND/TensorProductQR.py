@@ -10,7 +10,7 @@ quadrature rules from one-dimensional ones by taking tensor products.
 
 from copy import deepcopy
 import operator as op
-from numpy import vstack
+from numpy import vstack, multiply
 
 from QuadratureRule import QuadratureRule
 from Utils import meshgrid_nd
@@ -66,20 +66,20 @@ class TensorProductQR(QuadratureRule):
                  nodes has a shape of :math:`(D, |\Gamma|)` and the
                  array of weights is of shape :math:`(|\Gamma|)`.
         """
-        self._number_nodes = reduce(op.mul, [ rule.get_number_nodes() for rule in self._rules ])
+        self._number_nodes = reduce(multiply, [ rule.get_number_nodes() for rule in self._rules ])
         # The quadrature nodes \gamma.
         nodes = meshgrid_nd([ rule.get_nodes() for rule in self._rules ])
         self._nodes = vstack([ node.reshape(1,-1) for node in nodes ])
         # The quadrature weights \omega.
         weights = meshgrid_nd([ rule.get_weights() for rule in self._rules ])
-        weights = reduce(lambda x,y: x*y, weights)
+        weights = reduce(multiply, weights)
         self._weights = weights.reshape(1,-1)
 
 
     def __str__(self):
         s = "Tensor product quadrature rule consisting of:\n"
         l = ["  " + str(rule) + "\n" for rule in self._rules]
-        s += reduce(lambda x,y:x+y, l)
+        s += reduce(op.add, l)
         return s
 
 

@@ -8,7 +8,7 @@ numpy ndarrays into Grid instances.
 @license: Modified BSD License
 """
 
-from numpy import atleast_1d, abs
+from numpy import atleast_1d, abs, multiply
 
 from AbstractGrid import AbstractGrid
 
@@ -46,7 +46,7 @@ class GridWrapper(AbstractGrid):
         if overall is False:
             return self._data.shape[1:]
         else:
-            return reduce(lambda x,y: x*y, self._data.shape[1:])
+            return reduce(multiply, self._data.shape[1:])
 
 
     def get_nodes(self, flat=True, split=False):

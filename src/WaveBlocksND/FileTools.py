@@ -11,6 +11,7 @@ ID is just the base name of the path or the configuration file.
 """
 
 import os
+import operator as op
 
 import GlobalDefaults as GD
 
@@ -160,7 +161,7 @@ def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kv
             # to avoid representation errors when converting to floats.
             if item[2] == val:
                 # Concatenate the fragments again
-                groups[index].append( reduce(lambda x,y: x+y, item) )
+                groups[index].append(reduce(op.add, item))
                 break
 
     return groups
@@ -236,8 +237,7 @@ def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp
     tmp.sort(cmp=compare)
 
     # Remove numeric value and concatenate the fragments again
-    f = lambda x,y: x+y
-    sorted_list = [ reduce(f, s[:-1]) for s in tmp ]
+    sorted_list = [ reduce(op.add, s[:-1]) for s in tmp ]
 
     return sorted_list
 

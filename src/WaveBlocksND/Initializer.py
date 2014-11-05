@@ -2,9 +2,11 @@
 
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
+
+from numpy import add
 
 from WaveFunction import WaveFunction
 from BlockFactory import BlockFactory
@@ -37,7 +39,7 @@ class Initializer(object):
             Psi.append( values )
 
         # TODO: Maybe sum up immediately instead of at the end to reduce memory usage
-        Psi = reduce(lambda x,y: x+y, Psi)
+        Psi = reduce(add, Psi)
 
         # Pack the values in a WaveFunction instance
         WF = WaveFunction(self._parameters)

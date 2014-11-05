@@ -4,11 +4,11 @@ This file contains code for the representation of the kinetic
 operator :math:`-\frac{1}{2} \Delta` in the Fourier space.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import roll, exp, pi
+from numpy import roll, exp, pi, square, add
 from numpy.fft import fftfreq
 
 __all__ = ["KineticOperator"]
@@ -44,8 +44,7 @@ class KineticOperator(object):
         omega = [ o.reshape(roll(shape, i)) for i, o in enumerate(omega) ]
 
         # Compute the dot product of omega with itself
-        omega_sqr = map(lambda x: x*x, omega)
-        omega_sqr = reduce(lambda x,y: x+y, omega_sqr)
+        omega_sqr = reduce(add, map(square, omega))
 
         # Fourier space grid axes
         self._omega = omega
