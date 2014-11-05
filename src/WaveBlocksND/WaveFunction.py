@@ -216,8 +216,8 @@ class WaveFunction(object):
 
         # Apply the matrix potential to the ket
         tmp = [ zeros(component.shape, dtype=complexfloating) for component in self._values ]
-        for row in xrange(0, self._number_components):
-            for col in xrange(0, self._number_components):
+        for row in xrange(self._number_components):
+            for col in xrange(self._number_components):
                 tmp[row] = tmp[row] + potential[row*self._number_components+col] * self._values[col]
 
         # Fourier transform the components

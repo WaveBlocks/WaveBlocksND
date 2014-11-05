@@ -217,7 +217,7 @@ class SymbolicIntegral(Quadrature):
               (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(k+l)/2.0))
 
         S = 0.0j
-        for j in xrange(0, min(k,l)+1):
+        for j in xrange(min(k, l)+1):
             S = S + (self._bk[k,j] * self._bl[l,j] * self._jf[j] *
                      self._pfk[k-j] * self._pfl[l-j] * self._Hk[k-j] * self._Hl[l-j])
 
@@ -249,8 +249,8 @@ class SymbolicIntegral(Quadrature):
         K = Kbra.get_basis_size()
         L = Kket.get_basis_size()
 
-        mikl = min(K,L)
-        makl = max(K,L)
+        mikl = min(K, L)
+        makl = max(K, L)
 
         # Factorials
         f = factorial(arange(makl))

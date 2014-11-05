@@ -210,12 +210,12 @@ class NSDInhomogeneous(Quadrature):
                 print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
 
             # Diagonal Elements
-            for j in xrange(i,D):
+            for j in xrange(i, D):
                 T[j,j] = T[j,j] - T[i-1,j]**2 / (4.0*T[i-1,i-1])
 
             # Others
-            for rowi in xrange(i,D):
-                for coli in xrange(rowi+1,D):
+            for rowi in xrange(i, D):
+                for coli in xrange(rowi+1, D):
                     T[rowi,coli] = T[rowi,coli] - T[i-1,rowi]*T[i-1,coli] / (2*T[i-1,i-1])
 
         # Compute remaining parts
