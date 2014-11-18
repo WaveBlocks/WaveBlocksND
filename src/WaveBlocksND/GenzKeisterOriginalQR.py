@@ -187,6 +187,7 @@ class GenzKeisterOriginalQR(QuadratureRule):
 
 
 # Magic numbers
+# For derivation and computation see our technical report.
 generators = array([0.0,
                     1.2247448713915890491,
                     2.9592107790638377223,

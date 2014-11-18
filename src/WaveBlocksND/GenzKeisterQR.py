@@ -40,6 +40,7 @@ class GenzKeisterQR(GenzKeisterOriginalQR):
         """
         GenzKeisterOriginalQR.__init__(self, dimension, level, options=options)
         # Transform weights
+        # TODO: This is the best transform we can do right now
         self._weights /= exp(-norm(self._nodes, axis=0)**2)
 
 
