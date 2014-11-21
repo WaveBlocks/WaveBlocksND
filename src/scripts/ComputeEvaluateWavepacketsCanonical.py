@@ -27,7 +27,7 @@ parser.add_argument("-b", "--blockid",
                     nargs = "*",
                     default = [0])
 
-parser.add_argument("-p", "--params",
+parser.add_argument("-p", "--paramfile",
                     help = "An additional configuration parameters file")
 
 args = parser.parse_args()
@@ -37,8 +37,8 @@ iom = IOManager()
 iom.open_file(filename=args.simfile)
 
 # Read the additional grid parameters
-if args.params:
-    parametersfile = args.params
+if args.paramfile:
+    parametersfile = args.paramfile
     PA = ParameterLoader().load_from_file(parametersfile)
 else:
     PA = None
