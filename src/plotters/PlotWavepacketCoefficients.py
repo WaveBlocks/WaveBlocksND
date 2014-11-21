@@ -8,18 +8,17 @@ Note that this script will fail to produce correct results if the
 basis shapes are adaptive and their mappings mu incompatible!
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import real, imag, abs, angle, squeeze
+import argparse
+from numpy import real, imag, abs, angle
 from matplotlib.pyplot import *
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import BlockFactory
-from WaveBlocksND.Plot import plotcm
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -47,11 +46,12 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     hashes, coeffs = iom.load_wavepacket_coefficients(blockid=blockid, get_hashes=True)
 
-    return time, coeffs, map(squeeze, hashes)
+    return time, coeffs, [h.reshape(-1) for h in hashes]
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -61,11 +61,12 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(blockid=blockid, get_hashes=True)
 
-    return time, coeffs, map(squeeze, hashes)
+    return time, coeffs, [h.reshape(-1) for h in hashes]
 
 
 def plot_coefficients(parameters, data, absang=False, index=0, imgsize=(10,20)):
@@ -129,11 +130,25 @@ def plot_coefficients(parameters, data, absang=False, index=0, imgsize=(10,20)):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
+    iom = IOManager()
     try:
-        iom.open_file(filename=sys.argv[1])
+        iom.open_file(filename=args.datafile)
     except IndexError:
         iom.open_file()
 
