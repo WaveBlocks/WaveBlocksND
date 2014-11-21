@@ -9,7 +9,8 @@ potential in terms of Hagedorn wavepackets.
 """
 
 import argparse
-from numpy import argsort, atleast_1d, complexfloating, conjugate, dot, ones, real, squeeze, sum, transpose, zeros_like
+from numpy import (argsort, atleast_1d, complexfloating, conjugate, dot, ones, real,
+                   squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh
 
@@ -160,6 +161,12 @@ def compute_eigenstate(parameters):
 
         coeffs = ev[:,index]
         energy = ew[index]
+
+        # Try to resolve ambiguities in sign
+        imax = argmax(abs(coeffs))
+        a = abs(angle(coeffs[imax]))
+        if a > pi/2.0:
+            coeffs *= -1
 
         print("Level: "+str(state))
         print("Energy: "+str(energy))
