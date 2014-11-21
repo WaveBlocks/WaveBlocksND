@@ -16,7 +16,6 @@ from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcf
-
 from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
