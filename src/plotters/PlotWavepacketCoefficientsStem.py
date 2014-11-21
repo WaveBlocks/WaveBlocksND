@@ -62,7 +62,8 @@ def read_data_homogeneous(iom, blockid=0):
             ki = array([bs[node] for node in bs.get_node_iterator()])
             k.append(ki)
 
-        plot_coefficients(k, coeffs, step, parameters["dt"], index=blockid)
+        dt = parameters["dt"] if parameters.has_key("dt") else None
+        plot_coefficients(k, coeffs, step, dt, index=blockid)
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -92,7 +93,8 @@ def read_data_inhomogeneous(iom, blockid=0):
             ki = array([bs[node] for node in bs.get_node_iterator()])
             k.append(ki)
 
-        plot_coefficients(k, coeffs, step, parameters["dt"], index=blockid)
+        dt = parameters["dt"] if parameters.has_key("dt") else None
+        plot_coefficients(k, coeffs, step, dt, index=blockid)
 
 
 def plot_coefficients(k, c, step, dt, index=0):
@@ -122,7 +124,10 @@ def plot_coefficients(k, c, step, dt, index=0):
         ax.set_xlabel(r"$k$")
         ax.set_ylabel(r"$c_k$")
 
-    fig.suptitle(r"Coefficients $c_k$ at time $t="+str(step*dt)+r"$")
+    if dt is not None:
+        fig.suptitle(r"Coefficients $c_k$ at time $t="+str(step*dt)+r"$")
+    else:
+        fig.suptitle(r"Coefficients $c_k$")
 
     fig.savefig("wavepacket_coefficients_block"+str(index)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+GD.output_format)
     close(fig)
