@@ -5,16 +5,16 @@ of a homogeneous or inhomogeneous Hagedorn wavepacket during the
 time propagation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import squeeze
 from matplotlib.pyplot import *
 
 from WaveBlocksND import IOManager
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -40,7 +40,8 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
 
@@ -62,7 +63,8 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
@@ -94,9 +96,11 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    print("Plotting the parameters of data block '"+str(index)+"'")
-
-    timegrid, qhist, phist, Qhist, Phist, Shist = data
+    if data is None:
+        return
+    else:
+        print("Plotting the parameters of data block '"+str(index)+"'")
+        timegrid, qhist, phist, Qhist, Phist, Shist = data
 
     # Plot the 2D trajectory of the parameters q and p
     fig = figure()
@@ -125,11 +129,25 @@ def plot_parameters(data, index=0):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
+    iom = IOManager()
     try:
-        iom.open_file(filename=sys.argv[1])
+        iom.open_file(filename=args.datafile)
     except IndexError:
         iom.open_file()
 
