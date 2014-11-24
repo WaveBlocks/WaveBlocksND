@@ -6,12 +6,13 @@ Note: The terms 'path' and 'ID' are used as synonyms here. Each simulation
 ID is just the base name of the path or the configuration file.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 import os
 import operator as op
+from collections import OrderedDict
 
 import GlobalDefaults as GD
 
@@ -151,7 +152,7 @@ def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kv
     tmp = [ s.partition(ldel + pattern + mdel) for s in stringlist ]
     tmp = [ s[0:2] + s[2].partition(rdel) for s in tmp ]
 
-    distinct_vals = set([ s[2] for s in tmp ])
+    distinct_vals = list(OrderedDict.fromkeys([ s[2] for s in tmp ]))
 
     groups = [ [] for i in xrange(len(distinct_vals)) ]
 
