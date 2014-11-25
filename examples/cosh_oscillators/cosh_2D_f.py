@@ -8,7 +8,7 @@ ncomponents = 1
 
 eps = 0.1
 
-potential = "cosh_osc_2d"
+potential = "cosh_osc_rotsym_2d"
 
 # The grid of our simulation domain
 limits = [(-6.283185307179586, 6.283185307179586), (-6.283185307179586, 6.283185307179586)]
