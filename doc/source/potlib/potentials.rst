@@ -487,7 +487,7 @@ Potential ``cos_osc_rotsym_2d``
 Potential ``cosh_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = ax \left(- \cosh{\left (bx x \right )} + 1\right) + ay \left(- \cosh{\left (by y \right )} + 1\right)`
+* Formula: :math:`V(x) = ax \left(\cosh{\left (bx x \right )} + 1\right) + ay \left(\cosh{\left (by y \right )} + 1\right)`
 
 * Variables: :math:`x`, :math:`y`
 

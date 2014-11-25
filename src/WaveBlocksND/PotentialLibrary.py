@@ -172,7 +172,7 @@ cos_osc_add_2d["number_levels"] = 1
 # A potential consisting of a hyperbolic cosine
 cosh_osc_2d = {}
 cosh_osc_2d["variables"] = ["x", "y"]
-cosh_osc_2d["potential"] = "ax * (1 - cosh(bx*x)) + ay * (1 - cosh(by*y))"
+cosh_osc_2d["potential"] = "ax * (1 + cosh(bx*x)) + ay * (1 + cosh(by*y))"
 cosh_osc_2d["defaults"] = {"ax":"1", "bx":"1", "ay":"1", "by":"1"}
 cosh_osc_2d["number_levels"] = 1
 
