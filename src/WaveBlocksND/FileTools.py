@@ -243,6 +243,21 @@ def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp
     return sorted_list
 
 
+def sort_and_group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
+    r"""Sorts and groups simulation IDs with respect to a pattern.
+
+    :param stringlist: A list with the simulation IDs.
+    :param pattern: The pattern used for sorting and grouping.
+    :param ldel: Left delimiter of the pattern.
+    :param mdel: Middle delimiter of the pattern.
+    :param rdel: Right delimiter of the pattern.
+    :param as_string: Determines if the values for ``pattern`` get converted to floats. Not used here.
+    :return: A list of groups of simulation IDs.
+    """
+    return group_by(sort_by(stringlist, pattern, ldel=ldel, mdel=mdel, rdel=rdel, as_string=as_string),
+                    pattern, ldel=ldel, mdel=mdel, rdel=rdel, as_string=as_string)
+
+
 def get_max_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel, as_string=False):
     r"""Get the maximum of a list with simulation IDs with respect to a (numerical) value in the ID.
     This is just a simple convenience function so that the user needs not to remember if the
@@ -382,3 +397,17 @@ def get_value_of(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_
     if unpack and len(values) == 1:
         values = values[0]
     return values
+
+
+def split_list(alist, n):
+    r"""Split a list into :math:`n` parts.
+
+    :param alist: The list to split.
+    :param n: The number of parts.
+    :return: A list containing the pieces of the original list.
+
+    .. note:: The pieces are *not* continuous sublists of the given list.
+    """
+    n = max(1, n)
+    n = min(len(alist), n)
+    return [ alist[i::n] for i in xrange(n) ]
