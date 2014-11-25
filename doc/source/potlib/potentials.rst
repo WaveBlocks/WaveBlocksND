@@ -232,6 +232,9 @@ Potential ``delta_gap``
 
 * Variables: :math:`x`
 
+* Default values:
+
+  * :math:`\delta = 0.2`
 
 .. image:: fig/delta_gap.png
    :width: 400px
@@ -436,8 +439,100 @@ Potential ``cos_osc_2d``
 .. image:: fig/cos_osc_2d.png
    :width: 400px
 
+Potential ``cos_osc_add_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = - \cos{\left (a x \right )} - \cos{\left (b y \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1`
+
+.. image:: fig/cos_osc_add_2d.png
+   :width: 400px
+
+Potential ``cos_osc_mul_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = - \cos{\left (a x \right )} \cos{\left (b y \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1`
+
+.. image:: fig/cos_osc_mul_2d.png
+   :width: 400px
+
+Potential ``cos_osc_rotsym_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = a \cos{\left (b \sqrt{x^{2} + y^{2}} \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1`
+
+.. image:: fig/cos_osc_rotsym_2d.png
+   :width: 400px
+
 Potential ``cosh_osc_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax \left(- \cosh{\left (bx x \right )} + 1\right) + ay \left(- \cosh{\left (by y \right )} + 1\right)`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`ay = 1`
+  * :math:`ax = 1`
+  * :math:`bx = 1`
+  * :math:`by = 1`
+
+.. image:: fig/cosh_osc_2d.png
+   :width: 400px
+
+Potential ``cosh_osc_add_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \cosh{\left (a x \right )} + \cosh{\left (b y \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1`
+
+.. image:: fig/cosh_osc_add_2d.png
+   :width: 400px
+
+Potential ``cosh_osc_mul_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \cosh{\left (a x \right )} \cosh{\left (b y \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b = 1`
+
+.. image:: fig/cosh_osc_mul_2d.png
+   :width: 400px
+
+Potential ``cosh_osc_rotsym_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 * Formula: :math:`V(x) = a \cosh{\left (b \sqrt{x^{2} + y^{2}} \right )}`
 
@@ -448,7 +543,7 @@ Potential ``cosh_osc_2d``
   * :math:`a = 1`
   * :math:`b = 1`
 
-.. image:: fig/cosh_osc_2d.png
+.. image:: fig/cosh_osc_rotsym_2d.png
    :width: 400px
 
 Potential ``double_well_2d``
@@ -540,7 +635,7 @@ Potential ``harmonic_channel``
 Potential ``henon_heiles``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - 0.333333333333333 y^{3}\right)`
+* Formula: :math:`V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - \frac{y^{3}}{3}\right)`
 
 * Variables: :math:`x`, :math:`y`
 
@@ -657,6 +752,21 @@ Potential ``ring_valley``
   * :math:`\delta = 1`
 
 .. image:: fig/ring_valley.png
+   :width: 400px
+
+Potential ``sine_maar``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = \alpha e^{- \sigma \left(x^{2} + y^{2}\right)} + \sin{\left (x^{2} + y^{2} \right )}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`\alpha = 0.8`
+  * :math:`\sigma = 1.0`
+
+.. image:: fig/sine_maar.png
    :width: 400px
 
 Potential ``conic``
