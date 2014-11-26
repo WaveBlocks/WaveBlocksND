@@ -10,14 +10,13 @@ for one-dimensional wavefunctions.
 
 import argparse
 from numpy import angle, conj, real, imag, squeeze
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcf
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
 
 
 def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
@@ -39,9 +38,9 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
         PP = parameters
 
     if load is True:
-        print("Loading grid data from datablock 'global'")
         if gridblockid is None:
             gridblockid = blockid
+        print("Loading grid data from datablock '%s'" % gridblockid)
         G = iom.load_grid(blockid=gridblockid)
         G = G.reshape((1, -1))
         grid = real(squeeze(G))
@@ -50,7 +49,7 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
         G = BlockFactory().create_grid(PP)
         grid = real(squeeze(G.get_nodes(flat=True)))
 
-    # Automatic viewport limits
+    # View
     if view[0] is None:
         view[0] = grid.min()
     if view[1] is None:
@@ -59,7 +58,7 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
     for step in timegrid:
-        print(" Plotting frame of timestep # " + str(step))
+        print(" Plotting frame of timestep # %d" % step)
 
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
         values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
@@ -93,10 +92,8 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
         else:
             fig.suptitle(r"$\Psi$")
 
-        fig.savefig("wavefunction_block"+str(blockid)+"_"+ (7-len(str(step)))*"0"+str(step) +GD.output_format)
+        fig.savefig("wavefunction_block_%s_timestep_%07d.png" % (blockid, step))
         close(fig)
-
-    print(" Plotting frames finished")
 
 
 
@@ -112,7 +109,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-p", "--paramfile",
                         type = str,
-                        help = "The simulation data file",
+                        help = "The configuration parameter file",
                         nargs = "?",
                         default = None)
 
@@ -149,10 +146,7 @@ if __name__ == "__main__":
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read file with parameter data for grid
     if args.paramfile:
@@ -166,7 +160,7 @@ if __name__ == "__main__":
 
     # Iterate over all blocks and plot their data
     for blockid in iom.get_block_ids():
-        print("Plotting frames of data block '"+str(blockid)+"'")
+        print("Plotting frames of data block '%s'" % blockid)
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom,
@@ -177,6 +171,6 @@ if __name__ == "__main__":
                         plotabssqr=args.plotabssqr,
                         load=False)
         else:
-            print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting any wavefunctions in block '%s'!" % blockid)
 
     iom.finalize()

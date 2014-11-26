@@ -4,25 +4,28 @@ Plot the wavefunctions probability densities
 for two-dimensional wavefunctions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import real
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import WaveFunction
 from WaveBlocksND import BasisTransformationWF
 from WaveBlocksND import IOManager
+from WaveBlocksND import GlobalDefaults as GLD
+from WaveBlocksND.Plot import plotcf2d
 
-from WaveBlocksND.Plot import plotcm
 
+def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
+    """Plot the wave function for a series of timesteps.
 
-def plot_frames(PP, iom, blockid=0, load=False):
-    r"""
+    :param iom: An :py:class:`IOManager` instance providing the simulation data.
+    :param view: The aspect ratio.
     """
     parameters = iom.load_parameters()
 
@@ -41,81 +44,124 @@ def plot_frames(PP, iom, blockid=0, load=False):
     else:
         G = BlockFactory().create_grid(PP)
 
-    V = BlockFactory().create_potential(parameters)
+    if tte:
+        V = BlockFactory().create_potential(parameters)
+        BT = BasisTransformationWF(V)
+        BT.set_grid(G)
 
     WF = WaveFunction(parameters)
     WF.set_grid(G)
-
-    BT = BasisTransformationWF(V)
-    BT.set_grid(G)
+    N = WF.get_number_components()
 
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
-    u, v = G.get_nodes(split=True, flat=False)
-    u = real(u)
-    v = real(v)
+    u, v = G.get_axes()
+    u = real(u.reshape(-1,))
+    v = real(v.reshape(-1,))
 
-    N = WF.get_number_components()
+    # View
+    if view is not None:
+        if view[0] is None:
+            view[0] = u.min()
+        if view[1] is None:
+            view[1] = u.max()
+        if view[2] is None:
+            view[2] = v.min()
+        if view[3] is None:
+            view[3] = v.max()
 
     for step in timegrid:
-        print(" Plotting frame of timestep # " + str(step))
+        print(" Plotting frame of timestep # %d" % step)
 
+        # Load the data
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
         values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
-
         WF.set_values(values)
 
         # Transform the values to the eigenbasis
-        # TODO: improve this:
-        if parameters["algorithm"] == "fourier":
+        if tte:
             BT.transform_to_eigen(WF)
-        else:
-            pass
 
         Psi = WF.get_values()
 
+        # Plot
         fig = figure()
 
         for level in xrange(N):
+            # Wavefunction data
             z = Psi[level]
             z = z.reshape(G.get_number_nodes())
 
-            subplot(N,1,level+1)
-            plotcm(z, darken=0.3)
+            fig.add_subplot(N,1,level+1)
+            plotcf2d(u, v, z, darken=0.3, limits=view)
 
-        savefig("wavefunction_level_"+str(level)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+".png")
+        fig.savefig("wavefunction_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
         close(fig)
 
-    print(" Plotting frames finished")
 
 
 
 if __name__ == "__main__":
-    iom = IOManager()
-    PL = ParameterLoader()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-p", "--paramfile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = None)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    parser.add_argument("-tte", "--transformtoeigen",
+                        action = "store_true",
+                        help = "Transform the data into the eigenbasis before plotting")
+
+    parser.add_argument("-x", "--xrange",
+                        type = float,
+                        help = "The plot range on the x-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-y", "--yrange",
+                        type = float,
+                        help = "The plot range on the y-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
     # Read file with parameter data for grid
-    try:
-        PP = PL.load_from_file(sys.argv[2])
-    except IndexError:
+    if args.paramfile:
+        PL = ParameterLoader()
+        PP = PL.load_from_file(args.paramfile)
+    else:
         PP = None
 
     # The axes rectangle that is plotted
-    #view = [-3.5, 3.5, -0.1, 3.5]
+    view = args.xrange + args.yrange
 
     # Iterate over all blocks and plot their data
     for blockid in iom.get_block_ids():
-        print("Plotting frames of data block '"+str(blockid)+"'")
+        print("Plotting frames of data block '%s'" % blockid)
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
-            plot_frames(PP, iom, blockid=blockid)
+            plot_frames(PP, iom, blockid=blockid,
+                        tte=args.transformtoeigen,
+                        view=view)
         else:
-            print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting any wavefunctions in block '%s'!" % blockid)
 
     iom.finalize()
