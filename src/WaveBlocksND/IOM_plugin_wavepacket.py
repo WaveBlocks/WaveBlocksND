@@ -337,7 +337,7 @@ def load_wavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     order. It is included only for convenience and is not particularly efficient.
 
     :param timestep: The timestep :math:`n` at which we load the wavepacket.
-    :param key: Specify which parameters to save. All are independent.
+    :param key: Specify which parameters to load. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     :param blockid: The ID of the data block to operate on.

@@ -94,7 +94,7 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None, interactiv
                 if view[4] is None:
                     view[4] = 0.0
                 if view[5] is None:
-                    view[5] = abs(z).max()
+                    view[5] = 1.1*abs(z).max()
 
             # Plot
             if not interactive:

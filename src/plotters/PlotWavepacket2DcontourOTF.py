@@ -48,18 +48,6 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
         V = BF.create_potential(parameters)
         BT = BasisTransformationHAWP(V)
 
-    # Load the wavepackets
-    wpd = iom.load_wavepacket_description(blockid=blockid)
-    HAWP = BF.create_wavepacket(wpd)
-
-    # Basis shapes
-    BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
-    BS = {}
-    for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BF.create_basis_shape(descr)
-
-    N = HAWP.get_number_components()
-
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
 
     u, v = G.get_axes()
@@ -80,18 +68,14 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
     for step in timegrid:
         print(" Plotting frame of timestep # %d" % step)
 
-        hi, ci = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
-        Pi = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
-
-        HAWP.set_parameters(Pi)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hi ])
-        HAWP.set_coefficients(ci)
-
-        psi = HAWP.evaluate_at(G, prefactor=True, component=0)
+        HAWP = iom.load_wavepacket(step, blockid=blockid)
+        N = HAWP.get_number_components()
 
         # Transform the values to the eigenbasis
         if tte:
-            BT.transform_to_eigen(psi)
+            BT.transform_to_eigen(HAWP)
+
+        psi = HAWP.evaluate_at(G.get_nodes(), prefactor=True, component=0)
 
         # Plot
         fig = figure()
