@@ -8,17 +8,17 @@ Note that this script will fail to produce correct results if the
 basis shapes are adaptive and their mappings mu incompatible!
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import abs, angle
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcm
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -32,11 +32,11 @@ def read_all_datablocks(iom):
     # Iterate over all blocks and plot their data
     for blockid in iom.get_block_ids():
         if iom.has_wavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid)
+            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), blockid=blockid)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), blockid=blockid)
         else:
-            print("Warning: Not plotting wavepacket coefficients in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -46,7 +46,8 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     hashes, coeffs = iom.load_wavepacket_coefficients(blockid=blockid, get_hashes=True)
 
@@ -60,14 +61,15 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(blockid=blockid, get_hashes=True)
 
     return time, coeffs
 
 
-def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
+def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -75,7 +77,7 @@ def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
     :param imgsize: The size of the plot. For a large number of plotted
                     coefficients, we might have to increase this value.
     """
-    print("Plotting the coefficients of data block '"+str(index)+"'")
+    print("Plotting the coefficients of data block '%s'" % blockid)
 
     # Check if we have enough coefficients to plot
     timegrid, coeffs = data
@@ -90,52 +92,63 @@ def plot_coefficients(parameters, data, index=0, imgsize=(10,20)):
             imgsize = imags
 
         fig = figure(figsize=imgsize)
-        ax = gca()
+        ax = fig.gca()
         ax.matshow(abs(coeff))
-        ax.set_xlabel("k")
-        ax.set_ylabel("t")
-        ax.set_title(r"Coefficients $c_k^"+str(jndex)+"$")
-        fig.savefig("wavepacket_coefficients_map_abs_component"+str(jndex)+"_block"+str(index)+GD.output_format)
+        ax.set_xlabel(r"$k$")
+        ax.set_ylabel(r"$t$")
+        ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
+        fig.savefig("wavepacket_coefficients_map_abs_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
         close(fig)
 
         fig = figure(figsize=imgsize)
-        ax = gca()
+        ax = fig.gca()
         ax.matshow(angle(coeff))
-        ax.set_xlabel("k")
-        ax.set_ylabel("t")
-        ax.set_title(r"Coefficients $c_k^"+str(jndex)+"$")
-        fig.savefig("wavepacket_coefficients_map_angle_component"+str(jndex)+"_block"+str(index)+GD.output_format)
+        ax.set_xlabel(r"$k$")
+        ax.set_ylabel(r"$t$")
+        ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
+        fig.savefig("wavepacket_coefficients_map_angle_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
         close(fig)
 
         fig = figure(figsize=imgsize)
-        ax = gca()
+        ax = fig.gca()
         plotcm(coeff, angle(coeff), abs(coeff), darken=False, axes=ax)
-        ax.set_xlabel("k")
-        ax.set_ylabel("t")
-        ax.set_title(r"Coefficients $c_k^"+str(jndex)+"$")
-        fig.savefig("wavepacket_coefficients_map_cm_component"+str(jndex)+"_block"+str(index)+GD.output_format)
+        ax.set_xlabel(r"$k$")
+        ax.set_ylabel(r"$t$")
+        ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
+        fig.savefig("wavepacket_coefficients_map_cm_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
         close(fig)
 
         fig = figure(figsize=imgsize)
-        ax = gca()
+        ax = fig.gca()
         plotcm(coeff, angle(coeff), abs(coeff), darken=True, axes=ax)
-        ax.set_xlabel("k")
-        ax.set_ylabel("t")
-        ax.set_title(r"Coefficients $c_k^"+str(jndex)+"$")
-        fig.savefig("wavepacket_coefficients_map_cm_darken_component"+str(jndex)+"_block"+str(index)+GD.output_format)
+        ax.set_xlabel(r"$k$")
+        ax.set_ylabel(r"$t$")
+        ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
+        fig.savefig("wavepacket_coefficients_map_cm_darken_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
         close(fig)
 
 
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ['0'])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
     read_all_datablocks(iom)

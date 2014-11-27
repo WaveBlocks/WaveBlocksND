@@ -17,7 +17,6 @@ from WaveBlocksND import IOManager
 from WaveBlocksND import BlockFactory
 from WaveBlocksND.Plot import stemcf
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
 
 
 def read_all_datablocks(iom):
@@ -32,7 +31,7 @@ def read_all_datablocks(iom):
         elif iom.has_inhomogwavepacket(blockid=blockid):
             read_data_inhomogeneous(iom, blockid=blockid)
         else:
-            print("Warning: Not plotting wavepacket coefficients in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -63,7 +62,7 @@ def read_data_homogeneous(iom, blockid=0):
             k.append(ki)
 
         dt = parameters["dt"] if parameters.has_key("dt") else None
-        plot_coefficients(k, coeffs, step, dt, index=blockid)
+        plot_coefficients(k, coeffs, step, dt, blockid=blockid)
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -94,10 +93,10 @@ def read_data_inhomogeneous(iom, blockid=0):
             k.append(ki)
 
         dt = parameters["dt"] if parameters.has_key("dt") else None
-        plot_coefficients(k, coeffs, step, dt, index=blockid)
+        plot_coefficients(k, coeffs, step, dt, blockid=blockid)
 
 
-def plot_coefficients(k, c, step, dt, index=0):
+def plot_coefficients(k, c, step, dt, blockid=0):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -105,7 +104,7 @@ def plot_coefficients(k, c, step, dt, index=0):
     :param imgsize: The size of the plot. For a large number of plotted
                     coefficients, we might have to increase this value.
     """
-    print("Plotting the coefficients of data block '"+str(index)+"' at timestep "+str(step))
+    print("Plotting the coefficients of data block '%s' at timestep %d" % (blockid,step))
 
     N = len(k)
 
@@ -125,11 +124,11 @@ def plot_coefficients(k, c, step, dt, index=0):
         ax.set_ylabel(r"$c_k$")
 
     if dt is not None:
-        fig.suptitle(r"Coefficients $c_k$ at time $t="+str(step*dt)+r"$")
+        fig.suptitle(r"Coefficients $c_k$ at time $t=%f$" % (step*dt))
     else:
         fig.suptitle(r"Coefficients $c_k$")
 
-    fig.savefig("wavepacket_coefficients_block"+str(index)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+GD.output_format)
+    fig.savefig("wavepacket_coefficients_block_%s_timestep_%07d.png" % (blockid, step))
     close(fig)
 
 
@@ -153,10 +152,7 @@ if __name__ == "__main__":
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
     read_all_datablocks(iom)

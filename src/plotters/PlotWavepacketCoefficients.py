@@ -14,29 +14,12 @@ basis shapes are adaptive and their mappings mu incompatible!
 
 import argparse
 from numpy import real, imag, abs, angle
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
-
-
-def read_all_datablocks(iom):
-    r"""Read the data from all blocks that contain any usable data.
-
-    :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    """
-    parameters = iom.load_parameters()
-
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_wavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid)
-        elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting wavepacket coefficients in block '"+str(blockid)+"'!")
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -69,7 +52,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     return time, coeffs, [h.reshape(-1) for h in hashes]
 
 
-def plot_coefficients(parameters, data, absang=False, index=0, imgsize=(10,20)):
+def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsize=(10,20)):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -77,7 +60,7 @@ def plot_coefficients(parameters, data, absang=False, index=0, imgsize=(10,20)):
     :param imgsize: The size of the plot. For a large number of plotted
                     coefficients, we might have to increase this value.
     """
-    print("Plotting the coefficients of data block '"+str(index)+"'")
+    print("Plotting the coefficients of data block '%s'" % index)
 
     # Check if we have enough coefficients to plot
     timegrid, coeffs, hashes = data
@@ -97,30 +80,30 @@ def plot_coefficients(parameters, data, absang=False, index=0, imgsize=(10,20)):
     for bs in BS:
         allvects.update(set([i for i in bs]))
 
-    # And plot
+    # Plot
     for vect in allvects:
-        print(" Plotting coefficient "+str(vect)+" out of "+str(len(allvects)))
+        print(" Plotting coefficient "+str(vect)+" out of %d" % len(allvects))
 
         fig = figure()
 
         for level in xrange(N):
             j = BS[level][vect]
             if j is not None:
-
                 ax = fig.add_subplot(N,1,level+1)
 
-                if absang is True:
-                    ax.plot(timegrid, angle(coeffs[level][:,j]))
-                    ax.plot(timegrid, abs(coeffs[level][:,j]), "r")
+                if not reim:
+                    ax.plot(timegrid, angle(coeffs[level][:,j]), label=r"$\arg c$")
                 else:
-                    ax.plot(timegrid, real(coeffs[level][:,j]))
-                    ax.plot(timegrid, imag(coeffs[level][:,j]))
-                    ax.plot(timegrid, abs(coeffs[level][:,j]))
+                    ax.plot(timegrid, real(coeffs[level][:,j]), label=r"$\Re c$")
+                    ax.plot(timegrid, imag(coeffs[level][:,j]), label=r"$\Im c$")
+
+                ax.plot(timegrid, abs(coeffs[level][:,j]), "r", label=r"$|c|$")
 
                 ax.grid(True)
                 ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+                ax.legend(loc='upper right')
                 ax.set_xlabel(r"$t$")
-                ax.set_ylabel(r"$c^"+str(level)+r"$")
+                ax.set_ylabel(r"$c^{%d}$" % level)
 
         fig.suptitle(r"$\underline{k} = "+str(vect)+r"$")
         fig.savefig("coefficient_k"+str(vect)+"_block"+str(index)+GD.output_format)
@@ -143,16 +126,26 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = [0])
 
+    parser.add_argument("--reim",
+                        action = "store_true",
+                        help = "Plot the real and imaginary parts")
+
     args = parser.parse_args()
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
-    read_all_datablocks(iom)
+    parameters = iom.load_parameters()
+
+    # Iterate over all blocks and plot their data
+    for blockid in iom.get_block_ids():
+        if iom.has_wavepacket(blockid=blockid):
+            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid, reim=args.reim)
+        elif iom.has_inhomogwavepacket(blockid=blockid):
+            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid, reim=args.reim)
+        else:
+            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 
     iom.finalize()
