@@ -57,12 +57,6 @@ def read_data_homogeneous(iom, blockid=0):
     # Basis transformator
     BT = BasisTransformationHAWP(Potential)
 
-    # Basis shapes
-    BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
-    BS = {}
-    for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
-
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_wavepacket_description(blockid=blockid)
     HAWP = BlockFactory().create_wavepacket(descr)
@@ -76,13 +70,7 @@ def read_data_homogeneous(iom, blockid=0):
     for i, step in enumerate(timegrid):
         print(" Computing eigentransformation at timestep %d" % step)
         # Retrieve simulation data
-        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
-        hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
-
-        # Configure the wavepacket
-        HAWP.set_parameters(params)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
-        HAWP.set_coefficients(coeffs)
+        HAWP = iom.load_wavepacket(timestep=step, blockid=blockid)
 
         # Transform to the eigenbasis.
         BT.transform_to_eigen(HAWP)
@@ -111,12 +99,6 @@ def read_data_inhomogeneous(iom, blockid=0):
     # Basis transformator
     BT = BasisTransformationHAWP(Potential)
 
-    # Basis shapes
-    BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
-    BS = {}
-    for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
-
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_inhomogwavepacket_description(blockid=blockid)
     HAWP = BlockFactory().create_wavepacket(descr)
@@ -130,13 +112,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     for i, step in enumerate(timegrid):
         print(" Computing eigentransformation at timestep %d" % step)
         # Retrieve simulation data
-        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid)
-        hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
-
-        # Configure the wavepacket
-        HAWP.set_parameters(params)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
-        HAWP.set_coefficients(coeffs)
+        HAWP = iom.load_inhomogwavepacket(timestep=step, blockid=blockid)
 
         # Transform to the eigenbasis.
         BT.transform_to_eigen(HAWP)
