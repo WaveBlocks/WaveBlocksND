@@ -4,11 +4,11 @@ Function for plotting functions of the type f:I^2 -> C
 with contour levels having a fixed level distance.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import amax, amin, abs, arange, squeeze
+from numpy import amax, amin, arange, squeeze
 from matplotlib.pyplot import gca
 
 

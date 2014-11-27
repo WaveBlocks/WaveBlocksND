@@ -10,9 +10,9 @@ time propagation.
 """
 
 import argparse
-from numpy import real, imag, abs, squeeze, array
+from numpy import real, imag, abs, array
 from numpy.linalg import norm, det
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ComplexMath
 from WaveBlocksND import IOManager
@@ -48,11 +48,11 @@ def read_data_homogeneous(iom, blockid=0):
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
-    qhist = squeeze(array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]))
-    phist = squeeze(array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]))
-    Qhist = squeeze(array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]))
-    Phist = squeeze(array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]))
-    Shist = squeeze(Shist)
+    qhist = array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]).reshape(-1)
+    phist = array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]).reshape(-1)
+    Qhist = array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]).reshape(-1)
+    Phist = array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]).reshape(-1)
+    Shist = Shist.reshape(-1)
 
     return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
 
@@ -77,11 +77,11 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(squeeze(q))
-        phist.append(squeeze(p))
-        Qhist.append(squeeze(Q))
-        Phist.append(squeeze(P))
-        Shist.append(squeeze(S))
+        qhist.append(array([ norm(q[i,:]) for i in xrange(q.shape[0]) ]).reshape(-1))
+        phist.append(array([ norm(p[i,:]) for i in xrange(p.shape[0]) ]).reshape(-1))
+        Qhist.append(array([ det(Q[i,:,:]) for i in xrange(Q.shape[0]) ]).reshape(-1))
+        Phist.append(array([ det(P[i,:,:]) for i in xrange(P.shape[0]) ]).reshape(-1))
+        Shist.append(S.reshape(-1))
 
     return (time, qhist, phist, Qhist, Phist, Shist)
 
@@ -238,16 +238,13 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--blockid",
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ['0'])
 
     args = parser.parse_args()
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
     read_all_datablocks(iom)

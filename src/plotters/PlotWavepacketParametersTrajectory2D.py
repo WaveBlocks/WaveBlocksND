@@ -10,8 +10,8 @@ time propagation.
 """
 
 import argparse
-from numpy import squeeze
-from matplotlib.pyplot import *
+from numpy import real
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import GlobalDefaults as GLD
@@ -38,22 +38,21 @@ def read_data_homogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    parameters = iom.load_parameters()
-    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
-    time = timegrid * dt
-
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
-
-    # The Dimension D, we know that q has shapw (#timesteps, D, 1)
-    D = Pi[0].shape[1]
-    if not D == 2:
-        print("Warning: Trajectory plotting implemented only for 2D wavepackets")
-        return
-
-    Pi = map(squeeze, Pi)
     qhist, phist, Qhist, Phist, Shist = Pi
-    return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
+
+    # The Dimension D, we know that q has shape (#timesteps, D, 1)
+    D = qhist.shape[1]
+    if not D == 2:
+        raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
+
+    Pi = [ [real(qhist.reshape((-1,D)))],
+           [real(phist.reshape((-1,D)))],
+           [Qhist.reshape((-1,D,D))],
+           [Phist.reshape((-1,D,D))],
+           [Shist.reshape((-1,1))] ]
+
+    return Pi
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -61,18 +60,12 @@ def read_data_inhomogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    parameters = iom.load_parameters()
-    timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
-    time = timegrid * dt
-
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
-    # The Dimension D, we know that q_0 has shapw (#timesteps, D, 1)
+    # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
     D = Pis[0][0].shape[1]
     if not D == 2:
-        print("Warning: Trajectory plotting implemented only for 2D wavepackets")
-        return
+        raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
 
     # List with Pi time evolutions
     Phist = []
@@ -82,13 +75,13 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(squeeze(q))
-        phist.append(squeeze(p))
-        Qhist.append(squeeze(Q))
-        Phist.append(squeeze(P))
-        Shist.append(squeeze(S))
+        qhist.append(real(q.reshape((-1,D,))))
+        phist.append(real(p.reshape((-1,D,))))
+        Qhist.append(Q.reshape((-1,D,D)))
+        Phist.append(P.reshape((-1,D,D)))
+        Shist.append(S.reshape((-1,1,)))
 
-    return (time, qhist, phist, Qhist, Phist, Shist)
+    return (qhist, phist, Qhist, Phist, Shist)
 
 
 def plot_parameters(data, index=0):
@@ -96,11 +89,9 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    if data is None:
-        return
-    else:
-        print("Plotting the parameters of data block '"+str(index)+"'")
-        timegrid, qhist, phist, Qhist, Phist, Shist = data
+    print("Plotting the parameters of data block '%s'" % index)
+
+    qhist, phist, Qhist, Phist, Shist = data
 
     # Plot the 2D trajectory of the parameters q and p
     fig = figure()
@@ -140,16 +131,13 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--blockid",
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ['0'])
 
     args = parser.parse_args()
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
     read_all_datablocks(iom)

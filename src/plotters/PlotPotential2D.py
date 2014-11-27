@@ -4,11 +4,11 @@ Plot the eigenvalues (energy levels) of the potential.
 This script is only for two-dimensional potentials.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import real
 
 try:
@@ -22,6 +22,7 @@ from WaveBlocksND import BlockFactory
 from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
+from WaveBlocksND import GlobalDefaults as GLD
 
 
 def plot_potential(grid, potential, along_axes=False, interactive=False, view=None, size=(800,700)):
@@ -79,27 +80,63 @@ def plot_potential(grid, potential, along_axes=False, interactive=False, view=No
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-p", "--paramfile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = None)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    parser.add_argument("-x", "--xrange",
+                        type = float,
+                        help = "The plot range on the x-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-y", "--yrange",
+                        type = float,
+                        help = "The plot range on the y-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-z", "--zrange",
+                        type = float,
+                        help = "The plot range on the z-axis",
+                        nargs = 2,
+                        default = [0, 10])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
+    iom = IOManager()
     try:
-        iom.open_file(filename=sys.argv[1])
+        iom.open_file(filename=args.datafile)
     except IndexError:
         iom.open_file()
 
+    # Read file with parameter data for grid
     parameters = iom.load_parameters()
 
-    # Read file with parameter data for grid
-    try:
+    if args.paramfile:
         PL = ParameterLoader()
-        gridparams = PL.load_from_file(sys.argv[2])
-    except IndexError:
+        gridparams = PL.load_from_file(args.paramfile)
+    else:
         gridparams = parameters
 
-    # Manually adjust the plotting region
-    # view = [xmin, xmax, ymin, ymax, zmin, zmax]
-    view = [None, None, None, None, 0, 10]
-
+    # The axes rectangle that is plotted
+    view = args.xrange + args.yrange + args.zrange
     if view[0] is None:
         view[0] = gridparams["limits"][0][0]
     if view[1] is None:

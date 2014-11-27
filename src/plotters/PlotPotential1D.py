@@ -4,11 +4,11 @@ Plot the eigenvalues (energy levels) of the potential.
 This script is only for one-dimensional potentials.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import real
 from matplotlib.pyplot import *
 
@@ -17,7 +17,7 @@ from WaveBlocksND import BlockFactory
 from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -56,27 +56,57 @@ def plot_potential(grid, potential, view=None, size=(12,9), fill=False):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
-    PL = ParameterLoader()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-p", "--paramfile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = None)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    parser.add_argument("-x", "--xrange",
+                        type = float,
+                        help = "The plot range on the x-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-y", "--yrange",
+                        type = float,
+                        help = "The plot range on the y-axis",
+                        nargs = 2,
+                        default = [-2, 5])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
+    iom = IOManager()
     try:
-        iom.open_file(filename=sys.argv[1])
+        iom.open_file(filename=args.datafile)
     except IndexError:
         iom.open_file()
 
+    # Read file with parameter data for grid
     parameters = iom.load_parameters()
 
-    # Read file with parameter data for grid
-    try:
-        gridparams = PL.load_from_file(sys.argv[2])
-    except IndexError:
+    if args.paramfile:
+        PL = ParameterLoader()
+        gridparams = PL.load_from_file(args.paramfile)
+    else:
         gridparams = parameters
 
-    # Manually adjust the plotting region
-    # view = [xmin, xmax, ymin, ymax]
-    view = [None, None, -2, 5]
-
+    # The axes rectangle that is plotted
+    view = args.xrange + args.yrange
     if view[0] is None:
         view[0] = gridparams["limits"][0][0]
     if view[1] is None:

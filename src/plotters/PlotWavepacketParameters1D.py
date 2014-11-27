@@ -10,8 +10,8 @@ time propagation.
 """
 
 import argparse
-from numpy import real, imag, abs, squeeze
-from matplotlib.pyplot import *
+from numpy import real, imag, abs
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ComplexMath
 from WaveBlocksND import IOManager
@@ -45,10 +45,22 @@ def read_data_homogeneous(iom, blockid=0):
     time = timegrid * dt
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
-    Pi = map(squeeze, Pi)
-
     qhist, phist, Qhist, Phist, Shist = Pi
-    return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
+
+    # The Dimension D, we know that q has shape (#timesteps, D, 1)
+    D = qhist.shape[1]
+
+    if not D == 1:
+        raise NotImplementedError("This script is for 1D wavepackets only")
+
+    data = ( time,
+             [qhist.reshape(-1)],
+             [phist.reshape(-1)],
+             [Qhist.reshape(-1)],
+             [Phist.reshape(-1)],
+             [Shist.reshape(-1)] )
+
+    return data
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -63,6 +75,11 @@ def read_data_inhomogeneous(iom, blockid=0):
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
+    # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
+    D = Pis[0][0].shape[1]
+    if not D == 1:
+        raise NotImplementedError("This script is for 1D wavepackets only")
+
     # List with Pi time evolutions
     Phist = []
     Qhist = []
@@ -71,11 +88,11 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(squeeze(q))
-        phist.append(squeeze(p))
-        Qhist.append(squeeze(Q))
-        Phist.append(squeeze(P))
-        Shist.append(squeeze(S))
+        qhist.append(q.reshape(-1))
+        phist.append(p.reshape(-1))
+        Qhist.append(Q.reshape(-1))
+        Phist.append(P.reshape(-1))
+        Shist.append(S.reshape(-1))
 
     return (time, qhist, phist, Qhist, Phist, Shist)
 
@@ -85,7 +102,7 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    print("Plotting the parameters of data block '"+str(index)+"'")
+    print("Plotting the parameters of data block '%s'" % index)
 
     timegrid, qhist, phist, Qhist, Phist, Shist = data
 
@@ -228,16 +245,13 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--blockid",
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ['0'])
 
     args = parser.parse_args()
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     # Read the data and plot it, one plot for each data block.
     read_all_datablocks(iom)

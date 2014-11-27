@@ -3,11 +3,11 @@
 Plot the autocorrelations of the different wavepackets as well as the sum of all autocorrelations.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
+import argparse
 from numpy import max, real, imag, abs
 from matplotlib.pyplot import *
 
@@ -115,11 +115,25 @@ def plot_autocorrelations(data, index=0):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
 
-    # Read the file with the simulation data
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = [0])
+
+    args = parser.parse_args()
+
+    # Read file with simulation data
+    iom = IOManager()
     try:
-        iom.open_file(filename=sys.argv[1])
+        iom.open_file(filename=args.datafile)
     except IndexError:
         iom.open_file()
 

@@ -5,11 +5,11 @@ with abs(f) as z-value and phase(f) as color code.
 This function makes a three dimensional stem plot.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import array, zeros, real, squeeze
+from numpy import real, squeeze
 import mpl_toolkits.mplot3d.art3d as art3d
 from matplotlib.pyplot import gcf
 

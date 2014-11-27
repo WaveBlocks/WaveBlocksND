@@ -132,7 +132,7 @@ if __name__ == "__main__":
     parser.add_argument("-b", "--blockid",
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ['0'])
 
     parser.add_argument("-tte", "--transformtoeigen",
                         action = "store_true",

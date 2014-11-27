@@ -11,7 +11,7 @@ time propagation.
 
 import argparse
 from numpy import abs, angle, array
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import BlockFactory
