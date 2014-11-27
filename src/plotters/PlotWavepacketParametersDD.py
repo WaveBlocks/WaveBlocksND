@@ -32,7 +32,7 @@ def read_all_datablocks(iom):
         elif iom.has_inhomogwavepacket(blockid=blockid):
             plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
         else:
-            print("Warning: Not plotting wavepacket parameters in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -91,7 +91,7 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    print("Plotting the parameters of data block '"+str(index)+"'")
+    print("Plotting the parameters of data block '%s'" % index)
 
     timegrid, qhist, phist, Qhist, Phist, Shist = data
 

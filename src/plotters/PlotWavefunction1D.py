@@ -9,7 +9,7 @@ for one-dimensional wavefunctions.
 """
 
 import argparse
-from numpy import angle, conj, real, imag, squeeze
+from numpy import angle, conj, real, imag
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ParameterLoader
@@ -42,12 +42,11 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
             gridblockid = blockid
         print("Loading grid data from datablock '%s'" % gridblockid)
         G = iom.load_grid(blockid=gridblockid)
-        G = G.reshape((1, -1))
-        grid = real(squeeze(G))
+        grid = real(G.reshape(-1))
     else:
         print("Creating new grid")
         G = BlockFactory().create_grid(PP)
-        grid = real(squeeze(G.get_nodes(flat=True)))
+        grid = real(G.get_nodes(flat=True).reshape(-1))
 
     # View
     if view[0] is None:
@@ -73,13 +72,13 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
             if plotcomponents is True:
                 ax.plot(grid, real(component))
                 ax.plot(grid, imag(component))
-                ax.set_ylabel(r"$\Re \varphi_"+str(index)+r", \Im \varphi_"+str(index)+r"$")
+                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index,index))
             if plotabssqr is True:
                 ax.plot(grid, real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
             if plotphase is True:
                 plotcf(grid, angle(component), real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
 
             ax.set_xlabel(r"$x$")
 
@@ -88,7 +87,7 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
             ax.set_ylim(view[2:])
 
         if parameters.has_key("dt"):
-            fig.suptitle(r"$\Psi$ at time $"+str(step*parameters["dt"])+r"$")
+            fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")
 
@@ -171,6 +170,6 @@ if __name__ == "__main__":
                         plotabssqr=args.plotabssqr,
                         load=False)
         else:
-            print("Warning: Not plotting any wavefunctions in block '%s'!" % blockid)
+            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
 
     iom.finalize()

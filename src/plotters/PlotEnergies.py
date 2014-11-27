@@ -8,12 +8,12 @@ Plot the energies of the different wavepackets as well as the sum of all energie
 """
 
 import argparse
-from numpy import abs
-from matplotlib.pyplot import *
+from numpy import abs, add
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -27,7 +27,7 @@ def read_all_datablocks(iom):
         if iom.has_energy(blockid=blockid):
             plot_energies(read_data(iom, blockid=blockid), index=blockid)
         else:
-            print("Warning: Not plotting energies in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting energies in block '%s'" % blockid)
 
 
 def read_data(iom, blockid=0):
@@ -48,24 +48,18 @@ def read_data(iom, blockid=0):
     ekin, epot = iom.load_energy(blockid=blockid, split=True)
 
     # Compute the sum of all energies
-    ekinsum = reduce(lambda x,y: x+y, ekin)
-    epotsum = reduce(lambda x,y: x+y, epot)
-
-    ekin.append(ekinsum)
-    epot.append(epotsum)
+    ekin.append(reduce(add, ekin))
+    epot.append(reduce(add, epot))
 
     return (timek, timep, ekin, epot, have_dt)
 
 
 def plot_energies(data, index=0):
-    print("Plotting the energies of data block '"+str(index)+"'")
+    print("Plotting the energies of data block '%s'" % index)
 
     timegridk, timegridp, ekin, epot, have_dt = data
 
-    if have_dt:
-        xlbl=r"Time $t$"
-    else:
-        xlbl=r"Timesteps $n$"
+    xlbl = r"Time $t$" if have_dt else r"Timesteps $n$"
 
     # Plot the energies
     fig = figure()
@@ -73,15 +67,15 @@ def plot_energies(data, index=0):
 
     # Plot the kinetic energy of the individual wave packets
     for i, kin in enumerate(ekin[:-1]):
-        ax.plot(timegridk, kin, label=r"$E^{kin}_"+str(i)+r"$")
+        ax.plot(timegridk, kin, label=r"$E^{kin}_{%d}$" % i)
 
     # Plot the potential energy of the individual wave packets
     for i, pot in enumerate(epot[:-1]):
-        ax.plot(timegridp, pot, label=r"$E^{pot}_"+str(i)+r"$")
+        ax.plot(timegridp, pot, label=r"$E^{pot}_{%d}$" % i)
 
     # Plot the sum of kinetic and potential energy for all wave packets
     for i, (kin, pot) in enumerate(zip(ekin, epot)[:-1]):
-        ax.plot(timegridk, kin + pot, label=r"$E^{kin}_"+str(i)+r"+E^{pot}_"+str(i)+r"$")
+        ax.plot(timegridk, kin + pot, label=r"$E^{kin}_{%d}+E^{pot}_{%d}$" % (i,i))
 
     # Plot sum of kinetic and sum of potential energy
     ax.plot(timegridk, ekin[-1], label=r"$\sum_i E^{kin}_i$")
@@ -156,10 +150,7 @@ if __name__ == "__main__":
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     read_all_datablocks(iom)
 

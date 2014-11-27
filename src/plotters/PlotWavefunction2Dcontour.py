@@ -162,6 +162,6 @@ if __name__ == "__main__":
                         tte=args.transformtoeigen,
                         view=view)
         else:
-            print("Warning: Not plotting any wavefunctions in block '%s'!" % blockid)
+            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
 
     iom.finalize()

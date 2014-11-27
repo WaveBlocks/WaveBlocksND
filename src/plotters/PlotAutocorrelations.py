@@ -8,12 +8,12 @@ Plot the autocorrelations of the different wavepackets as well as the sum of all
 """
 
 import argparse
-from numpy import max, real, imag, abs
-from matplotlib.pyplot import *
+from numpy import max, real, imag, abs, add
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -27,7 +27,7 @@ def read_all_datablocks(iom):
         if iom.has_autocorrelation(blockid=blockid):
             plot_autocorrelations(read_data(iom, blockid=blockid), index=blockid)
         else:
-            print("Warning: Not plotting autocorrelations in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting autocorrelations in block '%s'" % blockid)
 
 
 def read_data(iom, blockid=0):
@@ -35,31 +35,26 @@ def read_data(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    timegrid = iom.load_autocorrelation_timegrid(blockid=blockid)
     have_dt = iom.has_parameters()
     if have_dt:
         parameters = iom.load_parameters()
-        time = timegrid * parameters["dt"]
-    else:
-        time = timegrid
+
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    timegrid = iom.load_autocorrelation_timegrid(blockid=blockid)
+    time = timegrid * dt
 
     autocorrelations = iom.load_autocorrelation(blockid=blockid, split=True)
-
-    autocorrelationsum = reduce(lambda x,y: x+y, autocorrelations)
-    autocorrelations.append(autocorrelationsum)
+    autocorrelations.append(reduce(add, autocorrelations))
 
     return (time, autocorrelations, have_dt)
 
 
 def plot_autocorrelations(data, index=0):
-    print("Plotting the autocorrelations of data block '"+str(index)+"'")
+    print("Plotting the autocorrelations of data block '%s'" % index)
 
     timegrid, autocorrelations, have_dt = data
 
-    if have_dt:
-        xlbl=r"Time $t$"
-    else:
-        xlbl=r"Timesteps $n$"
+    xlbl = r"Time $t$" if have_dt else r"Timesteps $n$"
 
     # Plot the autocorrelations
     fig = figure()
@@ -67,10 +62,7 @@ def plot_autocorrelations(data, index=0):
 
     # Plot the autocorrelations of the individual wavepackets
     for i, datum in enumerate(autocorrelations[:-1]):
-        label_i = r"$|\langle \Phi_"+str(i)+r"(0) | \Phi_"+str(i)+r"(t) \rangle|$"
-        #ax.plot(timegrid, real(datum), label=label_i)
-        #ax.plot(timegrid, imag(datum), label=label_i)
-        ax.plot(timegrid, abs(datum), label=label_i)
+        ax.plot(timegrid, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i,i))
 
     # Plot the sum of all autocorrelations
     ax.plot(timegrid, abs(autocorrelations[-1]), color=(1,0,0), label=r"$\sum_i {|\langle \Phi_i(0) | \Phi_i(t) \rangle|}$")
@@ -93,12 +85,9 @@ def plot_autocorrelations(data, index=0):
     # Plot the autocorrelations of the individual wavepackets
     for i, datum in enumerate(autocorrelations[:-1]):
         ax = fig.add_subplot(N, 1, i+1)
-        label_ir = r"$\Re \langle \Phi_"+str(i)+r"(0) | \Phi_"+str(i)+r"(t) \rangle$"
-        label_ii = r"$\Im \langle \Phi_"+str(i)+r"(0) | \Phi_"+str(i)+r"(t) \rangle$"
-        label_im = r"$|\langle \Phi_"+str(i)+r"(0) | \Phi_"+str(i)+r"(t) \rangle|$"
-        ax.plot(timegrid, real(datum), label=label_ir)
-        ax.plot(timegrid, imag(datum), label=label_ii)
-        ax.plot(timegrid, abs(datum), label=label_im)
+        ax.plot(timegrid, real(datum), label=r"$\Re \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i,i))
+        ax.plot(timegrid, imag(datum), label=r"$\Im \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i,i))
+        ax.plot(timegrid, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i,i))
 
         ax.set_xlim(min(timegrid), max(timegrid))
         ax.grid(True)
@@ -132,10 +121,7 @@ if __name__ == "__main__":
 
     # Read file with simulation data
     iom = IOManager()
-    try:
-        iom.open_file(filename=args.datafile)
-    except IndexError:
-        iom.open_file()
+    iom.open_file(filename=args.datafile)
 
     read_all_datablocks(iom)
 
