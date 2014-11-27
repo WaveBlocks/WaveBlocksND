@@ -135,11 +135,11 @@ if __name__ == "__main__":
 
     parser.add_argument("--plotcomponents",
                         action = "store_true",
-                        help = "Plot the real/imaginary parts.")
+                        help = "Plot the real/imaginary parts")
 
     parser.add_argument("--plotabssqr",
                         action = "store_true",
-                        help = "Plot the absolute value squared.")
+                        help = "Plot the absolute value squared")
 
     args = parser.parse_args()
 

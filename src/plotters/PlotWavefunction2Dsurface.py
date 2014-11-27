@@ -21,7 +21,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot3D import surfcf
 
 
-def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None, interactive=False, sparsify=10):
+def plot_frames(PP, iom, blockid=0, load=False, tte=False, sparsify=10, view=None, interactive=False):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
