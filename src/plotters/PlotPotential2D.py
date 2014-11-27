@@ -26,12 +26,12 @@ def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, int
     """
     # The Grid
     u, v = grid.get_nodes(split=True, flat=False)
-    u = real(u)
-    v = real(v)
+    u = real(u[::sparsify,::sparsify])
+    v = real(v[::sparsify,::sparsify])
 
     # Create potential and evaluate eigenvalues
     potew = potential.evaluate_eigenvalues_at(grid)
-    potew = [ real(level).reshape(grid.get_number_nodes(overall=False)) for level in potew ]
+    potew = [ real(level).reshape(grid.get_number_nodes(overall=False))[::sparsify,::sparsify] for level in potew ]
 
     # Plot
     if not interactive:
