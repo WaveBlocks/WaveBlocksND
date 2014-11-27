@@ -4,24 +4,27 @@ Plot the wavepackets probability densities
 for two-dimensional wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import squeeze
-from matplotlib.pyplot import *
+import argparse
+from numpy import real
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import BasisTransformationHAWP
 from WaveBlocksND import IOManager
-
+from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot import plotcf2d
 
 
-def plot_frames(PP, iom, blockid=0, load=False, limits=None):
-    r"""
+def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
+    """Plot the wavepacket for a series of timesteps.
+
+    :param iom: An :py:class:`IOManager` instance providing the simulation data.
+    :param view: The aspect ratio.
     """
     parameters = iom.load_parameters()
     BF = BlockFactory()
@@ -41,11 +44,11 @@ def plot_frames(PP, iom, blockid=0, load=False, limits=None):
     else:
         G = BF.create_grid(PP)
 
-    u, v = map(squeeze, G.get_axes())
+    if tte:
+        V = BF.create_potential(parameters)
+        BT = BasisTransformationHAWP(V)
 
-    V = BF.create_potential(parameters)
-    BT = BasisTransformationHAWP(V)
-
+    # Load the wavepackets
     wpd = iom.load_wavepacket_description(blockid=blockid)
     HAWP = BF.create_wavepacket(wpd)
 
@@ -55,12 +58,27 @@ def plot_frames(PP, iom, blockid=0, load=False, limits=None):
     for ahash, descr in BS_descr.iteritems():
         BS[ahash] = BF.create_basis_shape(descr)
 
-    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-
     N = HAWP.get_number_components()
 
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+
+    u, v = G.get_axes()
+    u = real(u.reshape(-1))
+    v = real(v.reshape(-1))
+
+    # View
+    if view is not None:
+        if view[0] is None:
+            view[0] = u.min()
+        if view[1] is None:
+            view[1] = u.max()
+        if view[2] is None:
+            view[2] = v.min()
+        if view[3] is None:
+            view[3] = v.max()
+
     for step in timegrid:
-        print(" Plotting frame of timestep # " + str(step))
+        print(" Plotting frame of timestep # %d" % step)
 
         hi, ci = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
         Pi = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
@@ -71,50 +89,87 @@ def plot_frames(PP, iom, blockid=0, load=False, limits=None):
 
         psi = HAWP.evaluate_at(G, prefactor=True, component=0)
 
+        # Transform the values to the eigenbasis
+        if tte:
+            BT.transform_to_eigen(psi)
+
+        # Plot
         fig = figure()
 
         for level in xrange(N):
             z = psi[level]
             z = z.reshape(G.get_number_nodes())
 
-            subplot(N,1,level+1)
-            #plotcm(z.reshape(G.get_number_nodes()), darken=0.3)
-            plotcf2d(u, v, z, darken=0.3, limits=limits)
+            fig.add_subplot(N,1,level+1)
+            plotcf2d(u, v, z, darken=0.3, limits=view)
 
-        savefig("wavepacket_block_"+str(blockid)+"_level_"+str(level)+"_timestep_"+(5-len(str(step)))*"0"+str(step)+".png")
+        fig.savefig("wavepacket_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
         close(fig)
 
-    print(" Plotting frames finished")
 
 
 
 if __name__ == "__main__":
-    iom = IOManager()
-    PL = ParameterLoader()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-p", "--paramfile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = None)
+
+    parser.add_argument("-b", "--blockid",
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ['0'])
+
+    parser.add_argument("-tte", "--transformtoeigen",
+                        action = "store_true",
+                        help = "Transform the data into the eigenbasis before plotting")
+
+    parser.add_argument("-x", "--xrange",
+                        type = float,
+                        help = "The plot range on the x-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-y", "--yrange",
+                        type = float,
+                        help = "The plot range on the y-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
     # Read file with parameter data for grid
-    try:
-        PP = PL.load_from_file(sys.argv[2])
-    except IndexError:
+    if args.paramfile:
+        PL = ParameterLoader()
+        PP = PL.load_from_file(args.paramfile)
+    else:
         PP = None
 
     # The axes rectangle that is plotted
-    #view = [-3, 3, -3, 3]
-    view = None
+    view = args.xrange + args.yrange
 
     # Iterate over all blocks and plot their data
     for blockid in iom.get_block_ids():
-        print("Plotting frames of data block '"+str(blockid)+"'")
+        print("Plotting frames of data block '%s'" % blockid)
         # See if we have wavepacket values
         if iom.has_wavepacket(blockid=blockid):
-            plot_frames(PP, iom, blockid=blockid, limits=view)
+            plot_frames(PP, iom, blockid=blockid,
+                        tte=args.transformtoeigen,
+                        view=view)
         else:
-            print("Warning: Not plotting any wavepackets in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting any wavepackets in block '%s'!" % blockid)
 
     iom.finalize()

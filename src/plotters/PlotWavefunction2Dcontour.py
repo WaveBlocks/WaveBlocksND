@@ -56,8 +56,8 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
     u, v = G.get_axes()
-    u = real(u.reshape(-1,))
-    v = real(v.reshape(-1,))
+    u = real(u.reshape(-1))
+    v = real(v.reshape(-1))
 
     # View
     if view is not None:
