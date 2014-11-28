@@ -15,7 +15,7 @@ from WaveBlocksND import GlobalDefaults as GD
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("simfile",
+parser.add_argument("-d", "--datafile",
                     type = str,
                     help = "The simulation data file",
                     nargs = "?",
@@ -29,6 +29,10 @@ parser.add_argument("-b", "--blockid",
 parser.add_argument("-p", "--params",
                     help = "An additional configuration parameters file")
 
+parser.add_argument("-et", "--eigentransform",
+                    help = "Transform the data into the eigenbasis before computing norms",
+                    action = "store_false")
+
 # TODO: Filter type of objects
 # parser.add_argument("-t", "--type",
 #                     help = "The type of objects to consider",
@@ -39,7 +43,7 @@ args = parser.parse_args()
 
 # Read file with simulation data
 iom = IOManager()
-iom.open_file(filename=args.simfile)
+iom.open_file(filename=args.datafile)
 
 # Which blocks to handle
 if "all" in args.blockid:
@@ -88,24 +92,24 @@ if PA is None:
 
 # Iterate over all blocks
 for blockid in blocks_to_handle:
-    print("Computing the autocorrelation in data block '"+str(blockid)+"'")
+    print("Computing the autocorrelation in data block '%s'" % blockid)
 
     if iom.has_autocorrelation(blockid=blockid):
-        print("Datablock '"+str(blockid)+"' already contains autocorrelation data, silent skip.")
+        print("Datablock '%s' already contains autocorrelation data, silent skip." % blockid)
         continue
 
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
         import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid)
+        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_wavefunction(blockid=blockid):
         import AutocorrelationWavefunction
-        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid)
+        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid)
+        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     else:
-        print("Warning: Not computing any autocorrelations in block '"+str(blockid)+"'!")
+        print("Warning: Not computing any autocorrelations in block '%s'!" % blockid)
 
 iom.finalize()
