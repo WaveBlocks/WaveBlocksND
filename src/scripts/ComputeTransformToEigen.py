@@ -1,9 +1,9 @@
 """The WaveBlocks Project
 
-Compute the eigen transformation of some simulation results.
+Compute the eigen transformation of the simulation results given.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -55,7 +55,7 @@ for groupid in iomc.get_group_ids():
         iome.create_group(groupid=groupid)
 
     for blockid in iomc.get_block_ids(groupid=groupid):
-        print("Computing eigentransformation of data in block '"+str(blockid)+"'")
+        print("Computing eigentransformation of data in block '%s'" % blockid)
 
         # Create the block if necessary
         if not blockid in iome.get_block_ids(groupid=groupid):

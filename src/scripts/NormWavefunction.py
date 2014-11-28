@@ -3,7 +3,7 @@
 Calculate the norms of the different wavefunctions as well as the sum of all norms.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -45,7 +45,7 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing norms of timestep "+str(step))
+        print(" Computing norms of timestep %d" % step)
 
         # Retrieve simulation data
         values = iom.load_wavefunction(timestep=step, blockid=blockid)

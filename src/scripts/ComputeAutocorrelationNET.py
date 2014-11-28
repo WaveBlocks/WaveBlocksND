@@ -59,9 +59,9 @@ if args.params:
     PA = ParameterLoader().load_from_file(parametersfile)
 else:
     # None given, try to load from simulation file
-    try:
+    if iom.has_parameters():
         PA = iom.load_parameters()
-    except:
+    else:
         PA = None
 
 # See if we have a description for observables and

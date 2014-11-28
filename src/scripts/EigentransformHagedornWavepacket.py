@@ -51,7 +51,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Compute eigentransform at timestep # " + str(step))
+        print(" Compute eigentransform at timestep %d" % step)
 
         # Retrieve simulation data
         params = iomin.load_wavepacket_parameters(timestep=step, blockid=blockidin, key=KEY)
@@ -115,7 +115,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Compute eigentransform at timestep # " + str(step))
+        print(" Compute eigentransform at timestep %d" % step)
 
         # Retrieve simulation data
         params = iomin.load_inhomogwavepacket_parameters(timestep=step, blockid=blockidin, key=KEY)

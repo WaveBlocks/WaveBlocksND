@@ -39,11 +39,9 @@ else:
 
 # Iterate over all blocks
 for blockid in blocks_to_handle:
-    try:
+    if iom.has_wavepacket(blockid=blockid):
         # Ugly hack using raw hdf5 data access
         path = "/datablock_"+str(blockid)+"/wavepacket/coefficients/c_0"
         iom._srf[path][:] *= -1.0
-    except KeyError:
-        pass
 
 iom.finalize()

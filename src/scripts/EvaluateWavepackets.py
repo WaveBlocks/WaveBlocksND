@@ -62,7 +62,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Evaluating homogeneous wavepacket at timestep "+str(step))
+        print(" Evaluating homogeneous wavepacket at timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
