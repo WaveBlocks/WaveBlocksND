@@ -79,12 +79,13 @@ if __name__ == "__main__":
     parser.add_argument("-r", "--results",
                         type = str,
                         help = "Path where the results are.",
+                        nargs = "?",
                         default = GlobalDefaults.path_to_results)
 
     parser.add_argument("-a", "--scriptargs",
                         help = "Additional arguments passed to the script.",
-                        default = [],
-                        nargs=argparse.REMAINDER)
+                        nargs=argparse.REMAINDER,
+                        default = [])
 
     args = parser.parse_args()
 
