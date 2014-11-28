@@ -21,7 +21,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot3D import surfcf
 
 
-def plot_frames(PP, iom, blockid=0, load=False, tte=False, sparsify=10, view=None, interactive=False):
+def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, sparsify=10, view=None, interactive=False):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -44,7 +44,7 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, sparsify=10, view=Non
     else:
         G = BlockFactory().create_grid(PP)
 
-    if tte:
+    if eigentransform:
         V = BlockFactory().create_potential(parameters)
         BT = BasisTransformationWF(V)
         BT.set_grid(G)
@@ -79,7 +79,7 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, sparsify=10, view=Non
         WF.set_values(values)
 
         # Transform the values to the eigenbasis
-        if tte:
+        if eigentransform:
             BT.transform_to_eigen(WF)
 
         Psi = WF.get_values()
@@ -134,7 +134,7 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ['0'])
 
-    parser.add_argument("-tte", "--transformtoeigen",
+    parser.add_argument("-et", "--eigentransform",
                         action = "store_true",
                         help = "Transform the data into the eigenbasis before plotting")
 
@@ -187,7 +187,7 @@ if __name__ == "__main__":
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
-                        tte=args.transformtoeigen,
+                        eigentransform=args.eigentransform,
                         sparsify=args.sparsify,
                         view=view,
                         interactive=args.interactive)

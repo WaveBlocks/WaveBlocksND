@@ -20,7 +20,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot import plotcf2d
 
 
-def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
+def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, view=None):
     """Plot the wavepacket for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -44,7 +44,7 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
     else:
         G = BF.create_grid(PP)
 
-    if tte:
+    if eigentransform:
         V = BF.create_potential(parameters)
         BT = BasisTransformationHAWP(V)
 
@@ -72,7 +72,7 @@ def plot_frames(PP, iom, blockid=0, load=False, tte=False, view=None):
         N = HAWP.get_number_components()
 
         # Transform the values to the eigenbasis
-        if tte:
+        if eigentransform:
             BT.transform_to_eigen(HAWP)
 
         psi = HAWP.evaluate_at(G.get_nodes(), prefactor=True, component=0)
@@ -113,7 +113,7 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ['0'])
 
-    parser.add_argument("-tte", "--transformtoeigen",
+    parser.add_argument("-et", "--eigentransform",
                         action = "store_true",
                         help = "Transform the data into the eigenbasis before plotting")
 
@@ -151,7 +151,7 @@ if __name__ == "__main__":
         # See if we have wavepacket values
         if iom.has_wavepacket(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
-                        tte=args.transformtoeigen,
+                        eigentransform=args.eigentransform,
                         view=view)
         else:
             print("Warning: Not plotting any wavepackets in block '%s'" % blockid)
