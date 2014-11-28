@@ -12,7 +12,7 @@ import argparse
 from numpy import (argsort, atleast_1d, complexfloating, conjugate, dot, ones, real,
                    squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
-from scipy.linalg import sqrtm, inv, eigh
+from scipy.linalg import sqrtm, inv, eigh, norm
 
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import GradientHAWP
@@ -20,7 +20,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
 
 
-def compute_eigenstate(parameters):
+def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
     r"""
     Special variables necessary in configuration:
 
@@ -40,7 +40,7 @@ def compute_eigenstate(parameters):
 
     # Create output file now, in case this fails we did not waste computations
     IOM = IOManager()
-    IOM.create_file("eigenstates.hdf5")
+    IOM.create_file(filename)
 
     # Save the simulation parameters
     IOM.add_parameters()
@@ -182,6 +182,13 @@ def compute_eigenstate(parameters):
         IOM.save_wavepacket(HAWP, 0, blockid=bid)
 
     IOM.finalize()
+
+    if norm(q0) > 1000:
+        print("+----------------------------------+")
+        print("| Run-away minimum?                |")
+        print("| Maybe try different:             |")
+        print("|   starting_point = [x0, y0, ...] |")
+        print("+----------------------------------+")
 
 
 
