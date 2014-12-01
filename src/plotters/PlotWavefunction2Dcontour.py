@@ -152,10 +152,9 @@ if __name__ == "__main__":
         PP = None
 
     # Which blocks to handle
-    if "all" in args.blockid:
-        blockids = iom.get_block_ids()
-    else:
-        blockids = args.blockid
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
 
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange

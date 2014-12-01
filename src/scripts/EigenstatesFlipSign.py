@@ -32,10 +32,9 @@ iom = IOManager()
 iom.open_file(filename=args.datafile)
 
 # Which blocks to handle
-if "all" in args.blockid:
-    blocks_to_handle = iom.get_block_ids()
-else:
-    blocks_to_handle = map(int, args.blockid)
+blockids = iom.get_block_ids()
+if not "all" in args.blockid:
+    blockids = [ bid for bid in args.blockid if bid in blockids ]
 
 # Iterate over all blocks
 for blockid in blocks_to_handle:

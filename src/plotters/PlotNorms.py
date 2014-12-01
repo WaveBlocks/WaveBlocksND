@@ -145,10 +145,9 @@ if __name__ == "__main__":
     iom.open_file(filename=args.datafile)
 
     # Which blocks to handle
-    if "all" in args.blockid:
-        blockids = iom.get_block_ids()
-    else:
-        blockids = args.blockid
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
 
     # Iterate over all blocks
     for blockid in blockids:
