@@ -21,9 +21,10 @@ parser.add_argument("-d", "--datafile",
                     default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
+                    type = str,
                     help = "The data block to handle",
                     nargs = "*",
-                    default = [0])
+                    default = ["all"])
 
 parser.add_argument("-et", "--eigentransform",
                     help = "Transform the data into the eigenbasis before computing norms",
@@ -43,12 +44,12 @@ iom.open_file(filename=args.datafile)
 
 # Which blocks to handle
 if "all" in args.blockid:
-    blocks_to_handle = iom.get_block_ids()
+    blockids = iom.get_block_ids()
 else:
-    blocks_to_handle = map(int, args.blockid)
+    blockids = args.blockid
 
 # Iterate over all blocks
-for blockid in blocks_to_handle:
+for blockid in blockids:
     print("Computing the norms in data block '%s'" % blockid)
 
     if iom.has_norm(blockid=blockid):

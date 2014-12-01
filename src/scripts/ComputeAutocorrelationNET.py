@@ -23,9 +23,10 @@ parser.add_argument("-d", "--datafile",
                     default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
+                    type = str,
                     help = "The data block to handle",
                     nargs = "*",
-                    default = [0])
+                    default = ["all"])
 
 parser.add_argument("-p", "--params",
                     help = "An additional configuration parameters file")
@@ -48,9 +49,9 @@ iom.open_file(filename=args.datafile)
 
 # Which blocks to handle
 if "all" in args.blockid:
-    blocks_to_handle = iom.get_block_ids()
+    blockids = iom.get_block_ids()
 else:
-    blocks_to_handle = map(int, args.blockid)
+    blockids = args.blockid
 
 # Do we have a specifc configuration file holding
 # the definitions for inner products to use?
@@ -92,7 +93,7 @@ if PA is None:
         }
 
 # Iterate over all blocks
-for blockid in blocks_to_handle:
+for blockid in blockids:
     print("Computing the autocorrelation in data block '%s'" % blockid)
 
     if iom.has_autocorrelation(blockid=blockid):
