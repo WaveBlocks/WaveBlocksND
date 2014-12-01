@@ -22,12 +22,6 @@ def read_all_datablocks(iom):
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_energy(blockid=blockid):
-            plot_energies(read_data(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting energies in block '%s'" % blockid)
 
 
 def read_data(iom, blockid=0):
@@ -142,9 +136,10 @@ if __name__ == "__main__":
                         default = GLD.file_resultdatafile)
 
     parser.add_argument("-b", "--blockid",
+                        type = str,
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ["all"])
 
     args = parser.parse_args()
 
@@ -152,6 +147,19 @@ if __name__ == "__main__":
     iom = IOManager()
     iom.open_file(filename=args.datafile)
 
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    if "all" in args.blockid:
+        blockids = iom.get_block_ids()
+    else:
+        blockids = args.blockid
+
+    # Iterate over all blocks
+    for blockid in iom.get_block_ids():
+        print("Plotting energies in data block '%s'" % blockid)
+
+        if iom.has_energy(blockid=blockid):
+            plot_energies(read_data(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting energies in block '%s'" % blockid)
 
     iom.finalize()

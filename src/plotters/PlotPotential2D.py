@@ -85,10 +85,11 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = None)
 
-    parser.add_argument("-b", "--blockid",
-                        help = "The data block to handle",
-                        nargs = "*",
-                        default = [0])
+    # parser.add_argument("-b", "--blockid",
+    #                     type = str,
+    #                     help = "The data block to handle",
+    #                     nargs = "*",
+    #                     default = ["all"])
 
     parser.add_argument("-x", "--xrange",
                         type = float,
@@ -135,7 +136,7 @@ if __name__ == "__main__":
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange + args.zrange
 
-    #
+    # Plot
     if parameters["dimension"] == 2:
         Potential = BlockFactory().create_potential(parameters)
         Grid = TensorProductGrid(gridparams["limits"], gridparams["number_nodes"])

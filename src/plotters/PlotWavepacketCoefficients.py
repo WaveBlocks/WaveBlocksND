@@ -122,9 +122,10 @@ if __name__ == "__main__":
                         default = GLD.file_resultdatafile)
 
     parser.add_argument("-b", "--blockid",
+                        type = str,
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ["all"])
 
     parser.add_argument("--reim",
                         action = "store_true",
@@ -136,11 +137,21 @@ if __name__ == "__main__":
     iom = IOManager()
     iom.open_file(filename=args.datafile)
 
+    # Which blocks to handle
+    if "all" in args.blockid:
+        blockids = iom.get_block_ids()
+    else:
+        blockids = args.blockid
+
     # Read the data and plot it, one plot for each data block.
     parameters = iom.load_parameters()
 
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting wavepacket coefficients in data block '%s'" % blockid)
+
+        # NOTE: Add new algorithms here
+
         if iom.has_wavepacket(blockid=blockid):
             plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid, reim=args.reim)
         elif iom.has_inhomogwavepacket(blockid=blockid):

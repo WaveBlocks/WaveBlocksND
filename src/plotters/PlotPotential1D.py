@@ -72,10 +72,11 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = None)
 
-    parser.add_argument("-b", "--blockid",
-                        help = "The data block to handle",
-                        nargs = "*",
-                        default = [0])
+    # parser.add_argument("-b", "--blockid",
+    #                     type = str,
+    #                     help = "The data block to handle",
+    #                     nargs = "*",
+    #                     default = ["all"])
 
     parser.add_argument("-x", "--xrange",
                         type = float,

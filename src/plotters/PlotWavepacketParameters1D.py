@@ -19,21 +19,6 @@ from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
-def read_all_datablocks(iom):
-    r"""Read the data from all blocks that contain any usable data.
-
-    :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_wavepacket(blockid=blockid):
-            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
-        elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
-
-
 def read_data_homogeneous(iom, blockid=0):
     r"""
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -243,9 +228,10 @@ if __name__ == "__main__":
                         default = GLD.file_resultdatafile)
 
     parser.add_argument("-b", "--blockid",
+                        type = str,
                         help = "The data block to handle",
                         nargs = "*",
-                        default = ['0'])
+                        default = ["all"])
 
     args = parser.parse_args()
 
@@ -253,7 +239,23 @@ if __name__ == "__main__":
     iom = IOManager()
     iom.open_file(filename=args.datafile)
 
-    # Read the data and plot it, one plot for each data block.
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    if "all" in args.blockid:
+        blockids = iom.get_block_ids()
+    else:
+        blockids = args.blockid
+
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting wavepacket parameters in data block '%s'" % blockid)
+
+        # NOTE: Add new algorithms here
+
+        if iom.has_wavepacket(blockid=blockid):
+            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
+        elif iom.has_inhomogwavepacket(blockid=blockid):
+            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
 
     iom.finalize()

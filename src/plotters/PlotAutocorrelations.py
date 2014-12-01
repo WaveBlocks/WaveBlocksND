@@ -113,9 +113,10 @@ if __name__ == "__main__":
                         default = GLD.file_resultdatafile)
 
     parser.add_argument("-b", "--blockid",
+                        type = str,
                         help = "The data block to handle",
                         nargs = "*",
-                        default = [0])
+                        default = ["all"])
 
     args = parser.parse_args()
 
@@ -123,6 +124,19 @@ if __name__ == "__main__":
     iom = IOManager()
     iom.open_file(filename=args.datafile)
 
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    if "all" in args.blockid:
+        blockids = iom.get_block_ids()
+    else:
+        blockids = args.blockid
+
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting autocorrelations in data block '%s'" % blockid)
+
+        if iom.has_autocorrelation(blockid=blockid):
+            plot_autocorrelations(read_data(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting autocorrelations in block '%s'" % blockid)
 
     iom.finalize()

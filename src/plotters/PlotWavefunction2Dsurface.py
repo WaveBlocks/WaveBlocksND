@@ -130,9 +130,10 @@ if __name__ == "__main__":
                         default = None)
 
     parser.add_argument("-b", "--blockid",
+                        type = str,
                         help = "The data block to handle",
                         nargs = "*",
-                        default = ['0'])
+                        default = ["all"])
 
     parser.add_argument("-et", "--eigentransform",
                         action = "store_true",
@@ -178,11 +179,17 @@ if __name__ == "__main__":
     else:
         PP = None
 
+    # Which blocks to handle
+    if "all" in args.blockid:
+        blockids = iom.get_block_ids()
+    else:
+        blockids = args.blockid
+
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange + args.zrange
 
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
+    # Iterate over all blocks
+    for blockid in blockids:
         print("Plotting frames of data block '%s'" % blockid)
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
