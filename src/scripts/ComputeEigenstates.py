@@ -201,6 +201,12 @@ if __name__ == "__main__":
                         type = str,
                         help = "The configuration parameters file")
 
+    parser.add_argument("-o", "--outputfile",
+                    type = str,
+                    help = "The output data file",
+                    nargs = "?",
+                    default = "eigenstates.hdf5")
+
     args = parser.parse_args()
 
     # Read the path for the configuration file we use for this simulation.
@@ -208,6 +214,6 @@ if __name__ == "__main__":
 
     # Set up the parameter provider singleton
     PA = ParameterLoader().load_from_file(args.parametersfile)
-    compute_eigenstate(PA)
+    compute_eigenstate(PA, filename=args.outputfile)
 
     print("Eigenstate computation finished")
