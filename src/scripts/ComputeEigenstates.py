@@ -179,7 +179,7 @@ def compute_eigenstate(parameters):
         # Save all the wavepacket data
         bid = IOM.create_block(groupid=gid)
         IOM.add_wavepacket(parameters, blockid=bid, key=KEY)
-        IOM.save_wavepacket(HAWP, 0, blockid=bid)
+        IOM.save_wavepacket(HAWP, 0, blockid=bid, key=KEY)
 
     IOM.finalize()
 
