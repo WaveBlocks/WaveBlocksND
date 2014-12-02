@@ -10,7 +10,7 @@ ncomponents = 1
 
 eps = 0.1
 
-potential = "cosh_osc_2d"
+potential = "cosh_osc_rotsym_2d"
 
 # The parameter set of the initial wavepacket
 Q = [[1.0, 0.0],

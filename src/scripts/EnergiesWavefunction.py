@@ -69,7 +69,7 @@ def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Iterate over all timesteps
         for i, step in enumerate(timesteps):
-            print(" Computing energies of timestep # " + str(step))
+            print(" Computing energies of timestep %d" % step)
 
             # Retrieve simulation data
             values = iom.load_wavefunction(timestep=step, blockid=blockid)
@@ -104,7 +104,7 @@ def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Iterate over all timesteps
         for i, step in enumerate(timesteps):
-            print(" Computing energies of timestep # " + str(step))
+            print(" Computing energies of timestep %d" % step)
 
             # Retrieve simulation data
             values = iom.load_wavefunction(timestep=step, blockid=blockid)

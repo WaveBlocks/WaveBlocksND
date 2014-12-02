@@ -148,12 +148,54 @@ cos_osc_2d["potential"] = "ax * (1 - cos(bx*x)) + ay * (1 - cos(by*y))"
 cos_osc_2d["defaults"] = {"ax":"1", "bx":"1", "ay":"1", "by":"1"}
 cos_osc_2d["number_levels"] = 1
 
+# A potential consisting of a cosine wave part in 2D
+cos_osc_rotsym_2d = {}
+cos_osc_rotsym_2d["variables"] = ["x", "y"]
+cos_osc_rotsym_2d["potential"] = "a * cos(b * sqrt(x**2+y**2))"
+cos_osc_rotsym_2d["defaults"] = {"a":"1", "b":"1"}
+cos_osc_rotsym_2d["number_levels"] = 1
+
+# A potential consisting of a cosine wave part in 2D
+cos_osc_mul_2d = {}
+cos_osc_mul_2d["variables"] = ["x", "y"]
+cos_osc_mul_2d["potential"] = "-cos(a*x) * cos(b*y)"
+cos_osc_mul_2d["defaults"] = {"a":"1", "b":"1"}
+cos_osc_mul_2d["number_levels"] = 1
+
+# A potential consisting of a cosine wave part in 2D
+cos_osc_add_2d = {}
+cos_osc_add_2d["variables"] = ["x", "y"]
+cos_osc_add_2d["potential"] = "-(cos(a*x) + cos(b*y))"
+cos_osc_add_2d["defaults"] = {"a":"1", "b":"1"}
+cos_osc_add_2d["number_levels"] = 1
+
 # A potential consisting of a hyperbolic cosine
 cosh_osc_2d = {}
 cosh_osc_2d["variables"] = ["x", "y"]
-cosh_osc_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
-cosh_osc_2d["defaults"] = {"a":"1", "b":"1"}
+cosh_osc_2d["potential"] = "ax * (1 + cosh(bx*x)) + ay * (1 + cosh(by*y))"
+cosh_osc_2d["defaults"] = {"ax":"1", "bx":"1", "ay":"1", "by":"1"}
 cosh_osc_2d["number_levels"] = 1
+
+# A potential consisting of a hyperbolic cosine
+cosh_osc_rotsym_2d = {}
+cosh_osc_rotsym_2d["variables"] = ["x", "y"]
+cosh_osc_rotsym_2d["potential"] = "a * cosh(b * sqrt(x**2+y**2))"
+cosh_osc_rotsym_2d["defaults"] = {"a":"1", "b":"1"}
+cosh_osc_rotsym_2d["number_levels"] = 1
+
+# A potential consisting of a hyperbolic cosine
+cosh_osc_mul_2d = {}
+cosh_osc_mul_2d["variables"] = ["x", "y"]
+cosh_osc_mul_2d["potential"] = "cosh(a*x) * cosh(b*y)"
+cosh_osc_mul_2d["defaults"] = {"a":"1", "b":"1"}
+cosh_osc_mul_2d["number_levels"] = 1
+
+# A potential consisting of a hyperbolic cosine
+cosh_osc_add_2d = {}
+cosh_osc_add_2d["variables"] = ["x", "y"]
+cosh_osc_add_2d["potential"] = "cosh(a*x) + cosh(b*y)"
+cosh_osc_add_2d["defaults"] = {"a":"1", "b":"1"}
+cosh_osc_add_2d["number_levels"] = 1
 
 # A quad well potential with 4 wells
 quad_well = {}
@@ -255,6 +297,13 @@ henon_heiles["variables"] = ["x", "y"]
 henon_heiles["potential"] = "1/2*a*(x**2 + y**2) + b*(x**2*y - y**3/3)"
 henon_heiles["defaults"] = {"a":"1", "b":"1/2"}
 henon_heiles["number_levels"] = 1
+
+# Small well on top of high mountain
+sine_maar = {}
+sine_maar["variables"] = ["x", "y"]
+sine_maar["potential"] = "sin(x**2+y**2) + alpha * exp(-sigma*(x**2+y**2))"
+sine_maar["defaults"] = {"alpha":0.8, "sigma":1.0}
+sine_maar["number_levels"] = 1
 
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #

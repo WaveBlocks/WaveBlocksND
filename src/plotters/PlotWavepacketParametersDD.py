@@ -5,34 +5,19 @@ of a homogeneous or inhomogeneous Hagedorn wavepacket during the
 time propagation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import real, imag, abs, squeeze, array
+import argparse
+from numpy import real, imag, abs, array
 from numpy.linalg import norm, det
-from matplotlib.pyplot import *
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ComplexMath
 from WaveBlocksND import IOManager
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
-
-
-def read_all_datablocks(iom):
-    r"""Read the data from all blocks that contain any usable data.
-
-    :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_wavepacket(blockid=blockid):
-            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
-        elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting wavepacket parameters in block '"+str(blockid)+"'!")
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -42,16 +27,17 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
-    qhist = squeeze(array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]))
-    phist = squeeze(array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]))
-    Qhist = squeeze(array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]))
-    Phist = squeeze(array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]))
-    Shist = squeeze(Shist)
+    qhist = array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]).reshape(-1)
+    phist = array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]).reshape(-1)
+    Qhist = array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]).reshape(-1)
+    Phist = array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]).reshape(-1)
+    Shist = Shist.reshape(-1)
 
     return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
 
@@ -63,7 +49,8 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    time = timegrid * dt
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
@@ -75,11 +62,11 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(squeeze(q))
-        phist.append(squeeze(p))
-        Qhist.append(squeeze(Q))
-        Phist.append(squeeze(P))
-        Shist.append(squeeze(S))
+        qhist.append(array([ norm(q[i,:]) for i in xrange(q.shape[0]) ]).reshape(-1))
+        phist.append(array([ norm(p[i,:]) for i in xrange(p.shape[0]) ]).reshape(-1))
+        Qhist.append(array([ det(Q[i,:,:]) for i in xrange(Q.shape[0]) ]).reshape(-1))
+        Phist.append(array([ det(P[i,:,:]) for i in xrange(P.shape[0]) ]).reshape(-1))
+        Shist.append(S.reshape(-1))
 
     return (time, qhist, phist, Qhist, Phist, Shist)
 
@@ -89,7 +76,7 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    print("Plotting the parameters of data block '"+str(index)+"'")
+    print("Plotting the parameters of data block '%s'" % index)
 
     timegrid, qhist, phist, Qhist, Phist, Shist = data
 
@@ -185,7 +172,7 @@ def plot_parameters(data, index=0):
 
     ax = fig.add_subplot(4,2,7)
     for item in Shist:
-        ax.plot(timegrid, item, label=r"$S$")
+        ax.plot(timegrid, real(item), label=r"$S$")
     ax.grid(True)
     ax.set_title(r"$S$")
 
@@ -225,15 +212,42 @@ def plot_parameters(data, index=0):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        type = str,
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ["all"])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
-    # Read the data and plot it, one plot for each data block.
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
+
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting wavepacket parameters in data block '%s'" % blockid)
+
+        # NOTE: Add new algorithms here
+
+        if iom.has_wavepacket(blockid=blockid):
+            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
+        elif iom.has_inhomogwavepacket(blockid=blockid):
+            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
 
     iom.finalize()

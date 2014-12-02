@@ -5,16 +5,16 @@ of a homogeneous or inhomogeneous Hagedorn wavepacket during the
 time propagation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import squeeze
-from matplotlib.pyplot import *
+import argparse
+from numpy import real
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -23,14 +23,6 @@ def read_all_datablocks(iom):
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_wavepacket(blockid=blockid):
-            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
-        elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting wavepacket parameters in block '"+str(blockid)+"'!")
 
 
 def read_data_homogeneous(iom, blockid=0):
@@ -38,21 +30,21 @@ def read_data_homogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    parameters = iom.load_parameters()
-    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
-
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
-
-    # The Dimension D, we know that q has shapw (#timesteps, D, 1)
-    D = Pi[0].shape[1]
-    if not D == 2:
-        print("Warning: Trajectory plotting implemented only for 2D wavepackets")
-        return
-
-    Pi = map(squeeze, Pi)
     qhist, phist, Qhist, Phist, Shist = Pi
-    return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
+
+    # The Dimension D, we know that q has shape (#timesteps, D, 1)
+    D = qhist.shape[1]
+    if not D == 2:
+        raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
+
+    Pi = [ [real(qhist.reshape((-1,D)))],
+           [real(phist.reshape((-1,D)))],
+           [Qhist.reshape((-1,D,D))],
+           [Phist.reshape((-1,D,D))],
+           [Shist.reshape((-1,1))] ]
+
+    return Pi
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -60,17 +52,12 @@ def read_data_inhomogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    parameters = iom.load_parameters()
-    timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    time = timegrid * parameters["dt"]
-
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
-    # The Dimension D, we know that q_0 has shapw (#timesteps, D, 1)
+    # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
     D = Pis[0][0].shape[1]
     if not D == 2:
-        print("Warning: Trajectory plotting implemented only for 2D wavepackets")
-        return
+        raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
 
     # List with Pi time evolutions
     Phist = []
@@ -80,13 +67,13 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(squeeze(q))
-        phist.append(squeeze(p))
-        Qhist.append(squeeze(Q))
-        Phist.append(squeeze(P))
-        Shist.append(squeeze(S))
+        qhist.append(real(q.reshape((-1,D,))))
+        phist.append(real(p.reshape((-1,D,))))
+        Qhist.append(Q.reshape((-1,D,D)))
+        Phist.append(P.reshape((-1,D,D)))
+        Shist.append(S.reshape((-1,1,)))
 
-    return (time, qhist, phist, Qhist, Phist, Shist)
+    return (qhist, phist, Qhist, Phist, Shist)
 
 
 def plot_parameters(data, index=0):
@@ -94,9 +81,9 @@ def plot_parameters(data, index=0):
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
     """
-    print("Plotting the parameters of data block '"+str(index)+"'")
+    print("Plotting the parameters of data block '%s'" % index)
 
-    timegrid, qhist, phist, Qhist, Phist, Shist = data
+    qhist, phist, Qhist, Phist, Shist = data
 
     # Plot the 2D trajectory of the parameters q and p
     fig = figure()
@@ -125,15 +112,42 @@ def plot_parameters(data, index=0):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        type = str,
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ["all"])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
-    # Read the data and plot it, one plot for each data block.
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
+
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting wavepacket parameters in data block '%s'" % blockid)
+
+        # NOTE: Add new algorithms here
+
+        if iom.has_wavepacket(blockid=blockid):
+            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
+        elif iom.has_inhomogwavepacket(blockid=blockid):
+            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
 
     iom.finalize()

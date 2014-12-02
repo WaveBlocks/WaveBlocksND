@@ -3,17 +3,17 @@
 Plot the energies of the different wavepackets as well as the sum of all energies.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import abs
-from matplotlib.pyplot import *
+import argparse
+from numpy import abs, add
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
 
 
@@ -22,12 +22,6 @@ def read_all_datablocks(iom):
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_energy(blockid=blockid):
-            plot_energies(read_data(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting energies in block '"+str(blockid)+"'!")
 
 
 def read_data(iom, blockid=0):
@@ -48,24 +42,18 @@ def read_data(iom, blockid=0):
     ekin, epot = iom.load_energy(blockid=blockid, split=True)
 
     # Compute the sum of all energies
-    ekinsum = reduce(lambda x,y: x+y, ekin)
-    epotsum = reduce(lambda x,y: x+y, epot)
-
-    ekin.append(ekinsum)
-    epot.append(epotsum)
+    ekin.append(reduce(add, ekin))
+    epot.append(reduce(add, epot))
 
     return (timek, timep, ekin, epot, have_dt)
 
 
 def plot_energies(data, index=0):
-    print("Plotting the energies of data block '"+str(index)+"'")
+    print("Plotting the energies of data block '%s'" % index)
 
     timegridk, timegridp, ekin, epot, have_dt = data
 
-    if have_dt:
-        xlbl=r"Time $t$"
-    else:
-        xlbl=r"Timesteps $n$"
+    xlbl = r"Time $t$" if have_dt else r"Timesteps $n$"
 
     # Plot the energies
     fig = figure()
@@ -73,15 +61,15 @@ def plot_energies(data, index=0):
 
     # Plot the kinetic energy of the individual wave packets
     for i, kin in enumerate(ekin[:-1]):
-        ax.plot(timegridk, kin, label=r"$E^{kin}_"+str(i)+r"$")
+        ax.plot(timegridk, kin, label=r"$E^{kin}_{%d}$" % i)
 
     # Plot the potential energy of the individual wave packets
     for i, pot in enumerate(epot[:-1]):
-        ax.plot(timegridp, pot, label=r"$E^{pot}_"+str(i)+r"$")
+        ax.plot(timegridp, pot, label=r"$E^{pot}_{%d}$" % i)
 
     # Plot the sum of kinetic and potential energy for all wave packets
     for i, (kin, pot) in enumerate(zip(ekin, epot)[:-1]):
-        ax.plot(timegridk, kin + pot, label=r"$E^{kin}_"+str(i)+r"+E^{pot}_"+str(i)+r"$")
+        ax.plot(timegridk, kin + pot, label=r"$E^{kin}_{%d}+E^{pot}_{%d}$" % (i,i))
 
     # Plot sum of kinetic and sum of potential energy
     ax.plot(timegridk, ekin[-1], label=r"$\sum_i E^{kin}_i$")
@@ -139,14 +127,38 @@ def plot_energies(data, index=0):
 
 
 if __name__ == "__main__":
-    iom = IOManager()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        type = str,
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ["all"])
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
-    read_all_datablocks(iom)
+    # Which blocks to handle
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
+
+    # Iterate over all blocks
+    for blockid in iom.get_block_ids():
+        print("Plotting energies in data block '%s'" % blockid)
+
+        if iom.has_energy(blockid=blockid):
+            plot_energies(read_data(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting energies in block '%s'" % blockid)
 
     iom.finalize()

@@ -71,7 +71,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing autocorrelation of timestep "+str(step))
+        print(" Computing autocorrelation of timestep %d" % step)
 
         # Retrieve simulation data
         paramst = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
@@ -149,7 +149,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing autocorrelations of timestep "+str(step))
+        print(" Computing autocorrelations of timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid)

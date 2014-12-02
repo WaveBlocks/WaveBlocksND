@@ -22,7 +22,6 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
     :param x: The :math:`x` values.
     :param x: The :math:`y` values.
     :param z: The values :math:`z = f(x,y)`.
-
     :param darken: How strong to take into account the modulus of the data to darken colors.
                    Values with :math:`|z| = R` will get fully saturated colors
                    while :math:`|z| = 0` is black and :math:`|z| \rightarrow \infty`

@@ -63,7 +63,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing energies of timestep "+str(step))
+        print(" Computing energies of timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
@@ -141,7 +141,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing energies of timestep "+str(step))
+        print(" Computing energies of timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid, key=KEY)

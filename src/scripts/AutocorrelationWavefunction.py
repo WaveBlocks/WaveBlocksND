@@ -67,7 +67,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing autocorrelations of timestep "+str(step))
+        print(" Computing autocorrelations of timestep %d" % step)
 
         # Retrieve simulation data
         values = iom.load_wavefunction(timestep=step, blockid=blockid)

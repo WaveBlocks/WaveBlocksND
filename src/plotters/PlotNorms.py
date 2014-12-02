@@ -3,31 +3,18 @@
 Plot the norms of the different wavepackets as well as the sum of all norms.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import sqrt, max
-from matplotlib.pyplot import *
+import argparse
+from numpy import add, square, sqrt, max
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
-
+from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
-
-
-def read_all_datablocks(iom):
-    """Read the data from all blocks that contain any usable data.
-
-    :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    """
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        if iom.has_norm(blockid=blockid):
-            plot_norms(read_data(iom, blockid=blockid), index=blockid)
-        else:
-            print("Warning: Not plotting norms in block '"+str(blockid)+"'!")
 
 
 def read_data(iom, blockid=0):
@@ -35,32 +22,27 @@ def read_data(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
-    timegrid = iom.load_norm_timegrid(blockid=blockid)
     have_dt = iom.has_parameters()
     if have_dt:
         parameters = iom.load_parameters()
-        time = timegrid * parameters["dt"]
-    else:
-        time = timegrid
+
+    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    timegrid = iom.load_norm_timegrid(blockid=blockid)
+    time = timegrid * dt
 
     norms = iom.load_norm(blockid=blockid, split=True)
-
-    normsum = [ item**2 for item in norms ]
-    normsum = reduce(lambda x,y: x+y, normsum)
+    normsum = reduce(add, map(square, norms))
     norms.append(sqrt(normsum))
 
     return (time, norms, have_dt)
 
 
 def plot_norms(data, index=0):
-    print("Plotting the norms of data block '"+str(index)+"'")
+    print("Plotting the norms of data block '%s'" % index)
 
     timegrid, norms, have_dt = data
 
-    if have_dt:
-        xlbl=r"Time $t$"
-    else:
-        xlbl=r"Timesteps $n$"
+    xlbl = r"Time $t$" if have_dt else r"Timesteps $n$"
 
     # Plot the norms
     fig = figure()
@@ -68,7 +50,7 @@ def plot_norms(data, index=0):
 
     # Plot the norms of the individual wavepackets
     for i, datum in enumerate(norms[:-1]):
-        label_i = r"$\| \Phi_"+str(i)+r" \|$"
+        label_i = r"$\| \Phi_{%d} \|$" % i
         ax.plot(timegrid, datum, label=label_i)
 
     # Plot the sum of all norms
@@ -80,7 +62,7 @@ def plot_norms(data, index=0):
     ax.set_title(r"Norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
-    ax.set_ylim([0,1.1*max(norms[:-1])])
+    ax.set_ylim([0, 1.1*max(norms[:-1])])
     fig.savefig("norms_block"+str(index)+GD.output_format)
     close(fig)
 
@@ -90,7 +72,7 @@ def plot_norms(data, index=0):
 
     # Plot the squared norms of the individual wavepackets
     for i, datum in enumerate(norms[:-1]):
-        label_i = r"$\| \Phi_"+str(i)+r" \|^2$"
+        label_i = r"$\| \Phi_{%d} \|^2$" % i
         ax.plot(timegrid, datum**2, label=label_i)
 
     # Plot the squared sum of all norms
@@ -102,7 +84,7 @@ def plot_norms(data, index=0):
     ax.set_title(r"Squared norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
-    ax.set_ylim([0,1.1*max(norms[-1]**2)])
+    ax.set_ylim([0, 1.1*max(norms[-1]**2)])
     fig.savefig("norms_sqr_block"+str(index)+GD.output_format)
     close(fig)
 
@@ -142,14 +124,38 @@ def plot_norms(data, index=0):
 
 
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-b", "--blockid",
+                        type = str,
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ["all"])
+
+    args = parser.parse_args()
+
+    # Read file with simulation data
     iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
-    # Read the file with the simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    # Which blocks to handle
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
 
-    read_all_datablocks(iom)
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting norms in data block '%s'" % blockid)
+
+        if iom.has_norm(blockid=blockid):
+            plot_norms(read_data(iom, blockid=blockid), index=blockid)
+        else:
+            print("Warning: Not plotting norms in block '%s'" % blockid)
 
     iom.finalize()

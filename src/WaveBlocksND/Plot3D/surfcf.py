@@ -5,19 +5,13 @@ with :math:`|f|` as y-value and :math:`\arg(f)` as color code.
 This function makes a 3D surface plot.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
 from numpy import linspace, pi, squeeze, ones, real, fmod
 from matplotlib.colors import hsv_to_rgb
-
-try:
-    # New Mayavi version
-    from mayavi import mlab
-except ImportError:
-    # Older Mayavi versions
-    from enthought.mayavi import mlab
+from mayavi import mlab
 
 
 def compute_color_map():
@@ -29,7 +23,7 @@ def compute_color_map():
     return 255*squeeze(hsv_to_rgb(hsv_colors))
 
 
-def surfcf(gridx, gridy, phase, modulus, colormap=None):
+def surfcf(gridx, gridy, phase, modulus, colormap=None, view=None):
     r"""Plot the modulus of a complex valued function :math:`f:R^2 -> C`
     together with its phase in a color coded fashion.
 
@@ -43,7 +37,18 @@ def surfcf(gridx, gridy, phase, modulus, colormap=None):
         colormap = compute_color_map()
 
     # The real(.) is necessary just to get an array with dtype real
-    mesh = mlab.mesh(real(gridx), real(gridy), real(modulus), scalars=real(phase))
+    src = mlab.pipeline.grid_source(real(gridx), real(gridy), real(modulus), scalars=real(phase))
+
+    # Clip to given view
+    if view is not None:
+        geometry_filter = mlab.pipeline.user_defined(src, filter='GeometryFilter')
+        geometry_filter.filter.extent_clipping = True
+        geometry_filter.filter.extent = view
+        src = mlab.pipeline.user_defined(geometry_filter, filter='CleanPolyData')
+
+    # Plot the surface
+    normals = mlab.pipeline.poly_data_normals(src)
+    mesh = mlab.pipeline.surface(normals)
 
     # Set the custom color map
     mesh.module_manager.scalar_lut_manager.use_default_range = False
@@ -51,8 +56,5 @@ def surfcf(gridx, gridy, phase, modulus, colormap=None):
     lut = mesh.module_manager.scalar_lut_manager.lut.table.to_array()
     lut[:,0:3] = colormap.copy()
     mesh.module_manager.scalar_lut_manager.lut.table = lut
-
-    # Update the figure
-    mlab.draw()
 
     return mesh

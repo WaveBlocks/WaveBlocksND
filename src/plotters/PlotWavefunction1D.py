@@ -4,20 +4,19 @@ Plot the wavefunctions probability densities
 for one-dimensional wavefunctions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
-import sys
-from numpy import angle, conj, real, imag, squeeze
-from matplotlib.pyplot import *
+import argparse
+from numpy import angle, conj, real, imag
+from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ParameterLoader
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcf
-
-import GraphicsDefaults as GD
+from WaveBlocksND import GlobalDefaults as GLD
 
 
 def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
@@ -39,21 +38,26 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
         PP = parameters
 
     if load is True:
-        print("Loading grid data from datablock 'global'")
         if gridblockid is None:
             gridblockid = blockid
+        print("Loading grid data from datablock '%s'" % gridblockid)
         G = iom.load_grid(blockid=gridblockid)
-        G = G.reshape((1, -1))
-        grid = G
+        grid = real(G.reshape(-1))
     else:
         print("Creating new grid")
         G = BlockFactory().create_grid(PP)
-        grid = G.get_nodes(flat=True)
+        grid = real(G.get_nodes(flat=True).reshape(-1))
+
+    # View
+    if view[0] is None:
+        view[0] = grid.min()
+    if view[1] is None:
+        view[1] = grid.max()
 
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
 
     for step in timegrid:
-        print(" Plotting frame of timestep # " + str(step))
+        print(" Plotting frame of timestep # %d" % step)
 
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
         values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
@@ -66,61 +70,112 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
             ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
 
             if plotcomponents is True:
-                ax.plot(squeeze(grid), real(component))
-                ax.plot(squeeze(grid), imag(component))
-                ax.set_ylabel(r"$\Re \varphi_"+str(index)+r", \Im \varphi_"+str(index)+r"$")
+                ax.plot(grid, real(component))
+                ax.plot(grid, imag(component))
+                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index,index))
             if plotabssqr is True:
-                ax.plot(squeeze(grid), component*conj(component))
-                ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
+                ax.plot(grid, real(component*conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
             if plotphase is True:
-                plotcf(squeeze(grid), angle(component), component*conj(component))
-                ax.set_ylabel(r"$\langle \varphi_"+str(index)+r"| \varphi_"+str(index)+r"\rangle$")
+                plotcf(grid, angle(component), real(component*conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
 
             ax.set_xlabel(r"$x$")
 
             # Set the aspect window
-            if view is not None:
-                ax.set_xlim(view[:2])
-                ax.set_ylim(view[2:])
+            ax.set_xlim(view[:2])
+            ax.set_ylim(view[2:])
 
         if parameters.has_key("dt"):
-            fig.suptitle(r"$\Psi$ at time $"+str(step*parameters["dt"])+r"$")
+            fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")
-        fig.savefig("wavefunction_block"+str(blockid)+"_"+ (7-len(str(step)))*"0"+str(step) +GD.output_format)
-        close(fig)
 
-    print(" Plotting frames finished")
+        fig.savefig("wavefunction_block_%s_timestep_%07d.png" % (blockid, step))
+        close(fig)
 
 
 
 
 if __name__ == "__main__":
-    iom = IOManager()
-    PL = ParameterLoader()
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument("-d", "--datafile",
+                        type = str,
+                        help = "The simulation data file",
+                        nargs = "?",
+                        default = GLD.file_resultdatafile)
+
+    parser.add_argument("-p", "--paramfile",
+                        type = str,
+                        help = "The configuration parameter file",
+                        nargs = "?",
+                        default = None)
+
+    parser.add_argument("-b", "--blockid",
+                        type = str,
+                        help = "The data block to handle",
+                        nargs = "*",
+                        default = ["all"])
+
+    parser.add_argument("-x", "--xrange",
+                        type = float,
+                        help = "The plot range on the x-axis",
+                        nargs = 2,
+                        default = [None, None])
+
+    parser.add_argument("-y", "--yrange",
+                        type = float,
+                        help = "The plot range on the y-axis",
+                        nargs = 2,
+                        default = [0, 3.5])
+
+    parser.add_argument("--plotphase",
+                        action = "store_false",
+                        help = "Plot the complex phase (slow)")
+
+    parser.add_argument("--plotcomponents",
+                        action = "store_true",
+                        help = "Plot the real/imaginary parts")
+
+    parser.add_argument("--plotabssqr",
+                        action = "store_true",
+                        help = "Plot the absolute value squared")
+
+    args = parser.parse_args()
 
     # Read file with simulation data
-    try:
-        iom.open_file(filename=sys.argv[1])
-    except IndexError:
-        iom.open_file()
+    iom = IOManager()
+    iom.open_file(filename=args.datafile)
 
     # Read file with parameter data for grid
-    try:
-        PP = PL.load_from_file(sys.argv[2])
-    except IndexError:
+    if args.paramfile:
+        PL = ParameterLoader()
+        PP = PL.load_from_file(args.paramfile)
+    else:
         PP = None
 
-    # The axes rectangle that is plotted
-    view = [-3.5, 3.5, -0.1, 3.5]
+    # Which blocks to handle
+    blockids = iom.get_block_ids()
+    if not "all" in args.blockid:
+        blockids = [ bid for bid in args.blockid if bid in blockids ]
 
-    # Iterate over all blocks and plot their data
-    for blockid in iom.get_block_ids():
-        print("Plotting frames of data block '"+str(blockid)+"'")
+    # The axes rectangle that is plotted
+    view = args.xrange + args.yrange
+
+    # Iterate over all blocks
+    for blockid in blockids:
+        print("Plotting frames of data block '%s'" % blockid)
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
-            plot_frames(PP, iom, blockid=blockid, view=view, plotphase=True, plotcomponents=False, plotabssqr=False, load=False)
+            plot_frames(PP, iom,
+                        blockid=blockid,
+                        view=view,
+                        plotphase=args.plotphase,
+                        plotcomponents=args.plotcomponents,
+                        plotabssqr=args.plotabssqr,
+                        load=False)
         else:
-            print("Warning: Not plotting any wavefunctions in block '"+str(blockid)+"'!")
+            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
 
     iom.finalize()

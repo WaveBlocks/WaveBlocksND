@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-Flip the signs of the coefficients of some eigenstate wavepackets.
+Delete wavefunction data from simulation result files.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2014 R. Bourquin
@@ -10,24 +10,25 @@ Flip the signs of the coefficients of some eigenstate wavepackets.
 import argparse
 
 from WaveBlocksND import IOManager
-
+from WaveBlocksND import GlobalDefaults as GD
 
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--datafile",
                     type = str,
-                    help = "The data file",
+                    help = "The simulation data file",
                     nargs = "?",
-                    default = "eigenstates.hdf5")
+                    default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
+                    type = str,
                     help = "The data block to handle",
                     nargs = "*",
-                    default = [0])
+                    default = ["all"])
 
 args = parser.parse_args()
 
-# Read file
+# Read file with simulation data
 iom = IOManager()
 iom.open_file(filename=args.datafile)
 
@@ -37,10 +38,11 @@ if not "all" in args.blockid:
     blockids = [ bid for bid in args.blockid if bid in blockids ]
 
 # Iterate over all blocks
-for blockid in blocks_to_handle:
-    if iom.has_wavepacket(blockid=blockid):
-        # Ugly hack using raw hdf5 data access
-        path = "/datablock_"+str(blockid)+"/wavepacket/coefficients/c_0"
-        iom._srf[path][:] *= -1.0
+for blockid in blockids:
+    if iom.has_wavefunction(blockid=blockid):
+        print("Deleting grid and wavefunction data in block '%s'" % blockid)
+        iom.delete_wavefunction(blockid=blockid)
+        if iom.has_grid(blockid=blockid):
+            iom.delete_grid(blockid=blockid)
 
 iom.finalize()

@@ -5,7 +5,7 @@ a bunch of simulation configuration given some
 sets of parameters.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -215,7 +215,7 @@ if __name__ == "__main__":
                         help = "The meta-configuration file.",
                         default = GlobalDefaults.file_metaconfiguration)
 
-    parser.add_argument("-d", "--dest",
+    parser.add_argument("-d", "--destination",
                         type = str,
                         help = "The destination where to store the configurations generated.",
                         default = GlobalDefaults.path_to_autogen_configs)
@@ -223,7 +223,7 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
     print("Meta configuration read from: " + args.metaconfiguration)
-    print("Write configurations to: " + args.dest)
+    print("Write configurations to: " + args.destination)
 
     # Read the configuration file
     with open(args.metaconfiguration) as f:
@@ -240,4 +240,4 @@ if __name__ == "__main__":
         PA = """ """
 
     # Generate the configuration files
-    generate_configurations(PA, GP, LP, cfpath=args.dest)
+    generate_configurations(PA, GP, LP, cfpath=args.destination)

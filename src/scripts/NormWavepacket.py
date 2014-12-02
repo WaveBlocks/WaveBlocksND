@@ -52,7 +52,7 @@ def compute_norm_hawp(iom, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing norms of timestep "+str(step))
+        print(" Computing norms of timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=KEY)
@@ -116,7 +116,7 @@ def compute_norm_inhawp(iom, blockid=0, eigentrafo=True):
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
-        print(" Computing norms of timestep "+str(step))
+        print(" Computing norms of timestep %d" % step)
 
         # Retrieve simulation data
         params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid, key=KEY)

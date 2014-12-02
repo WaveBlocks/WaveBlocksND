@@ -16,19 +16,24 @@ from WaveBlocksND import GlobalDefaults as GD
 
 parser = argparse.ArgumentParser()
 
-parser.add_argument("simfile",
+parser.add_argument("-d", "--datafile",
                     type = str,
                     help = "The simulation data file",
                     nargs = "?",
                     default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
+                    type = str,
                     help = "The data block to handle",
                     nargs = "*",
-                    default = [0])
+                    default = ["all"])
 
 parser.add_argument("-p", "--params",
                     help = "An additional configuration parameters file")
+
+parser.add_argument("-et", "--eigentransform",
+                    help = "Transform the data into the eigenbasis before computing norms",
+                    action = "store_true")
 
 # TODO: Filter type of objects
 # parser.add_argument("-t", "--type",
@@ -40,13 +45,12 @@ args = parser.parse_args()
 
 # Read file with simulation data
 iom = IOManager()
-iom.open_file(filename=args.simfile)
+iom.open_file(filename=args.datafile)
 
 # Which blocks to handle
-if "all" in args.blockid:
-    blocks_to_handle = iom.get_block_ids()
-else:
-    blocks_to_handle = map(int, args.blockid)
+blockids = iom.get_block_ids()
+if not "all" in args.blockid:
+    blockids = [ bid for bid in args.blockid if bid in blockids ]
 
 # Do we have a specifc configuration file holding
 # the definitions for inner products to use?
@@ -55,9 +59,9 @@ if args.params:
     PA = ParameterLoader().load_from_file(parametersfile)
 else:
     # None given, try to load from simulation file
-    try:
+    if iom.has_parameters():
         PA = iom.load_parameters()
-    except:
+    else:
         PA = None
 
 # See if we have a description for observables and
@@ -88,25 +92,25 @@ if PA is None:
         }
 
 # Iterate over all blocks
-for blockid in blocks_to_handle:
-    print("Computing the autocorrelation in data block '"+str(blockid)+"'")
+for blockid in blockids:
+    print("Computing the autocorrelation in data block '%s'" % blockid)
 
     if iom.has_autocorrelation(blockid=blockid):
-        print("Datablock '"+str(blockid)+"' already contains autocorrelation data, silent skip.")
+        print("Datablock '%s' already contains autocorrelation data, silent skip." % blockid)
         continue
 
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
         import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=False)
+        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_wavefunction(blockid=blockid):
         import AutocorrelationWavefunction
-        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=False)
+        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=False)
+        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     else:
-        print("Warning: Not computing any autocorrelations in block '"+str(blockid)+"'!")
+        print("Warning: Not computing any autocorrelations in block '%s'!" % blockid)
 
 iom.finalize()

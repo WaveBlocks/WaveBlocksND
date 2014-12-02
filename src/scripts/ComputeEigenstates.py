@@ -12,7 +12,7 @@ import argparse
 from numpy import (argsort, atleast_1d, complexfloating, conjugate, dot, ones, real,
                    squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
-from scipy.linalg import sqrtm, inv, eigh
+from scipy.linalg import sqrtm, inv, eigh, norm
 
 from WaveBlocksND import BlockFactory
 from WaveBlocksND import GradientHAWP
@@ -20,7 +20,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
 
 
-def compute_eigenstate(parameters):
+def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
     r"""
     Special variables necessary in configuration:
 
@@ -40,7 +40,7 @@ def compute_eigenstate(parameters):
 
     # Create output file now, in case this fails we did not waste computations
     IOM = IOManager()
-    IOM.create_file("eigenstates.hdf5")
+    IOM.create_file(filename)
 
     # Save the simulation parameters
     IOM.add_parameters()
@@ -183,6 +183,13 @@ def compute_eigenstate(parameters):
 
     IOM.finalize()
 
+    if norm(q0) > 1000:
+        print("+----------------------------------+")
+        print("| Run-away minimum?                |")
+        print("| Maybe try different:             |")
+        print("|   starting_point = [x0, y0, ...] |")
+        print("+----------------------------------+")
+
 
 
 
@@ -194,6 +201,12 @@ if __name__ == "__main__":
                         type = str,
                         help = "The configuration parameters file")
 
+    parser.add_argument("-o", "--outputfile",
+                    type = str,
+                    help = "The output data file",
+                    nargs = "?",
+                    default = "eigenstates.hdf5")
+
     args = parser.parse_args()
 
     # Read the path for the configuration file we use for this simulation.
@@ -201,6 +214,6 @@ if __name__ == "__main__":
 
     # Set up the parameter provider singleton
     PA = ParameterLoader().load_from_file(args.parametersfile)
-    compute_eigenstate(PA)
+    compute_eigenstate(PA, filename=args.outputfile)
 
     print("Eigenstate computation finished")
