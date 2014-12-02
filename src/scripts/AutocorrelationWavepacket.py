@@ -23,6 +23,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     :type eigentrafo: Boolean, default is ``True``.
     """
     parameters = iom.load_parameters()
+    BF = BlockFactory()
 
     # Number of time steps we saved
     timesteps = iom.load_wavepacket_timegrid(blockid=blockid)
@@ -31,7 +32,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     # Basis transformator
     if eigentrafo is True:
         # The potential used
-        Potential = BlockFactory().create_potential(parameters)
+        Potential = BF.create_potential(parameters)
         BT = BasisTransformationHAWP(Potential)
 
     # We want to save norms, thus add a data slot to the data file
@@ -39,8 +40,8 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_wavepacket_description(blockid=blockid)
-    HAWPo = BlockFactory().create_wavepacket(descr)
-    HAWPt = BlockFactory().create_wavepacket(descr)
+    HAWPo = BF.create_wavepacket(descr)
+    HAWPt = BF.create_wavepacket(descr)
 
     if eigentrafo is True:
         BT.set_matrix_builder(HAWPo.get_innerproduct())
@@ -49,7 +50,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
     for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
+        BS[ahash] = BF.create_basis_shape(descr)
 
     # Comfigure the original wavepacket
     KEY = ("q","p","Q","P","S","adQ")
@@ -62,7 +63,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
-    IP = BlockFactory().create_inner_product(obsconfig["innerproduct"])
+    IP = BF.create_inner_product(obsconfig["innerproduct"])
 
     # Transform to the eigenbasis.
     if eigentrafo is True:
@@ -105,6 +106,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     :type eigentrafo: Boolean, default is ``True``.
     """
     parameters = iom.load_parameters()
+    BF = BlockFactory()
 
     # Number of time steps we saved
     timesteps = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
@@ -113,7 +115,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     # Basis transformator
     if eigentrafo is True:
         # The potential used
-        Potential = BlockFactory().create_potential(parameters)
+        Potential = BF.create_potential(parameters)
         BT = BasisTransformationHAWP(Potential)
 
     # We want to save autocorrelations, thus add a data slot to the data file
@@ -121,8 +123,8 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_inhomogwavepacket_description(blockid=blockid)
-    HAWPo = BlockFactory().create_wavepacket(descr)
-    HAWPt = BlockFactory().create_wavepacket(descr)
+    HAWPo = BF.create_wavepacket(descr)
+    HAWPt = BF.create_wavepacket(descr)
 
     if eigentrafo is True:
         BT.set_matrix_builder(HAWPo.get_innerproduct())
@@ -131,7 +133,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     BS_descr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
     BS = {}
     for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
+        BS[ahash] = BF.create_basis_shape(descr)
 
     # Comfigure the original wavepacket
     # Retrieve simulation data
@@ -143,7 +145,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
-    IP = BlockFactory().create_inner_product(obsconfig["innerproduct"])
+    IP = BF.create_inner_product(obsconfig["innerproduct"])
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):

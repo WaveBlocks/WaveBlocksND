@@ -24,13 +24,14 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
     :type iseigen: Boolean, default is ``True``
     """
     parameters = iom.load_parameters()
+    BF = BlockFactory()
 
     # Number of time steps we saved
     timesteps = iom.load_wavepacket_timegrid(blockid=blockid)
     nrtimesteps = timesteps.shape[0]
 
     # The potential used
-    Potential = BlockFactory().create_potential(parameters)
+    Potential = BF.create_potential(parameters)
 
     # Basis transformator
     if eigentrafo is True:
@@ -41,7 +42,12 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_wavepacket_description(blockid=blockid)
-    HAWP = BlockFactory().create_wavepacket(descr)
+    HAWP = BF.create_wavepacket(descr)
+
+    # Inner product
+    if HAWP.get_innerproduct() is None:
+        IP = BF.create_inner_product(parameters["innerproduct"])
+        HAWP.set_innerproduct(IP)
 
     if eigentrafo is True:
         BT.set_matrix_builder(HAWP.get_innerproduct())
@@ -50,7 +56,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
     BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
     for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
+        BS[ahash] = BF.create_basis_shape(descr)
 
     O = ObservablesHAWP()
     KEY = ("q","p","Q","P","S","adQ")
@@ -96,13 +102,14 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
     :type iseigen: Boolean, default is ``True``
     """
     parameters = iom.load_parameters()
+    BF = BlockFactory()
 
     # Number of time steps we saved
     timesteps = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
     nrtimesteps = timesteps.shape[0]
 
     # The potential used
-    Potential = BlockFactory().create_potential(parameters)
+    Potential = BF.create_potential(parameters)
 
     # Basis transformator
     if eigentrafo is True:
@@ -113,7 +120,12 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
     # Initialize a Hagedorn wavepacket with the data
     descr = iom.load_inhomogwavepacket_description(blockid=blockid)
-    HAWP = BlockFactory().create_wavepacket(descr)
+    HAWP = BF.create_wavepacket(descr)
+
+    # Inner product
+    if HAWP.get_innerproduct() is None:
+        IP = BF.create_inner_product(parameters["innerproduct"])
+        HAWP.set_innerproduct(IP)
 
     if eigentrafo is True:
         BT.set_matrix_builder(HAWP.get_innerproduct())
@@ -122,7 +134,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
     BS_descr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
     BS = {}
     for ahash, descr in BS_descr.iteritems():
-        BS[ahash] = BlockFactory().create_basis_shape(descr)
+        BS[ahash] = BF.create_basis_shape(descr)
 
     O = ObservablesHAWP()
     KEY = ("q","p","Q","P","S","adQ")
