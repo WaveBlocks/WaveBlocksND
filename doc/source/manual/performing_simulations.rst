@@ -20,7 +20,7 @@ we can apply various post processing steps, for example the computation of
 energies, plotting of norms and many more.
 
 The first step is to create a `configuration file` and set the parameters. Let's call
-the file ``parameters_01.py``. The full content of this file is printed below
+the file ``parameters_01.py``. The full content of this file is printed below:
 
 ::
 
@@ -79,7 +79,7 @@ the file ``parameters_01.py``. The full content of this file is printed below
 For an overview of the available settings, see :ref:`Required parameter sets`.
 
 Now we have to run the main simulation program. This is done by the following
-command
+command:
 
 ::
 
@@ -109,7 +109,7 @@ the task is named ``ConfigurationGenerator.py``. It takes a so called `meta
 configuration` and then produces a set of ordinary configuration files.
 
 Let's look at a simple example: assume that our sample meta configuration file
-is ``metaconfiguration_02.py``, its content is reprinted below
+is ``metaconfiguration_02.py``, its content is reprinted below:
 
 ::
 
@@ -156,7 +156,7 @@ all the configuration files. Let's take a look into this directory:
 
     ls -l autogen_configurations/
 
-prints
+prints:
 
 ::
 
@@ -183,7 +183,7 @@ The batch loop
 
 There is a simple python script ``Batch.py`` which does nothing else than running
 simulations for a set of configurations. The usage is really simple. First create
-a subdirectory called configurations by
+a subdirectory called configurations by:
 
 ::
 
@@ -191,7 +191,7 @@ a subdirectory called configurations by
 
 Then we put all the configurations we want to run in the loop into this directory.
 For example if we created the configurations by the means described in the last
-section we just do
+section we just do:
 
 ::
 
@@ -201,7 +201,7 @@ We can put as many simulations as we like into this directory. Each simulation
 is run totally independently from all others. At the moment we do not run the
 simulations in parallel but it would be possible to do this.
 
-Now it is time to call the ``Batch.py`` script. The most simple call looks like
+Now it is time to call the ``Batch.py`` script. The most simple call looks like:
 
 ::
 
@@ -212,13 +212,13 @@ the place where it will put all the simulation results. Then it will call the
 ``Main.py`` script for each simulation configuration provided. After this it will
 run a bunch of data computation and plotting scripts. Finally it puts all the
 simulation results in a subdirectory of results whose name corresponds to the
-configuration file used. If we now look into the results directory by
+configuration file used. If we now look into the results directory by:
 
 ::
 
     ls results
 
-we see the listing
+we see the listing:
 
 ::
 
@@ -236,7 +236,7 @@ escapes, you can also write the name without escapes in a pair of ".)
 
     ls results/Parameters\[eps\=0.1\]\[delta\=0.5eps\]
 
-we have the following bunch of files
+we have the following bunch of files:
 
 ::
 
@@ -311,13 +311,13 @@ batch loop has terminated. Maybe you decided to compute a new observable or
 whatever. It would be tedious to call the script with each ``simulation_results.hdf5``
 and its correct file path manually. Exactly for this reason there is a script named
 ``ForAll.py``. For example assume we want to plot the potential used in each simulation
-(which is identical in our example but never mind). Then we call
+(which is identical in our example but never mind). Then we call:
 
 ::
 
     python ForAll.py PlotPotential.py
 
-which starts by printing
+which starts by printing:
 
 ::
 
@@ -346,7 +346,8 @@ but we can get them easily from the stored information. The following sections
 will show how to compute these data and store them in the output file
 ``simulation_results.hdf5`` too.
 
-All post-processing scripts can be called with an argument ``--help``
+All post-processing and plotting scripts can be called with an argument ``--help``
+and provide modern command line switch handling.
 
 ::
 
@@ -356,16 +357,17 @@ and will print a help message:
 
 ::
 
-    usage: ComputeNorms.py [-h] [-b [BLOCKID [BLOCKID ...]]] [simfile]
-
-    positional arguments:
-      simfile               The simulation data file
+    usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]] [-et]
 
     optional arguments:
       -h, --help            show this help message and exit
+      -d [DATAFILE], --datafile [DATAFILE]
+                            The simulation data file
       -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
                             The data block to handle
-
+      -et, --eigentransform
+                            Transform the data into the eigenbasis before
+                            computing norms
 
 Norms
 ~~~~~
@@ -643,7 +645,36 @@ three dimensional surface plots by calling either of:
     PlotWavefunction2Dsurface.py
 
 Three and higher dimensional wavefunctions can not be plotted but
-occur rarely anyway due to the vast amount of data involved.
+the need to do so occurs rarely anyway due to the vast amount of data involved.
+All plot scripts can set the viewport by command line arguments, for example:
+
+::
+
+    python ../plotters/PlotWavefunction1D.py --help
+
+::
+
+    usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMFILE]]
+                                 [-b [BLOCKID [BLOCKID ...]]] [-x XRANGE XRANGE]
+                                 [-y YRANGE YRANGE] [--plotphase]
+                                 [--plotcomponents] [--plotabssqr]
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -d [DATAFILE], --datafile [DATAFILE]
+                            The simulation data file
+      -p [PARAMFILE], --paramfile [PARAMFILE]
+                            The configuration parameter file
+      -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                            The data block to handle
+      -x XRANGE XRANGE, --xrange XRANGE XRANGE
+                            The plot range on the x-axis
+      -y YRANGE YRANGE, --yrange YRANGE YRANGE
+                            The plot range on the y-axis
+      --plotphase           Plot the complex phase (slow)
+      --plotcomponents      Plot the real/imaginary parts
+      --plotabssqr          Plot the absolute value squared
+
 
 Plotting the Potentials
 ~~~~~~~~~~~~~~~~~~~~~~~
