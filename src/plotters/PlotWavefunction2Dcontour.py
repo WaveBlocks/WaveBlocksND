@@ -95,7 +95,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, view=None)
             fig.add_subplot(N,1,level+1)
             plotcf2d(u, v, z, darken=0.3, limits=view)
 
-        fig.savefig("wavefunction_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
+        fig.savefig("wavefunction_contour_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
         close(fig)
 
 

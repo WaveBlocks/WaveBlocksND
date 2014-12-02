@@ -108,7 +108,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, sparsify=1
             if interactive:
                 mlab.show()
             else:
-                mlab.savefig("wavefunction_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
+                mlab.savefig("wavefunction_surface_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
                 mlab.close(fig)
 
 
