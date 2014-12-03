@@ -78,14 +78,17 @@ if PA is not None:
 # No configuration parameters so far, use a more or less sane default
 if PA is None:
     print("Warning: Using (possibly improper) default values for inner product")
+    descr = iom.load_wavepacket_description(blockid=blockids[0])
+    D = descr["dimension"]
     PA = {}
     PA["innerproduct"] = {
         "type" : "InhomogeneousInnerProduct",
         "delegate" : {
             "type" : "NSDInhomogeneous",
             'qr': {
-                'type': 'GaussHermiteOriginalQR',
-                'order': 5
+                'type': 'TensorProductQR',
+                'dimension': D,
+                'qr_rules': D * [{'type': 'GaussHermiteOriginalQR', 'order': 20}]
                 }
             }
         }

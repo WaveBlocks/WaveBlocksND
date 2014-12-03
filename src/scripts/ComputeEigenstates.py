@@ -168,7 +168,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
         if a > pi/2.0:
             coeffs *= -1
 
-        print("Level: "+str(state))
+        print("State: "+str(state))
         print("Energy: "+str(energy))
         print("Coefficients: \n")
         print(str(coeffs))
