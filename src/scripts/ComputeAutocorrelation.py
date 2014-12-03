@@ -88,7 +88,7 @@ if PA is None:
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': D,
-                'qr_rules': D * [{'type': 'GaussHermiteOriginalQR', 'order': 20}]
+                'qr_rules': D * [{'type': 'GaussHermiteOriginalQR', 'order': 5}]
                 }
             }
         }
