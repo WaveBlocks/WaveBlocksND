@@ -37,17 +37,19 @@ def read_data_homogeneous(iom, blockid=0):
 
     # Plot the coefficients for all timesteps
     for j, step in enumerate(timegrid):
-        hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, blockid=blockid, get_hashes=True)
+        allhashes, allcoeffs = iom.load_wavepacket_coefficients(timestep=step, blockid=blockid, get_hashes=True)
 
         k = []
-
-        for i in xrange(parameters["ncomponents"]):
-            bs = BS[int(hashes[i])]
-            ki = array([bs[node] for node in bs.get_node_iterator()])
+        ck = []
+        for ahash, coeffs in zip(allhashes, allcoeffs):
+            bs = BS[int(ahash)]
+            ki = array([ bs[node] for node in bs.get_node_iterator(mode="mag")])
+            ck.append(coeffs[ki])
+            ki.sort()
             k.append(ki)
 
         dt = parameters["dt"] if parameters.has_key("dt") else None
-        plot_coefficients(k, coeffs, step, dt, blockid=blockid)
+        plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -68,17 +70,19 @@ def read_data_inhomogeneous(iom, blockid=0):
 
     # Plot the coefficients for all timesteps
     for j, step in enumerate(timegrid):
-        hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, blockid=blockid, get_hashes=True)
+        allhashes, allcoeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, blockid=blockid, get_hashes=True)
 
         k = []
-
-        for i in xrange(parameters["ncomponents"]):
-            bs = BS[int(hashes[i])]
-            ki = array([bs[node] for node in bs.get_node_iterator()])
+        ck = []
+        for ahash, coeffs in zip(allhashes, allcoeffs):
+            bs = BS[int(ahash)]
+            ki = array([ bs[node] for node in bs.get_node_iterator(mode="mag")])
+            ck.append(coeffs[ki])
+            ki.sort()
             k.append(ki)
 
         dt = parameters["dt"] if parameters.has_key("dt") else None
-        plot_coefficients(k, coeffs, step, dt, blockid=blockid)
+        plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
 def plot_coefficients(k, c, step, dt, blockid=0):
