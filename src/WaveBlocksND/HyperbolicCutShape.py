@@ -4,7 +4,7 @@ This file contains the class for representing the hyperbolic cut
 basis shape which is a special type of sparse basis set.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -197,6 +197,19 @@ class HyperbolicCutShape(BasisShape):
         return index_iterator_chain(self._sparsity, direction)
 
 
+    def _get_index_iterator_mag(self):
+        r"""
+        """
+        # Nodes sorted by l_1 magnitude
+        nodes = sorted(self._lima.keys(), key=lambda k: sum(k))
+
+        def index_iterator_mag(nodes):
+            for node in nodes:
+                yield node
+
+        return index_iterator_mag(nodes)
+
+
     def get_node_iterator(self, mode="lex", direction=None):
         r"""
         Returns an iterator to iterate over all basis elements :math:`k \in \mathfrak{K}`.
@@ -216,6 +229,8 @@ class HyperbolicCutShape(BasisShape):
                 return self._get_index_iterator_chain(direction=direction)
             else:
                 raise ValueError("Can not build iterator for this direction.")
+        elif mode == "mag":
+            return self._get_index_iterator_mag()
         # TODO: Consider boundary node only iterator
         else:
             raise ValueError("Unknown iterator mode: "+str(mode)+".")
