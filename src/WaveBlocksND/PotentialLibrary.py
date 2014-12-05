@@ -141,6 +141,41 @@ quartic_2d_rotsym["potential"] = "sigmax**2 * x**4 + 2*sigmax*sigmay * x**2*y**2
 quartic_2d_rotsym["defaults"] = {"sigmax":"1", "sigmay":"1"}
 quartic_2d_rotsym["number_levels"] = 1
 
+# A simple fourth order anharmonic potential
+quartic_reg_2d = {}
+quartic_reg_2d["variables"] = ["x", "y"]
+quartic_reg_2d["potential"] = "sigmax * x**4 + sigmay * y**4 + taux * x**2 + tauy * y**2"
+quartic_reg_2d["defaults"] = {"sigmax":"1", "sigmay":"1", "taux":"1", "tauy":"1"}
+quartic_reg_2d["number_levels"] = 1
+
+# A simple fourth order anharmonic potential
+quartic_rotsym_reg_2d = {}
+quartic_rotsym_reg_2d["variables"] = ["x", "y"]
+quartic_rotsym_reg_2d["potential"] = "sigmax * x**4 + sigmay * y**4 + 2*sqrt(sigmax*sigmay)*x**2*y**2 + taux * x**2 + tauy * y**2"
+quartic_rotsym_reg_2d["defaults"] = {"sigmax":"1", "sigmay":"1", "taux":"1", "tauy":"1"}
+quartic_rotsym_reg_2d["number_levels"] = 1
+
+# A simple sixth order anharmonic potential
+sextic_2d = {}
+sextic_2d["variables"] = ["x", "y"]
+sextic_2d["potential"] = "sigmax * x**6 + sigmay * y**6"
+sextic_2d["defaults"] = {"sigmax":"1", "sigmay":"1"}
+sextic_2d["number_levels"] = 1
+
+# A simple sixth order anharmonic potential
+sextic_reg_2d = {}
+sextic_reg_2d["variables"] = ["x", "y"]
+sextic_reg_2d["potential"] = "sigmax * x**6 + sigmay * y**6 + tau*x**2 + tau*y**2"
+sextic_reg_2d["defaults"] = {"sigmax":"1", "sigmay":"1", "taux":"1", "tauy":"1"}
+sextic_reg_2d["number_levels"] = 1
+
+# A simple sixth order anharmonic potential
+sextic_rotsym_reg_2d = {}
+sextic_rotsym_reg_2d["variables"] = ["x", "y"]
+sextic_rotsym_reg_2d["potential"] = "ax**3 * x**6 + ay**3 * y**6 + 3 * ax**2 * ay * x**4 * y**2 + 3 * ax * ay**2 * x**2 * y**4 + taux * x**2 + tauy * y**2"
+sextic_rotsym_reg_2d["defaults"] = {"ax":"1", "ay":"1", "taux":"1", "tauy":"1"}
+sextic_rotsym_reg_2d["number_levels"] = 1
+
 # A potential consisting of a cosine wave part in 2D
 cos_osc_2d = {}
 cos_osc_2d["variables"] = ["x", "y"]
