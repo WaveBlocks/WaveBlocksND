@@ -151,7 +151,7 @@ cos_osc_2d["number_levels"] = 1
 # A potential consisting of a cosine wave part in 2D
 cos_osc_rotsym_2d = {}
 cos_osc_rotsym_2d["variables"] = ["x", "y"]
-cos_osc_rotsym_2d["potential"] = "a * cos(b * sqrt(x**2+y**2))"
+cos_osc_rotsym_2d["potential"] = "-a * cos(b * sqrt(x**2+y**2)**2)"
 cos_osc_rotsym_2d["defaults"] = {"a":"1", "b":"1"}
 cos_osc_rotsym_2d["number_levels"] = 1
 
