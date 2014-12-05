@@ -9,8 +9,8 @@ potential in terms of Hagedorn wavepackets.
 """
 
 import argparse
-from numpy import (argsort, atleast_1d, complexfloating, conjugate, dot, ones, real,
-                   squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
+from numpy import (argsort, atleast_1d, atleast_2d, complexfloating, conjugate, dot, ones, real,
+                   identity, squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh, norm
 
@@ -20,7 +20,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
 
 
-def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
+def compute_eigenstate(parameters, filename="eigenstates.hdf5", computePQ=True):
     r"""
     Special variables necessary in configuration:
 
@@ -38,7 +38,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
         # Upper-most potential surface
         N = 0
 
-    # Create output file now, in case this fails we did not waste computations
+    # Create output file now, in case this fails we did not waste computation time
     IOM = IOManager()
     IOM.create_file(filename)
 
@@ -63,7 +63,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
     if parameters.has_key("starting_point"):
         x0 = atleast_1d(parameters["starting_point"])
     else:
-        x0 = 2.0*ones(D)
+        x0 = 0.5 * ones(D)
 
     q0 = fmin(f, x0, xtol=1e-12)
     q0 = q0.reshape((D,1))
@@ -71,14 +71,24 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5"):
     # We are at the minimum with no momentum
     p0 = zeros_like(q0)
 
-    # Compute spreads now
-    # Q_0 = H^(-1/4)
-    H = V.evaluate_hessian_at(q0)
-    Q0 = inv(sqrtm(sqrtm(H)))
-    # Take P_0 = i Q_0^(-1)
-    P0 = 1.0j * inv(Q0)
+    # Compute spreads
+    if computePQ:
+        # Q_0 = H^(-1/4)
+        H = V.evaluate_hessian_at(q0)
+        Q0 = inv(sqrtm(sqrtm(H)))
+        # P_0 = i Q_0^(-1)
+        P0 = 1.0j * inv(Q0)
+    else:
+        if parameters.has_key("Q0"):
+            Q0 = atleast_2d(parameters["Q0"])
+        else:
+            Q0 = identity(D)
+        if parameters.has_key("P0"):
+            P0 = atleast_2d(parameters["P0"])
+        else:
+            P0 = 1.0j * inv(Q0)
 
-    # The parameter set Pi is ...
+    # The parameter set Pi
     print(70*"-")
     print("Parameter values are:")
     print("---------------------")
@@ -202,10 +212,14 @@ if __name__ == "__main__":
                         help = "The configuration parameters file")
 
     parser.add_argument("-o", "--outputfile",
-                    type = str,
-                    help = "The output data file",
-                    nargs = "?",
-                    default = "eigenstates.hdf5")
+                        type = str,
+                        help = "The output data file",
+                        nargs = "?",
+                        default = "eigenstates.hdf5")
+
+    parser.add_argument("--noPQ",
+                        help = "Do not compute the parameters Q and P",
+                        action = "store_false")
 
     args = parser.parse_args()
 
@@ -214,6 +228,6 @@ if __name__ == "__main__":
 
     # Set up the parameter provider singleton
     PA = ParameterLoader().load_from_file(args.parametersfile)
-    compute_eigenstate(PA, filename=args.outputfile)
+    compute_eigenstate(PA, filename=args.outputfile, computePQ=args.noPQ)
 
     print("Eigenstate computation finished")
