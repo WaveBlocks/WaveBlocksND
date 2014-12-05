@@ -305,6 +305,13 @@ sine_maar["potential"] = "sin(x**2+y**2) + alpha * exp(-sigma*(x**2+y**2))"
 sine_maar["defaults"] = {"alpha":0.8, "sigma":1.0}
 sine_maar["number_levels"] = 1
 
+# Pullen-Edmonds
+pullen_edmonds = {}
+pullen_edmonds["variables"] = ["x", "y"]
+pullen_edmonds["potential"] = "1/2*(b1*x**2 + b2*y**2) + a*x**2*y**2"
+pullen_edmonds["defaults"] = {"a":"1", "b1":"1", "b2":"1"}
+pullen_edmonds["number_levels"] = 1
+
 #######################################################################
 # Potentials in three dimensions and with one energy level (D=3, N=1) #
 #######################################################################
