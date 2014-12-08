@@ -472,7 +472,7 @@ Potential ``cos_osc_mul_2d``
 Potential ``cos_osc_rotsym_2d``
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-* Formula: :math:`V(x) = a \cos{\left (b \sqrt{x^{2} + y^{2}} \right )}`
+* Formula: :math:`V(x) = - a \cos{\left (b \left(x^{2} + y^{2}\right) \right )}`
 
 * Variables: :math:`x`, :math:`y`
 
@@ -675,6 +675,22 @@ Potential ``morse_threefold_2``
 .. image:: fig/morse_threefold_2.png
    :width: 400px
 
+Potential ``pullen_edmonds``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = a x^{2} y^{2} + \frac{b_{1} x^{2}}{2} + \frac{b_{2} y^{2}}{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`a = 1`
+  * :math:`b_{1} = 1`
+  * :math:`b_{2} = 1`
+
+.. image:: fig/pullen_edmonds.png
+   :width: 400px
+
 Potential ``quad_well``
 ^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -739,6 +755,40 @@ Potential ``quartic_2d_rotsym``
 .. image:: fig/quartic_2d_rotsym.png
    :width: 400px
 
+Potential ``quartic_reg_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{4} + sigmay y^{4} + taux x^{2} + tauy y^{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`taux = 1`
+  * :math:`tauy = 1`
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_reg_2d.png
+   :width: 400px
+
+Potential ``quartic_rotsym_reg_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{4} + sigmay y^{4} + taux x^{2} + tauy y^{2} + 2 x^{2} y^{2} \sqrt{sigmax sigmay}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`taux = 1`
+  * :math:`tauy = 1`
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/quartic_rotsym_reg_2d.png
+   :width: 400px
+
 Potential ``ring_valley``
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 
@@ -752,6 +802,55 @@ Potential ``ring_valley``
   * :math:`\delta = 1`
 
 .. image:: fig/ring_valley.png
+   :width: 400px
+
+Potential ``sextic_2d``
+^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{6} + sigmay y^{6}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/sextic_2d.png
+   :width: 400px
+
+Potential ``sextic_reg_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = sigmax x^{6} + sigmay y^{6} + taux x^{2} + tauy y^{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`taux = 1`
+  * :math:`tauy = 1`
+  * :math:`sigmay = 1`
+  * :math:`sigmax = 1`
+
+.. image:: fig/sextic_reg_2d.png
+   :width: 400px
+
+Potential ``sextic_rotsym_reg_2d``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+* Formula: :math:`V(x) = ax^{3} x^{6} + 3 ax^{2} ay x^{4} y^{2} + 3 ax ay^{2} x^{2} y^{4} + ay^{3} y^{6} + taux x^{2} + tauy y^{2}`
+
+* Variables: :math:`x`, :math:`y`
+
+* Default values:
+
+  * :math:`ay = 1`
+  * :math:`ax = 1`
+  * :math:`taux = 1`
+  * :math:`tauy = 1`
+
+.. image:: fig/sextic_rotsym_reg_2d.png
    :width: 400px
 
 Potential ``sine_maar``
