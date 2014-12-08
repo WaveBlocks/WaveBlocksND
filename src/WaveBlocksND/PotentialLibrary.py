@@ -165,7 +165,7 @@ sextic_2d["number_levels"] = 1
 # A simple sixth order anharmonic potential
 sextic_reg_2d = {}
 sextic_reg_2d["variables"] = ["x", "y"]
-sextic_reg_2d["potential"] = "sigmax * x**6 + sigmay * y**6 + tau*x**2 + tau*y**2"
+sextic_reg_2d["potential"] = "sigmax * x**6 + sigmay * y**6 + taux * x**2 + tauy * y**2"
 sextic_reg_2d["defaults"] = {"sigmax":"1", "sigmay":"1", "taux":"1", "tauy":"1"}
 sextic_reg_2d["number_levels"] = 1
 
