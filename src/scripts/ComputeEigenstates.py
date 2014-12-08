@@ -9,8 +9,8 @@ potential in terms of Hagedorn wavepackets.
 """
 
 import argparse
-from numpy import (argsort, atleast_1d, atleast_2d, complexfloating, conjugate, dot, ones, real,
-                   identity, squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
+from numpy import (argsort, atleast_1d, atleast_2d, complexfloating, conjugate, dot, ones, zeros,
+                   real, identity, squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
 from scipy.linalg import sqrtm, inv, eigh, norm
 
@@ -20,7 +20,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
 
 
-def compute_eigenstate(parameters, filename="eigenstates.hdf5", computePQ=True):
+def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, computePQ=True):
     r"""
     Special variables necessary in configuration:
 
@@ -53,23 +53,34 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computePQ=True):
     V = BF.create_potential(parameters)
     V.calculate_local_quadratic()
 
-    # Minimize the potential to find q0
-    f = lambda x: real((squeeze(V.evaluate_at(x)[N])))
-    # Start with an offset because exact 0.0 values can give
-    # issues, especially with the Hessian evaluation. This way
-    # the minimizer will always stay away from zero a tiny bit.
-    # The current starting point can give issues if the potential
-    # is stationary at the point (2, ..., 2) but that is less likely.
-    if parameters.has_key("starting_point"):
-        x0 = atleast_1d(parameters["starting_point"])
+    # Compute position and momentum
+    if computepq:
+        # Minimize the potential to find q0
+        f = lambda x: real((squeeze(V.evaluate_at(x)[N])))
+        # Start with an offset because exact 0.0 values can give
+        # issues, especially with the Hessian evaluation. This way
+        # the minimizer will always stay away from zero a tiny bit.
+        # The current starting point can give issues if the potential
+        # is stationary at the point (2, ..., 2) but that is less likely.
+        if parameters.has_key("starting_point"):
+            x0 = atleast_1d(parameters["starting_point"])
+        else:
+            x0 = 0.5 * ones(D)
+
+        q0 = fmin(f, x0, xtol=1e-12)
+        q0 = q0.reshape((D,1))
+
+        # We are at the minimum with no momentum
+        p0 = zeros_like(q0)
     else:
-        x0 = 0.5 * ones(D)
-
-    q0 = fmin(f, x0, xtol=1e-12)
-    q0 = q0.reshape((D,1))
-
-    # We are at the minimum with no momentum
-    p0 = zeros_like(q0)
+        if parameters.has_key("q0"):
+            q0 = atleast_2d(parameters["q0"])
+        else:
+            q0 = zeros((D,1))
+        if parameters.has_key("p0"):
+            p0 = atleast_2d(parameters["p0"])
+        else:
+            p0 = zeros((D,1))
 
     # Compute spreads
     if computePQ:
@@ -217,6 +228,10 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = "eigenstates.hdf5")
 
+    parser.add_argument("--nopq",
+                        help = "Do not compute the parameters q and p",
+                        action = "store_false")
+
     parser.add_argument("--noPQ",
                         help = "Do not compute the parameters Q and P",
                         action = "store_false")
@@ -228,6 +243,6 @@ if __name__ == "__main__":
 
     # Set up the parameter provider singleton
     PA = ParameterLoader().load_from_file(args.parametersfile)
-    compute_eigenstate(PA, filename=args.outputfile, computePQ=args.noPQ)
+    compute_eigenstate(PA, filename=args.outputfile, computepq=args.nopq, computePQ=args.noPQ)
 
     print("Eigenstate computation finished")
