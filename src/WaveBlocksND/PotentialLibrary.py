@@ -42,6 +42,12 @@ quartic["potential"] = "1/4 * sigma * x**4"
 quartic["defaults"] = {"sigma":0.05}
 quartic["number_levels"] = 1
 
+quartic_reg = {}
+quartic_reg["variables"] = ["x"]
+quartic_reg["potential"] = "1/4 * sigma * x**4 + tau * sigma * x**2"
+quartic_reg["defaults"] = {"sigma":0.05, "tau":1}
+quartic_reg["number_levels"] = 1
+
 # A potential consisting of a cosine wave
 cos_osc = {}
 cos_osc["variables"] = ["x"]
