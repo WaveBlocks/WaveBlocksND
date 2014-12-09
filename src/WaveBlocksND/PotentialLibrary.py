@@ -62,6 +62,17 @@ cosh_osc["potential"] = "a * cosh(b * x)"
 cosh_osc["defaults"] = {"a":"1", "b":"1"}
 cosh_osc["number_levels"] = 1
 
+# A potential consisting of a hyperbolic cosine squared
+# Its Taylor expansion is:
+#   a  +  a b^2 x^4  +  1/3 a b^4 x^8  + ...
+# which for the default parameters reduces to:
+#   1  +  x^4  +  1/3 x^8  + ...
+cosh_osc_sq = {}
+cosh_osc_sq["variables"] = ["x"]
+cosh_osc_sq["potential"] = "a * cosh(b * x**2)**2"
+cosh_osc_sq["defaults"] = {"a":"1", "b":"1"}
+cosh_osc_sq["number_levels"] = 1
+
 # The Morse potential
 morse = {}
 morse["variables"] = ["x"]
