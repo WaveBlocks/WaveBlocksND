@@ -31,7 +31,7 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
     parameters = iom.load_parameters()
 
     if not parameters["dimension"] == 1:
-        print("No wavefunction of one space dimensions, silent return!")
+        print("No two-dimensional wavefunction, silent return!")
         return
 
     if PP is None:
@@ -62,7 +62,7 @@ def plot_frames(PP, iom, blockid=0, view=None, plotphase=True, plotcomponents=Fa
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
         values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
 
-        # Plot the probability densities projected to the eigenbasis
+        # Plot
         fig = figure(figsize=imgsize)
 
         for index, component in enumerate(values):
