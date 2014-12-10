@@ -291,7 +291,7 @@ def load_inhomogwavepacket_basisshapes(self, the_hash=None, blockid=0):
 #
 
 
-def load_inhomogwavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S")):
+def load_inhomogwavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S","adQ")):
     r"""Load a wavepacket at a given timestep and return a fully configured instance.
     This method just calls some other :py:class:`IOManager` methods in the correct order.
     It is included only for convenience and is not particularly efficient.
@@ -299,7 +299,7 @@ def load_inhomogwavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S"))
     :param timestep: The timestep :math:`n` at which we load the wavepacket.
     :param key: Specify which parameters to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
-               Default is ``("q", "p", "Q", "P", "S")``.
+               Default is ``("q", "p", "Q", "P", "S", "adQ")``.
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`HagedornWavepacketInhomogeneous` instance.
     """
@@ -327,7 +327,7 @@ def load_inhomogwavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S"))
     return HAWP
 
 
-def save_inhomogwavepacket(self, packet, timestep, blockid=None, key=("q","p","Q","P","S")):
+def save_inhomogwavepacket(self, packet, timestep, blockid=None, key=("q","p","Q","P","S","adQ")):
     r"""Save a wavepacket at a given timestep and read all data to save from the
     :py:class:`HagedornWavepacketInhomogeneous` instance provided. This method just
     calls some other :py:class:`IOManager` methods in the correct order. It is included
@@ -338,7 +338,7 @@ def save_inhomogwavepacket(self, packet, timestep, blockid=None, key=("q","p","Q
     :param timestep: The timestep :math:`n` at which we save the wavepacket.
     :param key: Specify which parameters to save. All are independent.
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
-               Default is ``("q", "p", "Q", "P", "S")``.
+               Default is ``("q", "p", "Q", "P", "S", "adQ")``.
     :param blockid: The ID of the data block to operate on.
     """
     # Description

@@ -65,11 +65,11 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
         print(" Evaluating homogeneous wavepacket at timestep %d" % step)
 
         # Retrieve simulation data
-        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid)
+        params = iom.load_wavepacket_parameters(timestep=step, blockid=blockid, key=("q","p","Q","P","S","adQ"))
         hashes, coeffs = iom.load_wavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params)
+        HAWP.set_parameters(params, key=("q","p","Q","P","S","adQ"))
         HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
         HAWP.set_coefficients(coeffs)
 
