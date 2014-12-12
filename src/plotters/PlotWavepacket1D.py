@@ -20,7 +20,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot import plotcf
 
 
-def plot_frames(PP, iom, blockid=0, eigentransform=False, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=False, gridblockid=None, imgsize=(12,9)):
+def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=False, gridblockid=None, imgsize=(12,9)):
     """Plot the wavepacket for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -52,6 +52,15 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, view=None, plotphase=T
         BT = BasisTransformationHAWP(V)
 
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    if timerange is not None:
+        if len(timerange) == 1:
+            I = (timegrid == timerange)
+        else:
+            I = ((timegrid >= timerange[0]) & (timegrid <= timerange[1]))
+        if any(I):
+            timegrid = timegrid[I]
+        else:
+            raise ValueError("No valid timestep remains!")
 
     # View
     if view is not None:
@@ -144,6 +153,12 @@ if __name__ == "__main__":
                         nargs = 2,
                         default = [0, 3.5])
 
+    parser.add_argument("-t", "--timerange",
+                        type = int,
+                        help = "Plot only timestep(s) in this range",
+                        nargs = "+",
+                        default = None)
+
     parser.add_argument("--plotphase",
                         action = "store_false",
                         help = "Plot the complex phase (slow)")
@@ -184,6 +199,7 @@ if __name__ == "__main__":
         if iom.has_wavepacket(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
                         eigentransform=args.eigentransform,
+                        timerange=args.timerange,
                         view=view)
         else:
             print("Warning: Not plotting any wavepackets in block '%s'" % blockid)

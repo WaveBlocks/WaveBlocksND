@@ -21,7 +21,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot import plotcf2d
 
 
-def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, view=None):
+def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=None, view=None):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -54,6 +54,15 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, view=None)
     N = WF.get_number_components()
 
     timegrid = iom.load_wavefunction_timegrid(blockid=blockid)
+    if timerange is not None:
+        if len(timerange) == 1:
+            I = (timegrid == timerange)
+        else:
+            I = ((timegrid >= timerange[0]) & (timegrid <= timerange[1]))
+        if any(I):
+            timegrid = timegrid[I]
+        else:
+            raise ValueError("No valid timestep remains!")
 
     u, v = G.get_axes()
     u = real(u.reshape(-1))
@@ -138,6 +147,12 @@ if __name__ == "__main__":
                         nargs = 2,
                         default = [None, None])
 
+    parser.add_argument("-t", "--timerange",
+                        type = int,
+                        help = "Plot only timestep(s) in this range",
+                        nargs = "+",
+                        default = None)
+
     args = parser.parse_args()
 
     # Read file with simulation data
@@ -166,6 +181,7 @@ if __name__ == "__main__":
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
                         eigentransform=args.eigentransform,
+                        timerange=args.timerange,
                         view=view)
         else:
             print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)

@@ -19,7 +19,7 @@ from WaveBlocksND.Plot import stemcf
 from WaveBlocksND import GlobalDefaults as GLD
 
 
-def read_data_homogeneous(iom, blockid=0):
+def read_data_homogeneous(iom, blockid=0, timerange=None):
     r"""
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
@@ -28,6 +28,15 @@ def read_data_homogeneous(iom, blockid=0):
 
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    if timerange is not None:
+        if len(timerange) == 1:
+            I = (timegrid == timerange)
+        else:
+            I = ((timegrid >= timerange[0]) & (timegrid <= timerange[1]))
+        if any(I):
+            timegrid = timegrid[I]
+        else:
+            raise ValueError("No valid timestep remains!")
 
     # Basis shapes
     bsdescr = iom.load_wavepacket_basisshapes(blockid=blockid)
@@ -52,7 +61,7 @@ def read_data_homogeneous(iom, blockid=0):
         plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
-def read_data_inhomogeneous(iom, blockid=0):
+def read_data_inhomogeneous(iom, blockid=0, timerange=None):
     r"""
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
@@ -61,6 +70,15 @@ def read_data_inhomogeneous(iom, blockid=0):
 
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
+    if timerange is not None:
+        if len(timerange) == 1:
+            I = (timegrid == timerange)
+        else:
+            I = ((timegrid >= timerange[0]) & (timegrid <= timerange[1]))
+        if any(I):
+            timegrid = timegrid[I]
+        else:
+            raise ValueError("No valid timestep remains!")
 
     # Basis shapes
     bsdescr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
@@ -138,6 +156,12 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-t", "--timerange",
+                        type = int,
+                        help = "Plot only timestep(s) in this range",
+                        nargs = "+",
+                        default = None)
+
     args = parser.parse_args()
 
     # Read file with simulation data
@@ -154,9 +178,9 @@ if __name__ == "__main__":
         print("Plotting wavepacket coefficients in data block '%s'" % blockid)
 
         if iom.has_wavepacket(blockid=blockid):
-            read_data_homogeneous(iom, blockid=blockid)
+            read_data_homogeneous(iom, blockid=blockid, timerange=args.timerange)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            read_data_inhomogeneous(iom, blockid=blockid)
+            read_data_inhomogeneous(iom, blockid=blockid, timerange=args.timerange)
         else:
             print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 
