@@ -57,7 +57,7 @@ def plot_norms(data, blockid=0, view=None):
     if view[2] is None:
         view[2] = 0.0
     if view[3] is None:
-        view[3] = 1.1 * max(norms[:-1])
+        view[3] = 1.1 * max(norms[-1])
 
     # Plot the norms
     fig = figure()
