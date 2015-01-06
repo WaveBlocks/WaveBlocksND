@@ -3,7 +3,7 @@
 This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -163,15 +163,15 @@ class HagedornWavepacket(HagedornWavepacketBase):
         D = self._dimension
         for k, item in zip(key, Pi):
             if k == "q":
-                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                self._Pis[0] = atleast_2d(array(item).astype(complexfloating)).reshape(D,1)
             elif k == "p":
-                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                self._Pis[1] = atleast_2d(array(item).astype(complexfloating)).reshape(D,1)
             elif k == "Q":
-                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                self._Pis[2] = atleast_2d(array(item).astype(complexfloating)).reshape(D,D)
             elif k == "P":
-                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                self._Pis[3] = atleast_2d(array(item).astype(complexfloating)).reshape(D,D)
             elif k == "S":
-                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1,1)
+                self._Pis[4] = atleast_2d(array(item).astype(complexfloating)).reshape(1,1)
             elif k == "adQ":
                 self._get_sqrt(component).set(squeeze(item))
             else:
