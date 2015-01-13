@@ -8,6 +8,7 @@ This file contains a the block factory.
 """
 
 from copy import deepcopy
+from ast import literal_eval
 
 __all__ = ["BlockFactory"]
 
@@ -86,6 +87,7 @@ class BlockFactory(object):
                 for component, data in enumerate(description["coefficients"]):
                     BS = WP.get_basis_shapes(component=component)
                     for index, value in data:
+                        index = tuple(literal_eval(index))
                         if BS.contains(index):
                             WP.set_coefficient(component, index, value)
                         else:
@@ -121,6 +123,7 @@ class BlockFactory(object):
             if description.has_key("coefficients"):
                 for component, data in enumerate(description["coefficients"]):
                     for index, value in data:
+                        index = tuple(literal_eval(index))
                         WP.set_coefficient(component, index, value)
 
             # And the quadrature

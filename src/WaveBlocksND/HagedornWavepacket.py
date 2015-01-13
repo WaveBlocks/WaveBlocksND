@@ -160,8 +160,11 @@ class HagedornWavepacket(HagedornWavepacketBase):
         :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
         """
+        if not type(Pi) is dict:
+            Pi = {k:v for k, v in zip(key, Pi)}
+
         D = self._dimension
-        for k, item in zip(key, Pi):
+        for k, item in Pi.iteritems():
             if k == "q":
                 self._Pis[0] = atleast_2d(array(item).astype(complexfloating)).reshape(D,1)
             elif k == "p":

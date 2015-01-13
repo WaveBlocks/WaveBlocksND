@@ -180,6 +180,10 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             component = [component]
             Pi = [Pi]
 
+        for i, pi in enumerate(Pi):
+            if not type(pi) is dict:
+                Pi[i] = {k:v for k, v in zip(key, pi)}
+
         D = self._dimension
         for index, pic in zip(component, Pi):
             for k, item in zip(key, pic):
