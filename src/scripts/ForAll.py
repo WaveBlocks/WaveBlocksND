@@ -4,7 +4,7 @@ This file contains code some simple code to call a given
 python script for a bunch of simulation result files.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -31,14 +31,13 @@ except:
     save_extensions.append(".png")
 
 
-def execute_for_all(resultspath, scriptcode, scriptargs):
-    """Call a given python script with the simulation results data file as first
+def execute_for_all(resultspath, command):
+    """Call a given python script with the simulation results data file as last
     command line argument. The script and the data file are specified by (relative)
     file system paths.
 
     :param resultspath: The path where to look for simulation data.
-    :param scriptcode: The python script that gets called for all simulations.
-    :param scriptargs: Optional (constant) arguments to the script.
+    :param command: The python script that gets called for all simulations.
     """
     for simulationpath in get_result_dirs(resultspath):
         print(" Executing code for datafile in " + simulationpath)
@@ -54,7 +53,7 @@ def execute_for_all(resultspath, scriptcode, scriptargs):
 
         # For each file call the given script
         for resfile in resfiles:
-            sp.call(["python", scriptcode, resfile] + scriptargs)
+            sp.call(["python"] + command + [resfile])
 
             # Move newly created files back to the simulation path.
             # NOTE: It is the responsability of the code in the
@@ -72,26 +71,23 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("scriptcode",
-                        type = str,
-                        help = "The script file to execute.")
-
     parser.add_argument("-r", "--results",
                         type = str,
                         help = "Path where the results are.",
                         nargs = "?",
                         default = GlobalDefaults.path_to_results)
 
-    parser.add_argument("-a", "--scriptargs",
-                        help = "Additional arguments passed to the script.",
-                        nargs=argparse.REMAINDER,
-                        default = [])
+    parser.add_argument("-c", "--command",
+                        type = str,
+                        help = "The commands to execute.",
+                        nargs=argparse.REMAINDER)
+
 
     args = parser.parse_args()
 
-    print("Will execute the code from '" + str(args.scriptcode) + "' for all files in '" + str(args.results) + "'")
-    print("with optional arguments " + str(args.scriptargs))
+    print("** Will execute the command: " + " ".join(args.command))
+    print("** for all files in '" + str(args.results) + "'")
 
-    execute_for_all(args.results, args.scriptcode, args.scriptargs)
+    execute_for_all(args.results, args.command)
 
     print("Done")
