@@ -36,7 +36,11 @@ class HyperCubicShape(BasisShape):
         self._dimension = len(limits)
 
         # The limits Ki for each axis
-        self._limits = tuple(limits)
+        limits = tuple(limits)
+        if all(map(lambda l: int(l)>0, limits)):
+            self._limits = limits
+        else:
+            raise ValueError("All limits have to be positive.")
 
         # TODO: Do we really want to store these maps or better compute data the fly
 

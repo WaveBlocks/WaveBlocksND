@@ -43,7 +43,11 @@ class LimitedHyperbolicCutShape(BasisShape):
         self._sparsity = K
 
         # The limits
-        self._limits = tuple(limits)
+        limits = tuple(limits)
+        if all(map(lambda l: int(l)>0, limits)):
+            self._limits = limits
+        else:
+            raise ValueError("All limits have to be positive.")
 
         # The linear mapping k -> index for the basis
         iil = self._get_index_iterator_lex()
