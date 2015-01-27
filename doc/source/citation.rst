@@ -8,7 +8,7 @@ The code for one-dimensional simulations::
    @misc{waveblocks,
        author = {R. Bourquin and V. Gradinaru},
        title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
-       year = {2010, 2011, 2012, 2013, 2014},
+       year = {2010, 2011, 2012, 2013, 2014, 2015},
        url = {\url{https://github.com/raoulbq/WaveBlocks}},
        howpublished={\url{https://github.com/raoulbq/WaveBlocks}}
    }
