@@ -9,59 +9,10 @@ asymptotic linear time algorithm is used.
 @license: Modified BSD License
 """
 
-from numpy import (sqrt, exp, sin, cos, arccos, pi, floor, ceil, around,
-                   array, arange, ones_like, zeros_like, row_stack, column_stack,
-                   hstack, flipud, floating, dot)
+from numpy import (sqrt, exp, sin, cos, arccos, pi, floor, ceil, around, arange,
+                   array, ones_like, zeros_like, row_stack, column_stack, hstack,
+                   flipud, floating, dot)
 from scipy.special import h_roots as h_roots_original, airy
-
-
-def h_roots(n):
-    """Gauss-Hermite (physicst's) quadrature
-
-    Computes the sample points and weights for Gauss-Hermite quadrature.
-    The sample points are the roots of the `n`th degree Hermite polynomial,
-    :math:`H_n(x)`.  These sample points and weights correctly integrate
-    polynomials of degree :math:`2*n - 1` or less over the interval
-    :math:`[-inf, inf]` with weight function :math:`f(x) = e^{-x^2}`.
-
-    Parameters
-    ----------
-    n : int
-        quadrature order
-
-    Returns
-    -------
-    x : ndarray
-        Sample points
-    w : ndarray
-        Weights
-
-    Notes
-    -----
-    For small n up to 150 a modified version of the Golub-Welsch
-    algorithm is used. Nodes are computed from the eigenvalue
-    problem and improved by one step of a Newton iteration.
-    The weights are computed from the well-known analytical formula.
-
-    For n larger than 150 an optimal asymptotic algorithm is applied
-    which computes nodes and weights in a numerically stable manner.
-    The algorithm has linear runtime making computation for very
-    large n (several thousand or more) feasible.
-
-    See Also
-    --------
-    integrate.quadrature
-    integrate.fixed_quad
-    numpy.polynomial.hermite.hermgauss
-    """
-    m = int(n)
-    if n < 1 or n != m:
-        raise ValueError("n must be a positive integer.")
-
-    if n <= 150:
-        return h_roots_original(n)
-    else:
-        return h_roots_asy(n)
 
 
 def compute_tauk(n, k, maxit=5):
@@ -442,7 +393,7 @@ def newton(n, x_initial, maxit=5):
     if n % 2 == 1:
         x[0] = 0.0
     # Compute weights
-    w = exp(-x**2) / (2.0*ud**2)
+    w = 1.0 / (2.0*ud**2)
     return x, w
 
 
@@ -495,5 +446,174 @@ def h_roots_asy(n):
         nodes = hstack([-flipud(nodes[1:]), nodes])
         weights = hstack([flipud(weights[1:]), weights])
     # Scale weights
+    weights *= exp(-nodes**2)
     weights *= sqrt(pi) / sum(weights)
     return nodes, weights
+
+
+def h_roots(n):
+    """Gauss-Hermite (physicst's) quadrature
+
+    Computes the sample points and weights for Gauss-Hermite quadrature.
+    The sample points are the roots of the `n`th degree Hermite polynomial,
+    :math:`H_n(x)`. These sample points and weights correctly integrate
+    polynomials of degree :math:`2*n - 1` or less over the interval
+    :math:`[-inf, inf]` with weight function :math:`f(x) = e^{-x^2}`.
+
+    Parameters
+    ----------
+    n : int
+        quadrature order
+
+    Returns
+    -------
+    x : ndarray
+        Sample points
+    w : ndarray
+        Weights
+
+    Notes
+    -----
+    For small n up to 150 a modified version of the Golub-Welsch
+    algorithm is used. Nodes are computed from the eigenvalue
+    problem and improved by one step of a Newton iteration.
+    The weights are computed from the well-known analytical formula.
+
+    For n larger than 150 an optimal asymptotic algorithm is applied
+    which computes nodes and weights in a numerically stable manner.
+    The algorithm has linear runtime making computation for very
+    large n (several thousand or more) feasible.
+
+    See Also
+    --------
+    integrate.quadrature
+    integrate.fixed_quad
+    numpy.polynomial.hermite.hermgauss
+    """
+    m = int(n)
+    if n < 1 or n != m:
+        raise ValueError("n must be a positive integer.")
+
+    if n <= 150:
+        return h_roots_original(n)
+    else:
+        return h_roots_asy(n)
+
+
+def hermite_recursion(n, x):
+    r"""Evaluate the Hermite function :math:`h_n(x)` of order :math:`n`
+    recursively on the given points :math:`x` by the three term recursion.
+
+    :param n: The order :math:`n` of the Hermite function :math:`h_n(x)` to evaluate.
+    :param x: The points at which the Hermite function :math:`h_n(x)` is evaluated.
+    :return: An array :math:`Hn` containing the values of :math:`h_n(x)`.
+    """
+    Hnm1 = zeros_like(x)
+    Hn   = zeros_like(x)
+    Hnp1 = zeros_like(x)
+
+    Hn = pi**(-0.25) * exp(-0.5*x**2)
+    if n >= 1:
+        Hnm1 = Hn
+        Hn = sqrt(2.0) * x * Hnm1
+        for k in xrange(2, n+1):
+            Hnp1 = sqrt(2.0/k) * x * Hn - sqrt((k-1.0)/k) * Hnm1
+            Hnm1 = Hn
+            Hn = Hnp1
+
+    return Hn
+
+
+def psi_roots_asy(n):
+    """Gauss-Hermite (physicst's) quadrature for large n
+
+    Computes the sample points and weights for transformed Gauss-Hermite
+    quadrature. The sample points are the roots of the `n`th degree Hermite
+    polynomial, :math:`H_n(x)`. The weights are transformed such that
+    they do not include the exponential factor :math:`\exp(-x^2)`.
+
+    Parameters
+    ----------
+    n : int
+        quadrature order
+
+    Returns
+    -------
+    nodes : ndarray
+        Quadrature nodes
+    weights : ndarray
+        Quadrature weights
+
+    See Also
+    --------
+    psi_roots
+    """
+    m = int(n)
+    if n < 1 or n != m:
+        raise ValueError("n must be a positive integer.")
+
+    iv = initial_nodes(n)
+    nodes, weights = newton(n, iv)
+    # Combine with negative parts
+    if n % 2 == 0:
+        nodes = hstack([-flipud(nodes), nodes])
+        weights = hstack([flipud(weights), weights])
+    else:
+        nodes = hstack([-flipud(nodes[1:]), nodes])
+        weights = hstack([flipud(weights[1:]), weights])
+    # Scale weights
+    C = sqrt(2)*sqrt(pi) / sum(exp(-0.5*nodes**2) * weights)
+    weights *= C
+    return nodes, weights
+
+
+def psi_roots(n):
+    """Gauss-Hermite quadrature for functions including the exponential factor.
+
+    Computes the sample points and weights for transformed Gauss-Hermite
+    quadrature. The sample points are the roots of the `n`th degree Hermite
+    polynomial, :math:`H_n(x)`. The weights are transformed such that
+    they do not include the exponential factor :math:`\exp(-x^2)`.
+
+    Parameters
+    ----------
+    n : int
+        quadrature order
+
+    Returns
+    -------
+    x : ndarray
+        Sample points
+    w : ndarray
+        Weights
+
+    Notes
+    -----
+    For small n up to 150 a modified version of the Golub-Welsch
+    algorithm is used. Nodes are computed from the eigenvalue
+    problem and improved by one step of a Newton iteration.
+    The weights are computed from the well-known analytical formula.
+
+    For n larger than 150 an optimal asymptotic algorithm is applied
+    which computes nodes and weights in a numerically stable manner.
+    The algorithm has linear runtime making computation for very
+    large n (several thousand or more) feasible.
+
+    See Also
+    --------
+    integrate.quadrature
+    integrate.fixed_quad
+    numpy.polynomial.hermite.hermgauss
+    """
+    m = int(n)
+    if n < 1 or n != m:
+        raise ValueError("n must be a positive integer.")
+
+    if n <= 150:
+        nodes, weights =  h_roots_original(n)
+        # Hermite function recursion
+        h = hermite_recursion(n-1, nodes)
+        weights = 1.0/(h**2 * n)
+        return nodes, weights
+    else:
+        return psi_roots_asy(n)

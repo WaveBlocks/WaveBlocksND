@@ -3,15 +3,12 @@
 This file contains the class for Gauss-Hermite quadrature.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
 from copy import deepcopy
-from numpy import zeros, floating, real
-from scipy import pi, exp, sqrt
-
-from orthogonal import h_roots
+from orthogonal import psi_roots
 
 from QuadratureRule import QuadratureRule
 
@@ -45,21 +42,16 @@ class GaussHermiteQR(QuadratureRule):
         # Set the options
         self._options = options
 
-        nodes, weights = h_roots(self._order)
+        nodes, weights = psi_roots(self._order)
 
         # The number of nodes in this quadrature rule
         self._number_nodes = nodes.size
-
-        # We deal with real values only, but the array we get from h_roots is of complex dtype
-        h = self._hermite_recursion(real(nodes))[-1,:]
-        weights = 1.0/(h**2 * self._order)
 
         # The quadrature nodes \gamma.
         self._nodes = nodes.reshape((1,self._number_nodes))
 
         # The quadrature weights \omega.
-        self._weights = weights
-        self._weights = self._weights.reshape((1,self._number_nodes))
+        self._weights = weights.reshape((1,self._number_nodes))
 
 
     def __str__(self):
@@ -94,23 +86,3 @@ class GaussHermiteQR(QuadratureRule):
         :return: An array containing the quadrature weights :math:`\{\omega_i\}_i`.
         """
         return self._weights.copy()
-
-
-    def _hermite_recursion(self, nodes):
-        r"""Evaluate the Hermite functions recursively up to the order :math:`R` on the given nodes.
-
-        :param nodes: The points at which the Hermite functions are evaluated.
-        :return: A two dimensional array :math:`H` where the entry :math:`H[k,i]` is the value
-                 of the :math:`k`-th Hermite function evaluated at the node :math:`\{\gamma_i\}_i`.
-        """
-        H = zeros((self._order, nodes.size), dtype=floating)
-
-        H[0] = pi**(-0.25) * exp(-0.5*nodes**2)
-
-        if self._order > 1:
-            H[1] = sqrt(2.0) * nodes * H[0]
-
-            for k in xrange(2, self._order):
-                H[k] = sqrt(2.0/k) * nodes * H[k-1] - sqrt((k-1.0)/k) * H[k-2]
-
-        return H
