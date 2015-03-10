@@ -3,7 +3,7 @@
 This file contains the class for Genz-Keister quadrature.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2014 R. Bourquin
+@copyright: Copyright (C) 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -27,9 +27,6 @@ class GenzKeisterQR(GenzKeisterOriginalQR):
         :param level: The level :math:`K` of the Genz-Keister quadrature.
 
         :raise: :py:class:`ValueError` if the :math:`K` is not in the range :math:`[1, \ldots, 18]`.
-
-        References
-        ----------
 
         .. [1] Alan Genz: "Fully Symmetric Interpolatory Rules for Multiple Integrals",
                SIAM J. Num. Analysis. 23(6) (1986), pp. 1273-1283.
