@@ -10,7 +10,7 @@ Pade approximations and an Arnoldi iteration method.
 @license: Modified BSD License
 """
 
-from numpy import zeros, mat, dot, complexfloating, conjugate
+from numpy import zeros, dot, complexfloating, conjugate
 from scipy.linalg import norm, expm
 
 
@@ -65,6 +65,6 @@ def matrix_exp_arnoldi(A, v, factor, k):
     :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`.
     """
     V, H = arnoldi(A, v, min(min(A.shape), k))
-    eH = mat(expm(-1.0j*factor*H[:-1,:]))
-    r = V[:,:-1] * eH[:,0]
-    return asarray(r * norm(v))
+    eH = expm(-1.0j*factor*H[:-1,:])
+    r = dot(V[:,:-1], eH[:,0])
+    return r * norm(v)
