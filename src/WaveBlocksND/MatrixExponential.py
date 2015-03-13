@@ -66,5 +66,5 @@ def matrix_exp_arnoldi(A, v, factor, k):
     """
     V, H = arnoldi(A, v, min(min(A.shape), k))
     eH = expm(-1.0j*factor*H[:-1,:])
-    r = dot(V[:,:-1], eH[:,0])
-    return r * norm(v)
+    r = norm(v) * dot(V[:,:-1], eH[:,0])
+    return r.reshape(v.shape)
