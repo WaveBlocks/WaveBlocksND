@@ -3,7 +3,7 @@
 This file contains a propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2013, 2014 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2015 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -185,7 +185,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, b[0]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[0]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
@@ -195,7 +195,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, b[1]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[1]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
@@ -205,7 +205,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, b[2]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[2]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
@@ -215,7 +215,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, b[1]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[1]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
@@ -225,7 +225,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, b[0]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[0]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt

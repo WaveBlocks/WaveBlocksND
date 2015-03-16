@@ -3,7 +3,7 @@
 This file contains the Hagedorn propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2012, 2014 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2015 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -194,10 +194,8 @@ class MagnusPropagator(Propagator, SplittingParameters):
             F = (A1+A2)*(dt/eps**2)*0.5 + (dot(A2,A1)-dot(A1,A2))*((dt/eps**2)**2)*sqrt(3.0)/12.0
 
             # Propagate the coefficients
-            # CAUTION: self.matrix_exponential implements expm(-1j*F*factor) while the above
-            #          formula for Magnus thinks about expm(F) hence take factor = 1.0j
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, 1.0j)
+            coefficients = self._matrix_exponential(F, coefficients, 1.0)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
