@@ -23,7 +23,7 @@ def matrix_exp_pade(A, v, factor):
     :param factor: An additional scalar factor :math:`\alpha`.
     :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`
     """
-    return dot(expm(-1.0j*A*factor), v)
+    return dot(expm(A*factor), v)
 
 
 def arnoldi(A, v0, k):
@@ -65,6 +65,6 @@ def matrix_exp_arnoldi(A, v, factor, k):
     :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`.
     """
     V, H = arnoldi(A, v, min(min(A.shape), k))
-    eH = expm(-1.0j*factor*H[:-1,:])
+    eH = expm(factor*H[:-1,:])
     r = norm(v) * dot(V[:,:-1], eH[:,0])
     return r.reshape(v.shape)
