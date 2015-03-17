@@ -6,11 +6,11 @@ Pade approximations and an Arnoldi iteration method.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2007 V. Gradinaru
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, hstack, mat, dot, complexfloating, asarray
+from numpy import zeros, dot, complexfloating, conjugate
 from scipy.linalg import norm, expm
 
 
@@ -23,31 +23,35 @@ def matrix_exp_pade(A, v, factor):
     :param factor: An additional scalar factor :math:`\alpha`.
     :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`
     """
-    return dot(expm(-1.0j*A*factor), v)
+    return dot(expm(A*factor), v)
 
 
 def arnoldi(A, v0, k):
     r"""Arnoldi algorithm to compute the Krylov approximation :math:`H` of a matrix :math:`A`.
 
     :param A: The matrix :math:`A` of shape :math:`N \times N` to approximate.
-    :param v0: The initial vector :math:`v_0` of length :math:`N`. (Should be
-               in matrix shape :math:`(N,1)` for practical reasons.)
+    :param v0: The initial vector :math:`v_0` of length :math:`N`.
     :param k: The number :math:`k` of Krylov steps performed.
     :return: A tuple :math:`(V, H)` where :math:`V` is the large matrix of shape
-             :math:`N \times k` containing the orthogonal vectors and :math:`H` is the
-             small matrix of shape :math:`k \times k` containing the Krylov approximation
+             :math:`N \times (k+1)` containing the orthogonal vectors and :math:`H` is the
+             small matrix of shape :math:`(k+1) \times k` containing the Krylov approximation
              of :math:`A`.
     """
-    V = mat(v0.copy() / norm(v0))
-    H = mat(zeros((k+1,k)), dtype=complexfloating)
-    for m in xrange(k):
-        vt = A * V[:,m]
-        for j in xrange(m+1):
-            H[j,m] = (V[:,j].H*vt)[0,0]
-            vt -= H[j,m] * V[:,j]
-        H[m+1,m] = norm(vt)
-        V = hstack((V, vt.copy()/H[m+1,m]))
-    return (V, H)
+    r, c = A.shape
+    V = zeros((r, k+1), dtype=complexfloating)
+    H = zeros((k+1, k), dtype=complexfloating)
+
+    V[:,0] = v0.reshape(-1) / norm(v0)
+
+    for i in xrange(1, k+1):
+        vi = dot(A, V[:,i-1])
+        for j in xrange(i):
+            H[j,i-1] = dot(conjugate(V[:,j]), vi)
+            vi -= H[j,i-1] * V[:,j]
+        H[i,i-1] = norm(vi)
+        V[:,i] = vi / H[i,i-1]
+
+    return V, H
 
 
 def matrix_exp_arnoldi(A, v, factor, k):
@@ -61,6 +65,6 @@ def matrix_exp_arnoldi(A, v, factor, k):
     :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`.
     """
     V, H = arnoldi(A, v, min(min(A.shape), k))
-    eH = mat(expm(-1.0j*factor*H[:-1,:]))
-    r = V[:,:-1] * eH[:,0]
-    return asarray(r * norm(v))
+    eH = expm(factor*H[:-1,:])
+    r = norm(v) * dot(V[:,:-1], eH[:,0])
+    return r.reshape(v.shape)

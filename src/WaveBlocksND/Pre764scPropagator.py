@@ -3,7 +3,7 @@
 This file contains a propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2013, 2014 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2015 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -187,7 +187,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
                 F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
                 coefficients = packet.get_coefficient_vector()
-                coefficients = self._matrix_exponential(F, coefficients, h2/eps**2)
+                coefficients = self._matrix_exponential(F, coefficients, -1.0j*h2/eps**2)
                 packet.set_coefficient_vector(coefficients)
 
 
@@ -216,7 +216,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
                 F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
                 coefficients = packet.get_coefficient_vector()
-                coefficients = self._matrix_exponential(F, coefficients, h2/eps**2)
+                coefficients = self._matrix_exponential(F, coefficients, -1.0j*h2/eps**2)
                 packet.set_coefficient_vector(coefficients)
                 # Step with Abig
                 h1 = Z[j]*dt
@@ -252,7 +252,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
                     F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
                     coefficients = packet.get_coefficient_vector()
-                    coefficients = self._matrix_exponential(F, coefficients, h2/eps**2)
+                    coefficients = self._matrix_exponential(F, coefficients, -1.0j*h2/eps**2)
                     packet.set_coefficient_vector(coefficients)
                 # Step with Abig
                 h1 = Abig[j]*dt

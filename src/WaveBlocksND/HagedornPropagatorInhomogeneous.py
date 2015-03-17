@@ -3,7 +3,7 @@
 This file contains the Hagedorn propagator class for inhomogeneous wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -156,7 +156,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
             F = innerproduct.build_matrix(packet, packet, self._potential.evaluate_local_remainder_at)
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2
