@@ -3,11 +3,11 @@
 Some selected functions for complex math.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import array, hstack, cumsum, diff, around, abs, angle, exp, sqrt, pi
+from numpy import array, hstack, cumsum, diff, around, abs, angle, exp, sqrt, pi, squeeze
 
 __all__ = ["continuate", "cont_angle", "cont_sqrt"]
 
@@ -24,8 +24,10 @@ def continuate(data, jump=2.0*pi, reference=0.0):
                        explicitly. It can be used together with ``data``.
     :type reference: A single float number.
     """
-    data = hstack([array(reference), array(data)])
-    return (data - jump*hstack([ 0.0, cumsum(around( diff(data)/jump )) ]))[1:]
+    assert squeeze(reference).ndim == 0, "The 'reference' must be a scalar value."
+    data = hstack([array(reference), array(data).reshape(-1)])
+    offsets = cumsum(around(diff(data)/(1.0*jump)))
+    return (data - jump*hstack([0.0, offsets]))[1:]
 
 
 def cont_angle(data, reference=None):
@@ -42,16 +44,20 @@ def cont_angle(data, reference=None):
         # Return just cont_f(x)
         return continuate(angle(data))
     else:
-        # Return a 2-tuple ( cont_f(x), new_reference )
-        return 2*( continuate(angle(data), reference=reference) ,)
+        # Return a 2-tuple (cont_f(x), new_reference)
+        result = continuate(angle(data), reference=reference)
+        reference = result
+        return result, reference
 
 
 def cont_sqrt(data, reference=None):
     r"""Compute the complex square root (following the Riemann surface)
     yields a result *not* constrained to the principal value and avoiding
     discontinuities at the branch cut. This function applies 'continuate(.)'
-    to the complex phase and computes the complex square root according to
-    the formula :math:`\sqrt{z} = \sqrt{r} \exp \left( i \cdot \frac{\phi}{2} \right)`.
+    to the complex phase and computes for
+    :math:`z = r \exp \left(i \phi \right)` the complex square root
+    its square root according to the formula
+    :math:`\sqrt{z} = \sqrt{r} \exp \left(i \frac{\phi}{2} \right)`.
 
     :param data: An array with the input data.
     :param reference: This value allows the specify the starting point for
@@ -60,31 +66,37 @@ def cont_sqrt(data, reference=None):
     """
     if reference is None:
         # Return just cont_f(x)
-        return sqrt(abs(data))*exp(1.0j*continuate(angle(data))/2)
+        return sqrt(abs(data)) * exp(0.5j*continuate(angle(data)))
     else:
-        # Return a 2-tuple ( cont_f(x), new_reference )
+        # Return a 2-tuple (cont_f(x), new_reference)
         phi = continuate(angle(data), reference=reference)
-        return (sqrt(abs(data))*exp(1.0j*phi/2), phi)
+        result = sqrt(abs(data)) * exp(0.5j*phi)
+        reference = phi[0]
+        # TODO: Rethink what 'reference' to return for an array of input values.
+        return result, reference
 
 
 class ContinuousSqrt(object):
-    r"""Class for computing continuous square roots. All stuff about
-    referencing is hidden from the user.
+    r"""Class for computing continuous square roots.
+    All implementation details about referencing is
+    hidden from the user. The class is side-effect free.
     """
 
     def __init__(self, reference=0.0j):
-        self._reference = reference
+        self.set(reference)
 
     def clone(self):
         return ContinuousSqrt(reference=self._reference)
 
     def __call__(self, radicand):
-        root, ref = cont_sqrt(radicand, reference=self._reference)
-        self._reference = ref[0]
+        # Updating the reference is idempotent for identical radicands.
+        root, reference = cont_sqrt(radicand, reference=self._reference)
+        self._reference = reference
         return root
 
-    def set(self, newvalue):
-        self._reference = newvalue
+    def set(self, reference):
+        assert squeeze(reference).ndim == 0, "The 'reference' must be a scalar value."
+        self._reference = array(reference)
 
     def get(self):
-        return self._reference
+        return self._reference.copy()
