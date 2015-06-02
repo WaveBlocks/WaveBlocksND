@@ -151,19 +151,11 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         q, p, Q, P, S = Pi
 
         # Compute the affine transformation
-        Q0 = inv(dot(Q, conjugate(Q.T)))
-        Qs = inv(sqrtm(Q0))
+        q0 = q
+        Q0 = sqrtm(dot(Q, conjugate(Q.T)))
 
-        # TODO: Avoid sqrtm and inverse computation, use svd
-        # Untested code:
-        # D = Q.shape[0]
-        # U, S, Vh = svd(inv(Q))
-        # Sinv = 1.0 / S
-        # Sinv = diagsvd(Sinv, D, D)
-        # Qs = dot(conjugate(Vh.T), dot(Sinv, Vh))
-
-        # And transform the nodes
-        nodes = q + eps * dot(Qs, QR.get_nodes())
+        # Transform the quadrature nodes
+        nodes = q + eps * dot(Q0, QR.get_nodes())
         return nodes.copy()
 
 

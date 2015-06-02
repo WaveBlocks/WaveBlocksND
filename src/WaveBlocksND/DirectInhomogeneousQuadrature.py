@@ -133,11 +133,9 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
 
         q0 = dot(inv(r), s)
         Q0 = 0.5 * r
+        Q0 = inv(sqrtm(Q0))
 
-        # Here we can not avoid the matrix root by using svd
-        Qs = inv(sqrtm(Q0))
-
-        return (q0, Qs)
+        return (q0, Q0)
 
 
     def transform_nodes(self, Pibra, Piket, eps, QR=None):
@@ -159,11 +157,11 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         if QR["transform"] is not None and QR["transform"] is False:
             return QR.get_nodes()
 
-        # Mix the parameters to compute the affine transformation
-        q0, Qs = self.mix_parameters(Pibra, Piket)
+        # Mix the parameters and compute the affine transformation
+        q0, Q0 = self.mix_parameters(Pibra, Piket)
 
-        # And transform the nodes
-        nodes = q0 + eps * dot(Qs, QR.get_nodes())
+        # Transform the quadrature nodes
+        nodes = q0 + eps * dot(Q0, QR.get_nodes())
         return nodes.copy()
 
 
