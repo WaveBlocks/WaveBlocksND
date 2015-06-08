@@ -244,13 +244,12 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             nrlocalsteps = max(1, 1+nrtmp)
             for j in xrange(4):
                 # Step with Beps
-                h2 = Beps[j]*dt
-                # Do a potential step with the local non-quadratic Taylor remainder
-                # Beps[0] = 0, hence nothing to do
-                if j>0:
+                # Avoid expensive computation if coefficient is zero
+                if Beps[j] != 0.0:
+                    h2 = Beps[j]*dt
+                    # Do a potential step with the local non-quadratic Taylor remainder
                     innerproduct = packet.get_innerproduct()
                     F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
-
                     coefficients = packet.get_coefficient_vector()
                     coefficients = self._matrix_exponential(F, coefficients, -1.0j*h2/eps**2)
                     packet.set_coefficient_vector(coefficients)
