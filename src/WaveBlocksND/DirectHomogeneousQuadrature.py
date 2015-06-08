@@ -10,7 +10,7 @@ Here we handle the homogeneous case.
 """
 
 from numpy import zeros, ones, conjugate, dot, einsum
-from scipy.linalg import sqrtm, inv #, svd, diagsvd
+from scipy.linalg import sqrtm
 
 from DirectQuadrature import DirectQuadrature
 
@@ -155,7 +155,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         Q0 = sqrtm(dot(Q, conjugate(Q.T)))
 
         # Transform the quadrature nodes
-        nodes = q + eps * dot(Q0, QR.get_nodes())
+        nodes = q0 + eps * dot(Q0, QR.get_nodes())
         return nodes.copy()
 
 
