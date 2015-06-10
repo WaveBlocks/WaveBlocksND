@@ -174,7 +174,7 @@ class TimeManager(object):
         if self._nsteps is not None:
             return self._nsteps
         else:
-            return int( floor(self._T / (1.0 * self._dt)) )
+            return int(floor(self._T /float(self._dt)))
 
 
     def compute_timestep(self, t):
@@ -203,7 +203,7 @@ class TimeManager(object):
         :param n: The timestep n of which we want to find the corresponding time.
         :returns: The corresponding time :math:`t`.
         """
-        return 1.0 * n * self._dt
+        return float(n * self._dt)
 
 
     def set_interval(self, interval):
@@ -213,7 +213,7 @@ class TimeManager(object):
 
         Note that a value of ``0`` means we never save data at any regular interval.
         """
-        self._interval = interval
+        self._interval = int(interval)
 
 
     def add_to_savelist(self, alist):
@@ -237,14 +237,14 @@ class TimeManager(object):
             if type(item) == int:
                 timesteps.append(item)
             elif type(item) == float:
-                timesteps.append( self.compute_timestep(item) )
+                timesteps.append(self.compute_timestep(item))
 
         # Validate timesteps and check if n in [0,...,N]
         tmp = len(timesteps)
-        timesteps = [ i for i in timesteps if i > 0 and i <= self._nsteps ]
+        timesteps = [ i for i in timesteps if 0 <= i <= self._nsteps ]
 
         if tmp != len(timesteps):
-            print("Warning: Dropped some save timesteps due to invalidity!")
+            print("Warning: Dropped %d timestep(s) due to invalidity!" % (tmp - len(timesteps)))
 
         # Assure unique elements, just silently remove duplicates
         oldlist = set(self._savetimes)
@@ -266,20 +266,20 @@ class TimeManager(object):
         """
         # We do not save at regular intervals
         if self._interval == 0:
-            # Determine the number of saves resulting from saving at a regular interval is zero.
+            # The number of saves resulting from saving at a regular interval is zero
             n_si = 0
             # Determine the number of saves resulting from the savelist
             n_sl = len(self._savetimes)
         # We do save at regular intervals
         else:
             # Determine the number of saves resulting from saving at a regular interval
-            n_si = self._nsteps // self._interval
+            n_si = 1 + self._nsteps // self._interval
             # Determine the number of saves resulting from the savelist and
-            # exclude the timesteps which coincide with the regular intervals.
-            n_sl = len( [ i for i in self._savetimes if i % self._interval != 0 ] )
+            # exclude the timesteps which coincide with the regular intervals
+            n_sl = len([ i for i in self._savetimes if i % self._interval != 0 ])
 
-        # Total number of saves we will perform is given by the sum plus the initial value
-        number_saves = 1 + n_si + n_sl
+        # Total number of saves we will perform is given by the sum
+        number_saves = n_si + n_sl
 
         return number_saves
 

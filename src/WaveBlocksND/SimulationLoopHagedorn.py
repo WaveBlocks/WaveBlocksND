@@ -110,13 +110,16 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Write some initial values to disk
         for packet in self.propagator.get_wavepackets():
             self.IOManager.save_wavepacket_description(packet.get_description())
-            # Pi
-            self.IOManager.save_wavepacket_parameters(packet.get_parameters(key=key), timestep=0, key=key)
-            # Basis shapes
-            for shape in packet.get_basis_shapes():
-                self.IOManager.save_wavepacket_basisshapes(shape)
-            # Coefficients
-            self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=0)
+
+        if self._tm.must_save(0):
+            for packet in self.propagator.get_wavepackets():
+                # Pi
+                self.IOManager.save_wavepacket_parameters(packet.get_parameters(key=key), timestep=0, key=key)
+                # Basis shapes
+                for shape in packet.get_basis_shapes():
+                    self.IOManager.save_wavepacket_basisshapes(shape)
+                # Coefficients
+                self.IOManager.save_wavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=0)
 
 
     def run_simulation(self):
