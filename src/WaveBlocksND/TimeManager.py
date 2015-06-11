@@ -4,7 +4,7 @@ Provides several computation routines for
 handling time and timesteps.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -37,7 +37,7 @@ class TimeManager(object):
     are given, the user is responsible for compatible values.
 
     Additionally the class contains some routines for determining
-    if and when to save data. But we do not touch any data in here.
+    if and when some events (for example saving data) should occur.
     """
 
     def __init__(self, parameters):
@@ -77,15 +77,15 @@ class TimeManager(object):
         if self._nsteps is None:
             self._nsteps = self.compute_number_timesteps()
 
-        # Interval for saving
+        # Interval for regular events
         self._interval = 1
         if parameters.has_key("write_nth"):
             self.set_interval(parameters["write_nth"])
 
-        # List of timesteps when we have to save
-        self._savetimes = []
+        # List of timesteps of irregular events
+        self._eventtimes = []
         if parameters.has_key("save_at"):
-            self.add_to_savelist(parameters["save_at"])
+            self.add_to_eventlist(parameters["save_at"])
 
 
     def __str__(self):
@@ -101,7 +101,7 @@ class TimeManager(object):
 
         :param T: The simulation end time.
         """
-        self._T = T
+        self._T = float(T)
 
 
     def set_dt(self, dt):
@@ -109,7 +109,7 @@ class TimeManager(object):
 
         :param dt: The simulation timestep size.
         """
-        self._dt = dt
+        self._dt = float(dt)
 
 
     def set_nsteps(self, nsteps):
@@ -117,7 +117,7 @@ class TimeManager(object):
 
         :param nsteps: The number :math:`n` timesteps we do.
         """
-        self._nsteps = nsteps
+        self._nsteps = int(nsteps)
 
 
     def get_T(self):
@@ -163,7 +163,7 @@ class TimeManager(object):
         if self._dt is not None:
             return self._dt
         else:
-            return self._T / (1.0 * self._nsteps)
+            return self._T / float(self._nsteps)
 
 
     def compute_number_timesteps(self):
@@ -174,7 +174,7 @@ class TimeManager(object):
         if self._nsteps is not None:
             return self._nsteps
         else:
-            return int(floor(self._T /float(self._dt)))
+            return int(floor(self._T / float(self._dt)))
 
 
     def compute_timestep(self, t):
@@ -190,7 +190,7 @@ class TimeManager(object):
         stepo = t / self._dt
         step = round(stepo)
 
-        if abs(stepo - step) > 10**-10:
+        if abs(stepo - step) > 1e-10:
             print("Warning: questionable rounding for timestep computation!")
 
         return int(step)
@@ -207,18 +207,18 @@ class TimeManager(object):
 
 
     def set_interval(self, interval):
-        r"""Set the interval for saving results.
+        r"""Set the interval for regular events.
 
-        :param interval: The interval at which we save simulation results.
+        :param interval: The interval at which regular events get triggered.
 
-        Note that a value of ``0`` means we never save data at any regular interval.
+        Note that a value of ``0`` means there are no regular events.
         """
         self._interval = int(interval)
 
 
-    def add_to_savelist(self, alist):
-        r"""Add a list of times and/or timesteps to the list of times
-        which determine when to save data.
+    def add_to_eventlist(self, alist):
+        r"""Add a list of times and/or timesteps to the list of
+        times when irregular events get triggered.
 
         :param alist: A list with integers (interpreted as timesteps)
                       and/or floats (interpreted as times)
@@ -247,45 +247,45 @@ class TimeManager(object):
             print("Warning: Dropped %d timestep(s) due to invalidity!" % (tmp - len(timesteps)))
 
         # Assure unique elements, just silently remove duplicates
-        oldlist = set(self._savetimes)
+        oldlist = set(self._eventtimes)
         newlist = set(timesteps)
         times = list(oldlist.union(newlist))
         # Sort in ascending order
         times.sort()
         # Write back
-        self._savetimes = times
+        self._eventtimes = times
 
 
-    # TODO: Save and savelist -> event and eventlist
+    def compute_number_events(self):
+        r"""Compute the number of events we will perform during the simulation.
+        This can for example be used to determine how much space to allocate
+        in the output files if the events are times at which simulation data
+        is saved.
 
-    def compute_number_saves(self):
-        r"""Compute the number of saves we will perform during the simulation. This
-        can be used to determine how much space to allocate in the output files.
-
-        :returns: The number of times we will save something.
+        :returns: The number of events.
         """
         # We do not save at regular intervals
         if self._interval == 0:
             # The number of saves resulting from saving at a regular interval is zero
             n_si = 0
             # Determine the number of saves resulting from the savelist
-            n_sl = len(self._savetimes)
+            n_sl = len(self._eventtimes)
         # We do save at regular intervals
         else:
             # Determine the number of saves resulting from saving at a regular interval
             n_si = 1 + self._nsteps // self._interval
             # Determine the number of saves resulting from the savelist and
             # exclude the timesteps which coincide with the regular intervals
-            n_sl = len([ i for i in self._savetimes if i % self._interval != 0 ])
+            n_sl = len([ i for i in self._eventtimes if i % self._interval != 0 ])
 
         # Total number of saves we will perform is given by the sum
-        number_saves = n_si + n_sl
+        number_events = n_si + n_sl
 
-        return number_saves
+        return number_events
 
 
-    def must_save(self, n):
-        r"""Determine if we have to save right now.
+    def is_event(self, n):
+        r"""Determine if an event occurs right now.
 
         :param n: The current timestep in question.
         :returns: ``True`` or ``False``.
@@ -296,7 +296,7 @@ class TimeManager(object):
         elif self._interval != 0  and  n % self._interval == 0:
             # Save every k-th timestep specified by the interval
             return True
-        elif n in self._savetimes:
+        elif n in self._eventtimes:
             # Save if the n is in the list of timesteps
             return True
 
