@@ -4,7 +4,7 @@ This file contains the main simulation loop
 for the inhomogeneous Hagedorn propagator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -79,7 +79,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
 
         # Add storage for each packet
         npackets = len(self.parameters["initvals"])
-        slots = self._tm.compute_number_saves()
+        slots = self._tm.compute_number_events()
         key = ("q","p","Q","P","S","adQ")
 
         for i in xrange(npackets):
@@ -89,13 +89,16 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         # Write some initial values to disk
         for packet in self.propagator.get_wavepackets():
             self.IOManager.save_inhomogwavepacket_description(packet.get_description())
-            # Pi
-            self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(key=key), timestep=0, key=key)
-            # Basis shapes
-            for shape in packet.get_basis_shapes():
-                self.IOManager.save_inhomogwavepacket_basisshapes(shape)
-            # Coefficients
-            self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=0)
+
+        if self._tm.is_event(0):
+            for packet in self.propagator.get_wavepackets():
+                # Pi
+                self.IOManager.save_inhomogwavepacket_parameters(packet.get_parameters(key=key), timestep=0, key=key)
+                # Basis shapes
+                for shape in packet.get_basis_shapes():
+                    self.IOManager.save_inhomogwavepacket_basisshapes(shape)
+                # Coefficients
+                self.IOManager.save_inhomogwavepacket_coefficients(packet.get_coefficients(), packet.get_basis_shapes(), timestep=0)
 
 
     def run_simulation(self):
@@ -118,7 +121,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
             self.propagator.propagate()
 
             # Save some simulation data
-            if self._tm.must_save(i):
+            if self._tm.is_event(i):
                 # Run the postpropagate step
                 self.propagator.post_propagate()
 

@@ -4,7 +4,7 @@ This file contains the main simulation loop
 for the Fourier propagator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -77,7 +77,7 @@ class SimulationLoopFourier(SimulationLoop):
         self.propagator = FourierPropagator(potential, initialvalues, self.parameters)
 
         # Write some initial values to disk
-        slots = self._tm.compute_number_saves()
+        slots = self._tm.compute_number_events()
 
         self.IOManager.add_grid(self.parameters, blockid="global")
         self.IOManager.add_fourieroperators(self.parameters)
@@ -85,7 +85,8 @@ class SimulationLoopFourier(SimulationLoop):
 
         self.IOManager.save_grid(grid.get_nodes(flat=True), blockid="global")
         self.IOManager.save_fourieroperators(self.propagator.get_operators())
-        self.IOManager.save_wavefunction(initialvalues.get_values(), timestep=0)
+        if self._tm.is_event(0):
+            self.IOManager.save_wavefunction(initialvalues.get_values(), timestep=0)
 
 
     def run_simulation(self):
@@ -105,7 +106,7 @@ class SimulationLoopFourier(SimulationLoop):
             self.propagator.propagate()
 
             # Save some simulation data
-            if self._tm.must_save(i):
+            if self._tm.is_event(i):
                 # Run the postpropagate step
                 self.propagator.post_propagate()
                 self.IOManager.save_wavefunction(self.propagator.get_wavefunction().get_values(), timestep=i)
