@@ -3,7 +3,7 @@
 This file contains a the block factory.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -42,7 +42,7 @@ class BlockFactory(object):
             bs_type = "HyperCubicShape"
 
         if bs_type == "HyperCubicShape":
-            from HyperCubicShape import HyperCubicShape
+            from . import HyperCubicShape
             limits = description["limits"]
             BS = HyperCubicShape(limits)
 
@@ -53,7 +53,7 @@ class BlockFactory(object):
             BS = SimplexShape(D, K)
 
         elif bs_type == "HyperbolicCutShape":
-            from HyperbolicCutShape import HyperbolicCutShape
+            from . import HyperbolicCutShape
             K = description["K"]
             D = description["dimension"]
             BS = HyperbolicCutShape(D, K)
@@ -69,7 +69,7 @@ class BlockFactory(object):
         wp_type = description["type"]
 
         if wp_type == "HagedornWavepacket":
-            from HagedornWavepacket import HagedornWavepacket
+            from . import HagedornWavepacket
 
             # Initialize a packet
             WP = HagedornWavepacket(description["dimension"],
@@ -105,7 +105,7 @@ class BlockFactory(object):
                 print("Warning: no inner product specified!")
 
         elif wp_type == "HagedornWavepacketInhomogeneous":
-            from HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
+            from . import HagedornWavepacketInhomogeneous
 
             # Initialize a packet
             WP = HagedornWavepacketInhomogeneous(description["dimension"],
@@ -153,12 +153,12 @@ class BlockFactory(object):
             ip_type = "InhomogeneousInnerProduct"
 
         if ip_type == "HomogeneousInnerProduct":
-            from HomogeneousInnerProduct import HomogeneousInnerProduct
+            from . import HomogeneousInnerProduct
             QE = self.create_quadrature(description["delegate"])
             IP = HomogeneousInnerProduct(QE)
 
         elif ip_type == "InhomogeneousInnerProduct":
-            from InhomogeneousInnerProduct import InhomogeneousInnerProduct
+            from . import InhomogeneousInnerProduct
             QE = self.create_quadrature(description["delegate"])
             IP = InhomogeneousInnerProduct(QE)
 
@@ -179,22 +179,22 @@ class BlockFactory(object):
 
         # TODO: Maybe denest QR initialization?
         if qe_type == "DirectHomogeneousQuadrature":
-            from DirectHomogeneousQuadrature import DirectHomogeneousQuadrature
+            from . import DirectHomogeneousQuadrature
             QR = self.create_quadrature_rule(description["qr"])
             QE = DirectHomogeneousQuadrature(QR)
 
         elif qe_type == "DirectInhomogeneousQuadrature":
-            from DirectInhomogeneousQuadrature import DirectInhomogeneousQuadrature
+            from . import DirectInhomogeneousQuadrature
             QR = self.create_quadrature_rule(description["qr"])
             QE = DirectInhomogeneousQuadrature(QR)
 
         elif qe_type == "NSDInhomogeneous":
-            from NSDInhomogeneous import NSDInhomogeneous
+            from . import NSDInhomogeneous
             QR = self.create_quadrature_rule(description["qr"])
             QE = NSDInhomogeneous(QR)
 
         elif qe_type == "SymbolicIntegral":
-            from SymbolicIntegral import SymbolicIntegral
+            from . import SymbolicIntegral
             QE = SymbolicIntegral()
 
         else:
@@ -213,19 +213,19 @@ class BlockFactory(object):
             op = {"transform":True}
 
         if qr_type == "GaussHermiteQR":
-            from GaussHermiteQR import GaussHermiteQR
+            from . import GaussHermiteQR
             order = description["order"]
             assert type(order) == int
             QR = GaussHermiteQR(order, options=op)
 
         elif qr_type == "GaussHermiteOriginalQR":
-            from GaussHermiteOriginalQR import GaussHermiteOriginalQR
+            from . import GaussHermiteOriginalQR
             order = description["order"]
             assert type(order) == int
             QR = GaussHermiteOriginalQR(order, options=op)
 
         elif qr_type == "TrapezoidalQR":
-            from TrapezoidalQR import TrapezoidalQR
+            from . import TrapezoidalQR
             left = description["left"]
             right = description["right"]
             order = description["order"]
@@ -233,14 +233,14 @@ class BlockFactory(object):
             QR = TrapezoidalQR(left, right, order, options=op)
 
         elif qr_type == "GaussLaguerreQR":
-            from GaussLaguerreQR import GaussLaguerreQR
+            from . import GaussLaguerreQR
             order = description["order"]
             a = description["a"]
             assert type(order) == int
             QR = GaussLaguerreQR(order, a=a, options=op)
 
         elif qr_type == "TensorProductQR":
-            from TensorProductQR import TensorProductQR
+            from . import TensorProductQR
             # Iteratively create all quadrature rules necessary
             qrs = [ self.create_quadrature_rule(desc) for desc in description["qr_rules"] ]
             QR = TensorProductQR(qrs, options=op)
