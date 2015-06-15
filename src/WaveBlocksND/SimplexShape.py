@@ -1,10 +1,10 @@
 """The WaveBlocks Project
 
-This file contains the class for representing the hyperbolic cut
+This file contains the class for representing the simplex
 basis shape which is a special type of sparse basis set.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014, 2015 R. Bourquin
+@copyright: Copyright (C) 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -12,32 +12,30 @@ from numpy import eye, vstack, integer
 
 from BasisShape import BasisShape
 
-__all__ = ["HyperbolicCutShape"]
+__all__ = ["SimplexShape"]
 
 
-class HyperbolicCutShape(BasisShape):
-    r"""This class implements the hyperbolic cut basis shape which
-    is a special type of sparse basis set. A basis shape is essentially
-    all information and operations related to the set :math:`\mathfrak{K}`
-    of multi-indices :math:`k`. The hyperbolic cut shape in :math:`D` dimensions
-    and with `sparsity` :math:`K` is defined as the set
+class SimplexShape(BasisShape):
+    r"""This class implements the simplex basis shape which is a special type
+    of sparse basis set. A basis shape is essentially all information and operations
+    related to the set :math:`\mathfrak{K}` of multi-indices :math:`k`. The simplex
+    shape in :math:`D` dimensions and with maximal 1-norm :math:`K` is defined as the set
 
     .. math::
         \mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) |
-                                 k_d \geq 0 \forall d \in [0,\ldots,D-1]
-                                 \land \prod_{d=0}^{D-1}(1+k_d) \leq K \}
+                                 \sum_{d=0}^{D-1} k_d = \| k \|_1 \leq K \}
     """
 
     def __init__(self, D, K):
         r"""
         :param D: The dimension :math:`D`
-        :param K: The sparsity parameter :math:`K`
+        :param K: The maximal 1-norm :math:`K`
         """
         # The dimension of K
         self._dimension = D
 
-        # The sparsity parameter
-        self._sparsity = K
+        # The maximal 1-norm parameter
+        self._maxnorm = K
 
         # The linear mapping k -> index for the basis
         iil = self._get_index_iterator_lex()
@@ -52,17 +50,17 @@ class HyperbolicCutShape(BasisShape):
     def __str__(self):
         r""":return: A string describing the basis shape :math:`\mathfrak{K}`.
         """
-        s = ("Hyperbolic cut basis shape of dimension "+str(self._dimension)+
-             " and sparsity "+str(self._sparsity)+".")
+        s = ("Simplex basis shape of dimension "+str(self._dimension)+
+             " and maximal 1-norm "+str(self._maxnorm)+".")
         return s
 
 
     def __hash__(self):
-        r"""Compute a unique hash for the basis shape. In the case of hyperbolic
-        cut basis shapes :math:`\mathfrak{K}` the basis is fully specified by its
-        dimension :math:`D` and the sparsity parameter :math:`K`.
+        r"""Compute a unique hash for the basis shape. In the case of simplex
+        basis shapes :math:`\mathfrak{K}` the basis is fully specified by its
+        dimension :math:`D` and the maximal 1-norm parameter :math:`K`.
         """
-        return hash(("HyperbolicCutShape", self._dimension, self._sparsity))
+        return hash(("SimplexShape", self._dimension, self._maxnorm))
 
 
     def __getitem__(self, k):
@@ -119,9 +117,9 @@ class HyperbolicCutShape(BasisShape):
         never contains any data.
         """
         d = {}
-        d["type"] = "HyperbolicCutShape"
+        d["type"] = "SimplexShape"
         d["dimension"] = self._dimension
-        d["K"] = self._sparsity
+        d["K"] = self._maxnorm
         return d
 
 
@@ -130,22 +128,15 @@ class HyperbolicCutShape(BasisShape):
         boundary nodes are included in the extended basis shape.
         """
         D = self._dimension
-        K = self._sparsity
-        if D > 1:
-            # This formula is more narrow than: K = 2**(D-1) * (K+1)
-            # but works only for D >= 2
-            extended_sparsity = 2**(D-1) * K
-        else:
-            # Special casing K = 2**(D-1) * (K+1) for D = 1
-            extended_sparsity = K + 1
-        return HyperbolicCutShape(D, extended_sparsity)
+        K = self._maxnorm
+        return SimplexShape(D, K+1)
 
 
     def _get_index_iterator_lex(self):
         r"""
         """
-        # The hyperbolic cut parameter
-        Kmax = self._sparsity
+        # The maximal 1-norm
+        Kmax = self._maxnorm
 
         def index_iterator_lex(Kmax):
             # Initialize a counter
@@ -160,7 +151,7 @@ class HyperbolicCutShape(BasisShape):
 
                 # Reset overflows
                 for d in xrange(self._dimension):
-                    K = reduce(lambda x,y: x*(y+1), z[:-1], 1)
+                    K = sum(z[:-1])
                     if K > Kmax:
                         z[d] = 0
                         z[d+1] += 1
@@ -187,12 +178,12 @@ class HyperbolicCutShape(BasisShape):
                 # If yes, move base point and start a new chain
                 # Reset overflows
                 for i in xrange(D-d-1, D):
-                    K = reduce(lambda x,y: x*(y+1), z[(D-d-1):-1], 1)
+                    K = sum(z[(D-d-1):-1])
                     if K > Kmax:
                         z[i] = 0
                         z[i+1] += 1
 
-        return index_iterator_chain(self._sparsity, direction)
+        return index_iterator_chain(self._maxnorm, direction)
 
 
     def _get_index_iterator_mag(self):
@@ -239,7 +230,7 @@ class HyperbolicCutShape(BasisShape):
 
         :return: A tuple of the maximum of the multi-index in each direction.
         """
-        return tuple(self._dimension * [self._sparsity-1])
+        return tuple(self._dimension * [self._maxnorm])
 
 
     def get_neighbours(self, k, selection=None, direction=None):
@@ -282,11 +273,11 @@ class HyperbolicCutShape(BasisShape):
 
             # TODO: Try to simplify these nested if blocks
             if selection in ("backward", "all", None):
-                if nbw in self:
+                if not k[d] == 0:
                     nbh.append((d, nbw))
 
             if selection in ("forward", "all", None):
-                if nfw in self:
+                if not sum(k) == self._maxnorm:
                     nbh.append((d, nfw))
 
         return nbh
