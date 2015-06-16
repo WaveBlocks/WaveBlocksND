@@ -1,6 +1,6 @@
 """The WaveBlocks Project
 
-This file contains a the block factory.
+This file contains the block factory.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2012, 2013, 2014, 2015 R. Bourquin
@@ -8,6 +8,7 @@ This file contains a the block factory.
 """
 
 import importlib
+from functools import partial
 from copy import deepcopy
 
 __all__ = ["BlockFactory"]
@@ -21,18 +22,53 @@ class BlockFactory(object):
     def __init__(self):
 
         # Load different factory methods
-        import GridFactory
-        self.__dict__["create_grid"] = GridFactory.create_grid
-
         import PotentialFactory
         self.__dict__["create_potential"] = PotentialFactory.create_potential
 
-        import MatrixExponentialFactory
-        self.__dict__["create_matrixexponential"] = MatrixExponentialFactory.create_matrixexponential
-
-
     # TODO: Consider "local" vs "global" description dicts
     # TODO: Consider putting defaults into "GlobalDefaults"
+
+
+    def create_matrixexponential(self, description):
+        """Returns the requested matrix exponential routine.
+
+        :param description: A :py:class:`ParameterProvider` instance containing at least the
+                            key ``matrix_exponential`` and depending on its values more keys.
+        """
+        method = description["matrix_exponential"]
+
+        if method == "pade":
+            from MatrixExponential import matrix_exp_pade
+            return matrix_exp_pade
+        elif method == "arnoldi":
+            import GlobalDefaults
+            from MatrixExponential import matrix_exp_arnoldi
+            arnoldi_steps = description.get("arnoldi_steps", GlobalDefaults.arnoldi_steps)
+            return partial(matrix_exp_arnoldi, k=arnoldi_steps)
+        else:
+            raise ValueError("Unknown matrix exponential algorithm")
+
+
+    def create_grid(self, description):
+        """The method that creates a :py:class:`Grid` instance and decides
+        which subclass to instantiate depending on the given description.
+
+        :param description: A ``description`` (``dict`` or :py:class:`ParameterProvider` instance)
+                            with all necessary parameters.
+        :return: An adequate :py:class:`Grid` instance.
+        """
+        grid_type = description.get("type", "TensorProductGrid")
+
+        if grid_type == "TensorProductGrid":
+            from . import TensorProductGrid
+            limits = description["limits"]
+            number_nodes = description["number_nodes"]
+
+            # TODO: Improve for one|multiple values: limits = "D*(a,b)" || "[(a1,b1), (a2,b2), ...]"
+
+            grid = TensorProductGrid(limits, number_nodes)
+
+        return grid
 
 
     def create_basis_shape(self, description):
