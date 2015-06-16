@@ -3,12 +3,13 @@
 This file contains code for serializing simulation data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
 import os
 import types
+import importlib
 import h5py as hdf
 import numpy as np
 
@@ -68,7 +69,7 @@ class IOManager(object):
         # Load the necessary plugin
         print("Plugin to load: "+name)
         try:
-            plugin = __import__(name)
+            plugin = importlib.import_module(name)
         except ImportError:
             raise ImportError("IOM plugin '"+name+"' not found!")
 
