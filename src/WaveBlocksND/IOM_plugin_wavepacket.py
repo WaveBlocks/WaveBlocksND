@@ -343,7 +343,7 @@ def load_wavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S","adQ")):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`HagedornWavepacket` instance.
     """
-    from BlockFactory import BlockFactory
+    from WaveBlocksND.BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_wavepacket_description(blockid=blockid)

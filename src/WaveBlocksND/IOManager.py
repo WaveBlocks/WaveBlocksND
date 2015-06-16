@@ -69,7 +69,7 @@ class IOManager(object):
         # Load the necessary plugin
         print("Plugin to load: "+name)
         try:
-            plugin = importlib.import_module(name)
+            plugin = importlib.import_module(name, package="WaveBlocksND")
         except ImportError:
             raise ImportError("IOM plugin '"+name+"' not found!")
 
