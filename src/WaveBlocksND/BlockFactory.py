@@ -7,6 +7,7 @@ This file contains a the block factory.
 @license: Modified BSD License
 """
 
+import importlib
 from copy import deepcopy
 
 __all__ = ["BlockFactory"]
@@ -35,31 +36,16 @@ class BlockFactory(object):
 
 
     def create_basis_shape(self, description):
+        bs_args = description.copy()
+        bs_type = bs_args.pop("type", "HyperCubicShape")
+
         try:
-            bs_type = description["type"]
-        except:
-            # Default setting
-            bs_type = "HyperCubicShape"
-
-        if bs_type == "HyperCubicShape":
-            from . import HyperCubicShape
-            limits = description["limits"]
-            BS = HyperCubicShape(limits)
-
-        elif bs_type == "SimplexShape":
-            from SimplexShape import SimplexShape
-            K = description["K"]
-            D = description["dimension"]
-            BS = SimplexShape(D, K)
-
-        elif bs_type == "HyperbolicCutShape":
-            from . import HyperbolicCutShape
-            K = description["K"]
-            D = description["dimension"]
-            BS = HyperbolicCutShape(D, K)
-
-        else:
+            M = importlib.import_module(bs_type, package="WaveBlocksND")
+        except ImportError:
             raise ValueError("Unknown basis shape type "+str(bs_type))
+
+        C = getattr(M, bs_type)
+        BS = C(**bs_args)
 
         return BS
 
