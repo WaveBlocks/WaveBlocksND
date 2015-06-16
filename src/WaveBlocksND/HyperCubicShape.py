@@ -4,7 +4,7 @@ This file contains the class for representing the hypercubic basis shape
 which is the full dense basis set.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014x R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -42,7 +42,7 @@ class HyperCubicShape(BasisShape):
         else:
             raise ValueError("All limits have to be positive.")
 
-        # TODO: Do we really want to store these maps or better compute data the fly
+        # TODO: Do we really want to store these maps or better compute data on the fly
 
         # The linear mapping k -> index for the basis
         iil = self._get_index_iterator_lex()

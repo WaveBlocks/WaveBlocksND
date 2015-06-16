@@ -46,6 +46,12 @@ class BlockFactory(object):
             limits = description["limits"]
             BS = HyperCubicShape(limits)
 
+        elif bs_type == "SimplexShape":
+            from SimplexShape import SimplexShape
+            K = description["K"]
+            D = description["dimension"]
+            BS = SimplexShape(D, K)
+
         elif bs_type == "HyperbolicCutShape":
             from HyperbolicCutShape import HyperbolicCutShape
             K = description["K"]
