@@ -164,7 +164,7 @@ class McL42scPropagator(Propagator, PerturbedSplittingParameters):
         The semiclassical propagation scheme is used.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
 
@@ -174,11 +174,10 @@ class McL42scPropagator(Propagator, PerturbedSplittingParameters):
 
             # Propagate
             h1 = dt*0.21132486540518713 # (3 - sqrt(3))/6
-            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for L42, error: eps * (Delta t)^3
-            #nrtmp = int(sqrt(dt*eps)) # less steps, for L42, error: eps^2 * (Delta t)^3
-            #nrtmp = int(dt**0.75*eps**(-0.5))# even less steps, for L42, error: eps * (Delta t)^5
-            nrtmp = int(sqrt(dt*eps**-0.75)) # less steps, for L42, error: eps * (Delta t)^5
-            nrlocalsteps = max(1, 1+nrtmp)
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            nrlocalsteps = max(1, 1 + int(nrinnersteps))
+
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic taylor remainder

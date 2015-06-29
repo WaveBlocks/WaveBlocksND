@@ -164,7 +164,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
         The semiclassical propagations scheme is used.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
 
@@ -173,11 +173,9 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             eps = packet.get_eps()
 
             # Propagate
-            #nrtmp = int(sqrt(dt)*eps**(-0.75)) # for L42, error: eps^4 * (Delta t)^5
-            #nrtmp = int(dt**0.75*eps**(-0.5)) # even less steps, for L42, error: eps^2 * (Delta t)^3
-            #nrtmp = int(sqrt(dt/eps)) # less steps, for L84, error: eps^2 * (Delta t)^5
-            nrtmp = int(sqrt(dt*eps**-0.75)) # less steps, for L42, error: eps * (Delta t)^5
-            nrlocalsteps = max(1, 1+nrtmp)
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            nrlocalsteps = max(1, 1 + int(nrinnersteps))
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 

@@ -165,7 +165,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         time propagation.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
         # Processor
@@ -174,8 +174,10 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply preprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            nrtmp = int(sqrt(dt*eps**-0.75))
-            nrlocalsteps = max(1, 1+nrtmp)
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            nrlocalsteps = max(1, 1 + int(nrinnersteps))
+            # Splitting
             for j in xrange(6):
                 # Step with Abig
                 h1 = -Z[j]*dt
@@ -197,7 +199,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         time propagation.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
         # Postprocessor
@@ -206,8 +208,10 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply postprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            nrtmp = int(sqrt(dt*eps**-0.75))
-            nrlocalsteps = max(1, 1+nrtmp)
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            nrlocalsteps = max(1, 1 + int(nrinnersteps))
+            # Splitting
             for j in xrange(6-1, -1, -1):
                 # Step with Beps
                 h2 = Y[j]*dt
@@ -231,7 +235,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         The semiclassical propagations scheme is used.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
         # Kernel Pattern ABA
@@ -240,8 +244,10 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Propagate all packets
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            nrtmp = int(sqrt(dt*eps**-0.75))
-            nrlocalsteps = max(1, 1+nrtmp)
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            nrlocalsteps = max(1, 1 + int(nrinnersteps))
+            # Splitting
             for j in xrange(4):
                 # Step with Beps
                 # Avoid expensive computation if coefficient is zero
