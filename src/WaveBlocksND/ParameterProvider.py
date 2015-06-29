@@ -66,6 +66,10 @@ class ParameterProvider(object):
         return self._params.has_key(key)
 
 
+    def get(self, key, default):
+        return self._params.get(key, default)
+
+
     def compute_parameters(self):
         """Compute some further parameters from the given ones.
         """
