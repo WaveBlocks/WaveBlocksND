@@ -32,7 +32,7 @@ class QuadratureRule(object):
     def __getitem__(self, key):
         r"""Handle quadrature rule options.
         """
-        if self._options.has_key(key):
+        if key in self._options:
             return self._options[key]
         else:
             return None
