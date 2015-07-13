@@ -47,19 +47,19 @@ class TimeManager(object):
         # We need two out of three: T, dt and nsteps
         have_enough = 0
 
-        if parameters.has_key("T"):
+        if "T" in parameters:
             self._T = parameters["T"]
             have_enough += 1
         else:
             self._T = None
 
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             self._dt = parameters["dt"]
             have_enough += 1
         else:
             self._dt = None
 
-        if parameters.has_key("nsteps"):
+        if "nsteps" in parameters:
             self._nsteps = parameters["nsteps"]
             have_enough += 1
         else:
@@ -79,12 +79,12 @@ class TimeManager(object):
 
         # Interval for regular events
         self._interval = 1
-        if parameters.has_key("write_nth"):
+        if "write_nth" in parameters:
             self.set_interval(parameters["write_nth"])
 
         # List of timesteps of irregular events
         self._eventtimes = []
-        if parameters.has_key("save_at"):
+        if "save_at" in parameters:
             self.add_to_eventlist(parameters["save_at"])
 
 
@@ -191,9 +191,9 @@ class TimeManager(object):
         step = round(stepo)
 
         if abs(stepo - step) > 1e-10:
-            print("Warning: questionable rounding for timestep computation!")
+            print("Warning: Questionable rounding for timestep computation!")
 
-        return int(step)
+        return step
 
 
     def compute_time(self, n):
