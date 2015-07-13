@@ -17,7 +17,7 @@ class SplittingParameters(object):
 
 
     def build(self, method):
-        u"""
+        r"""
         :param method: A string specifying the method for time integration.
         :return: Two arrays :math:`a` and :math:`b`.
 
@@ -233,7 +233,7 @@ class SplittingParameters(object):
         s = a.shape[0]
         h = (tspan[1] - tspan[0]) / float(N)
 
-        for k in xrange(N):
-            for j in xrange(s):
+        for k in range(N):
+            for j in range(s):
                 psi1(a[j]*h, *args1)
                 psi2(b[j]*h, *args2)
