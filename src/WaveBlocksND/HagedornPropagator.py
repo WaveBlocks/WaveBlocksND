@@ -11,9 +11,9 @@ from functools import partial
 from numpy import dot, eye, atleast_2d
 from numpy.linalg import inv, det
 
-from Propagator import Propagator
-from BlockFactory import BlockFactory
-from ComplexMath import cont_angle
+from .Propagator import Propagator
+from .BlockFactory import BlockFactory
+from .ComplexMath import cont_angle
 
 __all__ = ["HagedornPropagator"]
 
@@ -56,7 +56,7 @@ class HagedornPropagator(Propagator):
         self._dt = self._parameters["dt"]
 
         # The relative mass scaling matrix M
-        if self._parameters.has_key("mass_scaling"):
+        if "mass_scaling" in self._parameters:
             self._M = atleast_2d(self._parameters["mass_scaling"])
             assert self._M.shape == (self._dimension, self._dimension)
             self._Minv = inv(self._M)

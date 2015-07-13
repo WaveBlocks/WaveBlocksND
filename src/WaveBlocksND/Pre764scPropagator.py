@@ -11,11 +11,11 @@ from functools import partial
 from numpy import dot, eye, atleast_2d, sqrt
 from numpy.linalg import inv, det
 
-from Propagator import Propagator
-from BlockFactory import BlockFactory
-from SplittingParameters import SplittingParameters
-from ProcessingSplittingParameters import ProcessingSplittingParameters
-from ComplexMath import cont_angle
+from .Propagator import Propagator
+from .BlockFactory import BlockFactory
+from .SplittingParameters import SplittingParameters
+from .ProcessingSplittingParameters import ProcessingSplittingParameters
+from .ComplexMath import cont_angle
 
 __all__ = ["Pre764scPropagator"]
 
@@ -60,7 +60,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         self._dt = self._parameters["dt"]
 
         # The relative mass scaling matrix M
-        if self._parameters.has_key("mass_scaling"):
+        if "mass_scaling" in self._parameters:
             self._M = atleast_2d(self._parameters["mass_scaling"])
             assert self._M.shape == (self._dimension, self._dimension)
             self._Minv = inv(self._M)
@@ -176,7 +176,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
             nrtmp = int(sqrt(dt*eps**-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            for j in xrange(6):
+            for j in range(6):
                 # Step with Abig
                 h1 = -Z[j]*dt
                 self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrlocalsteps, [packet], [packet,leading_chi])
@@ -208,7 +208,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
             nrtmp = int(sqrt(dt*eps**-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            for j in xrange(6-1, -1, -1):
+            for j in range(6-1, -1, -1):
                 # Step with Beps
                 h2 = Y[j]*dt
                 # Do a potential step with the local non-quadratic taylor remainder
@@ -242,7 +242,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
             nrtmp = int(sqrt(dt*eps**-0.75))
             nrlocalsteps = max(1, 1+nrtmp)
-            for j in xrange(4):
+            for j in range(4):
                 # Step with Beps
                 # Avoid expensive computation if coefficient is zero
                 if Beps[j] != 0.0:
