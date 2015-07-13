@@ -11,10 +11,11 @@ from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, v
 from scipy import conjugate, exp, sqrt
 from scipy.linalg import det, inv, norm
 
-from Wavepacket import Wavepacket
-from AbstractGrid import AbstractGrid
-from GridWrapper import GridWrapper
-from GradientHAWP import GradientHAWP
+from .Wavepacket import Wavepacket
+from .AbstractGrid import AbstractGrid
+from .GridWrapper import GridWrapper
+from .GradientHAWP import GradientHAWP
+from functools import reduce
 
 __all__ = ["HagedornWavepacketBase"]
 
@@ -326,7 +327,7 @@ class HagedornWavepacketBase(Wavepacket):
         phi[mu0,:] = self._evaluate_phi0(component, nodes, prefactor=False)
 
         # Compute all higher order states phi_k via recursion
-        for d in xrange(D):
+        for d in range(D):
             # Iterator for all valid index vectors k
             indices = bas.get_node_iterator(mode="chain", direction=d)
 
@@ -478,7 +479,7 @@ class HagedornWavepacketBase(Wavepacket):
         else:
             values = []
 
-            for component in xrange(self._number_components):
+            for component in range(self._number_components):
                 # Note: This is very inefficient! We may evaluate the same basis functions multiple
                 #       times. But as long as we don't know that the basis shapes are true subsets
                 #       of the largest one, we can not evaluate just all functions in this
