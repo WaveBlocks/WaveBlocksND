@@ -10,7 +10,8 @@ basis shape which is a special type of sparse basis set.
 
 from numpy import eye, vstack, integer
 
-from BasisShape import BasisShape
+from .BasisShape import BasisShape
+from functools import reduce
 
 __all__ = ["HyperbolicCutShape"]
 
@@ -43,7 +44,7 @@ class HyperbolicCutShape(BasisShape):
         iil = self._get_index_iterator_lex()
         self._lima = {k:index for index, k in enumerate(iil)}
         # And the inverse mapping
-        self._lima_inv = {v:k for k, v in self._lima.iteritems()}
+        self._lima_inv = {v:k for k, v in self._lima.items()}
 
         # The basis size
         self._basissize = len(self._lima)
@@ -149,7 +150,7 @@ class HyperbolicCutShape(BasisShape):
 
         def index_iterator_lex(Kmax):
             # Initialize a counter
-            z = [0 for i in xrange(self._dimension + 1)]
+            z = [0 for i in range(self._dimension + 1)]
 
             while z[self._dimension] == 0:
                 # Yield the current index vector
@@ -159,7 +160,7 @@ class HyperbolicCutShape(BasisShape):
                 z[0] += 1
 
                 # Reset overflows
-                for d in xrange(self._dimension):
+                for d in range(self._dimension):
                     K = reduce(lambda x,y: x*(y+1), z[:-1], 1)
                     if K > Kmax:
                         z[d] = 0
@@ -186,7 +187,7 @@ class HyperbolicCutShape(BasisShape):
                 # Check if we are done with the current base point
                 # If yes, move base point and start a new chain
                 # Reset overflows
-                for i in xrange(D-d-1, D):
+                for i in range(D-d-1, D):
                     K = reduce(lambda x,y: x*(y+1), z[(D-d-1):-1], 1)
                     if K > Kmax:
                         z[i] = 0
@@ -199,7 +200,7 @@ class HyperbolicCutShape(BasisShape):
         r"""
         """
         # Nodes sorted by l_1 magnitude
-        nodes = sorted(self._lima.keys(), key=lambda k: sum(k))
+        nodes = sorted(self._lima.keys(), key=sum)
 
         def index_iterator_mag(nodes):
             for node in nodes:
@@ -274,7 +275,7 @@ class HyperbolicCutShape(BasisShape):
         if direction is not None:
             directions = [ direction ]
         else:
-            directions = xrange(self._dimension)
+            directions = range(self._dimension)
 
         for d in directions:
             nfw = tuple(nbfw[:,d])

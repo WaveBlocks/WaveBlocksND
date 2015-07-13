@@ -10,7 +10,7 @@ which is the full dense basis set.
 
 from numpy import array, eye, vstack, integer
 
-from BasisShape import BasisShape
+from .BasisShape import BasisShape
 
 __all__ = ["HyperCubicShape"]
 
@@ -37,7 +37,7 @@ class HyperCubicShape(BasisShape):
 
         # The limits Ki for each axis
         limits = tuple(limits)
-        if all(map(lambda l: int(l)>0, limits)):
+        if all([int(l)>0 for l in limits]):
             self._limits = limits
         else:
             raise ValueError("All limits have to be positive.")
@@ -48,7 +48,7 @@ class HyperCubicShape(BasisShape):
         iil = self._get_index_iterator_lex()
         self._lima = {k:index for index, k in enumerate(iil)}
         # And the inverse mapping
-        self._lima_inv = {v:k for k, v in self._lima.iteritems()}
+        self._lima_inv = {v:k for k, v in self._lima.items()}
 
         # The basis size
         self._basissize = len(self._lima)
@@ -145,7 +145,7 @@ class HyperCubicShape(BasisShape):
 
         def index_iterator_lex(bounds):
             # Initialize a counter
-            z = [0 for i in xrange(self._dimension + 1)]
+            z = [0 for i in range(self._dimension + 1)]
 
             while z[self._dimension] == 0:
                 # Yield the current index vector
@@ -155,7 +155,7 @@ class HyperCubicShape(BasisShape):
                 z[0] += 1
 
                 # Reset overflows
-                for d in xrange(self._dimension):
+                for d in range(self._dimension):
                     if z[d] >= bounds[d]:
                         z[d] = 0
                         z[d+1] += 1
@@ -274,7 +274,7 @@ class HyperCubicShape(BasisShape):
         if direction is not None:
             directions = [ direction ]
         else:
-            directions = xrange(self._dimension)
+            directions = range(self._dimension)
 
         for d in directions:
             nfw = tuple(nbfw[:,d])
