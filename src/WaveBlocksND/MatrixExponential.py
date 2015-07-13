@@ -43,9 +43,9 @@ def arnoldi(A, v0, k):
 
     V[:,0] = v0.reshape(-1) / norm(v0)
 
-    for i in xrange(1, k+1):
+    for i in range(1, k+1):
         vi = dot(A, V[:,i-1])
-        for j in xrange(i):
+        for j in range(i):
             H[j,i-1] = dot(conjugate(V[:,j]), vi)
             vi -= H[j,i-1] * V[:,j]
         H[i,i-1] = norm(vi)
