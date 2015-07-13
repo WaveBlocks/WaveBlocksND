@@ -84,7 +84,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
 
         # Load the data
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
-        values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
+        values = [ wave[j,...] for j in range(parameters["ncomponents"]) ]
         WF.set_values(values)
 
         # Transform the values to the eigenbasis
@@ -96,7 +96,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
         # Plot
         fig = figure()
 
-        for level in xrange(N):
+        for level in range(N):
             # Wavefunction data
             z = Psi[level]
             z = z.reshape(G.get_number_nodes())

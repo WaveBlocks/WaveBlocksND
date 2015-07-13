@@ -69,7 +69,7 @@ def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, p
         print(" Plotting frame of timestep # %d" % step)
 
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
-        values = [ wave[j,...] for j in xrange(parameters["ncomponents"]) ]
+        values = [ wave[j,...] for j in range(parameters["ncomponents"]) ]
 
         # Plot
         fig = figure(figsize=imgsize)
@@ -95,7 +95,7 @@ def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, p
             ax.set_xlim(view[:2])
             ax.set_ylim(view[2:])
 
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")

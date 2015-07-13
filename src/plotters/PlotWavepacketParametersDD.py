@@ -27,16 +27,16 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
-    qhist = array([ norm(qhist[i,:]) for i in xrange(qhist.shape[0]) ]).reshape(-1)
-    phist = array([ norm(phist[i,:]) for i in xrange(phist.shape[0]) ]).reshape(-1)
-    Qhist = array([ det(Qhist[i,:,:]) for i in xrange(Qhist.shape[0]) ]).reshape(-1)
-    Phist = array([ det(Phist[i,:,:]) for i in xrange(Phist.shape[0]) ]).reshape(-1)
+    qhist = array([ norm(qhist[i,:]) for i in range(qhist.shape[0]) ]).reshape(-1)
+    phist = array([ norm(phist[i,:]) for i in range(phist.shape[0]) ]).reshape(-1)
+    Qhist = array([ det(Qhist[i,:,:]) for i in range(Qhist.shape[0]) ]).reshape(-1)
+    Phist = array([ det(Phist[i,:,:]) for i in range(Phist.shape[0]) ]).reshape(-1)
     Shist = Shist.reshape(-1)
 
     return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
@@ -49,7 +49,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
@@ -62,10 +62,10 @@ def read_data_inhomogeneous(iom, blockid=0):
     qhist = []
 
     for q,p,Q,P,S in Pis:
-        qhist.append(array([ norm(q[i,:]) for i in xrange(q.shape[0]) ]).reshape(-1))
-        phist.append(array([ norm(p[i,:]) for i in xrange(p.shape[0]) ]).reshape(-1))
-        Qhist.append(array([ det(Q[i,:,:]) for i in xrange(Q.shape[0]) ]).reshape(-1))
-        Phist.append(array([ det(P[i,:,:]) for i in xrange(P.shape[0]) ]).reshape(-1))
+        qhist.append(array([ norm(q[i,:]) for i in range(q.shape[0]) ]).reshape(-1))
+        phist.append(array([ norm(p[i,:]) for i in range(p.shape[0]) ]).reshape(-1))
+        Qhist.append(array([ det(Q[i,:,:]) for i in range(Q.shape[0]) ]).reshape(-1))
+        Phist.append(array([ det(P[i,:,:]) for i in range(P.shape[0]) ]).reshape(-1))
         Shist.append(S.reshape(-1))
 
     return (time, qhist, phist, Qhist, Phist, Shist)
