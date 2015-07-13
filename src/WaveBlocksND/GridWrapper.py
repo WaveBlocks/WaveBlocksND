@@ -8,9 +8,9 @@ numpy ndarrays into Grid instances.
 @license: Modified BSD License
 """
 
-from numpy import atleast_1d, abs, multiply
+from numpy import atleast_1d, abs, product
 
-from AbstractGrid import AbstractGrid
+from .AbstractGrid import AbstractGrid
 
 __all__ = ["GridWrapper"]
 
@@ -19,10 +19,9 @@ class GridWrapper(AbstractGrid):
     r"""This class constructs a thin layer around an ``ndarray`` and wraps
     it as :py:class:`Grid` subclass for API compatibility. The array must
     have a shape of :math:`(D, N)` with :math:`N` the overall number of nodes.
-
-    Rather than using this class, one should try to eliminate the
-    cases where it is used now.
     """
+    # TODO: Rather than using this class, one should try to eliminate the
+    #       cases where it is used now.
 
     def __init__(self, anarray):
         # Shape is (D, #nodes)
@@ -30,7 +29,7 @@ class GridWrapper(AbstractGrid):
         self._dimension = self._data.shape[0]
         # Compute some additional data
         # TODO: Note that these values are only correct for closed, aperiodic grids
-        self._limits = [ (anarray[d,0], anarray[d,-1]) for d in xrange(self._dimension) ]
+        self._limits = [ (anarray[d,0], anarray[d,-1]) for d in range(self._dimension) ]
         self._extensions = [ abs(l[-1] - l[0]) for l in self._limits ]
 
 
@@ -46,7 +45,7 @@ class GridWrapper(AbstractGrid):
         if overall is False:
             return self._data.shape[1:]
         else:
-            return reduce(multiply, self._data.shape[1:])
+            return product(self._data.shape[1:])
 
 
     def get_nodes(self, flat=True, split=False):
@@ -67,7 +66,7 @@ class GridWrapper(AbstractGrid):
             raise NotImplementedError("Grid wrapping for hypercubic storage.")
 
         if split is True:
-            return [ self._data[i,...] for i in xrange(self._data.shape[0]) ]
+            return [ self._data[i,...] for i in range(self._data.shape[0]) ]
         else:
             return self._data
 
