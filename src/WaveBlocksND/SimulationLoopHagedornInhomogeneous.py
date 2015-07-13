@@ -8,12 +8,12 @@ for the inhomogeneous Hagedorn propagator.
 @license: Modified BSD License
 """
 
-from SimulationLoop import SimulationLoop
-from IOManager import IOManager
-from TimeManager import TimeManager
-from BlockFactory import BlockFactory
-from BasisTransformationHAWP import BasisTransformationHAWP
-from HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
+from .SimulationLoop import SimulationLoop
+from .IOManager import IOManager
+from .TimeManager import TimeManager
+from .BlockFactory import BlockFactory
+from .BasisTransformationHAWP import BasisTransformationHAWP
+from .HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 
 __all__ = ["SimulationLoopHagedornInhomogeneous"]
 
@@ -82,7 +82,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         slots = self._tm.compute_number_events()
         key = ("q","p","Q","P","S","adQ")
 
-        for i in xrange(npackets):
+        for i in range(npackets):
             bid = self.IOManager.create_block()
             self.IOManager.add_inhomogwavepacket(self.parameters, timeslots=slots, blockid=bid, key=key)
 
@@ -115,7 +115,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         # Note: We do not save any data here
 
         # Run the simulation for a given number of timesteps
-        for i in xrange(1, nsteps+1):
+        for i in range(1, nsteps+1):
             print(" doing timestep "+str(i))
 
             self.propagator.propagate()
