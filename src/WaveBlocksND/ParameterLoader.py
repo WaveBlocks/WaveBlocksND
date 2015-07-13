@@ -11,7 +11,7 @@ puts the values into a parameter provider instance.
 import types
 from copy import deepcopy
 
-from ParameterProvider import ParameterProvider
+from .ParameterProvider import ParameterProvider
 
 __all__ = ["ParameterLoader"]
 
@@ -24,18 +24,18 @@ class ParameterLoader(object):
 
     def _get_configuration_variables(self, _scriptcode):
         r"""Clean environment for reading in local parameters.
-        
+
         :param _scriptcode: String with the configuration code to execute.
         """
         # Execute the configuration file, they are plain python files
-        exec(_scriptcode)
+        globalvals = {}
+        localvals = {}
+        exec(_scriptcode, globalvals, localvals)
 
         # Filter out private variables (the ones prefixed by "_")
         # Instances like "self" and imported modules.
-        parameters = locals().items()
-
+        parameters = localvals.items()
         parameters = [ item for item in parameters if not type(item[1]) == types.ModuleType ]
-        parameters = [ item for item in parameters if not type(item[1]) == types.InstanceType ]
         parameters = [ item for item in parameters if not item[0].startswith("_") ]
         parameters = [ item for item in parameters if not item[0] == "self" ]
 
@@ -69,7 +69,7 @@ class ParameterLoader(object):
         PP = ParameterProvider()
 
         # Put the values into a ParameterProvider instance
-        for key, value in adict.iteritems():
+        for key, value in adict.items():
             PP[key] = deepcopy(value)
 
         # Compute some values on top of the given input parameters

@@ -27,7 +27,7 @@ def meshgrid_nd(arrays):
     D = len(arrays)
 
     # The number of elements in each array
-    nelements = map(len, arrays)
+    nelements = list(map(len, arrays))
 
     result = []
 

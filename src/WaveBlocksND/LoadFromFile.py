@@ -45,7 +45,7 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
     # Basis shapes
     BS_descr = IOM.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Create a packet
@@ -63,11 +63,11 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
     # Reformat data
     C = []
 
-    for n in xrange(HAWP.get_number_components()):
+    for n in range(HAWP.get_number_components()):
         B = HAWP.get_basis_shapes(component=n)
         cn = HAWP.get_coefficients(component=n)
         l = []
-        for i in xrange(B.get_basis_size()):
+        for i in range(B.get_basis_size()):
             l.append( (B[i], cn[i,0]) )
         C.append(l)
 
