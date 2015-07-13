@@ -15,8 +15,8 @@ from scipy.misc import factorial
 from scipy.special import binom
 #from scipy.special.orthogonal import eval_hermite
 
-from InnerProduct import InnerProductException
-from Quadrature import Quadrature
+from .InnerProduct import InnerProductException
+from .Quadrature import Quadrature
 
 __all__ = ["SymbolicIntegral"]
 
@@ -123,7 +123,7 @@ class SymbolicIntegral(Quadrature):
         H = {}
         H[-1] = 0.0
         H[0] = 1.0
-        for n in xrange(N+1):
+        for n in range(N+1):
             H[n+1] = 2.0*x*H[n] - 2.0*n*H[n-1]
 
         H.pop(-1)
@@ -217,7 +217,7 @@ class SymbolicIntegral(Quadrature):
               (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(k+l)/2.0))
 
         S = 0.0j
-        for j in xrange(min(k, l)+1):
+        for j in range(min(k,l) + 1):
             S = S + (self._bk[k,j] * self._bl[l,j] * self._jf[j] *
                      self._pfk[k-j] * self._pfl[l-j] * self._Hk[k-j] * self._Hl[l-j])
 
