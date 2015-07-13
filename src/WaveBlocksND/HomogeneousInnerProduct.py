@@ -11,7 +11,7 @@ and expectation values and the matrix elements of an arbitrary operator.
 
 from numpy import zeros, complexfloating, sum, cumsum
 
-from InnerProduct import InnerProduct
+from .InnerProduct import InnerProduct
 
 __all__ = ["HomogeneousInnerProduct"]
 
@@ -80,8 +80,8 @@ class HomogeneousInnerProduct(InnerProduct):
             rows = [ diag_component ]
             cols = [ diag_component ]
         else:
-            rows = xrange(N)
-            cols = xrange(N)
+            rows = range(N)
+            cols = range(N)
 
         self._delegate.prepare(rows, cols)
 
@@ -100,7 +100,7 @@ class HomogeneousInnerProduct(InnerProduct):
             result = result[0]
         elif diagonal is True:
             # Only keep the diagonal elements
-            result = [result[i*N+i] for i in xrange(N)]
+            result = [result[i*N+i] for i in range(N)]
 
         return result
 
@@ -131,8 +131,8 @@ class HomogeneousInnerProduct(InnerProduct):
         # Compute the matrix elements
         result = zeros((sum(K),sum(K)), dtype=complexfloating)
 
-        for row in xrange(N):
-            for col in xrange(N):
+        for row in range(N):
+            for col in range(N):
                 M = self._delegate.perform_build_matrix(row, col)
                 # Put the result into the global storage
                 result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = M
