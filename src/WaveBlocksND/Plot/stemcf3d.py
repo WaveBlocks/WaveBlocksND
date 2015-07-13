@@ -13,7 +13,7 @@ from numpy import real, squeeze
 import mpl_toolkits.mplot3d.art3d as art3d
 from matplotlib.pyplot import gcf
 
-from color_map import color_map
+from .color_map import color_map
 
 
 def stemcf3d(gridu, gridv, phase, modulus, darken=None, fig=None, markerp="o", **kwargs):
@@ -38,7 +38,7 @@ def stemcf3d(gridu, gridv, phase, modulus, darken=None, fig=None, markerp="o", *
     axes = fig.add_subplot(1, 1, 1, projection='3d')
 
     for ui, vi, wi, col in zip(gridu, gridv, modulus, rgb_colors):
-        line = art3d.Line3D(*zip((ui, vi, 0), (ui, vi, wi)), marker=markerp, markevery=(1, 1), color=col)
+        line = art3d.Line3D(*list(zip((ui, vi, 0), (ui, vi, wi))), marker=markerp, markevery=(1, 1), color=col)
         axes.add_line(line)
 
     axes.set_xlim3d(real(gridu).min(), real(gridu).max())
