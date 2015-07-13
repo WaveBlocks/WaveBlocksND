@@ -49,7 +49,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
     # Basis shapes
     BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Comfigure the original wavepacket
@@ -132,7 +132,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     # Basis shapes
     BS_descr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Comfigure the original wavepacket
