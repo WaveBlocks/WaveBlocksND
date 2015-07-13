@@ -200,7 +200,7 @@ class HyperCubicShape(BasisShape):
         r"""
         """
         # Nodes sorted by l_1 magnitude
-        nodes = sorted(self._lima.keys(), key=lambda k: sum(k))
+        nodes = sorted(self._lima.keys(), key=sum)
 
         def index_iterator_mag(nodes):
             for node in nodes:
