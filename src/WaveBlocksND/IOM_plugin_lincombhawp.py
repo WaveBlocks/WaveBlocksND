@@ -93,7 +93,7 @@ def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepack
     if "S" in key and not "S" in grp_wppi.keys():
         grp_wppi.create_dataset("S", (T,J,1), dtype=np.complexfloating, chunks=(1,csJs,1), maxshape=(Ts,Js,1))
     # Wavepacket coefficients
-    for i in xrange(N):
+    for i in range(N):
         grp_wpci.create_dataset("c_"+str(i), (T,J,K), dtype=np.complexfloating, chunks=(1,csJs,csKs), maxshape=(Ts,Js,Ks))
 
     # Attach pointer to timegrid
@@ -129,7 +129,7 @@ def save_lincombhawp_description(self, descr, blockid=0):
     """
     pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp"
     # Save the description
-    for key, value in descr.iteritems():
+    for key, value in descr.items():
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
         self._srf[pathd].attrs[key] = pickle.dumps(value)
@@ -283,7 +283,7 @@ def save_lincombhawp_wavepacket_basisshapes(self, basisshapes, blockid=0):
 
             # Save the description
             descr = basisshape.get_description()
-            for key, value in descr.iteritems():
+            for key, value in descr.items():
                 # Store all the values as pickled strings because hdf can
                 # only store strings or ndarrays as attributes.
                 daset.attrs[key] = pickle.dumps(value)
@@ -298,7 +298,7 @@ def load_lincombhawp_description(self, blockid=0):
 
     # Load and return all descriptions available
     descr = {}
-    for key, value in self._srf[pathd].attrs.iteritems():
+    for key, value in self._srf[pathd].attrs.items():
         descr[key] = pickle.loads(value)
     return descr
 
@@ -437,7 +437,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         for ahash in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+ahash].attrs.iteritems():
+            for key, value in self._srf[pathd+ahash].attrs.items():
                 descr[key] = pickle.loads(value)
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
@@ -449,7 +449,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+name].attrs.iteritems():
+            for key, value in self._srf[pathd+name].attrs.items():
                 descr[key] = pickle.loads(value)
             return descr
         else:
@@ -471,8 +471,8 @@ def load_lincombhawp(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`LinearCombinationOfHAWPs` instance.
     """
-    from LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
-    from BlockFactory import BlockFactory
+    from .LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
+    from .BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_lincombhawp_description(blockid=blockid)
@@ -486,7 +486,7 @@ def load_lincombhawp(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     LC = LinearCombinationOfHAWPs(descr["dimension"], descr["ncomponents"], descr["eps"], number_packets=J)
     # Basis shapes
     K_descrs = self.load_lincombhawp_wavepacket_basisshapes(blockid=blockid)
-    K = { ha:BF.create_basis_shape(de) for ha,de in K_descrs.iteritems() }
+    K = { ha:BF.create_basis_shape(de) for ha,de in K_descrs.items() }
     # Coefficients and basis shape hashes
     hashes, coeffs = self.load_lincombhawp_wavepacket_coefficients(timestep=timestep, get_hashes=True, blockid=blockid)
     Ks = [ K[ha] for ha in np.squeeze(hashes) ]

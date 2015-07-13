@@ -91,7 +91,7 @@ def save_lincombwp_description(self, descr, blockid=0):
     """
     pathd = "/"+self._prefixb+str(blockid)+"/lincombwp"
     # Save the description
-    for key, value in descr.iteritems():
+    for key, value in descr.items():
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
         self._srf[pathd].attrs[key] = pickle.dumps(value)
@@ -179,7 +179,7 @@ def load_lincombwp_description(self, blockid=0):
 
     # Load and return all descriptions available
     descr = {}
-    for key, value in self._srf[pathd].attrs.iteritems():
+    for key, value in self._srf[pathd].attrs.items():
         descr[key] = pickle.loads(value)
     return descr
 
@@ -335,7 +335,7 @@ def load_lincombwp(self, timestep, blockid=0):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`LinearCombinationOfWPs` instance.
     """
-    from LinearCombinationOfWPs import LinearCombinationOfWPs
+    from .LinearCombinationOfWPs import LinearCombinationOfWPs
 
     descr = self.load_lincombwp_description(blockid=blockid)
 

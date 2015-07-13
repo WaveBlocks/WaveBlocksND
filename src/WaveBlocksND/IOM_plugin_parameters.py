@@ -9,7 +9,7 @@ IOM plugin providing functions for handling simulation parameter data.
 
 import pickle
 
-import ParameterProvider as ParameterProvider
+from . import ParameterProvider as ParameterProvider
 
 
 def add_parameters(self, blockid="global"):
@@ -64,7 +64,7 @@ def load_parameters(self, blockid="global"):
     p = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"].attrs
     PP = ParameterProvider.ParameterProvider()
 
-    for key, value in p.iteritems():
+    for key, value in p.items():
         PP[key] = pickle.loads(value)
 
     # Compute some values on top of the given input parameters
