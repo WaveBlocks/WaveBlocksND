@@ -12,10 +12,10 @@ of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 import sympy
 import numpy
 
-from MatrixPotential import MatrixPotential
-from AbstractGrid import AbstractGrid
-from GridWrapper import GridWrapper
-import GlobalDefaults
+from .MatrixPotential import MatrixPotential
+from .AbstractGrid import AbstractGrid
+from .GridWrapper import GridWrapper
+from . import GlobalDefaults
 
 __all__ = ["MatrixPotential1S"]
 
@@ -45,7 +45,7 @@ class MatrixPotential1S(MatrixPotential):
         self._dimension = len(variables)
 
         # Try symbolic simplification
-        if kwargs.has_key("try_simplification"):
+        if "try_simplification" in kwargs:
             self._try_simplify = kwargs["try_simplification"]
         else:
             self._try_simplify = GlobalDefaults.__dict__["try_simplification"]
@@ -184,7 +184,7 @@ class MatrixPotential1S(MatrixPotential):
         grid = self._grid_wrap(grid)
         #shape = [1] + list(grid.get_number_nodes())
         shape = (1, grid.get_number_nodes(overall=True))
-        return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
+        return tuple(numpy.ones(shape, dtype=numpy.complexfloating))
 
 
     def calculate_exponential(self, factor=1):
@@ -238,7 +238,7 @@ class MatrixPotential1S(MatrixPotential):
         if self._jacobian_s is None:
             # TODO: Add symbolic simplification
             self._jacobian_s = self._potential_s.jacobian(self._variables).T
-            self._jacobian_n = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in self._jacobian_s ])
+            self._jacobian_n = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in self._jacobian_s)
 
 
     def evaluate_jacobian_at(self, grid, component=None):
@@ -261,7 +261,7 @@ class MatrixPotential1S(MatrixPotential):
 
         J = numpy.zeros((D,N), dtype=numpy.complexfloating)
 
-        for row in xrange(D):
+        for row in range(D):
             J[row, :] = self._jacobian_n[row](*nodes)
 
         return J
@@ -275,7 +275,7 @@ class MatrixPotential1S(MatrixPotential):
         if self._hessian_s is None:
             # TODO: Add symbolic simplification
             self._hessian_s = sympy.hessian(self._potential_s[0,0], self._variables)
-            self._hessian_n = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in self._hessian_s ])
+            self._hessian_n = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in self._hessian_s)
 
 
     def evaluate_hessian_at(self, grid, component=None):
@@ -298,8 +298,8 @@ class MatrixPotential1S(MatrixPotential):
 
         H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
 
-        for row in xrange(D):
-            for col in xrange(D):
+        for row in range(D):
+            for col in range(D):
                 H[:, row, col] = self._hessian_n[row*D+col](*nodes)
 
         # 'squeeze' would be dangerous here, make sure it works in the 1D case too
@@ -342,7 +342,7 @@ class MatrixPotential1S(MatrixPotential):
         J = self.evaluate_jacobian_at(grid)
         H = self.evaluate_hessian_at(grid)
 
-        return tuple([V, J, H])
+        return tuple(V, J, H)
 
 
     def calculate_local_remainder(self, diagonal_component=None):
@@ -392,7 +392,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
-        self._remainder_n = tuple([ sympy.lambdify(list(self._variables) + qs, self._remainder_s[0,0], "numpy") ])
+        self._remainder_n = tuple(sympy.lambdify(list(self._variables) + qs, self._remainder_s[0,0], "numpy"))
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):

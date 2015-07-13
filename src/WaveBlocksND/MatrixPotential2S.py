@@ -12,10 +12,10 @@ of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 import sympy
 import numpy
 
-from MatrixPotential import MatrixPotential
-from AbstractGrid import AbstractGrid
-from GridWrapper import GridWrapper
-import GlobalDefaults
+from .MatrixPotential import MatrixPotential
+from .AbstractGrid import AbstractGrid
+from .GridWrapper import GridWrapper
+from . import GlobalDefaults
 
 __all__ = ["MatrixPotential2S"]
 
@@ -42,7 +42,7 @@ class MatrixPotential2S(MatrixPotential):
         self._dimension = len(variables)
 
         # Try symbolic simplification
-        if kwargs.has_key("try_simplification"):
+        if "try_simplification" in kwargs:
             self._try_simplify = kwargs["try_simplification"]
         else:
             self._try_simplify = GlobalDefaults.__dict__["try_simplification"]
@@ -55,7 +55,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # The the potential, symbolic expressions and evaluatable functions
         self._potential_s = expression
-        self._potential_n = tuple([ sympy.lambdify(self._variables, entry, "numpy") for entry in self._potential_s ])
+        self._potential_n = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in self._potential_s)
 
         # The cached eigenvalues, symbolic expressions and evaluatable functions
         self._eigenvalues_s = None
@@ -120,7 +120,7 @@ class MatrixPotential2S(MatrixPotential):
             entries = [ row * self._number_components + col ]
         else:
             N = self._number_components
-            entries = [ row * N + col for row in xrange(N) for col in xrange(N) ]
+            entries = [ row * N + col for row in range(N) for col in range(N) ]
             #entries = [ n for n in xrange(N*N) ]
 
         # Evaluate all entries specified
@@ -174,7 +174,7 @@ class MatrixPotential2S(MatrixPotential):
         self._eigenvalues_s = (l1, l2)
 
         # The numerical functions for the eigenvalues
-        self._eigenvalues_n = tuple([ sympy.lambdify(self._variables, item, "numpy") for item in self._eigenvalues_s ])
+        self._eigenvalues_n = tuple(sympy.lambdify(self._variables, item, "numpy") for item in self._eigenvalues_s)
 
 
     def evaluate_eigenvalues_at(self, grid, entry=None, as_matrix=False):
@@ -204,10 +204,10 @@ class MatrixPotential2S(MatrixPotential):
             N = self._number_components
             if as_matrix is True:
                 # All entries
-                entries = [ (row,col) for row in xrange(N) for col in xrange(N) ]
+                entries = [ (row,col) for row in range(N) for col in range(N) ]
             else:
                 # Diagonal entries only
-                entries = [ (row,row) for row in xrange(N) ]
+                entries = [ (row,row) for row in range(N) ]
 
         # Compute all diagonal entries first
         diags = [ e[0] for e in entries if e[0] == e[1] ]
@@ -303,14 +303,14 @@ class MatrixPotential2S(MatrixPotential):
 
         nodes = grid.get_nodes(split=True)
         # Assure real values as atan2 is only defined for real values!
-        nodes = map(numpy.real, nodes)
+        nodes = list(map(numpy.real, nodes))
 
         # Evaluate the eigenvectors on the grid
         result = []
 
         for vector in self._eigenvectors_n:
             tmp = numpy.zeros((self._number_components, grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating)
-            for index in xrange(self._number_components):
+            for index in range(self._number_components):
                 tmp[index,:] = vector[index](*nodes)
             result.append(tmp)
 
@@ -359,8 +359,8 @@ class MatrixPotential2S(MatrixPotential):
             M[1,1] = t * (sympy.cosh(D) - (a-d)/2 * sympy.sinh(D)/D)
 
         self._exponential_s = M
-        self._exponential_n = tuple([ sympy.lambdify(self._variables, item, "numpy")
-                                      for item in self._exponential_s ])
+        self._exponential_n = tuple(sympy.lambdify(self._variables, item, "numpy")
+                                    for item in self._exponential_s)
 
 
     def evaluate_exponential_at(self, grid):
@@ -435,7 +435,7 @@ class MatrixPotential2S(MatrixPotential):
         if component is not None:
             indices = [ component ]
         else:
-            indices = xrange(self._number_components)
+            indices = range(self._number_components)
 
         result = []
 
@@ -496,7 +496,7 @@ class MatrixPotential2S(MatrixPotential):
         if component is not None:
             indices = [ component ]
         else:
-            indices = xrange(self._number_components)
+            indices = range(self._number_components)
 
         result = []
 
@@ -504,8 +504,8 @@ class MatrixPotential2S(MatrixPotential):
             hessian = self._hessian_n[i]
             H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
 
-            for row in xrange(D):
-                for col in xrange(D):
+            for row in range(D):
+                for col in range(D):
                     H[:, row, col] = hessian[row*D+col](*nodes)
 
             # 'squeeze' would be dangerous here, make sure it works in the 1D case too
@@ -529,7 +529,7 @@ class MatrixPotential2S(MatrixPotential):
         :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`
                                    that gets expanded into a Taylor series :math:`u_i`.
         """
-        if self._taylor_eigen_s.has_key(diagonal_component):
+        if diagonal_component in self._taylor_eigen_s:
             # Calculation already done at some earlier time
             return
         else:
@@ -564,7 +564,7 @@ class MatrixPotential2S(MatrixPotential):
         if diagonal_component is not None:
             self._calculate_local_quadratic_component(diagonal_component)
         else:
-            for component in xrange(self._number_components):
+            for component in range(self._number_components):
                 self._calculate_local_quadratic_component(component)
 
 
@@ -606,7 +606,7 @@ class MatrixPotential2S(MatrixPotential):
                                    that gets expanded into a Taylor series :math:`u_i`.
         """
         # Calculation already done at some earlier time?
-        if self._remainder_eigen_s.has_key(diagonal_component):
+        if diagonal_component in self._remainder_eigen_s:
             return
 
         self.calculate_eigenvalues()
@@ -615,7 +615,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # Point q where the Taylor series is computed
         # This is a column vector q = (q1, ... ,qD)
-        qs = [ sympy.Symbol("q"+str(i)) for i in xrange(len(self._variables)) ]
+        qs = [ sympy.Symbol("q"+str(i)) for i in range(len(self._variables)) ]
         pairs = [ (xi,qi) for xi,qi in zip(self._variables, qs) ]
 
         V = self._eigenvalues_s[diagonal_component].subs(pairs)
@@ -648,8 +648,8 @@ class MatrixPotential2S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
-        self._remainder_eigen_n[diagonal_component] = tuple([
-            sympy.lambdify(list(self._variables) + qs, entry, "numpy") for entry in remainder ])
+        self._remainder_eigen_n[diagonal_component] = tuple(
+            sympy.lambdify(list(self._variables) + qs, entry, "numpy") for entry in remainder)
 
 
     def _calculate_local_remainder_inhomogeneous(self):
@@ -704,8 +704,8 @@ class MatrixPotential2S(MatrixPotential):
         self._remainder_eigen_ih_s = remainder
 
         # Construct functions to evaluate the approximation at point q at the given nodes
-        self._remainder_eigen_ih_n = tuple([
-            sympy.lambdify(list(self._variables) + qs, entry, "numpy") for entry in remainder ])
+        self._remainder_eigen_ih_n = tuple(
+            sympy.lambdify(list(self._variables) + qs, entry, "numpy") for entry in remainder)
 
 
     def calculate_local_remainder(self, diagonal_component=None):
