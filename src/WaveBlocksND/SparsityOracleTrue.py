@@ -8,7 +8,7 @@ always saying the integrals are non-zero.
 @license: Modified BSD License
 """
 
-from SparsityOracle import SparsityOracle
+from .SparsityOracle import SparsityOracle
 
 __all__ = ["SparsityOracleTrue"]
 
