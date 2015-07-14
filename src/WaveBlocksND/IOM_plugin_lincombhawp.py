@@ -132,7 +132,7 @@ def save_lincombhawp_description(self, descr, blockid=0):
     for key, value in descr.items():
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = pickle.dumps(value)
+        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
 
 
 def save_lincombhawp_coefficients(self, coefficients, timestep, blockid=0):
@@ -299,7 +299,7 @@ def load_lincombhawp_description(self, blockid=0):
     # Load and return all descriptions available
     descr = {}
     for key, value in self._srf[pathd].attrs.items():
-        descr[key] = pickle.loads(value)
+        descr[key] = pickle.loads(value.tostring())
     return descr
 
 
