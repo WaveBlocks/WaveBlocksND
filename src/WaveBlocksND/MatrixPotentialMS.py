@@ -317,7 +317,7 @@ class MatrixPotentialMS(MatrixPotential):
         self._JV_n = {}
 
         for i, variable in enumerate(self._variables):
-            self._JV_s[i] = tuple(ympy.diff(entry, variable) for entry in self._potential_s)
+            self._JV_s[i] = tuple(sympy.diff(entry, variable) for entry in self._potential_s)
 
         for k, v in self._JV_s.items():
             self._JV_n[k] = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in v)

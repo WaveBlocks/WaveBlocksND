@@ -184,7 +184,7 @@ class MatrixPotential1S(MatrixPotential):
         grid = self._grid_wrap(grid)
         #shape = [1] + list(grid.get_number_nodes())
         shape = (1, grid.get_number_nodes(overall=True))
-        return tuple(numpy.ones(shape, dtype=numpy.complexfloating))
+        return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
 
 
     def calculate_exponential(self, factor=1):
@@ -342,7 +342,7 @@ class MatrixPotential1S(MatrixPotential):
         J = self.evaluate_jacobian_at(grid)
         H = self.evaluate_hessian_at(grid)
 
-        return tuple(V, J, H)
+        return tuple([V, J, H])
 
 
     def calculate_local_remainder(self, diagonal_component=None):
@@ -392,7 +392,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
-        self._remainder_n = tuple(sympy.lambdify(list(self._variables) + qs, self._remainder_s[0,0], "numpy"))
+        self._remainder_n = tuple([ sympy.lambdify(list(self._variables) + qs, self._remainder_s[0,0], "numpy") ])
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
