@@ -286,7 +286,7 @@ def save_lincombhawp_wavepacket_basisshapes(self, basisshapes, blockid=0):
             for key, value in descr.items():
                 # Store all the values as pickled strings because hdf can
                 # only store strings or ndarrays as attributes.
-                daset.attrs[key] = pickle.dumps(value)
+                daset.attrs[key] = np.void(pickle.dumps(value))
 
 
 def load_lincombhawp_description(self, blockid=0):
@@ -438,7 +438,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+ahash].attrs.items():
-                descr[key] = pickle.loads(value)
+                descr[key] = pickle.loads(value.tostring())
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
         return descrs
@@ -450,7 +450,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+name].attrs.items():
-                descr[key] = pickle.loads(value)
+                descr[key] = pickle.loads(value.tostring())
             return descr
         else:
             raise IndexError("No basis shape with given hash "+str(hash))
