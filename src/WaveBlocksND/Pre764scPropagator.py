@@ -75,6 +75,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Precalculate the potential splittings needed
         self._prepare_potential()
         self._a, self._b = SplittingParameters().build(parameters["splitting_method"])
+        self._innerorder = SplittingParameters().order(parameters["splitting_method"])
         self._A, self._B, self._Y, self._Z = ProcessingSplittingParameters().build("BCR764")
 
 
@@ -174,8 +175,12 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply preprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            # Inner time step
-            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            # Inner time step (fit to third term)
+            r = self._innerorder
+            alpha = 3.0
+            beta = 4.0
+            defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
+            nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
             # Splitting
             for j in xrange(6):
@@ -208,8 +213,12 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply postprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            # Inner time step
-            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            # Inner time step (fit to third term)
+            r = self._innerorder
+            alpha = 3.0
+            beta = 4.0
+            defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
+            nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
             # Splitting
             for j in xrange(6-1, -1, -1):
@@ -244,8 +253,12 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Propagate all packets
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            # Inner time step
-            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            # Inner time step (fit to third term)
+            r = self._innerorder
+            alpha = 3.0
+            beta = 4.0
+            defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
+            nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
             # Splitting
             for j in xrange(4):
