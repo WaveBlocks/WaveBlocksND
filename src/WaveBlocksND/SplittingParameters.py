@@ -4,7 +4,7 @@ This file contains data to build several closely
 related splitting methods.
 
 @author: V. Gradinaru, R. Bourquin
-@copyright: Copyright (C) 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2013, 2014, 2015 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -212,6 +212,25 @@ class SplittingParameters(object):
             raise NotImplementedError("Unknown method: " + method)
 
         return a, b
+
+
+    def order(self, method):
+        r"""
+        :param method: A string specifying the method for time integration.
+        :return: The order of this method.
+        """
+        return {
+            "LT":    1,
+            "S2":    2,
+            "SS":    2,
+            "PRKS6": 4,
+            "BM42":  4,
+            "Y4":    4,
+            "Y61":   6,
+            "BM63":  6,
+            "KL6":   6,
+            "KL8":   8,
+            "KL10": 10}[method]
 
 
     def intsplit(self, psi1, psi2, a, b, tspan, N, args1=[], args2=[]):
