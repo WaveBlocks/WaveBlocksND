@@ -176,8 +176,12 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
 
-            # Inner time step
-            nrinnersteps = self._parameters.get("innersteps", sqrt(dt * eps**-0.75))
+            # Inner time step (fit to second term)
+            r = self._innerorder
+            alpha = 2.0
+            beta = 4.0
+            defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
+            nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
 
             # Propagate
