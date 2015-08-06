@@ -13,6 +13,7 @@ from numpy.linalg import inv, det
 
 from Propagator import Propagator
 from BlockFactory import BlockFactory
+from SplittingParameters import SplittingParameters
 from PerturbedSplittingParameters import PerturbedSplittingParameters
 from ComplexMath import cont_angle
 
@@ -72,7 +73,9 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
-        self._a, self._b = PerturbedSplittingParameters().build("L84")
+        self._a, self._b = SplittingParameters().build(parameters["splitting_method"])
+        self._innerorder = SplittingParameters().order(parameters["splitting_method"])
+        self._A, self._B = PerturbedSplittingParameters().build("L84")
 
 
     def __str__(self):
@@ -164,6 +167,8 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
         """
         # Cache some parameter values
         dt = self._dt
+        A = self._A
+        B = self._B
         a = self._a
         b = self._b
 
@@ -176,50 +181,50 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
 
             # Propagate
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[0]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[0]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[1]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[1]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[2]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[2]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[3]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[3]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[3]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[3]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[4]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[4]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*b[4]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[4]*dt/eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, a[5]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[5]*dt], nrlocalsteps, [packet], [packet,leading_chi])
