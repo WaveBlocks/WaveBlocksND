@@ -164,7 +164,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
         The semiclassical propagation scheme is used.
         """
         # Cache some parameter values
-        dt = 1.0*self._dt
+        dt = self._dt
         a = self._a
         b = self._b
 
@@ -173,25 +173,25 @@ class MagnusPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
 
             # Propagate until c1*dt
-            h1 = (0.5-sqrt(3.)/6.)*dt
-            nrN1 = max(1, 1 + int((h1**(1.0/2.0))*eps**-(3.0/8.0)))
+            h1 = (0.5 - sqrt(3.0)/6.0) * dt
+            nrN1 = max(1, 1 + int(h1**0.5 * eps**(-3.0/8.0)))
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, [packet], [packet,leading_chi])
 
             # Build a first matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
-            A1 = (-1.0j)*innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            A1 = -1.0j * innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             # Propagate until c2*dt
-            h2 = dt/sqrt(3.0)
-            nrN2 = max(1, 1 + int((h2**(1.0/2.0))*eps**(-3.0/8.0)))
+            h2 = 1.0 / sqrt(3.0) * dt
+            nrN2 = max(1, 1 + int(h2**0.5 * eps**(-3.0/8.0)))
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, [packet], [packet,leading_chi])
 
             # Build a second matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
-            A2 = (-1.0j)*innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            A2 = -1.0j * innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             # Combine both and build the matrix for Magnus of 4-th order split
-            F = (A1+A2)*(dt/eps**2)*0.5 + (dot(A2,A1)-dot(A1,A2))*((dt/eps**2)**2)*sqrt(3.0)/12.0
+            F = (A1 + A2) * 0.5*(dt/eps**2) + (dot(A2,A1) - dot(A1,A2)) * sqrt(3.0)/12.0*((dt/eps**2)**2)
 
             # Propagate the coefficients
             coefficients = packet.get_coefficient_vector()

@@ -187,7 +187,6 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             # Propagate
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
-            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
@@ -196,7 +195,6 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
-            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
@@ -205,7 +203,6 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
-            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
@@ -214,7 +211,6 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[3]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
-            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
@@ -223,7 +219,6 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
 
             self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[4]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
-            # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
