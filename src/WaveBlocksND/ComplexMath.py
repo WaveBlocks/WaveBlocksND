@@ -24,6 +24,7 @@ def continuate(data, jump=2.0*pi, reference=0.0):
                        explicitly. It can be used together with ``data``.
     :type reference: A single float number.
     """
+    # TODO: Maybe replace with 'unwrap' from numpy?
     assert squeeze(reference).ndim == 0, "The 'reference' must be a scalar value."
     data = hstack([array(reference), array(data).reshape(-1)])
     offsets = cumsum(around(diff(data)/(1.0*jump)))
