@@ -23,5 +23,5 @@ please use the following bibtex snippet:
         title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
         year = {2010 - 2015},
         url = {\url{https://github.com/WaveBlocks/WaveBlocksND}},
-        howpublished={\url{https://github.com/WaveBlocks/WaveBlocksND}}
+        howpublished = {\url{https://github.com/WaveBlocks/WaveBlocksND}}
     }

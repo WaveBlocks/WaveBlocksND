@@ -10,7 +10,7 @@ The code for one-dimensional simulations::
       title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
       year = {2010 - 2015},
       url = {\url{https://github.com/WaveBlocks/WaveBlocks}},
-      howpublished={\url{https://github.com/WaveBlocks/WaveBlocks}}
+      howpublished = {\url{https://github.com/WaveBlocks/WaveBlocks}}
   }
 
 The code for multi-dimensional simulations::
@@ -20,5 +20,5 @@ The code for multi-dimensional simulations::
        title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
        year = {2010 - 2015},
        url = {\url{https://github.com/WaveBlocks/WaveBlocksND}},
-       howpublished={\url{https://github.com/WaveBlocks/WaveBlocksND}}
+       howpublished = {\url{https://github.com/WaveBlocks/WaveBlocksND}}
    }
