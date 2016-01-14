@@ -1,0 +1,353 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>McL42scPropagator &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="McL84scPropagator" href="McL84scPropagator.html" />
+    <link rel="prev" title="SemiclassicalPropagator" href="SemiclassicalPropagator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="McL84scPropagator.html" title="McL84scPropagator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SemiclassicalPropagator.html" title="SemiclassicalPropagator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="mcl42scpropagator">
+<h1>McL42scPropagator<a class="headerlink" href="#mcl42scpropagator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-mcl42scpropagator-class"></span><h2>About the <tt class="docutils literal"><span class="pre">McL42scPropagator</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-00794731a428b44879548caa309091ce311aa081.png" alt="Inheritance diagram of McL42scPropagator" usemap="#inheritance9bb90b24fa" class="inheritance"/>
+<map id="inheritance9bb90b24fa" name="inheritance9bb90b24fa">
+<area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi` in" alt="" coords="457,31,735,56"/>
+<area shape="rect" id="node2" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="124,5,291,31"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.McL42scPropagator">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">McL42scPropagator</tt><big>(</big><em>parameters</em>, <em>potential</em>, <em>packets=[]</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> in
+a potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. The propagation is done for a given set of homogeneous
+Hagedorn wavepackets neglecting interaction. It uses the McL42 and the idea of the
+semiclassical splitting</p>
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.add_wavepacket">
+<tt class="descname">add_wavepacket</tt><big>(</big><em>packet</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.add_wavepacket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> to the list of propagated wavepackets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (A tuple <img class="math" src="../_images/math/91989a06ae3d2582be4e597cf7efc43aaa76421a.png" alt="(\Psi, \chi)"/> with <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> a <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a>
+instance and <img class="math" src="../_images/math/f632c791f693410fc1bf07ad7cb02c6fcfef9aed.png" alt="\chi"/> an integer.) &#8211; The new wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> and its leading component <img class="math" src="../_images/math/e42c974e4f72f1cc2a72c01ed46c711b29445e03.png" alt="\chi \in [0,N-1]"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.build">
+<tt class="descname">build</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.build" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>method</strong> &#8211; A string specifying the method for time integration.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Two arrays <img class="math" src="../_images/math/7dd2a5ea01fbd72ad2a58dd1f3d6ecbfde6208a1.png" alt="a"/> and <img class="math" src="../_images/math/5e87bf41a96deddf6cb485ff530f153f2590e9cc.png" alt="b"/>.</td>
+</tr>
+</tbody>
+</table>
+<table border="1" class="docutils">
+<colgroup>
+<col width="19%" />
+<col width="19%" />
+<col width="28%" />
+<col width="34%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Method</th>
+<th class="head">Order</th>
+<th class="head">Authors</th>
+<th class="head">Reference</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>L42</td>
+<td>(4,2)</td>
+<td>McLachlan</td>
+<td><a class="footnote-reference" href="#id6" id="id1">[1]</a> page 6</td>
+</tr>
+<tr class="row-odd"><td>L62</td>
+<td>(6,2)</td>
+<td>McLachlan</td>
+<td><a class="footnote-reference" href="#id6" id="id2">[1]</a> page 6</td>
+</tr>
+<tr class="row-even"><td>L82</td>
+<td>(8,2)</td>
+<td>McLachlan</td>
+<td><a class="footnote-reference" href="#id6" id="id3">[1]</a> page 6</td>
+</tr>
+<tr class="row-odd"><td>L102</td>
+<td>(10,2)</td>
+<td>McLachlan</td>
+<td><a class="footnote-reference" href="#id6" id="id4">[1]</a> page 6</td>
+</tr>
+<tr class="row-even"><td>L84</td>
+<td>(8,4)</td>
+<td>McLachlan</td>
+<td><a class="footnote-reference" href="#id6" id="id5">[1]</a> page 8</td>
+</tr>
+</tbody>
+</table>
+<table class="docutils footnote" frame="void" id="id6" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label">[1]</td><td><em>(<a class="fn-backref" href="#id1">1</a>, <a class="fn-backref" href="#id2">2</a>, <a class="fn-backref" href="#id3">3</a>, <a class="fn-backref" href="#id4">4</a>, <a class="fn-backref" href="#id5">5</a>)</em> R.I. McLachlan, &#8220;Composition methods in the presence of small parameters&#8221;,
+BIT Numerical Mathematics, Volume 35, Issue 2, (1995) 258-268.
+There is also a 2003 version which was used for the implementation.</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.get_number_components">
+<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.get_potential">
+<tt class="descname">get_potential</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> used for time propagation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><tt class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></tt></a> subclass instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.get_wavepackets">
+<tt class="descname">get_wavepackets</tt><big>(</big><em>packet=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.get_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the wavepackets <img class="math" src="../_images/math/f208d849d195bf8aa2dcdee96350b0e486b7d291.png" alt="\{\Psi_i\}_i"/> that take part in the time propagation by the
+current <a class="reference internal" href="SemiclassicalPropagator.html#WaveBlocksND.SemiclassicalPropagator" title="WaveBlocksND.SemiclassicalPropagator"><tt class="xref py py-class docutils literal"><span class="pre">SemiclassicalPropagator</span></tt></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> (in this list) of a single packet <img class="math" src="../_images/math/034b3ac6431b79d3aa58a3ebe8c185f94fc75713.png" alt="\Psi_i"/> that is
+to be returned. If set to <tt class="docutils literal"><span class="pre">None</span></tt> (default) return the full list with all packets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instances or a single instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.intsplit">
+<tt class="descname">intsplit</tt><big>(</big><em>psia</em>, <em>psib</em>, <em>a</em>, <em>b</em>, <em>tspan</em>, <em>N</em>, <em>argsa=[]</em>, <em>argsb=[]</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.intsplit" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute a single, full propagation step by operator splitting.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>psia</strong> &#8211; First evolution operator <img class="math" src="../_images/math/87de8ae280ea6763121c43c70585fa4a49936c7c.png" alt="\Psi_a"/></li>
+<li><strong>psib</strong> &#8211; Second evolution operator <img class="math" src="../_images/math/0c681241c2c31f6549ddb7c25f0c13848cb68c6c.png" alt="\Psi_b"/></li>
+<li><strong>a</strong> &#8211; Parameters for evolution with <img class="math" src="../_images/math/87de8ae280ea6763121c43c70585fa4a49936c7c.png" alt="\Psi_a"/></li>
+<li><strong>b</strong> &#8211; Parameters for evolution with <img class="math" src="../_images/math/0c681241c2c31f6549ddb7c25f0c13848cb68c6c.png" alt="\Psi_b"/></li>
+<li><strong>tspan</strong> &#8211; Timespan <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> of a single, full splitting step</li>
+<li><strong>N</strong> &#8211; Number of substeps to perform</li>
+<li><strong>argsa</strong> &#8211; Additional optional arguments of <img class="math" src="../_images/math/87de8ae280ea6763121c43c70585fa4a49936c7c.png" alt="\Psi_a"/></li>
+<li><strong>argsb</strong> &#8211; Additional optional arguments of <img class="math" src="../_images/math/0c681241c2c31f6549ddb7c25f0c13848cb68c6c.png" alt="\Psi_b"/></li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The values for <tt class="docutils literal"><span class="pre">argsa</span></tt> and <tt class="docutils literal"><span class="pre">argsb</span></tt> have to be
+<a href="#id7"><span class="problematic" id="id8">``</span></a>list``s even in case of single items.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.post_propagate">
+<tt class="descname">post_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at final time <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>,
+perform some computations exactly once after running the ordinary
+time propagation and before each time simulation data will be saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.pre_propagate">
+<tt class="descname">pre_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/fb761c2e199ad45ccf14767f48b88169479d840f.png" alt="t_0"/>,
+perform some computations exactly once before running the ordinary
+time propagation and after each time simulation data was saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.propagate">
+<tt class="descname">propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> compute the propagated
+wavepacket at time <img class="math" src="../_images/math/248f20efaf95b4d4c73e23e7cb9ece1b73e10098.png" alt="t + \tau"/>. We perform exactly one timestep of size
+<img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> here. This propagation is done for all packets in the list
+<img class="math" src="../_images/math/f208d849d195bf8aa2dcdee96350b0e486b7d291.png" alt="\{\Psi_i\}_i"/> and neglects any interaction between two packets.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.McL42scPropagator.set_wavepackets">
+<tt class="descname">set_wavepackets</tt><big>(</big><em>packetlist</em><big>)</big><a class="headerlink" href="#WaveBlocksND.McL42scPropagator.set_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the list <img class="math" src="../_images/math/f208d849d195bf8aa2dcdee96350b0e486b7d291.png" alt="\{\Psi_i\}_i"/> of wavepackets that the propagator will propagate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packetlist</strong> (A list of <img class="math" src="../_images/math/216cfab30f07c1916ba38cc380c04fe84c4c0834.png" alt="(\Psi_i, \chi_i)"/> tuples.) &#8211; A list of new wavepackets <img class="math" src="../_images/math/034b3ac6431b79d3aa58a3ebe8c185f94fc75713.png" alt="\Psi_i"/> and their
+leading components <img class="math" src="../_images/math/cc6ea38e465ef83538fbafda2a991a84b3bdb5b1.png" alt="\chi_i"/> to propagate.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">McL42scPropagator</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">McL42scPropagator</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SemiclassicalPropagator.html"
+                        title="previous chapter">SemiclassicalPropagator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="McL84scPropagator.html"
+                        title="next chapter">McL84scPropagator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/McL42scPropagator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="McL84scPropagator.html" title="McL84scPropagator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SemiclassicalPropagator.html" title="SemiclassicalPropagator"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

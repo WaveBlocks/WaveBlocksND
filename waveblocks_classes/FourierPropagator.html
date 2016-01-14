@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>FourierPropagator &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="HagedornPropagator" href="HagedornPropagator.html" />
+    <link rel="prev" title="Propagator" href="Propagator.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HagedornPropagator.html" title="HagedornPropagator"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Propagator.html" title="Propagator"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="fourierpropagator">
+<h1>FourierPropagator<a class="headerlink" href="#fourierpropagator" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-fourierpropagator-class"></span><h2>About the <tt class="docutils literal"><span class="pre">FourierPropagator</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-d53f84f2a30128188076c60870648f464562e949.png" alt="Inheritance diagram of FourierPropagator" usemap="#inheritance52a761d7bc" class="inheritance"/>
+<map id="inheritance52a761d7bc" name="inheritance52a761d7bc">
+<area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi(x_0, t_0)` on" alt="" coords="220,5,475,31"/>
+<area shape="rect" id="node2" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="5,5,172,31"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.FourierPropagator">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">FourierPropagator</tt><big>(</big><em>potential</em>, <em>initial_values</em>, <em>para</em><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/1311af10c3fc8f6e94ef1d8a12b43b1967a6c9a4.png" alt="\Psi(x_0, t_0)"/> on
+a potential hyper surface <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. The propagation is done with a Strang splitting
+of the time propagation operator <img class="math" src="../_images/math/d37b15746efc323a0f5b8296d7d5c9e899dad7e2.png" alt="\exp(-\frac{i}{\varepsilon^2} \tau H)"/>.</p>
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.get_number_components">
+<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.get_operators">
+<tt class="descname">get_operators</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_operators" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the kinetic and potential operators <img class="math" src="../_images/math/62bb15ac7312a22c42be5bfe52c67742a49ff64d.png" alt="T(\Omega)"/> and <img class="math" src="../_images/math/ecb9ac43dbf52be6e181a0e67c827fea96b7d6c1.png" alt="V(\Gamma)"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple <img class="math" src="../_images/math/7bf5ed1473e5dee69b361769a6f6ac8ff4b54b3c.png" alt="(T, V)"/> containing two <tt class="docutils literal"><span class="pre">ndarrays</span></tt>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.get_potential">
+<tt class="descname">get_potential</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> used for time propagation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><tt class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></tt></a> subclass instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.get_wavefunction">
+<tt class="descname">get_wavefunction</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_wavefunction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the wavefunction that stores the current data <img class="math" src="../_images/math/5b1be7843909382dd6a3620782d21788e570734e.png" alt="\Psi(\Gamma)"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><tt class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></tt></a> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.post_propagate">
+<tt class="descname">post_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at final time <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>,
+perform some computations exactly once after running the ordinary
+time propagation and before each time simulation data will be saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.pre_propagate">
+<tt class="descname">pre_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/fb761c2e199ad45ccf14767f48b88169479d840f.png" alt="t_0"/>,
+perform some computations exactly once before running the ordinary
+time propagation and after each time simulation data was saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.FourierPropagator.propagate">
+<tt class="descname">propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.FourierPropagator.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction values <img class="math" src="../_images/math/5b1be7843909382dd6a3620782d21788e570734e.png" alt="\Psi(\Gamma)"/> at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, calculate
+new values <img class="math" src="../_images/math/f38e06a44339d7eb0e7798268a68aa94d4384d94.png" alt="\Psi^\prime(\Gamma)"/> at time <img class="math" src="../_images/math/248f20efaf95b4d4c73e23e7cb9ece1b73e10098.png" alt="t + \tau"/>. We perform exactly
+one single timestep of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> within this function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">FourierPropagator</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">FourierPropagator</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Propagator.html"
+                        title="previous chapter">Propagator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="HagedornPropagator.html"
+                        title="next chapter">HagedornPropagator</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/FourierPropagator.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HagedornPropagator.html" title="HagedornPropagator"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Propagator.html" title="Propagator"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

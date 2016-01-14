@@ -1,0 +1,686 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>LinearCombinationOfHAWPs &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="GradientLCWP" href="GradientLCWP.html" />
+    <link rel="prev" title="LinearCombinationOfWPs" href="LinearCombinationOfWPs.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GradientLCWP.html" title="GradientLCWP"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="LinearCombinationOfWPs.html" title="LinearCombinationOfWPs"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="linearcombinationofhawps">
+<h1>LinearCombinationOfHAWPs<a class="headerlink" href="#linearcombinationofhawps" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-linearcombinationofhawps-class"></span><h2>About the <tt class="docutils literal"><span class="pre">LinearCombinationOfHAWPs</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-618a16e0570a7fa4cb34355c37635980bfad9b31.png" alt="Inheritance diagram of LinearCombinationOfHAWPs" usemap="#inheritanceb7b6db29e7" class="inheritance"/>
+<map id="inheritanceb7b6db29e7" name="inheritanceb7b6db29e7">
+<area shape="rect" id="node1" title="This class represents linear combinations" alt="" coords="437,5,763,26"/>
+<area shape="rect" id="node2" title="This class is an abstract interface to linear combinations" alt="" coords="5,5,396,26"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">LinearCombinationOfHAWPs</tt><big>(</big><em>dimension</em>, <em>number_components</em>, <em>eps</em>, <em>number_packets=0</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents linear combinations
+of compatible Hagedorn wavepackets.</p>
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>dimension</em>, <em>number_components</em>, <em>eps</em>, <em>number_packets=0</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new linear combination of Hagedorn wavepackets. This
+object represents <img class="math" src="../_images/math/9a528819d124a32289b0b9a1f9552b42ae47f1a6.png" alt="\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j"/>.
+All <img class="math" src="../_images/math/372c2a0702e1e5866656215408b37a2ddb8d2d45.png" alt="J"/> wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> have the same number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>
+components and are defined in the <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> dimensional space.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>dimension</strong> &#8211; The space dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> the packets have.</li>
+<li><strong>ncomponents</strong> &#8211; The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components the packets have.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An instance of <a class="reference internal" href="#WaveBlocksND.LinearCombinationOfHAWPs" title="WaveBlocksND.LinearCombinationOfHAWPs"><tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfHAWPs</span></tt></a>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.__str__">
+<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.__str__" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the linear combination of Hagedorn
+wavepackets <img class="math" src="../_images/math/861d42cb469473886f3586a7987bfd1aadf6a502.png" alt="\Upsilon = \sum_{j=0}^J c_j \Psi_j"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.add_wavepacket">
+<tt class="descname">add_wavepacket</tt><big>(</big><em>packet</em>, <em>coefficient=1.0</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.add_wavepacket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new wavepacket to the linear combination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>packet</strong> (A <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instance.) &#8211; The new Hagedorn wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> to add.</li>
+<li><strong>coefficient</strong> &#8211; The corresponding coefficient <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/>, default is 1.0.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.add_wavepackets">
+<tt class="descname">add_wavepackets</tt><big>(</big><em>packetlist</em>, <em>coefficients=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.add_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a list of new wavepackets to the linear combination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>packetlist</strong> (A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instances.) &#8211; A list of new Hagedorn wavepackets <img class="math" src="../_images/math/3013902bf5a439595d9af4b6a1597ab0594c7c65.png" alt="\{\Psi_j\}"/>.</li>
+<li><strong>coefficients</strong> &#8211; The corresponding coefficient vector <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/>, default
+is a vector of all 1.0.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.clone">
+<tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.clone" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.evaluate_at">
+<tt class="descname">evaluate_at</tt><big>(</big><em>grid</em>, <em>packetindex=None</em>, <em>prefactor=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.evaluate_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the linear copmbination <img class="math" src="../_images/math/861d42cb469473886f3586a7987bfd1aadf6a502.png" alt="\Upsilon = \sum_{j=0}^J c_j \Psi_j"/>
+of Hagedorn wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A class having a <tt class="docutils literal"><span class="pre">get_nodes(...)</span></tt> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
+<li><strong>packetindex</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of a single packet <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> to evaluate.
+(Defaults to <tt class="docutils literal"><span class="pre">None</span></tt> for evaluating all wavepackets.)</li>
+<li><strong>prefactor</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/942460eeef3b3f064cf22fa69c50d2044de4b25a.png" alt="\frac{1}{\sqrt{\det(Q_j)}}"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> at the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.evaluate_basis_at">
+<tt class="descname">evaluate_basis_at</tt><big>(</big><em>grid</em>, <em>prefactor=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.evaluate_basis_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate all the individual Hagedorn wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> of
+<img class="math" src="../_images/math/861d42cb469473886f3586a7987bfd1aadf6a502.png" alt="\Upsilon = \sum_{j=0}^J c_j \Psi_j"/> at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A class having a <tt class="docutils literal"><span class="pre">get_nodes(...)</span></tt> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
+<li><strong>prefactor</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/942460eeef3b3f064cf22fa69c50d2044de4b25a.png" alt="\frac{1}{\sqrt{\det(Q_j)}}"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A two-dimensional ndarray <img class="math" src="../_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/> of shape <img class="math" src="../_images/math/21880f6b5bb90d11ed50883d9a33a60385a55199.png" alt="(|\Gamma|, J)"/> where
+the entry <img class="math" src="../_images/math/1c994e11e86cfbd86fc9d96c9f210870eb28c5f0.png" alt="H[i, j]"/> is the value of <img class="math" src="../_images/math/d72b8cf29a001665f21ca12fd370f01391da75a9.png" alt="\Psi_j(\gamma_i)"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes">
+<tt class="descname">get_basis_shapes</tt><big>(</big><em>packetindex=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the basis shapes <img class="math" src="../_images/math/c51e29f98d1b5fbf1788fff896f61d8ca853ab67.png" alt="\mathfrak{K}_j"/> for each packet <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose basis shape we request. (Default is
+<tt class="docutils literal"><span class="pre">None</span></tt> which means to return the basis shapes for all components.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The basis shape for an individual component or a list with all shapes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes_hashes">
+<tt class="descname">get_basis_shapes_hashes</tt><big>(</big><em>packetindex=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes_hashes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the hashes of all basis shapes <img class="math" src="../_images/math/c51e29f98d1b5fbf1788fff896f61d8ca853ab67.png" alt="\mathfrak{K}_j"/> for each packet <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose basis shape we request. (Default is
+<tt class="docutils literal"><span class="pre">None</span></tt> which means to return the basis shapes for all components.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The basis shape for an individual component or a list with all shapes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_basis_sizes">
+<tt class="descname">get_basis_sizes</tt><big>(</big><em>packetindex=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_sizes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the basis sizes <img class="math" src="../_images/math/7cb841233757e6facfafde17f184c34d29e037f9.png" alt="|\mathfrak{K}_j|"/> for each packet <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose basis shape we request. (Default is
+<tt class="docutils literal"><span class="pre">None</span></tt> which means to return the basis shapes for all components.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The basis shape for an individual component or a list with all shapes.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_coefficient">
+<tt class="descname">get_coefficient</tt><big>(</big><em>packetindex</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the coefficient <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/> of the wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packetindex</strong> &#8211; The index <img class="math" src="../_images/math/4bd3aed5353a5e7d9a12b531d09970b72e2c10c6.png" alt="0 \leq j &lt; J"/> of the coefficient to retrieve.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The coefficient <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_coefficients">
+<tt class="descname">get_coefficients</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the vector with all coefficients <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/> of all wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The vector <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/> of all coefficients <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/>. The vector is of
+shape <img class="math" src="../_images/math/a5e52b7b9fa338b2b9cb3a41c67741b4d129037d.png" alt="(J, 1)"/>.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Type:</th><td class="field-body">An <tt class="xref py py-class docutils literal"><span class="pre">ndarray</span></tt></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of this linear combination object.
+A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+necessary to reconstruct the current instance. A description
+never contains any data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_dimension">
+<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of all the wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_eps">
+<tt class="descname">get_eps</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_eps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/> of the wavepacket.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_number_components">
+<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components all the wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> have.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_number_packets">
+<tt class="descname">get_number_packets</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_number_packets" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/372c2a0702e1e5866656215408b37a2ddb8d2d45.png" alt="J"/> of wavepackets in the linear combination <img class="math" src="../_images/math/9a528819d124a32289b0b9a1f9552b42ae47f1a6.png" alt="\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket">
+<tt class="descname">get_wavepacket</tt><big>(</big><em>packetindex</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> from the linear combination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>index</strong> &#8211; The index <img class="math" src="../_images/math/4bd3aed5353a5e7d9a12b531d09970b72e2c10c6.png" alt="0 \leq j &lt; J"/> of the packet to retrieve.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Type:</th><td class="field-body">A <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficient">
+<tt class="descname">get_wavepacket_coefficient</tt><big>(</big><em>packetindex</em>, <em>index</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A single complex number.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficients">
+<tt class="descname">get_wavepacket_coefficients</tt><big>(</big><em>packetindex=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A single complex number.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_parameters">
+<tt class="descname">get_wavepacket_parameters</tt><big>(</big><em>packetindex=None</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Hagedorn parameter set <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packetindex</strong> &#8211; The index <img class="math" src="../_images/math/4bd3aed5353a5e7d9a12b531d09970b72e2c10c6.png" alt="0 \leq j &lt; J"/> of the packet whose parameter
+set <img class="math" src="../_images/math/c05a3416f32bdb48e0e486412f84dd5d684191f4.png" alt="Pi"/> we want.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The Hagedorn parameter set <img class="math" src="../_images/math/e1cf285bb6a36bb64b4e3f6567e557daafd190da.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.get_wavepackets">
+<tt class="descname">get_wavepackets</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get all the wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> from the linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This method potentially generates a <em>large</em> number of wavepacket instances.</p>
+</div>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instances.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.remove_wavepacket">
+<tt class="descname">remove_wavepacket</tt><big>(</big><em>packetindex</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.remove_wavepacket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove a wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> from the linear combination.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packetindex</strong> &#8211; The index <img class="math" src="../_images/math/4bd3aed5353a5e7d9a12b531d09970b72e2c10c6.png" alt="0 \leq j &lt; J"/> of the packet to remove.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_coefficient">
+<tt class="descname">set_coefficient</tt><big>(</big><em>packetindex</em>, <em>coefficient</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the coefficient <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/> of the wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>packetindex</strong> &#8211; The index <img class="math" src="../_images/math/4bd3aed5353a5e7d9a12b531d09970b72e2c10c6.png" alt="0 \leq j &lt; J"/> of the coefficient to retrieve.</li>
+<li><strong>coefficient</strong> &#8211; The coefficient <img class="math" src="../_images/math/25ce8815ff81c2071b842ecaf581c222c39e11c8.png" alt="c_j"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_coefficients">
+<tt class="descname">set_coefficients</tt><big>(</big><em>coefficients</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update all the coefficients <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/> of <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>coefficients</strong> (An <tt class="xref py py-class docutils literal"><span class="pre">ndarray</span></tt>) &#8211; The vector <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficient">
+<tt class="descname">set_wavepacket_coefficient</tt><big>(</big><em>packetindex</em>, <em>index</em>, <em>value</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
+<li><strong>value</strong> &#8211; The new value of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficients">
+<tt class="descname">set_wavepacket_coefficients</tt><big>(</big><em>coefficients</em>, <em>basisshapes=None</em>, <em>packetindex=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<p>Warning: make sure the coefficients and basis shapes stay in sync!</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A single complex number.</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_parameters">
+<tt class="descname">set_wavepacket_parameters</tt><big>(</big><em>Pilist</em>, <em>packetindex=None</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the Hagedorn parameters <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>Pilist</strong> &#8211; The Hagedorn parameter set <img class="math" src="../_images/math/e1cf285bb6a36bb64b4e3f6567e557daafd190da.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.set_wavepackets">
+<tt class="descname">set_wavepackets</tt><big>(</big><em>packetlist</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.LinearCombinationOfHAWPs.slim_recursion">
+<tt class="descname">slim_recursion</tt><big>(</big><em>grid</em>, <em>packetindex</em>, <em>prefactor=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfHAWPs.slim_recursion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.
+This routine is a slim version compared to the full basis evaluation. At every moment
+we store only the data we really need to compute the next step until we hit the highest
+order basis functions.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A class having a <tt class="docutils literal"><span class="pre">get_nodes(...)</span></tt> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of a single component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> to evaluate.</li>
+<li><strong>prefactor</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/a3aea50980fd0d53683953da994dbfbe23210c74.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
+at the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note that this function does not include the global phase <img class="math" src="../_images/math/056350764f820245947ee3206230948a8eba8816.png" alt="\exp(\frac{i S}{\varepsilon^2})"/>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">LinearCombinationOfHAWPs</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">LinearCombinationOfHAWPs</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="LinearCombinationOfWPs.html"
+                        title="previous chapter">LinearCombinationOfWPs</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="GradientLCWP.html"
+                        title="next chapter">GradientLCWP</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/LinearCombinationOfHAWPs.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="GradientLCWP.html" title="GradientLCWP"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="LinearCombinationOfWPs.html" title="LinearCombinationOfWPs"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,459 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>MatrixPotentialMS &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="BasisShape" href="BasisShape.html" />
+    <link rel="prev" title="MatrixPotential2S" href="MatrixPotential2S.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BasisShape.html" title="BasisShape"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="MatrixPotential2S.html" title="MatrixPotential2S"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="matrixpotentialms">
+<h1>MatrixPotentialMS<a class="headerlink" href="#matrixpotentialms" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-matrixpotentialms-class"></span><h2>About the <tt class="docutils literal"><span class="pre">MatrixPotentialMS</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-289da6bc2413154eb0a4810a9d13532be6373a59.png" alt="Inheritance diagram of MatrixPotentialMS" usemap="#inheritance1ce63c1ccb" class="inheritance"/>
+<map id="inheritance1ce63c1ccb" name="inheritance1ce63c1ccb">
+<area shape="rect" id="node1" title="This class represents a potential :math:`V(x)` with :math:`x \in \mathbb{R}^D`." alt="" coords="5,5,221,31"/>
+<area shape="rect" id="node2" title="This class represents a matrix potential :math:`V(x)`. The potential is" alt="" coords="269,5,525,31"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.MatrixPotentialMS">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">MatrixPotentialMS</tt><big>(</big><em>expression</em>, <em>variables</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents a matrix potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. The potential is
+given as an analytic <img class="math" src="../_images/math/e124387baa3fb78556702e7e00266ce1954002e0.png" alt="N \times N"/> matrix expression. All methods use
+pure numerical techniques because symbolical calculations are unfeasible
+for 3 or more energy levels.</p>
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_eigenvalues">
+<tt class="descname">calculate_eigenvalues</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_eigenvalues" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all the eigenvalues <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.
+We can not do this by symbolic calculations, hence the function has an empty
+implementation. We compute the eigenvalues by numerical techniques in the corresponding
+<cite>evaluate_eigenvalues_at</cite> function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_eigenvectors">
+<tt class="descname">calculate_eigenvectors</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_eigenvectors" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate all the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.
+We can not do this by symbolic calculations, hence the function has an empty
+implementation. We compute the eigenvectors by numerical techniques in the corresponding
+<cite>evaluate_eigenvectors_at</cite> function.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_exponential">
+<tt class="descname">calculate_exponential</tt><big>(</big><em>factor=1</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_exponential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the matrix exponential <img class="math" src="../_images/math/ae7f8cdc94f67b7595d2bdab5c604444ddb26d77.png" alt="\exp(\alpha V)"/>. In the case
+of this class the matrix is of size <img class="math" src="../_images/math/e124387baa3fb78556702e7e00266ce1954002e0.png" alt="N \times N"/> thus the exponential
+can not be calculated analytically for a general matrix. We use numerical
+approximations to determine the matrix exponential. We just store
+the prefactor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> for use during numerical evaluation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The prefactor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> in the exponential.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_hessian">
+<tt class="descname">calculate_hessian</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_hessian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Hessian matrix <img class="math" src="../_images/math/520c97990c613c875ea10feaf7dcfc725895889e.png" alt="\nabla^2 \lambda_i"/> of the potential&#8217;s
+eigenvalues <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>. For potentials
+which depend only one variable, this equals the second derivative and <img class="math" src="../_images/math/64d032898fa3b7af06f14278c9c9312bcb374c67.png" alt="D=1"/>.
+Note that this function is idempotent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_jacobian">
+<tt class="descname">calculate_jacobian</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_jacobian" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the Jacobian matrix <img class="math" src="../_images/math/969b994360aa3f73e4b137e5629e5231c0934ea8.png" alt="\nabla \lambda_i"/> of the potential&#8217;s
+eigenvalues <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>. For potentials
+which depend only one variable, this equals the first derivative and <img class="math" src="../_images/math/64d032898fa3b7af06f14278c9c9312bcb374c67.png" alt="D=1"/>.
+Note that this function is idempotent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_local_quadratic">
+<tt class="descname">calculate_local_quadratic</tt><big>(</big><em>diagonal_component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_local_quadratic" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the local quadratic approximation matrix <img class="math" src="../_images/math/b6c31820e520ba1ee76ca06a3221d429c0c6c107.png" alt="U(x)"/> of the potential&#8217;s
+eigenvalues in <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/>. This function can be used for the homogeneous case
+and takes into account the leading component <img class="math" src="../_images/math/81fb922b6465a676d5056dfa76c3807d07fbfacd.png" alt="\chi \in [0,\ldots,N-1]"/>.
+If the parameter <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> is not given, calculate the local quadratic approximation
+matrix <img class="math" src="../_images/math/b6c31820e520ba1ee76ca06a3221d429c0c6c107.png" alt="U(x)"/> of all the potential&#8217;s eigenvalues in <img class="math" src="../_images/math/7327d24dc2d12421147d5944f0fc23e67753f1b0.png" alt="\Lambda"/>. This case
+can be used for the inhomogeneous case.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>diagonal_component</strong> &#8211; Dummy parameter which has no effect here.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.calculate_local_remainder">
+<tt class="descname">calculate_local_remainder</tt><big>(</big><em>diagonal_component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.calculate_local_remainder" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate the non-quadratic remainder matrix <img class="math" src="../_images/math/f6cf1d7676695db4fe650ba77f30c5598bffdc5b.png" alt="W(x) = V(x) - U(x)"/> of the
+quadratic approximation matrix <img class="math" src="../_images/math/b6c31820e520ba1ee76ca06a3221d429c0c6c107.png" alt="U(x)"/> of the potential&#8217;s eigenvalue matrix
+<img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/>. In the homogeneous case the matrix <img class="math" src="../_images/math/73f5e249c88b2b3068263480f576b051cb5c4f6e.png" alt="U"/> is given by
+<img class="math" src="../_images/math/469208090ad422b7091a905fa04615e7e21b6fed.png" alt="U(x) = \text{diag}([u_i,\ldots,u_i])"/> where in the inhomogeneous case it
+is given by <img class="math" src="../_images/math/5e20b7ac4e00d4ae4714e7d6ec52b654ca12d653.png" alt="U(x) = \text{diag}([u_0,\ldots,u_{N-1}])"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>diagonal_component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt> (default)) &#8211; Specifies the index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/3b765ea6939f1eba2541e91f870cb3c078aa29be.png" alt="\lambda_i"/>
+that gets expanded into a Taylor series <img class="math" src="../_images/math/4301e96aa92ce06a03e5d43e1cc0f6b52555b706.png" alt="u_i"/>. If set to
+<tt class="docutils literal"><span class="pre">None</span></tt> the inhomogeneous case is computed.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_at">
+<tt class="descname">evaluate_at</tt><big>(</big><em>grid</em>, <em>entry=None</em>, <em>as_matrix=True</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
+to evaluate the potential at.</li>
+<li><strong>entry</strong> (<em>A python tuple of two integers.</em>) &#8211; The indices <img class="math" src="../_images/math/0de78069ab15c688f6d8c6f59d5c5805bc969595.png" alt="(i,j)"/> of the component <img class="math" src="../_images/math/85c629034bc5fc3cc106a37b901bda9d0d110f5c.png" alt="V_{i,j}(x)"/>
+we want to evaluate or <tt class="docutils literal"><span class="pre">None</span></tt> to evaluate all entries.</li>
+<li><strong>as_matrix</strong> &#8211; Dummy parameter which has no effect here.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing <img class="math" src="../_images/math/b0614445362e91ebcad2b2650b0eab330c60a5ea.png" alt="N^2"/> numpy ndarrays of shape <img class="math" src="../_images/math/7e91db70d2c236fa6c80382f7ef726155a826c87.png" alt="(1, |\Gamma|)"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_eigenvalues_at">
+<tt class="descname">evaluate_eigenvalues_at</tt><big>(</big><em>grid</em>, <em>entry=None</em>, <em>as_matrix=False</em>, <em>sorted=True</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvalues_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the eigenvalues <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
+to evaluate the eigenvalues at.</li>
+<li><strong>entry</strong> (<em>A python tuple of two integers.</em>) &#8211; The indices <img class="math" src="../_images/math/0de78069ab15c688f6d8c6f59d5c5805bc969595.png" alt="(i,j)"/> of the component <img class="math" src="../_images/math/bc5aeca7a93bcf35f242e11c91985e3739d8449a.png" alt="\Lambda_{i,j}(x)"/>
+we want to evaluate or <tt class="docutils literal"><span class="pre">None</span></tt> to evaluate all entries. If <img class="math" src="../_images/math/83a912b8f9f6e0e366c2ec579037777b820f835d.png" alt="j = i"/>
+then we evaluate the eigenvalue <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/>.</li>
+<li><strong>as_matrix</strong> &#8211; Whether to include the off-diagonal zero entries of
+<img class="math" src="../_images/math/bc5aeca7a93bcf35f242e11c91985e3739d8449a.png" alt="\Lambda_{i,j}(x)"/> in the return value.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing the numpy ndarrays, all of shape <img class="math" src="../_images/math/7e91db70d2c236fa6c80382f7ef726155a826c87.png" alt="(1, |\Gamma|)"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_eigenvectors_at">
+<tt class="descname">evaluate_eigenvectors_at</tt><big>(</big><em>grid</em>, <em>sorted=True</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvectors_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
+to evaluate the eigenvectors at.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list containing the <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> numpy ndarrays, all of shape <img class="math" src="../_images/math/d16e6a6e129385b62ac6a9a940374a6653447d01.png" alt="(D, |\Gamma|)"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_exponential_at">
+<tt class="descname">evaluate_exponential_at</tt><big>(</big><em>grid</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_exponential_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the exponential of the potential matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
+to evaluate the exponential at.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The numerical approximation of the matrix exponential at the given grid nodes.
+A list contains the exponentials for all entries <img class="math" src="../_images/math/0de78069ab15c688f6d8c6f59d5c5805bc969595.png" alt="(i,j)"/>, each having
+a shape of <img class="math" src="../_images/math/7e91db70d2c236fa6c80382f7ef726155a826c87.png" alt="(1, |\Gamma|)"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_hessian_at">
+<tt class="descname">evaluate_hessian_at</tt><big>(</big><em>grid</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_hessian_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the list of Hessian matrices <img class="math" src="../_images/math/de7c2b448fe6790bc32c9e021184032d4cde87d1.png" alt="\nabla^2 \lambda_i(x)"/> at some grid
+nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> for one or all eigenvalues.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> the Hessian gets evaluated at.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/3b765ea6939f1eba2541e91f870cb3c078aa29be.png" alt="\lambda_i"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the potential&#8217;s Hessian at the given nodes. The result
+is an <tt class="docutils literal"><span class="pre">ndarray</span></tt> of shape <img class="math" src="../_images/math/ea6fe505038242f8efb89cbfd81157d9d1abb60f.png" alt="(D,D)"/> is we evaluate at a single
+grid node or of shape <img class="math" src="../_images/math/78b1df7c068e016c5e75857ffb2d1ea07667566a.png" alt="(D,D,|\Gamma|)"/> if we evaluate at multiple
+nodes simultaneously.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_jacobian_at">
+<tt class="descname">evaluate_jacobian_at</tt><big>(</big><em>grid</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_jacobian_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the list of Jacobian matrices <img class="math" src="../_images/math/1711e8e44b9b10cc2ffe806bc285e117490b8976.png" alt="\nabla \lambda_i(x)"/> at some grid
+nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> for one or all eigenvalues.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> the Jacobian gets evaluated at.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/3b765ea6939f1eba2541e91f870cb3c078aa29be.png" alt="\lambda_i"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the potential&#8217;s Jacobian at the given nodes. The result
+is a list of <tt class="docutils literal"><span class="pre">ndarray</span></tt> each of shape <img class="math" src="../_images/math/a41048c9da51dbfe7315f4c7f1706edd5381198f.png" alt="(D,1)"/> is we evaluate
+at a single grid node or of shape <img class="math" src="../_images/math/005cb5a9e026019c97383b5933b3baba3ed73487.png" alt="(D,|\Gamma|)"/>
+if we evaluate at multiple nodes simultaneously.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_local_quadratic_at">
+<tt class="descname">evaluate_local_quadratic_at</tt><big>(</big><em>grid</em>, <em>diagonal_component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_local_quadratic_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerically evaluate the local quadratic approximation matrix <img class="math" src="../_images/math/b6c31820e520ba1ee76ca06a3221d429c0c6c107.png" alt="U(x)"/> of
+the potential&#8217;s eigenvalues in <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> at the given grid nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> instance. (Numpy arrays are not directly supported yet.)) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/> we want to
+evaluate the quadratic approximation at.</li>
+<li><strong>diagonal_component</strong> &#8211; Specifies the index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/3b765ea6939f1eba2541e91f870cb3c078aa29be.png" alt="\lambda_i"/>
+that gets expanded into a Taylor series <img class="math" src="../_images/math/4301e96aa92ce06a03e5d43e1cc0f6b52555b706.png" alt="u_i"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of tuples or a single tuple. Each tuple <img class="math" src="../_images/math/66621f66f44f4d86fcc6a9dd951e2b829bae93ca.png" alt="(\lambda, J, H)"/> contains the
+the evaluated eigenvalue <img class="math" src="../_images/math/d87ebafa5ca3e7026d8169edcdd31c197b065bbc.png" alt="\lambda_i(\Gamma)"/>, its Jacobian <img class="math" src="../_images/math/a2ca07887503a290117c911f854edd1ee0114d77.png" alt="J(\Gamma)"/>
+and its Hessian <img class="math" src="../_images/math/48561220cb357966df855a3e586a18c0ff84205e.png" alt="H(\Gamma)"/> in this order.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.evaluate_local_remainder_at">
+<tt class="descname">evaluate_local_remainder_at</tt><big>(</big><em>grid</em>, <em>position</em>, <em>diagonal_component=None</em>, <em>entry=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.evaluate_local_remainder_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Numerically evaluate the non-quadratic remainder <img class="math" src="../_images/math/b738fcc004e96c1fbf021b4b995374bea20c503a.png" alt="W(x)"/> of the quadratic
+approximation <img class="math" src="../_images/math/b6c31820e520ba1ee76ca06a3221d429c0c6c107.png" alt="U(x)"/> of the potential&#8217;s eigenvalue <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> at the
+given nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
+<blockquote>
+<div>Warning: do not set the <tt class="docutils literal"><span class="pre">diagonal_component</span></tt> and the <tt class="docutils literal"><span class="pre">entry</span></tt> parameter both to <tt class="docutils literal"><span class="pre">None</span></tt>.</div></blockquote>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>grid</strong> &#8211; The grid nodes <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> the remainder <img class="math" src="../_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/> gets evaluated at.</li>
+<li><strong>position</strong> &#8211; The point <img class="math" src="../_images/math/2a4c57fa093973079ac38cece87fe4685656ab9b.png" alt="q \in \mathbb{R}^D"/> where the Taylor series is computed.</li>
+<li><strong>diagonal_component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt> (default)) &#8211; Specifies the index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/3b765ea6939f1eba2541e91f870cb3c078aa29be.png" alt="\lambda_i"/>
+that gets expanded into a Taylor series <img class="math" src="../_images/math/4301e96aa92ce06a03e5d43e1cc0f6b52555b706.png" alt="u_i"/> and whose
+remainder matrix <img class="math" src="../_images/math/f3d0a4ba09e66a718a746d737fc9f46d822f0f53.png" alt="W(x) = V(x) - \text{diag}([u_i,\ldots,u_i])"/>
+we evaluate. If set to <tt class="docutils literal"><span class="pre">None</span></tt> the inhomogeneous case given by
+<img class="math" src="../_images/math/8b3d04a79f4c8dfdbfa39e309ad74fe8dbb056cc.png" alt="W(x) = V(x) - \text{diag}([u_0,\ldots,u_{N-1}])"/> is computed.</li>
+<li><strong>entry</strong> (<em>A python tuple of two integers.</em>) &#8211; The entry <img class="math" src="../_images/math/8d0a83f7e53f2057dee65c238e64db73c7601832.png" alt="\left(i,j\right)"/> of the remainder matrix <img class="math" src="../_images/math/fa34489cf430b7630b30f28b2eb050e2489e3523.png" alt="W"/>
+that is evaluated.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list with <img class="math" src="../_images/math/b0614445362e91ebcad2b2650b0eab330c60a5ea.png" alt="N^2"/> <tt class="docutils literal"><span class="pre">ndarray</span></tt> elements or a single <tt class="docutils literal"><span class="pre">ndarray</span></tt>. Each
+containing the values of <img class="math" src="../_images/math/f842ba1f8d11199c0d7b6825cf1861bc5487aa1c.png" alt="W_{i,j}(\Gamma)"/>. Each array is of shape
+<img class="math" src="../_images/math/8d25fa04fc0df524261d7e843ccdd342df08316a.png" alt="(1,|\Gamma|)"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.get_dimension">
+<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.get_dimension" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.
+The dimension is equal to the number of free variables <img class="math" src="../_images/math/33dfc32d00ebd5c5791c824010a155d9e5630b6f.png" alt="x_i"/>
+where <img class="math" src="../_images/math/342c9c9e999f0568e992a131851146b08fa99040.png" alt="x := (x_1, x_2, ..., x_D)"/>.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.MatrixPotentialMS.get_number_components">
+<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotentialMS.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>
+supports. This is equivalent to the number of energy levels <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/>.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">MatrixPotentialMS</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">MatrixPotentialMS</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="MatrixPotential2S.html"
+                        title="previous chapter">MatrixPotential2S</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BasisShape.html"
+                        title="next chapter">BasisShape</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/MatrixPotentialMS.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BasisShape.html" title="BasisShape"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="MatrixPotential2S.html" title="MatrixPotential2S"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

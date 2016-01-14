@@ -1,0 +1,389 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>NSDInhomogeneous &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="SparsityOracle" href="SparsityOracle.html" />
+    <link rel="prev" title="SymbolicIntegral" href="SymbolicIntegral.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SparsityOracle.html" title="SparsityOracle"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="SymbolicIntegral.html" title="SymbolicIntegral"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="nsdinhomogeneous">
+<h1>NSDInhomogeneous<a class="headerlink" href="#nsdinhomogeneous" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-nsdinhomogeneous-class"></span><h2>About the <tt class="docutils literal"><span class="pre">NSDInhomogeneous</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-ed2af96baac308fd410b457e11b7650779d10eba.png" alt="Inheritance diagram of NSDInhomogeneous" usemap="#inheritance985a2b4335" class="inheritance"/>
+<map id="inheritance985a2b4335" name="inheritance985a2b4335">
+<area shape="rect" id="node2" title="This class is an abstract interface to quadratures in general." alt="" coords="5,5,177,31"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.NSDInhomogeneous">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">NSDInhomogeneous</tt><big>(</big><em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize the numerical steepest descent transformation
+for quadrature of highly oscillatory overlap integrals.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; Typically one uses an instance of <a class="reference internal" href="GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR" title="WaveBlocksND.GaussHermiteOriginalQR"><tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt></a>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.build_bilinear">
+<tt class="descname">build_bilinear</tt><big>(</big><em>Pibra</em>, <em>Piket</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.build_bilinear" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the oscillator <img class="math" src="../_images/math/1429c56b096c2710d9662b51c8c2cb61ce4bf90b.png" alt="-\overline{g_k} + g_l"/>
+occuring in the integral <img class="math" src="../_images/math/1548b37da773e0afbff5ebcc66013ec45972314d.png" alt="\langle\phi_k\left[\Pi_k\right] | \phi_l\left[\Pi_l\right]\rangle"/>
+into a bilinear form
+<img class="math" src="../_images/math/0144839bf3ec239063a0ebe61897aa8e570d0848.png" alt="g(x) = \underline{x}^{\mathrm{H}} \mathbf{A} \underline{x} + \underline{b}^{\mathrm{T}} \underline{x} + c"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Pibra</strong> &#8211; The parameters <img class="math" src="../_images/math/ca3c36d5fabc3d5b4b234d003ae615873b0deb02.png" alt="\Pi_k = (\underline{q_k}, \underline{p_k}, \mathbf{Q_k}, \mathbf{P_k})"/> from the &#8216;bra&#8217; packet.</li>
+<li><strong>Piket</strong> &#8211; The parameters <img class="math" src="../_images/math/583e120285bf84dedabc675683957f541648f9dc.png" alt="\Pi_l = (\underline{q_l}, \underline{p_l}, \mathbf{Q_l}, \mathbf{P_l})"/> from the &#8216;ket&#8217; packet.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Three arrays: a matrix <img class="math" src="../_images/math/3986f9b8ba3bd56d09ce9ff731826e829e72d8ea.png" alt="\mathbf{A}"/> of shape <img class="math" src="../_images/math/89950087802f1d3fe7d1bcfa3b42695d80ffbe64.png" alt="D \times D"/>,
+a vector <img class="math" src="../_images/math/fca931570b68cd0a7b9a36eeed67ab77c6c6a1f3.png" alt="\underline{b}"/> of shape <img class="math" src="../_images/math/a36d423d93dee0f84c77b8179105bd4952afc3a2.png" alt="D \times 1"/> and a scalar value <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.do_nsd">
+<tt class="descname">do_nsd</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.do_nsd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates by numerical steepest descent the integral
+<img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
+function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/60dd313b71dcb52ef5cc0ba8c42b5cce2b859872.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of this quadrature object.
+A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+necessary to reconstruct the current instance. A description
+never contains any data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.get_qr">
+<tt class="descname">get_qr</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current instance of the quadrature rule.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.initialize_operator">
+<tt class="descname">initialize_operator</tt><big>(</big><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_operator" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the operator part of the inner product to evaluate.
+This function initializes the operator used for quadratures
+and for building matrices.</p>
+<p>Note that the operator must not have residues and can be
+maximally polynomial but not exponential.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>operator</strong> &#8211; The operator of the inner product.
+If <tt class="docutils literal"><span class="pre">None</span></tt> a suitable identity is used.</li>
+<li><strong>matrix</strong> &#8211; Set this to <tt class="docutils literal"><span class="pre">True</span></tt> (Default is <tt class="docutils literal"><span class="pre">False</span></tt>) in case
+we want to compute the matrix elements.
+For nasty technical reasons we can not yet unify
+the operator call syntax.</li>
+<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.initialize_packet">
+<tt class="descname">initialize_packet</tt><big>(</big><em>pacbra</em>, <em>packet=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_packet" title="Permalink to this definition">¶</a></dt>
+<dd><p>Provide the wavepacket parts of the inner product to evaluate.
+Since the quadrature is inhomogeneous, different wavepackets can be
+used for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>pacbra</strong> &#8211; The packet that is used for the &#8216;bra&#8217; part.</li>
+<li><strong>packet</strong> &#8211; The packet that is used for the &#8216;ket&#8217; part.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.mix_parameters">
+<tt class="descname">mix_parameters</tt><big>(</big><em>Pibra</em>, <em>Piket</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.mix_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Mix the two parameter sets <img class="math" src="../_images/math/7dec972d634439bf5a19ed81c57d4acbdcab587c.png" alt="\Pi_i"/> and <img class="math" src="../_images/math/797501c1a4b0c3a07d7c0ee7d87c0848d71f4f7a.png" alt="\Pi_j"/>
+from the &#8216;bra&#8217; and the &#8216;ket&#8217; wavepackets <img class="math" src="../_images/math/4ebbd138d74ec566a2838325c988a614d1dd1276.png" alt="\Phi\left[\Pi_i\right]"/>
+and <img class="math" src="../_images/math/db14dff0f9663705d33ffd6ce75ba3ec1762fc25.png" alt="\Phi^\prime\left[\Pi_j\right]"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>Pibra</strong> &#8211; The parameter set <img class="math" src="../_images/math/7dec972d634439bf5a19ed81c57d4acbdcab587c.png" alt="\Pi_i"/> from the bra part wavepacket.</li>
+<li><strong>Piket</strong> &#8211; The parameter set <img class="math" src="../_images/math/797501c1a4b0c3a07d7c0ee7d87c0848d71f4f7a.png" alt="\Pi_j"/> from the ket part wavepacket.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The mixed parameters <img class="math" src="../_images/math/edb0e26cacb2812d4f30d3151e3296b49bf29bcc.png" alt="q_0"/> and <img class="math" src="../_images/math/09d3a718daa62d2ce2a06e4de2a806390d0f3450.png" alt="Q_S"/>. (See the theory for details.)</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.perform_build_matrix">
+<tt class="descname">perform_build_matrix</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Computes by standard quadrature the matrix elements
+<img class="math" src="../_images/math/95754092d910f9d6e6cb0fef991c2377bcdee3cf.png" alt="\langle\Phi_i | f |\Phi^\prime_j\rangle"/> for a general function
+<img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/60dd313b71dcb52ef5cc0ba8c42b5cce2b859872.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.perform_quadrature">
+<tt class="descname">perform_quadrature</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_quadrature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluates by numerical steepest descent the integral
+<img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
+function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A single complex floating point number.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.prepare">
+<tt class="descname">prepare</tt><big>(</big><em>rows</em>, <em>cols</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.prepare" title="Permalink to this definition">¶</a></dt>
+<dd><p>Precompute some values needed for evaluating the quadrature
+<img class="math" src="../_images/math/d02563476e7f9ceb5b255b99e15fa76b4e4318dd.png" alt="\langle \Phi_i | f(x) | \Phi^\prime_j \rangle"/> or the corresponding
+matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>rows</strong> &#8211; A list of all <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> with <img class="math" src="../_images/math/c641334893af173dd5b3030f99548af3d0e9ec30.png" alt="0 \leq i \leq N"/>
+selecting the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> for which te precompute values.</li>
+<li><strong>cols</strong> &#8211; A list of all <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> with <img class="math" src="../_images/math/8b74560b070d7dc4a60efb67b313b253b717f9ce.png" alt="0 \leq j \leq N"/>
+selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> for which te precompute values.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<p>Note that the two arguments are not used in the current implementation.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.NSDInhomogeneous.set_qr">
+<tt class="descname">set_qr</tt><big>(</big><em>QR</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.set_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">NSDInhomogeneous</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">NSDInhomogeneous</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="SymbolicIntegral.html"
+                        title="previous chapter">SymbolicIntegral</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SparsityOracle.html"
+                        title="next chapter">SparsityOracle</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/NSDInhomogeneous.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SparsityOracle.html" title="SparsityOracle"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="SymbolicIntegral.html" title="SymbolicIntegral"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

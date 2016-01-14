@@ -1,0 +1,259 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>InhomogeneousInnerProduct &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="HomogeneousInnerProductLCWP" href="HomogeneousInnerProductLCWP.html" />
+    <link rel="prev" title="HomogeneousInnerProduct" href="HomogeneousInnerProduct.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HomogeneousInnerProductLCWP.html" title="HomogeneousInnerProductLCWP"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="HomogeneousInnerProduct.html" title="HomogeneousInnerProduct"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="inhomogeneousinnerproduct">
+<h1>InhomogeneousInnerProduct<a class="headerlink" href="#inhomogeneousinnerproduct" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-inhomogeneousinnerproduct-class"></span><h2>About the <tt class="docutils literal"><span class="pre">InhomogeneousInnerProduct</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<p class="graphviz">
+<img src="../_images/inheritance-d243f220644ac1cd2a7c70ec66975dd2e750ed14.png" alt="Inheritance diagram of InhomogeneousInnerProduct" usemap="#inheritance5af1cdf705" class="inheritance"/>
+<map id="inheritance5af1cdf705" name="inheritance5af1cdf705">
+<area shape="rect" id="node2" title="This class is an abstract interface to inner products in general." alt="" coords="5,5,193,31"/>
+</map>
+</p>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct">
+<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">InhomogeneousInnerProduct</tt><big>(</big><em>delegate=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.__init__">
+<tt class="descname">__init__</tt><big>(</big><em>delegate=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class computes the inhomogeneous inner product
+<img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delegate</strong> (A <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> subclass instance.) &#8211; The delegate inner product.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.build_matrix">
+<tt class="descname">build_matrix</tt><big>(</big><em>pacbra</em>, <em>packet=None</em>, <em>operator=None</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.build_matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delegates the computation of the matrix elements <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>
+for a general function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
+The matrix is computed without including the coefficients <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/867c955c2c72005c675f66dc9ba9d508bed05cb6.png" alt="N^\prime"/> components.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/67abe63d842662798a8bd651ffff8acee9d18af8.png" alt="f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
+<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix of size <img class="math" src="../_images/math/16129530b9b9b3ca77f729e4fd5a02e1067710f6.png" alt="\sum_i^N |\mathfrak{K}_i| \times \sum_j^{N^\prime} |\mathfrak{K}^\prime_j|"/>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.get_delegate">
+<tt class="descname">get_delegate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.get_delegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> subclass instance
+used for evaluation of this inner product.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The current instance of the quadrature.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.get_description">
+<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.get_description" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return a description of this inner product object.
+A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+necessary to reconstruct the current instance. A description
+never contains any data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.quadrature">
+<tt class="descname">quadrature</tt><big>(</big><em>pacbra</em>, <em>packet=None</em>, <em>operator=None</em>, <em>summed=False</em>, <em>component=None</em>, <em>diag_component=None</em>, <em>diagonal=False</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.quadrature" title="Permalink to this definition">¶</a></dt>
+<dd><p>Delegates the evaluation of <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/> for a general
+function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/867c955c2c72005c675f66dc9ba9d508bed05cb6.png" alt="N^\prime"/> components.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/6ff0fd1ce23d51119969a53c0ebb7d6a91ce244b.png" alt="f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
+<li><strong>summed</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to sum up the individual integrals <img class="math" src="../_images/math/f2feda174b43b1e69d87b8e83f40bfbf00ff85eb.png" alt="\langle\Phi_i|f_{i,j}|\Phi^\prime_j\rangle"/>.</li>
+<li><strong>component</strong> &#8211; Request only the i-th component of the result. Remember that <img class="math" src="../_images/math/64c90cb4de234ef09f9df4c716e36d8a9eff1c34.png" alt="i \in [0, N \cdot N^\prime-1]"/>.</li>
+<li><strong>diag_component</strong> &#8211; Request only the i-th component from the diagonal entries, here <img class="math" src="../_images/math/750a348bbd54a60dc92109496e52604230811e89.png" alt="i \in [0, N^\prime-1]"/>.
+Note that <tt class="docutils literal"><span class="pre">component</span></tt> takes precedence over <tt class="docutils literal"><span class="pre">diag_component</span></tt> if both are supplied. (Which is discouraged)</li>
+<li><strong>diagonal</strong> &#8211; Only return the diagonal elements <img class="math" src="../_images/math/3b986006f84a5b094c41ff7a6c188701bd2e649c.png" alt="\langle\Phi_i|f_{i,i}|\Phi^\prime_i\rangle"/>.
+This is useful for diagonal operators <img class="math" src="../_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/>.</li>
+<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the braket <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>. This is either a scalar value or
+a list of <img class="math" src="../_images/math/bd545bf7332e1c0703888f08debafef33e03f7e3.png" alt="N \cdot N^\prime"/> scalar elements depending on the value of <tt class="docutils literal"><span class="pre">summed</span></tt>.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.InhomogeneousInnerProduct.set_delegate">
+<tt class="descname">set_delegate</tt><big>(</big><em>delegate</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.set_delegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> subclass instance used for quadrature.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delegate</strong> &#8211; The new <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">InhomogeneousInnerProduct</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">InhomogeneousInnerProduct</span></tt> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="HomogeneousInnerProduct.html"
+                        title="previous chapter">HomogeneousInnerProduct</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="HomogeneousInnerProductLCWP.html"
+                        title="next chapter">HomogeneousInnerProductLCWP</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/waveblocks_classes/InhomogeneousInnerProduct.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="HomogeneousInnerProductLCWP.html" title="HomogeneousInnerProductLCWP"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="HomogeneousInnerProduct.html" title="HomogeneousInnerProduct"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>
