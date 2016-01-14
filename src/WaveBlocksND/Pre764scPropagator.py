@@ -8,7 +8,7 @@ This file contains a propagator class for homogeneous wavepackets.
 """
 
 from functools import partial
-from numpy import dot, eye, atleast_2d, sqrt
+from numpy import dot, eye, atleast_2d
 from numpy.linalg import inv, det
 
 from Propagator import Propagator
@@ -176,7 +176,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply preprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            # Inner time step (fit to third term)
+            # Inner time step (fit to third term: eps^3 dt^4)
             r = self._innerorder
             alpha = 3.0
             beta = 4.0
@@ -213,7 +213,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply postprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
-            # Inner time step (fit to third term)
+            # Inner time step (fit to third term: eps^3 dt^4)
             r = self._innerorder
             alpha = 3.0
             beta = 4.0
@@ -253,7 +253,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
 
-            # Inner time step (fit to third term)
+            # Inner time step (fit to third term: eps^3 dt^4)
             r = self._innerorder
             alpha = 3.0
             beta = 4.0
