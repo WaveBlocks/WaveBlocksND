@@ -345,6 +345,12 @@ def get_value(item, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     :param rdel: Right delimiter of the pattern.
     :return: The ``value`` part of the given item.
     """
+    # Assert 'item' is a single item
+    if not (item.count(mdel) == 1 and
+            item[0] == ldel and
+            item[-1] == rdel):
+        raise ValueError("The item '"+str(item)+"' is not a single item.")
+
     rightpart = item.partition(mdel)
     value = rightpart[-1].partition(rdel)
     return value[0]
