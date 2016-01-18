@@ -299,7 +299,7 @@ def get_items(name, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     :return: A list of all ``key=value`` items present in the ``name``.
     """
     parts = name.split(ldel)
-    items = [ ldel+p for p in parts if rdel in p ]
+    items = [ ldel + p.rsplit(rdel)[0] + rdel for p in parts if rdel in p ]
     return items
 
 
