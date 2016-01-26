@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 
 def readme():
     with open('README.md') as f:
@@ -11,7 +11,7 @@ setup(name = 'WaveBlocksND',
       author = 'R. Bourquin',
       author_email = 'raoul.bourquin@sam.math.ethz.ch',
       url = 'https://github.com/WaveBlocks/WaveBlocksND',
-      packages = ['WaveBlocksND'],
+      packages = find_packages(),
       scripts = [],
       classifiers = [
         'Development Status :: 4 - Beta',
@@ -25,8 +25,11 @@ setup(name = 'WaveBlocksND',
       ],
       license = 'BSD',
       install_requires = [
-        'h5py',
-        'sympy',
-        'numpy',
-        'scipy',
-      ])
+        'h5py >= 2.4.0',
+        'matplotlib >= 1.4.3',
+        #'mayavi',
+        'numpy >= 1.9.2',
+        'scipy >= 0.14.1',
+        'sympy >= 0.7.6',
+      ],
+)
