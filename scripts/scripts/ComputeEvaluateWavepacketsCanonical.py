@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Sample wavepackets at the nodes of a given grid and save

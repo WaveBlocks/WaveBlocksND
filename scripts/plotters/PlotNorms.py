@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Plot the norms of the different wavepackets as well as the sum of all norms.

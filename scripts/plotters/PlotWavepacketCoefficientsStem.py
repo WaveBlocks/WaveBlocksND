@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Plot the coefficients $c_i$ of each component of a homogeneous or

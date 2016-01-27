@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Flip the signs of the coefficients of some eigenstate wavepackets.

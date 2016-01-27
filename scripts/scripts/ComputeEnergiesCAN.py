@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Compute the energies of the different wavepackets or wavefunctions.

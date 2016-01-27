@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Plot the eigenvalues (energy levels) of the potential.

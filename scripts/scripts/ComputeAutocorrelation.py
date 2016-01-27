@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 Compute the autocorrelations of the different wavepackets or wavefunctions.

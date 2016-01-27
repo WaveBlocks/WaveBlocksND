@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """The WaveBlocks Project
 
 This file is main script for running simulations with WaveBlocks.

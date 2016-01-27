@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 r"""The WaveBlocks Project
 
 Plot the evolution of the parameters :math:`Pi_i = (q, p, Q, P, S)`
