@@ -59,13 +59,13 @@ for blockid in blockids:
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
-        import EnergiesWavepacket
+        from WaveBlocksND.Interface import EnergiesWavepacket
         EnergiesWavepacket.compute_energy_hawp(iom, blockid=blockid, eigentrafo=args.eigentransform, iseigen=False)
     elif iom.has_wavefunction(blockid=blockid):
-        import EnergiesWavefunction
+        from WaveBlocksND.Interface import EnergiesWavefunction
         EnergiesWavefunction.compute_energy(iom, blockid=blockid, eigentrafo=args.eigentransform, iseigen=False)
     elif iom.has_inhomogwavepacket(blockid=blockid):
-        import EnergiesWavepacket
+        from WaveBlocksND.Interface import EnergiesWavepacket
         EnergiesWavepacket.compute_energy_inhawp(iom, blockid=blockid, eigentrafo=args.eigentransform, iseigen=False)
     else:
         print("Warning: Not computing any energies in block '%s'!" % blockid)

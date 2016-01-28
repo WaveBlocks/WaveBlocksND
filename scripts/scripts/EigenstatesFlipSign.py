@@ -38,7 +38,7 @@ if not "all" in args.blockid:
     blockids = [ bid for bid in args.blockid if bid in blockids ]
 
 # Iterate over all blocks
-for blockid in blocks_to_handle:
+for blockid in blockids:
     if iom.has_wavepacket(blockid=blockid):
         # Ugly hack using raw hdf5 data access
         path = "/datablock_"+str(blockid)+"/wavepacket/coefficients/c_0"

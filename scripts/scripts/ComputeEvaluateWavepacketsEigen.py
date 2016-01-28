@@ -68,10 +68,10 @@ for blockid in blockids:
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
-        import EvaluateWavepackets
+        from WaveBlocksND.Interface import EvaluateWavepackets
         EvaluateWavepackets.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
-        import EvaluateWavepacketsInhomog
+        from WaveBlocksND.Interface import EvaluateWavepacketsInhomog
         EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.eigentransform)
     else:
         print("Warning: Not evaluating any wavepackets in block '%s'!" % blockid)

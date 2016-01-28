@@ -64,18 +64,18 @@ for groupid in iomc.get_group_ids():
 
         # See if we have a wavefunction
         if iomc.has_wavefunction(blockid=blockid):
-            from EigentransformWavefunction import transform_wavefunction_to_eigen
-            transform_wavefunction_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
+            from WaveBlocksND.Interface import EigentransformWavefunction
+            EigentransformWavefunction.transform_wavefunction_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
 
         # See if we have a homogeneous wavepacket next
         if iomc.has_wavepacket(blockid=blockid):
-            from EigentransformHagedornWavepacket import transform_hawp_to_eigen
-            transform_hawp_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
+            from WaveBlocksND.Interface import EigentransformHagedornWavepacket
+            EigentransformHagedornWavepacket.transform_hawp_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
 
         # See if we have an inhomogeneous wavepacket next
         if iomc.has_inhomogwavepacket(blockid=blockid):
-            from EigentransformHagedornWavepacket import transform_inhawp_to_eigen
-            transform_inhawp_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
+            from WaveBlocksND.Interface import EigentransformHagedornWavepacket
+            EigentransformHagedornWavepacket.transform_inhawp_to_eigen(iomc, iome, blockidin=blockid, blockidout=blockid)
 
 iomc.finalize()
 iome.finalize()

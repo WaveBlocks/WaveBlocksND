@@ -105,13 +105,13 @@ for blockid in blockids:
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
-        import AutocorrelationWavepacket
+        from WaveBlocksND.Interface import AutocorrelationWavepacket
         AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_wavefunction(blockid=blockid):
-        import AutocorrelationWavefunction
+        from WaveBlocksND.Interface import AutocorrelationWavefunction
         AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
-        import AutocorrelationWavepacket
+        from WaveBlocksND.Interface import AutocorrelationWavepacket
         AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
     else:
         print("Warning: Not computing any autocorrelations in block '%s'!" % blockid)

@@ -59,13 +59,13 @@ for blockid in blockids:
     # NOTE: Add new algorithms here
 
     if iom.has_wavepacket(blockid=blockid):
-        import NormWavepacket
+        from WaveBlocksND.Interface import NormWavepacket
         NormWavepacket.compute_norm_hawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_wavefunction(blockid=blockid):
-        import NormWavefunction
+        from WaveBlocksND.Interface import NormWavefunction
         NormWavefunction.compute_norm(iom, blockid=blockid, eigentrafo=args.eigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
-        import NormWavepacket
+        from WaveBlocksND.Interface import NormWavepacket
         NormWavepacket.compute_norm_inhawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
     else:
         print("Warning: Not computing any norm in block '%s'!" % blockid)

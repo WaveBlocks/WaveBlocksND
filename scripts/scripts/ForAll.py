@@ -26,8 +26,8 @@ from WaveBlocksND import GlobalDefaults
 save_extensions = [ GlobalDefaults.ext_resultdatafile ]
 
 try:
-    from GraphicsDefaults import output_format
-    save_extensions.append(output_format)
+    from WaveBlocksND.Interface import GraphicsDefaults
+    save_extensions.append(GraphicsDefaults.output_format)
 except:
     save_extensions.append(".png")
 
