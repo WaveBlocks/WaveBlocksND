@@ -1,8 +1,25 @@
 from setuptools import setup, find_packages
+import os
+
 
 def readme():
     with open('README.md') as f:
         return f.read()
+
+
+def find_scripts(*paths):
+    scripts = []
+    for path in paths:
+        for fi in os.listdir(path):
+            if fi.endswith(".py"):
+                fi = os.path.join(path, fi)
+                with open(fi) as f:
+                    l = f.readlines()[0]
+                    if l.startswith("#!"):
+                          scripts.append(fi)
+
+    return scripts
+
 
 setup(name = 'WaveBlocksND',
       version = '0.5',
@@ -12,15 +29,14 @@ setup(name = 'WaveBlocksND',
       author_email = 'raoul.bourquin@sam.math.ethz.ch',
       url = 'https://github.com/WaveBlocks/WaveBlocksND',
       packages = find_packages(),
-      classifiers = [
-        'Development Status :: 4 - Beta',
-        'Topic :: Scientific/Engineering :: Mathematics',
-        'Topic :: Scientific/Engineering :: Physics',
-        'Topic :: Scientific/Engineering :: Chemistry',
-        'Intended Audience :: Science/Research',
-        'License :: OSI Approved :: BSD License',
-        'Environment :: Console',
-        'Programming Language :: Python :: 2.7',
+      classifiers = ['Development Status :: 4 - Beta',
+                     'Topic :: Scientific/Engineering :: Mathematics',
+                     'Topic :: Scientific/Engineering :: Physics',
+                     'Topic :: Scientific/Engineering :: Chemistry',
+                     'Intended Audience :: Science/Research',
+                     'License :: OSI Approved :: BSD License',
+                     'Environment :: Console',
+                     'Programming Language :: Python :: 2.7',
       ],
       license = 'BSD',
       install_requires = [
@@ -31,40 +47,5 @@ setup(name = 'WaveBlocksND',
         'scipy >= 0.14.1',
         'sympy >= 0.7.6',
       ],
-      scripts = [
-        'scripts/scripts/Batch.py',
-        'scripts/scripts/ComputeAutocorrelation.py',
-        'scripts/scripts/ComputeAutocorrelationNET.py',
-        'scripts/scripts/ComputeEigenstates.py',
-        'scripts/scripts/ComputeEnergies.py',
-        'scripts/scripts/ComputeEnergiesCAN.py',
-        'scripts/scripts/ComputeEnergiesNET.py',
-        'scripts/scripts/ComputeEvaluateWavepacketsCanonical.py',
-        'scripts/scripts/ComputeEvaluateWavepacketsEigen.py',
-        'scripts/scripts/ComputeNorms.py',
-        'scripts/scripts/ComputeNormsNET.py',
-        'scripts/scripts/ComputeTransformToEigen.py',
-        'scripts/scripts/ConfigurationGenerator.py',
-        'scripts/scripts/DeleteWavefunction.py',
-        'scripts/scripts/EigenstatesFlipSign.py',
-        'scripts/scripts/ForAll.py',
-        'scripts/scripts/Main.py',
-        'scripts/plotters/PlotAutocorrelations.py',
-        'scripts/plotters/PlotEnergies.py',
-        'scripts/plotters/PlotNorms.py',
-        'scripts/plotters/PlotPotential1D.py',
-        'scripts/plotters/PlotPotential2D.py',
-        'scripts/plotters/PlotWavefunction1D.py',
-        'scripts/plotters/PlotWavefunction2Dcontour.py',
-        'scripts/plotters/PlotWavefunction2Dsurface.py',
-        'scripts/plotters/PlotWavepacket1D.py',
-        'scripts/plotters/PlotWavepacket2Dcontour.py',
-        'scripts/plotters/PlotWavepacketCoefficients.py',
-        'scripts/plotters/PlotWavepacketCoefficientsMap.py',
-        'scripts/plotters/PlotWavepacketCoefficientsMapEigen.py',
-        'scripts/plotters/PlotWavepacketCoefficientsStem.py',
-        'scripts/plotters/PlotWavepacketParameters1D.py',
-        'scripts/plotters/PlotWavepacketParametersDD.py',
-        'scripts/plotters/PlotWavepacketParametersSchema2D.py',
-        'scripts/plotters/PlotWavepacketParametersTrajectory2D.py'
-      ])
+      scripts = find_scripts('./scripts/scripts', './scripts/plotters/') + ['./scripts/sh/make_video.sh']
+)
