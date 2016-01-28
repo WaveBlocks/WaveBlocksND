@@ -3,7 +3,7 @@
 Compute the norms of the homogeneous wavepackets as well as the sum of all norms.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 

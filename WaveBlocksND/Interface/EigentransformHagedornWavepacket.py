@@ -3,7 +3,7 @@
 Compute the transformation to the eigen basis for wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 

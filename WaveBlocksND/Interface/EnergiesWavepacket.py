@@ -3,7 +3,7 @@
 Compute the kinetic and potential energies of the homogeneous wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
