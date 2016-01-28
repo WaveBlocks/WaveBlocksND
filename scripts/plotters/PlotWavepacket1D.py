@@ -5,7 +5,7 @@ Plot the wavepackets probability densities
 for one-dimensional wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2014 R. Bourquin
+@copyright: Copyright (C) 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -74,7 +74,6 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
         print(" Plotting frame of timestep # %d" % step)
 
         HAWP = iom.load_wavepacket(step, blockid=blockid)
-        N = HAWP.get_number_components()
 
         # Transform the values to the eigenbasis
         if eigentransform:

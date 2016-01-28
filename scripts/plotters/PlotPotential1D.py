@@ -5,7 +5,7 @@ Plot the eigenvalues (energy levels) of the potential.
 This script is only for one-dimensional potentials.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -19,7 +19,7 @@ from WaveBlocksND import TensorProductGrid
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
+from WaveBlocksND.Interface import GraphicsDefaults as GD
 
 
 def plot_potential(grid, potential, view=None, size=(12,9)):

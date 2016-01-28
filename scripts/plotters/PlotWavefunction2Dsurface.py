@@ -5,7 +5,7 @@ Plot the wavefunctions probability densities
 for two-dimensional wavefunctions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 

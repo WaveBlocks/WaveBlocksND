@@ -5,7 +5,7 @@ Plot the wavefunctions probability densities
 for one-dimensional wavefunctions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 

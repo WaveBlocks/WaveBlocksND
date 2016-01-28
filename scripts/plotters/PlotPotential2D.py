@@ -5,7 +5,7 @@ Plot the eigenvalues (energy levels) of the potential.
 This script is only for two-dimensional potentials.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 

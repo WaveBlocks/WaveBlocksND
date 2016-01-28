@@ -6,7 +6,7 @@ of a homogeneous or inhomogeneous Hagedorn wavepacket during the
 time propagation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -16,7 +16,7 @@ from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
+from WaveBlocksND.Interface import GraphicsDefaults as GD
 
 
 def read_data_homogeneous(iom, blockid=0):

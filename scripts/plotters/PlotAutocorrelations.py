@@ -4,18 +4,18 @@
 Plot the autocorrelations of the different wavepackets as well as the sum of all autocorrelations.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
-from numpy import max, real, imag, abs, add
+from numpy import real, imag, abs, add
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
+from WaveBlocksND.Interface import GraphicsDefaults as GD
 
 
 def read_all_datablocks(iom):

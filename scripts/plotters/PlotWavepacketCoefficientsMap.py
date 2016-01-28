@@ -9,7 +9,7 @@ Note that this script will fail to produce correct results if the
 basis shapes are adaptive and their mappings mu incompatible!
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -20,7 +20,7 @@ from matplotlib.pyplot import figure, close
 from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import plotcm
 from WaveBlocksND import GlobalDefaults as GLD
-import GraphicsDefaults as GD
+from WaveBlocksND.Interface import GraphicsDefaults as GD
 
 
 def read_data_homogeneous(iom, blockid=0):
