@@ -173,9 +173,7 @@ def generate_configurations(pa, gp, lp, cfname="Parameters", cfpath=GlobalDefaul
     i = 0
     for cv in VG:
         i += 1
-
-        # Too bad dict comprehensions only available in python >= 2.7
-        params = dict([ item for item in zip(lpk, cv) ])
+        params = {k:v for k,v in zip(lpk, cv)}
 
         filename = construct_name(cfname, params)
         filepath = os.path.join(".", cfpath, filename)

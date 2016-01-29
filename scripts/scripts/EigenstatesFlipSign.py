@@ -12,7 +12,6 @@ import argparse
 
 from WaveBlocksND import IOManager
 
-
 parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--datafile",
@@ -40,7 +39,7 @@ if not "all" in args.blockid:
 # Iterate over all blocks
 for blockid in blockids:
     if iom.has_wavepacket(blockid=blockid):
-        # Ugly hack using raw hdf5 data access
+        # TODO: Ugly hack using raw hdf5 data access
         path = "/datablock_"+str(blockid)+"/wavepacket/coefficients/c_0"
         iom._srf[path][:] *= -1.0
 
