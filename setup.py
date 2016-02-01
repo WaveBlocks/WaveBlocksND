@@ -47,5 +47,6 @@ setup(name = 'WaveBlocksND',
         'scipy >= 0.14.1',
         'sympy >= 0.7.6',
       ],
+      include_package_data = True,
       scripts = find_scripts('./scripts/scripts', './scripts/plotters/') + ['./scripts/sh/make_video.sh']
 )
