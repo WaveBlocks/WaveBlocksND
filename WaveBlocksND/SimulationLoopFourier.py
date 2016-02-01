@@ -4,7 +4,7 @@ This file contains the main simulation loop
 for the Fourier propagator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -23,12 +23,13 @@ class SimulationLoopFourier(SimulationLoop):
     propagates a set of initial values during a time evolution.
     """
 
-    def __init__(self, parameters):
+    def __init__(self, parameters, resultsfile):
         """Create a new simulation loop instance for a simulation
         using the Fourier propagation method.
 
         :param parameters: The simulation parameters.
         :type parameters: A :py:class:`ParameterProvider` instance.
+        :param resultsfile: Path and filename of the hdf5 output file.
         """
         # Keep a reference to the simulation parameters
         self.parameters = parameters
@@ -44,7 +45,7 @@ class SimulationLoopFourier(SimulationLoop):
 
         # Set up serialization of simulation data
         self.IOManager = IOManager()
-        self.IOManager.create_file()
+        self.IOManager.create_file(resultsfile)
         self.IOManager.create_block()
 
         # Save the simulation parameters
