@@ -1,0 +1,4 @@
+include README.md
+include examples/
+include doc/Makefile
+include doc/source/
