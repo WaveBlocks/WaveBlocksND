@@ -11,13 +11,15 @@ Smolyak construction.
 
 from copy import deepcopy
 import operator as op
+from functools import reduce
 from numpy import hstack, vsplit, squeeze, lexsort, where, vstack, multiply
 from numpy.linalg import norm
 from scipy.special import binom
 
-from QuadratureRule import QuadratureRule
-from Combinatorics import lattice_points_norm
-from Utils import meshgrid_nd
+from .QuadratureRule import QuadratureRule
+from .Combinatorics import lattice_points_norm
+from .Utils import meshgrid_nd
+
 
 __all__ = ["SmolyakQR"]
 
@@ -84,7 +86,7 @@ class SmolyakQR(QuadratureRule):
 
     def __str__(self):
         s = "Sparse grid (Smolyak) quadrature rule consisting of:\n"
-        l = ["  " + str(rule) + "\n" for k,rule in self._rules.iteritems() if k <= self._level]
+        l = ["  " + str(rule) + "\n" for k,rule in self._rules.items() if k <= self._level]
         s += reduce(op.add, l)
         return s
 
@@ -155,7 +157,7 @@ class SmolyakQR(QuadratureRule):
         factors = []
 
         # Index Set
-        for q in xrange(max(0, K-D), K):
+        for q in range(max(0, K-D), K):
             S = lattice_points_norm(D, q)
             for j, s in enumerate(S):
                 # Only use non-negative nodes for the construction.
@@ -175,7 +177,7 @@ class SmolyakQR(QuadratureRule):
 
         # Sort
         allnodes = hstack(allnodes).reshape(D,-1)
-        allweights = hstack([factor*weights for factor, weights in zip(factors,allweights)]).reshape(1,-1)
+        allweights = hstack([f*w for f, w in zip(factors,allweights)]).reshape(1,-1)
 
         I = lexsort(map(squeeze, vsplit(allnodes, D))[::-1])
 
@@ -188,7 +190,7 @@ class SmolyakQR(QuadratureRule):
 
         no = norm(allnodes[:,:-1] - allnodes[:,1:], axis=0)
 
-        for col in xrange(1, allnodes.shape[1]):
+        for col in range(1, allnodes.shape[1]):
             if no[col-1] <= tolerance:
                 allweights[0,last] += allweights[0,col]
                 allweights[0,col] = 0
@@ -200,7 +202,7 @@ class SmolyakQR(QuadratureRule):
         allweights = allweights[:,I]
 
         # Mirror points to all other hyperoctants
-        for d in xrange(D):
+        for d in range(D):
             indices = abs(allnodes[d,:]) >= tolerance
             mirrorn = allnodes[:,indices]
             mirrorn[d,:] *= -1.0

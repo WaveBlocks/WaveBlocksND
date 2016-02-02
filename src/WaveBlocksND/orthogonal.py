@@ -516,7 +516,7 @@ def hermite_recursion(n, x):
     if n >= 1:
         Hnm1 = Hn
         Hn = sqrt(2.0) * x * Hnm1
-        for k in xrange(2, n+1):
+        for k in range(2, n+1):
             Hnp1 = sqrt(2.0/k) * x * Hn - sqrt((k-1.0)/k) * Hnm1
             Hnm1 = Hn
             Hn = Hnp1

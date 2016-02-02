@@ -10,7 +10,7 @@ subtype of the instance is derived from the potentials' symbolic expression.
 
 import sympy
 
-import GlobalDefaults
+from . import GlobalDefaults
 
 
 def create_potential(description):
@@ -33,8 +33,8 @@ def create_potential(description):
 
     if type(potential_reference) == str:
         # Try to load the potential from the library
-        import PotentialLibrary as PL
-        if PL.__dict__.has_key(potential_reference):
+        from . import PotentialLibrary as PL
+        if potential_reference in PL.__dict__:
             potential_description = PL.__dict__[potential_reference]
         else:
             raise ValueError("Unknown potential " + potential_reference + " requested from library.")
@@ -58,7 +58,7 @@ def create_potential(description):
     potmatrix = [ [ sympy.sympify(item) for item in row ] for row in pot ]
 
     # Get the default parameters, if any
-    if potential_description.has_key("defaults"):
+    if "defaults" in potential_description:
         default_params = potential_description["defaults"]
     else:
         default_params = {}
@@ -76,10 +76,10 @@ def create_potential(description):
 
             # Search symbols and find a value for each one
             for atom in symbols:
-                if description.has_key(atom.name):
+                if atom.name in description:
                     # A value is given by the parameter provider
                     val = description[atom.name]
-                elif default_params.has_key(atom.name):
+                elif atom.name in default_params:
                     # We do have a default value
                     val = default_params[atom.name]
                 else:
@@ -116,7 +116,7 @@ def create_potential(description):
     # potential_matrix is set now
 
     # Read of the number of components
-    if potential_description.has_key("number_components"):
+    if "number_components" in potential_description:
         nc_given = potential_description["number_components"]
         nc_found = potential_matrix.rows
         if nc_given != nc_found:
@@ -128,7 +128,7 @@ def create_potential(description):
     # N is set now
 
     # Get the variables used for the space axes
-    if not potential_description.has_key("variables"):
+    if "variables" not in potential_description:
         raise ValueError("No variables for potential given!")
     else:
         given_free_variables = set(map(sympy.sympify, potential_description["variables"]))
@@ -140,7 +140,7 @@ def create_potential(description):
         free_variables = tuple(map(sympy.sympify, potential_description["variables"]))
 
     # Create instances of MatrixPotential*
-    if potential_description.has_key("type"):
+    if "type" in potential_description:
         class_type = potential_description["type"]
     else:
         # Default classes if no other wish specified
@@ -154,16 +154,16 @@ def create_potential(description):
     if class_type == "MatrixPotential1S":
         # Scalar potential case
         assert nc == 1
-        from MatrixPotential1S import MatrixPotential1S
+        from .MatrixPotential1S import MatrixPotential1S
         potential = MatrixPotential1S(potential_matrix, free_variables)
     elif class_type == "MatrixPotential2S":
         # Symbolic computations, only for N = 2
         assert nc == 2
-        from MatrixPotential2S import MatrixPotential2S
+        from .MatrixPotential2S import MatrixPotential2S
         potential = MatrixPotential2S(potential_matrix, free_variables)
     elif class_type == "MatrixPotentialMS":
         # General numerical computations, for all N >= 1
-        from MatrixPotentialMS import MatrixPotentialMS
+        from .MatrixPotentialMS import MatrixPotentialMS
         potential = MatrixPotentialMS(potential_matrix, free_variables)
 
     return potential

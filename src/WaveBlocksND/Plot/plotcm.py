@@ -11,7 +11,7 @@ phase of the entries encoded into the usual color code.
 from matplotlib.pyplot import gca
 from matplotlib import ticker
 
-from color_map import color_map
+from .color_map import color_map
 
 
 def plotcm(matrix, phase=None, modulus=None, darken=None, axes=None, **kwargs):

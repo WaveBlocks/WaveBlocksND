@@ -12,7 +12,7 @@ import types
 import h5py as hdf
 import numpy as np
 
-import GlobalDefaults
+from . import GlobalDefaults
 
 __all__ = ["IOManager"]
 
@@ -74,7 +74,7 @@ class IOManager(object):
 
         # Filter out functions we want to add to IOM and
         # bind the methods to the current IOM instance
-        for k, v in plugin.__dict__.iteritems():
+        for k, v in plugin.__dict__.items():
             if type(v) == types.FunctionType:
                 self.__dict__[k] = types.MethodType(v, self)
 

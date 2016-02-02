@@ -41,7 +41,7 @@ def read_data_homogeneous(iom, blockid=0, timerange=None):
     # Basis shapes
     bsdescr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in bsdescr.iteritems():
+    for ahash, descr in bsdescr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Plot the coefficients for all timesteps
@@ -57,7 +57,7 @@ def read_data_homogeneous(iom, blockid=0, timerange=None):
             ki.sort()
             k.append(ki)
 
-        dt = parameters["dt"] if parameters.has_key("dt") else None
+        dt = parameters["dt"] if "dt" in parameters else None
         plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
@@ -83,7 +83,7 @@ def read_data_inhomogeneous(iom, blockid=0, timerange=None):
     # Basis shapes
     bsdescr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in bsdescr.iteritems():
+    for ahash, descr in bsdescr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Plot the coefficients for all timesteps
@@ -99,7 +99,7 @@ def read_data_inhomogeneous(iom, blockid=0, timerange=None):
             ki.sort()
             k.append(ki)
 
-        dt = parameters["dt"] if parameters.has_key("dt") else None
+        dt = parameters["dt"] if "dt" in parameters else None
         plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
@@ -117,7 +117,7 @@ def plot_coefficients(k, c, step, dt, blockid=0):
 
     fig = figure()
 
-    for n in xrange(N):
+    for n in range(N):
         ax = fig.add_subplot(N,1,n+1)
 
         stemcf(k[n], angle(c[n]), abs(c[n]))

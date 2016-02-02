@@ -47,7 +47,7 @@ def add_inhomogwavepacket(self, parameters, timeslots=None, blockid=0, key=("q",
     grp_wp.create_dataset("basis_shape_hash", (T,N), dtype=np.integer, chunks=True, maxshape=(None,N))
     grp_wp.create_dataset("basis_size", (T,N), dtype=np.integer, chunks=True, maxshape=(None,N))
     # Parameters
-    for i in xrange(N):
+    for i in range(N):
         if "q" in key and not "q" in grp_pi.keys():
             grp_pi.create_dataset("q_"+str(i), (T,D,1), dtype=np.complexfloating, chunks=True, maxshape=(Ts,D,1))
         if "p" in key and not "p" in grp_pi.keys():
@@ -61,7 +61,7 @@ def add_inhomogwavepacket(self, parameters, timeslots=None, blockid=0, key=("q",
         if "adQ" in key and not "adQ" in grp_pi.keys():
             grp_pi.create_dataset("adQ_"+str(i), (T,1,1), dtype=np.complexfloating, chunks=True, maxshape=(Ts,1,1))
     # Coefficients
-    for i in xrange(N):
+    for i in range(N):
         grp_ci.create_dataset("c_"+str(i), (T,1), dtype=np.complexfloating, chunks=(1,8), maxshape=(Ts,None))
 
     # Attach pointer to data instead timegrid
@@ -87,10 +87,10 @@ def has_inhomogwavepacket(self, blockid=0):
 def save_inhomogwavepacket_description(self, descr, blockid=0):
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog"
     # Save the description
-    for key, value in descr.iteritems():
+    for key, value in descr.items():
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = pickle.dumps(value)
+        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
 
 
 def save_inhomogwavepacket_parameters(self, parameters, timestep=None, blockid=0, key=("q","p","Q","P","S")):
@@ -176,10 +176,10 @@ def save_inhomogwavepacket_basisshapes(self, basisshape, blockid=0):
 
         # Save the description
         descr = basisshape.get_description()
-        for key, value in descr.iteritems():
+        for key, value in descr.items():
             # Store all the values as pickled strings because hdf can
             # only store strings or ndarrays as attributes.
-            daset.attrs[key] = pickle.dumps(value)
+            daset.attrs[key] = np.void(pickle.dumps(value))
 
         # TODO: Consider to save the mapping. Do we want or need this?
 
@@ -189,8 +189,8 @@ def load_inhomogwavepacket_description(self, blockid=0):
 
     # Load and return all descriptions available
     descr = {}
-    for key, value in self._srf[pathd].attrs.iteritems():
-        descr[key] = pickle.loads(value)
+    for key, value in self._srf[pathd].attrs.items():
+        descr[key] = pickle.loads(value.tostring())
     return descr
 
 
@@ -215,7 +215,7 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
         index = self.find_timestep_index(pathtg, timestep)
 
     data = []
-    for i in xrange(len(self._srf[pathd].keys()) // int(self._srf[pathd].attrs["number_parameters"])):
+    for i in range(len(self._srf[pathd].keys()) // int(self._srf[pathd].attrs["number_parameters"])):
         if timestep is not None:
             data.append( tuple([ self._srf[pathd+k+"_"+str(i)][index,:,:] for k in key ]) )
         else:
@@ -241,7 +241,7 @@ def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, c
         hashes = np.hsplit(hashes, N)
 
     data = []
-    for i in xrange(len(self._srf[pathd].keys())):
+    for i in range(len(list(self._srf[pathd].keys()))):
         if timestep is not None:
             size = self._srf[pathbsi][index,i]
             data.append( self._srf[pathd+"c_"+str(i)][index,:size] )
@@ -265,8 +265,8 @@ def load_inhomogwavepacket_basisshapes(self, the_hash=None, blockid=0):
         for ahash in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+ahash].attrs.iteritems():
-                descr[key] = pickle.loads(value)
+            for key, value in self._srf[pathd+ahash].attrs.items():
+                descr[key] = pickle.loads(value.tostring())
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
         return descrs
@@ -279,8 +279,8 @@ def load_inhomogwavepacket_basisshapes(self, the_hash=None, blockid=0):
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+name].attrs.iteritems():
-                descr[key] = pickle.loads(value)
+            for key, value in self._srf[pathd+name].attrs.items():
+                descr[key] = pickle.loads(value.tostring())
             return descr
         else:
             raise IndexError("No basis shape with given hash "+str(hash))
@@ -303,7 +303,7 @@ def load_inhomogwavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S","
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`HagedornWavepacketInhomogeneous` instance.
     """
-    from BlockFactory import BlockFactory
+    from .BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_inhomogwavepacket_description(blockid=blockid)

@@ -11,7 +11,7 @@ from copy import deepcopy
 from numpy import real
 from scipy.special.orthogonal import la_roots
 
-from QuadratureRule import QuadratureRule
+from .QuadratureRule import QuadratureRule
 
 __all__ = ["GaussLaguerreQR"]
 

@@ -11,11 +11,11 @@ from functools import partial
 from numpy import dot, eye, atleast_2d
 from numpy.linalg import inv, det
 
-from Propagator import Propagator
-from BlockFactory import BlockFactory
-from SplittingParameters import SplittingParameters
-from ProcessingSplittingParameters import ProcessingSplittingParameters
-from ComplexMath import cont_angle
+from .Propagator import Propagator
+from .BlockFactory import BlockFactory
+from .SplittingParameters import SplittingParameters
+from .ProcessingSplittingParameters import ProcessingSplittingParameters
+from .ComplexMath import cont_angle
 
 __all__ = ["Pre764scPropagator"]
 
@@ -60,7 +60,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         self._dt = self._parameters["dt"]
 
         # The relative mass scaling matrix M
-        if self._parameters.has_key("mass_scaling"):
+        if "mass_scaling" in self._parameters:
             self._M = atleast_2d(self._parameters["mass_scaling"])
             assert self._M.shape == (self._dimension, self._dimension)
             self._Minv = inv(self._M)
@@ -176,6 +176,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply preprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
+
             # Inner time step (fit to third term: eps^3 dt^4)
             r = self._innerorder
             alpha = 3.0
@@ -183,8 +184,9 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
             nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
+
             # Splitting
-            for j in xrange(v):
+            for j in range(v):
                 # Step with Abig
                 self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, -Z[j]*dt], nrlocalsteps, [packet], [packet,leading_chi])
 
@@ -213,6 +215,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         # Apply postprocessor step
         for packet, leading_chi in self._packets:
             eps = packet.get_eps()
+
             # Inner time step (fit to third term: eps^3 dt^4)
             r = self._innerorder
             alpha = 3.0
@@ -220,8 +223,9 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
             nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
+
             # Splitting
-            for j in reversed(xrange(v)):
+            for j in reversed(range(v)):
                 # Step with Beps
                 # Do a potential step with the local non-quadratic taylor remainder
                 innerproduct = packet.get_innerproduct()
@@ -262,7 +266,7 @@ class Pre764scPropagator(Propagator, SplittingParameters):
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
 
             # Splitting
-            for j in xrange(u):
+            for j in range(u):
                 # Step with Beps
                 # Avoid expensive computation if coefficient is zero
                 if Beps[j] != 0.0:

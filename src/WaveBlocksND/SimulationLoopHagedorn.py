@@ -8,11 +8,11 @@ for the homogeneous Hagedorn propagator.
 @license: Modified BSD License
 """
 
-from SimulationLoop import SimulationLoop
-from IOManager import IOManager
-from TimeManager import TimeManager
-from BlockFactory import BlockFactory
-from BasisTransformationHAWP import BasisTransformationHAWP
+from .SimulationLoop import SimulationLoop
+from .IOManager import IOManager
+from .TimeManager import TimeManager
+from .BlockFactory import BlockFactory
+from .BasisTransformationHAWP import BasisTransformationHAWP
 
 __all__ = ["SimulationLoopHagedorn"]
 
@@ -67,22 +67,22 @@ class SimulationLoopHagedorn(SimulationLoop):
         # TODO: Attach the "leading_component to the hawp as codata
         # TODO: Clean up this ugly if tree
         if self.parameters["propagator"] == "magnus_split":
-            from MagnusPropagator import MagnusPropagator
+            from .MagnusPropagator import MagnusPropagator
             self.propagator = MagnusPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "semiclassical":
-            from SemiclassicalPropagator import SemiclassicalPropagator
+            from .SemiclassicalPropagator import SemiclassicalPropagator
             self.propagator = SemiclassicalPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "McL42sc":
-            from McL42scPropagator import McL42scPropagator
+            from .McL42scPropagator import McL42scPropagator
             self.propagator = McL42scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "Pre764sc":
-            from Pre764scPropagator import Pre764scPropagator
+            from .Pre764scPropagator import Pre764scPropagator
             self.propagator = Pre764scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "McL84sc":
-            from McL84scPropagator import McL84scPropagator
+            from .McL84scPropagator import McL84scPropagator
             self.propagator = McL84scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "hagedorn":
-            from HagedornPropagator import HagedornPropagator
+            from .HagedornPropagator import HagedornPropagator
             self.propagator = HagedornPropagator(self.parameters, potential)
         else:
             raise NotImplementedError("Unknown propagator type: " + self.parameters["propagator"])
@@ -103,7 +103,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         slots = self._tm.compute_number_events()
         key = ("q","p","Q","P","S","adQ")
 
-        for i in xrange(npackets):
+        for i in range(npackets):
             bid = self.IOManager.create_block()
             self.IOManager.add_wavepacket(self.parameters, timeslots=slots, blockid=bid, key=key)
 
@@ -136,7 +136,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Note: We do not save any data here
 
         # Run the simulation for a given number of timesteps
-        for i in xrange(1, nsteps+1):
+        for i in range(1, nsteps+1):
             print(" doing timestep "+str(i))
 
             self.propagator.propagate()

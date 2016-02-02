@@ -71,6 +71,6 @@ def load_fourieroperators(self, blockid=0):
     path = "/"+self._prefixb+str(blockid)+"/propagation/operators/"
     opT = self._srf[path+"opkinetic"]
     opV = self._srf[path+"oppotential"]
-    opV = [ opV[index,...] for index in xrange(opV.shape[0]) ]
+    opV = [ opV[index,...] for index in range(opV.shape[0]) ]
 
     return (opT, opV)

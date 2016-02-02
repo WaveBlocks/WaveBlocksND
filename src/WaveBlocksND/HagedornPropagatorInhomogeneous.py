@@ -10,9 +10,9 @@ This file contains the Hagedorn propagator class for inhomogeneous wavepackets.
 from numpy import dot, eye, atleast_2d
 from numpy.linalg import inv, det
 
-from Propagator import Propagator
-from BlockFactory import BlockFactory
-from ComplexMath import cont_angle
+from .Propagator import Propagator
+from .BlockFactory import BlockFactory
+from .ComplexMath import cont_angle
 
 __all__ = ["HagedornPropagatorInhomogeneous"]
 
@@ -52,7 +52,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
         self._dt = self._parameters["dt"]
 
         # The relative mass scaling matrix M
-        if self._parameters.has_key("mass_scaling"):
+        if "mass_scaling" in self._parameters:
             self._M = atleast_2d(self._parameters["mass_scaling"])
             assert self._M.shape == (self._dimension, self._dimension)
             self._Minv = inv(self._M)
@@ -133,7 +133,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
             key = ("q", "p", "Q", "P", "S", "adQ")
 
             # Do a kinetic step of dt/2
-            for component in xrange(self._number_components):
+            for component in range(self._number_components):
                 q, p, Q, P, S, adQ = packet.get_parameters(component=component, key=key)
                 q = q + 0.5 * dt * dot(Mi, p)
                 Q = Q + 0.5 * dt * dot(Mi, P)
@@ -142,7 +142,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
                 packet.set_parameters((q, p, Q, P, S, adQn), component=component, key=key)
 
             # Do a potential step with the local quadratic part
-            for component in xrange(self._number_components):
+            for component in range(self._number_components):
                 q, p, Q, P, S = packet.get_parameters(component=component)
                 V = self._potential.evaluate_local_quadratic_at(q, diagonal_component=component)
 
@@ -160,7 +160,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
             packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2
-            for component in xrange(self._number_components):
+            for component in range(self._number_components):
                 q, p, Q, P, S, adQ = packet.get_parameters(component=component, key=key)
                 q = q + 0.5 * dt * dot(Mi, p)
                 Q = Q + 0.5 * dt * dot(Mi, P)

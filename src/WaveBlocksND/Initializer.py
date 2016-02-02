@@ -8,8 +8,9 @@
 
 from numpy import add
 
-from WaveFunction import WaveFunction
-from BlockFactory import BlockFactory
+from .WaveFunction import WaveFunction
+from .BlockFactory import BlockFactory
+from functools import reduce
 
 __all__ = ["Initializer"]
 
@@ -36,7 +37,7 @@ class Initializer(object):
 
             # Reshape values into hypercubic shape
             values = [ val.reshape(grid.get_number_nodes()) for val in values ]
-            Psi.append( values )
+            Psi.append(values)
 
         # TODO: Maybe sum up immediately instead of at the end to reduce memory usage
         Psi = reduce(add, Psi)

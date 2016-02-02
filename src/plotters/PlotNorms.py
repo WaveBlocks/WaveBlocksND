@@ -15,6 +15,7 @@ from WaveBlocksND import IOManager
 from WaveBlocksND.Plot import legend
 from WaveBlocksND import GlobalDefaults as GLD
 import GraphicsDefaults as GD
+from functools import reduce
 
 
 def read_data(iom, blockid=0):
@@ -24,7 +25,7 @@ def read_data(iom, blockid=0):
     """
     if iom.has_parameters():
         parameters = iom.load_parameters()
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             dt = parameters["dt"]
     else:
         dt = None
@@ -33,7 +34,7 @@ def read_data(iom, blockid=0):
 
     norms = iom.load_norm(blockid=blockid, split=True)
     # Compute the sum over all levels
-    norms.append(sqrt(reduce(add, map(square, norms))))
+    norms.append(sqrt(reduce(add, list(map(square, norms)))))
 
     return (timegrid, norms, dt)
 

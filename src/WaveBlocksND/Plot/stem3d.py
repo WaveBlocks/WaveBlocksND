@@ -21,7 +21,7 @@ def stem3d(u, v, w, fig=None, markerp="o"):
     axes = fig.add_subplot(1, 1, 1, projection='3d')
 
     for ui, vi, wi in zip(u, v, w):
-        line = art3d.Line3D(*zip((ui, vi, 0), (ui, vi, wi)), marker=markerp, markevery=(1, 1))
+        line = art3d.Line3D(*list(zip((ui, vi, 0), (ui, vi, wi))), marker=markerp, markevery=(1, 1))
         axes.add_line(line)
 
     axes.set_xlim3d(u.min(), u.max())

@@ -12,8 +12,8 @@ constructed explicitly for the inhomogeneous case.
 from numpy import squeeze, conjugate, sqrt, arange, isnan
 from scipy.misc import factorial
 
-from InnerProduct import InnerProductException
-from SymbolicIntegral import SymbolicIntegral
+from .InnerProduct import InnerProductException
+from .SymbolicIntegral import SymbolicIntegral
 
 __all__ = ["SymbolicIntegral0"]
 

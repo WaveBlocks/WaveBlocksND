@@ -12,8 +12,8 @@ exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 from numpy import zeros, complexfloating
 from numpy.fft import fftn, ifftn
 
-from Propagator import Propagator
-from KineticOperator import KineticOperator
+from .Propagator import Propagator
+from .KineticOperator import KineticOperator
 
 __all__ = ["FourierPropagator"]
 
@@ -110,8 +110,8 @@ class FourierPropagator(Propagator):
         tmp = [ zeros(value.shape, dtype=complexfloating) for value in values ]
 
         # The first step with the potential
-        for row in xrange(N):
-            for col in xrange(N):
+        for row in range(N):
+            for col in range(N):
                 tmp[row] = tmp[row] + self._VE[row*N+col] * values[col]
 
         # Go to Fourier space
@@ -125,8 +125,8 @@ class FourierPropagator(Propagator):
 
         # The second step with the potential
         values = [ zeros(component.shape, dtype=complexfloating) for component in tmp ]
-        for row in xrange(N):
-            for col in xrange(N):
+        for row in range(N):
+            for col in range(N):
                 values[row] = values[row] + self._VE[row*N+col] * tmp[col]
 
         # Pack values back to WaveFunction object

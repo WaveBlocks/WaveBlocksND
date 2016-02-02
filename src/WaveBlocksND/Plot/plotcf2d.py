@@ -12,7 +12,7 @@ by the usual color code.
 from numpy import meshgrid, real, where
 from matplotlib.pyplot import gca
 
-from color_map import color_map
+from .color_map import color_map
 
 
 def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):

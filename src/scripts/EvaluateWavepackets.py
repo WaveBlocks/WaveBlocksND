@@ -54,7 +54,7 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
     # Basis shapes
     BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BlockFactory().create_basis_shape(descr)
 
     WF = WaveFunction(parameters)

@@ -66,9 +66,9 @@ else:
 # See if we have a description for observables and
 # especially autocorrelation computation
 if PA is not None:
-    if PA.has_key("observables"):
+    if "observables" in PA:
         PA = PA["observables"]
-        if PA.has_key("autocorrelation"):
+        if "autocorrelation" in PA:
             PA = PA["autocorrelation"]
         else:
             PA = None

@@ -29,7 +29,7 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     hashes, coeffs = iom.load_wavepacket_coefficients(blockid=blockid, get_hashes=True)
@@ -44,7 +44,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(blockid=blockid, get_hashes=True)
@@ -69,7 +69,7 @@ def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsi
 
     # Reconstruct basis shapes
     BS = []
-    for i in xrange(N):
+    for i in range(N):
         d = iom.load_wavepacket_basisshapes(the_hash=hashes[i][0])
         bs = BlockFactory().create_basis_shape(d)
         BS.append(bs)
@@ -86,7 +86,7 @@ def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsi
 
         fig = figure()
 
-        for level in xrange(N):
+        for level in range(N):
             j = BS[level][vect]
             if j is not None:
                 ax = fig.add_subplot(N,1,level+1)

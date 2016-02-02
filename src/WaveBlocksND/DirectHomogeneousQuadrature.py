@@ -12,7 +12,7 @@ Here we handle the homogeneous case.
 from numpy import zeros, ones, conjugate, dot, einsum
 from scipy.linalg import sqrtm
 
-from DirectQuadrature import DirectQuadrature
+from .DirectQuadrature import DirectQuadrature
 
 __all__ = ["DirectHomogeneousQuadrature"]
 
@@ -105,7 +105,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         """
         # Evaluate only the bases we need
         N  = self._packet.get_number_components()
-        bases = [ None for n in xrange(N) ]
+        bases = [ None for n in range(N) ]
 
         for row in rows:
             if bases[row] is None:
@@ -122,7 +122,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         if self._eval_at_once is True:
             self._values = tuple(self._operator(self._nodes, q))
         else:
-            self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in xrange(N) for c in xrange(N) ])
+            self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in range(N) for c in range(N) ])
         # Recheck what we got
         assert type(self._values) is tuple
         assert len(self._values) == N**2

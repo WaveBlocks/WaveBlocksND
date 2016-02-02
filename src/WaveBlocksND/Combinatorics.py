@@ -23,7 +23,7 @@ def partitions(D, K):
     yield P.copy()
     while P.sum() <= K:
         p0 = P[0]
-        for i in xrange(1, D):
+        for i in range(1, D):
             p0 += P[i]
             if P[0] <= P[i] + 1:
                 P[i] = 0
@@ -54,7 +54,7 @@ def lattice_points_norm(D, N):
     c = 1
     while k[D-1] < N:
         if c == D:
-            for i in xrange(c-1, 0, -1):
+            for i in range(c-1, 0, -1):
                 c = i
                 if not k[i-1] == 0:
                     break
@@ -75,7 +75,7 @@ def lattice_points(D, N):
     :param D: The dimension :math:`D` of the lattice.
     :param N: The maximal :math:`l_1` norm of the lattice points.
     """
-    for n in xrange(N+1):
+    for n in range(N+1):
         for l in lattice_points_norm(D, n):
             yield l
 
@@ -91,13 +91,13 @@ def permutations(P):
     P = P.copy()
     yield P.copy()
     while True:
-        for i in xrange(1, D):
+        for i in range(1, D):
             pi = P[i]
             if P[i-1] > pi:
                 I = i
                 if i > 1:
                     J = I
-                    for j in xrange(I//2):
+                    for j in range(I//2):
                         pj = P[j]
                         if pj <= pi:
                             I = I - 1

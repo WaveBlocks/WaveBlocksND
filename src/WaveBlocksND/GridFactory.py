@@ -16,7 +16,7 @@ def create_grid(description):
                         with all necessary parameters.
     :return: An adequate :py:class:`Grid` instance.
     """
-    if description.has_key("grid_type"):
+    if "grid_type" in description:
         grid_type = description["type"]
     else:
         grid_type = "tensor_product"

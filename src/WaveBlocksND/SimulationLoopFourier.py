@@ -8,12 +8,12 @@ for the Fourier propagator.
 @license: Modified BSD License
 """
 
-from BlockFactory import BlockFactory
-from Initializer import Initializer
-from BasisTransformationWF import BasisTransformationWF
-from FourierPropagator import FourierPropagator
-from SimulationLoop import SimulationLoop
-from IOManager import IOManager
+from .BlockFactory import BlockFactory
+from .Initializer import Initializer
+from .BasisTransformationWF import BasisTransformationWF
+from .FourierPropagator import FourierPropagator
+from .SimulationLoop import SimulationLoop
+from .IOManager import IOManager
 
 __all__ = ["SimulationLoopFourier"]
 
@@ -100,7 +100,7 @@ class SimulationLoopFourier(SimulationLoop):
         # Note: We do not save any data here
 
         # Run the simulation for a given number of timesteps
-        for i in xrange(1, nsteps+1):
+        for i in range(1, nsteps+1):
             print(" doing timestep "+str(i))
 
             self.propagator.propagate()

@@ -49,7 +49,7 @@ def compute_norm(iom, blockid=0, eigentrafo=True):
 
         # Retrieve simulation data
         values = iom.load_wavefunction(timestep=step, blockid=blockid)
-        values = [ values[j,...] for j in xrange(parameters["ncomponents"]) ]
+        values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
         WF.set_values(values)
 
         # Project wavefunction values to eigenbasis

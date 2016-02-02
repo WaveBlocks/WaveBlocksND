@@ -60,7 +60,7 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q","p","Q"
     if "adQ" in key and not "adQ" in grp_pi.keys():
         grp_pi.create_dataset("adQ", (T,1,1), dtype=np.complexfloating, chunks=True, maxshape=(Ts,1,1))
     # Coefficients
-    for i in xrange(N):
+    for i in range(N):
         grp_ci.create_dataset("c_"+str(i), (T,1), dtype=np.complexfloating, chunks=(1,8), maxshape=(Ts,None))
 
     # Attach pointer to data instead timegrid
@@ -95,10 +95,10 @@ def save_wavepacket_description(self, descr, blockid=0):
     """
     pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
     # Save the description
-    for key, value in descr.iteritems():
+    for key, value in descr.items():
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = pickle.dumps(value)
+        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
 
 
 def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0, key=("q","p","Q","P","S")):
@@ -187,10 +187,10 @@ def save_wavepacket_basisshapes(self, basisshape, blockid=0):
 
         # Save the description
         descr = basisshape.get_description()
-        for key, value in descr.iteritems():
+        for key, value in descr.items():
             # Store all the values as pickled strings because hdf can
             # only store strings or ndarrays as attributes.
-            daset.attrs[key] = pickle.dumps(value)
+            daset.attrs[key] = np.void(pickle.dumps(value))
 
         # TODO: Consider to save the mapping. Do we want or need this?
 
@@ -204,8 +204,8 @@ def load_wavepacket_description(self, blockid=0):
 
     # Load and return all descriptions available
     descr = {}
-    for key, value in self._srf[pathd].attrs.iteritems():
-        descr[key] = pickle.loads(value)
+    for key, value in self._srf[pathd].attrs.items():
+        descr[key] = pickle.loads(value.tostring())
     return descr
 
 
@@ -263,7 +263,7 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
     if component is not None:
         components = [component]
     else:
-        components = xrange(N)
+        components = range(N)
 
     # Load the hash data
     if get_hashes is True:
@@ -305,8 +305,8 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         for ahash in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+ahash].attrs.iteritems():
-                descr[key] = pickle.loads(value)
+            for key, value in self._srf[pathd+ahash].attrs.items():
+                descr[key] = pickle.loads(value.tostring())
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
         return descrs
@@ -319,8 +319,8 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+name].attrs.iteritems():
-                descr[key] = pickle.loads(value)
+            for key, value in self._srf[pathd+name].attrs.items():
+                descr[key] = pickle.loads(value.tostring())
             return descr
         else:
             raise IndexError("No basis shape with given hash "+str(hash))
@@ -343,7 +343,7 @@ def load_wavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S","adQ")):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`HagedornWavepacket` instance.
     """
-    from BlockFactory import BlockFactory
+    from .BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_wavepacket_description(blockid=blockid)
