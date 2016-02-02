@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("parametersfile",
                     type = str,
-                    help = "The simulation configuration parameters file")
+                    help = "The simulation configuration parameters file.")
 
 parser.add_argument("-o", "--outputfile",
                     type = str,
