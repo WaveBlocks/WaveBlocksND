@@ -20,10 +20,10 @@ def create_matrixexponential(description):
     method = description["matrix_exponential"]
 
     if method == "pade":
-        from MatrixExponential import matrix_exp_pade
+        from .MatrixExponential import matrix_exp_pade
         return matrix_exp_pade
     elif method == "arnoldi":
-        from MatrixExponential import matrix_exp_arnoldi
+        from .MatrixExponential import matrix_exp_arnoldi
         try:
             arnoldi_steps = description["arnoldi_steps"]
         except:

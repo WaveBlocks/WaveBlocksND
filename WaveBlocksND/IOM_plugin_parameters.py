@@ -8,8 +8,9 @@ IOM plugin providing functions for handling simulation parameter data.
 """
 
 import pickle
+import numpy
 
-import ParameterProvider as ParameterProvider
+from WaveBlocksND.ParameterProvider import ParameterProvider
 
 
 def add_parameters(self, blockid="global"):
@@ -53,7 +54,7 @@ def save_parameters(self, parameters, blockid="global"):
     for param, value in parameters:
         # Store all the values as pickled strings because hdf can
         # only store strings or ndarrays as attributes.
-        paset.attrs[param] = pickle.dumps(value)
+        paset.attrs[param] = numpy.void(pickle.dumps(value))
 
 
 def load_parameters(self, blockid="global"):
@@ -62,10 +63,10 @@ def load_parameters(self, blockid="global"):
     :param blockid: The ID of the data block to operate on.
     """
     p = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"].attrs
-    PP = ParameterProvider.ParameterProvider()
+    PP = ParameterProvider()
 
-    for key, value in p.iteritems():
-        PP[key] = pickle.loads(value)
+    for key, value in p.items():
+        PP[key] = pickle.loads(value.tostring())
 
     # Compute some values on top of the given input parameters
     PP.compute_parameters()

@@ -32,7 +32,7 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     # The potential used
@@ -48,7 +48,7 @@ def read_data_homogeneous(iom, blockid=0):
     BT.set_matrix_builder(HAWP.get_innerproduct())
 
     # Store the resulting coefficients here
-    CI = [ [] for i in xrange(HAWP.get_number_components()) ]
+    CI = [ [] for i in range(HAWP.get_number_components()) ]
 
     # Iterate over all timesteps, this is an *expensive* transformation
     for i, step in enumerate(timegrid):
@@ -74,7 +74,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     # The potential used
@@ -90,7 +90,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     BT.set_matrix_builder(HAWP.get_quadrature())
 
     # Store the resulting coefficients here
-    CI = [ [] for i in xrange(HAWP.get_number_components()) ]
+    CI = [ [] for i in range(HAWP.get_number_components()) ]
 
     # Iterate over all timesteps, this is an *expensive* transformation
     for i, step in enumerate(timegrid):

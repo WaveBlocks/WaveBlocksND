@@ -10,10 +10,11 @@ quadrature rules from one-dimensional ones by taking tensor products.
 
 from copy import deepcopy
 import operator as op
+from functools import reduce
 from numpy import vstack, multiply
 
-from QuadratureRule import QuadratureRule
-from Utils import meshgrid_nd
+from .QuadratureRule import QuadratureRule
+from .Utils import meshgrid_nd
 
 __all__ = ["TensorProductQR"]
 

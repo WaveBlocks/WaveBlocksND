@@ -13,7 +13,7 @@ from numpy import array, zeros, real
 from matplotlib.collections import LineCollection
 from matplotlib.pyplot import gca
 
-from color_map import color_map
+from .color_map import color_map
 
 
 def stemcf(grid, phase, modulus, darken=None, axes=None, linestylep="solid", linewidthp=2, color=None, markerp="o", **kwargs):

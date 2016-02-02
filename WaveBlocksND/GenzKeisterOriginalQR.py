@@ -12,8 +12,8 @@ weight factor.
 from copy import deepcopy
 from numpy import array, indices, repeat, hstack
 
-from QuadratureRule import QuadratureRule
-from Combinatorics import partitions, lattice_points, permutations
+from .QuadratureRule import QuadratureRule
+from .Combinatorics import partitions, lattice_points, permutations
 
 __all__ = ["GenzKeisterOriginalQR"]
 
@@ -132,7 +132,7 @@ class GenzKeisterOriginalQR(QuadratureRule):
         W = 0.0
         for Q in lattice_points(D, K-P.sum()):
             w = 1.0
-            for i in xrange(D):
+            for i in range(D):
                 w *= WF[P[i], Q[i]+P[i]]
             W += w
 

@@ -14,10 +14,10 @@ from numpy import pi, dot, einsum, conjugate, delete
 from scipy import exp, sqrt
 from scipy.linalg import det, inv
 
-from LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
-from HagedornWavepacket import HagedornWavepacket
-from AbstractGrid import AbstractGrid
-from GridWrapper import GridWrapper
+from .LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
+from .HagedornWavepacket import HagedornWavepacket
+from .AbstractGrid import AbstractGrid
+from .GridWrapper import GridWrapper
 
 __all__ = ["LinearCombinationOfHAWPs"]
 
@@ -207,7 +207,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
         :return: A list of :py:class:`HagedornWavepacket` instances.
         """
-        return [ self.get_wavepacket(j) for j in xrange(self._number_packets) ]
+        return [ self.get_wavepacket(j) for j in range(self._number_packets) ]
 
 
     # def set_wavepackets(self, packetlist):
@@ -682,7 +682,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
         values = zeros((G,J))
         # Evaluate each packet individually
-        for j in xrange(J):
+        for j in range(J):
             S = self._Pis[4][j,:]
             phase = exp(1.0j * S / eps**2)
             values[:,j] = phase * self.slim_recursion(grid, j, prefactor=prefactor)
@@ -715,7 +715,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
             grid = self._grid_wrap(grid)
             values = zeros((grid.get_number_nodes(overall=True),))
             # Evaluate each packet individually
-            for j in xrange(self._number_packets):
+            for j in range(self._number_packets):
                 S = self._Pis[4][j,:]
                 phase = exp(1.0j * S / eps**2)
                 values = values + squeeze(self._lc_coefficients[j]) * phase * self.slim_recursion(grid, j, prefactor=prefactor)

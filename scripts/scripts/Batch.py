@@ -32,7 +32,7 @@ def batch_run(call_prerun, call_simulation, call_for_each, call_postrun, result_
     if os.path.lexists(configurationsdir) and os.path.isdir(configurationsdir):
         allfiles = os.listdir(configurationsdir)
         # Only python files can be valid configurations
-        configurations = filter(lambda x: x.endswith(".py"), allfiles)
+        configurations = [x for x in allfiles if x.endswith(".py")]
 
 
         if len(configurations) == 0:

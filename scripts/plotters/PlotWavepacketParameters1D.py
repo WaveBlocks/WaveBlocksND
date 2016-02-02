@@ -27,7 +27,7 @@ def read_data_homogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
@@ -56,7 +56,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     """
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
-    dt = parameters["dt"] if parameters.has_key("dt") else 1.0
+    dt = parameters["dt"] if "dt" in parameters else 1.0
     time = timegrid * dt
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)

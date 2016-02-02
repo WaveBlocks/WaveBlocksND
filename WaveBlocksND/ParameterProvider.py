@@ -11,9 +11,9 @@ features like fetching undefined values from a global configuration.
 
 from copy import deepcopy
 
-import GlobalDefaults
-from BlockFactory import BlockFactory
-from TimeManager import TimeManager
+from . import GlobalDefaults
+from .BlockFactory import BlockFactory
+from .TimeManager import TimeManager
 
 __all__ = ["ParameterProvider"]
 
@@ -32,12 +32,12 @@ class ParameterProvider(object):
 
     def __getitem__(self, key):
         # See if we have a parameter with specified name
-        if self._params.has_key(key):
+        if key in self._params:
             return self._params[key]
         else:
             # If not, try to find a global default value for it and copy over this value
             print("Warning: parameter '"+str(key)+"' not found, now trying global defaults!")
-            if GlobalDefaults.__dict__.has_key(key):
+            if key in GlobalDefaults.__dict__:
                 self.__setitem__(key, deepcopy(GlobalDefaults.__dict__[key]))
                 return self._params[key]
             else:
@@ -49,12 +49,12 @@ class ParameterProvider(object):
 
 
     def __contains__(self, key):
-        return self._params.has_key(key)
+        return key in self._params
 
 
     def __iter__(self):
         # For iteration over the parameter key-value pairs
-        for item in self._params.iteritems():
+        for item in self._params.items():
             yield item
 
 
@@ -63,7 +63,7 @@ class ParameterProvider(object):
 
 
     def has_key(self, key):
-        return self._params.has_key(key)
+        return key in self._params
 
 
     def get(self, key, default):
@@ -83,7 +83,7 @@ class ParameterProvider(object):
         except:
             pass
 
-        if self._params.has_key("potential"):
+        if "potential" in self._params:
             # Ugly hack. Should improve handling of potential libraries
             Potential = BlockFactory().create_potential(self)
             # Number of components of $\Psi$
@@ -125,7 +125,7 @@ class ParameterProvider(object):
             except:
                 raise TypeError("Wrong data type for update_parameters.")
 
-        for key, value in params.iteritems():
+        for key, value in params.items():
             self.__setitem__(key, value)
         # Compute some values on top of the given input parameters
         self.compute_parameters()
@@ -173,7 +173,7 @@ class ParameterProvider(object):
         s += "All parameters provided\n"
         s += "------------------------------------\n"
 
-        keys = self._params.keys()
+        keys = list(self._params.keys())
         keys.sort()
 
         for key in keys:

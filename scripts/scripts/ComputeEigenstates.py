@@ -33,7 +33,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
     """
     D = parameters["dimension"]
 
-    if parameters.has_key("eigenstate_of_level"):
+    if "eigenstate_of_level" in parameters:
         N = parameters["eigenstate_of_level"]
     else:
         # Upper-most potential surface
@@ -63,7 +63,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
         # the minimizer will always stay away from zero a tiny bit.
         # The current starting point can give issues if the potential
         # is stationary at the point (2, ..., 2) but that is less likely.
-        if parameters.has_key("starting_point"):
+        if "starting_point" in parameters:
             x0 = atleast_1d(parameters["starting_point"])
         else:
             x0 = 0.5 * ones(D)
@@ -74,11 +74,11 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
         # We are at the minimum with no momentum
         p0 = zeros_like(q0)
     else:
-        if parameters.has_key("q0"):
+        if "q0" in parameters:
             q0 = atleast_2d(parameters["q0"])
         else:
             q0 = zeros((D,1))
-        if parameters.has_key("p0"):
+        if "p0" in parameters:
             p0 = atleast_2d(parameters["p0"])
         else:
             p0 = zeros((D,1))
@@ -91,11 +91,11 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
         # P_0 = i Q_0^(-1)
         P0 = 1.0j * inv(Q0)
     else:
-        if parameters.has_key("Q0"):
+        if "Q0" in parameters:
             Q0 = atleast_2d(parameters["Q0"])
         else:
             Q0 = identity(D)
-        if parameters.has_key("P0"):
+        if "P0" in parameters:
             P0 = atleast_2d(parameters["P0"])
         else:
             P0 = 1.0j * inv(Q0)
@@ -163,7 +163,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
     ind = argsort(ew)
 
     # Build the requested energy levels and states
-    if parameters.has_key("eigenstates_indices"):
+    if "eigenstates_indices" in parameters:
         states = parameters["eigenstates_indices"]
     else:
         # Groundstate only

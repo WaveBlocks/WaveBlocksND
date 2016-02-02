@@ -10,9 +10,9 @@ linear combination of Hagedorn wavepackets.
 
 from numpy import squeeze
 
-from Gradient import Gradient
-from GradientHAWP import GradientHAWP
-from LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
+from .Gradient import Gradient
+from .GradientHAWP import GradientHAWP
+from .LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
 
 __all__ = ["GradientLinearCombinationHAWP"]
 
@@ -50,10 +50,10 @@ class GradientLinearCombinationHAWP(Gradient):
         eps = lincomb.get_eps()
         G = GradientHAWP()
 
-        new_lincombs = [ LinearCombinationOfHAWPs(D, N, eps) for d in xrange(D) ]
+        new_lincombs = [ LinearCombinationOfHAWPs(D, N, eps) for d in range(D) ]
 
         # Handle each wavepacket individually
-        for j in xrange(J):
+        for j in range(J):
             packet = lincomb.get_wavepacket(j)
             grads = G.apply_gradient(packet, component=component)
 

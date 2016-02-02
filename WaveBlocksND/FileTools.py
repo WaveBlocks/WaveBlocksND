@@ -12,9 +12,10 @@ ID is just the base name of the path or the configuration file.
 
 import os
 import operator as op
+from functools import reduce
 from collections import OrderedDict
 
-import GlobalDefaults as GD
+from . import GlobalDefaults as GD
 
 
 def get_result_dirs(path):
@@ -24,7 +25,7 @@ def get_result_dirs(path):
     :return: A list of simulation IDs.
     """
     dirs = [ os.path.join(path, adir) for adir in os.listdir(path) ]
-    return filter(os.path.isdir, dirs)
+    return list(filter(os.path.isdir, dirs))
 
 
 def get_parameters_file(path, unpack=True):
@@ -154,7 +155,7 @@ def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kv
 
     distinct_vals = list(OrderedDict.fromkeys([ s[2] for s in tmp ]))
 
-    groups = [ [] for i in xrange(len(distinct_vals)) ]
+    groups = [ [] for i in range(len(distinct_vals)) ]
 
     for item in tmp:
         for index, val in enumerate(distinct_vals):
@@ -315,7 +316,7 @@ def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel
     """
     items = get_items(name, ldel=ldel, mdel=mdel, rdel=rdel)
     searchfor = ldel + pattern + mdel
-    result = filter(lambda item: searchfor in item, items)
+    result = [item for item in items if searchfor in item]
 
     if len(result) == 0:
         print("Warning: pattern '"+pattern+"' not found in: "+str(name))
@@ -416,4 +417,4 @@ def split_list(alist, n):
     """
     n = max(1, n)
     n = min(len(alist), n)
-    return [ alist[i::n] for i in xrange(n) ]
+    return [ alist[i::n] for i in range(n) ]

@@ -144,6 +144,6 @@ class PerturbedSplittingParameters(object):
         c[::2] = a
         c[1::2] = b
 
-        for k in xrange(N):
-            for j in xrange(sa+sb):
+        for k in range(N):
+            for j in range(sa+sb):
                 psi[j%2](c[j]*h, *args[j%2])

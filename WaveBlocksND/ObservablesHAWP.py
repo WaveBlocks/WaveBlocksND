@@ -11,8 +11,8 @@ of Hagedorn wavepackets.
 from functools import partial
 from numpy import conjugate, squeeze, sum
 
-from Observables import Observables
-from GradientHAWP import GradientHAWP
+from .Observables import Observables
+from .GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesHAWP"]
 
@@ -86,7 +86,7 @@ class ObservablesHAWP(Observables):
         """
         if component is None:
             N = wavepacket.get_number_components()
-            components = xrange(N)
+            components = range(N)
         else:
             components = [component]
 
@@ -136,8 +136,8 @@ class ObservablesHAWP(Observables):
             Q = self._innerproduct.quadrature(wavepacket, operator=f, eval_at_once=True)
             # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
             # TODO: Should this go inside the innerproduct?
-            tmp = map(squeeze, Q)
-            epot = [ sum(tmp[i*N:(i+1)*N]) for i in xrange(N) ]
+            tmp = list(map(squeeze, Q))
+            epot = [ sum(tmp[i*N:(i+1)*N]) for i in range(N) ]
 
         if summed is True:
             epot = sum(epot)

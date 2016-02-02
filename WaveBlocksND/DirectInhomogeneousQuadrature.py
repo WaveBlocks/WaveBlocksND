@@ -13,7 +13,7 @@ from numpy import zeros, ones, imag, conjugate, dot, ndarray, einsum
 from scipy import exp
 from scipy.linalg import sqrtm, inv, det
 
-from DirectQuadrature import DirectQuadrature
+from .DirectQuadrature import DirectQuadrature
 
 __all__ = ["DirectInhomogeneousQuadrature"]
 

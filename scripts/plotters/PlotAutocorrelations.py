@@ -9,6 +9,7 @@ Plot the autocorrelations of the different wavepackets as well as the sum of all
 """
 
 import argparse
+from functools import reduce
 from numpy import real, imag, abs, add
 from matplotlib.pyplot import figure, close
 
@@ -38,7 +39,7 @@ def read_data(iom, blockid=0):
     """
     if iom.has_parameters():
         parameters = iom.load_parameters()
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             dt = parameters["dt"]
     else:
         dt = None

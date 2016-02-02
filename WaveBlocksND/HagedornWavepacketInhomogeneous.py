@@ -10,9 +10,9 @@ This file contains the class which represents an inhomogeneous Hagedorn wavepack
 from numpy import zeros, complexfloating, array, eye, atleast_2d, angle, squeeze
 from numpy.linalg import det
 
-from HagedornWavepacketBase import HagedornWavepacketBase
-from HyperCubicShape import HyperCubicShape
-from ComplexMath import ContinuousSqrt
+from .HagedornWavepacketBase import HagedornWavepacketBase
+from .HyperCubicShape import HyperCubicShape
+from .ComplexMath import ContinuousSqrt
 
 __all__ = ["HagedornWavepacketInhomogeneous"]
 
@@ -42,7 +42,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         # The coefficients c^i
         self._coefficients = []
 
-        for d in xrange(self._number_components):
+        for d in range(self._number_components):
             # Default basis shapes for all components
             bs = HyperCubicShape( self._dimension*[1] )
             self._basis_shapes.append(bs)
@@ -66,7 +66,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         self._IP = None
 
         # Function for taking continuous roots
-        self._sqrt = [ ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in xrange(self._number_components) ]
+        self._sqrt = [ ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in range(self._number_components) ]
 
 
     def __str__(self):
@@ -135,7 +135,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                  The parameters :math:`\Pi_i = (q_i, p_i, Q_i, P_i, S_i)` are always in this order.
         """
         if component is None:
-            components = xrange(self._number_components)
+            components = range(self._number_components)
         else:
             components = [component]
 
@@ -175,7 +175,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         :param component: The index :math:`i` of the component :math:`\Phi_i` whose parameters :math:`\Pi_i` we want to update.
         """
         if component is None:
-            component = xrange(self._number_components)
+            component = range(self._number_components)
         else:
             component = [component]
             Pi = [Pi]

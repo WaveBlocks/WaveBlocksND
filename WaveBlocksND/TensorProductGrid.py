@@ -11,7 +11,8 @@ dense regular tensor product grids.
 import operator
 from numpy import array, atleast_1d, complexfloating, diff, floating, hstack, mgrid, ogrid, squeeze
 
-from DenseGrid import DenseGrid
+from .DenseGrid import DenseGrid
+from functools import reduce
 
 __all__ = ["TensorProductGrid"]
 
@@ -101,7 +102,7 @@ class TensorProductGrid(DenseGrid):
         :return: A list of :math:`h_i` values or a single value.
         """
         if axes is None:
-            axes = xrange(self._dimension)
+            axes = range(self._dimension)
 
         return [ self._meshwidths[i] for i in atleast_1d(axes) ]
 
@@ -119,7 +120,7 @@ class TensorProductGrid(DenseGrid):
         :return: A list of :math:`N_i` values or a single value :math:`N`.
         """
         if axes is None:
-            axes = xrange(self._dimension)
+            axes = range(self._dimension)
 
         values = [ self._number_nodes[i] for i in atleast_1d(axes) ]
 
@@ -167,7 +168,7 @@ class TensorProductGrid(DenseGrid):
             self._compute_grid_axes()
 
         if axes is None:
-            axes = xrange(self._dimension)
+            axes = range(self._dimension)
         axes = atleast_1d(axes)
 
         return [ self._gridaxes[i] for i in axes ]
@@ -194,9 +195,9 @@ class TensorProductGrid(DenseGrid):
             if split is False:
                 return self._gridnodes
             else:
-                return tuple([ self._gridnodes[i,:] for i in xrange(self._dimension) ])
+                return tuple([ self._gridnodes[i,:] for i in range(self._dimension) ])
         else:
             if split is False:
                 return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
             else:
-                return tuple([ self._gridnodes[i,:].reshape(self.get_number_nodes()) for i in xrange(self._dimension) ])
+                return tuple([ self._gridnodes[i,:].reshape(self.get_number_nodes()) for i in range(self._dimension) ])

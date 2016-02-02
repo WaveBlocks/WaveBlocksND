@@ -14,7 +14,7 @@ from numpy import (array, zeros, ones, diag, squeeze,  conjugate, transpose, dot
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
-from Quadrature import Quadrature
+from .Quadrature import Quadrature
 
 __all__ = ["NSDInhomogeneous"]
 
@@ -204,18 +204,18 @@ class NSDInhomogeneous(Quadrature):
         U = conjugate(transpose(U))
 
         # Oscillator updates
-        for i in xrange(1, D):
+        for i in range(1, D):
             if T[i-1,i-1] == 0:
                 # TODO: Prove that this never happens or handle it correctly!
                 print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
 
             # Diagonal Elements
-            for j in xrange(i, D):
+            for j in range(i, D):
                 T[j,j] = T[j,j] - T[i-1,j]**2 / (4.0*T[i-1,i-1])
 
             # Others
-            for rowi in xrange(i, D):
-                for coli in xrange(rowi+1, D):
+            for rowi in range(i, D):
+                for coli in range(rowi+1, D):
                     T[rowi,coli] = T[rowi,coli] - T[i-1,rowi]*T[i-1,coli] / (2*T[i-1,i-1])
 
         # Compute remaining parts
@@ -235,7 +235,7 @@ class NSDInhomogeneous(Quadrature):
         # Path Precomposition
         Tu = 0.5 * triu(T, 1) / Dk
         paths = (sqrt(1.0j / Dk) * tk).astype(complexfloating)
-        for i in reversed(xrange(D)):
+        for i in reversed(range(D)):
             paths[i,:] = paths[i,:] - dot(Tu[i,:], paths)
 
         # Path derivatives

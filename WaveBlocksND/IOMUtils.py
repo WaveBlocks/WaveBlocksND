@@ -7,7 +7,7 @@ Various small utility functions.
 @license: Modified BSD License
 """
 
-from BlockFactory import BlockFactory
+from .BlockFactory import BlockFactory
 
 
 def load_wavepacket(iom, timestep, blockid=0):
@@ -34,7 +34,7 @@ def load_wavepacket(iom, timestep, blockid=0):
     # Basis shapes
     BS_descr = iom.load_wavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     KEY = ("q","p","Q","P","S","adQ")
@@ -73,7 +73,7 @@ def load_wavepacket_inhomogeneous(iom, timestep, blockid=0):
     # Basis shapes
     BS_descr = iom.load_inhomogwavepacket_basisshapes(blockid=blockid)
     BS = {}
-    for ahash, descr in BS_descr.iteritems():
+    for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
     KEY = ("q","p","Q","P","S","adQ")

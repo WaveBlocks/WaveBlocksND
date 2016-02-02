@@ -9,6 +9,7 @@ Plot the energies of the different wavepackets as well as the sum of all energie
 """
 
 import argparse
+from functools import reduce
 from numpy import abs, add
 from matplotlib.pyplot import figure, close
 
@@ -32,7 +33,7 @@ def read_data(iom, blockid=0):
     """
     if iom.has_parameters():
         parameters = iom.load_parameters()
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             dt = parameters["dt"]
     else:
         dt = None
@@ -77,7 +78,7 @@ def plot_energies(data, blockid=0, view=None):
         ax.plot(timegridp*dt, pot, label=r"$E^{pot}_{%d}$" % i)
 
     # Plot the sum of kinetic and potential energy for all wave packets
-    for i, (kin, pot) in enumerate(zip(ekin, epot)[:-1]):
+    for i, (kin, pot) in enumerate(list(zip(ekin, epot))[:-1]):
         ax.plot(timegridk*dt, kin + pot, label=r"$E^{kin}_{%d}+E^{pot}_{%d}$" % (i,i))
 
     # Plot sum of kinetic and sum of potential energy

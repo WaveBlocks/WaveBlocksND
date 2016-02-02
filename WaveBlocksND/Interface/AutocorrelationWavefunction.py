@@ -55,7 +55,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
 
     # Preconfigure the
     values = iom.load_wavefunction(timestep=0, blockid=blockid)
-    values = [ values[j,...] for j in xrange(parameters["ncomponents"]) ]
+    values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
     WFo.set_values(values)
 
     # Project wavefunction values to eigenbasis
@@ -71,7 +71,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
 
         # Retrieve simulation data
         values = iom.load_wavefunction(timestep=step, blockid=blockid)
-        values = [ values[j,...] for j in xrange(parameters["ncomponents"]) ]
+        values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
         WFt.set_values(values)
 
         # Project wavefunction values to eigenbasis
@@ -90,6 +90,6 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
         # TODO: Consider splitting into cases `fft` versus `fftn`
         valueso = WFo.get_values()
         valuest = WFt.get_values()
-        acs = [prefactor*ifftn(sum(conjugate(valueso[n])*valuest[n])) for n in xrange(parameters["ncomponents"])]
+        acs = [prefactor*ifftn(sum(conjugate(valueso[n])*valuest[n])) for n in range(parameters["ncomponents"])]
 
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)

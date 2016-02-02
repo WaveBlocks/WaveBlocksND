@@ -78,7 +78,7 @@ class WaveFunction(object):
         :return: A list of the values :math:`\psi_i` for all components :math:`i`.
         """
         if components is None:
-            components = xrange(self._number_components)
+            components = range(self._number_components)
 
         if flat is None:
             # Do not change the shape
@@ -155,7 +155,7 @@ class WaveFunction(object):
 
         # Sum the individual norms if requested
         if summed is True:
-            norms = map(square, norms)
+            norms = list(map(square, norms))
             return sqrt(sum(norms))
         else:
             return norms
@@ -216,8 +216,8 @@ class WaveFunction(object):
 
         # Apply the matrix potential to the ket
         tmp = [ zeros(component.shape, dtype=complexfloating) for component in self._values ]
-        for row in xrange(self._number_components):
-            for col in xrange(self._number_components):
+        for row in range(self._number_components):
+            for col in range(self._number_components):
                 tmp[row] = tmp[row] + potential[row*self._number_components+col] * self._values[col]
 
         # Fourier transform the components

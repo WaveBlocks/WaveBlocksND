@@ -12,7 +12,7 @@ arbitrary operator.
 
 from numpy import zeros, complexfloating, conjugate, transpose, dot, cumsum, sum, reshape, array, repeat
 
-from InnerProduct import InnerProduct
+from .InnerProduct import InnerProduct
 
 __all__ = ["HomogeneousInnerProductLCWP"]
 

@@ -16,7 +16,7 @@ def legend(*args, **kwargs):
 
     The args and kwargs are forwarded to the pylab legend function
     """
-    if kwargs.has_key('loc'):
+    if 'loc' in kwargs:
         loc = kwargs['loc']
 
         if loc == "outer right":

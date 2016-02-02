@@ -7,7 +7,7 @@ This file contains the abstract class for representing dense grids.
 @license: Modified BSD License
 """
 
-from AbstractGrid import AbstractGrid
+from .AbstractGrid import AbstractGrid
 
 __all__ = ["DenseGrid"]
 

@@ -105,7 +105,7 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
             ax.set_xlim(view[:2])
             ax.set_ylim(view[2:])
 
-        if parameters.has_key("dt"):
+        if "dt" in parameters:
             fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")

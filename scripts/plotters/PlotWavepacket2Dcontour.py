@@ -90,7 +90,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
         # Plot
         fig = figure()
 
-        for level in xrange(N):
+        for level in range(N):
             z = psi[level]
             z = z.reshape(G.get_number_nodes())
 

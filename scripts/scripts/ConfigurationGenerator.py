@@ -15,6 +15,7 @@ import argparse
 import os
 
 from WaveBlocksND import GlobalDefaults
+from functools import reduce
 
 
 def sort_statements(preamble, alist):
@@ -64,7 +65,7 @@ def construct_name(filename, adict):
     :param names: A dict containing the ``key=value`` pairs.
     """
     # Put all key=value pairs as string into a list
-    kvs = [ GlobalDefaults.kvp_ldel + str(k) + GlobalDefaults.kvp_mdel + str(v) + GlobalDefaults.kvp_rdel for k, v in adict.iteritems() ]
+    kvs = [ GlobalDefaults.kvp_ldel + str(k) + GlobalDefaults.kvp_mdel + str(v) + GlobalDefaults.kvp_rdel for k, v in adict.items() ]
 
     # Concatenate all key=value pairs in a string
     if len(kvs) == 0:
@@ -117,7 +118,7 @@ def write_file(filepath, preamble, settings, sort_code=False):
 
     # Write all the key=value konfiguration pairs
     code = []
-    for k, v in settings.iteritems():
+    for k, v in settings.items():
 
         statement = str(k) + " = " + str(v) + "\n"
         code.append(statement)
@@ -163,8 +164,8 @@ def generate_configurations(pa, gp, lp, cfname="Parameters", cfpath=GlobalDefaul
     print(lp)
 
     # Sort into keys and values
-    lpk = [ k for k in lp.iterkeys() ]
-    lpv = [ v for v in lp.itervalues() ]
+    lpk = [ k for k in lp.keys() ]
+    lpv = [ v for v in lp.values() ]
 
     # Compute a cartesian product of all local parameters
     VG = product(*lpv)

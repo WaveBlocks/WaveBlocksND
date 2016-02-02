@@ -69,8 +69,8 @@ class PhaseSpaceLattice(object):
         keepq = []
         keepp = []
         rows, cols = indices.shape
-        for r in xrange(rows):
-            for c in xrange(cols):
+        for r in range(rows):
+            for c in range(cols):
                 if bool(indices[r,c]) is True:
                     keepq.append(c)
                     keepp.append(r)

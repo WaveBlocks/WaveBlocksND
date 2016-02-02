@@ -12,8 +12,8 @@ where the bra does not equal the ket.
 from functools import partial
 from numpy import squeeze, sum
 
-from Observables import Observables
-from GradientHAWP import GradientHAWP
+from .Observables import Observables
+from .GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesMixedHAWP"]
 
@@ -125,7 +125,7 @@ class ObservablesMixedHAWP(Observables):
             raise ValueError("Number of components in bra (%d) and ket (%d) differs!" % (Nbra, Nket))
 
         if component is None:
-            components = xrange(Nbra)
+            components = range(Nbra)
         else:
             components = [component]
 
@@ -206,11 +206,11 @@ class ObservablesMixedHAWP(Observables):
             Q = [squeeze(Q)]
         else:
             Q = self._innerproduct.quadrature(pacbra, packet, operator=f, eval_at_once=True)
-            Q = map(squeeze, Q)
+            Q = list(map(squeeze, Q))
 
         # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
         # TODO: Should this go inside the innerproduct?
-        epot = [ sum(Q[i*Nket:(i+1)*Nket]) for i in xrange(Nbra) ]
+        epot = [ sum(Q[i*Nket:(i+1)*Nket]) for i in range(Nbra) ]
 
         if summed is True:
             epot = sum(epot)

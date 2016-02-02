@@ -49,7 +49,7 @@ def transform_wavefunction_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Retrieve simulation data
         values = iomin.load_wavefunction(timestep=step, blockid=blockidin)
-        values = [ values[j,...] for j in xrange(parameters["ncomponents"]) ]
+        values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
         WF.set_values(values)
 
         # Project wavefunction values to eigenbasis

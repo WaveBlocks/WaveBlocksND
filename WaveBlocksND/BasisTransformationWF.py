@@ -11,7 +11,7 @@ of the potential.
 
 import numpy
 
-from BasisTransformation import BasisTransformation
+from .BasisTransformation import BasisTransformation
 
 __all__ = ["BasisTransformationWF"]
 
@@ -80,9 +80,9 @@ class BasisTransformationWF(BasisTransformation):
         # The basis transformation, essentially a matrix multiplication
         N = wavefunction.get_number_components()
         result = []
-        for i in xrange(N):
+        for i in range(N):
             tmp = numpy.zeros(values[0].shape, dtype=numpy.complexfloating)
-            for j in xrange(N):
+            for j in range(N):
                 tmp += self._ev[j][i,:] * values[j]
             result.append(tmp)
 
@@ -117,9 +117,9 @@ class BasisTransformationWF(BasisTransformation):
         # The basis transformation, essentially a matrix multiplication
         N = wavefunction.get_number_components()
         result = []
-        for i in xrange(N):
+        for i in range(N):
             tmp = numpy.zeros(values[0].shape, dtype=numpy.complexfloating)
-            for j in xrange(N):
+            for j in range(N):
                 tmp += self._ev[i][j,:] * values[j]
             result.append(tmp)
 

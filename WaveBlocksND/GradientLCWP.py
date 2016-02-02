@@ -8,8 +8,8 @@ a linear combination of arbitrary wavepackets.
 @license: Modified BSD License
 """
 
-from Gradient import Gradient
-from LinearCombinationOfWPs import LinearCombinationOfWPs
+from .Gradient import Gradient
+from .LinearCombinationOfWPs import LinearCombinationOfWPs
 
 __all__ = ["GradientLCWP"]
 
@@ -44,7 +44,7 @@ class GradientLCWP(Gradient):
         # TODO: Optimizing this. For large linear combinations, computing
         #       and storing *all* gradient packets is inefficient. Maybe
         #       better go packet by packet.
-        gradients = [ LinearCombinationOfWPs(D, N) for d in xrange(D) ]
+        gradients = [ LinearCombinationOfWPs(D, N) for d in range(D) ]
         coefficients = lincomb.get_coefficients()
 
         for i, packet in enumerate(lincomb.get_wavepackets()):
