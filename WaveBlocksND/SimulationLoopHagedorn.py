@@ -173,3 +173,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         :py:class:`IOManager` to write the data and close the output files.
         """
         self.IOManager.finalize()
+
+        print("**************************************************")
+        print("***            Simulation Finished             ***")
+        print("**************************************************")
