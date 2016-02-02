@@ -58,15 +58,15 @@ print(PA)
 # Decide which simulation loop to use
 if PA["algorithm"] == "fourier":
     from WaveBlocksND import SimulationLoopFourier
-    SL = SimulationLoopFourier(PA, filepath=outputfile)
+    SL = SimulationLoopFourier(PA, resultsfile=outputfile)
 
 elif PA["algorithm"] == "hagedorn":
     from WaveBlocksND import SimulationLoopHagedorn
-    SL = SimulationLoopHagedorn(PA, filepath=outputfile)
+    SL = SimulationLoopHagedorn(PA, resultsfile=outputfile)
 
 elif PA["algorithm"] == "hagedorn_inhomog":
     from WaveBlocksND import SimulationLoopHagedornInhomogeneous
-    SL = SimulationLoopHagedornInhomogeneous(PA, filepath=outputfile)
+    SL = SimulationLoopHagedornInhomogeneous(PA, resultsfile=outputfile)
 
 # NOTE: Add new algorithms here
 
