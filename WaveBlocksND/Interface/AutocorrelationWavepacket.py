@@ -137,8 +137,8 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
     # Comfigure the original wavepacket
     # Retrieve simulation data
-    params = iom.load_wavepacket_parameters(timestep=0, blockid=blockid)
-    hashes, coeffs = iom.load_wavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
+    params = iom.load_inhomogwavepacket_parameters(timestep=0, blockid=blockid)
+    hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWPo.set_parameters(params)
     HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])

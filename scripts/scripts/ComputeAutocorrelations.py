@@ -83,8 +83,7 @@ else:
     else:
         PA = None
 
-# See if we have a description for observables and
-# especially autocorrelation computation
+# See if we have a description for observables and especially autocorrelation computation
 if PA is not None:
     if "observables" in PA:
         PA = PA["observables"]
@@ -95,11 +94,9 @@ if PA is not None:
     else:
         PA = None
 
-# No configuration parameters so far, use a more or less sane default
-if PA is None:
-    print("Warning: Using (possibly improper) default values for inner product")
-    descr = iom.load_wavepacket_description(blockid=blockids[0])
-    D = descr["dimension"]
+# More or less sane default integrator
+def integrator(description):
+    D = description["dimension"]
     PA = {}
     PA["innerproduct"] = {
         "type" : "InhomogeneousInnerProduct",
@@ -109,9 +106,10 @@ if PA is None:
                 'type': 'TensorProductQR',
                 'dimension': D,
                 'qr_rules': D * [{'type': 'GaussHermiteOriginalQR', 'order': 5}]
-                }
             }
         }
+    }
+    return PA
 
 # Iterate over all blocks
 for blockid in blockids:
@@ -120,6 +118,17 @@ for blockid in blockids:
     if iom.has_autocorrelation(blockid=blockid):
         print("Datablock '%s' already contains autocorrelation data, silent skip." % blockid)
         continue
+
+    # No configuration parameters so far
+    if PA is None:
+        print("Warning: Using (possibly improper) default values for inner product")
+
+        if iom.has_wavepacket(blockid=blockid):
+            descr = iom.load_wavepacket_description(blockid=blockid)
+            PA = integrator(descr)
+        elif iom.has_inhomogwavepacket(blockid=blockid):
+            descr = iom.load_inhomogwavepacket_description(blockid=blockid)
+            PA = integrator(descr)
 
     # NOTE: Add new algorithms here
 
