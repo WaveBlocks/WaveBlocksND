@@ -9,6 +9,7 @@ Plot the energies of the different wavepackets as well as the sum of all energie
 """
 
 import argparse
+import os
 from functools import reduce
 from numpy import abs, add
 from matplotlib.pyplot import figure, close
@@ -48,7 +49,7 @@ def read_data(iom, blockid=0):
     return (timegridk, timegridp, ekin, epot, dt)
 
 
-def plot_energies(data, blockid=0, view=None):
+def plot_energies(data, blockid=0, view=None, path='.'):
     print("Plotting the energies of data block '%s'" % blockid)
 
     timegridk, timegridp, ekin, epot, dt = data
@@ -96,7 +97,7 @@ def plot_energies(data, blockid=0, view=None):
     ax.set_xlabel(xlbl)
     legend(loc="outer right")
     ax.set_title(r"Energies of the wavepacket $\Psi$")
-    fig.savefig("energies_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "energies_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -115,7 +116,7 @@ def plot_energies(data, blockid=0, view=None):
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
     ax.set_title(r"Energy drift of the wavepacket $\Psi$")
-    fig.savefig("energy_drift_block"+str(blockid)+"_lin"+GD.output_format)
+    fig.savefig(os.path.join(path, "energy_drift_block"+str(blockid)+"_lin"+GD.output_format))
     close(fig)
 
 
@@ -129,7 +130,7 @@ def plot_energies(data, blockid=0, view=None):
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
     ax.set_title(r"Energy drift of the wavepacket $\Psi$")
-    fig.savefig("energy_drift_block"+str(blockid)+"_log"+GD.output_format)
+    fig.savefig(os.path.join(path, "energy_drift_block"+str(blockid)+"_log"+GD.output_format))
     close(fig)
 
 
@@ -150,6 +151,12 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     parser.add_argument("-t", "--trange",
                         type = float,
                         help = "The plot range on the t-axis",
@@ -164,9 +171,18 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -181,7 +197,7 @@ if __name__ == "__main__":
         print("Plotting energies in data block '%s'" % blockid)
 
         if iom.has_energy(blockid=blockid):
-            plot_energies(read_data(iom, blockid=blockid), blockid=blockid, view=view)
+            plot_energies(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
             print("Warning: Not plotting energies in block '%s'" % blockid)
 

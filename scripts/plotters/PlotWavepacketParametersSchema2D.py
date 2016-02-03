@@ -11,6 +11,7 @@ time propagation.
 """
 
 import argparse
+import os
 from numpy import array, linspace, dot, sin, cos, pi, real
 from matplotlib.pyplot import figure, close
 
@@ -70,7 +71,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     return (qhist, phist, Qhist, Phist, Shist)
 
 
-def plot_parameters(data, index=0):
+def plot_parameters(data, index=0, path='.'):
     r"""Plot the data parameters :math:`(q,p,Q,P,S)` over time.
     For each new `index` we start a new figure. This allows plotting
     several time evolutions to the same figure
@@ -96,7 +97,7 @@ def plot_parameters(data, index=0):
     ax.set_ylabel(r"$q_y$")
     ax.grid(True)
     ax.set_title(r"Schematic evolution of $q$ and $Q$")
-    fig.savefig("wavepacket_parameters_schema_pos_block"+str(index)+GD.output_format)
+    fig.savefig(os.path.join(path, "wavepacket_parameters_schema_pos_block"+str(index)+GD.output_format))
     close(fig)
 
 
@@ -111,7 +112,7 @@ def plot_parameters(data, index=0):
     ax.set_ylabel(r"$p_y$")
     ax.grid(True)
     ax.set_title(r"Schematic evolution of $p$ and $P$")
-    fig.savefig("wavepacket_parameters_schema_mom_lock"+str(index)+GD.output_format)
+    fig.savefig(os.path.join(path, "wavepacket_parameters_schema_mom_lock"+str(index)+GD.output_format))
     close(fig)
 
 
@@ -132,11 +133,26 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     args = parser.parse_args()
+
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -150,9 +166,9 @@ if __name__ == "__main__":
         # NOTE: Add new algorithms here
 
         if iom.has_wavepacket(blockid=blockid):
-            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid)
+            plot_parameters(read_data_homogeneous(iom, blockid=blockid), index=blockid, path=resultspath)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid)
+            plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid, path=resultspath)
         else:
             print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
 

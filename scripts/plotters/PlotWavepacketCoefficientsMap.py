@@ -14,6 +14,7 @@ basis shapes are adaptive and their mappings mu incompatible!
 """
 
 import argparse
+import os
 from numpy import abs, angle
 from matplotlib.pyplot import figure, close
 
@@ -53,7 +54,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     return time, coeffs
 
 
-def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
+def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20), path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -81,7 +82,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
         ax.set_xlabel(r"$k$")
         ax.set_ylabel(r"$t$")
         ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
-        fig.savefig("wavepacket_coefficients_map_abs_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
+        fig.savefig(os.path.join(path, "wavepacket_coefficients_map_abs_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format))
         close(fig)
 
         fig = figure(figsize=imgsize)
@@ -90,7 +91,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
         ax.set_xlabel(r"$k$")
         ax.set_ylabel(r"$t$")
         ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
-        fig.savefig("wavepacket_coefficients_map_angle_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
+        fig.savefig(os.path.join(path, "wavepacket_coefficients_map_angle_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format))
         close(fig)
 
         fig = figure(figsize=imgsize)
@@ -99,7 +100,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
         ax.set_xlabel(r"$k$")
         ax.set_ylabel(r"$t$")
         ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
-        fig.savefig("wavepacket_coefficients_map_cm_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
+        fig.savefig(os.path.join(path, "wavepacket_coefficients_map_cm_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format))
         close(fig)
 
         fig = figure(figsize=imgsize)
@@ -108,7 +109,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20)):
         ax.set_xlabel(r"$k$")
         ax.set_ylabel(r"$t$")
         ax.set_title(r"Coefficients $c_k^{%d}$" % jndex)
-        fig.savefig("wavepacket_coefficients_map_cm_darken_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format)
+        fig.savefig(os.path.join(path, "wavepacket_coefficients_map_cm_darken_block_"+str(blockid)+"_component_"+str(jndex)+GD.output_format))
         close(fig)
 
 
@@ -129,11 +130,26 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     args = parser.parse_args()
+
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     parameters = iom.load_parameters()
 
@@ -147,9 +163,9 @@ if __name__ == "__main__":
         print("Plotting wavepacket parameters in data block '%s'" % blockid)
 
         if iom.has_wavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), blockid=blockid)
+            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), blockid=blockid, path=resultspath)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), blockid=blockid)
+            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), blockid=blockid, path=resultspath)
         else:
             print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 

@@ -9,6 +9,7 @@ Plot the autocorrelations of the different wavepackets as well as the sum of all
 """
 
 import argparse
+import os
 from functools import reduce
 from numpy import real, imag, abs, add
 from matplotlib.pyplot import figure, close
@@ -53,7 +54,7 @@ def read_data(iom, blockid=0):
     return (timegrid, autocorrelations, dt)
 
 
-def plot_autocorrelations(data, blockid=0, view=None):
+def plot_autocorrelations(data, blockid=0, view=None, path='.'):
     print("Plotting the autocorrelations of data block '%s'" % blockid)
 
     timegrid, autocorrelations, dt = data
@@ -92,7 +93,7 @@ def plot_autocorrelations(data, blockid=0, view=None):
     ax.set_title(r"Autocorrelations of $\Psi$")
     legend(loc="upper right")
     ax.set_xlabel(xlbl)
-    fig.savefig("autocorrelations_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "autocorrelations_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -115,7 +116,7 @@ def plot_autocorrelations(data, blockid=0, view=None):
         legend(loc="upper right")
 
     ax.set_title(r"Autocorrelations of $\Psi$")
-    fig.savefig("autocorrelations_per_component_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "autocorrelations_per_component_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -136,6 +137,12 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     parser.add_argument("-t", "--trange",
                         type = float,
                         help = "The plot range on the t-axis",
@@ -150,9 +157,18 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -167,7 +183,7 @@ if __name__ == "__main__":
         print("Plotting autocorrelations in data block '%s'" % blockid)
 
         if iom.has_autocorrelation(blockid=blockid):
-            plot_autocorrelations(read_data(iom, blockid=blockid), blockid=blockid, view=view)
+            plot_autocorrelations(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
             print("Warning: Not plotting autocorrelations in block '%s'" % blockid)
 

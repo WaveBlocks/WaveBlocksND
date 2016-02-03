@@ -10,6 +10,7 @@ for one-dimensional wavefunctions.
 """
 
 import argparse
+import os
 from numpy import angle, conj, real, imag
 from matplotlib.pyplot import figure, close
 
@@ -20,7 +21,7 @@ from WaveBlocksND.Plot import plotcf
 from WaveBlocksND import GlobalDefaults as GLD
 
 
-def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9)):
+def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9), path='.'):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -101,7 +102,7 @@ def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, p
         else:
             fig.suptitle(r"$\Psi$")
 
-        fig.savefig("wavefunction_block_%s_timestep_%07d.png" % (blockid, step))
+        fig.savefig(os.path.join(path, "wavefunction_block_%s_timestep_%07d.png" % (blockid, step)))
         close(fig)
 
 
@@ -116,7 +117,7 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = GLD.file_resultdatafile)
 
-    parser.add_argument("-p", "--paramfile",
+    parser.add_argument("-p", "--parametersfile",
                         type = str,
                         help = "The configuration parameter file",
                         nargs = "?",
@@ -127,6 +128,12 @@ if __name__ == "__main__":
                         help = "The data block to handle",
                         nargs = "*",
                         default = ["all"])
+
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
 
     parser.add_argument("-x", "--xrange",
                         type = float,
@@ -160,14 +167,24 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+    parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Read file with parameter data for grid
-    if args.paramfile:
+    if args.parametersfile:
         PL = ParameterLoader()
-        PP = PL.load_from_file(args.paramfile)
+        PP = PL.load_from_file(parametersfile)
     else:
         PP = None
 
@@ -191,7 +208,8 @@ if __name__ == "__main__":
                         plotphase=args.plotphase,
                         plotcomponents=args.plotcomponents,
                         plotabssqr=args.plotabssqr,
-                        load=False)
+                        load=False,
+                        path=resultspath)
         else:
             print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
 

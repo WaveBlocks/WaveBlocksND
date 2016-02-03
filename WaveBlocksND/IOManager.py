@@ -12,8 +12,6 @@ import types
 import h5py as hdf
 import numpy as np
 
-from . import GlobalDefaults
-
 __all__ = ["IOManager"]
 
 
