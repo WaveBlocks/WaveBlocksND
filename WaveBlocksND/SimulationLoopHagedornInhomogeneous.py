@@ -4,7 +4,7 @@ This file contains the main simulation loop
 for the inhomogeneous Hagedorn propagator.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -23,13 +23,14 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
     propagates a set of initial values during a time evolution.
     """
 
-    def __init__(self, parameters):
+    def __init__(self, parameters, resultsfile):
         r"""Create a new simulation loop instance for a simulation
         using the semiclassical Hagedorn wavepacket based propagation
         method.
 
         :param parameters: The simulation parameters.
         :type parameters: A :py:class:`ParameterProvider` instance.
+        :param resultsfile: Path and filename of the hdf5 output file.
         """
         # Keep a reference to the simulation parameters
         self.parameters = parameters
@@ -45,7 +46,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
 
         # Set up serialization of simulation data
         self.IOManager = IOManager()
-        self.IOManager.create_file()
+        self.IOManager.create_file(resultsfile)
 
         # Save the simulation parameters
         self.IOManager.add_parameters()
@@ -151,3 +152,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         :py:class:`IOManager` to write the data and close the output files.
         """
         self.IOManager.finalize()
+
+        print("**************************************************")
+        print("***            Simulation Finished             ***")
+        print("**************************************************")

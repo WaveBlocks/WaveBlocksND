@@ -9,6 +9,7 @@ Plot the norms of the different wavepackets as well as the sum of all norms.
 """
 
 import argparse
+import os
 from functools import reduce
 from numpy import add, square, sqrt, max
 from matplotlib.pyplot import figure, close
@@ -40,7 +41,7 @@ def read_data(iom, blockid=0):
     return (timegrid, norms, dt)
 
 
-def plot_norms(data, blockid=0, view=None):
+def plot_norms(data, blockid=0, view=None, path='.'):
     print("Plotting the norms of data block '%s'" % blockid)
 
     timegrid, norms, dt = data
@@ -80,7 +81,7 @@ def plot_norms(data, blockid=0, view=None):
     ax.set_title(r"Norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
-    fig.savefig("norms_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "norms_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -102,7 +103,7 @@ def plot_norms(data, blockid=0, view=None):
     ax.set_title(r"Squared norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
-    fig.savefig("norms_sqr_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "norms_sqr_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -119,7 +120,7 @@ def plot_norms(data, blockid=0, view=None):
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$\|\Psi\|_0 - \|\Psi\|_t$")
-    fig.savefig("norms_drift_block"+str(blockid)+GD.output_format)
+    fig.savefig(os.path.join(path, "norms_drift_block"+str(blockid)+GD.output_format))
     close(fig)
 
 
@@ -134,7 +135,7 @@ def plot_norms(data, blockid=0, view=None):
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$\|\Psi\|_0 - \|\Psi\|_t$")
-    fig.savefig("norms_drift_block"+str(blockid)+"_log"+GD.output_format)
+    fig.savefig(os.path.join(path, "norms_drift_block"+str(blockid)+"_log"+GD.output_format))
     close(fig)
 
 
@@ -155,6 +156,12 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     parser.add_argument("-t", "--trange",
                         type = float,
                         help = "The plot range on the t-axis",
@@ -169,9 +176,18 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -186,7 +202,7 @@ if __name__ == "__main__":
         print("Plotting norms in data block '%s'" % blockid)
 
         if iom.has_norm(blockid=blockid):
-            plot_norms(read_data(iom, blockid=blockid), blockid=blockid, view=view)
+            plot_norms(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
             print("Warning: Not plotting norms in block '%s'" % blockid)
 

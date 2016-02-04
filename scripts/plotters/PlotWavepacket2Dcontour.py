@@ -10,6 +10,7 @@ for two-dimensional wavepackets.
 """
 
 import argparse
+import os
 from numpy import real
 from matplotlib.pyplot import figure, close
 
@@ -21,7 +22,7 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Plot import plotcf2d
 
 
-def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=None, view=None):
+def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=None, view=None, path='.'):
     """Plot the wavepacket for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -97,7 +98,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
             fig.add_subplot(N,1,level+1)
             plotcf2d(u, v, z, darken=0.3, limits=view)
 
-        fig.savefig("wavepacket_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step))
+        fig.savefig(os.path.join(path, "wavepacket_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step)))
         close(fig)
 
 
@@ -112,7 +113,7 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = GLD.file_resultdatafile)
 
-    parser.add_argument("-p", "--paramfile",
+    parser.add_argument("-p", "--parametersfile",
                         type = str,
                         help = "The simulation data file",
                         nargs = "?",
@@ -123,6 +124,12 @@ if __name__ == "__main__":
                         help = "The data block to handle",
                         nargs = "*",
                         default = ["all"])
+
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
 
     parser.add_argument("-et", "--eigentransform",
                         action = "store_true",
@@ -148,14 +155,24 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+    parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Read file with parameter data for grid
-    if args.paramfile:
+    if args.parametersfile:
         PL = ParameterLoader()
-        PP = PL.load_from_file(args.paramfile)
+        PP = PL.load_from_file(parametersfile)
     else:
         PP = None
 
@@ -175,7 +192,8 @@ if __name__ == "__main__":
             plot_frames(PP, iom, blockid=blockid,
                         eigentransform=args.eigentransform,
                         timerange=args.timerange,
-                        view=view)
+                        view=view,
+                        path=resultspath)
         else:
             print("Warning: Not plotting any wavepackets in block '%s'" % blockid)
 

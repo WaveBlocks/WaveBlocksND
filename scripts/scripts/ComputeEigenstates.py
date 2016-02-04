@@ -5,11 +5,12 @@ This file contains code for computing the eigenstates of a given
 potential in terms of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
+import os
 from numpy import (argsort, atleast_1d, atleast_2d, complexfloating, conjugate, dot, ones, zeros,
                    real, identity, squeeze, sum, transpose, zeros_like, argmax, angle, abs, pi)
 from scipy.optimize import fmin
@@ -205,6 +206,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
 
     IOM.finalize()
 
+    # TODO: Find better criterion
     if norm(q0) > 1000:
         print("+----------------------------------+")
         print("| Run-away minimum?                |")
@@ -221,29 +223,45 @@ if __name__ == "__main__":
 
     parser.add_argument("parametersfile",
                         type = str,
-                        help = "The configuration parameters file")
+                        help = "The configuration parameters file.")
 
     parser.add_argument("-o", "--outputfile",
                         type = str,
-                        help = "The output data file",
+                        help = "The output data file.",
                         nargs = "?",
                         default = "eigenstates.hdf5")
 
+    parser.add_argument("-r", "--resultspath",
+                    type = str,
+                    help = "Path where to put the results.",
+                    nargs = "?",
+                    default = '.')
+
     parser.add_argument("--nopq",
-                        help = "Do not compute the parameters q and p",
+                        help = "Do not compute the parameters q and p.",
                         action = "store_false")
 
     parser.add_argument("--noPQ",
-                        help = "Do not compute the parameters Q and P",
+                        help = "Do not compute the parameters Q and P.",
                         action = "store_false")
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
+    outputfile = os.path.abspath(os.path.join(args.resultspath, args.outputfile))
+
     # Read the path for the configuration file we use for this simulation.
-    print("Using configuration from file: " + args.parametersfile)
+    print("Using configuration from file: " + parametersfile)
 
     # Set up the parameter provider singleton
-    PA = ParameterLoader().load_from_file(args.parametersfile)
-    compute_eigenstate(PA, filename=args.outputfile, computepq=args.nopq, computePQ=args.noPQ)
+    PA = ParameterLoader().load_from_file(parametersfile)
+    compute_eigenstate(PA, filename=outputfile, computepq=args.nopq, computePQ=args.noPQ)
 
     print("Eigenstate computation finished")

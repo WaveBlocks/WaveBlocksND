@@ -10,6 +10,7 @@ This script is only for two-dimensional potentials.
 """
 
 import argparse
+import os
 from numpy import real
 from mayavi import mlab
 
@@ -20,7 +21,7 @@ from WaveBlocksND import ParameterLoader
 from WaveBlocksND import GlobalDefaults as GLD
 
 
-def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, interactive=False):
+def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, interactive=False, path='.'):
     """Plot the potential
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -65,7 +66,7 @@ def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, int
     if interactive:
         mlab.show()
     else:
-        mlab.savefig("potential_3D_view.png")
+        mlab.savefig(os.path.join(path, "potential_3D_view.png"))
         mlab.close(fig)
 
 
@@ -80,7 +81,7 @@ if __name__ == "__main__":
                         nargs = "?",
                         default = GLD.file_resultdatafile)
 
-    parser.add_argument("-p", "--paramfile",
+    parser.add_argument("-p", "--parametersfile",
                         type = str,
                         help = "The simulation data file",
                         nargs = "?",
@@ -91,6 +92,12 @@ if __name__ == "__main__":
     #                     help = "The data block to handle",
     #                     nargs = "*",
     #                     default = ["all"])
+
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
 
     parser.add_argument("-x", "--xrange",
                         type = float,
@@ -121,16 +128,26 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+    parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Read file with parameter data for grid
     parameters = iom.load_parameters()
 
-    if args.paramfile:
+    if args.parametersfile:
         PL = ParameterLoader()
-        gridparams = PL.load_from_file(args.paramfile)
+        gridparams = PL.load_from_file(parametersfile)
     else:
         gridparams = parameters
 
@@ -142,9 +159,10 @@ if __name__ == "__main__":
         Potential = BlockFactory().create_potential(parameters)
         Grid = TensorProductGrid(gridparams["limits"], gridparams["number_nodes"])
         plot_potential(Grid, Potential,
-                        sparsify=args.sparsify,
-                        view=view,
-                        interactive=args.interactive)
+                       sparsify=args.sparsify,
+                       view=view,
+                       interactive=args.interactive,
+                       path=resultspath)
     else:
         print("Not a potential in two space dimensions, silent return!")
 

@@ -5,11 +5,12 @@ Sample wavepackets at the nodes of a given grid and save
 the results back to the given simulation data file.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
+import os
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import ParameterLoader
@@ -19,35 +20,50 @@ parser = argparse.ArgumentParser()
 
 parser.add_argument("-d", "--datafile",
                     type = str,
-                    help = "The simulation data file",
+                    help = "The simulation data file.",
                     nargs = "?",
                     default = GD.file_resultdatafile)
 
 parser.add_argument("-b", "--blockid",
                     type = str,
-                    help = "The data block to handle",
+                    help = "The data block to handle.",
                     nargs = "*",
                     default = ["all"])
 
-parser.add_argument("-p", "--paramfile",
+parser.add_argument("-p", "--parametersfile",
                     type = str,
-                    help = "The configuration parameter file",
+                    help = "The configuration parameter file.",
                     nargs = "?",
                     default = None)
 
+parser.add_argument("-r", "--resultspath",
+                    type = str,
+                    help = "Path where to put the results.",
+                    nargs = "?",
+                    default = '.')
+
 parser.add_argument("-et", "--eigentransform",
-                    help = "Transform the data into the eigenbasis before computing norms",
+                    help = "Transform the data into the eigenbasis before computing norms.",
                     action = "store_false")
 
 args = parser.parse_args()
 
+
+# File with the simulation data
+resultspath = os.path.abspath(args.resultspath)
+
+if not os.path.exists(resultspath):
+    raise IOError("The results path does not exist: " + args.resultspath)
+
+datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
 # Read file with simulation data
 iom = IOManager()
-iom.open_file(filename=args.datafile)
+iom.open_file(filename=datafile)
 
 # Read the additional grid parameters
-if args.paramfile:
-    parametersfile = args.paramfile
+if args.parametersfile:
+    parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
     PA = ParameterLoader().load_from_file(parametersfile)
 else:
     PA = None

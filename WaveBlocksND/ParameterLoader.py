@@ -4,7 +4,7 @@ Reads configuration files containing the simulation parameters and
 puts the values into a parameter provider instance.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -49,9 +49,8 @@ class ParameterLoader(object):
         :return: A :py:class:`ParameterProvider` instance.
         """
         # Read the configuration file
-        cf = open(filepath)
-        content = cf.read()
-        cf.close()
+        with open(filepath, 'r') as cf:
+            content = cf.read()
 
         # All the parameters as dict
         params = self._get_configuration_variables(content)

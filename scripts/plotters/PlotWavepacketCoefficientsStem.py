@@ -11,6 +11,7 @@ time propagation.
 """
 
 import argparse
+import os
 from numpy import abs, angle, array
 from matplotlib.pyplot import figure, close
 
@@ -104,7 +105,7 @@ def read_data_inhomogeneous(iom, blockid=0, timerange=None):
         plot_coefficients(k, ck, step, dt, blockid=blockid)
 
 
-def plot_coefficients(k, c, step, dt, blockid=0):
+def plot_coefficients(k, c, step, dt, blockid=0, path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -136,7 +137,7 @@ def plot_coefficients(k, c, step, dt, blockid=0):
     else:
         fig.suptitle(r"Coefficients $c_k$")
 
-    fig.savefig("wavepacket_coefficients_block_%s_timestep_%07d.png" % (blockid, step))
+    fig.savefig(os.path.join(path, "wavepacket_coefficients_block_%s_timestep_%07d.png" % (blockid, step)))
     close(fig)
 
 
@@ -157,6 +158,12 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     parser.add_argument("-t", "--timerange",
                         type = int,
                         help = "Plot only timestep(s) in this range",
@@ -165,9 +172,18 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -179,9 +195,9 @@ if __name__ == "__main__":
         print("Plotting wavepacket coefficients in data block '%s'" % blockid)
 
         if iom.has_wavepacket(blockid=blockid):
-            read_data_homogeneous(iom, blockid=blockid, timerange=args.timerange)
+            read_data_homogeneous(iom, blockid=blockid, timerange=args.timerange, path=resultspath)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            read_data_inhomogeneous(iom, blockid=blockid, timerange=args.timerange)
+            read_data_inhomogeneous(iom, blockid=blockid, timerange=args.timerange, path=resultspath)
         else:
             print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 

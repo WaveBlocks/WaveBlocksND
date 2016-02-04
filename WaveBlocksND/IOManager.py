@@ -3,7 +3,7 @@
 This file contains code for serializing simulation data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -11,8 +11,6 @@ import os
 import types
 import h5py as hdf
 import numpy as np
-
-from . import GlobalDefaults
 
 __all__ = ["IOManager"]
 
@@ -82,7 +80,7 @@ class IOManager(object):
         return self.__dict__[key]
 
 
-    def create_file(self, filename=GlobalDefaults.file_resultdatafile):
+    def create_file(self, filename):
         """Set up a new :py:class:`IOManager` instance. The output file is created and opened.
 
         :param filename: The filename (optionally with filepath) of the file we try to create.
@@ -109,7 +107,7 @@ class IOManager(object):
         self.create_block(blockid="global", groupid="global")
 
 
-    def open_file(self, filename=GlobalDefaults.file_resultdatafile):
+    def open_file(self, filename):
         """Load a given file that contains the results from another simulation.
 
         :param filename: The filename (optionally with filepath) of the file we try to load.

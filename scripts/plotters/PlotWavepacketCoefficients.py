@@ -14,6 +14,7 @@ basis shapes are adaptive and their mappings mu incompatible!
 """
 
 import argparse
+import os
 from numpy import real, imag, abs, angle
 from matplotlib.pyplot import figure, close
 
@@ -53,7 +54,7 @@ def read_data_inhomogeneous(iom, blockid=0):
     return time, coeffs, [h.reshape(-1) for h in hashes]
 
 
-def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsize=(10,20)):
+def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsize=(10,20), path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -107,7 +108,7 @@ def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsi
                 ax.set_ylabel(r"$c^{%d}$" % level)
 
         fig.suptitle(r"$\underline{k} = "+str(vect)+r"$")
-        fig.savefig("coefficient_k"+str(vect)+"_block"+str(index)+GD.output_format)
+        fig.savefig(os.path.join(path, "coefficient_k"+str(vect)+"_block"+str(index)+GD.output_format))
         close(fig)
 
 
@@ -128,15 +129,30 @@ if __name__ == "__main__":
                         nargs = "*",
                         default = ["all"])
 
+    parser.add_argument("-r", "--resultspath",
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
+
     parser.add_argument("--reim",
                         action = "store_true",
                         help = "Plot the real and imaginary parts")
 
     args = parser.parse_args()
 
+
+    # File with the simulation data
+    resultspath = os.path.abspath(args.resultspath)
+
+    if not os.path.exists(resultspath):
+        raise IOError("The results path does not exist: " + args.resultspath)
+
+    datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
+
     # Read file with simulation data
     iom = IOManager()
-    iom.open_file(filename=args.datafile)
+    iom.open_file(filename=datafile)
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
@@ -153,9 +169,9 @@ if __name__ == "__main__":
         # NOTE: Add new algorithms here
 
         if iom.has_wavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid, reim=args.reim)
+            plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), index=blockid, reim=args.reim, path=resultspath)
         elif iom.has_inhomogwavepacket(blockid=blockid):
-            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid, reim=args.reim)
+            plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid, reim=args.reim, path=resultspath)
         else:
             print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
 

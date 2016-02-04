@@ -4,11 +4,12 @@
 Compute the eigen transformation of the simulation results given.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 import argparse
+import os
 
 from WaveBlocksND import IOManager
 from WaveBlocksND import GlobalDefaults as GD
@@ -24,19 +25,37 @@ parser.add_argument("-o", "--outputfile",
                     type = str,
                     help = "The data file to write the transformed data.")
 
+parser.add_argument("-r", "--resultspath",
+                    type = str,
+                    help = "Path where to put the results.",
+                    nargs = "?",
+                    default = '.')
+
 args = parser.parse_args()
 
+
+# Files with the simulation data
+resultspath = os.path.abspath(args.resultspath)
+
+if not os.path.exists(resultspath):
+    raise IOError("The results path does not exist: " + args.resultspath)
+
+inputfile = os.path.abspath(os.path.join(args.resultspath, args.inputfile))
+
+# No output file name given
 if not args.outputfile:
-    outputfile = args.inputfile.replace(GD.ext_resultdatafile, "") + "_eigen" + GD.ext_resultdatafile
+    outputfile = inputfile.replace(GD.ext_resultdatafile, "") + "_eigen" + GD.ext_resultdatafile
 else:
     outputfile = args.outputfile
 
-print("Reading simulation data from the file: "+str(args.inputfile))
+outputfile = os.path.abspath(os.path.join(args.resultspath, outputfile))
+
+print("Reading simulation data from the file: "+str(inputfile))
 print("Writing transformed data to the file: "+str(outputfile))
 
 # Read file with simulation data
 iomc = IOManager()
-iomc.open_file(args.inputfile)
+iomc.open_file(inputfile)
 
 iome = IOManager()
 iome.create_file(outputfile)
