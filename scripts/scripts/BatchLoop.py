@@ -25,7 +25,7 @@ def list_configurations(path):
     configurations = []
 
     for afile in os.listdir(path):
-        afile = os.path.abspath(os.path.join(path, afile))
+        afile = os.path.join(path, afile)
         if os.path.isfile(afile) and afile.endswith('.py'):
             configurations.append(afile)
 
@@ -77,17 +77,22 @@ class Job:
 def run_job(job):
     r"""Run the given job object.
     """
-    print("Running simulation: " + job.configfile)
+    print("Running simulation: {}".format(job.configfile))
 
-    resultspath = job.resultspath
     configfile = job.configfile
     configname = os.path.basename(configfile).split('.py')[0]
 
-    with open("simulation_"+str(configname)+"_stdout.log", 'w') as stdout:
-        with open("simulation_"+str(configname)+"_stderr.log", 'w') as stderr:
+    outputpath = os.path.join(job.resultspath, configname)
 
-            outputpath = os.path.join(resultspath, configname)
+    stdoutlogfile = os.path.join(outputpath, "simulation_"+str(configname)+"_stdout.log")
+    stderrlogfile = os.path.join(outputpath, "simulation_"+str(configname)+"_stderr.log")
 
+    # Make sure the ouput directory exists
+    os.makedirs(outputpath, mode=0o700, exist_ok=True)
+
+    # Open log files and execute commands
+    with open(stdoutlogfile, 'w') as stdout:
+        with open(stderrlogfile, 'w') as stderr:
             for command in job.commands(outputpath):
                 subprocess.call(command,
                                 shell=False,
@@ -124,12 +129,12 @@ if __name__ == "__main__":
 
     parser.add_argument("-c", "--configurations",
                         type = str,
-                        help = "Path to the 'configuration' directory")
+                        help = "Path to the 'configuration' directory.")
 
     parser.add_argument("-r", "--resultspath",
                         type = str,
                         help = "Path to the 'results' directory.",
-                        default = './results')
+                        default = '.')
 
     parser.add_argument("-m", "--maxworkers",
                         type = int,
@@ -140,7 +145,7 @@ if __name__ == "__main__":
 
 
     commands = [
-        "mkdir -p OUTPUTPATH",
+        "cp CONFIGFILE OUTPUTPATH",
         "Main.py CONFIGFILE -r OUTPUTPATH",
         "ComputeNorms.py -r OUTPUTPATH",
         "ComputeEnergies.py -r OUTPUTPATH",
@@ -151,14 +156,26 @@ if __name__ == "__main__":
     ]
 
 
+    # Paths
+    fpath = os.path.abspath(args.configurations)
+    rpath = os.path.abspath(args.resultspath)
+
+    if not (os.path.exists(fpath) and os.path.isdir(fpath)):
+        raise ValueError("Invalid configuration path: " + str(fpath))
+
+    if not (os.path.exists(rpath) and os.path.isdir(rpath)):
+        raise ValueError("Invalid results path: " + str(rpath))
+
     # Read off commands
     C = parse_commands(commands)
 
     # List all configuration files
-    F = list_configurations(args.configurations)
+    F = list_configurations(fpath)
 
     # Set up jobs
-    J = [ Job(f, args.resultspath, C) for f in F ]
+    J = [ Job(f, rpath, C) for f in F ]
 
     # Batch run
+    print("Running {} simulations from: {}".format(len(F), fpath))
+    print("Putting results into: {}\n".format(rpath))
     batch_loop(J, max_workers=args.maxworkers)
