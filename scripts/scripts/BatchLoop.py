@@ -10,8 +10,8 @@ Simple script to run several simulations with a given set of parameter files.
 
 import argparse
 import os
+import shlex
 import logging
-
 import concurrent.futures
 import subprocess
 
@@ -33,6 +33,25 @@ def list_configurations(path):
 
 
 
+def parse_commands(commands):
+    def get_lambda(command):
+        def lambda_c(configfile, outputpath):
+            U = []
+            for c in command:
+                if c == "CONFIGFILE":
+                    U.append(configfile)
+                elif c == "OUTPUTPATH":
+                    U.append(outputpath)
+                else:
+                    U.append(c)
+            return U
+        return lambda_c
+
+    L = [get_lambda(shlex.split(command)) for command in commands ]
+    return L
+
+
+
 class Job:
     r"""
     """
@@ -51,7 +70,7 @@ class Job:
 
     def commands(self, outputpath):
         configfile = self._configfile
-        return self._commands(configfile, outputpath)
+        return [ command(configfile, outputpath) for command in self._commands ]
 
 
 
@@ -120,25 +139,26 @@ if __name__ == "__main__":
     args = parser.parse_args()
 
 
-
-    commands = lambda configfile, outputpath: [
-        ['mkdir', '-p', outputpath],
-        ['Main.py', configfile, '-r', outputpath],
-        ['ComputeNorms.py', '-r', outputpath],
-        ['ComputeEnergies.py', '-r', outputpath],
-        ['ComputeAutocorrelations.py', '-r', outputpath],
-        ['PlotNorms.py', '-r', outputpath],
-        ['PlotEnergies.py', '-r', outputpath],
-        ['PlotAutocorrelations.py', '-r', outputpath]
+    commands = [
+        "mkdir -p OUTPUTPATH",
+        "Main.py CONFIGFILE -r OUTPUTPATH",
+        "ComputeNorms.py -r OUTPUTPATH",
+        "ComputeEnergies.py -r OUTPUTPATH",
+        "ComputeAutocorrelations.py -r OUTPUTPATH",
+        "PlotNorms.py -r OUTPUTPATH",
+        "PlotEnergies.py -r OUTPUTPATH",
+        "PlotAutocorrelations.py -r OUTPUTPATH"
     ]
 
 
+    # Read off commands
+    C = parse_commands(commands)
 
     # List all configuration files
-    C = list_configurations(args.configurations)
+    F = list_configurations(args.configurations)
 
     # Set up jobs
-    J = [ Job(c, args.resultspath, commands) for c in C ]
+    J = [ Job(f, args.resultspath, C) for f in F ]
 
     # Batch run
     batch_loop(J, max_workers=args.maxworkers)
