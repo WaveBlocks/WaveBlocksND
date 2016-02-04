@@ -10,78 +10,80 @@ Simple script to run several simulations with a given set of parameter files.
 
 import argparse
 import os
+import logging
 
 import concurrent.futures
 import subprocess
 
 
-class job:
-
-    def __init__(self, configfile, resultspath):
-        self._configfile = configfile
-        self._resultspath = resultspath
-
-    def resultspath(self):
-        return self._resultspath
-
-    def configfile(self):
-        return self._configfile
-
-    def commands(self, resultspath):
-        configfile = self._configfile
-        return [
-            ['Main.py', str(configfile), '-r', resultspath],
-            ['ComputeNorms.py', '-r', resultspath],
-            ['ComputeEnergies.py', '-r', resultspath],
-            ['ComputeAutocorrelations.py', '-r', resultspath],
-            ['PlotNorms.py', '-r', resultspath],
-            ['PlotEnergies.py', '-r', resultspath],
-            ['PlotAutocorrelations.py', '-r', resultspath]
-        ]
-
-
-
 def list_configurations(path):
-    configurations = [
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_1D_p.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_1D_f.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_1D_p_ih.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_1D_p_nsd.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_1D_p_stationary_groundstate.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_2D_p.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_2D_p_stationary_groundstate.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_ring_2D_p.py',
-        '/u/raoulb/WaveBlocksND/examples/harmonic_oscillators/harmonic_tube_2D_p.py'
-    ]
+    r"""Search for configuration files containing the simulation parameters
+    under a given path and return a list of all.
+
+    :parameter path: The path under which we search for configuration files.
+    """
+    configurations = []
+
+    for afile in os.listdir(path):
+        afile = os.path.abspath(os.path.join(path, afile))
+        if os.path.isfile(afile) and afile.endswith('.py'):
+            configurations.append(afile)
+
     return configurations
 
 
 
-def run_job(job):
-    print("Running simulation: " + job.configfile())
+class Job:
+    r"""
+    """
+    def __init__(self, configfile, resultspath, commands):
+        self._configfile = configfile
+        self._resultspath = resultspath
+        self._commands = commands
 
-    resultspath = job.resultspath()
-    configfile = job.configfile()
+    @property
+    def resultspath(self):
+        return self._resultspath
+
+    @property
+    def configfile(self):
+        return self._configfile
+
+    def commands(self, outputpath):
+        configfile = self._configfile
+        return self._commands(configfile, outputpath)
+
+
+
+def run_job(job):
+    r"""Run the given job object.
+    """
+    print("Running simulation: " + job.configfile)
+
+    resultspath = job.resultspath
+    configfile = job.configfile
     configname = os.path.basename(configfile).split('.py')[0]
 
-    with open("call_"+str(configname)+"_stdout.log", 'w') as stdout:
-        with open("call_"+str(configname)+"_sdterr.log", 'w') as stderr:
+    with open("simulation_"+str(configname)+"_stdout.log", 'w') as stdout:
+        with open("simulation_"+str(configname)+"_stderr.log", 'w') as stderr:
 
             outputpath = os.path.join(resultspath, configname)
-            os.mkdir(outputpath)
 
             for command in job.commands(outputpath):
                 subprocess.call(command,
                                 shell=False,
                                 stdout=stdout,
                                 stderr=stderr)
-
     return True
 
 
 
 def batch_loop(jobs, max_workers=4):
+    r"""Run jobs in parallel.
 
+    :param jobs: List of runnable jobs objects.
+    :param max_workers: Maximal number of jobs run in parallel.
+    """
     with concurrent.futures.ThreadPoolExecutor(max_workers = max_workers) as executor:
 
         F = {executor.submit(run_job, job) : job for job in jobs}
@@ -90,11 +92,9 @@ def batch_loop(jobs, max_workers=4):
             try:
                 future.result()
             except Exception:
-                print('Code generated an exception')
+                logging.exception('Code generated an exception')
                 continue
-            else:
-                print('Code terminated properly')
-                pass
+
 
 
 
@@ -103,32 +103,42 @@ if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
 
-    parser.add_argument("-j", "--job",
-                        type = str,
-                        help = "The job configuration file")
-
     parser.add_argument("-c", "--configurations",
                         type = str,
                         help = "Path to the 'configuration' directory")
 
-    parser.add_argument("-r", "--results",
+    parser.add_argument("-r", "--resultspath",
                         type = str,
                         help = "Path to the 'results' directory.",
-                        default = '.')
+                        default = './results')
 
     parser.add_argument("-m", "--maxworkers",
                         type = int,
                         help = "Maximal number of parallel jobs.",
-                        default = 4)
+                        default = 2)
 
     args = parser.parse_args()
 
 
-    # Set up jobs
-    J = []
-    for c in list_configurations('.'):
-        J.append(job(c, './results'))
 
+    commands = lambda configfile, outputpath: [
+        ['mkdir', '-p', outputpath],
+        ['Main.py', configfile, '-r', outputpath],
+        ['ComputeNorms.py', '-r', outputpath],
+        ['ComputeEnergies.py', '-r', outputpath],
+        ['ComputeAutocorrelations.py', '-r', outputpath],
+        ['PlotNorms.py', '-r', outputpath],
+        ['PlotEnergies.py', '-r', outputpath],
+        ['PlotAutocorrelations.py', '-r', outputpath]
+    ]
+
+
+
+    # List all configuration files
+    C = list_configurations(args.configurations)
+
+    # Set up jobs
+    J = [ Job(c, args.resultspath, commands) for c in C ]
 
     # Batch run
-    batch_loop(J, max_workers=4)
+    batch_loop(J, max_workers=args.maxworkers)
