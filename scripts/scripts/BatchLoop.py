@@ -32,12 +32,18 @@ def list_configurations(path):
     return configurations
 
 
+class Command:
+    r"""
+    """
 
-def parse_commands(commands):
-    def get_lambda(command):
+    def __init__(self, commandstring):
+        self._command = self._get_lambda(shlex.split(commandstring))
+        self._commandstring = commandstring
+
+    def _get_lambda(self, commandstring):
         def lambda_c(configfile, outputpath):
             U = []
-            for c in command:
+            for c in commandstring:
                 if c == "CONFIGFILE":
                     U.append(configfile)
                 elif c == "OUTPUTPATH":
@@ -47,18 +53,26 @@ def parse_commands(commands):
             return U
         return lambda_c
 
-    L = [get_lambda(shlex.split(command)) for command in commands ]
-    return L
+    def __repr__(self):
+        return self._commandstring
+
+    @property
+    def command(self):
+        return self._command
 
 
 
 class Job:
     r"""
     """
+
     def __init__(self, configfile, resultspath, commands):
         self._configfile = configfile
         self._resultspath = resultspath
         self._commands = commands
+
+    def __repr__(self):
+        return repr(self._commands)
 
     @property
     def resultspath(self):
@@ -70,7 +84,7 @@ class Job:
 
     def commands(self, outputpath):
         configfile = self._configfile
-        return [ command(configfile, outputpath) for command in self._commands ]
+        return [ command.command(configfile, outputpath) for command in self._commands ]
 
 
 
@@ -98,7 +112,7 @@ def run_job(job):
                                 shell=False,
                                 stdout=stdout,
                                 stderr=stderr)
-    return True
+    return None
 
 
 
@@ -110,7 +124,7 @@ def batch_loop(jobs, max_workers=4):
     """
     with concurrent.futures.ThreadPoolExecutor(max_workers = max_workers) as executor:
 
-        F = {executor.submit(run_job, job) : job for job in jobs}
+        F = [ executor.submit(run_job, job) for job in jobs ]
 
         for future in concurrent.futures.as_completed(F):
             try:
@@ -167,7 +181,7 @@ if __name__ == "__main__":
         raise ValueError("Invalid results path: " + str(rpath))
 
     # Read off commands
-    C = parse_commands(commands)
+    C = [ Command(c) for c in commands ]
 
     # List all configuration files
     F = list_configurations(fpath)
