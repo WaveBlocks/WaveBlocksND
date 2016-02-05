@@ -4,7 +4,7 @@ IOM plugin providing functions for handling
 homogeneous Hagedorn wavepacket data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -205,7 +205,7 @@ def load_wavepacket_description(self, blockid=0):
     # Load and return all descriptions available
     descr = {}
     for key, value in self._srf[pathd].attrs.items():
-        descr[key] = pickle.loads(value.tostring())
+        descr[key] = self._load_attr_value(value)
     return descr
 
 
@@ -306,7 +306,7 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+ahash].attrs.items():
-                descr[key] = pickle.loads(value.tostring())
+                descr[key] = self._load_attr_value(value)
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
         return descrs
@@ -320,7 +320,7 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+name].attrs.items():
-                descr[key] = pickle.loads(value.tostring())
+                descr[key] = self._load_attr_value(value)
             return descr
         else:
             raise IndexError("No basis shape with given hash "+str(hash))
@@ -343,7 +343,7 @@ def load_wavepacket(self, timestep, blockid=0, key=("q","p","Q","P","S","adQ")):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`HagedornWavepacket` instance.
     """
-    from .BlockFactory import BlockFactory
+    from WaveBlocksND.BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_wavepacket_description(blockid=blockid)

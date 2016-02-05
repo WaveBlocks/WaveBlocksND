@@ -4,7 +4,7 @@ IOM plugin providing functions for handling
 linear combinations of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -299,7 +299,7 @@ def load_lincombhawp_description(self, blockid=0):
     # Load and return all descriptions available
     descr = {}
     for key, value in self._srf[pathd].attrs.items():
-        descr[key] = pickle.loads(value.tostring())
+        descr[key] = self._load_attr_value(value)
     return descr
 
 
@@ -438,7 +438,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+ahash].attrs.items():
-                descr[key] = pickle.loads(value.tostring())
+                descr[key] = self._load_attr_value(value)
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
         return descrs
@@ -450,7 +450,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
             # TODO: What data exactly do we want to return?
             descr = {}
             for key, value in self._srf[pathd+name].attrs.items():
-                descr[key] = pickle.loads(value.tostring())
+                descr[key] = self._load_attr_value(value)
             return descr
         else:
             raise IndexError("No basis shape with given hash "+str(hash))
@@ -471,8 +471,8 @@ def load_lincombhawp(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`LinearCombinationOfHAWPs` instance.
     """
-    from .LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
-    from .BlockFactory import BlockFactory
+    from WaveBlocksND.LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
+    from WaveBlocksND.BlockFactory import BlockFactory
     BF = BlockFactory()
 
     descr = self.load_lincombhawp_description(blockid=blockid)

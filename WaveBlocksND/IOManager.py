@@ -9,6 +9,7 @@ This file contains code for serializing simulation data.
 
 import os
 import types
+import pickle
 import h5py as hdf
 import numpy as np
 
@@ -325,3 +326,14 @@ class IOManager(object):
         """
         parts = data.shape[axis]
         return np.split(data, parts, axis=axis)
+
+
+    def _load_attr_value(self, value):
+        # TODO: Fix for old python 2.x
+        #       Remove after 3.x transition
+        # TODO: Maybe rather use base64?
+        try:
+            upv = pickle.loads(value.tostring())
+        except:
+            upv = pickle.loads(value)
+        return upv

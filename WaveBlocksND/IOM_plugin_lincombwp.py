@@ -4,7 +4,7 @@ IOM plugin providing functions for handling
 linear combinations of general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -180,7 +180,7 @@ def load_lincombwp_description(self, blockid=0):
     # Load and return all descriptions available
     descr = {}
     for key, value in self._srf[pathd].attrs.items():
-        descr[key] = pickle.loads(value.tostring())
+        descr[key] = self._load_attr_value(value)
     return descr
 
 
