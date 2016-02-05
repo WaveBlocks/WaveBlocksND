@@ -120,7 +120,7 @@
     <span class="n">path</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;/propagation/operators/&quot;</span>
     <span class="n">opT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">path</span><span class="o">+</span><span class="s">&quot;opkinetic&quot;</span><span class="p">]</span>
     <span class="n">opV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">path</span><span class="o">+</span><span class="s">&quot;oppotential&quot;</span><span class="p">]</span>
-    <span class="n">opV</span> <span class="o">=</span> <span class="p">[</span> <span class="n">opV</span><span class="p">[</span><span class="n">index</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">opV</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">]</span>
+    <span class="n">opV</span> <span class="o">=</span> <span class="p">[</span> <span class="n">opV</span><span class="p">[</span><span class="n">index</span><span class="p">,</span><span class="o">...</span><span class="p">]</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">opV</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="p">]</span>
 
     <span class="k">return</span> <span class="p">(</span><span class="n">opT</span><span class="p">,</span> <span class="n">opV</span><span class="p">)</span></div>
 </pre></div>
@@ -161,7 +161,7 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
+        &copy; Copyright 2016, R. Bourquin.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

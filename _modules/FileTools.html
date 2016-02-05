@@ -55,15 +55,16 @@
 <span class="sd">ID is just the base name of the path or the configuration file.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">operator</span> <span class="kn">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
 <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">OrderedDict</span>
 
-<span class="kn">import</span> <span class="nn">GlobalDefaults</span> <span class="kn">as</span> <span class="nn">GD</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">GlobalDefaults</span> <span class="k">as</span> <span class="n">GD</span>
 
 
 <div class="viewcode-block" id="get_result_dirs"><a class="viewcode-back" href="../waveblocks_classes/FileTools.html#FileTools.get_result_dirs">[docs]</a><span class="k">def</span> <span class="nf">get_result_dirs</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
@@ -73,7 +74,7 @@
 <span class="sd">    :return: A list of simulation IDs.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dirs</span> <span class="o">=</span> <span class="p">[</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">adir</span><span class="p">)</span> <span class="k">for</span> <span class="n">adir</span> <span class="ow">in</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="p">]</span>
-    <span class="k">return</span> <span class="nb">filter</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">,</span> <span class="n">dirs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">list</span><span class="p">(</span><span class="nb">filter</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isdir</span><span class="p">,</span> <span class="n">dirs</span><span class="p">))</span>
 
 </div>
 <div class="viewcode-block" id="get_parameters_file"><a class="viewcode-back" href="../waveblocks_classes/FileTools.html#FileTools.get_parameters_file">[docs]</a><span class="k">def</span> <span class="nf">get_parameters_file</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">unpack</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
@@ -203,7 +204,7 @@
 
     <span class="n">distinct_vals</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">OrderedDict</span><span class="o">.</span><span class="n">fromkeys</span><span class="p">([</span> <span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="p">]))</span>
 
-    <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">distinct_vals</span><span class="p">))</span> <span class="p">]</span>
+    <span class="n">groups</span> <span class="o">=</span> <span class="p">[</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">distinct_vals</span><span class="p">))</span> <span class="p">]</span>
 
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">distinct_vals</span><span class="p">):</span>
@@ -274,17 +275,8 @@
         <span class="c"># Use string in comparison, allows sorting</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span> <span class="n">s</span> <span class="o">+</span> <span class="p">(</span><span class="n">s</span><span class="p">[</span><span class="mi">2</span><span class="p">],)</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="p">]</span>
 
-    <span class="c"># Define a custom order relation</span>
-    <span class="k">def</span> <span class="nf">compare</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="mi">1</span>
-        <span class="k">elif</span> <span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="mi">0</span>
-
     <span class="c"># Sort w.r.t. the numerical value</span>
-    <span class="n">tmp</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="nb">cmp</span><span class="o">=</span><span class="n">compare</span><span class="p">)</span>
+    <span class="n">tmp</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c"># Remove numeric value and concatenate the fragments again</span>
     <span class="n">sorted_list</span> <span class="o">=</span> <span class="p">[</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">tmp</span> <span class="p">]</span>
@@ -348,7 +340,7 @@
 <span class="sd">    :return: A list of all ``key=value`` items present in the ``name``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">parts</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">ldel</span><span class="p">)</span>
-    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ldel</span><span class="o">+</span><span class="n">p</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span> <span class="k">if</span> <span class="n">rdel</span> <span class="ow">in</span> <span class="n">p</span> <span class="p">]</span>
+    <span class="n">items</span> <span class="o">=</span> <span class="p">[</span> <span class="n">ldel</span> <span class="o">+</span> <span class="n">p</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="n">rdel</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rdel</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">parts</span> <span class="k">if</span> <span class="n">rdel</span> <span class="ow">in</span> <span class="n">p</span> <span class="p">]</span>
     <span class="k">return</span> <span class="n">items</span>
 
 </div>
@@ -364,7 +356,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">items</span> <span class="o">=</span> <span class="n">get_items</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">ldel</span><span class="o">=</span><span class="n">ldel</span><span class="p">,</span> <span class="n">mdel</span><span class="o">=</span><span class="n">mdel</span><span class="p">,</span> <span class="n">rdel</span><span class="o">=</span><span class="n">rdel</span><span class="p">)</span>
     <span class="n">searchfor</span> <span class="o">=</span> <span class="n">ldel</span> <span class="o">+</span> <span class="n">pattern</span> <span class="o">+</span> <span class="n">mdel</span>
-    <span class="n">result</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">item</span><span class="p">:</span> <span class="n">searchfor</span> <span class="ow">in</span> <span class="n">item</span><span class="p">,</span> <span class="n">items</span><span class="p">)</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">items</span> <span class="k">if</span> <span class="n">searchfor</span> <span class="ow">in</span> <span class="n">item</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="s">&quot;Warning: pattern &#39;&quot;</span><span class="o">+</span><span class="n">pattern</span><span class="o">+</span><span class="s">&quot;&#39; not found in: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
@@ -394,6 +386,12 @@
 <span class="sd">    :param rdel: Right delimiter of the pattern.</span>
 <span class="sd">    :return: The ``value`` part of the given item.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># Assert &#39;item&#39; is a single item</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">item</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="n">mdel</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span> <span class="ow">and</span>
+            <span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">ldel</span> <span class="ow">and</span>
+            <span class="n">item</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">rdel</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;The item &#39;&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">item</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;&#39; is not a single item.&quot;</span><span class="p">)</span>
+
     <span class="n">rightpart</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">mdel</span><span class="p">)</span>
     <span class="n">value</span> <span class="o">=</span> <span class="n">rightpart</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">partition</span><span class="p">(</span><span class="n">rdel</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">value</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -459,7 +457,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
     <span class="n">n</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">alist</span><span class="p">),</span> <span class="n">n</span><span class="p">)</span>
-    <span class="k">return</span> <span class="p">[</span> <span class="n">alist</span><span class="p">[</span><span class="n">i</span><span class="p">::</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">]</span></div>
+    <span class="k">return</span> <span class="p">[</span> <span class="n">alist</span><span class="p">[</span><span class="n">i</span><span class="p">::</span><span class="n">n</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="p">]</span></div>
 </pre></div>
 
           </div>
@@ -498,7 +496,7 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
+        &copy; Copyright 2016, R. Bourquin.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>

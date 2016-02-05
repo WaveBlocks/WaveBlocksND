@@ -53,7 +53,7 @@
 <span class="sd">homogeneous Hagedorn wavepacket data.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -109,7 +109,7 @@
     <span class="k">if</span> <span class="s">&quot;adQ&quot;</span> <span class="ow">in</span> <span class="n">key</span> <span class="ow">and</span> <span class="ow">not</span> <span class="s">&quot;adQ&quot;</span> <span class="ow">in</span> <span class="n">grp_pi</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">grp_pi</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;adQ&quot;</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">))</span>
     <span class="c"># Coefficients</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
         <span class="n">grp_ci</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;c_&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">),</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">8</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span><span class="bp">None</span><span class="p">))</span>
 
     <span class="c"># Attach pointer to data instead timegrid</span>
@@ -144,10 +144,10 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;/wavepacket&quot;</span>
     <span class="c"># Save the description</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">descr</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">descr</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="c"># Store all the values as pickled strings because hdf can</span>
         <span class="c"># only store strings or ndarrays as attributes.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
 </div>
 <div class="viewcode-block" id="save_wavepacket_parameters"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavepacket.html#IOM_plugin_wavepacket.save_wavepacket_parameters">[docs]</a><span class="k">def</span> <span class="nf">save_wavepacket_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;q&quot;</span><span class="p">,</span><span class="s">&quot;p&quot;</span><span class="p">,</span><span class="s">&quot;Q&quot;</span><span class="p">,</span><span class="s">&quot;P&quot;</span><span class="p">,</span><span class="s">&quot;S&quot;</span><span class="p">)):</span>
@@ -236,10 +236,10 @@
 
         <span class="c"># Save the description</span>
         <span class="n">descr</span> <span class="o">=</span> <span class="n">basisshape</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
-        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">descr</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+        <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">descr</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="c"># Store all the values as pickled strings because hdf can</span>
             <span class="c"># only store strings or ndarrays as attributes.</span>
-            <span class="n">daset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="n">daset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
 
         <span class="c"># TODO: Consider to save the mapping. Do we want or need this?</span>
 
@@ -253,8 +253,8 @@
 
     <span class="c"># Load and return all descriptions available</span>
     <span class="n">descr</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-        <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_attr_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">descr</span>
 
 </div>
@@ -312,7 +312,7 @@
     <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">components</span> <span class="o">=</span> <span class="nb">xrange</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">components</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 
     <span class="c"># Load the hash data</span>
     <span class="k">if</span> <span class="n">get_hashes</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
@@ -354,8 +354,8 @@
         <span class="k">for</span> <span class="n">ahash</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="c"># TODO: What data exactly do we want to return?</span>
             <span class="n">descr</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="o">+</span><span class="n">ahash</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="o">+</span><span class="n">ahash</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_attr_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="c"># &#39;ahash&#39; is &quot;basis_shape_...&quot; and we want only the &quot;...&quot; part</span>
             <span class="n">descrs</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">ahash</span><span class="p">[</span><span class="mi">12</span><span class="p">:])]</span> <span class="o">=</span> <span class="n">descr</span>
         <span class="k">return</span> <span class="n">descrs</span>
@@ -368,8 +368,8 @@
         <span class="k">if</span> <span class="n">name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="c"># TODO: What data exactly do we want to return?</span>
             <span class="n">descr</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="o">+</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
-                <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="o">+</span><span class="n">name</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">descr</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_attr_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">descr</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s">&quot;No basis shape with given hash &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="nb">hash</span><span class="p">))</span>
@@ -392,7 +392,7 @@
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    :return: A :py:class:`HagedornWavepacket` instance.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="kn">from</span> <span class="nn">BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
+    <span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
     <span class="n">BF</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span>
 
     <span class="n">descr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">load_wavepacket_description</span><span class="p">(</span><span class="n">blockid</span><span class="o">=</span><span class="n">blockid</span><span class="p">)</span>
@@ -477,7 +477,7 @@
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
+        &copy; Copyright 2016, R. Bourquin.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
