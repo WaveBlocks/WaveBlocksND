@@ -4,7 +4,7 @@ Provides several computation routines for
 handling time and timesteps.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -48,19 +48,19 @@ class TimeManager(object):
         have_enough = 0
 
         if "T" in parameters:
-            self._T = parameters["T"]
+            self._T = float(parameters["T"])
             have_enough += 1
         else:
             self._T = None
 
         if "dt" in parameters:
-            self._dt = parameters["dt"]
+            self._dt = float(parameters["dt"])
             have_enough += 1
         else:
             self._dt = None
 
         if "nsteps" in parameters:
-            self._nsteps = parameters["nsteps"]
+            self._nsteps = int(parameters["nsteps"])
             have_enough += 1
         else:
             self._nsteps = None
@@ -80,7 +80,7 @@ class TimeManager(object):
         # Interval for regular events
         self._interval = 1
         if "write_nth" in parameters:
-            self.set_interval(parameters["write_nth"])
+            self.set_interval(int(parameters["write_nth"]))
 
         # List of timesteps of irregular events
         self._eventtimes = []
@@ -152,7 +152,7 @@ class TimeManager(object):
         if self._T is not None:
             return self._T
         else:
-            return self._nsteps * self._dt
+            return float(self._nsteps * self._dt)
 
 
     def compute_timestep_size(self):
@@ -193,7 +193,7 @@ class TimeManager(object):
         if abs(stepo - step) > 1e-10:
             print("Warning: Questionable rounding for timestep computation!")
 
-        return step
+        return int(step)
 
 
     def compute_time(self, n):
