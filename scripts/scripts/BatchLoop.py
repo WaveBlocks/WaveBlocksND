@@ -143,6 +143,7 @@ if __name__ == "__main__":
 
     parser.add_argument("-c", "--configurations",
                         type = str,
+                        required = True,
                         help = "Path to the 'configuration' directory.")
 
     parser.add_argument("-r", "--resultspath",
