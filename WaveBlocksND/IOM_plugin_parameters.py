@@ -3,7 +3,7 @@
 IOM plugin providing functions for handling simulation parameter data.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -66,7 +66,7 @@ def load_parameters(self, blockid="global"):
     PP = ParameterProvider()
 
     for key, value in p.items():
-        PP[key] = pickle.loads(value.tostring())
+        PP[key] = self._load_attr_value(value)
 
     # Compute some values on top of the given input parameters
     PP.compute_parameters()

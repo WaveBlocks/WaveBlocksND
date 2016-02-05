@@ -6,7 +6,7 @@ Note: The terms 'path' and 'ID' are used as synonyms here. Each simulation
 ID is just the base name of the path or the configuration file.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -226,17 +226,8 @@ def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp
         # Use string in comparison, allows sorting
         tmp = [ s + (s[2],) for s in tmp ]
 
-    # Define a custom order relation
-    def compare(x,y):
-        if x[-1] > y[-1]:
-            return 1
-        elif y[-1] > x[-1]:
-            return -1
-        else:
-            return 0
-
     # Sort w.r.t. the numerical value
-    tmp.sort(cmp=compare)
+    tmp.sort(key=lambda x: x[-1])
 
     # Remove numeric value and concatenate the fragments again
     sorted_list = [ reduce(op.add, s[:-1]) for s in tmp ]

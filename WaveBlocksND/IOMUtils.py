@@ -3,11 +3,11 @@
 Various small utility functions.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013 R. Bourquin
+@copyright: Copyright (C) 2013, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
-from .BlockFactory import BlockFactory
+from WaveBlocksND.BlockFactory import BlockFactory
 
 
 def load_wavepacket(iom, timestep, blockid=0):
