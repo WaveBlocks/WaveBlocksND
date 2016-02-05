@@ -105,8 +105,8 @@ def run_job(job):
     os.makedirs(outputpath, mode=0o700, exist_ok=True)
 
     # Open log files and execute commands
-    with open(stdoutlogfile, 'w') as stdout:
-        with open(stderrlogfile, 'w') as stderr:
+    with open(stdoutlogfile, 'a') as stdout:
+        with open(stderrlogfile, 'a') as stderr:
             for command in job.commands(outputpath):
                 subprocess.call(command,
                                 shell=False,
@@ -192,4 +192,5 @@ if __name__ == "__main__":
     # Batch run
     print("Running {} simulations from: {}".format(len(F), fpath))
     print("Putting results into: {}\n".format(rpath))
+    print("-------------------")
     batch_loop(J, max_workers=args.maxworkers)

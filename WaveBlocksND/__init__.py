@@ -133,5 +133,5 @@ from .ObservablesLCWP import ObservablesLCWP
 import sys
 import os
 
-plugin_dir = os.path.dirname(os.path.realpath(__file__))
+plugin_dir = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(plugin_dir)
