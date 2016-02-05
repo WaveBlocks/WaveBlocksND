@@ -8,9 +8,9 @@ This file contains the class for Gauss-Hermite quadrature.
 """
 
 from copy import deepcopy
-from .orthogonal import psi_roots
+from WaveBlocksND.orthogonal import psi_roots
 
-from .QuadratureRule import QuadratureRule
+from WaveBlocksND.QuadratureRule import QuadratureRule
 
 __all__ = ["GaussHermiteQR"]
 

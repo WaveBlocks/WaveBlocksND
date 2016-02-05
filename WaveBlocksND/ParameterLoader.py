@@ -11,7 +11,7 @@ puts the values into a parameter provider instance.
 import types
 from copy import deepcopy
 
-from .ParameterProvider import ParameterProvider
+from WaveBlocksND.ParameterProvider import ParameterProvider
 
 __all__ = ["ParameterLoader"]
 

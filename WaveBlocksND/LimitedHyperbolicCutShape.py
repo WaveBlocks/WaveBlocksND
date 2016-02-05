@@ -10,8 +10,8 @@ basis shape which is a special type of sparse basis set.
 
 from numpy import eye, vstack, integer
 
-from .BasisShape import BasisShape
-from .HyperbolicCutShape import HyperbolicCutShape
+from WaveBlocksND.BasisShape import BasisShape
+from WaveBlocksND.HyperbolicCutShape import HyperbolicCutShape
 from functools import reduce
 
 __all__ = ["LimitedHyperbolicCutShape"]

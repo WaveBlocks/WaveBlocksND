@@ -7,7 +7,7 @@
 
 from __future__ import absolute_import
 
-__version__ = 0.2
+__version__ = 0.5
 
 # Math
 from .ComplexMath import ContinuousSqrt

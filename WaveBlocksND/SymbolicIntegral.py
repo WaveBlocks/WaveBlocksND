@@ -15,8 +15,8 @@ from scipy.misc import factorial
 from scipy.special import binom
 #from scipy.special.orthogonal import eval_hermite
 
-from .InnerProduct import InnerProductException
-from .Quadrature import Quadrature
+from WaveBlocksND.InnerProduct import InnerProductException
+from WaveBlocksND.Quadrature import Quadrature
 
 __all__ = ["SymbolicIntegral"]
 

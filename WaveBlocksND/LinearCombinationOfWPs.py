@@ -10,7 +10,7 @@ of general but compatible wavepackets of any kind.
 
 from numpy import zeros, ones, complexfloating, atleast_2d, delete, vstack
 
-from .LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
+from WaveBlocksND.LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 
 __all__ = ["LinearCombinationOfWPs"]
 

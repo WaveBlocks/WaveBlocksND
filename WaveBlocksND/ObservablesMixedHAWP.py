@@ -12,8 +12,8 @@ where the bra does not equal the ket.
 from functools import partial
 from numpy import squeeze, sum
 
-from .Observables import Observables
-from .GradientHAWP import GradientHAWP
+from WaveBlocksND.Observables import Observables
+from WaveBlocksND.GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesMixedHAWP"]
 

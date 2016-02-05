@@ -10,8 +10,8 @@ of linear combinations of general wavepackets.
 
 from numpy import conjugate, transpose, dot, sqrt, array, repeat
 
-from .Observables import Observables
-from .GradientLCWP import GradientLCWP
+from WaveBlocksND.Observables import Observables
+from WaveBlocksND.GradientLCWP import GradientLCWP
 
 __all__ = ["ObservablesLCWP"]
 

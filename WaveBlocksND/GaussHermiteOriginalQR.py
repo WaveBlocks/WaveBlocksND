@@ -10,9 +10,9 @@ weight factor.
 """
 
 from copy import deepcopy
-from .orthogonal import h_roots
+from WaveBlocksND.orthogonal import h_roots
 
-from .QuadratureRule import QuadratureRule
+from WaveBlocksND.QuadratureRule import QuadratureRule
 
 __all__ = ["GaussHermiteOriginalQR"]
 

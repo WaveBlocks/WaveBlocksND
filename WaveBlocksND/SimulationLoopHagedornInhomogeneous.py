@@ -8,12 +8,12 @@ for the inhomogeneous Hagedorn propagator.
 @license: Modified BSD License
 """
 
-from .SimulationLoop import SimulationLoop
-from .IOManager import IOManager
-from .TimeManager import TimeManager
-from .BlockFactory import BlockFactory
-from .BasisTransformationHAWP import BasisTransformationHAWP
-from .HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
+from WaveBlocksND.SimulationLoop import SimulationLoop
+from WaveBlocksND.IOManager import IOManager
+from WaveBlocksND.TimeManager import TimeManager
+from WaveBlocksND.BlockFactory import BlockFactory
+from WaveBlocksND.BasisTransformationHAWP import BasisTransformationHAWP
+from WaveBlocksND.HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 
 __all__ = ["SimulationLoopHagedornInhomogeneous"]
 

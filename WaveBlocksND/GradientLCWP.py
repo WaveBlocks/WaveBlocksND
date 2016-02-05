@@ -8,8 +8,8 @@ a linear combination of arbitrary wavepackets.
 @license: Modified BSD License
 """
 
-from .Gradient import Gradient
-from .LinearCombinationOfWPs import LinearCombinationOfWPs
+from WaveBlocksND.Gradient import Gradient
+from WaveBlocksND.LinearCombinationOfWPs import LinearCombinationOfWPs
 
 __all__ = ["GradientLCWP"]
 

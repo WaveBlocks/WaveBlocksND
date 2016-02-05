@@ -12,10 +12,10 @@ of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.
 import sympy
 import numpy
 
-from .MatrixPotential import MatrixPotential
-from .AbstractGrid import AbstractGrid
-from .GridWrapper import GridWrapper
-from . import GlobalDefaults
+from WaveBlocksND.MatrixPotential import MatrixPotential
+from WaveBlocksND.AbstractGrid import AbstractGrid
+from WaveBlocksND.GridWrapper import GridWrapper
+from WaveBlocksND import GlobalDefaults
 
 __all__ = ["MatrixPotential1S"]
 

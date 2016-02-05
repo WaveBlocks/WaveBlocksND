@@ -10,7 +10,7 @@ and matrix elements by using standard quadrature rules.
 
 from numpy import squeeze, transpose, conjugate, dot
 
-from .Quadrature import Quadrature
+from WaveBlocksND.Quadrature import Quadrature
 
 __all__ = ["DirectQuadrature"]
 

@@ -12,8 +12,8 @@ exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 from numpy import zeros, complexfloating
 from numpy.fft import fftn, ifftn
 
-from .Propagator import Propagator
-from .KineticOperator import KineticOperator
+from WaveBlocksND.Propagator import Propagator
+from WaveBlocksND.KineticOperator import KineticOperator
 
 __all__ = ["FourierPropagator"]
 

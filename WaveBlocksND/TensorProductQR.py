@@ -13,8 +13,8 @@ import operator as op
 from functools import reduce
 from numpy import vstack, multiply
 
-from .QuadratureRule import QuadratureRule
-from .Utils import meshgrid_nd
+from WaveBlocksND.QuadratureRule import QuadratureRule
+from WaveBlocksND.Utils import meshgrid_nd
 
 __all__ = ["TensorProductQR"]
 

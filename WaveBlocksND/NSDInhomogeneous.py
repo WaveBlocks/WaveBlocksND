@@ -14,7 +14,7 @@ from numpy import (array, zeros, ones, diag, squeeze,  conjugate, transpose, dot
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
 
-from .Quadrature import Quadrature
+from WaveBlocksND.Quadrature import Quadrature
 
 __all__ = ["NSDInhomogeneous"]
 

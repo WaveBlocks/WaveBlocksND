@@ -10,7 +10,7 @@ which is the full dense basis set.
 
 from numpy import array, eye, vstack, integer
 
-from .BasisShape import BasisShape
+from WaveBlocksND.BasisShape import BasisShape
 
 __all__ = ["HyperCubicShape"]
 

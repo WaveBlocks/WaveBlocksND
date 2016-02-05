@@ -14,10 +14,10 @@ import sympy
 import numpy
 from scipy import linalg
 
-from .MatrixPotential import MatrixPotential
-from .AbstractGrid import AbstractGrid
-from .GridWrapper import GridWrapper
-from . import GlobalDefaults
+from WaveBlocksND.MatrixPotential import MatrixPotential
+from WaveBlocksND.AbstractGrid import AbstractGrid
+from WaveBlocksND.GridWrapper import GridWrapper
+from WaveBlocksND import GlobalDefaults
 
 __all__ = ["MatrixPotentialMS"]
 

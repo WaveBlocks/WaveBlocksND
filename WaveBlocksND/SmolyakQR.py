@@ -16,9 +16,9 @@ from numpy import hstack, vsplit, squeeze, lexsort, where, vstack, multiply
 from numpy.linalg import norm
 from scipy.special import binom
 
-from .QuadratureRule import QuadratureRule
-from .Combinatorics import lattice_points_norm
-from .Utils import meshgrid_nd
+from WaveBlocksND.QuadratureRule import QuadratureRule
+from WaveBlocksND.Combinatorics import lattice_points_norm
+from WaveBlocksND.Utils import meshgrid_nd
 
 
 __all__ = ["SmolyakQR"]

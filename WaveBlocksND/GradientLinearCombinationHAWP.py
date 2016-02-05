@@ -10,9 +10,9 @@ linear combination of Hagedorn wavepackets.
 
 from numpy import squeeze
 
-from .Gradient import Gradient
-from .GradientHAWP import GradientHAWP
-from .LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
+from WaveBlocksND.Gradient import Gradient
+from WaveBlocksND.GradientHAWP import GradientHAWP
+from WaveBlocksND.LinearCombinationOfHAWPs import LinearCombinationOfHAWPs
 
 __all__ = ["GradientLinearCombinationHAWP"]
 

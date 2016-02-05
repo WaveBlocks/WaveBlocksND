@@ -10,7 +10,7 @@ subtype of the instance is derived from the potentials' symbolic expression.
 
 import sympy
 
-from . import GlobalDefaults
+from WaveBlocksND import GlobalDefaults
 
 
 def create_potential(description):

@@ -11,10 +11,10 @@ from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, v
 from scipy import conjugate, exp, sqrt
 from scipy.linalg import det, inv, norm
 
-from .Wavepacket import Wavepacket
-from .AbstractGrid import AbstractGrid
-from .GridWrapper import GridWrapper
-from .GradientHAWP import GradientHAWP
+from WaveBlocksND.Wavepacket import Wavepacket
+from WaveBlocksND.AbstractGrid import AbstractGrid
+from WaveBlocksND.GridWrapper import GridWrapper
+from WaveBlocksND.GradientHAWP import GradientHAWP
 from functools import reduce
 
 __all__ = ["HagedornWavepacketBase"]

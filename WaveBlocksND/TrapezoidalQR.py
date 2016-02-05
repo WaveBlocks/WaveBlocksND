@@ -10,7 +10,7 @@ This file contains the class for trapezoidal quadrature rules.
 from copy import deepcopy
 from numpy import linspace, abs, ones
 
-from .QuadratureRule import QuadratureRule
+from WaveBlocksND.QuadratureRule import QuadratureRule
 
 __all__ = ["TrapezoidalQR"]
 
