@@ -4,21 +4,21 @@ A first glance
 Introduction
 ------------
 
-The WaveBlocks project is a collection of reusable software components
+The *WaveBlocks* project is a collection of reusable software components
 providing many of the objects used in the study of semi-classical wavepackets.
 Currently it's all about the time-dependent Schroedinger equation and the time
 evolution of initial states.
 
 One of the main goals is to provide a set of building blocks - hence the project's
 name - that are well tested and reliable. The included features range from
-very simple mathematical operations like specialised quadrature rules to basic
+very simple mathematical operations like specialized quadrature rules to basic
 data structures for semi-classical wavepackets to more high-level simulation
 algorithms and some non-standard plotting functions. Of course there are also
 routines included for saving, managing and evaluating simulation results inflexible
 manner. All of these components are put together in an easy to use and easy to
 extend framework.
 
-The whole project is written in the `python` programming language and a strong
+The whole project is written in the `Python` programming language and a strong
 emphasis is put on readable code and clean software design. Speed and efficiency
 are, however, not the main concern for the moment.
 
@@ -26,165 +26,143 @@ are, however, not the main concern for the moment.
 Download
 --------
 
-The WaveBlocks project has its home at GitHub
+The WaveBlocks project has its home at GitHub:
 
-https://github.com/raoulbq/WaveBlocksND
+  https://github.com/WaveBlocks
 
-and the latest version can be found in the git
-repository at the same place.
+where there are several closely related ``git`` repositories. The latest version
+of this project can be found in the ``git`` repository:
 
-Check out the `master` branch for the main development version or one of the
+  https://github.com/WaveBlocks/WaveBlocksND
+
+Check out the ``master`` branch for the main development version or one of the
 tags for stable and released versions. There are also branches used for developing
-special features before they are ready to get merged into the `master` branch.
-Older stable versions are available as complete self-consistent tarballs.
+special features before they are ready to get merged into the ``master`` branch.
 
 
 Dependencies
 ------------
 
-Probably the most difficult part of the installation is to get the dependencies
-right. We need some more or less well known python packages that are not
-installed by default. On any recent Linux distribution (for example Debian)
+The `WaveBlocksND` software depends on some more or less well known `Python` packages,
+that are not installed by default. On any recent Linux distribution (for example `Debian`)
 you can use the package manager to download and install all the dependencies.
-First, make sure you run python 2.x and not python 3.x because some of
-the following packages will not (yet) work with the latest python version. All
-necessary dependencies are listed here together with a brief statement of why
-we need the package.
+The simulation code is compatible with `Python 3.4` and above. Hence, make sure to
+get the correct version of all dependencies. All packages can also be installed
+via the ``pip`` `tool <https://pip.pypa.io/en/latest/>`_ from
+the `Python Package Index <https://pypi.python.org/pypi>`_.
 
-* Numpy, available from http://www.numpy.org
+The necessary dependencies are listed here together with a brief statement of why we need the package.
+
+* ``numpy``, available from http://www.numpy.org
 
   Numpy provides fast multidimensional arrays.
 
-* Scipy, available from http://www.scipy.org
+* ``scipy``, available from http://www.scipy.org
 
   Scipy interfaces to fast numerical subroutines (BLAS, LAPACK, FFTW).
 
-* Sympy, available from http://sympy.org
+* ``sympy``, available from http://sympy.org
 
-  Sympy gives rise to (limited) symbolic calculation.
+  Sympy gives rise to symbolic calculation.
 
-* Matplotlib, available from http://matplotlib.org
+* ``matplotlib``, available from http://matplotlib.org
 
   Matplotlib is used for two-dimensional plotting.
 
-* h5py, available from http://h5py.org
+* ``h5py``, available from http://h5py.org
 
   H5py is the interface to the Hierarchical Data Format `hdf`.
 
-* mayavi2, available from http://code.enthought.com/projects/mayavi/
+* ``mayavi2``, available from http://code.enthought.com/projects/mayavi/
 
   Mayavi2 is used for three-dimensional plotting.
 
-The mayavi2 dependency is weak in the sense that the whole `WaveBlocks` code
+The ``mayavi2`` dependency is weak in the sense that the whole `WaveBlocks` code
 runs fine without it and only the 3-dimensional plotting functions are not available.
-
-The package numdifftools is already included in the program archive. You
-should put it somewhere within your python path. (In the example instal-
-lation from below, this would be ``~/python/numdifftools/``, just beside the
-`WaveBlocks` directory). The package itself can be found at
-
-http://code.google.com/p/numdifftools/
-
-in case you want to look for a newer version. In general the latest version of
-each software package should be used.
 
 
 Installation
 ------------
 
-In the following sections be sure not to mix up the name `WaveBlocks` that
-stands for the whole project and the subdirectory `WaveBlocksND` which is the
-python library and a small subset of the whole project.
+In the following section be sure not to mix up the name `WaveBlocks` that
+stands for the whole project and the name ``WaveBlocksND`` which is the
+name of the `Python` package.
 
-Using a tarball
-~~~~~~~~~~~~~~~
+By using the `Python` ``virtualenv`` `utility <https://virtualenv.pypa.io/en/latest/>`_,
+we can easily create a completely isolated `Python` environments. Any `Python`
+package can then be installed locally within such an environment without affecting
+the outer world.
 
-Installing the `WaveBlocks` code itself is trivial if you use one of the provided
-tarballs. You just have to unpack the program archive and place the directories
-``src/WaveBlocksND`` (which contains the library part of `WaveBlocks`) and
-``src/numdifftools`` somewhere in your file system. Make sure the location is
-within your `python path`, otherwise you'll have to adapt the environment variable
-``PYTHONPATH``.
 
-For example if you place these two directories below ``~/python`` then you have
-to adapt the python path as follows:
+For Users
+~~~~~~~~~
 
-::
-
-    export PYTHONPATH="$PYTHONPATH:~/python"
-
-You can write this line into your .bashrc file or any comparable file for your
-default shell. (Otherwise this information is gone when you close the shell.)
-
-From the repository
-~~~~~~~~~~~~~~~~~~~
-
-If you want to check out the source code from the repository, the necessary
-steps are similar. First check out the code (we assume here you want to use
-the `master` branch) into a new directory (here ``~/WB``)
+First, we create a new `virtualenv` called ``waveblocks`` which we allow access to
+all the `Python` packages that are already installed on the system:
 
 ::
 
-    git clone https://github.com/raoulbq/WaveBlocksND.git ~/WB
+    virtualenv -p /usr/bin/python3.4 --system-site-packages waveblocks
 
-The directory listing should now look like
+This assumes that the dependencies are installed globally on the system.
+If we want a truly isolated environment, we can omit the switch ``--system-site-packages``.
+This will cause all packages to be built and installed locally to this `virtualenv`.
 
-::
-
-    ls ~/WB/
-    doc  examples  src
-
-and we find the source code below src,
+Next, we switch into the directory and active the `virtualenv`:
 
 ::
 
-    ls ~/WB/src
-    plotters  scripts  sh  tests  WaveBlocksND
+   cd waveblocks
+   source ./bin/activate
 
-Assume we want to install any custom python software locally below ``~/python``
-so we create this directory and put all the things there. We start with the
-`numdifftools` python package.
-
-::
-
-    mkdir ~/python
-    cp -r ~/WB/src/numdifftools/ ~/python
-
-We can just copy the files as they won't change in the git repository often. But
-it's a wise idea not to copy ``~/WB/src/WaveBlocks`` but to instead use symbolic
-links. (If you have multiple checkouts this is also a simple way to choose which
-one will be used when you just type ``import WaveBlocksND`` at a python prompt.
-This is similar to the alternatives framework in Debian.) You may just follow
-the shell command given here for a working sample setup.
+Finally, we can install the `WaveBlocks` software directly from the `git` repository
+by running:
 
 ::
 
-    ln -s ~/WB/src/WaveBlocksND WaveBlocksND
+   pip install git+https://github.com/WaveBlocks/WaveBlocksND.git#egg=WaveBlocksND
 
-Finally we have to adapt the python path to include the directory ``~/python``
-which can be done as follows:
+That is all we have to do. Before using the software, **always** go back to the ``waveblocks`` directory
+and run ``source ./bin/activate`` there. Note that this action is **local** to the current shell instance.
+
+
+For Developers
+~~~~~~~~~~~~~~
+
+If you plan to modify the source code, first clone the `git` repository:
 
 ::
 
-    export PYTHONPATH="$PYTHONPATH:~/python"
+   git clone https://github.com/WaveBlocks/WaveBlocksND.git ~/waveblockssource
 
-You can write this last line into your ``.bashrc`` file or any comparable file
-for your default shell. (Otherwise this information is gone when you close the shell.)
+The clone is put into the directory ``~/waveblockssource``. The directory listing should now look like:
+
+::
+
+   LICENSE  MANIFEST.in  README.md  WaveBlocksND  doc  examples  scripts  setup.py
+
+Next, you can create and activate the `virtualenbv` like above. The run the following command
+to install the software within the `virtualenv`:
+
+::
+
+   pip install -e ~/waveblockssource
+
+Note the ``-e`` switch, which connects the source code in ``~/waveblockssource`` with the
+installation inside the `virtualenv` at ``~/waveblocks``.
+
 
 The scripts
 ~~~~~~~~~~~
 
-The scripts (everything in ``src/scripts`` and ``src/plotters``)
-that perform simulations, data evaluation and plotting can now be stored and
-called from anywhere as these file are just plain python scripts that import the
-``WaveBlocksND`` python module. It's best to put these scripts all together in a
-directory where you plan to work and perform simulations.
+The scripts (everything in ``scripts/``) that perform simulations, data evaluation and plotting can now be
+called from anywhere as these file are just plain `Python` scripts that import the ``WaveBlocksND`` `Python` module.
 
 
 Supported computing platforms
 -----------------------------
 
-The `WaveBlocksND` code should run on `Windows` and `Mac OS X` and the various
-`BSD` variants too, provided that the required python dependencies are installed.
-However, this has not yet been tested. The primary development platform is
-`GNU/Linux` and in particular `Debian`.
+The ``WaveBlocksND`` code might run on `Windows` and `OS X` and the various
+`BSD` variants too, provided that the required `Python` dependencies are installed.
+However, this has never been tested. The primary development platform is `GNU/Linux`
+and in particular `Debian`.
