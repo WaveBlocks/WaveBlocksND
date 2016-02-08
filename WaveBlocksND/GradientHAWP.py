@@ -10,7 +10,7 @@ Compute the action of the gradient operator applied to a Hagedorn wavepacket.
 from numpy import zeros, complexfloating, conjugate, squeeze
 from scipy import sqrt
 
-from .Gradient import Gradient
+from WaveBlocksND.Gradient import Gradient
 
 __all__ = ["GradientHAWP"]
 

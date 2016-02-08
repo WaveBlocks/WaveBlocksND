@@ -12,7 +12,7 @@ Here we handle the homogeneous case.
 from numpy import zeros, ones, conjugate, dot, einsum
 from scipy.linalg import sqrtm
 
-from .DirectQuadrature import DirectQuadrature
+from WaveBlocksND.DirectQuadrature import DirectQuadrature
 
 __all__ = ["DirectHomogeneousQuadrature"]
 

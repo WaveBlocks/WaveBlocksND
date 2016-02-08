@@ -11,9 +11,9 @@ features like fetching undefined values from a global configuration.
 
 from copy import deepcopy
 
-from . import GlobalDefaults
-from .BlockFactory import BlockFactory
-from .TimeManager import TimeManager
+from WaveBlocksND import GlobalDefaults
+from WaveBlocksND.BlockFactory import BlockFactory
+from WaveBlocksND.TimeManager import TimeManager
 
 __all__ = ["ParameterProvider"]
 

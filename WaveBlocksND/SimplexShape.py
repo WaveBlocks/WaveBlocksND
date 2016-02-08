@@ -10,7 +10,7 @@ basis shape which is a special type of sparse basis set.
 
 from numpy import eye, vstack, integer
 
-from .BasisShape import BasisShape
+from WaveBlocksND.BasisShape import BasisShape
 
 __all__ = ["SimplexShape"]
 

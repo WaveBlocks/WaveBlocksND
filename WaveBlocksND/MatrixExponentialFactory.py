@@ -4,7 +4,7 @@ This file contains a simple function that selects the desired
 matrix exponential routine.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011 R. Bourquin
+@copyright: Copyright (C) 2011, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -20,10 +20,10 @@ def create_matrixexponential(description):
     method = description["matrix_exponential"]
 
     if method == "pade":
-        from .MatrixExponential import matrix_exp_pade
+        from WaveBlocksND.MatrixExponential import matrix_exp_pade
         return matrix_exp_pade
     elif method == "arnoldi":
-        from .MatrixExponential import matrix_exp_arnoldi
+        from WaveBlocksND.MatrixExponential import matrix_exp_arnoldi
         try:
             arnoldi_steps = description["arnoldi_steps"]
         except:

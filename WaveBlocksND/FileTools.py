@@ -15,7 +15,7 @@ import operator as op
 from functools import reduce
 from collections import OrderedDict
 
-from . import GlobalDefaults as GD
+from WaveBlocksND import GlobalDefaults as GD
 
 
 def get_result_dirs(path):

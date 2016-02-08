@@ -11,7 +11,7 @@ at the phase space distance between both packets.
 from numpy import array, ones, abs, sqrt, dot, atleast_1d
 from numpy.linalg import norm
 
-from .SparsityOracle import SparsityOracle
+from WaveBlocksND.SparsityOracle import SparsityOracle
 
 __all__ = ["SparsityOraclePSHAWP"]
 

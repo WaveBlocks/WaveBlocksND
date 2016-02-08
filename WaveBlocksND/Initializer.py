@@ -8,8 +8,8 @@
 
 from numpy import add
 
-from .WaveFunction import WaveFunction
-from .BlockFactory import BlockFactory
+from WaveBlocksND.WaveFunction import WaveFunction
+from WaveBlocksND.BlockFactory import BlockFactory
 from functools import reduce
 
 __all__ = ["Initializer"]

@@ -10,9 +10,9 @@ This file contains the class which represents a homogeneous Hagedorn wavepacket.
 from numpy import zeros, complexfloating, array, eye, atleast_2d, angle, squeeze
 from numpy.linalg import det
 
-from .HagedornWavepacketBase import HagedornWavepacketBase
-from .HyperCubicShape import HyperCubicShape
-from .ComplexMath import ContinuousSqrt
+from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
+from WaveBlocksND.HyperCubicShape import HyperCubicShape
+from WaveBlocksND.ComplexMath import ContinuousSqrt
 
 __all__ = ["HagedornWavepacket"]
 

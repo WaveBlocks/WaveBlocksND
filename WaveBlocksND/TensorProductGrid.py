@@ -11,7 +11,7 @@ dense regular tensor product grids.
 import operator
 from numpy import array, atleast_1d, complexfloating, diff, floating, hstack, mgrid, ogrid, squeeze
 
-from .DenseGrid import DenseGrid
+from WaveBlocksND.DenseGrid import DenseGrid
 from functools import reduce
 
 __all__ = ["TensorProductGrid"]

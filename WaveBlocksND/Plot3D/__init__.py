@@ -5,4 +5,4 @@
 @license: Modified BSD License
 """
 
-from .surfcf import surfcf
+from WaveBlocksND.Plot3D.surfcf import surfcf

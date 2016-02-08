@@ -8,12 +8,12 @@ for the Fourier propagator.
 @license: Modified BSD License
 """
 
-from .BlockFactory import BlockFactory
-from .Initializer import Initializer
-from .BasisTransformationWF import BasisTransformationWF
-from .FourierPropagator import FourierPropagator
-from .SimulationLoop import SimulationLoop
-from .IOManager import IOManager
+from WaveBlocksND.BlockFactory import BlockFactory
+from WaveBlocksND.Initializer import Initializer
+from WaveBlocksND.BasisTransformationWF import BasisTransformationWF
+from WaveBlocksND.FourierPropagator import FourierPropagator
+from WaveBlocksND.SimulationLoop import SimulationLoop
+from WaveBlocksND.IOManager import IOManager
 
 __all__ = ["SimulationLoopFourier"]
 

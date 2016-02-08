@@ -11,7 +11,7 @@ from copy import deepcopy
 from numpy import exp
 from numpy.linalg import norm
 
-from .GenzKeisterOriginalQR import GenzKeisterOriginalQR
+from WaveBlocksND.GenzKeisterOriginalQR import GenzKeisterOriginalQR
 
 __all__ = ["GenzKeisterQR"]
 

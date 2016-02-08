@@ -12,8 +12,8 @@ weight factor.
 from copy import deepcopy
 from numpy import array, indices, repeat, hstack
 
-from .QuadratureRule import QuadratureRule
-from .Combinatorics import partitions, lattice_points, permutations
+from WaveBlocksND.QuadratureRule import QuadratureRule
+from WaveBlocksND.Combinatorics import partitions, lattice_points, permutations
 
 __all__ = ["GenzKeisterOriginalQR"]
 

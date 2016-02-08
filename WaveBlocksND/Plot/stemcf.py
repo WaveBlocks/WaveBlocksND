@@ -5,7 +5,7 @@ with abs(f) as y-value and phase(f) as color code.
 This function makes a stem plot.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,7 +13,7 @@ from numpy import array, zeros, real
 from matplotlib.collections import LineCollection
 from matplotlib.pyplot import gca
 
-from .color_map import color_map
+from WaveBlocksND.Plot.color_map import color_map
 
 
 def stemcf(grid, phase, modulus, darken=None, axes=None, linestylep="solid", linewidthp=2, color=None, markerp="o", **kwargs):

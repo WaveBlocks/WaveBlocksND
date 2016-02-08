@@ -8,11 +8,11 @@ for the homogeneous Hagedorn propagator.
 @license: Modified BSD License
 """
 
-from .SimulationLoop import SimulationLoop
-from .IOManager import IOManager
-from .TimeManager import TimeManager
-from .BlockFactory import BlockFactory
-from .BasisTransformationHAWP import BasisTransformationHAWP
+from WaveBlocksND.SimulationLoop import SimulationLoop
+from WaveBlocksND.IOManager import IOManager
+from WaveBlocksND.TimeManager import TimeManager
+from WaveBlocksND.BlockFactory import BlockFactory
+from WaveBlocksND.BasisTransformationHAWP import BasisTransformationHAWP
 
 __all__ = ["SimulationLoopHagedorn"]
 
@@ -68,22 +68,22 @@ class SimulationLoopHagedorn(SimulationLoop):
         # TODO: Attach the "leading_component to the hawp as codata
         # TODO: Clean up this ugly if tree
         if self.parameters["propagator"] == "magnus_split":
-            from .MagnusPropagator import MagnusPropagator
+            from WaveBlocksND.MagnusPropagator import MagnusPropagator
             self.propagator = MagnusPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "semiclassical":
-            from .SemiclassicalPropagator import SemiclassicalPropagator
+            from WaveBlocksND.SemiclassicalPropagator import SemiclassicalPropagator
             self.propagator = SemiclassicalPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "McL42sc":
-            from .McL42scPropagator import McL42scPropagator
+            from WaveBlocksND.McL42scPropagator import McL42scPropagator
             self.propagator = McL42scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "Pre764sc":
-            from .Pre764scPropagator import Pre764scPropagator
+            from WaveBlocksND.Pre764scPropagator import Pre764scPropagator
             self.propagator = Pre764scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "McL84sc":
-            from .McL84scPropagator import McL84scPropagator
+            from WaveBlocksND.McL84scPropagator import McL84scPropagator
             self.propagator = McL84scPropagator(self.parameters, potential)
         elif self.parameters["propagator"] == "hagedorn":
-            from .HagedornPropagator import HagedornPropagator
+            from WaveBlocksND.HagedornPropagator import HagedornPropagator
             self.propagator = HagedornPropagator(self.parameters, potential)
         else:
             raise NotImplementedError("Unknown propagator type: " + self.parameters["propagator"])

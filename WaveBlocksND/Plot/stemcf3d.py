@@ -5,7 +5,7 @@ with abs(f) as z-value and phase(f) as color code.
 This function makes a three dimensional stem plot.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,7 +13,7 @@ from numpy import real, squeeze
 import mpl_toolkits.mplot3d.art3d as art3d
 from matplotlib.pyplot import gcf
 
-from .color_map import color_map
+from WaveBlocksND.Plot.color_map import color_map
 
 
 def stemcf3d(gridu, gridv, phase, modulus, darken=None, fig=None, markerp="o", **kwargs):

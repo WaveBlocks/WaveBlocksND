@@ -14,7 +14,7 @@ from numpy import squeeze, conjugate, sqrt, ones, zeros, complexfloating, pi, do
 from scipy.linalg import inv, det
 from scipy import exp
 
-from .Quadrature import Quadrature
+from WaveBlocksND.Quadrature import Quadrature
 
 __all__ = ["GaussianIntegral"]
 

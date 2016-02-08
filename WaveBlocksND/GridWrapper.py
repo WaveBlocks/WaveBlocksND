@@ -10,7 +10,7 @@ numpy ndarrays into Grid instances.
 
 from numpy import atleast_1d, abs, product
 
-from .AbstractGrid import AbstractGrid
+from WaveBlocksND.AbstractGrid import AbstractGrid
 
 __all__ = ["GridWrapper"]
 

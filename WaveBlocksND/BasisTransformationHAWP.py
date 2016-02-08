@@ -9,9 +9,11 @@ of the potential.
 @license: Modified BSD License
 """
 
+from __future__ import absolute_import
+
 from numpy import dot, transpose, conjugate, vsplit
 
-from .BasisTransformation import BasisTransformation
+from WaveBlocksND.BasisTransformation import BasisTransformation
 
 __all__ = ["BasisTransformationHAWP"]
 

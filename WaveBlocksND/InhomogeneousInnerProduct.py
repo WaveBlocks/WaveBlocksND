@@ -11,7 +11,7 @@ and expectation values and the matrix elements of an arbitrary operator.
 
 from numpy import zeros, complexfloating, sum, cumsum
 
-from .InnerProduct import InnerProduct
+from WaveBlocksND.InnerProduct import InnerProduct
 
 __all__ = ["InhomogeneousInnerProduct"]
 

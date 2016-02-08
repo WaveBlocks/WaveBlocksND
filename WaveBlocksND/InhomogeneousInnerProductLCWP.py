@@ -12,7 +12,7 @@ arbitrary operator.
 
 from numpy import zeros, complexfloating, conjugate, transpose, dot, sum, cumsum, array, repeat, reshape
 
-from .InnerProduct import InnerProduct
+from WaveBlocksND.InnerProduct import InnerProduct
 
 __all__ = ["InhomogeneousInnerProductLCWP"]
 

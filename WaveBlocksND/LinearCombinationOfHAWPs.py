@@ -14,10 +14,10 @@ from numpy import pi, dot, einsum, conjugate, delete
 from scipy import exp, sqrt
 from scipy.linalg import det, inv
 
-from .LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
-from .HagedornWavepacket import HagedornWavepacket
-from .AbstractGrid import AbstractGrid
-from .GridWrapper import GridWrapper
+from WaveBlocksND.LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
+from WaveBlocksND.HagedornWavepacket import HagedornWavepacket
+from WaveBlocksND.AbstractGrid import AbstractGrid
+from WaveBlocksND.GridWrapper import GridWrapper
 
 __all__ = ["LinearCombinationOfHAWPs"]
 

@@ -11,8 +11,8 @@ of Hagedorn wavepackets.
 from functools import partial
 from numpy import conjugate, squeeze, sum
 
-from .Observables import Observables
-from .GradientHAWP import GradientHAWP
+from WaveBlocksND.Observables import Observables
+from WaveBlocksND.GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesHAWP"]
 

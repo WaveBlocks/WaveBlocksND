@@ -11,9 +11,9 @@ from functools import partial
 from numpy import dot, eye, atleast_2d
 from numpy.linalg import inv, det
 
-from .Propagator import Propagator
-from .BlockFactory import BlockFactory
-from .ComplexMath import cont_angle
+from WaveBlocksND.Propagator import Propagator
+from WaveBlocksND.BlockFactory import BlockFactory
+from WaveBlocksND.ComplexMath import cont_angle
 
 __all__ = ["HagedornPropagator"]
 

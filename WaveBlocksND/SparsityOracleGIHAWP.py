@@ -8,9 +8,9 @@ at the Gaussian integral of both packets.
 @license: Modified BSD License
 """
 
-from .SparsityOracle import SparsityOracle
-from .GaussianIntegral import GaussianIntegral
-from .InhomogeneousInnerProduct import InhomogeneousInnerProduct
+from WaveBlocksND.SparsityOracle import SparsityOracle
+from WaveBlocksND.GaussianIntegral import GaussianIntegral
+from WaveBlocksND.InhomogeneousInnerProduct import InhomogeneousInnerProduct
 
 __all__ = ["SparsityOracleGIHAWP"]
 
