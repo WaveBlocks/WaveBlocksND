@@ -2,29 +2,31 @@ Using `WaveBlocks` for performing simulations
 =============================================
 
 In this chapter we show how to use the `WaveBlocks` framework for performing
-simulations. The process is always the same and consists of a pre-processing
+simulations. The process is always the same and consists of a preprocessing
 step, a main step and a post-processing step. The preprocessing step is where
 we configure the simulations we want to perform. Then there is the main step
 where the simulations are run. Finally, there follows a postprocessing step where
-we evaluate the data and (optionally) create visualisations. We will see that the
-post processing step consists of many small and independent substeps reflecting
+we evaluate the data and (optionally) create visualization. We will see that the
+post processing step consists of many small and independent sub-steps reflecting
 the various options of what to do with the data obtained.
 
 Set up and run a simulation
 ---------------------------
 
-Let's first show how to set up a single simulation. The basic workflow consists
+Let's first show how to set up a single simulation. The basic work-flow consists
 of several steps. First we have to prepare the simulation, then we run the main
 simulation program. This gives us a data file with the simulation results. Then
 we can apply various post processing steps, for example the computation of
 energies, plotting of norms and many more.
 
 The first step is to create a `configuration file` and set the parameters. Let's call
-the file ``parameters_01.py``. The full content of this file is printed below:
+the file ``harmonic_1D_p.py``. The full content of this file is printed below:
 
 ::
 
     algorithm = "hagedorn"
+    propagator = "semiclassical"
+    splitting_method = "Y4"
 
     T = 12
     dt = 0.01
@@ -56,12 +58,15 @@ the file ``parameters_01.py``. The full content of this file is printed below:
             "dimension" : 1
         }],
         "coefficients" : [[ ((0,), 1.0) ]],
-        "quadrature" : {
-            "type" : "HomogeneousQuadrature",
-        'qr': {
-                'type': 'TensorProductQR',
-                'dimension': 1,
-                'qr_rules': [{'dimension': 1, 'order': 14, 'type': 'GaussHermiteQR'}]
+        "innerproduct" : {
+            "type" : "HomogeneousInnerProduct",
+            "delegate" : {
+                "type" : "DirectHomogeneousQuadrature",
+                'qr': {
+                    'type': 'TensorProductQR',
+                    'dimension': 1,
+                    'qr_rules': [{'dimension': 1, 'order': 14, 'type': 'GaussHermiteQR'}]
+                }
             }
         }
     }
@@ -76,28 +81,48 @@ the file ``parameters_01.py``. The full content of this file is printed below:
 
     matrix_exponential = "pade"
 
-For an overview of the available settings, see :ref:`Required parameter sets`.
-
-Now we have to run the main simulation program. This is done by the following
-command:
+This configuration file can also be found in the `examples` directory at:
 
 ::
 
-    python Main.py parameters_01.py
+    examples/harmonic_oscillators/harmonic_1D_p.py
+
+Now we have to run the main simulation program. This is done by the following command:
+
+::
+
+    Main.py harmonic_1D_p.py
 
 where we have to provide the configuration file as the first command line option
 of the ``Main.py`` program. When the program terminates, it leaves a file called
 ``simulation_results.hdf5`` which contains all the simulation data. We can use
 the program ``hdfview`` to gain some insight of the contents of the file.
 
+All commands support an online help listing the available switches:
+
+::
+
+    Main.py --help
+    usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
+
+    positional arguments:
+      parametersfile        The simulation configuration parameters file.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -o OUTPUTFILE, --outputfile OUTPUTFILE
+                            The data file to write the transformed data.
+      -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                            Path where to put the results.
+
+
 Running multiple simulations
 ----------------------------
 
 Now we know how to run a single simulation. But most of the time we want
-to run a multitude of simulations. This is not more difficult, only the workflow
+to run a multitude of simulations. This is not more difficult, only the work-flow
 changes a little bit. Throughout the next section we work in an arbitrary
-directory. All scripts called and all files referenced are assumed to lie within this
-working directory.
+directory. All files referenced are assumed to lie within this working directory.
 
 Preparation and Meta-configurations
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -105,8 +130,23 @@ Preparation and Meta-configurations
 First we need to generate a bunch of configurations. Of course we could write
 all the files by hand. However, for a set of simulations where just one or a
 few parameters vary, we can avoid this tedious work. The tool that takes over
-the task is named ``ConfigurationGenerator.py``. It takes a so called `meta
-configuration` and then produces a set of ordinary configuration files.
+the task is named ``ConfigurationGenerator.py``. It takes a so called `meta configuration`
+and then produces a set of ordinary configuration files. The synopsis for this
+tool is:
+
+::
+
+    ConfigurationGenerator.py --help
+    usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
+
+    positional arguments:
+      metaconfiguration     The meta-configuration file.
+
+    optional arguments:
+      -h, --help            show this help message and exit
+      -d DESTINATION, --destination DESTINATION
+                            The destination where to store the configurations
+                            generated.
 
 Let's look at a simple example: assume that our sample meta configuration file
 is ``metaconfiguration_02.py``, its content is reprinted below:
@@ -131,23 +171,23 @@ is ``metaconfiguration_02.py``, its content is reprinted below:
     LP["eps"] = [0.1, 0.5]
     LP["delta"] = ["0.5*eps", "1.0*eps", "1.5*eps"]
 
-The file is just another plain python file with only informal constraints.
-There must be two dicts named ``GP`` and ``LP`` in the top level namespace.
+The file is just another plain `Python` file with only informal constraints.
+There must be two dicts named ``GP`` and ``LP`` in the top level name-space.
 The first one, ``GP``, contains all the parameters that are `global` to the
 set of configuration. While the second one, ``LP``, contains lists of the
 parameters that vary with each simulation. The configuration generator then
-computes the cartesian product of all these lists in ``LP``. Then, for each
-tuple of this cartesian product it adds all parameters from ``GP``, yielding
+computes the Cartesian product of all these lists in ``LP``. Then, for each
+tuple of this Cartesian product it adds all parameters from ``GP``, yielding
 a single configuration. Additionally to these two variables there can be
 another one which is used for global preambles. This variable has to be called
-``PA`` and holds a (multi-line) python string of valid python code. These
+``PA`` and holds a (multi-line) `Python` string of valid `Python` code. These
 statements are written to the very top of every configuration file generated.
 
 We can run the configuration generator as:
 
 ::
 
-    python ConfigurationGenerator.py metaconfiguration_02.py
+    ConfigurationGenerator.py metaconfiguration_02.py
 
 and it will create the directory ``autogen_configurations`` where it puts
 all the configuration files. Let's take a look into this directory:
@@ -168,10 +208,10 @@ prints:
     Parameters[eps=0.5][delta=1.5eps].py
 
 and we find 6 configuration files. One file for each combination of a value for
-eps and one for delta. The filenames contain all local parameters as ``key=value``
+``eps`` and one for ``delta``. The file names contain all local parameters as ``key=value``
 pairs. These can be used later in the post processing step by the functions from
-``FileTools.py`` for sorting and grouping the simulations with respect to almost
-arbitrary criteria.
+the :py:class:`FileTools` sub-module for sorting and grouping the simulations with
+respect to almost arbitrary criteria.
 
 These configuration files can now be fed to the main simulation program one
 after another as shown in the last section. We could again do this manually but
@@ -181,38 +221,41 @@ there is a better solution.
 The batch loop
 ~~~~~~~~~~~~~~
 
-There is a simple python script ``Batch.py`` which does nothing else than running
-simulations for a set of configurations. The usage is really simple. First create
-a subdirectory called configurations by:
+There is a simple `Python` script ``BatchLoop.py`` which does nothing else than running
+simulations for a set of configurations. The usage is really simple.
 
 ::
 
-    mkdir configurations
+    BatchLoop.py --help
+    usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
 
-Then we put all the configurations we want to run in the loop into this directory.
-For example if we created the configurations by the means described in the last
-section we just do:
+    optional arguments:
+      -h, --help            show this help message and exit
+      -c CONFIGURATIONS, --configurations CONFIGURATIONS
+                            Path to the 'configuration' directory.
+      -r RESULTSPATH, --resultspath RESULTSPATH
+                            Path to the 'results' directory.
+      -m MAXWORKERS, --maxworkers MAXWORKERS
+                            Maximal number of parallel jobs.
+
+We can run as many simulations as we like. Each simulation is run independently
+from all others and there is a limit of ``MAXWORKERS`` simulations run in parallel.
+We have to provide a directory where the results should end up:
 
 ::
 
-    mv autogen_configurations/* configurations/
+    mkdir results
 
-We can put as many simulations as we like into this directory. Each simulation
-is run totally independently from all others. At the moment we do not run the
-simulations in parallel but it would be possible to do this.
-
-Now it is time to call the ``Batch.py`` script. The most simple call looks like:
+Now it is time to call the ``BatchLoop.py`` script. The simple call looks like:
 
 ::
 
-    python Batch.py
+    BatchLoop.py -c autogen_configurations -r results
 
-The first thing is does is to create a new directory called ``results``. This is
-the place where it will put all the simulation results. Then it will call the
-``Main.py`` script for each simulation configuration provided. After this it will
-run a bunch of data computation and plotting scripts. Finally it puts all the
-simulation results in a subdirectory of results whose name corresponds to the
-configuration file used. If we now look into the results directory by:
+This will create new directories in ``results`` whose names correspond to the
+configuration files used. It will call the ``Main.py`` script for each simulation
+configuration provided. After this it will run a bunch of data computation and plotting
+scripts. If we now look into the results directory by:
 
 ::
 
@@ -230,7 +273,7 @@ we see the listing:
     Parameters[eps=0.5][delta=1.5eps]
 
 and for the results of a single simulation (notice the necessary shell character
-escapes, you can also write the name without escapes in a pair of ".)
+escapes, you can also write the name without escapes in a pair of ``"``.)
 
 ::
 
@@ -254,55 +297,6 @@ file (``simulation results.hdf5``). If there were some plots generated,
 then these files are here too.
 
 
-Advanced configuration of the batch loop
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-In the last section we saw how to use the so called batch loop. Now we reveal the
-full power of this script. The script can be called with a further configuration
-file. We call this file the `batchconfiguration`. Please do not confuse this with
-the `simulation configuration` file holding the physical simulation parameters for
-a single simulation and the `metaconfiguration` file specifying how to generate a
-bunch of closely related simulation configuration files.
-
-The listing 2.3 shows the default batch configuration. The file is a plain python
-script file which contains only three lists. Each list holds the names of some
-other python scripts. The rest should be self-explanatory from the comments.
-
-::
-
-    # Default configuration of which scripts are run in the
-    # batch loop . Change the content of the lists as you like
-    # but never rename the variables .
-    # All scripts in this list are called for each simulation
-    # configuration and with the configuration file as first
-    # command line argument
-    call_simulation = ["Main.py"]
-
-    # All scripts in this list are called for each simulation
-    # configuration but without additional arguments . They can
-    # assume that the simulation results data file is available
-    # at the default location ( ’./ simulation_results . hdf5 ’) .
-
-    call_for_each = ["ComputeNorms.py" ,
-                     "ComputeEnergies.py",
-                     # "PlotPotential.py",
-                     "PlotNorms.py",
-                     "PlotEnergies.py",
-                     # "PlotWavepacketParameters.py",
-                     # "PlotWavepacketCoefficients.py",
-                     # "EvaluateWavepacketsEigen.py",
-                     # "PlotWavefunction.py",
-                     # "PlotWavepackets.py"
-                    ]
-
-    # The scripts in this list are called once after all
-    # simulations are finished and the results were moved
-    # to the final location ( default ’./ results /* ’) . Put
-    # all scripts that do comparisons between different
-    # simulations in here.
-    call_once = []
-
-
 Running more scripts
 ~~~~~~~~~~~~~~~~~~~~
 
@@ -315,7 +309,7 @@ and its correct file path manually. Exactly for this reason there is a script na
 
 ::
 
-    python ForAll.py PlotPotential.py
+    ForAll.py PlotPotential.py
 
 which starts by printing:
 
@@ -335,10 +329,10 @@ Computing more data
 
 After we have run a simulation the output file ``simulation_results.hdf5``
 contains all data that were computed during the simulation. This is for example
-wavefunction values or wavepacket parameters etc. depending on the exact setup
+wave-function values or wave-packet parameters etc. depending on the exact setup
 run. Usually we want also to compute some properties of the time evolution. This
 is done in a second step called `post processing` of the data. There are several
-scripts in the ``scripts/`` subdirectory which post-process the simulation data.
+scripts in the ``scripts/`` sub-directory which post-process the simulation data.
 
 Assume we want to compute the norms and energies of the wave function during its
 time evolution. These properties are not computed while running the simulation,
@@ -351,23 +345,26 @@ and provide modern command line switch handling.
 
 ::
 
-    python ComputeNorms.py --help
+    ComputeNorms.py --help
 
 and will print a help message:
 
 ::
 
-    usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]] [-et]
+    usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
+                           [-r [RESULTSPATH]] [-et]
 
     optional arguments:
       -h, --help            show this help message and exit
       -d [DATAFILE], --datafile [DATAFILE]
-                            The simulation data file
+                            The simulation data file.
       -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
-                            The data block to handle
+                            The data block to handle.
+      -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                            Path where to put the results.
       -et, --eigentransform
                             Transform the data into the eigenbasis before
-                            computing norms
+                            computing norms.
 
 Norms
 ~~~~~
@@ -376,9 +373,9 @@ Computing norms is trivial and fast. Just run the script:
 
 ::
 
-    python ComputeNorms.py
+    ComputeNorms.py
 
-This will compute the norms of all wavepackets or wave functions
+This will compute the norms of all wave-packets or wave functions
 depending on what the simulation setup was and what is already stored
 in ``simulation_results.hdf5``.
 
@@ -390,7 +387,7 @@ All we need is to run:
 
 ::
 
-    python ComputeEnergies.py
+    ComputeEnergies.py
 
 which will compute kinetic and potential energies.
 
@@ -399,14 +396,14 @@ Autocorrelations
 
 The computation of auto-correlations is a bit more complicated. What
 we want to compute is the following overlap integral (here discussed
-in case of wavepackets):
+in case of wave-packets):
 
 .. math::
    \langle \Psi(0) | \Psi(t) \rangle
 
-which compares the wavepacket at time :math:`t` with the initial value
-:math:`\Psi(0)` at time 0. Because this involves wavepackets at two different
-times we need a specialised quadrature to get accurate results.  We have to tell
+which compares the wave-packet at time :math:`t` with the initial value
+:math:`\Psi(0)` at time 0. Because this involves wave-packets at two different
+times we need a specialized quadrature to get accurate results.  We have to tell
 the script which quadrature we would like to use. This is done best by adding a
 top-level snippet like the following to the original simulation setup
 configuration *before* the simulation is run. This will choose the
@@ -434,7 +431,7 @@ setup:
    used by the :py:class:`NSDInhomogeneous` transformation.
 
 As a second example we show the corresponding snippet in case of a three
-dimensional simlation setup:
+dimensional simulation setup:
 
 ::
 
@@ -462,26 +459,35 @@ The only thing we have to do then is to call the corresponding post-processor sc
 
 ::
 
-    python ComputeAutocorrelation.py
+    ComputeAutocorrelation.py
 
 
-Wavepacket sampling
+Wave-packet sampling
 ~~~~~~~~~~~~~~~~~~~
 
-If we made a simulation with wavepackets only and want to sample them
+If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:
 
 ::
 
-    python EvaluateWavepackets.py
+    usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
+                                                  [-b [BLOCKID [BLOCKID ...]]]
+                                                  [-p [PARAMETERSFILE]]
+                                                  [-r [RESULTSPATH]] [-et]
 
-This script is for homogeneous Hagedorn wavepackets only. For the
-inhomogeneous variant there is another script:
-
-::
-
-    python EvaluateWavepacketsInhomog.py
-
+    optional arguments:
+      -h, --help            show this help message and exit
+      -d [DATAFILE], --datafile [DATAFILE]
+                            The simulation data file.
+      -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                            The data block to handle.
+      -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
+                            The configuration parameter file.
+      -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                            Path where to put the results.
+      -et, --eigentransform
+                            Transform the data into the eigenbasis before
+                            computing norms.
 
 Eigentransformations
 ~~~~~~~~~~~~~~~~~~~~
@@ -492,9 +498,9 @@ observables usually should be computed in the eigenbasis there is a
 transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.
 
-However, in case we explicitely do not want the transformation to take place
+However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-post-processing scripts which can be recognised by a ``NET`` in their name:
+post-processing scripts which can be recognized by a ``NET`` in their name:
 
 ::
 
@@ -504,7 +510,7 @@ post-processing scripts which can be recognised by a ``NET`` in their name:
 
 The ``NET`` (No-Eigen-Transformation) variants never do a basis transformation
 and compute the requested observables on the data given assuming a correct
-basis. There is also a ``CAN`` variant which computes explicitely in the
+basis. There is also a ``CAN`` variant which computes explicitly in the
 canonical basis:
 
 ::
@@ -518,12 +524,12 @@ we use :math:`V(x)` or :math:`\Lambda(x)` in the code.
 Explicit Eigentransformation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-In case we want to convert all the simulation data (think: wavefunction values
-or wavepacket data) once to the eigenbasis there is this script:
+In case we want to convert all the simulation data (think: wave-function values
+or wave-packet data) once to the eigenbasis there is this script:
 
 ::
 
-    python ComputeTransformToEigen.py --help
+    ComputeTransformToEigen.py --help
 
 According to its help text:
 
@@ -543,16 +549,16 @@ new data file. A typical invoke could look like:
 
 ::
 
-    python ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
+    ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
 
 
-Visualisation
+Visualization
 -------------
 
-The post processing step usually splits into two substeps. First we compute
-additional data and then we visualise these data. The two substeps are performed
-by individual scripts. All these scripts optionally take the filename or
-filepath of the ``simulation_results.hdf5`` as a further command line argument.
+The post processing step usually splits into two sub-steps. First we compute
+additional data and then we visualize these data. The two sub-steps are performed
+by individual scripts. All these scripts optionally take the file-name or
+file-path of the ``simulation_results.hdf5`` as a further command line argument.
 
 In this section we look at the plotting scripts used to visualize
 common aspects of the simulated objects.
@@ -572,7 +578,7 @@ following scripts can be used:
 Plotting Wavepackets
 ~~~~~~~~~~~~~~~~~~~~
 
-Given a Hagedorn wavepacket :math:`\Psi` we can plot various quantities like the
+Given a Hagedorn wave-packet :math:`\Psi` we can plot various quantities like the
 time evolution of the parameter set :math:`\Pi(t)`. In one and :math:`D`
 dimensions this is done with:
 
@@ -595,7 +601,7 @@ For a schematic propagation plot including also the spreads :math:`Q(t)` and
 
     PlotWavepacketParametersSchema2D.py
 
-Plotting the wavepacket coefficients :math:`c(t)` can be done by several scripts
+Plotting the wave-packet coefficients :math:`c(t)` can be done by several scripts
 available which emphasize different aspects. Usually one wants to use one of:
 
 ::
@@ -603,7 +609,7 @@ available which emphasize different aspects. Usually one wants to use one of:
     PlotWavepacketCoefficients.py
     PlotWavepacketCoefficientsStem.py
 
-Especially for higher dimensional wavepackets the other two scripts can
+Especially for higher dimensional wave-packets the other two scripts can
 give better visualizations:
 
 ::
@@ -613,29 +619,29 @@ give better visualizations:
 
 .. note:: These scripts can easily fail for too long simulations. In case this
 	  happens, try to plot less values by dropping some intermediate
-	  timesteps.
+	  time-steps.
 
-By evaluating a wavepacket we can also plot contours in case of a two
+By evaluating a wave-packet we can also plot contours in case of a two
 dimensional simulation:
 
 ::
 
     PlotWavepacket2DcontourOTF.py
 
-This script does plot each wavepacket immediately after evaluation and hence is
+This script does plot each wave-packet immediately after evaluation and hence is
 much more efficient than evaluation of all packets first followed by a plot
-script for wavefunctions.
+script for wave-functions.
 
 Plotting Wavefunctions
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Plotting wavefunctions is easy. In one dimension we use this script:
+Plotting wave-functions is easy. In one dimension we use this script:
 
 ::
 
     PlotWavefunction1D.py
 
-to plot complex valued wavefunctions by applying the usual color coding
+to plot complex valued wave-functions by applying the usual color coding
 representing the phase. In two dimensions we can either make contour plots or
 three dimensional surface plots by calling either of:
 
@@ -644,13 +650,13 @@ three dimensional surface plots by calling either of:
     PlotWavefunction2Dcontour.py
     PlotWavefunction2Dsurface.py
 
-Three and higher dimensional wavefunctions can not be plotted but
+Three and higher dimensional wave-functions can not be plotted but
 the need to do so occurs rarely anyway due to the vast amount of data involved.
-All plot scripts can set the viewport by command line arguments, for example:
+All plot scripts can set the view-port by command line arguments, for example:
 
 ::
 
-    python ../plotters/PlotWavefunction1D.py --help
+    PlotWavefunction1D.py --help
 
 ::
 
@@ -695,5 +701,5 @@ Sorting and Grouping
 
 When comparing results from many different simulations one often wants
 to sort and group the individual runs and corresponding output
-files. For this purpose there is a submodule called
+files. For this purpose there is a sub-module called
 :py:class:`FileTools` which contains numerous handy functions.
