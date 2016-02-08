@@ -55,23 +55,25 @@
   <div class="section" id="using-waveblocks-for-performing-simulations">
 <h1>Using <cite>WaveBlocks</cite> for performing simulations<a class="headerlink" href="#using-waveblocks-for-performing-simulations" title="Permalink to this headline">¶</a></h1>
 <p>In this chapter we show how to use the <cite>WaveBlocks</cite> framework for performing
-simulations. The process is always the same and consists of a pre-processing
+simulations. The process is always the same and consists of a preprocessing
 step, a main step and a post-processing step. The preprocessing step is where
 we configure the simulations we want to perform. Then there is the main step
 where the simulations are run. Finally, there follows a postprocessing step where
-we evaluate the data and (optionally) create visualisations. We will see that the
-post processing step consists of many small and independent substeps reflecting
+we evaluate the data and (optionally) create visualization. We will see that the
+post processing step consists of many small and independent sub-steps reflecting
 the various options of what to do with the data obtained.</p>
 <div class="section" id="set-up-and-run-a-simulation">
 <h2>Set up and run a simulation<a class="headerlink" href="#set-up-and-run-a-simulation" title="Permalink to this headline">¶</a></h2>
-<p>Let&#8217;s first show how to set up a single simulation. The basic workflow consists
+<p>Let&#8217;s first show how to set up a single simulation. The basic work-flow consists
 of several steps. First we have to prepare the simulation, then we run the main
 simulation program. This gives us a data file with the simulation results. Then
 we can apply various post processing steps, for example the computation of
 energies, plotting of norms and many more.</p>
 <p>The first step is to create a <cite>configuration file</cite> and set the parameters. Let&#8217;s call
-the file <tt class="docutils literal"><span class="pre">parameters_01.py</span></tt>. The full content of this file is printed below:</p>
+the file <tt class="docutils literal"><span class="pre">harmonic_1D_p.py</span></tt>. The full content of this file is printed below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">algorithm</span> <span class="o">=</span> <span class="s">&quot;hagedorn&quot;</span>
+<span class="n">propagator</span> <span class="o">=</span> <span class="s">&quot;semiclassical&quot;</span>
+<span class="n">splitting_method</span> <span class="o">=</span> <span class="s">&quot;Y4&quot;</span>
 
 <span class="n">T</span> <span class="o">=</span> <span class="mi">12</span>
 <span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
@@ -103,12 +105,15 @@ the file <tt class="docutils literal"><span class="pre">parameters_01.py</span><
         <span class="s">&quot;dimension&quot;</span> <span class="p">:</span> <span class="mi">1</span>
     <span class="p">}],</span>
     <span class="s">&quot;coefficients&quot;</span> <span class="p">:</span> <span class="p">[[</span> <span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">]],</span>
-    <span class="s">&quot;quadrature&quot;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;HomogeneousQuadrature&quot;</span><span class="p">,</span>
-    <span class="s">&#39;qr&#39;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;TensorProductQR&#39;</span><span class="p">,</span>
-            <span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="s">&#39;qr_rules&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;order&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;GaussHermiteQR&#39;</span><span class="p">}]</span>
+    <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;HomogeneousInnerProduct&quot;</span><span class="p">,</span>
+        <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">,</span>
+            <span class="s">&#39;qr&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;TensorProductQR&#39;</span><span class="p">,</span>
+                <span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&#39;qr_rules&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;order&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;GaussHermiteQR&#39;</span><span class="p">}]</span>
+            <span class="p">}</span>
         <span class="p">}</span>
     <span class="p">}</span>
 <span class="p">}</span>
@@ -124,31 +129,61 @@ the file <tt class="docutils literal"><span class="pre">parameters_01.py</span><
 <span class="n">matrix_exponential</span> <span class="o">=</span> <span class="s">&quot;pade&quot;</span>
 </pre></div>
 </div>
-<p>For an overview of the available settings, see <em class="xref std std-ref">Required parameter sets</em>.</p>
-<p>Now we have to run the main simulation program. This is done by the following
-command:</p>
-<div class="highlight-python"><div class="highlight"><pre>python Main.py parameters_01.py
+<p>This configuration file can also be found in the <cite>examples</cite> directory at:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">examples</span><span class="o">/</span><span class="n">harmonic_oscillators</span><span class="o">/</span><span class="n">harmonic_1D_p</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>Now we have to run the main simulation program. This is done by the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>Main.py harmonic_1D_p.py
 </pre></div>
 </div>
 <p>where we have to provide the configuration file as the first command line option
 of the <tt class="docutils literal"><span class="pre">Main.py</span></tt> program. When the program terminates, it leaves a file called
 <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> which contains all the simulation data. We can use
 the program <tt class="docutils literal"><span class="pre">hdfview</span></tt> to gain some insight of the contents of the file.</p>
+<p>All commands support an online help listing the available switches:</p>
+<div class="highlight-python"><div class="highlight"><pre>Main.py --help
+usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
+
+positional arguments:
+  parametersfile        The simulation configuration parameters file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUTFILE, --outputfile OUTPUTFILE
+                        The data file to write the transformed data.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
+</pre></div>
+</div>
 </div>
 <div class="section" id="running-multiple-simulations">
 <h2>Running multiple simulations<a class="headerlink" href="#running-multiple-simulations" title="Permalink to this headline">¶</a></h2>
 <p>Now we know how to run a single simulation. But most of the time we want
-to run a multitude of simulations. This is not more difficult, only the workflow
+to run a multitude of simulations. This is not more difficult, only the work-flow
 changes a little bit. Throughout the next section we work in an arbitrary
-directory. All scripts called and all files referenced are assumed to lie within this
-working directory.</p>
+directory. All files referenced are assumed to lie within this working directory.</p>
 <div class="section" id="preparation-and-meta-configurations">
 <h3>Preparation and Meta-configurations<a class="headerlink" href="#preparation-and-meta-configurations" title="Permalink to this headline">¶</a></h3>
 <p>First we need to generate a bunch of configurations. Of course we could write
 all the files by hand. However, for a set of simulations where just one or a
 few parameters vary, we can avoid this tedious work. The tool that takes over
-the task is named <tt class="docutils literal"><span class="pre">ConfigurationGenerator.py</span></tt>. It takes a so called <cite>meta
-configuration</cite> and then produces a set of ordinary configuration files.</p>
+the task is named <tt class="docutils literal"><span class="pre">ConfigurationGenerator.py</span></tt>. It takes a so called <cite>meta configuration</cite>
+and then produces a set of ordinary configuration files. The synopsis for this
+tool is:</p>
+<div class="highlight-python"><div class="highlight"><pre>ConfigurationGenerator.py --help
+usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
+
+positional arguments:
+  metaconfiguration     The meta-configuration file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d DESTINATION, --destination DESTINATION
+                        The destination where to store the configurations
+                        generated.
+</pre></div>
+</div>
 <p>Let&#8217;s look at a simple example: assume that our sample meta configuration file
 is <tt class="docutils literal"><span class="pre">metaconfiguration_02.py</span></tt>, its content is reprinted below:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Global parameters that stay the same for all simulations :</span>
@@ -170,19 +205,19 @@ is <tt class="docutils literal"><span class="pre">metaconfiguration_02.py</span>
 <span class="n">LP</span><span class="p">[</span><span class="s">&quot;delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;0.5*eps&quot;</span><span class="p">,</span> <span class="s">&quot;1.0*eps&quot;</span><span class="p">,</span> <span class="s">&quot;1.5*eps&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>The file is just another plain python file with only informal constraints.
-There must be two dicts named <tt class="docutils literal"><span class="pre">GP</span></tt> and <tt class="docutils literal"><span class="pre">LP</span></tt> in the top level namespace.
+<p>The file is just another plain <cite>Python</cite> file with only informal constraints.
+There must be two dicts named <tt class="docutils literal"><span class="pre">GP</span></tt> and <tt class="docutils literal"><span class="pre">LP</span></tt> in the top level name-space.
 The first one, <tt class="docutils literal"><span class="pre">GP</span></tt>, contains all the parameters that are <cite>global</cite> to the
 set of configuration. While the second one, <tt class="docutils literal"><span class="pre">LP</span></tt>, contains lists of the
 parameters that vary with each simulation. The configuration generator then
-computes the cartesian product of all these lists in <tt class="docutils literal"><span class="pre">LP</span></tt>. Then, for each
-tuple of this cartesian product it adds all parameters from <tt class="docutils literal"><span class="pre">GP</span></tt>, yielding
+computes the Cartesian product of all these lists in <tt class="docutils literal"><span class="pre">LP</span></tt>. Then, for each
+tuple of this Cartesian product it adds all parameters from <tt class="docutils literal"><span class="pre">GP</span></tt>, yielding
 a single configuration. Additionally to these two variables there can be
 another one which is used for global preambles. This variable has to be called
-<tt class="docutils literal"><span class="pre">PA</span></tt> and holds a (multi-line) python string of valid python code. These
+<tt class="docutils literal"><span class="pre">PA</span></tt> and holds a (multi-line) <cite>Python</cite> string of valid <cite>Python</cite> code. These
 statements are written to the very top of every configuration file generated.</p>
 <p>We can run the configuration generator as:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ConfigurationGenerator.py metaconfiguration_02.py
+<div class="highlight-python"><div class="highlight"><pre>ConfigurationGenerator.py metaconfiguration_02.py
 </pre></div>
 </div>
 <p>and it will create the directory <tt class="docutils literal"><span class="pre">autogen_configurations</span></tt> where it puts
@@ -200,41 +235,45 @@ Parameters[eps=0.5][delta=1.5eps].py
 </pre></div>
 </div>
 <p>and we find 6 configuration files. One file for each combination of a value for
-eps and one for delta. The filenames contain all local parameters as <tt class="docutils literal"><span class="pre">key=value</span></tt>
+<tt class="docutils literal"><span class="pre">eps</span></tt> and one for <tt class="docutils literal"><span class="pre">delta</span></tt>. The file names contain all local parameters as <tt class="docutils literal"><span class="pre">key=value</span></tt>
 pairs. These can be used later in the post processing step by the functions from
-<tt class="docutils literal"><span class="pre">FileTools.py</span></tt> for sorting and grouping the simulations with respect to almost
-arbitrary criteria.</p>
+the <a class="reference internal" href="../waveblocks_classes/FileTools.html#module-FileTools" title="FileTools"><tt class="xref py py-class docutils literal"><span class="pre">FileTools</span></tt></a> sub-module for sorting and grouping the simulations with
+respect to almost arbitrary criteria.</p>
 <p>These configuration files can now be fed to the main simulation program one
 after another as shown in the last section. We could again do this manually but
 there is a better solution.</p>
 </div>
 <div class="section" id="the-batch-loop">
 <h3>The batch loop<a class="headerlink" href="#the-batch-loop" title="Permalink to this headline">¶</a></h3>
-<p>There is a simple python script <tt class="docutils literal"><span class="pre">Batch.py</span></tt> which does nothing else than running
-simulations for a set of configurations. The usage is really simple. First create
-a subdirectory called configurations by:</p>
-<div class="highlight-python"><div class="highlight"><pre>mkdir configurations
+<p>There is a simple <cite>Python</cite> script <tt class="docutils literal"><span class="pre">BatchLoop.py</span></tt> which does nothing else than running
+simulations for a set of configurations. The usage is really simple.</p>
+<div class="highlight-python"><div class="highlight"><pre>BatchLoop.py --help
+usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -c CONFIGURATIONS, --configurations CONFIGURATIONS
+                        Path to the &#39;configuration&#39; directory.
+  -r RESULTSPATH, --resultspath RESULTSPATH
+                        Path to the &#39;results&#39; directory.
+  -m MAXWORKERS, --maxworkers MAXWORKERS
+                        Maximal number of parallel jobs.
 </pre></div>
 </div>
-<p>Then we put all the configurations we want to run in the loop into this directory.
-For example if we created the configurations by the means described in the last
-section we just do:</p>
-<div class="highlight-python"><div class="highlight"><pre>mv autogen_configurations/* configurations/
+<p>We can run as many simulations as we like. Each simulation is run independently
+from all others and there is a limit of <tt class="docutils literal"><span class="pre">MAXWORKERS</span></tt> simulations run in parallel.
+We have to provide a directory where the results should end up:</p>
+<div class="highlight-python"><div class="highlight"><pre>mkdir results
 </pre></div>
 </div>
-<p>We can put as many simulations as we like into this directory. Each simulation
-is run totally independently from all others. At the moment we do not run the
-simulations in parallel but it would be possible to do this.</p>
-<p>Now it is time to call the <tt class="docutils literal"><span class="pre">Batch.py</span></tt> script. The most simple call looks like:</p>
-<div class="highlight-python"><div class="highlight"><pre>python Batch.py
+<p>Now it is time to call the <tt class="docutils literal"><span class="pre">BatchLoop.py</span></tt> script. The simple call looks like:</p>
+<div class="highlight-python"><div class="highlight"><pre>BatchLoop.py -c autogen_configurations -r results
 </pre></div>
 </div>
-<p>The first thing is does is to create a new directory called <tt class="docutils literal"><span class="pre">results</span></tt>. This is
-the place where it will put all the simulation results. Then it will call the
-<tt class="docutils literal"><span class="pre">Main.py</span></tt> script for each simulation configuration provided. After this it will
-run a bunch of data computation and plotting scripts. Finally it puts all the
-simulation results in a subdirectory of results whose name corresponds to the
-configuration file used. If we now look into the results directory by:</p>
+<p>This will create new directories in <tt class="docutils literal"><span class="pre">results</span></tt> whose names correspond to the
+configuration files used. It will call the <tt class="docutils literal"><span class="pre">Main.py</span></tt> script for each simulation
+configuration provided. After this it will run a bunch of data computation and plotting
+scripts. If we now look into the results directory by:</p>
 <div class="highlight-python"><div class="highlight"><pre>ls results
 </pre></div>
 </div>
@@ -248,7 +287,7 @@ Parameters[eps=0.5][delta=1.5eps]
 </pre></div>
 </div>
 <p>and for the results of a single simulation (notice the necessary shell character
-escapes, you can also write the name without escapes in a pair of &#8221;.)</p>
+escapes, you can also write the name without escapes in a pair of <tt class="docutils literal"><span class="pre">&quot;</span></tt>.)</p>
 <div class="highlight-python"><div class="highlight"><pre>ls results/Parameters\[eps\=0.1\]\[delta\=0.5eps\]
 </pre></div>
 </div>
@@ -267,51 +306,6 @@ file (<tt class="docutils literal"><span class="pre">Parameters[eps=0.1][delta=0
 file (<tt class="docutils literal"><span class="pre">simulation</span> <span class="pre">results.hdf5</span></tt>). If there were some plots generated,
 then these files are here too.</p>
 </div>
-<div class="section" id="advanced-configuration-of-the-batch-loop">
-<h3>Advanced configuration of the batch loop<a class="headerlink" href="#advanced-configuration-of-the-batch-loop" title="Permalink to this headline">¶</a></h3>
-<p>In the last section we saw how to use the so called batch loop. Now we reveal the
-full power of this script. The script can be called with a further configuration
-file. We call this file the <cite>batchconfiguration</cite>. Please do not confuse this with
-the <cite>simulation configuration</cite> file holding the physical simulation parameters for
-a single simulation and the <cite>metaconfiguration</cite> file specifying how to generate a
-bunch of closely related simulation configuration files.</p>
-<p>The listing 2.3 shows the default batch configuration. The file is a plain python
-script file which contains only three lists. Each list holds the names of some
-other python scripts. The rest should be self-explanatory from the comments.</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Default configuration of which scripts are run in the</span>
-<span class="c"># batch loop . Change the content of the lists as you like</span>
-<span class="c"># but never rename the variables .</span>
-<span class="c"># All scripts in this list are called for each simulation</span>
-<span class="c"># configuration and with the configuration file as first</span>
-<span class="c"># command line argument</span>
-<span class="n">call_simulation</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Main.py&quot;</span><span class="p">]</span>
-
-<span class="c"># All scripts in this list are called for each simulation</span>
-<span class="c"># configuration but without additional arguments . They can</span>
-<span class="c"># assume that the simulation results data file is available</span>
-<span class="c"># at the default location ( ’./ simulation_results . hdf5 ’) .</span>
-
-<span class="n">call_for_each</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;ComputeNorms.py&quot;</span> <span class="p">,</span>
-                 <span class="s">&quot;ComputeEnergies.py&quot;</span><span class="p">,</span>
-                 <span class="c"># &quot;PlotPotential.py&quot;,</span>
-                 <span class="s">&quot;PlotNorms.py&quot;</span><span class="p">,</span>
-                 <span class="s">&quot;PlotEnergies.py&quot;</span><span class="p">,</span>
-                 <span class="c"># &quot;PlotWavepacketParameters.py&quot;,</span>
-                 <span class="c"># &quot;PlotWavepacketCoefficients.py&quot;,</span>
-                 <span class="c"># &quot;EvaluateWavepacketsEigen.py&quot;,</span>
-                 <span class="c"># &quot;PlotWavefunction.py&quot;,</span>
-                 <span class="c"># &quot;PlotWavepackets.py&quot;</span>
-                <span class="p">]</span>
-
-<span class="c"># The scripts in this list are called once after all</span>
-<span class="c"># simulations are finished and the results were moved</span>
-<span class="c"># to the final location ( default ’./ results /* ’) . Put</span>
-<span class="c"># all scripts that do comparisons between different</span>
-<span class="c"># simulations in here.</span>
-<span class="n">call_once</span> <span class="o">=</span> <span class="p">[]</span>
-</pre></div>
-</div>
-</div>
 <div class="section" id="running-more-scripts">
 <h3>Running more scripts<a class="headerlink" href="#running-more-scripts" title="Permalink to this headline">¶</a></h3>
 <p>Sometimes you may wish to run a script for a set of simulations long after the
@@ -320,7 +314,7 @@ whatever. It would be tedious to call the script with each <tt class="docutils l
 and its correct file path manually. Exactly for this reason there is a script named
 <tt class="docutils literal"><span class="pre">ForAll.py</span></tt>. For example assume we want to plot the potential used in each simulation
 (which is identical in our example but never mind). Then we call:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ForAll.py PlotPotential.py
+<div class="highlight-python"><div class="highlight"><pre>ForAll.py PlotPotential.py
 </pre></div>
 </div>
 <p>which starts by printing:</p>
@@ -338,10 +332,10 @@ this is <tt class="docutils literal"><span class="pre">./results/</span></tt>) a
 <h2>Computing more data<a class="headerlink" href="#computing-more-data" title="Permalink to this headline">¶</a></h2>
 <p>After we have run a simulation the output file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>
 contains all data that were computed during the simulation. This is for example
-wavefunction values or wavepacket parameters etc. depending on the exact setup
+wave-function values or wave-packet parameters etc. depending on the exact setup
 run. Usually we want also to compute some properties of the time evolution. This
 is done in a second step called <cite>post processing</cite> of the data. There are several
-scripts in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> subdirectory which post-process the simulation data.</p>
+scripts in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> sub-directory which post-process the simulation data.</p>
 <p>Assume we want to compute the norms and energies of the wave function during its
 time evolution. These properties are not computed while running the simulation,
 but we can get them easily from the stored information. The following sections
@@ -349,30 +343,33 @@ will show how to compute these data and store them in the output file
 <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> too.</p>
 <p>All post-processing and plotting scripts can be called with an argument <tt class="docutils literal"><span class="pre">--help</span></tt>
 and provide modern command line switch handling.</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeNorms.py --help
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>and will print a help message:</p>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]] [-et]
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
+                       [-r [RESULTSPATH]] [-et]
 
 optional arguments:
   -h, --help            show this help message and exit
   -d [DATAFILE], --datafile [DATAFILE]
-                        The simulation data file
+                        The simulation data file.
   -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
-                        The data block to handle
+                        The data block to handle.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
   -et, --eigentransform
                         Transform the data into the eigenbasis before
-                        computing norms
+                        computing norms.
 </pre></div>
 </div>
 <div class="section" id="norms">
 <h3>Norms<a class="headerlink" href="#norms" title="Permalink to this headline">¶</a></h3>
 <p>Computing norms is trivial and fast. Just run the script:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeNorms.py
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>This will compute the norms of all wavepackets or wave functions
+<p>This will compute the norms of all wave-packets or wave functions
 depending on what the simulation setup was and what is already stored
 in <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>.</p>
 </div>
@@ -380,7 +377,7 @@ in <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span>
 <h3>Energies<a class="headerlink" href="#energies" title="Permalink to this headline">¶</a></h3>
 <p>Asking for the energies is almost equally trivial as computing norms.
 All we need is to run:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeEnergies.py
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergies</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>which will compute kinetic and potential energies.</p>
@@ -389,12 +386,12 @@ All we need is to run:</p>
 <h3>Autocorrelations<a class="headerlink" href="#autocorrelations" title="Permalink to this headline">¶</a></h3>
 <p>The computation of auto-correlations is a bit more complicated. What
 we want to compute is the following overlap integral (here discussed
-in case of wavepackets):</p>
+in case of wave-packets):</p>
 <div class="math">
 <p><img src="../_images/math/49be9b68526c612afc28c602ca69cc985638a63b.png" alt="\langle \Psi(0) | \Psi(t) \rangle"/></p>
-</div><p>which compares the wavepacket at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> with the initial value
-<img class="math" src="../_images/math/5e631906dfd06ee73cfb37637f44553e08d9f6d2.png" alt="\Psi(0)"/> at time 0. Because this involves wavepackets at two different
-times we need a specialised quadrature to get accurate results.  We have to tell
+</div><p>which compares the wave-packet at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> with the initial value
+<img class="math" src="../_images/math/5e631906dfd06ee73cfb37637f44553e08d9f6d2.png" alt="\Psi(0)"/> at time 0. Because this involves wave-packets at two different
+times we need a specialized quadrature to get accurate results.  We have to tell
 the script which quadrature we would like to use. This is done best by adding a
 top-level snippet like the following to the original simulation setup
 configuration <em>before</em> the simulation is run. This will choose the
@@ -421,7 +418,7 @@ setup:</p>
 used by the <tt class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></tt> transformation.</p>
 </div>
 <p>As a second example we show the corresponding snippet in case of a three
-dimensional simlation setup:</p>
+dimensional simulation setup:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="c"># Configurations needed for computation of observables</span>
 <span class="n">observables</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
@@ -444,20 +441,32 @@ dimensional simlation setup:</p>
 </pre></div>
 </div>
 <p>The only thing we have to do then is to call the corresponding post-processor script:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeAutocorrelation.py
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeAutocorrelation</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="wavepacket-sampling">
-<h3>Wavepacket sampling<a class="headerlink" href="#wavepacket-sampling" title="Permalink to this headline">¶</a></h3>
-<p>If we made a simulation with wavepackets only and want to sample them
+<div class="section" id="wave-packet-sampling">
+<h3>Wave-packet sampling<a class="headerlink" href="#wave-packet-sampling" title="Permalink to this headline">¶</a></h3>
+<p>If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:</p>
-<div class="highlight-python"><div class="highlight"><pre>python EvaluateWavepackets.py
-</pre></div>
-</div>
-<p>This script is for homogeneous Hagedorn wavepackets only. For the
-inhomogeneous variant there is another script:</p>
-<div class="highlight-python"><div class="highlight"><pre>python EvaluateWavepacketsInhomog.py
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
+                                              [-b [BLOCKID [BLOCKID ...]]]
+                                              [-p [PARAMETERSFILE]]
+                                              [-r [RESULTSPATH]] [-et]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d [DATAFILE], --datafile [DATAFILE]
+                        The simulation data file.
+  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                        The data block to handle.
+  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
+                        The configuration parameter file.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
+  -et, --eigentransform
+                        Transform the data into the eigenbasis before
+                        computing norms.
 </pre></div>
 </div>
 </div>
@@ -468,9 +477,9 @@ observables. Since the simulation is done in the canonical basis and the
 observables usually should be computed in the eigenbasis there is a
 transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.</p>
-<p>However, in case we explicitely do not want the transformation to take place
+<p>However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-post-processing scripts which can be recognised by a <tt class="docutils literal"><span class="pre">NET</span></tt> in their name:</p>
+post-processing scripts which can be recognized by a <tt class="docutils literal"><span class="pre">NET</span></tt> in their name:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNormsNET</span><span class="o">.</span><span class="n">py</span>
 <span class="n">ComputeEnergiesNET</span><span class="o">.</span><span class="n">py</span>
 <span class="n">ComputeAutocorrelationNET</span><span class="o">.</span><span class="n">py</span>
@@ -478,7 +487,7 @@ post-processing scripts which can be recognised by a <tt class="docutils literal
 </div>
 <p>The <tt class="docutils literal"><span class="pre">NET</span></tt> (No-Eigen-Transformation) variants never do a basis transformation
 and compute the requested observables on the data given assuming a correct
-basis. There is also a <tt class="docutils literal"><span class="pre">CAN</span></tt> variant which computes explicitely in the
+basis. There is also a <tt class="docutils literal"><span class="pre">CAN</span></tt> variant which computes explicitly in the
 canonical basis:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergiesCAN</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -487,9 +496,9 @@ canonical basis:</p>
 we use <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> or <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> in the code.</p>
 <div class="section" id="explicit-eigentransformation">
 <h4>Explicit Eigentransformation<a class="headerlink" href="#explicit-eigentransformation" title="Permalink to this headline">¶</a></h4>
-<p>In case we want to convert all the simulation data (think: wavefunction values
-or wavepacket data) once to the eigenbasis there is this script:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeTransformToEigen.py --help
+<p>In case we want to convert all the simulation data (think: wave-function values
+or wave-packet data) once to the eigenbasis there is this script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>According to its help text:</p>
@@ -505,18 +514,18 @@ optional arguments:
 </div>
 <p>it will read the input file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> and write output into a
 new data file. A typical invoke could look like:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
+<div class="highlight-python"><div class="highlight"><pre>ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
 </pre></div>
 </div>
 </div>
 </div>
 </div>
-<div class="section" id="visualisation">
-<h2>Visualisation<a class="headerlink" href="#visualisation" title="Permalink to this headline">¶</a></h2>
-<p>The post processing step usually splits into two substeps. First we compute
-additional data and then we visualise these data. The two substeps are performed
-by individual scripts. All these scripts optionally take the filename or
-filepath of the <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> as a further command line argument.</p>
+<div class="section" id="visualization">
+<h2>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h2>
+<p>The post processing step usually splits into two sub-steps. First we compute
+additional data and then we visualize these data. The two sub-steps are performed
+by individual scripts. All these scripts optionally take the file-name or
+file-path of the <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> as a further command line argument.</p>
 <p>In this section we look at the plotting scripts used to visualize
 common aspects of the simulated objects.</p>
 <div class="section" id="plotting-observables">
@@ -531,7 +540,7 @@ following scripts can be used:</p>
 </div>
 <div class="section" id="plotting-wavepackets">
 <h3>Plotting Wavepackets<a class="headerlink" href="#plotting-wavepackets" title="Permalink to this headline">¶</a></h3>
-<p>Given a Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> we can plot various quantities like the
+<p>Given a Hagedorn wave-packet <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> we can plot various quantities like the
 time evolution of the parameter set <img class="math" src="../_images/math/954d4334741b0d5eb565f847bb4b58493f74e591.png" alt="\Pi(t)"/>. In one and <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>
 dimensions this is done with:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketParameters1D</span><span class="o">.</span><span class="n">py</span>
@@ -548,13 +557,13 @@ of <img class="math" src="../_images/math/b73191f0a80b96b5e944911e77fa2b61c11bc8
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketParametersSchema2D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>Plotting the wavepacket coefficients <img class="math" src="../_images/math/83208c30e4108d67519822499963411aa1eb3ecf.png" alt="c(t)"/> can be done by several scripts
+<p>Plotting the wave-packet coefficients <img class="math" src="../_images/math/83208c30e4108d67519822499963411aa1eb3ecf.png" alt="c(t)"/> can be done by several scripts
 available which emphasize different aspects. Usually one wants to use one of:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketCoefficients</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavepacketCoefficientsStem</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>Especially for higher dimensional wavepackets the other two scripts can
+<p>Especially for higher dimensional wave-packets the other two scripts can
 give better visualizations:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketCoefficientsMapEigen</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavepacketCoefficientsMap</span><span class="o">.</span><span class="n">py</span>
@@ -564,34 +573,34 @@ give better visualizations:</p>
 <p class="first admonition-title">Note</p>
 <p class="last">These scripts can easily fail for too long simulations. In case this
 happens, try to plot less values by dropping some intermediate
-timesteps.</p>
+time-steps.</p>
 </div>
-<p>By evaluating a wavepacket we can also plot contours in case of a two
+<p>By evaluating a wave-packet we can also plot contours in case of a two
 dimensional simulation:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacket2DcontourOTF</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>This script does plot each wavepacket immediately after evaluation and hence is
+<p>This script does plot each wave-packet immediately after evaluation and hence is
 much more efficient than evaluation of all packets first followed by a plot
-script for wavefunctions.</p>
+script for wave-functions.</p>
 </div>
 <div class="section" id="plotting-wavefunctions">
 <h3>Plotting Wavefunctions<a class="headerlink" href="#plotting-wavefunctions" title="Permalink to this headline">¶</a></h3>
-<p>Plotting wavefunctions is easy. In one dimension we use this script:</p>
+<p>Plotting wave-functions is easy. In one dimension we use this script:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>to plot complex valued wavefunctions by applying the usual color coding
+<p>to plot complex valued wave-functions by applying the usual color coding
 representing the phase. In two dimensions we can either make contour plots or
 three dimensional surface plots by calling either of:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction2Dcontour</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavefunction2Dsurface</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>Three and higher dimensional wavefunctions can not be plotted but
+<p>Three and higher dimensional wave-functions can not be plotted but
 the need to do so occurs rarely anyway due to the vast amount of data involved.
-All plot scripts can set the viewport by command line arguments, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre>python ../plotters/PlotWavefunction1D.py --help
+All plot scripts can set the view-port by command line arguments, for example:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMFILE]]
@@ -632,7 +641,7 @@ optional arguments:
 <h3>Sorting and Grouping<a class="headerlink" href="#sorting-and-grouping" title="Permalink to this headline">¶</a></h3>
 <p>When comparing results from many different simulations one often wants
 to sort and group the individual runs and corresponding output
-files. For this purpose there is a submodule called
+files. For this purpose there is a sub-module called
 <a class="reference internal" href="../waveblocks_classes/FileTools.html#module-FileTools" title="FileTools"><tt class="xref py py-class docutils literal"><span class="pre">FileTools</span></tt></a> which contains numerous handy functions.</p>
 </div>
 </div>
@@ -651,7 +660,6 @@ files. For this purpose there is a submodule called
 <li><a class="reference internal" href="#running-multiple-simulations">Running multiple simulations</a><ul>
 <li><a class="reference internal" href="#preparation-and-meta-configurations">Preparation and Meta-configurations</a></li>
 <li><a class="reference internal" href="#the-batch-loop">The batch loop</a></li>
-<li><a class="reference internal" href="#advanced-configuration-of-the-batch-loop">Advanced configuration of the batch loop</a></li>
 <li><a class="reference internal" href="#running-more-scripts">Running more scripts</a></li>
 </ul>
 </li>
@@ -659,14 +667,14 @@ files. For this purpose there is a submodule called
 <li><a class="reference internal" href="#norms">Norms</a></li>
 <li><a class="reference internal" href="#energies">Energies</a></li>
 <li><a class="reference internal" href="#autocorrelations">Autocorrelations</a></li>
-<li><a class="reference internal" href="#wavepacket-sampling">Wavepacket sampling</a></li>
+<li><a class="reference internal" href="#wave-packet-sampling">Wave-packet sampling</a></li>
 <li><a class="reference internal" href="#eigentransformations">Eigentransformations</a><ul>
 <li><a class="reference internal" href="#explicit-eigentransformation">Explicit Eigentransformation</a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li><a class="reference internal" href="#visualisation">Visualisation</a><ul>
+<li><a class="reference internal" href="#visualization">Visualization</a><ul>
 <li><a class="reference internal" href="#plotting-observables">Plotting Observables</a></li>
 <li><a class="reference internal" href="#plotting-wavepackets">Plotting Wavepackets</a></li>
 <li><a class="reference internal" href="#plotting-wavefunctions">Plotting Wavefunctions</a></li>
@@ -728,7 +736,7 @@ files. For this purpose there is a submodule called
       </ul>
     </div>
     <div class="footer">
-        &copy; Copyright 2016, R. Bourquin.
+        &copy; Copyright 2015, R. Bourquin.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
     </div>
   </body>
