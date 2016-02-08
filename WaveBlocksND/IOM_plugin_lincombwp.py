@@ -335,7 +335,7 @@ def load_lincombwp(self, timestep, blockid=0):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`LinearCombinationOfWPs` instance.
     """
-    from .LinearCombinationOfWPs import LinearCombinationOfWPs
+    from WaveBlocksND.LinearCombinationOfWPs import LinearCombinationOfWPs
 
     descr = self.load_lincombwp_description(blockid=blockid)
 

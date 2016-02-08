@@ -4,7 +4,7 @@ This file contains a simple factory for MatrixPotential instances. The exact
 subtype of the instance is derived from the potentials' symbolic expression.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -33,7 +33,7 @@ def create_potential(description):
 
     if type(potential_reference) == str:
         # Try to load the potential from the library
-        from . import PotentialLibrary as PL
+        from WaveBlocksND import PotentialLibrary as PL
         if potential_reference in PL.__dict__:
             potential_description = PL.__dict__[potential_reference]
         else:
@@ -154,16 +154,16 @@ def create_potential(description):
     if class_type == "MatrixPotential1S":
         # Scalar potential case
         assert nc == 1
-        from .MatrixPotential1S import MatrixPotential1S
+        from WaveBlocksND.MatrixPotential1S import MatrixPotential1S
         potential = MatrixPotential1S(potential_matrix, free_variables)
     elif class_type == "MatrixPotential2S":
         # Symbolic computations, only for N = 2
         assert nc == 2
-        from .MatrixPotential2S import MatrixPotential2S
+        from WaveBlocksND.MatrixPotential2S import MatrixPotential2S
         potential = MatrixPotential2S(potential_matrix, free_variables)
     elif class_type == "MatrixPotentialMS":
         # General numerical computations, for all N >= 1
-        from .MatrixPotentialMS import MatrixPotentialMS
+        from WaveBlocksND.MatrixPotentialMS import MatrixPotentialMS
         potential = MatrixPotentialMS(potential_matrix, free_variables)
 
     return potential

@@ -5,14 +5,14 @@ of two real variables with the values encoded
 by the usual color code.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 from numpy import meshgrid, real, where
 from matplotlib.pyplot import gca
 
-from .color_map import color_map
+from WaveBlocksND.Plot.color_map import color_map
 
 
 def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):

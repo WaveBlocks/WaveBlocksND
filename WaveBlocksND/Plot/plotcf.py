@@ -4,7 +4,7 @@ Plot function for plotting functions of the type f:R -> C
 with abs(f) as y-value and phase(f) as color code.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -12,7 +12,7 @@ from numpy import array
 from matplotlib.collections import LineCollection
 from matplotlib.pyplot import gca
 
-from .color_map import color_map
+from WaveBlocksND.Plot.color_map import color_map
 
 
 def plotcf(grid, phase, modulus, darken=None, axes=None, linestylep="solid", linewidthp=1, color="k", **kwargs):

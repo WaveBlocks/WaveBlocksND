@@ -4,14 +4,14 @@ Function for plotting complex matrices with the
 phase of the entries encoded into the usual color code.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2011, 2012 R. Bourquin
+@copyright: Copyright (C) 2011, 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 from matplotlib.pyplot import gca
 from matplotlib import ticker
 
-from .color_map import color_map
+from WaveBlocksND.Plot.color_map import color_map
 
 
 def plotcm(matrix, phase=None, modulus=None, darken=None, axes=None, **kwargs):
