@@ -96,22 +96,22 @@ via the <tt class="docutils literal"><span class="pre">pip</span></tt> <a class=
 the <a class="reference external" href="https://pypi.python.org/pypi">Python Package Index</a>.</p>
 <p>The necessary dependencies are listed here together with a brief statement of why we need the package.</p>
 <ul>
-<li><p class="first"><tt class="docutils literal"><span class="pre">numpy</span></tt>, available from <a class="reference external" href="http://www.numpy.org">http://www.numpy.org</a></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">numpy</span></tt>, available from <a class="reference external" href="https://www.numpy.org">https://www.numpy.org</a></p>
 <p>Numpy provides fast multidimensional arrays.</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">scipy</span></tt>, available from <a class="reference external" href="http://www.scipy.org">http://www.scipy.org</a></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">scipy</span></tt>, available from <a class="reference external" href="https://www.scipy.org">https://www.scipy.org</a></p>
 <p>Scipy interfaces to fast numerical subroutines (BLAS, LAPACK, FFTW).</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">sympy</span></tt>, available from <a class="reference external" href="http://sympy.org">http://sympy.org</a></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">sympy</span></tt>, available from <a class="reference external" href="https://sympy.org">https://sympy.org</a></p>
 <p>Sympy gives rise to symbolic calculation.</p>
 </li>
 <li><p class="first"><tt class="docutils literal"><span class="pre">matplotlib</span></tt>, available from <a class="reference external" href="http://matplotlib.org">http://matplotlib.org</a></p>
 <p>Matplotlib is used for two-dimensional plotting.</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">h5py</span></tt>, available from <a class="reference external" href="http://h5py.org">http://h5py.org</a></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">h5py</span></tt>, available from <a class="reference external" href="https://h5py.org">https://h5py.org</a></p>
 <p>H5py is the interface to the Hierarchical Data Format <cite>hdf</cite>.</p>
 </li>
-<li><p class="first"><tt class="docutils literal"><span class="pre">mayavi2</span></tt>, available from <a class="reference external" href="http://code.enthought.com/projects/mayavi/">http://code.enthought.com/projects/mayavi/</a></p>
+<li><p class="first"><tt class="docutils literal"><span class="pre">mayavi2</span></tt>, available from <a class="reference external" href="https://github.com/enthought/mayavi">https://github.com/enthought/mayavi</a></p>
 <p>Mayavi2 is used for three-dimensional plotting.</p>
 </li>
 </ul>
@@ -168,18 +168,38 @@ to install the software within the <cite>virtualenv</cite>:</p>
 <p>Note the <tt class="docutils literal"><span class="pre">-e</span></tt> switch, which connects the source code in <tt class="docutils literal"><span class="pre">~/waveblockssource</span></tt> with the
 installation inside the <cite>virtualenv</cite> at <tt class="docutils literal"><span class="pre">~/waveblocks</span></tt>.</p>
 </div>
+</div>
+<div class="section" id="software-overview">
+<h2>Software Overview<a class="headerlink" href="#software-overview" title="Permalink to this headline">¶</a></h2>
+<p>The <cite>WaveBlocks</cite> package consists of two parts. On one hand there is a <cite>Python</cite> library
+and on the other hand there are a bunch of scripts that use this library to implement common
+computations.</p>
+<div class="section" id="the-library">
+<h3>The Library<a class="headerlink" href="#the-library" title="Permalink to this headline">¶</a></h3>
+<p>The library is called <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> and can be imported in <cite>Python</cite> by the usual procedure:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="kn">import</span> <span class="nn">WaveBlocksND</span>
+</pre></div>
+</div>
+<p>this will bring a large number of objects into scope:</p>
+<div class="highlight-python"><div class="highlight"><pre>dir(WaveBlocksND)
+[&#39;AbstractGrid&#39;, &#39;BasisShape&#39;, &#39;BasisTransformation&#39;, &#39;BasisTransformationHAWP&#39;, &#39;BasisTransformationWF&#39;, ...
+</pre></div>
+</div>
+<p>For the details, please refer to the class documentation.</p>
+</div>
 <div class="section" id="the-scripts">
-<h3>The scripts<a class="headerlink" href="#the-scripts" title="Permalink to this headline">¶</a></h3>
-<p>The scripts (everything in <tt class="docutils literal"><span class="pre">scripts/</span></tt>) that perform simulations, data evaluation and plotting can now be
-called from anywhere as these file are just plain <cite>Python</cite> scripts that import the <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> <cite>Python</cite> module.</p>
+<h3>The Scripts<a class="headerlink" href="#the-scripts" title="Permalink to this headline">¶</a></h3>
+<p>The scripts (everything in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> directory) perform simulations, data evaluation and plotting and
+can be called from anywhere. These files are just plain <cite>Python</cite> scripts that import the <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> <cite>Python</cite>
+module. They all support online help when called with the <tt class="docutils literal"><span class="pre">--help</span></tt> switch.</p>
 </div>
 </div>
-<div class="section" id="supported-computing-platforms">
-<h2>Supported computing platforms<a class="headerlink" href="#supported-computing-platforms" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="supported-platforms">
+<h2>Supported platforms<a class="headerlink" href="#supported-platforms" title="Permalink to this headline">¶</a></h2>
 <p>The <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code might run on <cite>Windows</cite> and <cite>OS X</cite> and the various
 <cite>BSD</cite> variants too, provided that the required <cite>Python</cite> dependencies are installed.
 However, this has never been tested. The primary development platform is <cite>GNU/Linux</cite>
-and in particular <cite>Debian</cite>.</p>
+and in particular the <cite>Debian</cite> distribution.</p>
 </div>
 </div>
 
@@ -198,10 +218,14 @@ and in particular <cite>Debian</cite>.</p>
 <li><a class="reference internal" href="#installation">Installation</a><ul>
 <li><a class="reference internal" href="#for-users">For Users</a></li>
 <li><a class="reference internal" href="#for-developers">For Developers</a></li>
-<li><a class="reference internal" href="#the-scripts">The scripts</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#supported-computing-platforms">Supported computing platforms</a></li>
+<li><a class="reference internal" href="#software-overview">Software Overview</a><ul>
+<li><a class="reference internal" href="#the-library">The Library</a></li>
+<li><a class="reference internal" href="#the-scripts">The Scripts</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#supported-platforms">Supported platforms</a></li>
 </ul>
 </li>
 </ul>

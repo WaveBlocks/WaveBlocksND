@@ -53,15 +53,15 @@ the `Python Package Index <https://pypi.python.org/pypi>`_.
 
 The necessary dependencies are listed here together with a brief statement of why we need the package.
 
-* ``numpy``, available from http://www.numpy.org
+* ``numpy``, available from https://www.numpy.org
 
   Numpy provides fast multidimensional arrays.
 
-* ``scipy``, available from http://www.scipy.org
+* ``scipy``, available from https://www.scipy.org
 
   Scipy interfaces to fast numerical subroutines (BLAS, LAPACK, FFTW).
 
-* ``sympy``, available from http://sympy.org
+* ``sympy``, available from https://sympy.org
 
   Sympy gives rise to symbolic calculation.
 
@@ -69,11 +69,11 @@ The necessary dependencies are listed here together with a brief statement of wh
 
   Matplotlib is used for two-dimensional plotting.
 
-* ``h5py``, available from http://h5py.org
+* ``h5py``, available from https://h5py.org
 
   H5py is the interface to the Hierarchical Data Format `hdf`.
 
-* ``mayavi2``, available from http://code.enthought.com/projects/mayavi/
+* ``mayavi2``, available from https://github.com/enthought/mayavi
 
   Mayavi2 is used for three-dimensional plotting.
 
@@ -152,17 +152,45 @@ Note the ``-e`` switch, which connects the source code in ``~/waveblockssource``
 installation inside the `virtualenv` at ``~/waveblocks``.
 
 
-The scripts
+Software Overview
+-----------------
+
+The `WaveBlocks` package consists of two parts. On one hand there is a `Python` library
+and on the other hand there are a bunch of scripts that use this library to implement common
+computations.
+
+
+The Library
 ~~~~~~~~~~~
 
-The scripts (everything in ``scripts/``) that perform simulations, data evaluation and plotting can now be
-called from anywhere as these file are just plain `Python` scripts that import the ``WaveBlocksND`` `Python` module.
+The library is called ``WaveBlocksND`` and can be imported in `Python` by the usual procedure:
+
+::
+
+   import WaveBlocksND
+
+this will bring a large number of objects into scope:
+
+::
+
+   dir(WaveBlocksND)
+   ['AbstractGrid', 'BasisShape', 'BasisTransformation', 'BasisTransformationHAWP', 'BasisTransformationWF', ...
+
+For the details, please refer to the class documentation.
 
 
-Supported computing platforms
------------------------------
+The Scripts
+~~~~~~~~~~~
+
+The scripts (everything in the ``scripts/`` directory) perform simulations, data evaluation and plotting and
+can be called from anywhere. These files are just plain `Python` scripts that import the ``WaveBlocksND`` `Python`
+module. They all support online help when called with the ``--help`` switch.
+
+
+Supported platforms
+-------------------
 
 The ``WaveBlocksND`` code might run on `Windows` and `OS X` and the various
 `BSD` variants too, provided that the required `Python` dependencies are installed.
 However, this has never been tested. The primary development platform is `GNU/Linux`
-and in particular `Debian`.
+and in particular the `Debian` distribution.
