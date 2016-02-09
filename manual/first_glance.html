@@ -57,13 +57,13 @@
 <div class="section" id="introduction">
 <h2>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h2>
 <p>The <em>WaveBlocks</em> project is a collection of reusable software components
-providing many of the objects used in the study of semi-classical wavepackets.
-Currently it&#8217;s all about the time-dependent Schroedinger equation and the time
+providing many of the objects used in the study of semi-classical wave-packets.
+Currently it&#8217;s all about the time-dependent Schrödinger equation and the time
 evolution of initial states.</p>
 <p>One of the main goals is to provide a set of building blocks - hence the project&#8217;s
 name - that are well tested and reliable. The included features range from
 very simple mathematical operations like specialized quadrature rules to basic
-data structures for semi-classical wavepackets to more high-level simulation
+data structures for semi-classical wave-packets to more high-level simulation
 algorithms and some non-standard plotting functions. Of course there are also
 routines included for saving, managing and evaluating simulation results inflexible
 manner. All of these components are put together in an easy to use and easy to
@@ -74,7 +74,7 @@ are, however, not the main concern for the moment.</p>
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
-<p>The WaveBlocks project has its home at GitHub:</p>
+<p>The <em>WaveBlocks</em> project has its home at GitHub:</p>
 <blockquote>
 <div><a class="reference external" href="https://github.com/WaveBlocks">https://github.com/WaveBlocks</a></div></blockquote>
 <p>where there are several closely related <tt class="docutils literal"><span class="pre">git</span></tt> repositories. The latest version
@@ -87,7 +87,7 @@ special features before they are ready to get merged into the <tt class="docutil
 </div>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>WaveBlocksND</cite> software depends on some more or less well known <cite>Python</cite> packages,
+<p>The <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> software depends on some more or less well known <cite>Python</cite> packages,
 that are not installed by default. On any recent Linux distribution (for example <cite>Debian</cite>)
 you can use the package manager to download and install all the dependencies.
 The simulation code is compatible with <cite>Python 3.4</cite> and above. Hence, make sure to
@@ -115,12 +115,12 @@ the <a class="reference external" href="https://pypi.python.org/pypi">Python Pac
 <p>Mayavi2 is used for three-dimensional plotting.</p>
 </li>
 </ul>
-<p>The <tt class="docutils literal"><span class="pre">mayavi2</span></tt> dependency is weak in the sense that the whole <cite>WaveBlocks</cite> code
+<p>The <tt class="docutils literal"><span class="pre">mayavi2</span></tt> dependency is weak in the sense that the whole <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code
 runs fine without it and only the 3-dimensional plotting functions are not available.</p>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
-<p>In the following section be sure not to mix up the name <cite>WaveBlocks</cite> that
+<p>In the following section be sure not to mix up the name <em>WaveBlocks</em> that
 stands for the whole project and the name <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> which is the
 name of the <cite>Python</cite> package.</p>
 <p>By using the <cite>Python</cite> <tt class="docutils literal"><span class="pre">virtualenv</span></tt> <a class="reference external" href="https://virtualenv.pypa.io/en/latest/">utility</a>,
@@ -142,13 +142,18 @@ This will cause all packages to be built and installed locally to this <cite>vir
 source ./bin/activate
 </pre></div>
 </div>
-<p>Finally, we can install the <cite>WaveBlocks</cite> software directly from the <cite>git</cite> repository
+<p>Finally, we can install the <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> software directly from the <cite>git</cite> repository
 by running:</p>
 <div class="highlight-python"><div class="highlight"><pre>pip install git+https://github.com/WaveBlocks/WaveBlocksND.git#egg=WaveBlocksND
 </pre></div>
 </div>
-<p>That is all we have to do. Before using the software, <strong>always</strong> go back to the <tt class="docutils literal"><span class="pre">waveblocks</span></tt> directory
-and run <tt class="docutils literal"><span class="pre">source</span> <span class="pre">./bin/activate</span></tt> there. Note that this action is <strong>local</strong> to the current shell instance.</p>
+<p>That is all we have to do.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Before using the software, <strong>always</strong> go back to the <tt class="docutils literal"><span class="pre">waveblocks</span></tt> directory
+and run <tt class="docutils literal"><span class="pre">source</span> <span class="pre">./bin/activate</span></tt> there to active the <tt class="docutils literal"><span class="pre">virtualenv</span></tt>.
+Note that this action is <strong>local</strong> to the current shell instance.</p>
+</div>
 </div>
 <div class="section" id="for-developers">
 <h3>For Developers<a class="headerlink" href="#for-developers" title="Permalink to this headline">¶</a></h3>
@@ -171,7 +176,7 @@ installation inside the <cite>virtualenv</cite> at <tt class="docutils literal">
 </div>
 <div class="section" id="software-overview">
 <h2>Software Overview<a class="headerlink" href="#software-overview" title="Permalink to this headline">¶</a></h2>
-<p>The <cite>WaveBlocks</cite> package consists of two parts. On one hand there is a <cite>Python</cite> library
+<p>The <em>WaveBlocks</em> package consists of two parts. On one hand there is a <cite>Python</cite> library
 and on the other hand there are a bunch of scripts that use this library to implement common
 computations.</p>
 <div class="section" id="the-library">
@@ -189,9 +194,12 @@ computations.</p>
 </div>
 <div class="section" id="the-scripts">
 <h3>The Scripts<a class="headerlink" href="#the-scripts" title="Permalink to this headline">¶</a></h3>
-<p>The scripts (everything in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> directory) perform simulations, data evaluation and plotting and
-can be called from anywhere. These files are just plain <cite>Python</cite> scripts that import the <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> <cite>Python</cite>
-module. They all support online help when called with the <tt class="docutils literal"><span class="pre">--help</span></tt> switch.</p>
+<p>The scripts (everything in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> source directory) perform simulations, data evaluation and plotting.
+During installation, these scripts are copied into the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> local <tt class="docutils literal"><span class="pre">bin/</span></tt> directory and this location is on
+the <tt class="docutils literal"><span class="pre">$PATH</span></tt>. Hence the scripts can be called from anywhere as long as the <tt class="docutils literal"><span class="pre">virtualenv</span></tt> is activated.
+These files are just plain <cite>Python</cite> scripts that import the <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> <cite>Python</cite> module. It is <cite>not</cite> necessary
+to call the scripts via a <cite>Python</cite> interpreter as all have a proper shebang line (<tt class="docutils literal"><span class="pre">#!/usr/bin/env</span> <span class="pre">python</span></tt>).
+The scripts all support online help when called with the <tt class="docutils literal"><span class="pre">--help</span></tt> switch.</p>
 </div>
 </div>
 <div class="section" id="supported-platforms">
