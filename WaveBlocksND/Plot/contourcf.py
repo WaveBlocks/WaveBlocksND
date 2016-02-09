@@ -13,7 +13,8 @@ from matplotlib.pyplot import gca
 
 
 def contourcf(gridx, gridy, values, leveldist=0.02, ax=None):
-    """Plot a function :math:`f:I^2 \rightarrow C` with contour levels.
+    r"""
+    Plot a function :math:`f:I^2 \rightarrow C` with contour levels.
     Put levels in linear and fixed distances on the third axis.
 
     :param gridx: The grid nodes along the :math:`x` axis of the real domain :math:`R^2`

@@ -247,7 +247,7 @@ class SplittingParameters(object):
         :param args2: Additional optional arguments of :math:`\Psi_b`
 
         .. note:: The values for ``args1`` and ``args2`` have to be
-                  ``list``s even in case of single items.
+                  of type ``list`` even in case of single items.
         """
         s = a.shape[0]
         h = (tspan[1] - tspan[0]) / float(N)

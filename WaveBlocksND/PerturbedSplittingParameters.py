@@ -133,7 +133,7 @@ class PerturbedSplittingParameters(object):
         :param argsb: Additional optional arguments of :math:`\Psi_b`
 
         .. note:: The values for ``argsa`` and ``argsb`` have to be
-                  ``list``s even in case of single items.
+                  of type ``list`` even in case of single items.
         """
         psi = (psia, psib)
         args = (argsa, argsb)
