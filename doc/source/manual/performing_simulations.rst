@@ -463,7 +463,7 @@ The only thing we have to do then is to call the corresponding post-processor sc
 
 
 Wave-packet sampling
-~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~~
 
 If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:

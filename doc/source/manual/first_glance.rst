@@ -5,14 +5,14 @@ Introduction
 ------------
 
 The *WaveBlocks* project is a collection of reusable software components
-providing many of the objects used in the study of semi-classical wavepackets.
-Currently it's all about the time-dependent Schroedinger equation and the time
+providing many of the objects used in the study of semi-classical wave-packets.
+Currently it's all about the time-dependent Schrödinger equation and the time
 evolution of initial states.
 
 One of the main goals is to provide a set of building blocks - hence the project's
 name - that are well tested and reliable. The included features range from
 very simple mathematical operations like specialized quadrature rules to basic
-data structures for semi-classical wavepackets to more high-level simulation
+data structures for semi-classical wave-packets to more high-level simulation
 algorithms and some non-standard plotting functions. Of course there are also
 routines included for saving, managing and evaluating simulation results inflexible
 manner. All of these components are put together in an easy to use and easy to
@@ -26,7 +26,7 @@ are, however, not the main concern for the moment.
 Download
 --------
 
-The WaveBlocks project has its home at GitHub:
+The *WaveBlocks* project has its home at GitHub:
 
   https://github.com/WaveBlocks
 
@@ -43,7 +43,7 @@ special features before they are ready to get merged into the ``master`` branch.
 Dependencies
 ------------
 
-The `WaveBlocksND` software depends on some more or less well known `Python` packages,
+The ``WaveBlocksND`` software depends on some more or less well known `Python` packages,
 that are not installed by default. On any recent Linux distribution (for example `Debian`)
 you can use the package manager to download and install all the dependencies.
 The simulation code is compatible with `Python 3.4` and above. Hence, make sure to
@@ -77,14 +77,14 @@ The necessary dependencies are listed here together with a brief statement of wh
 
   Mayavi2 is used for three-dimensional plotting.
 
-The ``mayavi2`` dependency is weak in the sense that the whole `WaveBlocks` code
+The ``mayavi2`` dependency is weak in the sense that the whole ``WaveBlocksND`` code
 runs fine without it and only the 3-dimensional plotting functions are not available.
 
 
 Installation
 ------------
 
-In the following section be sure not to mix up the name `WaveBlocks` that
+In the following section be sure not to mix up the name *WaveBlocks* that
 stands for the whole project and the name ``WaveBlocksND`` which is the
 name of the `Python` package.
 
@@ -115,15 +115,18 @@ Next, we switch into the directory and active the `virtualenv`:
    cd waveblocks
    source ./bin/activate
 
-Finally, we can install the `WaveBlocks` software directly from the `git` repository
+Finally, we can install the ``WaveBlocksND`` software directly from the `git` repository
 by running:
 
 ::
 
    pip install git+https://github.com/WaveBlocks/WaveBlocksND.git#egg=WaveBlocksND
 
-That is all we have to do. Before using the software, **always** go back to the ``waveblocks`` directory
-and run ``source ./bin/activate`` there. Note that this action is **local** to the current shell instance.
+That is all we have to do.
+
+.. note:: Before using the software, **always** go back to the ``waveblocks`` directory
+          and run ``source ./bin/activate`` there to active the ``virtualenv``.
+          Note that this action is **local** to the current shell instance.
 
 
 For Developers
@@ -155,7 +158,7 @@ installation inside the `virtualenv` at ``~/waveblocks``.
 Software Overview
 -----------------
 
-The `WaveBlocks` package consists of two parts. On one hand there is a `Python` library
+The *WaveBlocks* package consists of two parts. On one hand there is a `Python` library
 and on the other hand there are a bunch of scripts that use this library to implement common
 computations.
 
@@ -182,9 +185,12 @@ For the details, please refer to the class documentation.
 The Scripts
 ~~~~~~~~~~~
 
-The scripts (everything in the ``scripts/`` directory) perform simulations, data evaluation and plotting and
-can be called from anywhere. These files are just plain `Python` scripts that import the ``WaveBlocksND`` `Python`
-module. They all support online help when called with the ``--help`` switch.
+The scripts (everything in the ``scripts/`` source directory) perform simulations, data evaluation and plotting.
+During installation, these scripts are copied into the ``virtualenv`` local ``bin/`` directory and this location is on
+the ``$PATH``. Hence the scripts can be called from anywhere as long as the ``virtualenv`` is activated.
+These files are just plain `Python` scripts that import the ``WaveBlocksND`` `Python` module. It is `not` necessary
+to call the scripts via a `Python` interpreter as all have a proper shebang line (``#!/usr/bin/env python``).
+The scripts all support online help when called with the ``--help`` switch.
 
 
 Supported platforms
