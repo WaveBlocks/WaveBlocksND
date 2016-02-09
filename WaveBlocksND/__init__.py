@@ -130,8 +130,8 @@ from WaveBlocksND.ObservablesMixedHAWP import ObservablesMixedHAWP
 from WaveBlocksND.ObservablesLCWP import ObservablesLCWP
 
 # Enable dynamic plugin loading for IOManager
-import sys
-import os
+import sys as _sys
+import os as _os
 
-plugin_dir = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(plugin_dir)
+_plugin_dir = _os.path.dirname(_os.path.abspath(__file__))
+_sys.path.append(_plugin_dir)
