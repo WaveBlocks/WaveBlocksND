@@ -1,0 +1,682 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Configuration and Settings &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="Data storage" href="ch3_data_storage.html" />
+    <link rel="prev" title="Using WaveBlocks for performing simulations" href="ch1_performing_simulations.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ch3_data_storage.html" title="Data storage"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="ch1_performing_simulations.html" title="Using WaveBlocks for performing simulations"
+             accesskey="P">previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="configuration-and-settings">
+<h1>Configuration and Settings<a class="headerlink" href="#configuration-and-settings" title="Permalink to this headline">¶</a></h1>
+<p>In this chapter we describe the settings and valid configuration parameters
+for running simulations.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The following sections describe the settings of the old <tt class="docutils literal"><span class="pre">WaveBlocks</span></tt>
+code and do only partially apply to the new <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code.</p>
+</div>
+<div class="section" id="time-propagation-algorithms">
+<h2>Time propagation algorithms<a class="headerlink" href="#time-propagation-algorithms" title="Permalink to this headline">¶</a></h2>
+<p>At the moment, three algorithms for time propagation of initial values are
+implemented.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="25%" />
+<col width="75%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Name</th>
+<th class="head">Description</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>fourier</td>
+<td>Fourier propagation / Operator splitting</td>
+</tr>
+<tr class="row-odd"><td>hagedorn</td>
+<td>Homogeneous Hagedorn wavepackets</td>
+</tr>
+<tr class="row-even"><td>multihagedorn</td>
+<td>Inhomogeneous Hagedorn wavepackets</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="specifying-initial-values">
+<h2>Specifying initial values<a class="headerlink" href="#specifying-initial-values" title="Permalink to this headline">¶</a></h2>
+<p>Initial values are always specified as wavepackets. For the Fourier propagator,
+the packets are sampled at the grid nodes and for packet based algorithms, these
+initial packets are just propagated. The two configuration variables <tt class="docutils literal"><span class="pre">parameters</span></tt>
+and <tt class="docutils literal"><span class="pre">coefficients</span></tt> are responsible for specifying the initial wavepackets.
+Their values are interpreted as usual but let&#8217;s look at this important part
+a bit closer.</p>
+<div class="section" id="for-the-fourier-propagator">
+<h3>For the <tt class="docutils literal"><span class="pre">fourier</span></tt> Propagator<a class="headerlink" href="#for-the-fourier-propagator" title="Permalink to this headline">¶</a></h3>
+<p>The initial values for the <tt class="docutils literal"><span class="pre">fourier</span></tt> propagator are given in the simulation
+configuration file by the variable <tt class="docutils literal"><span class="pre">initial_values</span></tt>. The data format is
+a list of arbitrary length. Each entry is a list itself having the format:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="p">[</span> <span class="n">level</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="p">[(</span><span class="n">index</span><span class="p">,</span><span class="n">value</span><span class="p">),</span> <span class="p">(</span><span class="n">index</span><span class="p">,</span><span class="n">value</span><span class="p">),</span> <span class="o">...</span><span class="p">]</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>where the <tt class="docutils literal"><span class="pre">level</span></tt> is the energy level, the <tt class="docutils literal"><span class="pre">parameters</span></tt> is a 5-tuple
+of the usual form <tt class="docutils literal"><span class="pre">(q,p,Q,P,S)</span></tt> containing the wavepacket&#8217;s parameter. The
+third part is a list containing one or several <tt class="docutils literal"><span class="pre">(index,value)</span></tt> pairs
+which hold the value <img class="math" src="../_images/math/496867ca68c428fa123f26f0f73997632e61e116.png" alt="c_i"/> of the coefficient with index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>. We know
+that this is all the data necessary for constructing a wavepacket that lives on
+the given energy level. (But remember that these packets are sampled at the grid
+nodes later to be usable for the Fourier propagation.)</p>
+<p>This input format allows us to place several wavepackets on the same energy level,
+for example the following valid specification places two Gaussian packets
+which will run into each other and bounce off:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">initial_values</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">),</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">)]],</span>
+                  <span class="p">[</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span>  <span class="mf">0.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.0</span><span class="p">),</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">)]]]</span>
+</pre></div>
+</div>
+<p>For compatibility reasons the input can also be of the format described
+in the next two sections. This allows for sharing of simulation configurations.</p>
+</div>
+<div class="section" id="for-the-hagedorn-propagator">
+<h3>For the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> Propagator<a class="headerlink" href="#for-the-hagedorn-propagator" title="Permalink to this headline">¶</a></h3>
+<p>For this propagator we need one set of parameters which belong to
+the leading component. With these parameters we then set up a homogeneous
+wavepacket. We can specify the parameters as follows:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>with some meaningful values for <img class="math" src="../_images/math/7b1816c51f7d31275cd3ad400208fb7b3ce136a0.png" alt="Q"/>, <img class="math" src="../_images/math/f48b617185733d8dd6712643f1ab17c736661a06.png" alt="P"/>, <img class="math" src="../_images/math/11a85f3c69ae6702cb1d99d3de451913b8f84c04.png" alt="S"/> and <img class="math" src="../_images/math/23f1b45408e5b4130c0f940fcbfcec54492cbdcd.png" alt="q"/>
+and <img class="math" src="../_images/math/3eca8557203e86160952e1c0f735f7417f3285b1.png" alt="p"/>. For compatibility with the inhomogeneous case, we can also
+specify the parameters as:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">Q0</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">q0</span><span class="p">),</span> <span class="o">...</span><span class="p">,</span> <span class="p">(</span><span class="n">Pn</span><span class="p">,</span> <span class="n">Qn</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pn</span><span class="p">,</span> <span class="n">qn</span><span class="p">)</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>where there are as many inner tuples as energy levels. The initialisation
+code then picks just the single tuple with its index matching the
+<tt class="docutils literal"><span class="pre">leading_component</span></tt> value. This allows easy sharing of
+configuration files with minimal editing.</p>
+<p>The coefficients <img class="math" src="../_images/math/496867ca68c428fa123f26f0f73997632e61e116.png" alt="c_i"/> of the linear combination are specified for each
+level separately. There is a list of <tt class="docutils literal"><span class="pre">(index,value)</span></tt> pairs for
+each energy level and all these lists are collected in one big list
+assigned to the variable <tt class="docutils literal"><span class="pre">coefficients</span></tt>. This could for example look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">coefficients</span> <span class="o">=</span> <span class="p">[[</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mf">0.5</span><span class="p">),</span> <span class="p">(</span><span class="mi">4</span><span class="p">,</span><span class="mf">0.2</span><span class="p">)],</span>
+                <span class="p">[</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span><span class="mf">0.1</span><span class="p">),</span> <span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mf">1.2</span><span class="p">)]]</span>
+</pre></div>
+</div>
+<p>where we have two energy levels (note that the wave function here is not normalized!).
+These <tt class="docutils literal"><span class="pre">(index,value)</span></tt> pairs give the value <img class="math" src="../_images/math/496867ca68c428fa123f26f0f73997632e61e116.png" alt="c_i"/> of the coefficient
+with index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>. For example the list containing only the pair <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(2,1.0)</span> <span class="pre">]</span></tt>
+yields a <img class="math" src="../_images/math/ba8ba273266cae7460d2cfa3241911b4f0bdbda2.png" alt="\varphi_2"/> packet while the list <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(0,0.5),</span> <span class="pre">(1,0.5)</span> <span class="pre">]</span></tt> gives
+a superposition of <img class="math" src="../_images/math/75483e29d15b3779cff5999c20c43d52c7924d73.png" alt="\frac{1}{2} \left( \varphi_0 + \varphi_1 \right)"/>. If you
+wish to have no wavepacket on an energy level just provide the dummy pair <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(0,0.0)</span> <span class="pre">]</span></tt>.</p>
+</div>
+<div class="section" id="for-the-multihagedorn-propagator">
+<h3>For the <tt class="docutils literal"><span class="pre">multihagedorn</span></tt> Propagator<a class="headerlink" href="#for-the-multihagedorn-propagator" title="Permalink to this headline">¶</a></h3>
+<p>This propagator needs a set of parameters for each energy level. Thus
+the data structure must look like:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">Q0</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">q0</span><span class="p">),</span> <span class="o">...</span><span class="p">,</span> <span class="p">(</span><span class="n">Pn</span><span class="p">,</span> <span class="n">Qn</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pn</span><span class="p">,</span> <span class="n">qn</span><span class="p">)</span> <span class="p">]</span>
+</pre></div>
+</div>
+<p>where there are as many inner tuples as energy levels. The coefficients <img class="math" src="../_images/math/496867ca68c428fa123f26f0f73997632e61e116.png" alt="c_i"/>
+are specified the same way as in the homogeneous case above.</p>
+</div>
+</div>
+<div class="section" id="required-parameter-sets">
+<h2>Required parameter sets<a class="headerlink" href="#required-parameter-sets" title="Permalink to this headline">¶</a></h2>
+<p>The simulations can be configured with a very flexible scheme. One must only
+specify the values that are really necessary and can omit all others. There
+are some input parameters that have to be provided in any case and many others that
+are only necessary for a specific algorithm or are purely optional.</p>
+<p>In this section all parameters that can be provided are listed.
+You are free to define additional parameters and use them in a data evaluation
+script. Just make sure there is no variable name clash.</p>
+<div class="section" id="parameters-for-all-propagation-algorithms">
+<h3>Parameters for all propagation algorithms<a class="headerlink" href="#parameters-for-all-propagation-algorithms" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">algorithm</span></tt></dt>
+<dd><p class="first">The simulation algorithm.</p>
+<ul class="last simple">
+<li>Possible values: <tt class="docutils literal"><span class="pre">fourier</span></tt>, <tt class="docutils literal"><span class="pre">hagedorn</span></tt>, <tt class="docutils literal"><span class="pre">multihagedorn</span></tt></li>
+<li>Data type: string</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">potential</span></tt></dt>
+<dd><p class="first">The potential</p>
+<ul class="last simple">
+<li>Possible values: see Section <em class="xref std std-ref">Ready made Potentials</em></li>
+<li>Data type: string or dict</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">T</span></tt></dt>
+<dd><p class="first">The time when the simulation stops</p>
+<ul class="last simple">
+<li>Possible values: Non-negative float</li>
+<li>Data type: float</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">dt</span></tt></dt>
+<dd><p class="first">The size of a single time step</p>
+<ul class="last simple">
+<li>Possible values: Non-negative float</li>
+<li>Data type: float</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">eps</span></tt></dt>
+<dd><p class="first">The semi-classical scaling parameter</p>
+<ul class="last simple">
+<li>Possible values: Non-negative float</li>
+<li>Data type: float</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">parameters</span></tt></dt>
+<dd>The Hagedorn parameters <img class="math" src="../_images/math/b49f9b49a48b174896a3a0ba9712c6efb07e51e0.png" alt="\{P, Q, S, p, q \}"/> of the
+initial wavepackets. The exact format of this variable depends on the
+simulation algorithm used, see above.</dd>
+<dt><tt class="docutils literal"><span class="pre">coefficients</span></tt></dt>
+<dd>A list with the lists of (index,value) tuples that
+set the coefficients of the basis functions for the initial wavepackets. The
+exact format of this variable depends on the simulation algorithm used, see above.</dd>
+<dt><tt class="docutils literal"><span class="pre">write_nth</span></tt></dt>
+<dd><p class="first">Save simulation data every n-th timestep</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Positive Integer where the case 0 is interpreted as</dt>
+<dd><p class="first last"><em>never</em>. In this case only the initial values are saved.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+<li><p class="first">Default value: is 0 if no other value is provided.</p>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">save_at</span></tt></dt>
+<dd><p class="first">A list of times and/or timesteps when saving of the
+simulation data takes place. (Which data are saved depends on the implementation
+of the respective <tt class="docutils literal"><span class="pre">SimulationLoop</span></tt> subclass.)</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: A list of integers and/or floats. Integers are interpreted</dt>
+<dd><p class="first last">as timesteps and floats as (absolute) times. Always be aware
+of this difference in interpretation!</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer or float</p>
+</li>
+<li><dl class="first docutils">
+<dt>Default value: an empty list, thus saving at special points in time</dt>
+<dd><p class="first last">is not enabled.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">matrix_exponential</span></tt></dt>
+<dd><p class="first">Choose the algorithm used for computing the matrix exponential.</p>
+<ul class="last simple">
+<li>Possible values: <tt class="docutils literal"><span class="pre">&quot;pade&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;arnoldi&quot;</span></tt></li>
+<li>Data type: string</li>
+<li>Default value: <tt class="docutils literal"><span class="pre">&quot;arnoldi&quot;</span></tt></li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">arnoldi_steps</span></tt></dt>
+<dd><p class="first">The number of arnoldi steps performed. Use this together with
+the parameter <tt class="docutils literal"><span class="pre">matrix_exponential</span></tt> set to <tt class="docutils literal"><span class="pre">&quot;arnoldi&quot;</span></tt>.</p>
+<ul class="last simple">
+<li>Possible values: positive integers</li>
+<li>Data type: integer</li>
+<li>Default value: 20</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="parameters-for-the-fourier-propagator">
+<h3>Parameters for the <tt class="docutils literal"><span class="pre">fourier</span></tt> propagator<a class="headerlink" href="#parameters-for-the-fourier-propagator" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">initial_values</span></tt></dt>
+<dd>A specific input format for the initial values. This allows to
+place an arbitrary number of wavepackets on any energy level.
+A valid configuration must either have this variable set or both of
+<tt class="docutils literal"><span class="pre">parameters</span></tt> and <tt class="docutils literal"><span class="pre">coefficients</span></tt>. If all three are given, this
+takes precedence.</dd>
+<dt><tt class="docutils literal"><span class="pre">ngn</span></tt></dt>
+<dd><p class="first">The number of grid nodes used for the Fourier transformation.</p>
+<ul class="last simple">
+<li>Possible values: Integer, optimal is a power of 2 but this is not necessary.</li>
+<li>Data type: integer</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">f</span></tt></dt>
+<dd><p class="first">A scalar number that determines the extension of the computational domain.</p>
+<ul class="last simple">
+<li>Possible values: A non-negative float</li>
+<li>Data type: float</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">You must specify a <tt class="docutils literal"><span class="pre">basis_size</span></tt> (see below) for the Fourier
+propagator too because we compute initial values from wavepackets.</p>
+</div>
+</div>
+<div class="section" id="parameters-for-the-hagedorn-propagator">
+<h3>Parameters for the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> propagator<a class="headerlink" href="#parameters-for-the-hagedorn-propagator" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">basis_size</span></tt></dt>
+<dd><p class="first">Number of basis functions used for homogeneous Hagedorn wavepackets.</p>
+<ul class="last simple">
+<li>Possible values: Non-negative integer larger than 2.</li>
+<li>Data type: integer</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">leading_component</span></tt></dt>
+<dd><p class="first">The leading component is the eigenvalue that governs the propagation
+of the wavepackets&#8217; parameters.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Integer in the range 0 to <img class="math" src="../_images/math/19f9ae9a7d789d9a8e661b478df966192038b540.png" alt="N-1"/> inclusive,</dt>
+<dd><p class="first last">where <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> is the number of energy levels the
+given potential supports.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="parameters-for-the-multihagedorn-propagator">
+<h3>Parameters for the <tt class="docutils literal"><span class="pre">multihagedorn</span></tt> propagator<a class="headerlink" href="#parameters-for-the-multihagedorn-propagator" title="Permalink to this headline">¶</a></h3>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">basis_size</span></tt></dt>
+<dd><p class="first">Number of basis functions used for inhomogeneous Hagedorn packets.</p>
+<ul class="last simple">
+<li>Possible values: Non-negative integer larger than 2.</li>
+<li>Data type: integer</li>
+</ul>
+</dd>
+</dl>
+</div>
+<div class="section" id="optional-parameters">
+<h3>Optional parameters<a class="headerlink" href="#optional-parameters" title="Permalink to this headline">¶</a></h3>
+<p>All variables that appear as parameters of some potential can be specified
+here. For example, the <tt class="docutils literal"><span class="pre">quadratic</span></tt> potential has a parameter <tt class="docutils literal"><span class="pre">sigma</span></tt>
+which can be given in the simulation configuration. (Otherwise a default value
+would be used.) For potentials that contain parameters for which no default
+values are specified, these parameters must be given in the configuration file.
+An example of such a parameter is the <tt class="docutils literal"><span class="pre">delta</span></tt> of the <tt class="docutils literal"><span class="pre">delta_gap</span></tt> potential.</p>
+</div>
+</div>
+<div class="section" id="wave-packet-spawning">
+<h2>Wave-packet spawning<a class="headerlink" href="#wave-packet-spawning" title="Permalink to this headline">¶</a></h2>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">The spawning algorithms are not supported in the new <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code yet.</p>
+</div>
+<p>There are a number of parameters which are all related to the different
+spawning techniques. The name of these parameters always starts with the prefix
+<tt class="docutils literal"><span class="pre">spawn</span></tt>. It is beyond the scope of this document to explain the details
+of the spawning techniques and also the theoretical origin of the various parameters.</p>
+<p>To enable spawning, the configuration parameter <tt class="docutils literal"><span class="pre">algorithm</span></tt> can be set
+to additional values not mentioned above.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">algorithm</span></tt></dt>
+<dd><p class="first">The simulation algorithm</p>
+<ul class="last simple">
+<li>Possible values: <tt class="docutils literal"><span class="pre">&quot;spawning_adiabatic&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;spawning_nonadiabatic&quot;</span></tt></li>
+<li>Data type: string</li>
+</ul>
+</dd>
+</dl>
+<p>Since these algorithms make use of the homogeneous Hagedorn propagation internally,
+all variables related to this propagator must be set additionally.</p>
+<p>Then there is a bunch of parameters controlling the details of the spawning
+process. Most of these variables must be set properly, some are optional
+depending on specific choices for others.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">spawn_method</span></tt></dt>
+<dd><p class="first">Specify the spawning method used. If set to <tt class="docutils literal"><span class="pre">lumping</span></tt> we just spawn a
+normed wavepacket by copying over the norm of the <cite>spawn candidate</cite>. If
+set to <tt class="docutils literal"><span class="pre">projection</span></tt> a full basis projection is done up to the maximal
+order given by the parameter <tt class="docutils literal"><span class="pre">spawn_max_order</span></tt>. (Always set this value
+too.)</p>
+<ul class="last simple">
+<li>Possible values: <tt class="docutils literal"><span class="pre">&quot;lumping&quot;</span></tt> or <tt class="docutils literal"><span class="pre">&quot;projection&quot;</span></tt></li>
+<li>Data type: string</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">spawn_max_order</span></tt></dt>
+<dd><p class="first">The maximal order (size) of the spawned wavepacket i.e. on how many new basis
+functions the basis projection is performed. This only makes sense in
+combination with the <tt class="docutils literal"><span class="pre">spawn_method</span></tt> parameter set to <tt class="docutils literal"><span class="pre">projection</span></tt>.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Non-negative integer in the range <img class="math" src="../_images/math/04c321ae1756ddc0ff954b48c1ce7c9ba7ef4ed7.png" alt="\left[0, \ldots, K\right]"/></dt>
+<dd><p class="first last">where <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is the basis size given by <tt class="docutils literal"><span class="pre">basis_size</span></tt>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This <tt class="docutils literal"><span class="pre">spawn_max_order</span></tt> is <em>not</em> the basis size of the spawned wavepacket.
+(Which we currently can not control.)</p>
+</div>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">spawn_order</span></tt></dt>
+<dd><p class="first">The spawned wavepacket is assumed to be of the form of <img class="math" src="../_images/math/34ea3b8fe46ef695984759103d7bcdecd553f321.png" alt="\phi_k"/> at leading
+order. This is not always true but we need the value of <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> in the algorithms
+for formal reasons. If the value of <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is wrong then the results may be
+much worse. (Consider this to be a limitation of the current algorithms.)</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Non-negative integer in the range <img class="math" src="../_images/math/04c321ae1756ddc0ff954b48c1ce7c9ba7ef4ed7.png" alt="\left[0, \ldots, K\right]"/></dt>
+<dd><p class="first last">where <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is the basis size given by <tt class="docutils literal"><span class="pre">basis_size</span></tt>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+</ul>
+</dd>
+</dl>
+<p>Finally, we have several possibilities how we decide if and when to spawn. This
+criterion or <cite>oracle</cite> has to be set by the following variable. There is an
+open set of possibilities, more criteria may be added in the future. All values
+are class names of the classes that implement the corresponding condition. The
+implementations can be found in the file <tt class="docutils literal"><span class="pre">SpawnConditions.py</span></tt>.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">spawn_condition</span></tt></dt>
+<dd><p class="first">Specify the spawning condition used to decide if and when spawning should occur.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: <tt class="docutils literal"><span class="pre">&quot;spawn_at_time&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;norm_threshold&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;high_k_norm_threshold&quot;</span></tt>,</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">&quot;high_k_norm_derivative_threshold&quot;</span></tt>, <tt class="docutils literal"><span class="pre">&quot;norm_derivative_threshold_l2&quot;</span></tt>,
+<tt class="docutils literal"><span class="pre">&quot;norm_derivative_threshold_max&quot;</span></tt></p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: string</p>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">If in doubt, try using <tt class="docutils literal"><span class="pre">norm_threshold</span></tt> or <tt class="docutils literal"><span class="pre">norm_derivative_threshold_l2</span></tt>
+with sensible values for the related parameters. (Choosing good values for these
+parameters is the most difficult part.)</p>
+</div>
+<p>Each of these methods depend on one or several more parameters configuring their
+behaviour in detail. These parameters are described in the following list.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">spawn_threshold</span></tt></dt>
+<dd><p class="first">The spawning threshold is compared to the norm of the fragment or <cite>spawning candidate</cite>
+examined. Its norm has to exceed this value in order to initiate the spawning process.</p>
+<ul class="last">
+<li><p class="first">Possible values: Non-negative float (should be between 0.0 and 1.0)</p>
+</li>
+<li><p class="first">Data type: float</p>
+</li>
+<li><dl class="first docutils">
+<dt>Used by: All methods. (Because it is used in the parameter estimation process</dt>
+<dd><p class="first last">to avoid division by zero.) The methods <tt class="docutils literal"><span class="pre">norm_threshold</span></tt> and
+<tt class="docutils literal"><span class="pre">high_k_norm_threshold</span></tt> decide solely on this value. The methods
+<tt class="docutils literal"><span class="pre">*_derivative_*</span></tt> use this value as a first hint in combination with others.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">spawn_K0</span></tt></dt>
+<dd><p class="first">The index of the coefficient <img class="math" src="../_images/math/c4bd1482b6c6b6656b7869a3a7b0805f35eae90b.png" alt="c_{K0}"/> where splitting in low and high
+coefficients is applied. (<img class="math" src="../_images/math/c4bd1482b6c6b6656b7869a3a7b0805f35eae90b.png" alt="c_{K0}"/> is included into the set of high ones.)</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Non-negative integer in the range <img class="math" src="../_images/math/04c321ae1756ddc0ff954b48c1ce7c9ba7ef4ed7.png" alt="\left[0, \ldots, K\right]"/></dt>
+<dd><p class="first last">where <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is the basis size given by <img class="math" src="../_images/math/d3873d87ae387a4130f0f5a03bda82411310184f.png" alt="basis_size"/>.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+<li><dl class="first docutils">
+<dt>Used by: The conditions <tt class="docutils literal"><span class="pre">high_k_norm_threshold</span></tt> and <tt class="docutils literal"><span class="pre">high_k_norm_derivative_threshold</span></tt>.</dt>
+<dd><p class="first last">This parameter is also used by all method that do a low/high filtering.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">spawn_hist_len</span></tt></dt>
+<dd><p class="first">The length of the history measured in number of samples.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Positive integers. Values in the range of 5 up to</dt>
+<dd><p class="first last">about 30 are probably good choices.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: integer</p>
+</li>
+<li><dl class="first docutils">
+<dt>Used by: All methods that keep a history and remember their past.</dt>
+<dd><p class="first last">In particular these are:
+<tt class="docutils literal"><span class="pre">high_k_norm_derivative_threshold</span></tt>,
+<tt class="docutils literal"><span class="pre">norm_derivative_threshold_l2</span></tt>,
+<tt class="docutils literal"><span class="pre">norm_derivative_threshold_max</span></tt>.</p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">spawn_deriv_threshold</span></tt></dt>
+<dd><p class="first">The threshold applied to the derivative of the norm of the fragment examined for
+spawning. The derivative is usually approximated by simple finite differences.</p>
+<ul class="last">
+<li><p class="first">Possible values: (Small) real positive values</p>
+</li>
+<li><p class="first">Data type: float</p>
+</li>
+<li><dl class="first docutils">
+<dt>Used by: The methods</dt>
+<dd><p class="first last"><tt class="docutils literal"><span class="pre">high_k_norm_derivative_threshold</span></tt>,
+<tt class="docutils literal"><span class="pre">norm_derivative_threshold_l2</span></tt>,
+<tt class="docutils literal"><span class="pre">norm_derivative_threshold_max</span></tt></p>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+<dt><tt class="docutils literal"><span class="pre">spawn_time</span></tt></dt>
+<dd><p class="first">The time when we want to spawn.</p>
+<ul class="last">
+<li><dl class="first docutils">
+<dt>Possible values: Real values in the range <img class="math" src="../_images/math/1d3cb81063fd04cd699285c31684aa3e5b20ada6.png" alt="[0, T]"/>. The values will</dt>
+<dd><p class="first last">be rounded to the nearest timestep interval.</p>
+</dd>
+</dl>
+</li>
+<li><p class="first">Data type: float</p>
+</li>
+<li><p class="first">Used by: The method <tt class="docutils literal"><span class="pre">spawn_at_time</span></tt>.</p>
+</li>
+</ul>
+</dd>
+</dl>
+<div class="section" id="parameters-related-to-aposteriori-spawning">
+<h3>Parameters related to aposteriori spawning<a class="headerlink" href="#parameters-related-to-aposteriori-spawning" title="Permalink to this headline">¶</a></h3>
+<p>In addition to the algorithms that combine propagation with spawning there are
+also algorithms which perform an aposteriori analysis of spawning methods. They
+can be chosen by the following values for the parameter <tt class="docutils literal"><span class="pre">algorithm</span></tt>.</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">algorithm</span></tt></dt>
+<dd><p class="first">The simulation algorithm</p>
+<ul class="last simple">
+<li>Possible values: <tt class="docutils literal"><span class="pre">&quot;spawning_apost&quot;</span></tt> and <tt class="docutils literal"><span class="pre">&quot;spawning_apost_na&quot;</span></tt></li>
+<li>Data type: string</li>
+</ul>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">These values are currently unused.</p>
+</div>
+<p>In the non-adiabatic case we might be interested on specific energy levels only.
+These level can be set by the following variable. (This does not apply to the
+algorithms from the last section.)</p>
+<dl class="docutils">
+<dt><tt class="docutils literal"><span class="pre">spawn_components</span></tt></dt>
+<dd><p class="first">The energy levels on which spawning is tried.</p>
+<ul class="last simple">
+<li>Possible values: List of integers between 0 and the number of energy levels.</li>
+<li>Data type: list or tuple</li>
+</ul>
+</dd>
+</dl>
+<p>All other parameters from the last section must be used additionally to configure
+the details of the spawning process.</p>
+<p>For this very specialised problem setting you have to use the scripts
+<tt class="docutils literal"><span class="pre">AposterioriSpawning.py</span></tt> and <tt class="docutils literal"><span class="pre">AposterioriSpawningNA.py</span></tt>. These scripts
+perform the aposteriori analysis on some given simulation data. They produce
+new data files which then can be evaluated with the usual tools.</p>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Configuration and Settings</a><ul>
+<li><a class="reference internal" href="#time-propagation-algorithms">Time propagation algorithms</a></li>
+<li><a class="reference internal" href="#specifying-initial-values">Specifying initial values</a><ul>
+<li><a class="reference internal" href="#for-the-fourier-propagator">For the <tt class="docutils literal"><span class="pre">fourier</span></tt> Propagator</a></li>
+<li><a class="reference internal" href="#for-the-hagedorn-propagator">For the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> Propagator</a></li>
+<li><a class="reference internal" href="#for-the-multihagedorn-propagator">For the <tt class="docutils literal"><span class="pre">multihagedorn</span></tt> Propagator</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#required-parameter-sets">Required parameter sets</a><ul>
+<li><a class="reference internal" href="#parameters-for-all-propagation-algorithms">Parameters for all propagation algorithms</a></li>
+<li><a class="reference internal" href="#parameters-for-the-fourier-propagator">Parameters for the <tt class="docutils literal"><span class="pre">fourier</span></tt> propagator</a></li>
+<li><a class="reference internal" href="#parameters-for-the-hagedorn-propagator">Parameters for the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> propagator</a></li>
+<li><a class="reference internal" href="#parameters-for-the-multihagedorn-propagator">Parameters for the <tt class="docutils literal"><span class="pre">multihagedorn</span></tt> propagator</a></li>
+<li><a class="reference internal" href="#optional-parameters">Optional parameters</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#wave-packet-spawning">Wave-packet spawning</a><ul>
+<li><a class="reference internal" href="#parameters-related-to-aposteriori-spawning">Parameters related to aposteriori spawning</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="ch1_performing_simulations.html"
+                        title="previous chapter">Using <cite>WaveBlocks</cite> for performing simulations</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ch3_data_storage.html"
+                        title="next chapter">Data storage</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/ch2_configuration.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ch3_data_storage.html" title="Data storage"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="ch1_performing_simulations.html" title="Using WaveBlocks for performing simulations"
+             >previous</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

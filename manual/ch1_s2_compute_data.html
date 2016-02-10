@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Computing more data &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="computing-more-data">
+<h1>Computing more data<a class="headerlink" href="#computing-more-data" title="Permalink to this headline">¶</a></h1>
+<p>After we have run a simulation the output file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>
+contains all data that were computed during the simulation. This is for example
+wave-function values or wave-packet parameters etc. depending on the exact setup
+run. Usually we want also to compute some properties of the time evolution. This
+is done in a second step called <cite>post processing</cite> of the data. There are several
+scripts in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> sub-directory which post-process the simulation data.</p>
+<p>Assume we want to compute the norms and energies of the wave function during its
+time evolution. These properties are not computed while running the simulation,
+but we can get them easily from the stored information. The following sections
+will show how to compute these data and store them in the output file
+<tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> too.</p>
+<p>All post-processing and plotting scripts can be called with an argument <tt class="docutils literal"><span class="pre">--help</span></tt>
+and provide modern command line switch handling.</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>and will print a help message:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
+                       [-r [RESULTSPATH]] [-et]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d [DATAFILE], --datafile [DATAFILE]
+                        The simulation data file.
+  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                        The data block to handle.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
+  -et, --eigentransform
+                        Transform the data into the eigenbasis before
+                        computing norms.
+</pre></div>
+</div>
+<div class="section" id="norms">
+<h2>Norms<a class="headerlink" href="#norms" title="Permalink to this headline">¶</a></h2>
+<p>Computing norms is trivial and fast. Just run the script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>This will compute the norms of all wave-packets or wave functions
+depending on what the simulation setup was and what is already stored
+in <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>.</p>
+</div>
+<div class="section" id="energies">
+<h2>Energies<a class="headerlink" href="#energies" title="Permalink to this headline">¶</a></h2>
+<p>Asking for the energies is almost equally trivial as computing norms.
+All we need is to run:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergies</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>which will compute kinetic and potential energies.</p>
+</div>
+<div class="section" id="autocorrelations">
+<h2>Autocorrelations<a class="headerlink" href="#autocorrelations" title="Permalink to this headline">¶</a></h2>
+<p>The computation of auto-correlations is a bit more complicated. What
+we want to compute is the following overlap integral (here discussed
+in case of wave-packets):</p>
+<div class="math">
+<p><img src="../_images/math/49be9b68526c612afc28c602ca69cc985638a63b.png" alt="\langle \Psi(0) | \Psi(t) \rangle"/></p>
+</div><p>which compares the wave-packet at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> with the initial value
+<img class="math" src="../_images/math/5e631906dfd06ee73cfb37637f44553e08d9f6d2.png" alt="\Psi(0)"/> at time 0. Because this involves wave-packets at two different
+times we need a specialized quadrature to get accurate results.  We have to tell
+the script which quadrature we would like to use. This is done best by adding a
+top-level snippet like the following to the original simulation setup
+configuration <em>before</em> the simulation is run. This will choose the
+<tt class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></tt> quadrature transformation using
+<tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt> with 4 nodes and is for a one-dimensional
+setup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Configurations needed for computation of observables</span>
+<span class="n">observables</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
+            <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
+                <span class="s">&quot;qr&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">It is essential to take <tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt> as quadrature rule
+used by the <tt class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></tt> transformation.</p>
+</div>
+<p>As a second example we show the corresponding snippet in case of a three
+dimensional simulation setup:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># Configurations needed for computation of observables</span>
+<span class="n">observables</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
+            <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
+                <span class="s">&quot;qr&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;TensorProductQR&quot;</span><span class="p">,</span>
+                    <span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s">&quot;qr_rules&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}],</span>
+                    <span class="p">}</span>
+                <span class="p">}</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+</pre></div>
+</div>
+<p>The only thing we have to do then is to call the corresponding post-processor script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeAutocorrelation</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="wave-packet-sampling">
+<h2>Wave-packet sampling<a class="headerlink" href="#wave-packet-sampling" title="Permalink to this headline">¶</a></h2>
+<p>If we made a simulation with wave-packets only and want to sample them
+on a regular grid for example for plotting then there is a script for this purpose:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
+                                              [-b [BLOCKID [BLOCKID ...]]]
+                                              [-p [PARAMETERSFILE]]
+                                              [-r [RESULTSPATH]] [-et]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -d [DATAFILE], --datafile [DATAFILE]
+                        The simulation data file.
+  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
+                        The data block to handle.
+  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
+                        The configuration parameter file.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
+  -et, --eigentransform
+                        Transform the data into the eigenbasis before
+                        computing norms.
+</pre></div>
+</div>
+</div>
+<div class="section" id="eigentransformations">
+<h2>Eigentransformations<a class="headerlink" href="#eigentransformations" title="Permalink to this headline">¶</a></h2>
+<p>For potentials with multiple energy levels it matters in which basis we compute
+observables. Since the simulation is done in the canonical basis and the
+observables usually should be computed in the eigenbasis there is a
+transformation involved. The scripts shown above do this transformation
+internally and there is no need to worry.</p>
+<p>However, in case we explicitly do not want the transformation to take place
+(for example when working with single-level potentials) there are suitable
+post-processing scripts which can be recognized by a <tt class="docutils literal"><span class="pre">NET</span></tt> in their name:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNormsNET</span><span class="o">.</span><span class="n">py</span>
+<span class="n">ComputeEnergiesNET</span><span class="o">.</span><span class="n">py</span>
+<span class="n">ComputeAutocorrelationNET</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The <tt class="docutils literal"><span class="pre">NET</span></tt> (No-Eigen-Transformation) variants never do a basis transformation
+and compute the requested observables on the data given assuming a correct
+basis. There is also a <tt class="docutils literal"><span class="pre">CAN</span></tt> variant which computes explicitly in the
+canonical basis:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergiesCAN</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The reason why this script exists is that it makes a difference whether
+we use <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> or <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> in the code.</p>
+<div class="section" id="explicit-eigentransformation">
+<h3>Explicit Eigentransformation<a class="headerlink" href="#explicit-eigentransformation" title="Permalink to this headline">¶</a></h3>
+<p>In case we want to convert all the simulation data (think: wave-function values
+or wave-packet data) once to the eigenbasis there is this script:</p>
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<p>According to its help text:</p>
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeTransformToEigen.py [-h] [-i INPUTFILE] [-o OUTPUTFILE]
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -i INPUTFILE, --inputfile INPUTFILE
+                        The data file to read the data from.
+  -o OUTPUTFILE, --outputfile OUTPUTFILE
+                        The data file to write the transformed data.
+</pre></div>
+</div>
+<p>it will read the input file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> and write output into a
+new data file. A typical invoke could look like:</p>
+<div class="highlight-python"><div class="highlight"><pre>ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Computing more data</a><ul>
+<li><a class="reference internal" href="#norms">Norms</a></li>
+<li><a class="reference internal" href="#energies">Energies</a></li>
+<li><a class="reference internal" href="#autocorrelations">Autocorrelations</a></li>
+<li><a class="reference internal" href="#wave-packet-sampling">Wave-packet sampling</a></li>
+<li><a class="reference internal" href="#eigentransformations">Eigentransformations</a><ul>
+<li><a class="reference internal" href="#explicit-eigentransformation">Explicit Eigentransformation</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/ch1_s2_compute_data.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

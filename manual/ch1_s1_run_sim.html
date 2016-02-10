@@ -1,0 +1,198 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Set up and run a simulation &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="set-up-and-run-a-simulation">
+<h1>Set up and run a simulation<a class="headerlink" href="#set-up-and-run-a-simulation" title="Permalink to this headline">¶</a></h1>
+<p>Let&#8217;s first show how to set up a single simulation. The basic work-flow consists
+of several steps. First we have to prepare the simulation, then we run the main
+simulation program. This gives us a data file with the simulation results. Then
+we can apply various post processing steps, for example the computation of
+energies, plotting of norms and many more.</p>
+<p>The first step is to create a <cite>configuration file</cite> and set the simulation parameters.
+We use the file <tt class="docutils literal"><span class="pre">examples/harmonic_oscillators/harmonic_1D_p.py</span></tt> from the examples
+collection. The full content of this file is printed below:</p>
+<div class="code python highlight-python"><div class="highlight"><pre><span class="n">algorithm</span> <span class="o">=</span> <span class="s">&quot;hagedorn&quot;</span>
+<span class="n">propagator</span> <span class="o">=</span> <span class="s">&quot;semiclassical&quot;</span>
+<span class="n">splitting_method</span> <span class="o">=</span> <span class="s">&quot;Y4&quot;</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">dt</span> <span class="o">=</span> <span class="mf">0.01</span>
+
+<span class="n">dimension</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">ncomponents</span> <span class="o">=</span> <span class="mi">1</span>
+
+<span class="n">eps</span> <span class="o">=</span> <span class="mf">0.1</span>
+
+<span class="n">potential</span> <span class="o">=</span> <span class="s">&quot;quadratic&quot;</span>
+
+<span class="c"># The parameter set of the initial wavepacket</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">]]</span>
+<span class="n">P</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0j</span><span class="p">]]</span>
+<span class="n">q</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">1.0</span><span class="p">]]</span>
+<span class="n">p</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]]</span>
+<span class="n">S</span> <span class="o">=</span> <span class="p">[[</span><span class="mf">0.0</span><span class="p">]]</span>
+
+<span class="c"># What it takes to specify a wavepacket!</span>
+<span class="n">wp0</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;HagedornWavepacket&quot;</span><span class="p">,</span>
+    <span class="s">&quot;dimension&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s">&quot;ncomponents&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s">&quot;eps&quot;</span> <span class="p">:</span> <span class="mf">0.1</span><span class="p">,</span>
+    <span class="s">&quot;Pi&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">Q</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">S</span><span class="p">],</span>
+    <span class="s">&quot;basis_shapes&quot;</span> <span class="p">:</span> <span class="p">[{</span>
+        <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;HyperbolicCutShape&quot;</span><span class="p">,</span>
+        <span class="s">&quot;K&quot;</span> <span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s">&quot;dimension&quot;</span> <span class="p">:</span> <span class="mi">1</span>
+    <span class="p">}],</span>
+    <span class="s">&quot;coefficients&quot;</span> <span class="p">:</span> <span class="p">[[</span> <span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">]],</span>
+    <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;HomogeneousInnerProduct&quot;</span><span class="p">,</span>
+        <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">,</span>
+            <span class="s">&#39;qr&#39;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;TensorProductQR&#39;</span><span class="p">,</span>
+                <span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+                <span class="s">&#39;qr_rules&#39;</span><span class="p">:</span> <span class="p">[{</span><span class="s">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&#39;order&#39;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span> <span class="s">&#39;type&#39;</span><span class="p">:</span> <span class="s">&#39;GaussHermiteQR&#39;</span><span class="p">}]</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c"># Which wavepackets are initial values</span>
+<span class="n">initvals</span> <span class="o">=</span> <span class="p">[</span> <span class="n">wp0</span> <span class="p">]</span>
+
+<span class="n">leading_component</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="c"># How often do we write data to disk</span>
+<span class="n">write_nth</span> <span class="o">=</span> <span class="mi">5</span>
+
+<span class="n">matrix_exponential</span> <span class="o">=</span> <span class="s">&quot;pade&quot;</span>
+</pre></div>
+</div>
+<p>Now we have to run the main simulation program. This is done by the following command:</p>
+<div class="highlight-python"><div class="highlight"><pre>Main.py harmonic_1D_p.py
+</pre></div>
+</div>
+<p>where we have to provide the configuration file as command line option of the <tt class="docutils literal"><span class="pre">Main.py</span></tt>
+program. The <tt class="docutils literal"><span class="pre">Main.py</span></tt> command (like all other commands) supports an online help listing
+the available options and switches:</p>
+<div class="highlight-python"><div class="highlight"><pre>Main.py --help
+usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
+
+positional arguments:
+  parametersfile        The simulation configuration parameters file.
+
+optional arguments:
+  -h, --help            show this help message and exit
+  -o OUTPUTFILE, --outputfile OUTPUTFILE
+                        The data file to write the transformed data.
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
+</pre></div>
+</div>
+<p>When the program terminates, it leaves a file called <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> which
+contains all the simulation data. This <tt class="docutils literal"><span class="pre">hdf</span></tt> results file is stored in the <cite>local</cite>
+directory where the script was called (unless specified otherwise by the <tt class="docutils literal"><span class="pre">-o</span></tt> or <tt class="docutils literal"><span class="pre">-r</span></tt>
+switches) and <cite>not</cite> in the directory where the configuration file was loaded from.
+The script refuses to run if it would overwrite an existing <tt class="docutils literal"><span class="pre">hdf</span></tt> file.
+This measure is in place to prevent you from data loss.</p>
+<p>We can use the program <tt class="docutils literal"><span class="pre">hdfview</span></tt> for example to gain some insight of the contents
+of the file. More tools for manipulating <cite>hdf</cite> files can be found on the web-page
+of the <a class="reference internal" href="#hdfgroup" id="id1">[hdfgroup]</a>. Two very useful command line tools are <tt class="docutils literal"><span class="pre">h5ls</span></tt> and <tt class="docutils literal"><span class="pre">h5dump</span></tt>.</p>
+<table class="docutils citation" frame="void" id="hdfgroup" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[hdfgroup]</a></td><td><a class="reference external" href="http://www.hdfgroup.org/products/hdf5_tools/">http://www.hdfgroup.org/products/hdf5_tools/</a></td></tr>
+</tbody>
+</table>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="../_sources/manual/ch1_s1_run_sim.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2015, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    </div>
+  </body>
+</html>

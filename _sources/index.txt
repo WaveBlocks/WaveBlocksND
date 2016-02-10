@@ -15,12 +15,13 @@ The source code documentation below is actually up to date.
 .. toctree::
    :maxdepth: 2
 
-   manual/first_glance
-   manual/performing_simulations.rst
-   manual/the_core.rst
-   manual/interactive_use.rst
-   manual/extending_waveblocks.rst
-   citation
+   manual/ch0_first_glance.rst
+   manual/ch1_performing_simulations.rst
+   manual/ch2_configuration.rst
+   manual/ch3_data_storage.rst
+   manual/ch4_interactive_use.rst
+   manual/ch5_extending_waveblocks.rst
+   citation.rst
 
 Potential Library
 =================
