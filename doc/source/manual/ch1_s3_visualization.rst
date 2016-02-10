@@ -5,14 +5,13 @@ The post processing step usually splits into two sub-steps. First we compute
 additional data and then we visualize these data. The two sub-steps are performed
 by individual scripts. All these scripts optionally take the file-name or
 file-path of the ``simulation_results.hdf5`` as a further command line argument.
-
 In this section we look at the plotting scripts used to visualize
 common aspects of the simulated objects.
 
 Plotting Observables
 ~~~~~~~~~~~~~~~~~~~~
 
-For plotting the usual observables norm, energy and autocorrelation the
+For plotting the usual observables like norm, energy and autocorrelation the
 following scripts can be used:
 
 ::

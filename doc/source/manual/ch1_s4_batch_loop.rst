@@ -100,11 +100,33 @@ after another as shown in the last section. We could again do this manually but
 there is a better solution.
 
 
+Valid Meta-configurations
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+Probably the best approach to write a `metaconfiguration` file is to
+copy an existing one from the ``examples`` directory. There are some
+restrictions to obey when writing `metaconfiguration` files.
+(The ``ConfigurationGenerator`` is rather brittle.)
+The rules for valid files are as follows:
+
+* You can use any valid `Python` statement as value
+* All statements are written to a pure `Python` code file
+* You can write numbers, lists etc as plain text strings
+* All that is not in string form gets evaluated **right now**
+* Remember to escape `Python` strings twice
+* You can use variable references but with great care!
+
+.. note:: The ordering of the statements in the output file is such that
+          all statements can be executed with respect to local variables.
+          This is some kind of topological sorting. Be warned, it's implemented
+          using black magic and may fail now and then!
+
+
 The batch loop
 ~~~~~~~~~~~~~~
 
 There is a simple `Python` script called ``BatchLoop.py`` which does nothing else than running
-simulations for a set of configurations. The usage is really simple.
+simulations for a set of configurations. The usage is really simple:
 
 ::
 
@@ -127,7 +149,12 @@ from all others and there is a limit of ``MAXWORKERS`` simulations run in parall
              of the use of new library features providing support for concurrent execution
              of code!
 
-We have to provide a directory where the results should end up:
+With the switch ``-c`` we have to specify a directory where the configuration files
+are located. All `Python` files within that directory (excluding recursive descent)
+will be treated as simulation configurations. We can provide (with the switch ``-r``)
+also a directory where the simulation results, including numerical data and plots,
+will be placed (this defaults to ``.``, the current directory). Usually we will
+create a dedicated directory, often called ``results``:
 
 ::
 
@@ -160,7 +187,7 @@ we see the listing:
     Parameters[eps=0.5][delta=1.5eps]
 
 and for the results of a single simulation (notice the necessary shell character
-escapes, you can also write the name without escapes in a pair of ``"``.)
+escapes, you can also write the name without escapes in a pair of ``"``.):
 
 ::
 
@@ -178,9 +205,9 @@ we have the following bunch of files:
     Parameters[eps=0.1][delta=0.5eps].py
     simulation_results.hdf5
 
-Each directory within results contains at least the simulation parameters
+Each directory within ``results`` contains at least the simulation parameters
 file (``Parameters[eps=0.1][delta=0.5eps].py``) and the simulation results
-file (``simulation results.hdf5``). If there were some plots generated,
+file (``simulation_results.hdf5``). If there were some plots generated,
 then these files are here too.
 
 
