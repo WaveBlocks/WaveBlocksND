@@ -12,7 +12,7 @@ Structure of potential definitions
 ----------------------------------
 
 Performing a simulation with a new potential that is not (yet) part of the
-``PotentialLibrary`` is not difficult. All potentials are specified as a python
+``PotentialLibrary`` is not difficult. All potentials are specified as a `Python`
 dict. An simple example of a potential definition could look like:
 
 ::
