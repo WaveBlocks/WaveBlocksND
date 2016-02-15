@@ -71,26 +71,30 @@ dict. An simple example of a potential definition could look like:</p>
 <span class="n">quadratic</span><span class="p">[</span><span class="s">&quot;number_levels&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
 </pre></div>
 </div>
-<p>We see that this is nothing else than a <cite>Python</cite> <tt class="docutils literal"><span class="pre">dict</span></tt> (here assigned to the variable
-<tt class="docutils literal"><span class="pre">quadratic</span></tt>). This dict must have a key <tt class="docutils literal"><span class="pre">potential</span></tt> and the corresponding value
-is the analytic potential formula. This formula must contain the variable <tt class="docutils literal"><span class="pre">x</span></tt> which
-is the position space variable. It may optionally have an arbitrary number of
-parameters, here for example the <tt class="docutils literal"><span class="pre">sigma</span></tt> variable.</p>
-<p>The dict may have a further key called <tt class="docutils literal"><span class="pre">defaults</span></tt> whose value is another dict
-containing default values for the parameters. These values are used if you do
-not specify a value for a parameter in the simulation configuration file. You
-may omit the defaults here, then you always have to provide a value in the
-simulation configuration. Values given in the simulation configuration always
-precede default values.</p>
+<p>We see that this is nothing else than a <cite>Python</cite> <tt class="docutils literal"><span class="pre">dict</span></tt> (here
+assigned to the variable <tt class="docutils literal"><span class="pre">quadratic</span></tt>). This dict must have a key
+<tt class="docutils literal"><span class="pre">variables</span></tt> whose value is just a list of the position space
+variables, in this case just <tt class="docutils literal"><span class="pre">x</span></tt>. Next, there must be a key
+<tt class="docutils literal"><span class="pre">potential</span></tt> and the corresponding value is the symbolic expression
+of the potential formula. This formula must be a function of the
+position space variables listed.  It may optionally have an arbitrary
+number of parameters, here for example the <tt class="docutils literal"><span class="pre">sigma</span></tt> variable. The
+dict may have a further key called <tt class="docutils literal"><span class="pre">defaults</span></tt> whose value is another
+dict containing default values for the parameters. These values are
+used if you do not specify a value for a parameter in the simulation
+configuration file. You may omit the defaults here, then you always
+have to provide a value in the simulation configuration. Values given
+in the simulation configuration always precede default values. One can
+specify the number energy levels with the <tt class="docutils literal"><span class="pre">number_levels</span></tt> key.</p>
 <p>The analytic potential formula is given as a string. This string is parsed by
 the <tt class="docutils literal"><span class="pre">sympify</span></tt> function of <tt class="docutils literal"><span class="pre">Sympy</span></tt>. You can use many of the usual mathematical
-operations and functions, for example (fractional) powers (<tt class="docutils literal"><span class="pre">**</span></tt>), roots (<tt class="docutils literal"><span class="pre">sqrt()</span></tt>),
+operations and functions, for example (fractional) powers (<tt class="docutils literal"><span class="pre">**</span></tt>), roots (<tt class="docutils literal"><span class="pre">sqrt</span></tt>),
 trigonometric and hyperbolic functions and their inverse functions (but remember,
 it is called <tt class="docutils literal"><span class="pre">atan</span></tt> and not <tt class="docutils literal"><span class="pre">arctan</span></tt>) and also some constants like <tt class="docutils literal"><span class="pre">pi</span></tt>.
 Please refer to the <tt class="docutils literal"><span class="pre">Sympy</span></tt> manual for a more thorough description of <a class="reference internal" href="#sympify" id="id1">[sympify]</a>.
 The most important point is to make sure that the formula finally yields a scalar
 expression in the position variable(s).</p>
-<p>This is an example of a quadratic potential well in two dimensions,
+<p>This is an example of a quadratic elliptic potential well in two dimensions,
 using the variables <tt class="docutils literal"><span class="pre">x</span></tt> and <tt class="docutils literal"><span class="pre">y</span></tt>:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">quadratic_2d</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">quadratic_2d</span><span class="p">[</span><span class="s">&quot;variables&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;x&quot;</span><span class="p">,</span> <span class="s">&quot;y&quot;</span><span class="p">]</span>
@@ -110,9 +114,9 @@ using the variables <tt class="docutils literal"><span class="pre">x</span></tt>
 </div>
 <p>This potential has two energy levels and is given by a <img class="math" src="../_images/math/38d9d474a6c520ac582a14f70b97e0c5a903a16d.png" alt="2 \times 2"/> matrix.
 The matrix is constructed as two nested <cite>Python</cite> lists. Each entry is a single string
-as above. Note also that this potential does not specify a default for <tt class="docutils literal"><span class="pre">delta</span></tt>,
+as above. Note also, that this potential does not specify a default for <tt class="docutils literal"><span class="pre">delta</span></tt>,
 you have to assign a scalar float value to a variable called <tt class="docutils literal"><span class="pre">delta</span></tt> in the simulation
-configuration. You may specify potentials with as many energy levels as you like.</p>
+configuration file. You may specify potentials with as many energy levels as you like.</p>
 <p>A final word on the strings representing formulas and parameter values: any
 string that <cite>only</cite> consists of a numerical constant my be replaced by a float.
 But be careful with divisions, in <cite>Python</cite> 2.7, <tt class="docutils literal"><span class="pre">1/2</span></tt> yields <tt class="docutils literal"><span class="pre">0</span></tt>!</p>
@@ -150,9 +154,10 @@ values here too, but probably it has no real use case.</p>
 <p>As a small side note, here is an example of a custom potential when we create the
 configurations by the <tt class="xref py py-class docutils literal"><span class="pre">ConfigurationGenerator</span></tt>. (This is only a small excerpt
 of a metaconfiguration file.)</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># A custom potential without a default for &quot; alpha &quot;</span>
+<div class="highlight-python"><div class="highlight"><pre><span class="c"># A custom potential without a default for &quot;alpha&quot;</span>
 <span class="n">GP</span><span class="p">[</span><span class="s">&quot;potential&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{}</span>
 <span class="n">GP</span><span class="p">[</span><span class="s">&quot;potential[</span><span class="se">\&quot;</span><span class="s">potential</span><span class="se">\&quot;</span><span class="s">]&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s">&quot;</span><span class="se">\&quot;</span><span class="s">cosh(alpha*x)</span><span class="se">\&quot;</span><span class="s">&quot;</span>
+
 <span class="c"># Different values for &quot;alpha&quot; in each simulation</span>
 <span class="n">LP</span><span class="p">[</span><span class="s">&quot;alpha&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="o">*</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">5</span><span class="p">)]</span>
 </pre></div>

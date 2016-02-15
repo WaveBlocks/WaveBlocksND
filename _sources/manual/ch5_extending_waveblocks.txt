@@ -23,29 +23,32 @@ dict. An simple example of a potential definition could look like:
    quadratic["defaults"] = {"sigma":"1/2"}
    quadratic["number_levels"] = 1
 
-We see that this is nothing else than a `Python` ``dict`` (here assigned to the variable
-``quadratic``). This dict must have a key ``potential`` and the corresponding value
-is the analytic potential formula. This formula must contain the variable ``x`` which
-is the position space variable. It may optionally have an arbitrary number of
-parameters, here for example the ``sigma`` variable.
-
-The dict may have a further key called ``defaults`` whose value is another dict
-containing default values for the parameters. These values are used if you do
-not specify a value for a parameter in the simulation configuration file. You
-may omit the defaults here, then you always have to provide a value in the
-simulation configuration. Values given in the simulation configuration always
-precede default values.
+We see that this is nothing else than a `Python` ``dict`` (here
+assigned to the variable ``quadratic``). This dict must have a key
+``variables`` whose value is just a list of the position space
+variables, in this case just ``x``. Next, there must be a key
+``potential`` and the corresponding value is the symbolic expression
+of the potential formula. This formula must be a function of the
+position space variables listed.  It may optionally have an arbitrary
+number of parameters, here for example the ``sigma`` variable. The
+dict may have a further key called ``defaults`` whose value is another
+dict containing default values for the parameters. These values are
+used if you do not specify a value for a parameter in the simulation
+configuration file. You may omit the defaults here, then you always
+have to provide a value in the simulation configuration. Values given
+in the simulation configuration always precede default values. One can
+specify the number energy levels with the ``number_levels`` key.
 
 The analytic potential formula is given as a string. This string is parsed by
 the ``sympify`` function of ``Sympy``. You can use many of the usual mathematical
-operations and functions, for example (fractional) powers (``**``), roots (``sqrt()``),
+operations and functions, for example (fractional) powers (``**``), roots (``sqrt``),
 trigonometric and hyperbolic functions and their inverse functions (but remember,
 it is called ``atan`` and not ``arctan``) and also some constants like ``pi``.
 Please refer to the ``Sympy`` manual for a more thorough description of [sympify]_.
 The most important point is to make sure that the formula finally yields a scalar
 expression in the position variable(s).
 
-This is an example of a quadratic potential well in two dimensions,
+This is an example of a quadratic elliptic potential well in two dimensions,
 using the variables ``x`` and ``y``:
 
 ::
@@ -69,9 +72,9 @@ A more complicated potential could be given by the following `Python` code:
 
 This potential has two energy levels and is given by a :math:`2 \times 2` matrix.
 The matrix is constructed as two nested `Python` lists. Each entry is a single string
-as above. Note also that this potential does not specify a default for ``delta``,
+as above. Note also, that this potential does not specify a default for ``delta``,
 you have to assign a scalar float value to a variable called ``delta`` in the simulation
-configuration. You may specify potentials with as many energy levels as you like.
+configuration file. You may specify potentials with as many energy levels as you like.
 
 A final word on the strings representing formulas and parameter values: any
 string that `only` consists of a numerical constant my be replaced by a float.
@@ -116,9 +119,10 @@ of a metaconfiguration file.)
 
 ::
 
-    # A custom potential without a default for " alpha "
+    # A custom potential without a default for "alpha"
     GP["potential"] = {}
     GP["potential[\"potential\"]"] = "\"cosh(alpha*x)\""
+
     # Different values for "alpha" in each simulation
     LP["alpha"] = [0.1*i for i in range(1,5)]
 

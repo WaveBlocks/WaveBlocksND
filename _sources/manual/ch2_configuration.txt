@@ -1,20 +1,21 @@
 Configuration and Settings
 ==========================
 
-In this chapter we describe the settings and valid configuration parameters
-for running simulations.
+In this chapter we describe the settings and valid configuration
+parameters for running simulations.
 
 .. warning::
 
-  The following sections describe the settings of the old ``WaveBlocks``
-  code and do only partially apply to the new ``WaveBlocksND`` code.
+  The following sections describe the settings of the old
+  ``WaveBlocks`` code and do only partially apply to the new
+  ``WaveBlocksND`` code.
 
 
 Time propagation algorithms
 ---------------------------
 
-At the moment, three algorithms for time propagation of initial values are
-implemented.
+At the moment, three algorithms for time propagation of initial values
+are implemented.
 
 =============  ========================================
 Name           Description
@@ -24,16 +25,14 @@ hagedorn       Homogeneous Hagedorn wavepackets
 multihagedorn  Inhomogeneous Hagedorn wavepackets
 =============  ========================================
 
-.. spawn          Spawning propagation for tunneling problems
-
 
 Specifying initial values
 -------------------------
 
-Initial values are always specified as wavepackets. For the Fourier propagator,
+Initial values are always specified as wave-packets. For the Fourier propagator,
 the packets are sampled at the grid nodes and for packet based algorithms, these
 initial packets are just propagated. The two configuration variables ``parameters``
-and ``coefficients`` are responsible for specifying the initial wavepackets.
+and ``coefficients`` are responsible for specifying the initial wave-packets.
 Their values are interpreted as usual but let's look at this important part
 a bit closer.
 
@@ -48,14 +47,14 @@ a list of arbitrary length. Each entry is a list itself having the format::
   [ level, parameters, [(index,value), (index,value), ...] ]
 
 where the ``level`` is the energy level, the ``parameters`` is a 5-tuple
-of the usual form ``(q,p,Q,P,S)`` containing the wavepacket's parameter. The
+of the usual form ``(q,p,Q,P,S)`` containing the wave-packet's parameter. The
 third part is a list containing one or several ``(index,value)`` pairs
 which hold the value :math:`c_i` of the coefficient with index :math:`i`. We know
-that this is all the data necessary for constructing a wavepacket that lives on
+that this is all the data necessary for constructing a wave-packet that lives on
 the given energy level. (But remember that these packets are sampled at the grid
 nodes later to be usable for the Fourier propagation.)
 
-This input format allows us to place several wavepackets on the same energy level,
+This input format allows us to place several wave-packets on the same energy level,
 for example the following valid specification places two Gaussian packets
 which will run into each other and bounce off::
 
@@ -71,7 +70,7 @@ For the ``hagedorn`` Propagator
 
 For this propagator we need one set of parameters which belong to
 the leading component. With these parameters we then set up a homogeneous
-wavepacket. We can specify the parameters as follows::
+wave-packet. We can specify the parameters as follows::
 
   parameters = (q, p, Q, P, S)
 
@@ -81,7 +80,7 @@ specify the parameters as::
 
   parameters = [ (P0, Q0, S0, p0, q0), ..., (Pn, Qn, Sn, pn, qn) ]
 
-where there are as many inner tuples as energy levels. The initialisation
+where there are as many inner tuples as energy levels. The initialization
 code then picks just the single tuple with its index matching the
 ``leading_component`` value. This allows easy sharing of
 configuration files with minimal editing.
@@ -99,7 +98,7 @@ These ``(index,value)`` pairs give the value :math:`c_i` of the coefficient
 with index :math:`i`. For example the list containing only the pair ``[ (2,1.0) ]``
 yields a :math:`\varphi_2` packet while the list ``[ (0,0.5), (1,0.5) ]`` gives
 a superposition of :math:`\frac{1}{2} \left( \varphi_0 + \varphi_1 \right)`. If you
-wish to have no wavepacket on an energy level just provide the dummy pair ``[ (0,0.0) ]``.
+wish to have no wave-packet on an energy level just provide the dummy pair ``[ (0,0.0) ]``.
 
 
 For the ``multihagedorn`` Propagator
@@ -162,16 +161,16 @@ Parameters for all propagation algorithms
 
 ``parameters``
   The Hagedorn parameters :math:`\{P, Q, S, p, q \}` of the
-  initial wavepackets. The exact format of this variable depends on the
+  initial wave-packets. The exact format of this variable depends on the
   simulation algorithm used, see above.
 
 ``coefficients``
   A list with the lists of (index,value) tuples that
-  set the coefficients of the basis functions for the initial wavepackets. The
+  set the coefficients of the basis functions for the initial wave-packets. The
   exact format of this variable depends on the simulation algorithm used, see above.
 
 ``write_nth``
-  Save simulation data every n-th timestep
+  Save simulation data every n-th time-step
 
   * Possible values: Positive Integer where the case 0 is interpreted as
                      *never*. In this case only the initial values are saved.
@@ -179,12 +178,12 @@ Parameters for all propagation algorithms
   * Default value: is 0 if no other value is provided.
 
 ``save_at``
-  A list of times and/or timesteps when saving of the
+  A list of times and/or time-steps when saving of the
   simulation data takes place. (Which data are saved depends on the implementation
   of the respective ``SimulationLoop`` subclass.)
 
   * Possible values: A list of integers and/or floats. Integers are interpreted
-                     as timesteps and floats as (absolute) times. Always be aware
+                     as time-steps and floats as (absolute) times. Always be aware
                      of this difference in interpretation!
   * Data type: integer or float
   * Default value: an empty list, thus saving at special points in time
@@ -198,7 +197,7 @@ Parameters for all propagation algorithms
   * Default value: ``"arnoldi"``
 
 ``arnoldi_steps``
-  The number of arnoldi steps performed. Use this together with
+  The number of Arnoldi steps performed. Use this together with
   the parameter ``matrix_exponential`` set to ``"arnoldi"``.
 
   * Possible values: positive integers
@@ -211,7 +210,7 @@ Parameters for the ``fourier`` propagator
 
 ``initial_values``
   A specific input format for the initial values. This allows to
-  place an arbitrary number of wavepackets on any energy level.
+  place an arbitrary number of wave-packets on any energy level.
   A valid configuration must either have this variable set or both of
   ``parameters`` and ``coefficients``. If all three are given, this
   takes precedence.
@@ -230,21 +229,21 @@ Parameters for the ``fourier`` propagator
 
 .. Note::
    You must specify a ``basis_size`` (see below) for the Fourier
-   propagator too because we compute initial values from wavepackets.
+   propagator too because we compute initial values from wave-packets.
 
 
 Parameters for the ``hagedorn`` propagator
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 ``basis_size``
-  Number of basis functions used for homogeneous Hagedorn wavepackets.
+  Number of basis functions used for homogeneous Hagedorn wave-packets.
 
   * Possible values: Non-negative integer larger than 2.
   * Data type: integer
 
 ``leading_component``
   The leading component is the eigenvalue that governs the propagation
-  of the wavepackets' parameters.
+  of the wave-packets parameters.
 
   * Possible values: Integer in the range 0 to :math:`N-1` inclusive,
                      where :math:`N` is the number of energy levels the
@@ -303,7 +302,7 @@ depending on specific choices for others.
 
 ``spawn_method``
   Specify the spawning method used. If set to ``lumping`` we just spawn a
-  normed wavepacket by copying over the norm of the `spawn candidate`. If
+  normed wave-packet by copying over the norm of the `spawn candidate`. If
   set to ``projection`` a full basis projection is done up to the maximal
   order given by the parameter ``spawn_max_order``. (Always set this value
   too.)
@@ -312,7 +311,7 @@ depending on specific choices for others.
   * Data type: string
 
 ``spawn_max_order``
-  The maximal order (size) of the spawned wavepacket i.e. on how many new basis
+  The maximal order (size) of the spawned wave-packet i.e. on how many new basis
   functions the basis projection is performed. This only makes sense in
   combination with the ``spawn_method`` parameter set to ``projection``.
 
@@ -321,11 +320,11 @@ depending on specific choices for others.
   * Data type: integer
 
 .. Note::
-   This ``spawn_max_order`` is *not* the basis size of the spawned wavepacket.
+   This ``spawn_max_order`` is *not* the basis size of the spawned wave-packet.
    (Which we currently can not control.)
 
 ``spawn_order``
-  The spawned wavepacket is assumed to be of the form of :math:`\phi_k` at leading
+  The spawned wave-packet is assumed to be of the form of :math:`\phi_k` at leading
   order. This is not always true but we need the value of :math:`k` in the algorithms
   for formal reasons. If the value of :math:`k` is wrong then the results may be
   much worse. (Consider this to be a limitation of the current algorithms.)
@@ -354,7 +353,7 @@ implementations can be found in the file ``SpawnConditions.py``.
    parameters is the most difficult part.)
 
 Each of these methods depend on one or several more parameters configuring their
-behaviour in detail. These parameters are described in the following list.
+behavior in detail. These parameters are described in the following list.
 
 ``spawn_threshold``
   The spawning threshold is compared to the norm of the fragment or `spawning candidate`
@@ -404,7 +403,7 @@ behaviour in detail. These parameters are described in the following list.
   The time when we want to spawn.
 
   * Possible values: Real values in the range :math:`[0, T]`. The values will
-                     be rounded to the nearest timestep interval.
+                     be rounded to the nearest time-step interval.
   * Data type: float
   * Used by: The method ``spawn_at_time``.
 
@@ -438,7 +437,7 @@ algorithms from the last section.)
 All other parameters from the last section must be used additionally to configure
 the details of the spawning process.
 
-For this very specialised problem setting you have to use the scripts
+For this very specialized problem setting you have to use the scripts
 ``AposterioriSpawning.py`` and ``AposterioriSpawningNA.py``. These scripts
 perform the aposteriori analysis on some given simulation data. They produce
 new data files which then can be evaluated with the usual tools.

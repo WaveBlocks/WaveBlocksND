@@ -54,17 +54,18 @@
             
   <div class="section" id="configuration-and-settings">
 <h1>Configuration and Settings<a class="headerlink" href="#configuration-and-settings" title="Permalink to this headline">¶</a></h1>
-<p>In this chapter we describe the settings and valid configuration parameters
-for running simulations.</p>
+<p>In this chapter we describe the settings and valid configuration
+parameters for running simulations.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">The following sections describe the settings of the old <tt class="docutils literal"><span class="pre">WaveBlocks</span></tt>
-code and do only partially apply to the new <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code.</p>
+<p class="last">The following sections describe the settings of the old
+<tt class="docutils literal"><span class="pre">WaveBlocks</span></tt> code and do only partially apply to the new
+<tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt> code.</p>
 </div>
 <div class="section" id="time-propagation-algorithms">
 <h2>Time propagation algorithms<a class="headerlink" href="#time-propagation-algorithms" title="Permalink to this headline">¶</a></h2>
-<p>At the moment, three algorithms for time propagation of initial values are
-implemented.</p>
+<p>At the moment, three algorithms for time propagation of initial values
+are implemented.</p>
 <table border="1" class="docutils">
 <colgroup>
 <col width="25%" />
@@ -90,10 +91,10 @@ implemented.</p>
 </div>
 <div class="section" id="specifying-initial-values">
 <h2>Specifying initial values<a class="headerlink" href="#specifying-initial-values" title="Permalink to this headline">¶</a></h2>
-<p>Initial values are always specified as wavepackets. For the Fourier propagator,
+<p>Initial values are always specified as wave-packets. For the Fourier propagator,
 the packets are sampled at the grid nodes and for packet based algorithms, these
 initial packets are just propagated. The two configuration variables <tt class="docutils literal"><span class="pre">parameters</span></tt>
-and <tt class="docutils literal"><span class="pre">coefficients</span></tt> are responsible for specifying the initial wavepackets.
+and <tt class="docutils literal"><span class="pre">coefficients</span></tt> are responsible for specifying the initial wave-packets.
 Their values are interpreted as usual but let&#8217;s look at this important part
 a bit closer.</p>
 <div class="section" id="for-the-fourier-propagator">
@@ -105,13 +106,13 @@ a list of arbitrary length. Each entry is a list itself having the format:</p>
 </pre></div>
 </div>
 <p>where the <tt class="docutils literal"><span class="pre">level</span></tt> is the energy level, the <tt class="docutils literal"><span class="pre">parameters</span></tt> is a 5-tuple
-of the usual form <tt class="docutils literal"><span class="pre">(q,p,Q,P,S)</span></tt> containing the wavepacket&#8217;s parameter. The
+of the usual form <tt class="docutils literal"><span class="pre">(q,p,Q,P,S)</span></tt> containing the wave-packet&#8217;s parameter. The
 third part is a list containing one or several <tt class="docutils literal"><span class="pre">(index,value)</span></tt> pairs
 which hold the value <img class="math" src="../_images/math/496867ca68c428fa123f26f0f73997632e61e116.png" alt="c_i"/> of the coefficient with index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>. We know
-that this is all the data necessary for constructing a wavepacket that lives on
+that this is all the data necessary for constructing a wave-packet that lives on
 the given energy level. (But remember that these packets are sampled at the grid
 nodes later to be usable for the Fourier propagation.)</p>
-<p>This input format allows us to place several wavepackets on the same energy level,
+<p>This input format allows us to place several wave-packets on the same energy level,
 for example the following valid specification places two Gaussian packets
 which will run into each other and bounce off:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">initial_values</span> <span class="o">=</span> <span class="p">[[</span> <span class="mi">0</span><span class="p">,</span> <span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">,</span>  <span class="mf">2.0</span><span class="p">),</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span><span class="mf">1.0</span><span class="p">)]],</span>
@@ -125,7 +126,7 @@ in the next two sections. This allows for sharing of simulation configurations.<
 <h3>For the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> Propagator<a class="headerlink" href="#for-the-hagedorn-propagator" title="Permalink to this headline">¶</a></h3>
 <p>For this propagator we need one set of parameters which belong to
 the leading component. With these parameters we then set up a homogeneous
-wavepacket. We can specify the parameters as follows:</p>
+wave-packet. We can specify the parameters as follows:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">parameters</span> <span class="o">=</span> <span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -135,7 +136,7 @@ specify the parameters as:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">parameters</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="n">P0</span><span class="p">,</span> <span class="n">Q0</span><span class="p">,</span> <span class="n">S0</span><span class="p">,</span> <span class="n">p0</span><span class="p">,</span> <span class="n">q0</span><span class="p">),</span> <span class="o">...</span><span class="p">,</span> <span class="p">(</span><span class="n">Pn</span><span class="p">,</span> <span class="n">Qn</span><span class="p">,</span> <span class="n">Sn</span><span class="p">,</span> <span class="n">pn</span><span class="p">,</span> <span class="n">qn</span><span class="p">)</span> <span class="p">]</span>
 </pre></div>
 </div>
-<p>where there are as many inner tuples as energy levels. The initialisation
+<p>where there are as many inner tuples as energy levels. The initialization
 code then picks just the single tuple with its index matching the
 <tt class="docutils literal"><span class="pre">leading_component</span></tt> value. This allows easy sharing of
 configuration files with minimal editing.</p>
@@ -152,7 +153,7 @@ These <tt class="docutils literal"><span class="pre">(index,value)</span></tt> p
 with index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>. For example the list containing only the pair <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(2,1.0)</span> <span class="pre">]</span></tt>
 yields a <img class="math" src="../_images/math/ba8ba273266cae7460d2cfa3241911b4f0bdbda2.png" alt="\varphi_2"/> packet while the list <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(0,0.5),</span> <span class="pre">(1,0.5)</span> <span class="pre">]</span></tt> gives
 a superposition of <img class="math" src="../_images/math/75483e29d15b3779cff5999c20c43d52c7924d73.png" alt="\frac{1}{2} \left( \varphi_0 + \varphi_1 \right)"/>. If you
-wish to have no wavepacket on an energy level just provide the dummy pair <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(0,0.0)</span> <span class="pre">]</span></tt>.</p>
+wish to have no wave-packet on an energy level just provide the dummy pair <tt class="docutils literal"><span class="pre">[</span> <span class="pre">(0,0.0)</span> <span class="pre">]</span></tt>.</p>
 </div>
 <div class="section" id="for-the-multihagedorn-propagator">
 <h3>For the <tt class="docutils literal"><span class="pre">multihagedorn</span></tt> Propagator<a class="headerlink" href="#for-the-multihagedorn-propagator" title="Permalink to this headline">¶</a></h3>
@@ -214,14 +215,14 @@ script. Just make sure there is no variable name clash.</p>
 </dd>
 <dt><tt class="docutils literal"><span class="pre">parameters</span></tt></dt>
 <dd>The Hagedorn parameters <img class="math" src="../_images/math/b49f9b49a48b174896a3a0ba9712c6efb07e51e0.png" alt="\{P, Q, S, p, q \}"/> of the
-initial wavepackets. The exact format of this variable depends on the
+initial wave-packets. The exact format of this variable depends on the
 simulation algorithm used, see above.</dd>
 <dt><tt class="docutils literal"><span class="pre">coefficients</span></tt></dt>
 <dd>A list with the lists of (index,value) tuples that
-set the coefficients of the basis functions for the initial wavepackets. The
+set the coefficients of the basis functions for the initial wave-packets. The
 exact format of this variable depends on the simulation algorithm used, see above.</dd>
 <dt><tt class="docutils literal"><span class="pre">write_nth</span></tt></dt>
-<dd><p class="first">Save simulation data every n-th timestep</p>
+<dd><p class="first">Save simulation data every n-th time-step</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>Possible values: Positive Integer where the case 0 is interpreted as</dt>
@@ -236,13 +237,13 @@ exact format of this variable depends on the simulation algorithm used, see abov
 </ul>
 </dd>
 <dt><tt class="docutils literal"><span class="pre">save_at</span></tt></dt>
-<dd><p class="first">A list of times and/or timesteps when saving of the
+<dd><p class="first">A list of times and/or time-steps when saving of the
 simulation data takes place. (Which data are saved depends on the implementation
 of the respective <tt class="docutils literal"><span class="pre">SimulationLoop</span></tt> subclass.)</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>Possible values: A list of integers and/or floats. Integers are interpreted</dt>
-<dd><p class="first last">as timesteps and floats as (absolute) times. Always be aware
+<dd><p class="first last">as time-steps and floats as (absolute) times. Always be aware
 of this difference in interpretation!</p>
 </dd>
 </dl>
@@ -266,7 +267,7 @@ of this difference in interpretation!</p>
 </ul>
 </dd>
 <dt><tt class="docutils literal"><span class="pre">arnoldi_steps</span></tt></dt>
-<dd><p class="first">The number of arnoldi steps performed. Use this together with
+<dd><p class="first">The number of Arnoldi steps performed. Use this together with
 the parameter <tt class="docutils literal"><span class="pre">matrix_exponential</span></tt> set to <tt class="docutils literal"><span class="pre">&quot;arnoldi&quot;</span></tt>.</p>
 <ul class="last simple">
 <li>Possible values: positive integers</li>
@@ -281,7 +282,7 @@ the parameter <tt class="docutils literal"><span class="pre">matrix_exponential<
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">initial_values</span></tt></dt>
 <dd>A specific input format for the initial values. This allows to
-place an arbitrary number of wavepackets on any energy level.
+place an arbitrary number of wave-packets on any energy level.
 A valid configuration must either have this variable set or both of
 <tt class="docutils literal"><span class="pre">parameters</span></tt> and <tt class="docutils literal"><span class="pre">coefficients</span></tt>. If all three are given, this
 takes precedence.</dd>
@@ -303,14 +304,14 @@ takes precedence.</dd>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">You must specify a <tt class="docutils literal"><span class="pre">basis_size</span></tt> (see below) for the Fourier
-propagator too because we compute initial values from wavepackets.</p>
+propagator too because we compute initial values from wave-packets.</p>
 </div>
 </div>
 <div class="section" id="parameters-for-the-hagedorn-propagator">
 <h3>Parameters for the <tt class="docutils literal"><span class="pre">hagedorn</span></tt> propagator<a class="headerlink" href="#parameters-for-the-hagedorn-propagator" title="Permalink to this headline">¶</a></h3>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">basis_size</span></tt></dt>
-<dd><p class="first">Number of basis functions used for homogeneous Hagedorn wavepackets.</p>
+<dd><p class="first">Number of basis functions used for homogeneous Hagedorn wave-packets.</p>
 <ul class="last simple">
 <li>Possible values: Non-negative integer larger than 2.</li>
 <li>Data type: integer</li>
@@ -318,7 +319,7 @@ propagator too because we compute initial values from wavepackets.</p>
 </dd>
 <dt><tt class="docutils literal"><span class="pre">leading_component</span></tt></dt>
 <dd><p class="first">The leading component is the eigenvalue that governs the propagation
-of the wavepackets&#8217; parameters.</p>
+of the wave-packets parameters.</p>
 <ul class="last">
 <li><dl class="first docutils">
 <dt>Possible values: Integer in the range 0 to <img class="math" src="../_images/math/19f9ae9a7d789d9a8e661b478df966192038b540.png" alt="N-1"/> inclusive,</dt>
@@ -384,7 +385,7 @@ depending on specific choices for others.</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">spawn_method</span></tt></dt>
 <dd><p class="first">Specify the spawning method used. If set to <tt class="docutils literal"><span class="pre">lumping</span></tt> we just spawn a
-normed wavepacket by copying over the norm of the <cite>spawn candidate</cite>. If
+normed wave-packet by copying over the norm of the <cite>spawn candidate</cite>. If
 set to <tt class="docutils literal"><span class="pre">projection</span></tt> a full basis projection is done up to the maximal
 order given by the parameter <tt class="docutils literal"><span class="pre">spawn_max_order</span></tt>. (Always set this value
 too.)</p>
@@ -394,7 +395,7 @@ too.)</p>
 </ul>
 </dd>
 <dt><tt class="docutils literal"><span class="pre">spawn_max_order</span></tt></dt>
-<dd><p class="first">The maximal order (size) of the spawned wavepacket i.e. on how many new basis
+<dd><p class="first">The maximal order (size) of the spawned wave-packet i.e. on how many new basis
 functions the basis projection is performed. This only makes sense in
 combination with the <tt class="docutils literal"><span class="pre">spawn_method</span></tt> parameter set to <tt class="docutils literal"><span class="pre">projection</span></tt>.</p>
 <ul class="last">
@@ -411,12 +412,12 @@ combination with the <tt class="docutils literal"><span class="pre">spawn_method
 </dl>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">This <tt class="docutils literal"><span class="pre">spawn_max_order</span></tt> is <em>not</em> the basis size of the spawned wavepacket.
+<p class="last">This <tt class="docutils literal"><span class="pre">spawn_max_order</span></tt> is <em>not</em> the basis size of the spawned wave-packet.
 (Which we currently can not control.)</p>
 </div>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">spawn_order</span></tt></dt>
-<dd><p class="first">The spawned wavepacket is assumed to be of the form of <img class="math" src="../_images/math/34ea3b8fe46ef695984759103d7bcdecd553f321.png" alt="\phi_k"/> at leading
+<dd><p class="first">The spawned wave-packet is assumed to be of the form of <img class="math" src="../_images/math/34ea3b8fe46ef695984759103d7bcdecd553f321.png" alt="\phi_k"/> at leading
 order. This is not always true but we need the value of <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> in the algorithms
 for formal reasons. If the value of <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is wrong then the results may be
 much worse. (Consider this to be a limitation of the current algorithms.)</p>
@@ -460,7 +461,7 @@ with sensible values for the related parameters. (Choosing good values for these
 parameters is the most difficult part.)</p>
 </div>
 <p>Each of these methods depend on one or several more parameters configuring their
-behaviour in detail. These parameters are described in the following list.</p>
+behavior in detail. These parameters are described in the following list.</p>
 <dl class="docutils">
 <dt><tt class="docutils literal"><span class="pre">spawn_threshold</span></tt></dt>
 <dd><p class="first">The spawning threshold is compared to the norm of the fragment or <cite>spawning candidate</cite>
@@ -545,7 +546,7 @@ spawning. The derivative is usually approximated by simple finite differences.</
 <ul class="last">
 <li><dl class="first docutils">
 <dt>Possible values: Real values in the range <img class="math" src="../_images/math/1d3cb81063fd04cd699285c31684aa3e5b20ada6.png" alt="[0, T]"/>. The values will</dt>
-<dd><p class="first last">be rounded to the nearest timestep interval.</p>
+<dd><p class="first last">be rounded to the nearest time-step interval.</p>
 </dd>
 </dl>
 </li>
@@ -588,7 +589,7 @@ algorithms from the last section.)</p>
 </dl>
 <p>All other parameters from the last section must be used additionally to configure
 the details of the spawning process.</p>
-<p>For this very specialised problem setting you have to use the scripts
+<p>For this very specialized problem setting you have to use the scripts
 <tt class="docutils literal"><span class="pre">AposterioriSpawning.py</span></tt> and <tt class="docutils literal"><span class="pre">AposterioriSpawningNA.py</span></tt>. These scripts
 perform the aposteriori analysis on some given simulation data. They produce
 new data files which then can be evaluated with the usual tools.</p>

@@ -9,57 +9,20 @@ potential in the variables :math:`x` and :math:`y` is given by:
 
    V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - \frac{y^{3}}{3}\right)
 
-where we set :math:`a = 1` and  :math:`b = 1/2`. To compute the
+where we set :math:`a = 1` and  :math:`b = \frac{1}{2}`. To compute the
 eigenstates we write a configuration file ``eigenstates.py`` like:
 
-::
+.. include:: ../../../../examples/henon_heiles/eigenstates[eps=0.25].py
+   :code: python
 
-    dimension = 2
-    ncomponents = 1
-
-    potential = "henon_heiles"
-
-    eigenstate_of_level = 0
-
-    eigenstates_indices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
-
-    starting_point = [0.5, 0.5]
-
-    eps = 0.25
-
-    hawp_template = {
-        "type" : "HagedornWavepacket",
-        "dimension" : dimension,
-        "ncomponents": 1,
-        "eps" : eps,
-        "basis_shapes" : [{
-                "type" : "HyperbolicCutShape",
-                "K" : 24,
-                "dimension" : dimension
-                }]
-        }
-
-    innerproduct = {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
-            'qr': {
-                'type': 'TensorProductQR',
-                'dimension': dimension,
-                'qr_rules': [{'dimension': 1, 'order': 32, 'type': 'GaussHermiteQR'},
-                             {'dimension': 1, 'order': 32, 'type': 'GaussHermiteQR'}]
-            }
-        }
-    }
-
-We compute the first 15 eigenstates :math:`\Psi_0` up to :math:`\Psi_{14}`.
+We compute the first 15 eigenstates :math:`\Psi_{0}` up to :math:`\Psi_{14}`.
 The parameter ``starting_point`` sets the starting value for the minimization
 of the potential surface. This value is choosen such to stay in the local minimum
 we are interested in. The basis consists of the space spanned by all wavepackets
 indexed in the hyperbolic cut having sparsity :math:`K=24`. The actual computation
 is done by using the script ``ComputeEigenstates.py``::
 
-    python ComputeEigenstates.py eigenstates.py
+    ComputeEigenstates.py eigenstates.py
 
 and will print some output::
 
@@ -109,12 +72,12 @@ and will print some output::
 and produce an `eigenstates.hdf5` file containing all the wavepackets computed.
 Next we compute norms and energies of these states by::
 
-    python ComputeNorms.py -d eigenstates.hdf5
-    python ComputeEnergies.py -d eigenstates.hdf5
+    ComputeNorms.py -d eigenstates.hdf5
+    ComputeEnergies.py -d eigenstates.hdf5
 
 We could also evaluate and plot the packets or call any other
 post-processing script. But we like to do some custom computations
-and therefore switch to an interactive python session now::
+and therefore switch to an interactive `Python` session now::
 
     BF = BlockFactory()
     IOM = IOManager()
