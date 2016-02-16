@@ -51,10 +51,10 @@ class MatrixPotential1S(MatrixPotential):
             self._try_simplify = GlobalDefaults.__dict__["try_simplification"]
 
         # The the potential, symbolic expressions and evaluatable functions
-        assert expression.shape == (1,1)
+        assert expression.shape == (1, 1)
 
         self._potential_s = expression
-        self._potential_n = sympy.lambdify(self._variables, self._potential_s[0,0], "numpy")
+        self._potential_n = sympy.lambdify(self._variables, self._potential_s[0, 0], "numpy")
 
         # The cached eigenvalues, symbolic expressions and evaluatable functions
         self._eigenvalues_s = None
@@ -111,7 +111,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Put the result in correct shape (1, #gridnodes)
         N = grid.get_number_nodes(overall=True)
-        result = [ values.reshape((1,N)) ]
+        result = [values.reshape((1, N))]
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:
@@ -146,10 +146,6 @@ class MatrixPotential1S(MatrixPotential):
         :param as_matrix: Dummy parameter which has no effect here.
         :return: A list containing a single numpy ndarray of shape :math:`(N_1, ... ,N_D)`.
         """
-        # This is the correct solution but we will never use the values
-        #if self._eigenvalues_n is None:
-        #    self.calculate_eigenvalues()
-
         # Just evaluate the potential
         return self.evaluate_at(grid, entry=entry, as_matrix=as_matrix)
 
@@ -159,9 +155,7 @@ class MatrixPotential1S(MatrixPotential):
         In the scalar case this is just the value :math:`1`.
         Note: This function is idempotent and the eigenvectors are memoized for later reuse.
         """
-        # This is the correct solution but we will never use the values
-        #self._eigenvectors_s = sympy.Matrix([[1]])
-        #self._eigenvectors_n = sympy.lambdify(self._variables, self._eigenvectors_s, "numpy"))
+        # We will never use the values
         pass
 
 
@@ -177,14 +171,10 @@ class MatrixPotential1S(MatrixPotential):
         :type entry: A singly python  integer.
         :return: A list containing the numpy ndarrays, all of shape :math:`(1, |\Gamma|)`.
         """
-        # This is the correct solution but we will never use the values
-        #if self._eigenvectors_n is None:
-        #    self.calculate_eigenvectors()
         # TODO: Rethink about the 'entry' parameter here. Do we need it?
         grid = self._grid_wrap(grid)
-        #shape = [1] + list(grid.get_number_nodes())
         shape = (1, grid.get_number_nodes(overall=True))
-        return tuple([ numpy.ones(shape, dtype=numpy.complexfloating) ])
+        return tuple([numpy.ones(shape, dtype=numpy.complexfloating)])
 
 
     def calculate_exponential(self, factor=1):
@@ -195,7 +185,7 @@ class MatrixPotential1S(MatrixPotential):
 
         :param factor: The prefactor :math:`\alpha` in the exponential.
         """
-        self._exponential_s = sympy.exp(factor*self._potential_s[0,0])
+        self._exponential_s = sympy.exp(factor * self._potential_s[0, 0])
         self._exponential_n = sympy.lambdify(self._variables, self._exponential_s, "numpy")
 
 
@@ -221,7 +211,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Put the result in correct shape (1, #gridnodes)
         N = grid.get_number_nodes(overall=True)
-        result = [ values.reshape((1,N)) ]
+        result = [values.reshape((1, N))]
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:
@@ -259,7 +249,7 @@ class MatrixPotential1S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        J = numpy.zeros((D,N), dtype=numpy.complexfloating)
+        J = numpy.zeros((D, N), dtype=numpy.complexfloating)
 
         for row in range(D):
             J[row, :] = self._jacobian_n[row](*nodes)
@@ -274,7 +264,7 @@ class MatrixPotential1S(MatrixPotential):
         """
         if self._hessian_s is None:
             # TODO: Add symbolic simplification
-            self._hessian_s = sympy.hessian(self._potential_s[0,0], self._variables)
+            self._hessian_s = sympy.hessian(self._potential_s[0, 0], self._variables)
             self._hessian_n = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in self._hessian_s)
 
 
@@ -296,15 +286,15 @@ class MatrixPotential1S(MatrixPotential):
         D = self._dimension
         N = grid.get_number_nodes(overall=True)
 
-        H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
+        H = numpy.zeros((N, D, D), dtype=numpy.complexfloating)
 
         for row in range(D):
             for col in range(D):
-                H[:, row, col] = self._hessian_n[row*D+col](*nodes)
+                H[:, row, col] = self._hessian_n[row * D + col](*nodes)
 
         # 'squeeze' would be dangerous here, make sure it works in the 1D case too
         if N == 1:
-            H = H[0,:,:]
+            H = H[0, :, :]
 
         return H
 
@@ -321,8 +311,8 @@ class MatrixPotential1S(MatrixPotential):
         self.calculate_hessian()
 
         # Construct function to evaluate the Taylor approximation at point q at the given nodes
-        self._taylor_eigen_s = [ (0, self._eigenvalues_s), (1, self._jacobian_s), (2, self._hessian_s) ]
-        self._taylor_eigen_n = [ (0, self._eigenvalues_n), (1, self._jacobian_n), (2, self._hessian_n) ]
+        self._taylor_eigen_s = [(0, self._eigenvalues_s), (1, self._jacobian_s), (2, self._hessian_s)]
+        self._taylor_eigen_n = [(0, self._eigenvalues_n), (1, self._jacobian_n), (2, self._hessian_n)]
 
 
     def evaluate_local_quadratic_at(self, grid, diagonal_component=None):
@@ -338,7 +328,7 @@ class MatrixPotential1S(MatrixPotential):
         grid = self._grid_wrap(grid)
 
         # TODO: Relate this to the _taylor_eigen_{s,n} data
-        V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+        V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component, diagonal_component))
         J = self.evaluate_jacobian_at(grid)
         H = self.evaluate_hessian_at(grid)
 
@@ -359,17 +349,17 @@ class MatrixPotential1S(MatrixPotential):
 
         # Point q where the Taylor series is computed
         # This is a column vector q = (q1, ... ,qD)
-        qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._variables) ]
+        qs = [sympy.Symbol("q" + str(i)) for i, v in enumerate(self._variables)]
 
-        pairs = [ (xi,qi) for xi,qi in zip(self._variables, qs) ]
+        pairs = [(xi, qi) for xi, qi in zip(self._variables, qs)]
 
         V = self._eigenvalues_s.subs(pairs)
         J = self._jacobian_s.subs(pairs)
         H = self._hessian_s.subs(pairs)
 
         # Symbolic expression for the quadratic Taylor expansion term
-        xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._variables, qs) ])
-        quadratic = V + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+        xmq = sympy.Matrix([(xi - qi) for xi, qi in zip(self._variables, qs)])
+        quadratic = V + J.T * xmq + sympy.Rational(1, 2) * xmq.T * H * xmq
 
         # Symbolic simplification may fail
         if self._try_simplify:
@@ -392,7 +382,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Construct functions to evaluate the approximation at point q at the given nodes
         # The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]
-        self._remainder_n = tuple([ sympy.lambdify(list(self._variables) + qs, self._remainder_s[0,0], "numpy") ])
+        self._remainder_n = tuple([sympy.lambdify(list(self._variables) + qs, self._remainder_s[0, 0], "numpy")])
 
 
     def evaluate_local_remainder_at(self, grid, position, diagonal_component=None, entry=None):
@@ -420,7 +410,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # Put the result in correct shape (1, #gridnodes)
         N = grid.get_number_nodes(overall=True)
-        result = [ values.reshape((1,N)) ]
+        result = [values.reshape((1, N))]
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:

@@ -36,7 +36,7 @@ class Initializer(object):
             values = packet.evaluate_at(X, prefactor=True)
 
             # Reshape values into hypercubic shape
-            values = [ val.reshape(grid.get_number_nodes()) for val in values ]
+            values = [val.reshape(grid.get_number_nodes()) for val in values]
             Psi.append(values)
 
         # TODO: Maybe sum up immediately instead of at the end to reduce memory usage

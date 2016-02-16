@@ -84,8 +84,8 @@ class SymbolicIntegral0(SymbolicIntegral):
 
         # TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2
         #       but q1 \neq q2 and p1 \neq p2.
-        pf = (self._f[0,l] * 2**(-l/2.0) * self._I0 *
-              (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-l/2.0))
+        pf = (self._f[0, l] * 2**(-l / 2.0) * self._I0 *
+              (1.0j * conjugate(P1) * Q2 - 1.0j * conjugate(Q1) * P2)**(-l / 2.0))
 
         S = self._pfl[l] * self._Hl[l]
 
@@ -119,13 +119,13 @@ class SymbolicIntegral0(SymbolicIntegral):
 
         # Factorials
         f = factorial(arange(makl))
-        self._f = 1.0 / sqrt(f[:L].reshape(1,-1))
+        self._f = 1.0 / sqrt(f[:L].reshape(1, -1))
 
         # Note: formula currently fails for non-inhomogeneous case
         #       because of divisions by zero in the two args below.
-        argl = ((1.0j*conjugate(P1)*(q1-q2) - 1.0j*conjugate(Q1)*(p1-p2)) /
-                (sqrt(1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) *
-                 sqrt(1.0j*conjugate(P1)*Q2 - 1.0j*conjugate(Q1)*P2)))
+        argl = ((1.0j * conjugate(P1) * (q1 - q2) - 1.0j * conjugate(Q1) * (p1 - p2)) /
+                (sqrt(1.0j * conjugate(Q2 * P1) - 1.0j * conjugate(Q1 * P2)) *
+                 sqrt(1.0j * conjugate(P1) * Q2 - 1.0j * conjugate(Q1) * P2)))
 
         # TODO: Better test for failure?
         if self._doraise and isnan(squeeze(argl)):
@@ -135,10 +135,10 @@ class SymbolicIntegral0(SymbolicIntegral):
         # hence we have that k-j can be in [K-1, K-2, ..., K-1-min(K-1,L-1)]
         # and similar for l-j we have [L-1, L-2, ..., L-1-min(K-1,L-1)]
         # where both K-1-min(K-1,L-1) and L-1-min(K-1,L-1) are non-negative.
-        self._Hl = self._evaluate_hermite(L-1, 1.0/eps * argl)
+        self._Hl = self._evaluate_hermite(L - 1, 1.0 / eps * argl)
 
-        il = arange(L).reshape(-1,1)
-        self._pfl = ((1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) ** (il/2.0)).reshape(L)
+        il = arange(L).reshape(-1, 1)
+        self._pfl = ((1.0j * conjugate(Q2 * P1) - 1.0j * conjugate(Q1 * P2)) ** (il / 2.0)).reshape(L)
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)

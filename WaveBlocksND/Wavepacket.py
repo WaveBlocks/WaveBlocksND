@@ -54,7 +54,7 @@ class Wavepacket(object):
         # in case the timer resolution is too small. The 'time' part
         # assures that in case one instance gets deleted and another
         # created at the same location, their IDs still differ.
-        self._id = hashlib.md5(str(id(self))+str(time.time())).hexdigest()
+        self._id = hashlib.md5(str(id(self)) + str(time.time())).hexdigest()
 
 
     def get_id(self):

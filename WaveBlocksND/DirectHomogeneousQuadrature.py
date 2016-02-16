@@ -84,7 +84,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._operator = lambda nodes, dummy, entry=None: ones((1, nodes.shape[1])) if entry[0] == entry[1] else zeros((1, nodes.shape[1]))
         else:
             if matrix is False:
                 self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
@@ -104,8 +104,8 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
                      selecting the :math:`\Phi_j` for which we precompute values.
         """
         # Evaluate only the bases we need
-        N  = self._packet.get_number_components()
-        bases = [ None for n in range(N) ]
+        N = self._packet.get_number_components()
+        bases = [None for n in range(N)]
 
         for row in rows:
             if bases[row] is None:
@@ -122,7 +122,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         if self._eval_at_once is True:
             self._values = tuple(self._operator(self._nodes, q))
         else:
-            self._values = tuple([ self._operator(self._nodes, q, entry=(r,c)) for r in range(N) for c in range(N) ])
+            self._values = tuple([self._operator(self._nodes, q, entry=(r, c)) for r in range(N) for c in range(N)])
         # Recheck what we got
         assert type(self._values) is tuple
         assert len(self._values) == N**2
@@ -170,9 +170,9 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         """
         D = self._packet.get_dimension()
         eps = self._packet.get_eps()
-        N  = self._packet.get_number_components()
+        N = self._packet.get_number_components()
         # Main part of the integrand
-        factor = (eps**D * self._weights * self._values[row*N + col]).reshape((-1,))
+        factor = (eps**D * self._weights * self._values[row * N + col]).reshape((-1,))
         # Sum up matrices over all quadrature nodes
         M = einsum("k,ik,jk", factor, conjugate(self._bases[row]), self._bases[col])
         return M

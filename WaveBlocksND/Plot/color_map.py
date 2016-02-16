@@ -26,14 +26,14 @@ def color_map(data, phase=None, modulus=None, darken=1.0):
     :param axes: The axes instance used for plotting.
     """
     if len(data.shape) == 1:
-        hsv_colors = empty((1,)+data.shape+(3,))
+        hsv_colors = empty((1,) + data.shape + (3,))
     else:
-        hsv_colors = empty(data.shape+(3,))
+        hsv_colors = empty(data.shape + (3,))
 
     if phase is None:
         phase = angle(data)
 
-    hsv_colors[..., 0] = 0.5*fmod(phase+2*pi,2*pi)/pi
+    hsv_colors[..., 0] = 0.5 * fmod(phase + 2 * pi, 2 * pi) / pi
     hsv_colors[..., 1] = 1.0
     hsv_colors[..., 2] = 1.0
 
@@ -43,10 +43,10 @@ def color_map(data, phase=None, modulus=None, darken=1.0):
             modulus = abs(data)
 
         # Lightness
-        hsv_colors[...,2] = 2*arctan2(real(modulus),darken)/pi
+        hsv_colors[..., 2] = 2 * arctan2(real(modulus), darken) / pi
 
         # Saturation
-        l = hsv_colors[...,2]
-        hsv_colors[...,1] = where(l <= 0.5, 2*l, 2*(1-l))
+        l = hsv_colors[..., 2]
+        hsv_colors[..., 1] = where(l <= 0.5, 2 * l, 2 * (1 - l))
 
     return hsv_to_rgb(hsv_colors)

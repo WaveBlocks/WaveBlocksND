@@ -50,7 +50,7 @@ class GradientLinearCombinationHAWP(Gradient):
         eps = lincomb.get_eps()
         G = GradientHAWP()
 
-        new_lincombs = [ LinearCombinationOfHAWPs(D, N, eps) for d in range(D) ]
+        new_lincombs = [LinearCombinationOfHAWPs(D, N, eps) for d in range(D)]
 
         # Handle each wavepacket individually
         for j in range(J):

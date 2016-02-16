@@ -37,7 +37,7 @@ class HyperCubicShape(BasisShape):
 
         # The limits Ki for each axis
         limits = tuple(limits)
-        if all([int(l)>0 for l in limits]):
+        if all([int(l) > 0 for l in limits]):
             self._limits = limits
         else:
             raise ValueError("All limits have to be positive.")
@@ -46,9 +46,9 @@ class HyperCubicShape(BasisShape):
 
         # The linear mapping k -> index for the basis
         iil = self._get_index_iterator_lex()
-        self._lima = {k:index for index, k in enumerate(iil)}
+        self._lima = {k: index for index, k in enumerate(iil)}
         # And the inverse mapping
-        self._lima_inv = {v:k for k, v in self._lima.items()}
+        self._lima_inv = {v: k for k, v in self._lima.items()}
 
         # The basis size
         self._basissize = len(self._lima)
@@ -57,8 +57,7 @@ class HyperCubicShape(BasisShape):
     def __str__(self):
         r""":return: A string describing the basis shape :math:`\mathfrak{K}`.
         """
-        s = ("Hypercubic basis shape of dimension "+str(self._dimension)+
-             " and with limits "+str(self._limits)+".")
+        s = ("Hypercubic basis shape of dimension "+str(self._dimension)+" and with limits "+str(self._limits)+".")
         return s
 
 
@@ -133,7 +132,7 @@ class HyperCubicShape(BasisShape):
         r"""Extend the basis shape such that (at least) all neighbours of all
         boundary nodes are included in the extended basis shape.
         """
-        extended_limits = [ l+1 for l in self._limits ]
+        extended_limits = [l + 1 for l in self._limits]
         return HyperCubicShape(extended_limits)
 
 
@@ -158,7 +157,7 @@ class HyperCubicShape(BasisShape):
                 for d in range(self._dimension):
                     if z[d] >= bounds[d]:
                         z[d] = 0
-                        z[d+1] += 1
+                        z[d + 1] += 1
 
         return index_iterator_lex(bounds)
 
@@ -171,12 +170,12 @@ class HyperCubicShape(BasisShape):
             bounds = self._limits[:]
 
             # The counter
-            z = [ 0 for i in range(self._dimension + 1) ]
+            z = [0 for i in range(self._dimension + 1)]
 
             # Iterate over all valid stencil points
             while not z[-1] > 0:
                 # Otherwise we would yield k = (0,...,0) for limits = [1,...,1]
-                if not z[d] > bounds[d]-2:
+                if not z[d] > bounds[d] - 2:
                     yield tuple(z[:-1])
 
                 # Increase index in the dimension we build the chain
@@ -184,14 +183,14 @@ class HyperCubicShape(BasisShape):
 
                 # Check if we are done with the current base point
                 # If yes, move base point and start a new chain
-                if z[d] > bounds[d]-2:
+                if z[d] > bounds[d] - 2:
                     z[d] = 0
-                    z[d-1] += 1
+                    z[d - 1] += 1
 
                     for i in reversed(range(d)):
-                        if z[i] > bounds[i]-1:
+                        if z[i] > bounds[i] - 1:
                             z[i] = 0
-                            z[i-1] += 1
+                            z[i - 1] += 1
 
         return index_iterator_chain(direction)
 
@@ -232,7 +231,7 @@ class HyperCubicShape(BasisShape):
             return self._get_index_iterator_mag()
         # TODO: Consider boundary node only iterator
         else:
-            raise ValueError("Unknown iterator mode: "+str(mode)+".")
+            raise ValueError("Unknown iterator mode: {}.".format(mode))
 
 
     def get_limits(self):
@@ -272,13 +271,13 @@ class HyperCubicShape(BasisShape):
         nbh = []
 
         if direction is not None:
-            directions = [ direction ]
+            directions = [direction]
         else:
             directions = range(self._dimension)
 
         for d in directions:
-            nfw = tuple(nbfw[:,d])
-            nbw = tuple(nbbw[:,d])
+            nfw = tuple(nbfw[:, d])
+            nbw = tuple(nbbw[:, d])
 
             # TODO: Try to simplify these nested if blocks
             if selection in ("backward", "all", None):

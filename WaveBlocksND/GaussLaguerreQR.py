@@ -32,11 +32,9 @@ class GaussLaguerreQR(QuadratureRule):
 
         :raise: :py:class:`ValueError` if order ``order`` is not 1 or above.
 
-        .. warning::
-
-		This quadrature is made specifically for our needs. Therefore the default
-		values of :math:`\alpha` is not 0 but set to :math:`-\frac{1}{2}`. There
-		is hope that this will give less confusion and hidden errors.
+        .. warning:: This quadrature is made specifically for our needs. Therefore the default
+                     values of :math:`\alpha` is not 0 but set to :math:`-\frac{1}{2}`. There
+                     is hope that this will give less confusion and hidden errors.
         """
         # Quadrature has to have at least a single (node,weight) pair.
         if not order > 0:
@@ -58,10 +56,10 @@ class GaussLaguerreQR(QuadratureRule):
         self._number_nodes = nodes.size
 
         # The quadrature nodes \gamma.
-        self._nodes = real(nodes).reshape((1,self._number_nodes))
+        self._nodes = real(nodes).reshape((1, self._number_nodes))
 
         # The quadrature weights \omega.
-        self._weights = real(weights).reshape((1,self._number_nodes))
+        self._weights = real(weights).reshape((1, self._number_nodes))
 
 
     def __str__(self):

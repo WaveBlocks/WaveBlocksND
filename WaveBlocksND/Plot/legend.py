@@ -29,21 +29,19 @@ def legend(*args, **kwargs):
             y = bbox[0][1]
             w = bbox[1][0]
             h = bbox[1][1]
-            
-            axes.set_position([x,y,0.5,0.5])
 
-            #legend(bbox_to_anchor=(1.05, 1), loc=2, borderaxespad=0.)
-  
-            leg = pylab.legend(loc=(0,0), *args, **kwargs)
+            axes.set_position([x, y, 0.5, 0.5])
+
+            leg = pylab.legend(loc=(0, 0), *args, **kwargs)
             frame = leg.get_frame()
             lw = frame.get_width()
             lh = frame.get_height()
-            
-            scale = lw / (1.0*w)
-            
-            leg._loc = (x+w,y+h-lh)
 
-            axes.set_position([x,y,0.7*((w)/scale),0.9*h])
+            scale = lw / (1.0 * w)
+
+            leg._loc = (x + w, y + h - lh)
+
+            axes.set_position([x, y, 0.7 * (w / scale), 0.9 * h])
 
             pylab.draw_if_interactive()
             return leg

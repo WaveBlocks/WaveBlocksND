@@ -101,8 +101,8 @@ class SimulationLoopFourier(SimulationLoop):
         # Note: We do not save any data here
 
         # Run the simulation for a given number of timesteps
-        for i in range(1, nsteps+1):
-            print(" doing timestep "+str(i))
+        for i in range(1, nsteps + 1):
+            print(" doing timestep {}".format(i))
 
             self.propagator.propagate()
 

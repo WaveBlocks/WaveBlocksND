@@ -28,7 +28,7 @@ def plotcm(matrix, phase=None, modulus=None, darken=None, axes=None, **kwargs):
     # TODO: Allow to specify axes
 
     nr, nc = matrix.shape
-    extent = [-0.5, nc-0.5, nr-0.5, -0.5]
+    extent = [-0.5, nc - 0.5, nr - 0.5, -0.5]
 
     kw = {'extent': extent,
           'origin': 'upper',

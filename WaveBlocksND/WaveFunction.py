@@ -11,7 +11,7 @@ are some methods for calculating obervables as for example
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, atleast_1d, product, array, conjugate, sum, square
+from numpy import zeros, floating, complexfloating, atleast_1d, product, array, conjugate, sum, square
 from numpy.fft import fftn
 from scipy import sqrt
 from scipy import linalg as la
@@ -82,10 +82,10 @@ class WaveFunction(object):
 
         if flat is None:
             # Do not change the shape
-            return [ self._values[c] for c in atleast_1d(components) ]
+            return [self._values[c] for c in atleast_1d(components)]
         elif flat is True:
             # Return as flat array
-            return [ self._values[c].reshape((self._number_components, -1)) for c in atleast_1d(components) ]
+            return [self._values[c].reshape((self._number_components, -1)) for c in atleast_1d(components)]
         elif flat is False:
             # Return as non-flat array
             # Not implemented yet, not needed yet
@@ -147,11 +147,12 @@ class WaveFunction(object):
         # Compute the prefactor
         T = self._grid.get_extensions()
         N = self._grid.get_number_nodes()
-        prefactor = product( sqrt(array(T)) / (1.0*array(N)) )
+        prefactor = product(sqrt(array(T)) / array(N).astype(floating))
+
 
         # Compute the norm for all components specified
         # TODO: Consider splitting into cases `fft` versus `fftn`
-        norms = prefactor * array([ la.norm(fftn(self._values[component])) for component in atleast_1d(components) ])
+        norms = prefactor * array([la.norm(fftn(self._values[component])) for component in atleast_1d(components)])
 
         # Sum the individual norms if requested
         if summed is True:
@@ -177,18 +178,18 @@ class WaveFunction(object):
         #              AND avoid storing fft of all components.
 
         # Fourier transform the components
-        ftc = [ fftn(component) for component in self._values ]
+        ftc = [fftn(component) for component in self._values]
 
         # Compute the prefactor
         T = self._grid.get_extensions()
         N = self._grid.get_number_nodes()
-        prefactor = product( array(T) / (1.0*array(N)**2) )
+        prefactor = product(array(T) / array(N).astype(floating)**2)
 
         # TODO: Consider taking the result of this call as input for efficiency?
         KO = kinetic.evaluate_at()
 
         # Compute the braket in Fourier space
-        ekin = [ prefactor * sum(conjugate(item) * KO * item) for item in ftc ]
+        ekin = [prefactor * sum(conjugate(item) * KO * item) for item in ftc]
 
         if summed is True:
             ekin = sum(ekin)
@@ -209,23 +210,23 @@ class WaveFunction(object):
         # Compute the prefactor
         T = self._grid.get_extensions()
         N = self._grid.get_number_nodes()
-        prefactor = product( array(T) / (1.0*array(N)**2) )
+        prefactor = product(array(T) / array(N).astype(floating)**2)
 
         # Reshape from (1, prod_d^D N_d) to (N_1, ..., N_D) shape
-        potential = [ pot.reshape(N) for pot in potential ]
+        potential = [pot.reshape(N) for pot in potential]
 
         # Apply the matrix potential to the ket
-        tmp = [ zeros(component.shape, dtype=complexfloating) for component in self._values ]
+        tmp = [zeros(component.shape, dtype=complexfloating) for component in self._values]
         for row in range(self._number_components):
             for col in range(self._number_components):
-                tmp[row] = tmp[row] + potential[row*self._number_components+col] * self._values[col]
+                tmp[row] = tmp[row] + potential[row * self._number_components + col] * self._values[col]
 
         # Fourier transform the components
-        ftcbra = [ fftn(component) for component in self._values ]
-        ftcket = [ fftn(component) for component in tmp ]
+        ftcbra = [fftn(component) for component in self._values]
+        ftcket = [fftn(component) for component in tmp]
 
         # Compute the braket in Fourier space
-        epot = [ prefactor * sum(conjugate(cbra) * cket) for cbra, cket in zip(ftcbra, ftcket) ]
+        epot = [prefactor * sum(conjugate(cbra) * cket) for cbra, cket in zip(ftcbra, ftcket)]
 
         if summed is True:
             epot = sum(epot)

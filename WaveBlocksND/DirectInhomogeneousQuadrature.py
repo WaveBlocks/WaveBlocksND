@@ -87,7 +87,7 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._operator = lambda nodes, dummy, entry=None: ones((1, nodes.shape[1])) if entry[0] == entry[1] else zeros((1, nodes.shape[1]))
         else:
             if matrix is False:
                 self._operator = lambda nodes, dummy, entry=None: operator(nodes, entry=entry)
@@ -188,16 +188,16 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         # Operator should support the component notation for efficiency
         if self._eval_at_once is True:
             # TODO: Sure, this is inefficient, but we can not do better right now.
-            values = self._operator(nodes, Pimix[0])[row*N+col]
+            values = self._operator(nodes, Pimix[0])[row * N + col]
         else:
-            values = self._operator(nodes, Pimix[0], entry=(row,col))
+            values = self._operator(nodes, Pimix[0], entry=(row, col))
         # Recheck what we got
         assert type(values) is ndarray
-        assert values.shape == (1,self._QR.get_number_nodes())
+        assert values.shape == (1, self._QR.get_number_nodes())
         # Main part of the integrand
         factor = (eps**D * values * self._weights * det(Pimix[1])).reshape((-1,))
         # Sum up matrices over all quadrature nodes
         M = einsum("k,ik,jk", factor, conjugate(basisr), basisc)
         # Compute global phase difference
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
         return phase * M

@@ -12,7 +12,7 @@ import pickle
 import numpy as np
 
 
-def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepacketsize=None, blockid=0, key=("q","p","Q","P","S")):
+def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepacketsize=None, blockid=0, key=("q", "p", "Q", "P", "S")):
     r"""Add storage for the linear combination of Hagedorn wavepackets.
 
     :param parameters: An :py:class:`ParameterProvider` instance with at
@@ -77,24 +77,24 @@ def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepack
     grp_lc.create_dataset("timegrid_wp_coefficients", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
     grp_lc.create_dataset("lincomb_size", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=J)
     # Linear combination coefficients
-    grp_lc.create_dataset("lc_coefficients", (T,J), dtype=np.complexfloating, chunks=(1,csJs), maxshape=(Ts,Js))
+    grp_lc.create_dataset("lc_coefficients", (T, J), dtype=np.complexfloating, chunks=(1, csJs), maxshape=(Ts, Js))
     # Linear combination wavepackets
-    grp_lc.create_dataset("basis_shapes_hashes", (T,J,N), dtype=np.integer, chunks=(1,csJs,1), maxshape=(Ts,Js,N))
-    grp_lc.create_dataset("basis_sizes", (T,J,N), dtype=np.integer, chunks=(1,csJs,1), maxshape=(Ts,Js,N))
+    grp_lc.create_dataset("basis_shapes_hashes", (T, J, N), dtype=np.integer, chunks=(1, csJs, 1), maxshape=(Ts, Js, N))
+    grp_lc.create_dataset("basis_sizes", (T, J, N), dtype=np.integer, chunks=(1, csJs, 1), maxshape=(Ts, Js, N))
     # Wavepacket parameters
-    if "q" in key and not "q" in grp_wppi.keys():
-        grp_wppi.create_dataset("q", (T,J,D), dtype=np.complexfloating, chunks=(1,csJs,D), maxshape=(Ts,Js,D))
-    if "p" in key and not "p" in grp_wppi.keys():
-        grp_wppi.create_dataset("p", (T,J,D), dtype=np.complexfloating, chunks=(1,csJs,D), maxshape=(Ts,Js,D))
-    if "Q" in key and not "Q" in grp_wppi.keys():
-        grp_wppi.create_dataset("Q", (T,J,D,D), dtype=np.complexfloating, chunks=(1,csJs,D,D), maxshape=(Ts,Js,D,D))
-    if "P" in key and not "P" in grp_wppi.keys():
-        grp_wppi.create_dataset("P", (T,J,D,D), dtype=np.complexfloating, chunks=(1,csJs,D,D), maxshape=(Ts,Js,D,D))
-    if "S" in key and not "S" in grp_wppi.keys():
-        grp_wppi.create_dataset("S", (T,J,1), dtype=np.complexfloating, chunks=(1,csJs,1), maxshape=(Ts,Js,1))
+    if "q" in key and "q" not in grp_wppi.keys():
+        grp_wppi.create_dataset("q", (T, J, D), dtype=np.complexfloating, chunks=(1, csJs, D), maxshape=(Ts, Js, D))
+    if "p" in key and "p" not in grp_wppi.keys():
+        grp_wppi.create_dataset("p", (T, J, D), dtype=np.complexfloating, chunks=(1, csJs, D), maxshape=(Ts, Js, D))
+    if "Q" in key and "Q" not in grp_wppi.keys():
+        grp_wppi.create_dataset("Q", (T, J, D, D), dtype=np.complexfloating, chunks=(1, csJs, D, D), maxshape=(Ts, Js, D, D))
+    if "P" in key and "P" not in grp_wppi.keys():
+        grp_wppi.create_dataset("P", (T, J, D, D), dtype=np.complexfloating, chunks=(1, csJs, D, D), maxshape=(Ts, Js, D, D))
+    if "S" in key and "S" not in grp_wppi.keys():
+        grp_wppi.create_dataset("S", (T, J, 1), dtype=np.complexfloating, chunks=(1, csJs, 1), maxshape=(Ts, Js, 1))
     # Wavepacket coefficients
     for i in range(N):
-        grp_wpci.create_dataset("c_"+str(i), (T,J,K), dtype=np.complexfloating, chunks=(1,csJs,csKs), maxshape=(Ts,Js,Ks))
+        grp_wpci.create_dataset("c_"+str(i), (T, J, K), dtype=np.complexfloating, chunks=(1, csJs, csKs), maxshape=(Ts, Js, Ks))
 
     # Attach pointer to timegrid
     daset_tg_lc.attrs["pointer"] = 0
@@ -155,8 +155,8 @@ def save_lincombhawp_coefficients(self, coefficients, timestep, blockid=0):
     self._srf[pathlcs][timeslot] = J
     self.must_resize(pathd, timeslot)
     if not J == 0:
-        self.must_resize(pathd, J-1, axis=1)
-        self._srf[pathd][timeslot,:J] = np.squeeze(coefficients)
+        self.must_resize(pathd, J - 1, axis=1)
+        self._srf[pathd][timeslot, :J] = np.squeeze(coefficients)
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -166,7 +166,7 @@ def save_lincombhawp_coefficients(self, coefficients, timestep, blockid=0):
     self._srf[pathtg].attrs["pointer"] += 1
 
 
-def save_lincombhawp_wavepacket_parameters(self, parameters, timestep, blockid=0, key=("q","p","Q","P","S")):
+def save_lincombhawp_wavepacket_parameters(self, parameters, timestep, blockid=0, key=("q", "p", "Q", "P", "S")):
     r"""Save the parameter set :math:`\Pi` of the Hagedorn wavepacket :math:`\Psi` to a file.
 
     :param parameters: The parameter set of the Hagedorn wavepacket.
@@ -191,9 +191,9 @@ def save_lincombhawp_wavepacket_parameters(self, parameters, timestep, blockid=0
 
     # Write the parameters
     for key, item in zip(key, parameters):
-        self.must_resize(pathd+key, timeslot)
-        self.must_resize(pathd+key, J-1, axis=1)
-        self._srf[pathd+key][timeslot,:J,...] = item
+        self.must_resize(pathd + key, timeslot)
+        self.must_resize(pathd + key, J - 1, axis=1)
+        self._srf[pathd + key][timeslot, :J, ...] = item
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -224,7 +224,7 @@ def save_lincombhawp_wavepacket_coefficients(self, coefficients, basisshapes, ti
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # Write the lincomb size
-    basissizes = [ K.get_basis_size() for K in basisshapes ]
+    basissizes = [K.get_basis_size() for K in basisshapes]
     J = len(basissizes)
 
     self.must_resize(pathlcs, timeslot)
@@ -232,14 +232,14 @@ def save_lincombhawp_wavepacket_coefficients(self, coefficients, basisshapes, ti
 
     # Write all basis sizes
     self.must_resize(pathbsi, timeslot)
-    self.must_resize(pathbsi, J-1, axis=1)
-    self._srf[pathbsi][timeslot,:J,0] = np.array(basissizes)
+    self.must_resize(pathbsi, J - 1, axis=1)
+    self._srf[pathbsi][timeslot, :J, 0] = np.array(basissizes)
 
     # Write basis shape hashes
-    basisshapeshashes = np.array([ hash(K) for K in basisshapes ])
+    basisshapeshashes = np.array([hash(K) for K in basisshapes])
     self.must_resize(pathbsh, timeslot)
-    self.must_resize(pathbsh, J-1, axis=1)
-    self._srf[pathbsh][timeslot,:J,0] = basisshapeshashes
+    self.must_resize(pathbsh, J - 1, axis=1)
+    self._srf[pathbsh][timeslot, :J, 0] = basisshapeshashes
 
     # Write the wavepackets coefficients data
     coefficients = np.atleast_2d(coefficients)
@@ -249,9 +249,9 @@ def save_lincombhawp_wavepacket_coefficients(self, coefficients, basisshapes, ti
     pathc = pathd+"c_"+str(index)
     # Do we have to resize due to changed number of packets or coefficients
     self.must_resize(pathc, timeslot)
-    self.must_resize(pathc, j-1, axis=1)
-    self.must_resize(pathc, k-1, axis=2)
-    self._srf[pathc][timeslot,:j,:k] = coefficients
+    self.must_resize(pathc, j - 1, axis=1)
+    self.must_resize(pathc, k - 1, axis=2)
+    self._srf[pathc][timeslot, :j, :k] = coefficients
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -275,7 +275,7 @@ def save_lincombhawp_wavepacket_basisshapes(self, basisshapes, blockid=0):
         name = "basis_shape_"+str(ha)
 
         # Chech if we already stored this basis shape
-        if not name in self._srf[pathd].keys():
+        if name not in self._srf[pathd].keys():
             # TODO: Consider storing all hashes in one big dataset
             # Create new data set
             daset = self._srf[pathd].create_dataset("basis_shape_"+str(ha), (1,), dtype=np.integer)
@@ -356,13 +356,13 @@ def load_lincombhawp_coefficients(self, timestep=None, blockid=0):
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         J = self._srf[pathlcs][index]
-        return self._srf[pathd][index,:J]
+        return self._srf[pathd][index, :J]
     else:
         index = slice(None)
-        return self._srf[pathd][index,:]
+        return self._srf[pathd][index, :]
 
 
-def load_lincombhawp_wavepacket_parameters(self, timestep=None, blockid=0, key=("q","p","Q","P","S")):
+def load_lincombhawp_wavepacket_parameters(self, timestep=None, blockid=0, key=("q", "p", "Q", "P", "S")):
     r"""Load the wavepacket parameters.
 
     :param timestep: Load only the data of this timestep.
@@ -378,9 +378,9 @@ def load_lincombhawp_wavepacket_parameters(self, timestep=None, blockid=0, key=(
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         J = self._srf[pathlcs][index]
-        params = tuple([ self._srf[pathd+k][index,:J,...] for k in key ])
+        params = tuple([self._srf[pathd + k][index, :J, ...] for k in key])
     else:
-        params = tuple([ self._srf[pathd+k][:,:,...] for k in key ])
+        params = tuple([self._srf[pathd + k][:, :, ...] for k in key])
 
     return params
 
@@ -404,7 +404,7 @@ def load_lincombhawp_wavepacket_coefficients(self, timestep=None, get_hashes=Fal
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         Js = slice(0, self._srf[pathlcs][index])
-        Ks = slice(0, np.max(self._srf[pathbsi][index,:,0]))
+        Ks = slice(0, np.max(self._srf[pathbsi][index, :, 0]))
     else:
         index = slice(None)
         Js = slice(None)
@@ -412,10 +412,10 @@ def load_lincombhawp_wavepacket_coefficients(self, timestep=None, get_hashes=Fal
 
     # Load the hash data
     if get_hashes is True:
-        hashes = self._srf[pathbsh][index,Js]
+        hashes = self._srf[pathbsh][index, Js]
 
     # Load the coefficient data
-    data = self._srf[pathd+"c_"+str(i)][index,Js,Ks]
+    data = self._srf[pathd+"c_"+str(i)][index, Js, Ks]
 
     if get_hashes is True:
         return (hashes, data)
@@ -437,7 +437,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         for ahash in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+ahash].attrs.items():
+            for key, value in self._srf[pathd + ahash].attrs.items():
                 descr[key] = self._load_attr_value(value)
             # 'ahash' is "basis_shape_..." and we want only the "..." part
             descrs[int(ahash[12:])] = descr
@@ -449,11 +449,11 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?
             descr = {}
-            for key, value in self._srf[pathd+name].attrs.items():
+            for key, value in self._srf[pathd + name].attrs.items():
                 descr[key] = self._load_attr_value(value)
             return descr
         else:
-            raise IndexError("No basis shape with given hash "+str(hash))
+            raise IndexError("No basis shape with given hash {}".format(hash))
 
 
 #
@@ -461,7 +461,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
 #
 
 
-def load_lincombhawp(self, timestep, blockid=0, key=("q","p","Q","P","S")):
+def load_lincombhawp(self, timestep, blockid=0, key=("q", "p", "Q", "P", "S")):
     r"""Load a linear combination at a given timestep and return a fully configured
     :py:class:`LinearCombinationOfHAWPs` instance. This method just calls some other
     :py:class:`IOManager` methods in the correct order. It is included only for
@@ -486,10 +486,10 @@ def load_lincombhawp(self, timestep, blockid=0, key=("q","p","Q","P","S")):
     LC = LinearCombinationOfHAWPs(descr["dimension"], descr["ncomponents"], descr["eps"], number_packets=J)
     # Basis shapes
     K_descrs = self.load_lincombhawp_wavepacket_basisshapes(blockid=blockid)
-    K = { ha:BF.create_basis_shape(de) for ha,de in K_descrs.items() }
+    K = {ha: BF.create_basis_shape(de) for ha, de in K_descrs.items()}
     # Coefficients and basis shape hashes
     hashes, coeffs = self.load_lincombhawp_wavepacket_coefficients(timestep=timestep, get_hashes=True, blockid=blockid)
-    Ks = [ K[ha] for ha in np.squeeze(hashes) ]
+    Ks = [K[ha] for ha in np.squeeze(hashes)]
     LC.set_wavepacket_coefficients(coeffs, Ks)
     # Parameters
     Pi = self.load_lincombhawp_wavepacket_parameters(timestep=timestep, blockid=blockid, key=key)

@@ -50,11 +50,11 @@ class TensorProductGrid(DenseGrid):
         # format: [N_1, ..., N_D]
 
         # The limits of the bounding box of the grid
-        self._limits = [ array(limit) for limit in limits ]
+        self._limits = [array(limit) for limit in limits]
         # format: [(min_0,max_0), ..., (min_D,max_D)]
 
         # The extensions (edge length) of the bounding box
-        self._extensions = hstack([ abs(diff(limit)) for limit in self._limits ])
+        self._extensions = hstack([abs(diff(limit)) for limit in self._limits])
 
         # Compute the grid spacings along each axis
         self._meshwidths = self._extensions / squeeze(array(self._number_nodes, dtype=floating))
@@ -76,7 +76,7 @@ class TensorProductGrid(DenseGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        return [ self._limits[i] for i in atleast_1d(axes) ]
+        return [self._limits[i] for i in atleast_1d(axes)]
 
 
     def get_extensions(self, axes=None):
@@ -90,7 +90,7 @@ class TensorProductGrid(DenseGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        return [ self._extensions[i] for i in atleast_1d(axes) ]
+        return [self._extensions[i] for i in atleast_1d(axes)]
 
 
     def get_meshwidths(self, axes=None):
@@ -104,7 +104,7 @@ class TensorProductGrid(DenseGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        return [ self._meshwidths[i] for i in atleast_1d(axes) ]
+        return [self._meshwidths[i] for i in atleast_1d(axes)]
 
 
     def get_number_nodes(self, axes=None, overall=False):
@@ -122,7 +122,7 @@ class TensorProductGrid(DenseGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        values = [ self._number_nodes[i] for i in atleast_1d(axes) ]
+        values = [self._number_nodes[i] for i in atleast_1d(axes)]
 
         if overall is True:
             return reduce(operator.mul, values)
@@ -133,7 +133,7 @@ class TensorProductGrid(DenseGrid):
     def _build_slicers(self):
         # Helper routine to build the necessary slicing
         # objects used for constructing the grid nodes.
-        slicers = [ slice(lims[0], lims[1], step) for lims, step in zip(self._limits, self._meshwidths) ]
+        slicers = [slice(lims[0], lims[1], step) for lims, step in zip(self._limits, self._meshwidths)]
         return slicers
 
 
@@ -142,7 +142,7 @@ class TensorProductGrid(DenseGrid):
         # grids along all axes and caches the result. Each
         # grid is a D-dimensional ndarray of correct shape.
         S = self._build_slicers()
-        self._gridaxes = [ array(ax, dtype=complexfloating) for ax in ogrid[S] ]
+        self._gridaxes = [array(ax, dtype=complexfloating) for ax in ogrid[S]]
 
 
     def _compute_grid_full(self):
@@ -171,7 +171,7 @@ class TensorProductGrid(DenseGrid):
             axes = range(self._dimension)
         axes = atleast_1d(axes)
 
-        return [ self._gridaxes[i] for i in axes ]
+        return [self._gridaxes[i] for i in axes]
 
 
     def get_nodes(self, flat=True, split=False):
@@ -195,9 +195,9 @@ class TensorProductGrid(DenseGrid):
             if split is False:
                 return self._gridnodes
             else:
-                return tuple([ self._gridnodes[i,:] for i in range(self._dimension) ])
+                return tuple([self._gridnodes[i, :] for i in range(self._dimension)])
         else:
             if split is False:
                 return self._gridnodes.reshape([self._dimension] + self.get_number_nodes())
             else:
-                return tuple([ self._gridnodes[i,:].reshape(self.get_number_nodes()) for i in range(self._dimension) ])
+                return tuple([self._gridnodes[i, :].reshape(self.get_number_nodes()) for i in range(self._dimension)])

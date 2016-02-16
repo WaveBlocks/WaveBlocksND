@@ -60,7 +60,7 @@ class BlockFactory(object):
             BS = HyperbolicCutShape(D, K)
 
         else:
-            raise ValueError("Unknown basis shape type "+str(bs_type))
+            raise ValueError("Unknown basis shape type {}".format(bs_type))
 
         return BS
 
@@ -96,7 +96,7 @@ class BlockFactory(object):
                         if BS.contains(index):
                             WP.set_coefficient(component, index, value)
                         else:
-                            print("Warning: dropped coefficient with index "+str(index))
+                            print("Warning: dropped coefficient with index {}".format(index))
 
             # And the inner product
             if "innerproduct" in description:
@@ -110,8 +110,8 @@ class BlockFactory(object):
 
             # Initialize a packet
             WP = HagedornWavepacketInhomogeneous(description["dimension"],
-                                    description["ncomponents"],
-                                    description["eps"])
+                                                 description["ncomponents"],
+                                                 description["eps"])
 
             # Set parameters
             if "Pi" in description:
@@ -138,7 +138,7 @@ class BlockFactory(object):
                 print("Warning: no inner product specified!")
 
         else:
-            raise ValueError("Unknown wavepacket type "+str(wp_type))
+            raise ValueError("Unknown wavepacket type {}".format(wp_type))
 
         return WP
 
@@ -164,7 +164,7 @@ class BlockFactory(object):
             IP = InhomogeneousInnerProduct(QE)
 
         else:
-            raise ValueError("Unknown inner product type "+str(ip_type))
+            raise ValueError("Unknown inner product type {}".format(ip_type))
 
         return IP
 
@@ -199,7 +199,7 @@ class BlockFactory(object):
             QE = SymbolicIntegral()
 
         else:
-            raise ValueError("Unknown quadrature type "+str(qe_type))
+            raise ValueError("Unknown quadrature type {}".format(qe_type))
 
         return QE
 
@@ -211,7 +211,7 @@ class BlockFactory(object):
             op = deepcopy(description["options"])
         else:
             # Per default, adapt qr to follow dynamics
-            op = {"transform":True}
+            op = {"transform": True}
 
         if qr_type == "GaussHermiteQR":
             from WaveBlocksND.GaussHermiteQR import GaussHermiteQR
@@ -243,10 +243,10 @@ class BlockFactory(object):
         elif qr_type == "TensorProductQR":
             from WaveBlocksND.TensorProductQR import TensorProductQR
             # Iteratively create all quadrature rules necessary
-            qrs = [ self.create_quadrature_rule(desc) for desc in description["qr_rules"] ]
+            qrs = [self.create_quadrature_rule(desc) for desc in description["qr_rules"]]
             QR = TensorProductQR(qrs, options=op)
 
         else:
-            raise ValueError("Unknown quadrature rule type "+str(qr_type))
+            raise ValueError("Unknown quadrature rule type {}".format(qr_type))
 
         return QR

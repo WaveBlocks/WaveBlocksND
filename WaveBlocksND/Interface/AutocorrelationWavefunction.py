@@ -7,7 +7,7 @@ Compute the autocorrelations of wavefunctions.
 @license: Modified BSD License
 """
 
-from numpy import array, product, conjugate
+from numpy import array, product, conjugate, floating
 from numpy.fft import fftn, ifftn
 
 from WaveBlocksND import BlockFactory
@@ -55,7 +55,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
 
     # Preconfigure the
     values = iom.load_wavefunction(timestep=0, blockid=blockid)
-    values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
+    values = [values[j, ...] for j in range(parameters["ncomponents"])]
     WFo.set_values(values)
 
     # Project wavefunction values to eigenbasis
@@ -63,7 +63,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
         BT.transform_to_eigen(WFo)
 
     # Fourier transform the values
-    WFo.set_values([ fftn(value) for value in WFo.get_values() ])
+    WFo.set_values([fftn(value) for value in WFo.get_values()])
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
@@ -71,7 +71,7 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
 
         # Retrieve simulation data
         values = iom.load_wavefunction(timestep=step, blockid=blockid)
-        values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
+        values = [values[j, ...] for j in range(parameters["ncomponents"])]
         WFt.set_values(values)
 
         # Project wavefunction values to eigenbasis
@@ -79,17 +79,17 @@ def compute_autocorrelation(iom, obsconfig=None, blockid=0, eigentrafo=True):
             BT.transform_to_eigen(WFt)
 
         # Fourier transform the values
-        WFt.set_values([ fftn(value) for value in WFt.get_values() ])
+        WFt.set_values([fftn(value) for value in WFt.get_values()])
 
         # Compute the prefactor
         T = grid.get_extensions()
         N = grid.get_number_nodes()
-        prefactor = product( array(T) / (1.0*array(N)**2) )
+        prefactor = product(array(T) / array(N).astype(floating)**2)
 
         # Compute the autocorrelation
         # TODO: Consider splitting into cases `fft` versus `fftn`
         valueso = WFo.get_values()
         valuest = WFt.get_values()
-        acs = [prefactor*ifftn(sum(conjugate(valueso[n])*valuest[n])) for n in range(parameters["ncomponents"])]
+        acs = [prefactor * ifftn(sum(conjugate(valueso[n]) * valuest[n])) for n in range(parameters["ncomponents"])]
 
         iom.save_autocorrelation(acs, timestep=step, blockid=blockid)

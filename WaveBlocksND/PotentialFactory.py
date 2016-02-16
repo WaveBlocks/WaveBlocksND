@@ -55,7 +55,7 @@ def create_potential(description):
         raise ValueError("Invalid potential format!")
 
     # Sympify the expression strings for each entry of the potential matrix
-    potmatrix = [ [ sympy.sympify(item) for item in row ] for row in pot ]
+    potmatrix = [[sympy.sympify(item) for item in row] for row in pot]
 
     # Get the default parameters, if any
     if "defaults" in potential_description:

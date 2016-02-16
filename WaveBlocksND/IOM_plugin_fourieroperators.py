@@ -22,7 +22,7 @@ def add_fourieroperators(self, parameters, blockid=0):
     grp_pr = self._srf[self._prefixb+str(blockid)].create_group("propagation")
     grp_op = grp_pr.create_group("operators")
     grp_op.create_dataset("opkinetic", list(parameters["number_nodes"]), np.complexfloating)
-    grp_op.create_dataset("oppotential", [parameters["ncomponents"]**2]+list(parameters["number_nodes"]), np.complexfloating)
+    grp_op.create_dataset("oppotential", [parameters["ncomponents"]**2] + list(parameters["number_nodes"]), np.complexfloating)
 
 
 def delete_fourieroperators(self, blockid=0):
@@ -60,7 +60,7 @@ def save_fourieroperators(self, operators, blockid=0):
     # Save the potential propagation operator
     path = "/"+self._prefixb+str(blockid)+"/propagation/operators/oppotential"
     for index, item in enumerate(operators[1]):
-        self._srf[path][index,...] = item.astype(np.complexfloating)
+        self._srf[path][index, ...] = item.astype(np.complexfloating)
 
 
 def load_fourieroperators(self, blockid=0):
@@ -71,6 +71,6 @@ def load_fourieroperators(self, blockid=0):
     path = "/"+self._prefixb+str(blockid)+"/propagation/operators/"
     opT = self._srf[path+"opkinetic"]
     opV = self._srf[path+"oppotential"]
-    opV = [ opV[index,...] for index in range(opV.shape[0]) ]
+    opV = [opV[index, ...] for index in range(opV.shape[0])]
 
     return (opT, opV)

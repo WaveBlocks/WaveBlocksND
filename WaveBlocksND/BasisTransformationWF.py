@@ -76,8 +76,8 @@ class BasisTransformationWF(BasisTransformation):
         values = wavefunction.get_values()
 
         # Reshape to match eigenvectores
-        oshapes = [ value.shape for value in values ]
-        values = [ value.flatten() for value in values ]
+        oshapes = [value.shape for value in values]
+        values = [value.flatten() for value in values]
 
         # The basis transformation, essentially a matrix multiplication
         N = wavefunction.get_number_components()
@@ -85,11 +85,11 @@ class BasisTransformationWF(BasisTransformation):
         for i in range(N):
             tmp = numpy.zeros(values[0].shape, dtype=numpy.complexfloating)
             for j in range(N):
-                tmp += self._ev[j][i,:] * values[j]
+                tmp += self._ev[j][i, :] * values[j]
             result.append(tmp)
 
         # Reshape back
-        result = [ item.reshape(shape) for item, shape in zip(result, oshapes) ]
+        result = [item.reshape(shape) for item, shape in zip(result, oshapes)]
 
         # Pack values back to wavefunction object
         wavefunction.set_values(result)
@@ -113,8 +113,8 @@ class BasisTransformationWF(BasisTransformation):
         values = wavefunction.get_values()
 
         # Reshape to match eigenvectores
-        oshapes = [ value.shape for value in values ]
-        values = [ value.flatten() for value in values ]
+        oshapes = [value.shape for value in values]
+        values = [value.flatten() for value in values]
 
         # The basis transformation, essentially a matrix multiplication
         N = wavefunction.get_number_components()
@@ -122,11 +122,11 @@ class BasisTransformationWF(BasisTransformation):
         for i in range(N):
             tmp = numpy.zeros(values[0].shape, dtype=numpy.complexfloating)
             for j in range(N):
-                tmp += self._ev[i][j,:] * values[j]
+                tmp += self._ev[i][j, :] * values[j]
             result.append(tmp)
 
         # Reshape back
-        result = [ item.reshape(shape) for item, shape in zip(result, oshapes) ]
+        result = [item.reshape(shape) for item, shape in zip(result, oshapes)]
 
         # Pack values back to wavefunction object
         wavefunction.set_values(result)

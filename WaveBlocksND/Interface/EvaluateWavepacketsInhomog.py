@@ -34,9 +34,9 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
     grid = BlockFactory().create_grid(pp)
 
     # We want to save wavefunctions, thus add a data slot to the data file
-    d = {"ncomponents":parameters["ncomponents"],
-         "number_nodes":pp["number_nodes"],
-         "dimension":parameters["dimension"]}
+    d = {"ncomponents": parameters["ncomponents"],
+         "number_nodes": pp["number_nodes"],
+         "dimension": parameters["dimension"]}
     iom.add_grid(d, blockid=blockid)
     iom.add_wavefunction(d, timeslots=nrtimesteps, flat=True, blockid=blockid)
 
@@ -65,12 +65,12 @@ def compute_evaluate_wavepackets(pp, iom, blockid=0, eigentrafo=True):
         print(" Evaluating inhomogeneous wavepacket at timestep %d" % step)
 
         # Retrieve simulation data
-        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid, key=("q","p","Q","P","S","adQ"))
+        params = iom.load_inhomogwavepacket_parameters(timestep=step, blockid=blockid, key=("q", "p", "Q", "P", "S", "adQ"))
         hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=step, get_hashes=True, blockid=blockid)
 
         # Configure the wavepacket
-        HAWP.set_parameters(params, key=("q","p","Q","P","S","adQ"))
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_parameters(params, key=("q", "p", "Q", "P", "S", "adQ"))
+        HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

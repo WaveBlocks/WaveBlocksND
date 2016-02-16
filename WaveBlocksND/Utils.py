@@ -20,7 +20,7 @@ def meshgrid_nd(arrays):
     arrays = map(squeeze, arrays)
     arrays = tuple(map(atleast_1d, arrays))
 
-    if not len([ None for a in arrays if a.ndim != 1 ]) == 0:
+    if not len([None for a in arrays if a.ndim != 1]) == 0:
         raise ValueError("Arrays must be 1-dimensional")
 
     # The dimension

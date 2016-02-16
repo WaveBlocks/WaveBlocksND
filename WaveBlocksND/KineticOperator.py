@@ -36,13 +36,13 @@ class KineticOperator(object):
         T = grid.get_extensions()
 
         # Fourier domain nodes
-        prefactors = [ t / (2.0*pi) for t in T ]
-        omega = [ fftfreq(n, d=1.0/n) for n in N ]
-        omega = [ o / p for o, p in zip(omega, prefactors) ]
+        prefactors = [t / (2.0 * pi) for t in T]
+        omega = [fftfreq(n, d=1.0 / n) for n in N]
+        omega = [o / p for o, p in zip(omega, prefactors)]
 
         # Reshape properly
-        shape = [-1] + (D-1)*[1]
-        omega = [ o.reshape(roll(shape, i)) for i, o in enumerate(omega) ]
+        shape = [-1] + (D - 1) * [1]
+        omega = [o.reshape(roll(shape, i)) for i, o in enumerate(omega)]
 
         # Compute the dot product of omega with itself
         omega_sqr = reduce(add, map(square, omega))
@@ -56,7 +56,7 @@ class KineticOperator(object):
     def get_fourier_grid_axes(self):
         r"""Return the grid axes of the Fourier space grid :math:`\Omega`.
         """
-        return tuple([ o.copy() for o in self._omega ])
+        return tuple([o.copy() for o in self._omega])
 
 
     def calculate_operator(self, eps=None):

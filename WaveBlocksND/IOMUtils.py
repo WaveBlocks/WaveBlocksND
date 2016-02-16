@@ -23,7 +23,7 @@ def load_wavepacket(iom, timestep, blockid=0):
           built for interactive use only and should not be use in scripts.
     """
     if not iom.has_wavepacket(blockid=blockid):
-        print("There is no wavepacket to load in block "+str(blockid))
+        print("There is no wavepacket to load in block {}".format(blockid))
         return
 
     BF = BlockFactory()
@@ -37,13 +37,13 @@ def load_wavepacket(iom, timestep, blockid=0):
     for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
     # Retrieve simulation data
     params = iom.load_wavepacket_parameters(timestep=timestep, blockid=blockid, key=KEY)
     hashes, coeffs = iom.load_wavepacket_coefficients(timestep=timestep, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWP.set_parameters(params, key=KEY)
-    HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+    HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
     HAWP.set_coefficients(coeffs)
 
     return HAWP
@@ -62,7 +62,7 @@ def load_wavepacket_inhomogeneous(iom, timestep, blockid=0):
           built for interactive use only and should not be use in scripts.
     """
     if not iom.has_inhomogwavepacket(blockid=blockid):
-        print("There is no (inhomogeneous) wavepacket to load in block "+str(blockid))
+        print("There is no (inhomogeneous) wavepacket to load in block {}".format(blockid))
         return
 
     BF = BlockFactory()
@@ -76,13 +76,13 @@ def load_wavepacket_inhomogeneous(iom, timestep, blockid=0):
     for ahash, descr in BS_descr.items():
         BS[ahash] = BF.create_basis_shape(descr)
 
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
     # Retrieve simulation data
     params = iom.load_inhomogwavepacket_parameters(timestep=timestep, blockid=blockid, key=KEY)
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=timestep, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWP.set_parameters(params, key=KEY)
-    HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+    HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
     HAWP.set_coefficients(coeffs)
 
     return HAWP

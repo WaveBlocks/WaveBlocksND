@@ -42,14 +42,14 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         for d in range(self._number_components):
             # Default basis shapes for all components
-            bs = HyperCubicShape( self._dimension*[1] )
-            self._basis_shapes.append(bs)
+            BS = HyperCubicShape(self._dimension * [1])
+            self._basis_shapes.append(BS)
 
             # A Gaussian
-            self._coefficients.append(zeros((bs.get_basis_size(),1), dtype=complexfloating))
+            self._coefficients.append(zeros((BS.get_basis_size(), 1), dtype=complexfloating))
 
         # Cache basis sizes
-        self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
+        self._basis_sizes = [bs.get_basis_size() for bs in self._basis_shapes]
 
         # Default parameters of harmonic oscillator eigenstates
         q = zeros((self._dimension, 1), dtype=complexfloating)
@@ -71,8 +71,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
     def __str__(self):
         r""":return: A string describing the Hagedorn wavepacket :math:`\Psi`.
         """
-        s = ("Homogeneous Hagedorn wavepacket with "+str(self._number_components)
-             +" component(s) in "+str(self._dimension)+" space dimension(s)\n")
+        s = "Homogeneous Hagedorn wavepacket with "+str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n"
         return s
 
 
@@ -123,7 +122,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
         return other
 
 
-    def get_parameters(self, component=None, aslist=False, key=("q","p","Q","P","S")):
+    def get_parameters(self, component=None, aslist=False, key=("q", "p", "Q", "P", "S")):
         r"""Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param component: Dummy parameter for API compatibility with the inhomogeneous packets.
@@ -146,15 +145,15 @@ class HagedornWavepacket(HagedornWavepacketBase):
             elif k == "adQ":
                 Pilist.append(array(self._get_sqrt(component).get(), dtype=complexfloating))
             else:
-                raise KeyError("Invalid parameter key: "+str(key))
+                raise KeyError("Invalid parameter key: {}".format(key))
 
         if aslist is True:
-            return self._number_components * [ Pilist ]
+            return self._number_components * [Pilist]
 
         return Pilist
 
 
-    def set_parameters(self, Pi, component=None, key=("q","p","Q","P","S")):
+    def set_parameters(self, Pi, component=None, key=("q", "p", "Q", "P", "S")):
         r"""Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi`.
 
         :param Pi: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
@@ -163,16 +162,16 @@ class HagedornWavepacket(HagedornWavepacketBase):
         D = self._dimension
         for k, item in zip(key, Pi):
             if k == "q":
-                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                self._Pis[0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, 1)
             elif k == "p":
-                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                self._Pis[1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, 1)
             elif k == "Q":
-                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                self._Pis[2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, D)
             elif k == "P":
-                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                self._Pis[3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, D)
             elif k == "S":
-                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1,1)
+                self._Pis[4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1, 1)
             elif k == "adQ":
                 self._get_sqrt(component).set(squeeze(item))
             else:
-                raise KeyError("Invalid parameter key: "+str(key))
+                raise KeyError("Invalid parameter key: {}".format(key))

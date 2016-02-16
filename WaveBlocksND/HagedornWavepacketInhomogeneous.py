@@ -44,11 +44,11 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
 
         for d in range(self._number_components):
             # Default basis shapes for all components
-            bs = HyperCubicShape( self._dimension*[1] )
-            self._basis_shapes.append(bs)
+            BS = HyperCubicShape(self._dimension * [1])
+            self._basis_shapes.append(BS)
 
             # A Gaussian
-            self._coefficients.append(zeros((bs.get_basis_size(),1), dtype=complexfloating))
+            self._coefficients.append(zeros((BS.get_basis_size(), 1), dtype=complexfloating))
 
             # Default parameters of harmonic oscillator eigenstates
             q = zeros((self._dimension, 1), dtype=complexfloating)
@@ -60,20 +60,19 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
             self._Pis.append([q, p, Q, P, S])
 
         # Cache basis sizes
-        self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
+        self._basis_sizes = [bs.get_basis_size() for bs in self._basis_shapes]
 
         # No inner product set
         self._IP = None
 
         # Function for taking continuous roots
-        self._sqrt = [ ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in range(self._number_components) ]
+        self._sqrt = [ContinuousSqrt(angle(det(self._Pis[n][2]))) for n in range(self._number_components)]
 
 
     def __str__(self):
         r""":return: A string describing the Hagedorn wavepacket :math:`\Psi`.
         """
-        s = ("Inhomogeneous Hagedorn wavepacket with "+str(self._number_components)
-             +" component(s) in "+str(self._dimension)+" space dimension(s)\n")
+        s = "Inhomogeneous Hagedorn wavepacket with "+str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n"
         return s
 
 
@@ -119,12 +118,12 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         # no issues with sharing same instance
         other.set_innerproduct(self.get_innerproduct())
         # The complex root caches
-        other._sqrt = [ item.clone() for item in self._sqrt ]
+        other._sqrt = [item.clone() for item in self._sqrt]
 
         return other
 
 
-    def get_parameters(self, component=None, aslist=False, key=("q","p","Q","P","S")):
+    def get_parameters(self, component=None, aslist=False, key=("q", "p", "Q", "P", "S")):
         r"""Get the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -156,7 +155,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
                 elif k == "adQ":
                     tmp.append(array(self._get_sqrt(index).get(), dtype=complexfloating))
                 else:
-                    raise KeyError("Invalid parameter key: "+str(key))
+                    raise KeyError("Invalid parameter key: {}".format(key))
 
             Pilist.append(tmp)
 
@@ -166,7 +165,7 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         return Pilist
 
 
-    def set_parameters(self, Pi, component=None, key=("q","p","Q","P","S")):
+    def set_parameters(self, Pi, component=None, key=("q", "p", "Q", "P", "S")):
         r"""Set the Hagedorn parameter set :math:`\Pi_i` of each component :math`\Phi_i`
         of the wavepacket :math:`\Psi`.
 
@@ -184,16 +183,16 @@ class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
         for index, pic in zip(component, Pi):
             for k, item in zip(key, pic):
                 if k == "q":
-                    self._Pis[index][0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                    self._Pis[index][0] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, 1)
                 elif k == "p":
-                    self._Pis[index][1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,1)
+                    self._Pis[index][1] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, 1)
                 elif k == "Q":
-                    self._Pis[index][2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                    self._Pis[index][2] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, D)
                 elif k == "P":
-                    self._Pis[index][3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D,D)
+                    self._Pis[index][3] = atleast_2d(array(item, dtype=complexfloating)).reshape(D, D)
                 elif k == "S":
-                    self._Pis[index][4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1,1)
+                    self._Pis[index][4] = atleast_2d(array(item, dtype=complexfloating)).reshape(1, 1)
                 elif k == "adQ":
                     self._get_sqrt(index).set(squeeze(item))
                 else:
-                    raise KeyError("Invalid parameter key: "+str(key))
+                    raise KeyError("Invalid parameter key: {}".format(key))

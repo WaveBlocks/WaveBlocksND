@@ -34,7 +34,7 @@ def stemcf(grid, phase, modulus, darken=None, axes=None, linestylep="solid", lin
     rgb_colors = color_map(grid, phase=phase, modulus=modulus, darken=darken)
 
     # Put all the vertical line into a collection
-    segments = [ array([[node,0], [node,value]]) for node, value in zip(grid, modulus) ]
+    segments = [array([[node, 0], [node, value]]) for node, value in zip(grid, modulus)]
     line_segments = LineCollection(segments)
 
     # Set some properties of the lines

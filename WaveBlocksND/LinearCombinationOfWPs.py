@@ -35,7 +35,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         self._packets = []
         self._packet_ids = []
         self._number_packets = number_packets
-        self._coefficients = zeros((number_packets,1), dtype=complexfloating)
+        self._coefficients = zeros((number_packets, 1), dtype=complexfloating)
 
 
     def __str__(self):
@@ -43,8 +43,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         :return: A string describing the linear combination of general
                  wavepackets :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j`.
         """
-        s = ("Linear combination of "+str(self._number_packets)+" general wavepackets, each with "
-            +str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n")
+        s = ("Linear combination of "+str(self._number_packets)+" general wavepackets, each with "+str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n")
         return s
 
 
@@ -68,7 +67,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         # TODO: Consider using the block factory
         other = LinearCombinationOfWPs(params["dimension"],
                                        params["ncomponents"])
-        newpackets = [ wp.clone(keepid=keepid) for wp in self.get_wavepackets() ]
+        newpackets = [wp.clone(keepid=keepid) for wp in self.get_wavepackets()]
         other.add_wavepackets(newpackets, self.get_coefficients())
         return other
 
@@ -119,12 +118,12 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
                 raise ValueError("Adding packet failed due to duplicate id.")
 
         if coefficients is None:
-            coefficients = ones((len(packetlist),1))
+            coefficients = ones((len(packetlist), 1))
 
         self._packets.extend(packetlist)
         self._number_packets = self._number_packets + len(packetlist)
         self._packet_ids.extend(pids)
-        self._coefficients = vstack([self._coefficients, atleast_2d(coefficients).reshape((-1,1))])
+        self._coefficients = vstack([self._coefficients, atleast_2d(coefficients).reshape((-1, 1))])
 
 
     def remove_wavepacket(self, index):
@@ -135,7 +134,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         self._packets.pop(index)
         self._number_packets = self._number_packets - 1
         self._packet_ids.pop(index)
-        self._coefficients = delete(self._coefficients, index).reshape((-1,1))
+        self._coefficients = delete(self._coefficients, index).reshape((-1, 1))
 
 
     def get_wavepacket(self, index):
@@ -206,7 +205,7 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         if not coefficients.size == self._number_packets:
             raise ValueError("Wrong number of new coefficients.")
 
-        self._coefficients = coefficients.copy().reshape((-1,1))
+        self._coefficients = coefficients.copy().reshape((-1, 1))
 
 
     def evaluate_at(self, grid, component=None):
@@ -227,15 +226,15 @@ class LinearCombinationOfWPs(LinearCombinationOfWavepackets):
         if self._number_packets > 0:
             vals = self._packets[0].evaluate_at(grid, component=component, prefactor=True)
             if component is None:
-                result = [ self._coefficients[0] * val for val in vals ]
+                result = [self._coefficients[0] * val for val in vals]
             else:
                 result = self._coefficients[0] * vals
 
         for index, packet in enumerate(self._packets[1:]):
             vals = packet.evaluate_at(grid, component=component, prefactor=True)
             if component is None:
-                result = [ res + self._coefficients[index+1] * val for res, val in zip(result, vals) ]
+                result = [res + self._coefficients[index + 1] * val for res, val in zip(result, vals)]
             else:
-                result = result + self._coefficients[index+1] * vals
+                result = result + self._coefficients[index + 1] * vals
 
         return result

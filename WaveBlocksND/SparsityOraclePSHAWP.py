@@ -91,14 +91,14 @@ class SparsityOraclePSHAWP(SparsityOracle):
         kket = norm(kket) / sqrt(D) * ones(D)
 
         # Compute second moments
-        sigqbra = eps/sqrt(2.0) * sqrt(dot(abs(Qbra)**2, 2*kbra+1))
-        sigqket = eps/sqrt(2.0) * sqrt(dot(abs(Qket)**2, 2*kket+1))
+        sigqbra = eps / sqrt(2.0) * sqrt(dot(abs(Qbra)**2, 2 * kbra + 1))
+        sigqket = eps / sqrt(2.0) * sqrt(dot(abs(Qket)**2, 2 * kket + 1))
 
-        sigpbra = eps/sqrt(2.0) * sqrt(dot(abs(Pbra)**2, 2*kbra+1))
-        sigpket = eps/sqrt(2.0) * sqrt(dot(abs(Pket)**2, 2*kket+1))
+        sigpbra = eps / sqrt(2.0) * sqrt(dot(abs(Pbra)**2, 2 * kbra + 1))
+        sigpket = eps / sqrt(2.0) * sqrt(dot(abs(Pket)**2, 2 * kket + 1))
 
-        return (norm(qbra - qket) <= self._factor * (norm(sigqbra)+norm(sigqket)) and
-                norm(pbra - pket) <= self._factor * (norm(sigpbra)+norm(sigpket)))
+        return (norm(qbra - qket) <= self._factor * (norm(sigqbra) + norm(sigqket)) and
+                norm(pbra - pket) <= self._factor * (norm(sigpbra) + norm(sigpket)))
 
 
     def bias(self, bramink=None, ketmink=None):

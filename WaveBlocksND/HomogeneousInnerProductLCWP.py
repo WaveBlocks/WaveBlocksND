@@ -93,7 +93,7 @@ class HomogeneousInnerProductLCWP(InnerProduct):
         if component is not None:
             N = array([1] * lcket.get_number_packets())
         else:
-            N = array([ wp.get_number_components() for wp in lcket.get_wavepackets() ])
+            N = array([wp.get_number_components() for wp in lcket.get_wavepackets()])
 
         M = self.build_matrix(lcket, operator=operator, component=component, eval_at_once=eval_at_once)
 
@@ -123,7 +123,7 @@ class HomogeneousInnerProductLCWP(InnerProduct):
         if component is not None:
             N = [1] * lcket.get_number_packets()
         else:
-            N = [ wp.get_number_components() for wp in packets ]
+            N = [wp.get_number_components() for wp in packets]
 
         # The partition scheme of the block vectors and block matrix
         partition = [0] + list(cumsum(N))
@@ -138,14 +138,14 @@ class HomogeneousInnerProductLCWP(InnerProduct):
                         Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                         Q = reshape(Q, (N[row], N[col]))
                         # Put the result into the global storage
-                        result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = Q
+                        result[partition[row]:partition[row + 1], partition[col]:partition[col + 1]] = Q
         else:
             for row, pacbra in enumerate(packets):
                 for col, packet in enumerate(packets[:row]):
                     Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                     Q = reshape(Q, (N[row], N[col]))
                     # Put the result into the global storage
-                    result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = Q
+                    result[partition[row]:partition[row + 1], partition[col]:partition[col + 1]] = Q
 
         result = result + conjugate(transpose(result))
 
@@ -154,6 +154,6 @@ class HomogeneousInnerProductLCWP(InnerProduct):
             Q = self._delegate.quadrature(packet, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
             Q = reshape(Q, (N[d], N[d]))
             # Put the result into the global storage
-            result[partition[d]:partition[d+1], partition[d]:partition[d+1]] = Q
+            result[partition[d]:partition[d + 1], partition[d]:partition[d + 1]] = Q
 
         return result

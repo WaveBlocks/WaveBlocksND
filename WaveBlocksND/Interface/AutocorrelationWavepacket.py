@@ -53,13 +53,13 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
         BS[ahash] = BF.create_basis_shape(descr)
 
     # Comfigure the original wavepacket
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
     # Retrieve simulation data
     params = iom.load_wavepacket_parameters(timestep=0, blockid=blockid, key=KEY)
     hashes, coeffs = iom.load_wavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWPo.set_parameters(params, key=KEY)
-    HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+    HAWPo.set_basis_shapes([BS[int(ha)] for ha in hashes])
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
@@ -79,7 +79,7 @@ def compute_autocorrelation_hawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
         # Configure the wavepacket
         HAWPt.set_parameters(paramst, key=KEY)
-        HAWPt.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWPt.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWPt.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -141,7 +141,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(timestep=0, get_hashes=True, blockid=blockid)
     # Configure the wavepacket
     HAWPo.set_parameters(params)
-    HAWPo.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+    HAWPo.set_basis_shapes([BS[int(ha)] for ha in hashes])
     HAWPo.set_coefficients(coeffs)
 
     # Set up the innerproduct for solving the integrals <phi_0 | phi_t>
@@ -157,7 +157,7 @@ def compute_autocorrelation_inhawp(iom, obsconfig, blockid=0, eigentrafo=True):
 
         # Configure the wavepacket
         HAWPt.set_parameters(params)
-        HAWPt.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWPt.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWPt.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

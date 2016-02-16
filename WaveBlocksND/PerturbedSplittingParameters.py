@@ -38,7 +38,7 @@ class PerturbedSplittingParameters(object):
         if method == "L42":
             # Pattern ABA and m = s = 2
             m = 2
-            a = zeros(m+1)
+            a = zeros(m + 1)
             b = zeros(m)
             #
             a[0] = 0.21132486540518713
@@ -50,7 +50,7 @@ class PerturbedSplittingParameters(object):
         elif method == "L62":
             # Pattern ABA and m = s = 3
             m = 3
-            a = zeros(m+1)
+            a = zeros(m + 1)
             b = zeros(m)
             #
             a[0] = 0.1127016653792583
@@ -64,7 +64,7 @@ class PerturbedSplittingParameters(object):
         elif method == "L82":
             # Pattern ABA and m = s = 4
             m = 4
-            a = zeros(m+1)
+            a = zeros(m + 1)
             b = zeros(m)
             #
             a[0] = 0.069431844202973714
@@ -80,7 +80,7 @@ class PerturbedSplittingParameters(object):
         elif method == "L102":
             # Pattern ABA and m = s = 5
             m = 5
-            a = zeros(m+1)
+            a = zeros(m + 1)
             b = zeros(m)
             #
             a[0] = 0.046910077030668018
@@ -98,7 +98,7 @@ class PerturbedSplittingParameters(object):
         elif method == "L84":
             # Pattern ABA and m = 5
             m = 5
-            a = zeros(m+1)
+            a = zeros(m + 1)
             b = zeros(m)
             #
             a[0] =  0.07534696026989288842
@@ -140,10 +140,10 @@ class PerturbedSplittingParameters(object):
         h = (tspan[1] - tspan[0]) / float(N)
         sa = a.shape[0]
         sb = b.shape[0]
-        c = zeros(sa+sb, dtype=floating)
+        c = zeros(sa + sb, dtype=floating)
         c[::2] = a
         c[1::2] = b
 
         for k in range(N):
-            for j in range(sa+sb):
-                psi[j%2](c[j]*h, *args[j%2])
+            for j in range(sa + sb):
+                psi[j % 2](c[j] * h, *args[j % 2])

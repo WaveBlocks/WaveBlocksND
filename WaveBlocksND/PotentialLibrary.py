@@ -452,7 +452,7 @@ two_crossings["number_levels"] = 2
 delta_gap_rotsym = {}
 delta_gap_rotsym["variables"] = ["x", "y"]
 delta_gap_rotsym["potential"] = [["tanh(sqrt(x**2 + y**2))/2",                      "delta"],
-                                 ["delta"                    , "-tanh(sqrt(x**2 + y**2))/2"]]
+                                 ["delta",                     "-tanh(sqrt(x**2 + y**2))/2"]]
 delta_gap_rotsym["number_levels"] = 2
 
 conic = {}

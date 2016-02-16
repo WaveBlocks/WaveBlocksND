@@ -42,7 +42,7 @@ def add_wavefunction(self, parameters, flat=False, timeslots=None, blockid=0):
 
     # TODO: Improve chunking
     daset_psi_tg = grp_wf.create_dataset("timegrid", [T], dtype=np.integer, chunks=True, maxshape=[Ts], fillvalue=-1)
-    grp_wf.create_dataset("Psi", [T]+datashape, dtype=np.complexfloating, chunks=True, maxshape=[Ts]+datashape)
+    grp_wf.create_dataset("Psi", [T] + datashape, dtype=np.complexfloating, chunks=True, maxshape=[Ts] + datashape)
 
     daset_psi_tg.attrs["pointer"] = 0
 
@@ -74,7 +74,7 @@ def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    #TODO: take wavefunction or wavefunction.get_values() as input?
+    # TODO: take wavefunction or wavefunction.get_values() as input?
     pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"
     pathd = "/"+self._prefixb+str(blockid)+"/wavefunction/Psi"
     timeslot = self._srf[pathtg].attrs["pointer"]
@@ -83,7 +83,7 @@ def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
     self.must_resize(pathd, timeslot)
 
     for index, item in enumerate(wavefunctionvalues):
-        self._srf[pathd][timeslot,index,...] = item
+        self._srf[pathd][timeslot, index, ...] = item
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -112,6 +112,6 @@ def load_wavefunction(self, timestep=None, blockid=0):
     pathd = "/"+self._prefixb+str(blockid)+"/wavefunction/Psi"
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
-        return self._srf[pathd][index,...]
+        return self._srf[pathd][index, ...]
     else:
         return self._srf[pathd][...]

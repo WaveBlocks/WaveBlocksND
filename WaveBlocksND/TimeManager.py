@@ -90,9 +90,9 @@ class TimeManager(object):
 
     def __str__(self):
         s  = "TimeManager configured with:\n"
-        s += " Final time     T: " +str(self._T) +"\n"
-        s += " Timestep size dt: " +str(self._dt) +"\n"
-        s += " Number of steps : " +str(self._nsteps) +"\n"
+        s += " Final time     T: "+str(self._T)+"\n"
+        s += " Timestep size dt: "+str(self._dt)+"\n"
+        s += " Number of steps : "+str(self._nsteps)+"\n"
         return s
 
 
@@ -241,7 +241,7 @@ class TimeManager(object):
 
         # Validate timesteps and check if n in [0,...,N]
         tmp = len(timesteps)
-        timesteps = [ i for i in timesteps if 0 <= i <= self._nsteps ]
+        timesteps = [i for i in timesteps if 0 <= i <= self._nsteps]
 
         if tmp != len(timesteps):
             print("Warning: Dropped %d timestep(s) due to invalidity!" % (tmp - len(timesteps)))
@@ -276,7 +276,7 @@ class TimeManager(object):
             n_si = 1 + self._nsteps // self._interval
             # Determine the number of saves resulting from the savelist and
             # exclude the timesteps which coincide with the regular intervals
-            n_sl = len([ i for i in self._eventtimes if i % self._interval != 0 ])
+            n_sl = len([i for i in self._eventtimes if i % self._interval != 0])
 
         # Total number of saves we will perform is given by the sum
         number_events = n_si + n_sl
@@ -293,7 +293,7 @@ class TimeManager(object):
         if self._interval == 1:
             # Save every timestep
             return True
-        elif self._interval != 0  and  n % self._interval == 0:
+        elif self._interval != 0 and n % self._interval == 0:
             # Save every k-th timestep specified by the interval
             return True
         elif n in self._eventtimes:

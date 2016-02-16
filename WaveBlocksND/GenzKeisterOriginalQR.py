@@ -103,19 +103,19 @@ class GenzKeisterOriginalQR(QuadratureRule):
         """
         D = self._dimension
         # Number of 0 entries in P
-        xi = sum(P==0)
+        xi = sum(P == 0)
         # Compute all sign flips
-        u,v = indices((D-xi, 2**(D-xi)))
-        s = -2*((v>>u) & 1)+1
+        u, v = indices((D - xi, 2**(D - xi)))
+        s = -2 * ((v >> u) & 1) + 1
 
         nodes = []
         for P in permutations(P):
             # Generators corresponding to partition P give current node
-            X = generators[P].reshape(-1,1).copy()
+            X = generators[P].reshape(-1, 1).copy()
             # Flip signs
             I = (P != 0)
-            XX = repeat(X, 2**(D-xi), 1)
-            XX[I,:] *= s
+            XX = repeat(X, 2**(D - xi), 1)
+            XX[I, :] *= s
             nodes.append(XX)
 
         return hstack(nodes)
@@ -130,13 +130,13 @@ class GenzKeisterOriginalQR(QuadratureRule):
         """
         D = self._dimension
         W = 0.0
-        for Q in lattice_points(D, K-P.sum()):
+        for Q in lattice_points(D, K - P.sum()):
             w = 1.0
             for i in range(D):
-                w *= WF[P[i], Q[i]+P[i]]
+                w *= WF[P[i], Q[i] + P[i]]
             W += w
 
-        K = sum(P>0)
+        K = sum(P > 0)
         W /= 2**K
         return W
 
@@ -178,8 +178,8 @@ class GenzKeisterOriginalQR(QuadratureRule):
                 nodes.append(p)
                 weights.append(w)
 
-        self._nodes = hstack(nodes).reshape(D,-1)
-        self._weights = hstack(weights).reshape(1,-1)
+        self._nodes = hstack(nodes).reshape(D, -1)
+        self._weights = hstack(weights).reshape(1, -1)
         self._number_nodes = self._weights.size
 
 
@@ -247,4 +247,4 @@ WF = array([[1.7724538509055160273, -0.59081795030183867577, 0, -0.3685317922775
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -4.2040208044811380297e-29, 6.18461706215374787e-29],
             [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0.00081040558279177164563]])
 
-Z =  array([ 0, 0, 1, 0, 0, 3, 2, 1, 0, 0, 5, 4, 3, 2, 1, 0, 0, 0, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0])
+Z = array([0, 0, 1, 0, 0, 3, 2, 1, 0, 0, 5, 4, 3, 2, 1, 0, 0, 0, 8, 7, 6, 5, 4, 3, 2, 1, 0, 0, 0, 0])

@@ -102,7 +102,7 @@ class SimulationLoopHagedorn(SimulationLoop):
         # Add storage for each packet
         npackets = len(self.parameters["initvals"])
         slots = self._tm.compute_number_events()
-        key = ("q","p","Q","P","S","adQ")
+        key = ("q", "p", "Q", "P", "S", "adQ")
 
         for i in range(npackets):
             bid = self.IOManager.create_block()
@@ -130,15 +130,15 @@ class SimulationLoopHagedorn(SimulationLoop):
         nsteps = self._tm.compute_number_timesteps()
 
         # Which parameter data to save.
-        key = ("q","p","Q","P","S","adQ")
+        key = ("q", "p", "Q", "P", "S", "adQ")
 
         # Run the prepropagate step
         self.propagator.pre_propagate()
         # Note: We do not save any data here
 
         # Run the simulation for a given number of timesteps
-        for i in range(1, nsteps+1):
-            print(" doing timestep "+str(i))
+        for i in range(1, nsteps + 1):
+            print(" doing timestep {}".format(i))
 
             self.propagator.propagate()
 

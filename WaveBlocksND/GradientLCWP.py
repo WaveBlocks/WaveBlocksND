@@ -44,13 +44,13 @@ class GradientLCWP(Gradient):
         # TODO: Optimizing this. For large linear combinations, computing
         #       and storing *all* gradient packets is inefficient. Maybe
         #       better go packet by packet.
-        gradients = [ LinearCombinationOfWPs(D, N) for d in range(D) ]
+        gradients = [LinearCombinationOfWPs(D, N) for d in range(D)]
         coefficients = lincomb.get_coefficients()
 
         for i, packet in enumerate(lincomb.get_wavepackets()):
             G = packet.get_gradient_operator()
             gradient_wps = G.apply_gradient(packet, component=component)
             for d, grad_wp in enumerate(gradient_wps):
-                gradients[d].add_wavepacket(grad_wp, coefficient=coefficients[i,0])
+                gradients[d].add_wavepacket(grad_wp, coefficient=coefficients[i, 0])
 
         return gradients

@@ -146,7 +146,7 @@ class BasisShape(object):
         :math:`\sum_{d=0}^D k_d^2` from the zero index. In case of
         multiple maxima the method returns the first one found.
         """
-        indices = array([ node for node in self.get_node_iterator() ])
+        indices = array([node for node in self.get_node_iterator()])
         distances = sum(indices**2, axis=1)
-        k = tuple(indices[argmax(distances),:])
+        k = tuple(indices[argmax(distances), :])
         return k

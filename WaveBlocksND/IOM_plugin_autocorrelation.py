@@ -35,7 +35,7 @@ def add_autocorrelation(self, parameters, timeslots=None, blockid=0):
     # Create the dataset with appropriate parameters
     grp_ac = grp_ob.create_group("autocorrelation")
     daset_tg = grp_ac.create_dataset("timegrid", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,))
-    grp_ac.create_dataset("autocorrelation", (T,N), dtype=np.complexfloating, chunks=(csTs,N), maxshape=(Ts,N))
+    grp_ac.create_dataset("autocorrelation", (T, N), dtype=np.complexfloating, chunks=(csTs, N), maxshape=(Ts, N))
     daset_tg.attrs["pointer"] = 0
 
 
@@ -78,7 +78,7 @@ def save_autocorrelation(self, autocorrelations, timestep=None, blockid=0):
 
     # Write the data
     self.must_resize(pathd, timeslot)
-    self._srf[pathd][timeslot,:] = autocorrelations
+    self._srf[pathd][timeslot, :] = autocorrelations
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -115,6 +115,6 @@ def load_autocorrelation(self, timestep=None, split=False, blockid=0):
         axis = 1
 
     if split is True:
-        return self.split_data( self._srf[pathd][index,...], axis)
+        return self.split_data(self._srf[pathd][index, ...], axis)
     else:
-        return self._srf[pathd][index,...]
+        return self._srf[pathd][index, ...]

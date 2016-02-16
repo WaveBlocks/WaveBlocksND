@@ -42,12 +42,12 @@ def compute_tauk(n, k, maxit=5):
     h_roots_asy
     """
     a = n % 2 - 0.5
-    c = (4.0*floor(n/2.0) - 4.0*k + 3.0)*pi / (4.0*floor(n/2.0) + 2.0*a + 2.0)
+    c = (4.0*floor(n/2.0) - 4.0*k + 3.0) * pi / (4.0*floor(n/2.0) + 2.0*a + 2.0)
     f = lambda x: x - sin(x) - c
     df = lambda x: 1.0 - cos(x)
-    xi = 0.5*pi
+    xi = 0.5 * pi
     for i in range(maxit):
-        xi = xi - f(xi)/df(xi)
+        xi = xi - f(xi) / df(xi)
     return xi
 
 
@@ -78,11 +78,11 @@ def initial_nodes_a(n, k):
     h_roots_asy
     """
     tauk = compute_tauk(n, k)
-    sigk = cos(0.5*tauk)**2
+    sigk = cos(0.5 * tauk)**2
     a = n % 2 - 0.5
     nu = 4.0*floor(n/2.0) + 2.0*a + 2.0
     # Initial approximation of Hermite roots (square)
-    xksq = nu*sigk - 1.0/(3.0*nu) * (5.0/(4.0*(1.0-sigk)**2) - 1.0/(1.0-sigk) - 0.25)
+    xksq = nu * sigk - 1.0 / (3.0 * nu) * (5.0 / (4.0 * (1.0 - sigk)**2) - 1.0 / (1.0 - sigk) - 0.25)
     return xksq
 
 
@@ -108,11 +108,10 @@ def compute_am(m):
     airy_root
     h_roots_asy
     """
-    sm = 3*pi*(4*m-1) / 8.0
-    coeffs = row_stack([1.0, 5.0/48.0, -5.0/36.0, 77125.0/82944.0,
-                        -108056875.0/6967296.0, 162375596875.0/334430208.0])
+    sm = 3 * pi * (4 * m - 1) / 8.0
+    coeffs = row_stack([1.0, 5.0 / 48.0, -5.0 / 36.0, 77125.0 / 82944.0, -108056875.0 / 6967296.0, 162375596875.0 / 334430208.0])
     smp = column_stack([ones_like(sm), sm**(-2), sm**(-4), sm**(-6), sm**(-8), sm**(-10)])
-    am = -sm**(2.0/3.0) * dot(smp, coeffs).reshape((-1,))
+    am = -sm**(2.0 / 3.0) * dot(smp, coeffs).reshape((-1,))
     return am
 
 
@@ -138,20 +137,20 @@ def airy_root(m):
     h_roots_asy
     """
     airyroots = array([
-             -2.3381074104597670385,
-             -4.0879494441309706166,
-             -5.5205598280955510591,
-             -6.7867080900717589988,
-             -7.9441335871208531231,
-             -9.0226508533409803802,
-             -10.040174341558085931,
-             -11.008524303733262893,
-             -11.936015563236262517,
-             -12.828776752865757200])
+        -2.3381074104597670385,
+        -4.0879494441309706166,
+        -5.5205598280955510591,
+        -6.7867080900717589988,
+        -7.9441335871208531231,
+        -9.0226508533409803802,
+        -10.040174341558085931,
+        -11.008524303733262893,
+        -11.936015563236262517,
+        -12.828776752865757200])
     # Note: This specialized code is much faster than 'ai_zeros'
     am = zeros_like(m, dtype=floating)
     I = m <= 10
-    am[I] = airyroots[m[I]-1]
+    am[I] = airyroots[m[I] - 1]
     J = m > 10
     am[J] = compute_am(m[J])
     return am
@@ -189,11 +188,11 @@ def initial_nodes_b(n, k):
     ak = airy_root(k)
     # Initial approximation of Hermite roots (square)
     xksq = (nu +
-            2.0**(2.0/3.0) * ak * nu**(1.0/3.0) +
-            1.0/5.0 * 2.0**(4.0/3.0) * ak**2 * nu**(-1.0/3.0) +
-            (9.0/140.0 - 12.0/175.0 * ak**3) * nu**(-1.0) +
-            (16.0/1575.0 * ak + 92.0/7875.0 * ak**4) * 2.0**(2.0/3.0) * nu**(-5.0/3.0) -
-            (15152.0/3031875.0 * ak**5 + 1088.0/121275.0 * ak**2) * 2.0**(1.0/3.0) * nu**(-7.0/3.0))
+            2.0**(2.0 / 3.0) * ak * nu**(1.0 / 3.0) +
+            1.0 / 5.0 * 2.0**(4.0 / 3.0) * ak**2 * nu**(-1.0 / 3.0) +
+            (9.0 / 140.0 - 12.0 / 175.0 * ak**3) * nu**(-1.0) +
+            (16.0 / 1575.0 * ak + 92.0 / 7875.0 * ak**4) * 2.0**(2.0 / 3.0) * nu**(-5.0 / 3.0) -
+            (15152.0 / 3031875.0 * ak**5 + 1088.0 / 121275.0 * ak**2) * 2.0**(1.0 / 3.0) * nu**(-7.0 / 3.0))
     return xksq
 
 
@@ -221,13 +220,13 @@ def initial_nodes(n):
     """
     # Turnover point
     # linear polynomial fit to error of 10, 25, 40, ..., 1000 point rules
-    fit = 0.49082003*n - 4.37859653
+    fit = 0.49082003 * n - 4.37859653
     turnover = around(fit).astype(int)
     # Compute all approximations
-    ia = arange(1, int(floor(n*0.5)+1))
-    ib = flipud(arange(1, int(1+n-ceil(n*0.5))))
-    xasq = initial_nodes_a(n, ia[:turnover+1])
-    xbsq = initial_nodes_b(n, ib[turnover+1:])
+    ia = arange(1, int(floor(n * 0.5) + 1))
+    ib = flipud(arange(1, int(1 + n - ceil(n * 0.5))))
+    xasq = initial_nodes_a(n, ia[:turnover + 1])
+    xbsq = initial_nodes_b(n, ib[turnover + 1:])
     # Combine
     iv = sqrt(hstack([xasq, xbsq]))
     # Central node is always zero
@@ -270,15 +269,14 @@ def pbcf(n, theta):
     .. [parabolic-asymptotics]
        http://dlmf.nist.gov/12.10#vii
     """
-    mu = sqrt(2.0*n + 1.0)
     st = sin(theta)
     ct = cos(theta)
     # http://dlmf.nist.gov/12.10#vii
-    mu = 2.0*n + 1.0
+    mu = 2.0 * n + 1.0
     # http://dlmf.nist.gov/12.10#E23
-    eta = 0.5*theta - 0.5*st*ct
+    eta = 0.5 * theta - 0.5 * st * ct
     # http://dlmf.nist.gov/12.10#E39
-    zeta = -(3.0*eta/2.0) ** (2.0/3.0)
+    zeta = -(3.0 * eta / 2.0) ** (2.0 / 3.0)
     # http://dlmf.nist.gov/12.10#E40
     phi = (-zeta / st**2) ** (0.25)
     # Coefficients
@@ -318,9 +316,9 @@ def pbcf(n, theta):
     u = (u0, u1, u2, u3, u4, u5)
     v = (v0, v1, v2, v3, v4, v5)
     # Airy Evaluation (Bi and Bip unused)
-    Ai, Aip, Bi, Bip = airy(mu**(4.0/6.0) * zeta)
+    Ai, Aip, Bi, Bip = airy(mu**(4.0 / 6.0) * zeta)
     # Prefactor for U
-    P = 2.0*sqrt(pi) * mu**(1.0/6.0) * phi
+    P = 2.0 * sqrt(pi) * mu**(1.0 / 6.0) * phi
     # Terms for U
     # http://dlmf.nist.gov/12.10#E42
     A0 =   b[0]*u[0]
@@ -345,8 +343,8 @@ def pbcf(n, theta):
     D2 =  (a[4]*v[0] + phi**6*a[3]*v[1] + phi**12*a[2]*v[2] + phi**18*a[1]*v[3] + phi**24*a[0]*v[4]) / zeta**6
     # Derivative of U
     # http://dlmf.nist.gov/12.10#E36
-    Ud = Pd * (Ai  * (C0 + C1/mu**2.0 + C2/mu**4.0) / mu**(4.0/6.0) +
-               Aip * (D0 + D1/mu**2.0 + D2/mu**4.0) )
+    Ud = Pd * (Ai  * (C0 + C1 / mu**2.0 + C2 / mu**4.0) / mu**(4.0 / 6.0) +
+               Aip * (D0 + D1 / mu**2.0 + D2 / mu**4.0))
     return U, Ud
 
 
@@ -377,7 +375,7 @@ def newton(n, x_initial, maxit=5):
     h_roots_asy
     """
     # Variable transformation
-    mu = sqrt(2.0*n + 1.0)
+    mu = sqrt(2.0 * n + 1.0)
     t = x_initial / mu
     theta = arccos(t)
     # Newton iteration
@@ -393,7 +391,7 @@ def newton(n, x_initial, maxit=5):
     if n % 2 == 1:
         x[0] = 0.0
     # Compute weights
-    w = 1.0 / (2.0*ud**2)
+    w = 1.0 / (2.0 * ud**2)
     return x, w
 
 
@@ -509,15 +507,15 @@ def hermite_recursion(n, x):
     :return: An array :math:`Hn` containing the values of :math:`h_n(x)`.
     """
     Hnm1 = zeros_like(x)
-    Hn   = zeros_like(x)
+    Hn = zeros_like(x)
     Hnp1 = zeros_like(x)
 
-    Hn = pi**(-0.25) * exp(-0.5*x**2)
+    Hn = pi**(-0.25) * exp(-0.5 * x**2)
     if n >= 1:
         Hnm1 = Hn
         Hn = sqrt(2.0) * x * Hnm1
-        for k in range(2, n+1):
-            Hnp1 = sqrt(2.0/k) * x * Hn - sqrt((k-1.0)/k) * Hnm1
+        for k in range(2, n + 1):
+            Hnp1 = sqrt(2.0 / k) * x * Hn - sqrt((k - 1.0) / k) * Hnm1
             Hnm1 = Hn
             Hn = Hnp1
 
@@ -562,7 +560,7 @@ def psi_roots_asy(n):
         nodes = hstack([-flipud(nodes[1:]), nodes])
         weights = hstack([flipud(weights[1:]), weights])
     # Scale weights
-    C = sqrt(2)*sqrt(pi) / sum(exp(-0.5*nodes**2) * weights)
+    C = sqrt(2 * pi) / sum(exp(-0.5 * nodes**2) * weights)
     weights *= C
     return nodes, weights
 
@@ -610,10 +608,10 @@ def psi_roots(n):
         raise ValueError("n must be a positive integer.")
 
     if n <= 150:
-        nodes, weights =  h_roots_original(n)
+        nodes, weights = h_roots_original(n)
         # Hermite function recursion
-        h = hermite_recursion(n-1, nodes)
-        weights = 1.0/(h**2 * n)
+        h = hermite_recursion(n - 1, nodes)
+        weights = 1.0 / (h**2 * n)
         return nodes, weights
     else:
         return psi_roots_asy(n)

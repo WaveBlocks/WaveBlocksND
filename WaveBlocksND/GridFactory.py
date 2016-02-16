@@ -8,6 +8,7 @@ The exact subtype of the instance is read from the description.
 @license: Modified BSD License
 """
 
+
 def create_grid(description):
     """The method that creates a :py:class:`Grid` instance and decides
     which subclass to instantiate depending on the given description.

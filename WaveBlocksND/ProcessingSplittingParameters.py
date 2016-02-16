@@ -90,16 +90,16 @@ class ProcessingSplittingParameters(object):
 
         # Preprocessor
         for j in range(p):
-            psi1(-z[j]*h, *args1)
-            psi2(-y[j]*h, *args2)
+            psi1(-z[j] * h, *args1)
+            psi2(-y[j] * h, *args2)
 
         # Kernel
         for k in range(N):
             for j in range(s):
-                psi1(a[j]*h, *args1)
-                psi2(b[j]*h, *args2)
+                psi1(a[j] * h, *args1)
+                psi2(b[j] * h, *args2)
 
         # Postprocessor
-        for j in range(p-1, -1, -1):
-            psi1(y[j]*h, *args1)
-            psi2(z[j]*h, *args2)
+        for j in range(p - 1, -1, -1):
+            psi1(y[j] * h, *args1)
+            psi2(z[j] * h, *args2)

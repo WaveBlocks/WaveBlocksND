@@ -24,7 +24,7 @@ def get_result_dirs(path):
     :param path: The file system path under which we search for simulations.
     :return: A list of simulation IDs.
     """
-    dirs = [ os.path.join(path, adir) for adir in os.listdir(path) ]
+    dirs = [os.path.join(path, adir) for adir in os.listdir(path)]
     return list(filter(os.path.isdir, dirs))
 
 
@@ -47,7 +47,7 @@ def get_parameters_file(path, unpack=True):
     if len(parameters_files) == 0:
         raise IOError("No configuration .py file found!")
 
-    parameters_files = [os.path.join(path, rf) for rf in parameters_files ]
+    parameters_files = [os.path.join(path, rf) for rf in parameters_files]
 
     if unpack and len(parameters_files) == 1:
         parameters_files = parameters_files[0]
@@ -74,7 +74,7 @@ def get_results_file(path, fileext=GD.ext_resultdatafile, unpack=True):
     if len(results_files) == 0:
         raise IOError("No results .hdf5 file found!")
 
-    results_files = [os.path.join(path, rf) for rf in results_files ]
+    results_files = [os.path.join(path, rf) for rf in results_files]
 
     if unpack and len(results_files) == 1:
         results_files = results_files[0]
@@ -109,7 +109,7 @@ def gather_all(stringlist, pattern):
     :param pattern: The pattern.
     :return: A list of simulation IDs that contain the given pattern.
     """
-    gathered = [ s for s in stringlist if name_contains(s, pattern) ]
+    gathered = [s for s in stringlist if name_contains(s, pattern)]
     return gathered
 
 
@@ -150,12 +150,12 @@ def group_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kv
     :param as_string: Determines if the values for ``pattern`` get converted to floats. Not used here.
     :return: A list of groups of simulation IDs.
     """
-    tmp = [ s.partition(ldel + pattern + mdel) for s in stringlist ]
-    tmp = [ s[0:2] + s[2].partition(rdel) for s in tmp ]
+    tmp = [s.partition(ldel + pattern + mdel) for s in stringlist]
+    tmp = [s[0:2] + s[2].partition(rdel) for s in tmp]
 
-    distinct_vals = list(OrderedDict.fromkeys([ s[2] for s in tmp ]))
+    distinct_vals = list(OrderedDict.fromkeys([s[2] for s in tmp]))
 
-    groups = [ [] for i in range(len(distinct_vals)) ]
+    groups = [[] for i in range(len(distinct_vals))]
 
     for item in tmp:
         for index, val in enumerate(distinct_vals):
@@ -216,21 +216,21 @@ def sort_by(stringlist, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp
     :param as_string: Determines if the values for ``pattern`` get converted to floats.
     :return: A sorted list of simulation IDs.
     """
-    tmp = [ s.partition(ldel + pattern + mdel) for s in stringlist ]
-    tmp = [ s[0:2] + s[2].partition(rdel) for s in tmp ]
+    tmp = [s.partition(ldel + pattern + mdel) for s in stringlist]
+    tmp = [s[0:2] + s[2].partition(rdel) for s in tmp]
 
     if not as_string:
         # Convert to float and append numeric values to the splitted IDs
-        tmp = [ s + (float(s[2]),) for s in tmp ]
+        tmp = [s + (float(s[2]),) for s in tmp]
     else:
         # Use string in comparison, allows sorting
-        tmp = [ s + (s[2],) for s in tmp ]
+        tmp = [s + (s[2],) for s in tmp]
 
     # Sort w.r.t. the numerical value
     tmp.sort(key=lambda x: x[-1])
 
     # Remove numeric value and concatenate the fragments again
-    sorted_list = [ reduce(op.add, s[:-1]) for s in tmp ]
+    sorted_list = [reduce(op.add, s[:-1]) for s in tmp]
 
     return sorted_list
 
@@ -291,7 +291,7 @@ def get_items(name, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     :return: A list of all ``key=value`` items present in the ``name``.
     """
     parts = name.split(ldel)
-    items = [ ldel + p.rsplit(rdel)[0] + rdel for p in parts if rdel in p ]
+    items = [ldel + p.rsplit(rdel)[0] + rdel for p in parts if rdel in p]
     return items
 
 
@@ -310,7 +310,7 @@ def get_item(name, pattern, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel
     result = [item for item in items if searchfor in item]
 
     if len(result) == 0:
-        print("Warning: pattern '"+pattern+"' not found in: "+str(name))
+        print("Warning: pattern '{}' not found in: {}".format((pattern, name)))
 
     if unpack and len(result) == 1:
         result = result[0]
@@ -324,7 +324,7 @@ def get_by_item(stringlist, item):
     :param item: The ``key=value`` item to search for.
     :return: A list of simulation IDs.
     """
-    result = [ name for name in stringlist if item in name ]
+    result = [name for name in stringlist if item in name]
     return result
 
 
@@ -341,7 +341,7 @@ def get_value(item, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel, rdel=GD.kvp_rdel):
     if not (item.count(mdel) == 1 and
             item[0] == ldel and
             item[-1] == rdel):
-        raise ValueError("The item '"+str(item)+"' is not a single item.")
+        raise ValueError("The item '{}' is not a single item.".format(item))
 
     rightpart = item.partition(mdel)
     value = rightpart[-1].partition(rdel)
@@ -366,7 +366,7 @@ def get_by_value(stringlist, pattern, value, ldel=GD.kvp_ldel, mdel=GD.kvp_mdel,
         items = get_item(name, pattern, unpack=False)
 
         if len(items) > 1:
-            print("Warning: ambiguous pattern '"+pattern+"' in: "+str(name))
+            print("Warning: ambiguous pattern '{} in: {}".format((pattern, name)))
 
         for item in items:
             val = get_value(item, ldel=ldel, mdel=mdel, rdel=rdel)
@@ -408,4 +408,4 @@ def split_list(alist, n):
     """
     n = max(1, n)
     n = min(len(alist), n)
-    return [ alist[i::n] for i in range(n) ]
+    return [alist[i::n] for i in range(n)]

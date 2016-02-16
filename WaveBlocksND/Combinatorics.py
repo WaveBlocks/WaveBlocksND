@@ -29,7 +29,7 @@ def partitions(D, K):
                 P[i] = 0
             else:
                 P[0] = p0 - i * (P[i] + 1)
-                P[1:(i+1)] = P[i] + 1
+                P[1:(i + 1)] = P[i] + 1
                 yield P.copy()
                 break
         else:
@@ -52,17 +52,17 @@ def lattice_points_norm(D, N):
     yield tuple(k)
 
     c = 1
-    while k[D-1] < N:
+    while k[D - 1] < N:
         if c == D:
-            for i in range(c-1, 0, -1):
+            for i in range(c - 1, 0, -1):
                 c = i
-                if not k[i-1] == 0:
+                if not k[i - 1] == 0:
                     break
-        k[c-1] = k[c-1] - 1
+        k[c - 1] = k[c - 1] - 1
         c += 1
-        k[c-1] = N - sum(k[0:c-1])
+        k[c - 1] = N - sum(k[0:c - 1])
         if c < D:
-            k[c:D] = zeros(D-c, dtype=integer)
+            k[c:D] = zeros(D - c, dtype=integer)
 
         yield tuple(k)
 
@@ -75,7 +75,7 @@ def lattice_points(D, N):
     :param D: The dimension :math:`D` of the lattice.
     :param N: The maximal :math:`l_1` norm of the lattice points.
     """
-    for n in range(N+1):
+    for n in range(N + 1):
         for l in lattice_points_norm(D, n):
             yield l
 
@@ -93,22 +93,22 @@ def permutations(P):
     while True:
         for i in range(1, D):
             pi = P[i]
-            if P[i-1] > pi:
+            if P[i - 1] > pi:
                 I = i
                 if i > 1:
                     J = I
-                    for j in range(I//2):
+                    for j in range(I // 2):
                         pj = P[j]
                         if pj <= pi:
                             I = I - 1
-                        P[j] = P[i - j-1]
-                        P[i - j-1] = pj
+                        P[j] = P[i - j - 1]
+                        P[i - j - 1] = pj
                         if P[j] > pi:
-                            J = j+1
-                    if P[I-1] <= pi:
+                            J = j + 1
+                    if P[I - 1] <= pi:
                         I = J
-                P[i] = P[I-1]
-                P[I-1] = pi
+                P[i] = P[I - 1]
+                P[I - 1] = pi
                 yield P.copy()
                 break
         else:

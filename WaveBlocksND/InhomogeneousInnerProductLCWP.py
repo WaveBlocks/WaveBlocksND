@@ -99,8 +99,8 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
             Nbra = array([1] * lcbra.get_number_packets())
             Nket = array([1] * lcket.get_number_packets())
         else:
-            Nbra = array([ wp.get_number_components() for wp in lcbra.get_wavepackets() ])
-            Nket = array([ wp.get_number_components() for wp in lcket.get_wavepackets() ])
+            Nbra = array([wp.get_number_components() for wp in lcbra.get_wavepackets()])
+            Nket = array([wp.get_number_components() for wp in lcket.get_wavepackets()])
 
         M = self.build_matrix(lcbra, lcket, operator=operator, component=component, eval_at_once=eval_at_once)
 
@@ -139,8 +139,8 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
             Nbra = [1] * lcbra.get_number_packets()
             Nket = [1] * lcket.get_number_packets()
         else:
-            Nbra = [ wp.get_number_components() for wp in pacbras ]
-            Nket = [ wp.get_number_components() for wp in packets ]
+            Nbra = [wp.get_number_components() for wp in pacbras]
+            Nket = [wp.get_number_components() for wp in packets]
 
         # The partition scheme of the block vectors and block matrix
         partitionb = [0] + list(cumsum(Nbra))
@@ -155,13 +155,13 @@ class InhomogeneousInnerProductLCWP(InnerProduct):
                         Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                         Q = reshape(Q, (Nbra[row], Nket[col]))
                         # Put the result into the global storage
-                        result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = reshape(Q, (Nbra[row], Nket[col]))
+                        result[partitionb[row]:partitionb[row + 1], partitionk[col]:partitionk[col + 1]] = reshape(Q, (Nbra[row], Nket[col]))
         else:
             for row, pacbra in enumerate(pacbras):
                 for col, packet in enumerate(packets):
                     Q = self._delegate.quadrature(pacbra, packet, operator=operator, diag_component=component, eval_at_once=eval_at_once)
                     Q = reshape(Q, (Nbra[row], Nket[col]))
                     # Put the result into the global storage
-                    result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = Q
+                    result[partitionb[row]:partitionb[row + 1], partitionk[col]:partitionk[col + 1]] = Q
 
         return result

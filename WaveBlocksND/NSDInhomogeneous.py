@@ -9,7 +9,7 @@ numerical steepest descent technique.
 @license: Modified BSD License
 """
 
-from numpy import (array, zeros, ones, diag, squeeze,  conjugate, transpose, dot,
+from numpy import (array, zeros, ones, diag, squeeze, conjugate, transpose, dot,
                    einsum, product, complexfloating, imag, nan_to_num, triu)
 from scipy import exp, sqrt, pi
 from scipy.linalg import inv, schur, det, sqrtm
@@ -89,7 +89,7 @@ class NSDInhomogeneous(Quadrature):
         #       For this, 'operator' must support the 'component=(r,c)' option.
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._operator = lambda nodes, dummy, entry=None: ones((1, nodes.shape[1])) if entry[0] == entry[1] else zeros((1, nodes.shape[1]))
         else:
             # Wrap the operator inside a lambda ignoring the dummy parameter
             # This allows to use the same nsd code for quadrature and matrix construction.
@@ -205,18 +205,18 @@ class NSDInhomogeneous(Quadrature):
 
         # Oscillator updates
         for i in range(1, D):
-            if T[i-1,i-1] == 0:
+            if T[i - 1, i - 1] == 0:
                 # TODO: Prove that this never happens or handle it correctly!
                 print("Warning: 'update_oscillator' encountered a RESIDUE situation!")
 
             # Diagonal Elements
             for j in range(i, D):
-                T[j,j] = T[j,j] - T[i-1,j]**2 / (4.0*T[i-1,i-1])
+                T[j, j] = T[j, j] - T[i - 1, j]**2 / (4.0 * T[i - 1, i - 1])
 
             # Others
             for rowi in range(i, D):
-                for coli in range(rowi+1, D):
-                    T[rowi,coli] = T[rowi,coli] - T[i-1,rowi]*T[i-1,coli] / (2*T[i-1,i-1])
+                for coli in range(rowi + 1, D):
+                    T[rowi, coli] = T[rowi, coli] - T[i - 1, rowi] * T[i - 1, coli] / (2 * T[i - 1, i - 1])
 
         # Compute remaining parts
         X = inv(A + transpose(A))
@@ -228,7 +228,7 @@ class NSDInhomogeneous(Quadrature):
         prefactor = exp(1.0j * w * ctilde)
 
         # Take out diagonals of T
-        Dk = diag(T).reshape((D,1))
+        Dk = diag(T).reshape((D, 1))
         # Tau (path parametrization variable)
         tk = self._nodes / sqrt(w)
 
@@ -236,7 +236,7 @@ class NSDInhomogeneous(Quadrature):
         Tu = 0.5 * triu(T, 1) / Dk
         paths = (sqrt(1.0j / Dk) * tk).astype(complexfloating)
         for i in reversed(range(D)):
-            paths[i,:] = paths[i,:] - dot(Tu[i,:], paths)
+            paths[i, :] = paths[i, :] - dot(Tu[i, :], paths)
 
         # Path derivatives
         pathderivs = sqrt(1.0j / Dk)
@@ -250,20 +250,20 @@ class NSDInhomogeneous(Quadrature):
         # We loose it when dividing by phi_0 hence manually add it again.
         # TODO: Do we need mixing parameters here?
         #       Preliminary answer: no
-        fr = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Pibra[2]))
-        fc = (pi*eps**2)**(-0.25*D) * 1.0/sqrt(det(Piket[2]))
-        normfactor = conjugate(fr)*fc
+        fr = (pi * eps**2)**(-0.25 * D) * 1.0 / sqrt(det(Pibra[2]))
+        fc = (pi * eps**2)**(-0.25 * D) * 1.0 / sqrt(det(Piket[2]))
+        normfactor = conjugate(fr) * fc
 
         # Compute global phase difference
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
 
         # Non-oscillatory parts
         # Wavepacket
         # TODO: This is a huge hack: division by phi_0 not stable?
         basisr = self._pacbra.evaluate_basis_at(conjugate(pathst), row, prefactor=False)
-        basisr = basisr / basisr[0,:]
+        basisr = basisr / basisr[0, :]
         basisc = self._packet.evaluate_basis_at(pathst, col, prefactor=False)
-        basisc = basisc / basisc[0,:]
+        basisc = basisc / basisc[0, :]
         # Basis division by phi0 may introduce NaNs
         #basisr = nan_to_num(basisr)
         #basisc = nan_to_num(basisc)
@@ -271,9 +271,9 @@ class NSDInhomogeneous(Quadrature):
         # Operator should support the component notation for efficiency
         if self._eval_at_once is True:
             # TODO: Sure, this is inefficient, but we can not do better right now.
-            opath = self._operator(pathst, Pimix[0])[row*N+col]
+            opath = self._operator(pathst, Pimix[0])[row * N + col]
         else:
-            opath = self._operator(pathst, Pimix[0], entry=(row,col))
+            opath = self._operator(pathst, Pimix[0], entry=(row, col))
 
         # Do the quadrature
         quadrand = (opath * pdp * self._weights).reshape((-1,))

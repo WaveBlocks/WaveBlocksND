@@ -29,8 +29,8 @@ class GridWrapper(AbstractGrid):
         self._dimension = self._data.shape[0]
         # Compute some additional data
         # TODO: Note that these values are only correct for closed, aperiodic grids
-        self._limits = [ (anarray[d,0], anarray[d,-1]) for d in range(self._dimension) ]
-        self._extensions = [ abs(l[-1] - l[0]) for l in self._limits ]
+        self._limits = [(anarray[d, 0], anarray[d, -1]) for d in range(self._dimension)]
+        self._extensions = [abs(l[-1] - l[0]) for l in self._limits]
 
 
     def get_number_nodes(self, overall=False):
@@ -66,7 +66,7 @@ class GridWrapper(AbstractGrid):
             raise NotImplementedError("Grid wrapping for hypercubic storage.")
 
         if split is True:
-            return [ self._data[i,...] for i in range(self._data.shape[0]) ]
+            return [self._data[i, ...] for i in range(self._data.shape[0])]
         else:
             return self._data
 
@@ -82,7 +82,7 @@ class GridWrapper(AbstractGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        return [ self._limits[i] for i in atleast_1d(axes) ]
+        return [self._limits[i] for i in atleast_1d(axes)]
 
 
     def get_extensions(self, axes=None):
@@ -96,4 +96,4 @@ class GridWrapper(AbstractGrid):
         if axes is None:
             axes = range(self._dimension)
 
-        return [ self._extensions[i] for i in atleast_1d(axes) ]
+        return [self._extensions[i] for i in atleast_1d(axes)]

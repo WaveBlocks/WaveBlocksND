@@ -84,7 +84,7 @@ class TrapezoidalQR(QuadratureRule):
         nodes = linspace(self._left, self._right, self._number_nodes)
         # The number of nodes in this quadrature rule
         self._number_nodes = nodes.size
-        dx = abs(self._right-self._left) / (1.0*self._number_nodes-1.0)
+        dx = abs(self._right - self._left) / (self._number_nodes - 1.0)
         weights = ones(nodes.shape)
         weights[0] = 0.5
         weights[-1] = 0.5

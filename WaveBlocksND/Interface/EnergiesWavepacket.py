@@ -59,7 +59,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
         BS[ahash] = BF.create_basis_shape(descr)
 
     O = ObservablesHAWP()
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
@@ -71,7 +71,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Configure the wavepacket
         HAWP.set_parameters(params, key=KEY)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -137,7 +137,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
         BS[ahash] = BF.create_basis_shape(descr)
 
     O = ObservablesHAWP()
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
 
     # Iterate over all timesteps
     for i, step in enumerate(timesteps):
@@ -149,7 +149,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Configure the wavepacket
         HAWP.set_parameters(params, key=KEY)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

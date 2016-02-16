@@ -86,7 +86,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
     def _prepare_potential(self):
         """Precalculate the potential splittings needed
         """
-        for chi in set([ p[1] for p in self._packets ]):
+        for chi in set([p[1] for p in self._packets]):
             self._potential.calculate_local_quadratic(diagonal_component=chi)
             self._potential.calculate_local_remainder(diagonal_component=chi)
 
@@ -120,7 +120,7 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
         """
         # TODO: Does not return leading components. Add this if needed somewhere.
         if packet is None:
-            return [ p[0] for p in self._packets ]
+            return [p[0] for p in self._packets]
         else:
             return self._packets[packet][0]
 
@@ -180,50 +180,50 @@ class McL84scPropagator(Propagator, PerturbedSplittingParameters):
             r = self._innerorder
             alpha = 2.0
             beta = 4.0
-            defaultinnerstep = (dt**(r-beta) / eps**(alpha+2.0))**(1.0/r)
+            defaultinnerstep = (dt**(r - beta) / eps**(alpha + 2.0))**(1.0 / r)
             nrinnersteps = self._parameters.get("innersteps", defaultinnerstep)
             nrlocalsteps = max(1, 1 + int(nrinnersteps))
 
             # Propagate
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[0]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[0] * dt], nrlocalsteps, [packet], [packet, leading_chi])
 
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[0]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * B[0] * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[1]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[1] * dt], nrlocalsteps, [packet], [packet, leading_chi])
 
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[1]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * B[1] * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[2]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[2] * dt], nrlocalsteps, [packet], [packet, leading_chi])
 
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[2]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * B[2] * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[3]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[3] * dt], nrlocalsteps, [packet], [packet, leading_chi])
 
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[3]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * B[3] * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[4]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[4] * dt], nrlocalsteps, [packet], [packet, leading_chi])
 
             innerproduct = packet.get_innerproduct()
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*B[4]*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * B[4] * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0, A[5]*dt], nrlocalsteps, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, A[5] * dt], nrlocalsteps, [packet], [packet, leading_chi])

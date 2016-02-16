@@ -68,14 +68,14 @@ def add_overlaplcwp(self, parameters, timeslots=None, matrixsize=None, blockid=0
         csJcs = min(128, Jcs)
 
     for k in key:
-        if not k in valid_keys:
+        if k not in valid_keys:
             raise ValueError("Unknown key value "+str(k))
 
         name = k[2:]
 
         daset_tg = grp_ov.create_dataset("timegrid"+name, (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_ov.create_dataset("shape"+name, (T,2), dtype=np.integer, chunks=(csTs,2), maxshape=(Ts,2))
-        grp_ov.create_dataset("overlap"+name, (T,Jr,Jc), dtype=np.complexfloating, chunks=(1,csJrs,csJcs), maxshape=(Ts,Jrs,Jcs))
+        grp_ov.create_dataset("shape"+name, (T, 2), dtype=np.integer, chunks=(csTs, 2), maxshape=(Ts, 2))
+        grp_ov.create_dataset("overlap"+name, (T, Jr, Jc), dtype=np.complexfloating, chunks=(1, csJrs, csJcs), maxshape=(Ts, Jrs, Jcs))
 
         daset_tg.attrs["pointer"] = 0
 
@@ -138,7 +138,7 @@ def save_overlaplcwp(self, data, timestep=None, blockid=0, key=("ov", "ovkin", "
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
             pathd  = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlappot"
         else:
-            raise ValueError("Unknown key value "+str(item))
+            raise ValueError("Unknown key value {}".format(item))
 
         timeslot = self._srf[pathtg].attrs["pointer"]
 
@@ -146,11 +146,11 @@ def save_overlaplcwp(self, data, timestep=None, blockid=0, key=("ov", "ovkin", "
         self.must_resize(pathd, timeslot)
         data = np.atleast_2d(np.squeeze(data))
         rows, cols = data.shape
-        self.must_resize(pathd, rows-1, axis=1)
-        self.must_resize(pathd, cols-1, axis=2)
-        self._srf[pathd][timeslot,:rows,:cols] = data
+        self.must_resize(pathd, rows - 1, axis=1)
+        self.must_resize(pathd, cols - 1, axis=2)
+        self._srf[pathd][timeslot, :rows, :cols] = data
         self.must_resize(pathsh, timeslot)
-        self._srf[pathsh][timeslot,:] = np.array([rows,cols])
+        self._srf[pathsh][timeslot, :] = np.array([rows, cols])
 
         # Write the timestep to which the stored values belong into the timegrid
         self.must_resize(pathtg, timeslot)
@@ -181,7 +181,7 @@ def load_overlaplcwp_timegrid(self, blockid=0, key=("ov", "ovkin", "ovpot")):
             pathtg = "/"+self._prefixb+str(blockid)+"/overlaplcwp/timegridpot"
             tg.append(self._srf[pathtg][:])
         else:
-            raise ValueError("Unknown key value "+str(item))
+            raise ValueError("Unknown key value {}".format(item))
 
     if len(tg) == 1:
         print(tg)
@@ -211,7 +211,7 @@ def load_overlaplcwp_shape(self, blockid=0, key=("ov", "ovkin", "ovpot")):
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
             tg.append(self._srf[pathsh][:])
         else:
-            raise ValueError("Unknown key value "+str(item))
+            raise ValueError("Unknown key value {}".format(item))
 
     if len(tg) == 1:
         print(tg)
@@ -248,14 +248,14 @@ def load_overlaplcwp(self, timestep=None, blockid=0, key=("ov", "ovkin", "ovpot"
             pathsh = "/"+self._prefixb+str(blockid)+"/overlaplcwp/shapepot"
             pathd = "/"+self._prefixb+str(blockid)+"/overlaplcwp/overlappot"
         else:
-            raise ValueError("Unknown key value "+str(item))
+            raise ValueError("Unknown key value {}".format(item))
 
         if timestep is not None:
             index = self.find_timestep_index(pathtg, timestep)
-            shape = self._srf[pathsh][index,:]
-            datum = self._srf[pathd][index,:shape[0],:shape[1]]
+            shape = self._srf[pathsh][index, :]
+            datum = self._srf[pathd][index, :shape[0], :shape[1]]
         else:
-            datum = self._srf[pathd][:,:,:]
+            datum = self._srf[pathd][:, :, :]
 
         result.append(datum)
 

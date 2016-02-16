@@ -42,9 +42,9 @@ class HyperbolicCutShape(BasisShape):
 
         # The linear mapping k -> index for the basis
         iil = self._get_index_iterator_lex()
-        self._lima = {k:index for index, k in enumerate(iil)}
+        self._lima = {k: index for index, k in enumerate(iil)}
         # And the inverse mapping
-        self._lima_inv = {v:k for k, v in self._lima.items()}
+        self._lima_inv = {v: k for k, v in self._lima.items()}
 
         # The basis size
         self._basissize = len(self._lima)
@@ -53,8 +53,7 @@ class HyperbolicCutShape(BasisShape):
     def __str__(self):
         r""":return: A string describing the basis shape :math:`\mathfrak{K}`.
         """
-        s = ("Hyperbolic cut basis shape of dimension "+str(self._dimension)+
-             " and sparsity "+str(self._sparsity)+".")
+        s = ("Hyperbolic cut basis shape of dimension "+str(self._dimension)+" and sparsity "+str(self._sparsity)+".")
         return s
 
 
@@ -135,7 +134,7 @@ class HyperbolicCutShape(BasisShape):
         if D > 1:
             # This formula is more narrow than: K = 2**(D-1) * (K+1)
             # but works only for D >= 2
-            extended_sparsity = 2**(D-1) * K
+            extended_sparsity = 2**(D - 1) * K
         else:
             # Special casing K = 2**(D-1) * (K+1) for D = 1
             extended_sparsity = K + 1
@@ -161,10 +160,10 @@ class HyperbolicCutShape(BasisShape):
 
                 # Reset overflows
                 for d in range(self._dimension):
-                    K = reduce(lambda x,y: x*(y+1), z[:-1], 1)
+                    K = reduce(lambda x, y: x * (y + 1), z[:-1], 1)
                     if K > Kmax:
                         z[d] = 0
-                        z[d+1] += 1
+                        z[d + 1] += 1
 
         return index_iterator_lex(Kmax)
 
@@ -175,23 +174,23 @@ class HyperbolicCutShape(BasisShape):
         def index_iterator_chain(Kmax, d):
             D = self._dimension
             # The counter
-            z = [ 0 for i in range(D + 1) ]
+            z = [0 for i in range(D + 1)]
 
             # Iterate over all valid stencil points
             while z[D] == 0:
                 yield tuple(reversed(z[:-1]))
 
                 # Increase index in the dimension we build the chain
-                z[D-d-1] += 1
+                z[D - d - 1] += 1
 
                 # Check if we are done with the current base point
                 # If yes, move base point and start a new chain
                 # Reset overflows
-                for i in range(D-d-1, D):
-                    K = reduce(lambda x,y: x*(y+1), z[(D-d-1):-1], 1)
+                for i in range(D - d - 1, D):
+                    K = reduce(lambda x, y: x * (y + 1), z[(D - d - 1):-1], 1)
                     if K > Kmax:
                         z[i] = 0
-                        z[i+1] += 1
+                        z[i + 1] += 1
 
         return index_iterator_chain(self._sparsity, direction)
 
@@ -232,7 +231,7 @@ class HyperbolicCutShape(BasisShape):
             return self._get_index_iterator_mag()
         # TODO: Consider boundary node only iterator
         else:
-            raise ValueError("Unknown iterator mode: "+str(mode)+".")
+            raise ValueError("Unknown iterator mode: {}.".format(mode))
 
 
     def get_limits(self):
@@ -240,7 +239,7 @@ class HyperbolicCutShape(BasisShape):
 
         :return: A tuple of the maximum of the multi-index in each direction.
         """
-        return tuple(self._dimension * [self._sparsity-1])
+        return tuple(self._dimension * [self._sparsity - 1])
 
 
     def get_neighbours(self, k, selection=None, direction=None):
@@ -273,13 +272,13 @@ class HyperbolicCutShape(BasisShape):
         nbh = []
 
         if direction is not None:
-            directions = [ direction ]
+            directions = [direction]
         else:
             directions = range(self._dimension)
 
         for d in directions:
-            nfw = tuple(nbfw[:,d])
-            nbw = tuple(nbbw[:,d])
+            nfw = tuple(nbfw[:, d])
+            nbw = tuple(nbbw[:, d])
 
             # TODO: Try to simplify these nested if blocks
             if selection in ("backward", "all", None):

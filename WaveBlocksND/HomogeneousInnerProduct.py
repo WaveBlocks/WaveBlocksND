@@ -71,14 +71,14 @@ class HomogeneousInnerProduct(InnerProduct):
         self._delegate.initialize_packet(packet)
         self._delegate.initialize_operator(operator, eval_at_once=eval_at_once)
 
-        N  = packet.get_number_components()
+        N = packet.get_number_components()
         # Avoid unnecessary computations of other components
         if component is not None:
-            rows = [ component // N ]
-            cols = [ component % N ]
+            rows = [component // N]
+            cols = [component % N]
         elif diag_component is not None:
-            rows = [ diag_component ]
-            cols = [ diag_component ]
+            rows = [diag_component]
+            cols = [diag_component]
         else:
             rows = range(N)
             cols = range(N)
@@ -100,7 +100,7 @@ class HomogeneousInnerProduct(InnerProduct):
             result = result[0]
         elif diagonal is True:
             # Only keep the diagonal elements
-            result = [result[i*N+i] for i in range(N)]
+            result = [result[i * N + i] for i in range(N)]
 
         return result
 
@@ -122,19 +122,19 @@ class HomogeneousInnerProduct(InnerProduct):
         self._delegate.initialize_operator(operator, matrix=True, eval_at_once=eval_at_once)
 
         N = packet.get_number_components()
-        K = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
+        K = [bs.get_basis_size() for bs in packet.get_basis_shapes()]
         # The partition scheme of the block vectors and block matrix
         partition = [0] + list(cumsum(K))
 
         self._delegate.prepare(range(N), range(N))
 
         # Compute the matrix elements
-        result = zeros((sum(K),sum(K)), dtype=complexfloating)
+        result = zeros((sum(K), sum(K)), dtype=complexfloating)
 
         for row in range(N):
             for col in range(N):
                 M = self._delegate.perform_build_matrix(row, col)
                 # Put the result into the global storage
-                result[partition[row]:partition[row+1], partition[col]:partition[col+1]] = M
+                result[partition[row]:partition[row + 1], partition[col]:partition[col + 1]] = M
 
         return result

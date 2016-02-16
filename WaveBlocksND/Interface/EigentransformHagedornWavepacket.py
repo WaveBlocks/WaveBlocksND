@@ -22,7 +22,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     """
     parameters = iomin.load_parameters()
 
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
 
     # Number of time steps we saved
     timesteps = iomin.load_wavepacket_timegrid(blockid=blockidin)
@@ -59,7 +59,7 @@ def transform_hawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params, key=KEY)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.
@@ -86,7 +86,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
     """
     parameters = iomin.load_parameters()
 
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
 
     # Number of time steps we saved
     timesteps = iomin.load_inhomogwavepacket_timegrid(blockid=blockidin)
@@ -123,7 +123,7 @@ def transform_inhawp_to_eigen(iomin, iomout, blockidin=0, blockidout=0):
 
         # Configure the wavepacket
         HAWP.set_parameters(params, key=KEY)
-        HAWP.set_basis_shapes([ BS[int(ha)] for ha in hashes ])
+        HAWP.set_basis_shapes([BS[int(ha)] for ha in hashes])
         HAWP.set_coefficients(coeffs)
 
         # Transform to the eigenbasis.

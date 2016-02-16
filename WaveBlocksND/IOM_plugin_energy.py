@@ -38,19 +38,19 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
     grp_en = grp_ob.create_group("energies")
 
     # Add all requested data sets
-    if "kin" in key and not "kinetic" in grp_en.keys():
+    if "kin" in key and "kinetic" not in grp_en.keys():
         daset_tgek = grp_en.create_dataset("timegrid_kin", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("kinetic", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
+        grp_en.create_dataset("kinetic", (T, N), dtype=np.floating, chunks=(csTs, N), maxshape=(Ts, N))
         daset_tgek.attrs["pointer"] = 0
 
-    if "pot" in key and not "potential" in grp_en.keys():
+    if "pot" in key and "potential" not in grp_en.keys():
         daset_tgep = grp_en.create_dataset("timegrid_pot", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("potential", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
+        grp_en.create_dataset("potential", (T, N), dtype=np.floating, chunks=(csTs, N), maxshape=(Ts, N))
         daset_tgep.attrs["pointer"] = 0
 
-    if "tot" in key and not "total" in grp_en.keys():
+    if "tot" in key and "total" not in grp_en.keys():
         daset_tget = grp_en.create_dataset("timegrid_tot", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-        grp_en.create_dataset("total", (T,1), dtype=np.floating, chunks=(csTs,1), maxshape=(Ts,1))
+        grp_en.create_dataset("total", (T, 1), dtype=np.floating, chunks=(csTs, 1), maxshape=(Ts, 1))
         daset_tget.attrs["pointer"] = 0
 
 
@@ -122,7 +122,7 @@ def save_energy(self, energies, timestep=None, blockid=0, key=("kin", "pot")):
 
         # Write the data
         self.must_resize(pathd, timeslot)
-        self._srf[pathd][timeslot,:] = energy
+        self._srf[pathd][timeslot, :] = energy
 
         # Write the timestep to which the stored values belong into the timegrid
         self.must_resize(pathtg, timeslot)
@@ -189,9 +189,9 @@ def load_energy(self, timestep=None, split=False, blockid=0, key=("kin", "pot"))
             axis = 1
 
         if split is True:
-            energy = self.split_data( self._srf[pathd][index,...], axis)
+            energy = self.split_data(self._srf[pathd][index, ...], axis)
         else:
-            energy = self._srf[pathd][index,...]
+            energy = self._srf[pathd][index, ...]
 
         result.append(energy)
 

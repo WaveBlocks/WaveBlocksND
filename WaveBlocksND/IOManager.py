@@ -61,20 +61,20 @@ class IOManager(object):
         if parts[0] not in ("add", "delete", "has", "load", "save", "update"):
             return
         else:
-            print("Requested function: "+key)
+            print("Requested function: {}".format(key))
             name = "IOM_plugin_" + parts[1]
 
         # Load the necessary plugin
-        print("Plugin to load: "+name)
+        print("Plugin to load: {}".format(name))
         try:
             plugin = __import__(name)
         except ImportError:
-            raise ImportError("IOM plugin '"+name+"' not found!")
+            raise ImportError("IOM plugin '{}' not found!".format(name))
 
         # Filter out functions we want to add to IOM and
         # bind the methods to the current IOM instance
         for k, v in plugin.__dict__.items():
-            if type(v) == types.FunctionType:
+            if isinstance(v, types.FunctionType):
                 self.__dict__[k] = types.MethodType(v, self)
 
         # Now return the new function to complete it's call
@@ -90,7 +90,7 @@ class IOManager(object):
         # Create the file if it does not yet exist.
         # Otherwise raise an exception to avoid overwriting data.
         if os.path.lexists(filename):
-            raise IOError("Output file '"+str(filename)+"' already exists!")
+            raise IOError("Output file '{}' already exists!".format(filename))
         else:
             self._srf = hdf.File(filename)
 
@@ -119,22 +119,22 @@ class IOManager(object):
             if hdf.is_hdf5(filename):
                 self._srf = hdf.File(filename)
             else:
-                raise IOError("File '"+str(filename)+"' is not a hdf5 file")
+                raise IOError("File '{}' is not a hdf5 file".format(filename))
         else:
-            raise IOError("File '"+str(filename)+"' does not exist!")
+            raise IOError("File '{}' does not exist!".format(filename))
 
         # Check if the file format can be read by the IOManager
-        if not "file_version" in self._srf.attrs.keys():
+        if "file_version" not in self._srf.attrs.keys():
             raise IOError("Unsupported file format without version number")
 
         if self._srf.attrs["file_version"] != self._hdf_file_version:
             raise IOError("Unsupported file format version " + str(self._srf.attrs["file_version"]))
 
         # Initialize the internal book keeping data
-        self._block_ids = [ s[len(self._prefixb):] for s in self._srf.keys() if s.startswith(self._prefixb) ]
+        self._block_ids = [s[len(self._prefixb):] for s in self._srf.keys() if s.startswith(self._prefixb)]
         self._block_count = len(self._block_ids)
 
-        self._group_ids = [ s[len(self._prefixg):] for s in self._srf.keys() if s.startswith(self._prefixg) ]
+        self._group_ids = [s[len(self._prefixg):] for s in self._srf.keys() if s.startswith(self._prefixg)]
         self._group_count = len(self._group_ids)
 
 
@@ -148,7 +148,7 @@ class IOManager(object):
         self._srf.close()
         self._srf = None
         # Reset book keeping data
-        self._block_ids= None
+        self._block_ids = None
         self._block_count = None
         self._group_ids = None
         self._group_count = None
@@ -189,7 +189,7 @@ class IOManager(object):
             if grouped is False:
                 return self._block_ids[:]
             else:
-                return [ self._srf["/"+self._prefixg+str(gid)].keys() for gid in self.get_group_ids() ]
+                return [self._srf["/"+self._prefixg+str(gid)].keys() for gid in self.get_group_ids()]
 
 
     def get_group_ids(self, exclude=[]):
@@ -197,7 +197,7 @@ class IOManager(object):
 
         :param exclude: A list of group IDs to exclude. Per default no group is excluded.
         """
-        return [ gid for gid in self._group_ids if gid not in exclude ]
+        return [gid for gid in self._group_ids if gid not in exclude]
 
 
     def get_group_of_block(self, blockid):
@@ -224,7 +224,7 @@ class IOManager(object):
         if self._srf is None:
             return
 
-        if blockid is not None and (not str(blockid).isalnum()):# or str(blockid)[0].isdigit()):
+        if blockid is not None and (not str(blockid).isalnum()):
             raise ValueError("Block ID allows only characters A-Z, a-z and 0-9 and no leading digit.")
 
         if blockid is not None and str(blockid) in self._block_ids:
@@ -266,7 +266,7 @@ class IOManager(object):
         if self._srf is None:
             return
 
-        if groupid is not None and (not str(groupid).isalnum()):# or str(groupid)[0].isdigit()):
+        if groupid is not None and (not str(groupid).isalnum()):
             raise ValueError("Group ID allows only characters A-Z, a-z and 0-9 and no leading digit.")
 
         if groupid is not None and str(groupid) in self._group_ids:
@@ -298,8 +298,8 @@ class IOManager(object):
 
         # Is the current size smaller than the new "size"?
         # If yes, then resize the array along the given axis.
-        if cur_len-1 < size:
-            self._srf[path].resize(size+1, axis=axis)
+        if cur_len - 1 < size:
+            self._srf[path].resize(size + 1, axis=axis)
 
 
     def find_timestep_index(self, timegridpath, timestep):

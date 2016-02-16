@@ -94,10 +94,10 @@ class MatrixPotentialMS(MatrixPotential):
         # Determine which entries to evaluate
         if entry is not None:
             (row, col) = entry
-            entries = [ row * self._number_components + col ]
+            entries = [row * self._number_components + col]
         else:
             N = self._number_components
-            entries = [ row * N + col for row in range(N) for col in range(N) ]
+            entries = [row * N + col for row in range(N) for col in range(N)]
 
         # Evaluate all entries specified
         result = []
@@ -114,7 +114,7 @@ class MatrixPotentialMS(MatrixPotential):
 
             # Put the result in correct shape (1, #gridnodes)
             N = grid.get_number_nodes(overall=True)
-            result.append( values.reshape((1,N)) )
+            result.append(values.reshape((1, N)))
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:
@@ -167,22 +167,22 @@ class MatrixPotentialMS(MatrixPotential):
         # Fill in values
         for row in range(N):
             for col in range(N):
-                tmppot[:, row, col] = values[N*row + col]
+                tmppot[:, row, col] = values[N * row + col]
 
         # Calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)
         for i in range(n):
-            ew = linalg.eigvalsh(tmppot[i,:,:])
+            ew = linalg.eigvalsh(tmppot[i, :, :])
             if sorted is True:
                 # Sorting the eigenvalues, biggest first.
                 # TODO: Sort will fail iff energy level cross!
                 ew.sort()
-                tmpew[i,:] = ew[::-1]
+                tmpew[i, :] = ew[::-1]
             else:
                 # Do not sort
-                tmpew[i,:] = ew[:]
+                tmpew[i, :] = ew[:]
 
         # Split the data into different eigenvalues
-        tmp = [ tmpew[:,index].reshape((1,n)) for index in range(N) ]
+        tmp = [tmpew[:, index].reshape((1, n)) for index in range(N)]
 
         if entry is not None:
             (row, col) = entry
@@ -234,30 +234,30 @@ class MatrixPotentialMS(MatrixPotential):
         # Fill in values
         for row in range(N):
             for col in range(N):
-                tmppot[:, row, col] = values[N*row + col]
+                tmppot[:, row, col] = values[N * row + col]
 
         # Calculate eigenvectors assuming hermitian matrix (eigh for stability!)
         for i in range(n):
-            ew, ev = linalg.eigh(tmppot[i,:,:])
+            ew, ev = linalg.eigh(tmppot[i, :, :])
             if sorted is True:
                 # Sorting the eigenvectors in the same order as the eigenvalues.
                 ind = numpy.argsort(ew)
                 ind = ind[::-1]
-                evs = ev[:,ind]
-                tmpev[i,:,:] = evs
+                evs = ev[:, ind]
+                tmpev[i, :, :] = evs
             else:
                 # No sorting
-                tmpev[i,:,:] = ev
+                tmpev[i, :, :] = ev
 
         # A trick due to G. Hagedorn to get continuous eigenvectors
         # TODO: Not sure if it works in higher dimensions too! (Probably it does not)
         if self._continuous_eigenvectors is True:
             for i in range(1, n):
                 for ev in range(N):
-                    if numpy.dot(tmpev[i,:,ev],tmpev[i-1,:,ev]) < 0:
-                        tmpev[i,:,ev] *= -1
+                    if numpy.dot(tmpev[i, :, ev], tmpev[i - 1, :, ev]) < 0:
+                        tmpev[i, :, ev] *= -1
 
-        return tuple(numpy.transpose(tmpev[:,:,index]) for index in range(N))
+        return tuple(numpy.transpose(tmpev[:, :, index]) for index in range(N))
 
 
     def calculate_exponential(self, factor=1):
@@ -289,7 +289,7 @@ class MatrixPotentialMS(MatrixPotential):
         n = grid.get_number_nodes(overall=True)
 
         # Memory for storing temporary values
-        tmp = numpy.ndarray((n,N,N), dtype=numpy.complexfloating)
+        tmp = numpy.ndarray((n, N, N), dtype=numpy.complexfloating)
 
         # Evaluate potential
         values = self.evaluate_at(grid)
@@ -297,14 +297,14 @@ class MatrixPotentialMS(MatrixPotential):
         # Fill in values
         for row in range(N):
             for col in range(N):
-                tmp[:, row, col] = self._factor * values[N*row + col]
+                tmp[:, row, col] = self._factor * values[N * row + col]
 
         # Calculate exponential
         for i in range(n):
-            tmp[i,:,:] = linalg.expm(tmp[i,:,:], 10)
+            tmp[i, :, :] = linalg.expm(tmp[i, :, :], 10)
 
         # Split the data into different components
-        return tuple(tmp[:,row,col].reshape((1,n)) for row in range(N) for col in range(N))
+        return tuple(tmp[:, row, col].reshape((1, n)) for row in range(N) for col in range(N))
 
 
     def _calculate_jacobian_of_matrix(self, entry=None):
@@ -334,7 +334,7 @@ class MatrixPotentialMS(MatrixPotential):
 
         for i, variable1 in enumerate(self._variables):
             for j, variable2 in enumerate(self._variables):
-                self._HV_s[(i,j)] = tuple(sympy.diff(sympy.diff(entry, variable1), variable2)  for entry in self._potential_s)
+                self._HV_s[(i, j)] = tuple(sympy.diff(sympy.diff(entry, variable1), variable2) for entry in self._potential_s)
 
         for key, val in self._HV_s.items():
             self._HV_n[key] = tuple(sympy.lambdify(self._variables, entry, "numpy") for entry in val)
@@ -342,30 +342,28 @@ class MatrixPotentialMS(MatrixPotential):
 
     def _evaluate_jacobian_of_matrix(self, variable, grid, entry=None):
         # Note: We assume grid is already of supertype Grid
-        #issubclass(type(grid), AbstractGrid)
         n = grid.get_number_nodes(overall=True)
         N = self._number_components
         nodes = grid.get_nodes(split=True)
 
-        dAdxk = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
+        dAdxk = numpy.zeros((n, N, N), dtype=numpy.complexfloating)
         for row in range(N):
             for col in range(N):
-                dAdxk[:,row,col] = self._JV_n[variable][N*row+col](*nodes)
+                dAdxk[:, row, col] = self._JV_n[variable][N * row + col](*nodes)
 
         return dAdxk
 
 
     def _evaluate_hessian_of_matrix(self, variables, grid, entry=None):
         # Note: We assume grid is already of supertype Grid
-        #issubclass(type(grid), AbstractGrid)
         n = grid.get_number_nodes(overall=True)
         N = self._number_components
         nodes = grid.get_nodes(split=True)
 
-        dAdxidxj = numpy.zeros((n, N,N), dtype=numpy.complexfloating)
+        dAdxidxj = numpy.zeros((n, N, N), dtype=numpy.complexfloating)
         for row in range(N):
             for col in range(N):
-                dAdxidxj[:,row,col] = self._HV_n[variables][N*row+col](*nodes)
+                dAdxidxj[:, row, col] = self._HV_n[variables][N * row + col](*nodes)
 
         return dAdxidxj
 
@@ -414,7 +412,7 @@ class MatrixPotentialMS(MatrixPotential):
             for i in range(D):
                 dAdxi = self._evaluate_jacobian_of_matrix(i, grid)
                 # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
-                Jl[i,:] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxi, EV[l])
+                Jl[i, :] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxi, EV[l])
 
             Jn.append(Jl)
 
@@ -467,15 +465,15 @@ class MatrixPotentialMS(MatrixPotential):
         Hn = []
         # For each eigenvalue
         for l in levels:
-            Hl = numpy.zeros((D,D, n), dtype=numpy.complexfloating)
+            Hl = numpy.zeros((D, D, n), dtype=numpy.complexfloating)
 
             # For all variable pairs (xi, xj)
             for i in range(D):
                 for j in range(D):
                     # First term
-                    dAdxidxj = self._evaluate_hessian_of_matrix((i,j), grid)
+                    dAdxidxj = self._evaluate_hessian_of_matrix((i, j), grid)
                     # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
-                    Hl[i,j] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxidxj, EV[l])
+                    Hl[i, j] = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxidxj, EV[l])
 
                     # Second terms
                     tmp = numpy.zeros((n,), dtype=numpy.complexfloating)
@@ -488,12 +486,12 @@ class MatrixPotentialMS(MatrixPotential):
                             # TODO: Adapt to non-real eigenvectors by conjugating first EV[l]
                             factor1 = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxi, EV[k])
                             factor2 = numpy.einsum("j...,...jk,k...", numpy.conjugate(EV[l]), dAdxj, EV[k])
-                            tmp = tmp + factor1*factor2 / (EW[l]-EW[k])
+                            tmp = tmp + factor1 * factor2 / (EW[l] - EW[k])
 
-                    Hl[i,j,:] = Hl[i,j,:] + 2*tmp
+                    Hl[i, j, :] = Hl[i, j, :] + 2 * tmp
 
             if n == 1:
-                Hl = Hl.reshape((D,D))
+                Hl = Hl.reshape((D, D))
             Hn.append(Hl)
 
         if component is not None:
@@ -531,7 +529,7 @@ class MatrixPotentialMS(MatrixPotential):
                  and its Hessian :math:`H(\Gamma)` in this order.
         """
         if diagonal_component is not None:
-            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component, diagonal_component))
             J = self.evaluate_jacobian_at(grid, component=diagonal_component)
             H = self.evaluate_hessian_at(grid, component=diagonal_component)
             result = (V, J, H)
@@ -539,7 +537,7 @@ class MatrixPotentialMS(MatrixPotential):
             Vlist = self.evaluate_eigenvalues_at(grid)
             Jlist = self.evaluate_jacobian_at(grid)
             Hlist = self.evaluate_hessian_at(grid)
-            result = [ (V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist) ]
+            result = [(V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist)]
 
         return tuple(result)
 
@@ -604,15 +602,15 @@ class MatrixPotentialMS(MatrixPotential):
             # Compute quadratic approximation
             # L(q) + J(q)*(G-q) + 1/2*(G-q)T*H(q)*(G-q)
             df = nodes - position
-            U = L + numpy.einsum("i...,i...", J, df) + 0.5*numpy.einsum("j...,jk...,k...", df, H, df)
+            U = L + numpy.einsum("i...,i...", J, df) + 0.5 * numpy.einsum("j...,jk...,k...", df, H, df)
 
             # Compute the remainder W = V - U
             for row in rows:
                 for col in cols:
                     if row == col:
-                        W.append(V[row*N+col] - U)
+                        W.append(V[row * N + col] - U)
                     else:
-                        W.append(V[row*N+col])
+                        W.append(V[row * N + col])
         else:
             # Inhomogeneous case
             V = self.evaluate_at(grid)
@@ -622,14 +620,14 @@ class MatrixPotentialMS(MatrixPotential):
                 # Compute quadratic approximation
                 # L(q) + J(q)*(G-q) + 1/2*(G-q)T*H(q)*(G-q)
                 df = nodes - position
-                U = L + numpy.einsum("i...,i...", J, df) + 0.5*numpy.einsum("j...,jk...,k...", df, H, df)
+                U = L + numpy.einsum("i...,i...", J, df) + 0.5 * numpy.einsum("j...,jk...,k...", df, H, df)
 
                 for col in cols:
 
                     if row == col:
-                        W.append(V[row*N+col] - U)
+                        W.append(V[row * N + col] - U)
                     else:
-                        W.append(V[row*N+col])
+                        W.append(V[row * N + col])
 
         if entry is not None:
             # Unpack single item

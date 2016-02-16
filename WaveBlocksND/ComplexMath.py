@@ -12,7 +12,7 @@ from numpy import array, hstack, cumsum, diff, around, abs, angle, exp, sqrt, pi
 __all__ = ["continuate", "cont_angle", "cont_sqrt"]
 
 
-def continuate(data, jump=2.0*pi, reference=0.0):
+def continuate(data, jump=2.0 * pi, reference=0.0):
     r"""Make the given data continuous by removing all jumps of size :math:`k\cdot\text{jump}`
     but not touching jumps of any other size. This can be used to overcome issues with
     the branch cut along the negative axis. There may be arise problems with jumps that
@@ -27,8 +27,8 @@ def continuate(data, jump=2.0*pi, reference=0.0):
     # TODO: Maybe replace with 'unwrap' from numpy?
     assert squeeze(reference).ndim == 0, "The 'reference' must be a scalar value."
     data = hstack([array(reference), array(data).reshape(-1)])
-    offsets = cumsum(around(diff(data)/(1.0*jump)))
-    return (data - jump*hstack([0.0, offsets]))[1:]
+    offsets = cumsum(around(diff(data) / (1.0 * jump)))
+    return (data - jump * hstack([0.0, offsets]))[1:]
 
 
 def cont_angle(data, reference=None):
@@ -67,11 +67,11 @@ def cont_sqrt(data, reference=None):
     """
     if reference is None:
         # Return just cont_f(x)
-        return sqrt(abs(data)) * exp(0.5j*continuate(angle(data)))
+        return sqrt(abs(data)) * exp(0.5j * continuate(angle(data)))
     else:
         # Return a 2-tuple (cont_f(x), new_reference)
         phi = continuate(angle(data), reference=reference)
-        result = sqrt(abs(data)) * exp(0.5j*phi)
+        result = sqrt(abs(data)) * exp(0.5j * phi)
         reference = phi[0]
         # TODO: Rethink what 'reference' to return for an array of input values.
         return result, reference

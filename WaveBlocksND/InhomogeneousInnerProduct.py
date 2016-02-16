@@ -82,11 +82,11 @@ class InhomogeneousInnerProduct(InnerProduct):
         Nket = packet.get_number_components()
         # Avoid unnecessary computations of other components
         if component is not None:
-            rows = [ component // Nket ]
-            cols = [ component % Nket ]
+            rows = [component // Nket]
+            cols = [component % Nket]
         elif diag_component is not None:
-            rows = [ diag_component ]
-            cols = [ diag_component ]
+            rows = [diag_component]
+            cols = [diag_component]
         else:
             rows = range(Nbra)
             cols = range(Nket)
@@ -108,7 +108,7 @@ class InhomogeneousInnerProduct(InnerProduct):
             result = result[0]
         elif diagonal is True:
             # Only keep the diagonal elements
-            result = [result[i*Nket+i] for i in range(min(Nbra, Nket))]
+            result = [result[i * Nket + i] for i in range(min(Nbra, Nket))]
 
         return result
 
@@ -139,20 +139,20 @@ class InhomogeneousInnerProduct(InnerProduct):
         Nbra = pacbra.get_number_components()
         Nket = packet.get_number_components()
         # Packets can also have different basis size
-        Kbra = [ bs.get_basis_size() for bs in pacbra.get_basis_shapes() ]
-        Kket = [ bs.get_basis_size() for bs in packet.get_basis_shapes() ]
+        Kbra = [bs.get_basis_size() for bs in pacbra.get_basis_shapes()]
+        Kket = [bs.get_basis_size() for bs in packet.get_basis_shapes()]
         # The partition scheme of the block vectors and block matrix
         partitionb = [0] + list(cumsum(Kbra))
         partitionk = [0] + list(cumsum(Kket))
 
         self._delegate.prepare(range(Nbra), range(Nket))
 
-        result = zeros((sum(Kbra),sum(Kket)), dtype=complexfloating)
+        result = zeros((sum(Kbra), sum(Kket)), dtype=complexfloating)
 
         for row in range(Nbra):
             for col in range(Nket):
                 M = self._delegate.perform_build_matrix(row, col)
                 # Put the result into the global storage
-                result[partitionb[row]:partitionb[row+1], partitionk[col]:partitionk[col+1]] = M
+                result[partitionb[row]:partitionb[row + 1], partitionk[col]:partitionk[col + 1]] = M
 
         return result

@@ -83,7 +83,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
     def _prepare_potential(self):
         """Precalculate the potential splittings needed
         """
-        for chi in set([ p[1] for p in self._packets ]):
+        for chi in set([p[1] for p in self._packets]):
             self._potential.calculate_local_quadratic(diagonal_component=chi)
             self._potential.calculate_local_remainder(diagonal_component=chi)
 
@@ -117,7 +117,7 @@ class MagnusPropagator(Propagator, SplittingParameters):
         """
         # TODO: Does not return leading components. Add this if needed somewhere.
         if packet is None:
-            return [ p[0] for p in self._packets ]
+            return [p[0] for p in self._packets]
         else:
             return self._packets[packet][0]
 
@@ -173,9 +173,9 @@ class MagnusPropagator(Propagator, SplittingParameters):
             eps = packet.get_eps()
 
             # Propagate until c1*dt
-            h1 = (0.5 - sqrt(3.0)/6.0) * dt
-            nrN1 = max(1, 1 + int(h1**0.5 * eps**(-3.0/8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, [packet], [packet,leading_chi])
+            h1 = (0.5 - sqrt(3.0) / 6.0) * dt
+            nrN1 = max(1, 1 + int(h1**0.5 * eps**(-3.0 / 8.0)))
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrN1, [packet], [packet, leading_chi])
 
             # Build a first matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
@@ -183,15 +183,15 @@ class MagnusPropagator(Propagator, SplittingParameters):
 
             # Propagate until c2*dt
             h2 = 1.0 / sqrt(3.0) * dt
-            nrN2 = max(1, 1 + int(h2**0.5 * eps**(-3.0/8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h2], nrN2, [packet], [packet,leading_chi])
+            nrN2 = max(1, 1 + int(h2**0.5 * eps**(-3.0 / 8.0)))
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h2], nrN2, [packet], [packet, leading_chi])
 
             # Build a second matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
             A2 = -1.0j * innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             # Combine both and build the matrix for Magnus of 4-th order split
-            F = (A1 + A2) * 0.5*(dt/eps**2) + (dot(A2,A1) - dot(A1,A2)) * sqrt(3.0)/12.0*((dt/eps**2)**2)
+            F = (A1 + A2) * 0.5 * (dt / eps**2) + (dot(A2, A1) - dot(A1, A2)) * sqrt(3.0) / 12.0 * ((dt / eps**2)**2)
 
             # Propagate the coefficients
             coefficients = packet.get_coefficient_vector()
@@ -199,4 +199,4 @@ class MagnusPropagator(Propagator, SplittingParameters):
             packet.set_coefficient_vector(coefficients)
 
             # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a,b, [0.0,h1], nrN1, [packet], [packet,leading_chi])
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrN1, [packet], [packet, leading_chi])

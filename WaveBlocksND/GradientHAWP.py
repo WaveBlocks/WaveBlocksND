@@ -51,24 +51,24 @@ class GradientHAWP(Gradient):
         K = wavepacket.get_basis_shapes(component=component)
         Ke = K.extend()
         size = Ke.get_basis_size()
-        cnew = zeros((size,D), dtype=complexfloating)
+        cnew = zeros((size, D), dtype=complexfloating)
 
         # We implement the more efficient scatter type stencil here
         for k in K.get_node_iterator():
             # Central phi_i coefficient
-            cnew[Ke[k],:] += squeeze(coeffs[K[k]] * p)
+            cnew[Ke[k], :] += squeeze(coeffs[K[k]] * p)
 
             # Backward neighbours phi_{i - e_d}
             nbw = Ke.get_neighbours(k, selection="backward")
 
             for d, nb in nbw:
-                cnew[Ke[nb],:] += sqrt(eps**2/2.0) * sqrt(k[d]) * coeffs[K[k]] * Pbar[:,d]
+                cnew[Ke[nb], :] += sqrt(eps**2 / 2.0) * sqrt(k[d]) * coeffs[K[k]] * Pbar[:, d]
 
             # Forward neighbours phi_{i + e_d}
             nfw = Ke.get_neighbours(k, selection="forward")
 
             for d, nb in nfw:
-                cnew[Ke[nb],:] += sqrt(eps**2/2.0) * sqrt(k[d]+1.0) * coeffs[K[k]] * P[:,d]
+                cnew[Ke[nb], :] += sqrt(eps**2 / 2.0) * sqrt(k[d] + 1.0) * coeffs[K[k]] * P[:, d]
 
         return (Ke, cnew)
 
@@ -96,7 +96,7 @@ class GradientHAWP(Gradient):
             components = range(N)
 
         # Compute the gradients of all components
-        gradients = [ self.apply_gradient_component(wavepacket, n) for n in components ]
+        gradients = [self.apply_gradient_component(wavepacket, n) for n in components]
 
         if as_packet is True:
             D = wavepacket.get_dimension()
@@ -106,7 +106,7 @@ class GradientHAWP(Gradient):
                 for i, component in enumerate(components):
                     Ke, cnew = gradients[i]
                     hawp_new.set_basis_shapes(Ke, component=component)
-                    hawp_new.set_coefficients(cnew[:,d], component=component)
+                    hawp_new.set_coefficients(cnew[:, d], component=component)
                 new_wps.append(hawp_new)
             return new_wps
         else:

@@ -7,6 +7,7 @@ IOM plugin providing functions for handling of generic wavepacket data.
 @license: Modified BSD License
 """
 
+
 def add_genericwp(self, description, timeslots=None, blockid=0):
     r"""Add storage for generic unspecified wavepackets. This method
     delegates the call to another appropriate method depending on
@@ -25,7 +26,7 @@ def add_genericwp(self, description, timeslots=None, blockid=0):
     elif packet_type == "HagedornWavepacketInhomogeneous":
         self.add_inhomogwavepacket(description, timeslots=timeslots, blockid=blockid)
     else:
-        raise ValueError("Unknown wavepacket type: "+str(packet_type))
+        raise ValueError("Unknown wavepacket type: {}".format(packet_type))
 
 
 def delete_genericwp(self, blockid=0):
@@ -68,7 +69,7 @@ def load_genericwp(self, timestep, blockid=0):
     elif self.has_inhomogwavepacket(blockid=blockid):
         return self.load_inhomogwavepacket(timestep=timestep, blockid=blockid)
     else:
-        raise ValueError("No wavepacket of known type found in block "+str(blockid))
+        raise ValueError("No wavepacket of known type found in block {}".format(blockid))
 
 
 def save_genericwp(self, packet, timestep, blockid=0):
@@ -89,4 +90,4 @@ def save_genericwp(self, packet, timestep, blockid=0):
     elif packet_type == "HagedornWavepacketInhomogeneous":
         self.save_inhomogwavepacket(packet, timestep=timestep, blockid=blockid)
     else:
-        raise ValueError("Unknown wavepacket type: "+str(packet_type))
+        raise ValueError("Unknown wavepacket type: {}".format(packet_type))

@@ -78,7 +78,7 @@ class SplittingParameters(object):
             a[0] = 0.5
             a[1] = 0.5
             b[0] = 1.0
-        elif method =="PRKS6":
+        elif method == "PRKS6":
             s = 7
             a = zeros(s)
             b = zeros(s)
@@ -109,8 +109,8 @@ class SplittingParameters(object):
             a = zeros(s)
             b = zeros(s)
             pp = 3.0
-            theta = 1.0/(2.0 - 2**(1.0/pp))
-            vi = -2**(1.0/pp) * theta
+            theta = 1.0 / (2.0 - 2**(1.0 / pp))
+            vi = -2**(1.0 / pp) * theta
             a[0] = 0.0
             a[1] = theta
             a[2] = vi
@@ -130,7 +130,7 @@ class SplittingParameters(object):
             b[0] = 0.5 * a[1]
             b[1] = 0.5 * a[1:3].sum()
             b[2] = 0.5 * a[2:4].sum()
-            b[3] = 0.5 * (1.0 - 4.0*b[1] - a[3])
+            b[3] = 0.5 * (1.0 - 4.0 * b[1] - a[3])
             b[4:] = flipud(b[0:4])
         elif method == "BM63":
             s = 15
@@ -164,7 +164,7 @@ class SplittingParameters(object):
             a[4] =  0.08221359629355080023149045
             a[5] =  0.79854399093483008353899777
             a[6:] = flipud(a[1:5])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1])*0.5
+            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
             b[s/2:] = flipud(b[:s/2])
         elif method == "KL8":
             s = 18
@@ -181,7 +181,7 @@ class SplittingParameters(object):
             a[8] =  0.29501172360931029887096624
             a[9] = -0.60550853383003451169892108
             a[10:] = flipud(a[1:9])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1])*0.5
+            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
             b[s/2:] = flipud(b[:s/2])
         elif method == "KL10":
             s = 34
@@ -206,7 +206,7 @@ class SplittingParameters(object):
             a[16] =  0.05246957188100069574521612
             a[17] =  0.44373380805019087955111365
             a[18:] = flipud(a[1:17])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1])*0.5
+            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
             b[s/2:] = flipud(b[:s/2])
         else:
             raise NotImplementedError("Unknown method: " + method)
@@ -254,5 +254,5 @@ class SplittingParameters(object):
 
         for k in range(N):
             for j in range(s):
-                psi1(a[j]*h, *args1)
-                psi2(b[j]*h, *args2)
+                psi1(a[j] * h, *args1)
+                psi2(b[j] * h, *args2)

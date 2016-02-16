@@ -36,7 +36,7 @@ def add_norm(self, parameters, timeslots=None, blockid=0):
     grp_no = grp_ob.create_group("norm")
     # Create the dataset with appropriate parameters
     daset_tg = grp_no.create_dataset("timegrid", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
-    grp_no.create_dataset("norm", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
+    grp_no.create_dataset("norm", (T, N), dtype=np.floating, chunks=(csTs, N), maxshape=(Ts, N))
     daset_tg.attrs["pointer"] = 0
 
 
@@ -79,7 +79,7 @@ def save_norm(self, norm, timestep=None, blockid=0):
 
     # Write the data
     self.must_resize(pathd, timeslot)
-    self._srf[pathd][timeslot,:] = norms
+    self._srf[pathd][timeslot, :] = norms
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -116,6 +116,6 @@ def load_norm(self, timestep=None, split=False, blockid=0):
         axis = 1
 
     if split is True:
-        return self.split_data( self._srf[pathd][index,...], axis)
+        return self.split_data(self._srf[pathd][index, ...], axis)
     else:
-        return self._srf[pathd][index,...]
+        return self._srf[pathd][index, ...]

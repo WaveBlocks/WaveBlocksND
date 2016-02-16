@@ -19,8 +19,8 @@ def compute_color_map():
     """
     k = linspace(-pi, pi, 256, endpoint=True)
     hsv_colors = ones((1, k.shape[0], 3))
-    hsv_colors[:,:, 0] = 0.5*fmod(k+2*pi,2*pi)/pi
-    return 255*squeeze(hsv_to_rgb(hsv_colors))
+    hsv_colors[:, :, 0] = 0.5 * fmod(k + 2 * pi, 2 * pi) / pi
+    return 255 * squeeze(hsv_to_rgb(hsv_colors))
 
 
 def surfcf(gridx, gridy, phase, modulus, colormap=None, view=None):
@@ -54,7 +54,7 @@ def surfcf(gridx, gridy, phase, modulus, colormap=None, view=None):
     mesh.module_manager.scalar_lut_manager.use_default_range = False
     mesh.module_manager.scalar_lut_manager.data_range = [-pi, pi]
     lut = mesh.module_manager.scalar_lut_manager.lut.table.to_array()
-    lut[:,0:3] = colormap.copy()
+    lut[:, 0:3] = colormap.copy()
     mesh.module_manager.scalar_lut_manager.lut.table = lut
 
     return mesh

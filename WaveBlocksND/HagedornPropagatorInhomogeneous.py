@@ -101,7 +101,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
         :return: A list of :py:class:`HagedornWavepacketInhomogeneous` instances or a single instance.
         """
         if packet is None:
-            return [ p[0] for p in self._packets ]
+            return [p[0] for p in self._packets]
         else:
             return self._packets[packet][0]
 
@@ -156,7 +156,7 @@ class HagedornPropagatorInhomogeneous(Propagator):
             F = innerproduct.build_matrix(packet, packet, self._potential.evaluate_local_remainder_at)
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2

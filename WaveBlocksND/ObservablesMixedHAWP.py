@@ -135,7 +135,7 @@ class ObservablesMixedHAWP(Observables):
             gradpacbra = self._gradient.apply_gradient(pacbra, component=n)
             gradpacket = self._gradient.apply_gradient(packet, component=n)
             Q = [self._innerproduct.quadrature(gpb, gpk, diag_component=n) for gpb, gpk in zip(gradpacbra, gradpacket)]
-            ekin.append(0.5*sum(Q))
+            ekin.append(0.5 * sum(Q))
 
         if summed is True:
             ekin = sum(ekin)
@@ -210,7 +210,7 @@ class ObservablesMixedHAWP(Observables):
 
         # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
         # TODO: Should this go inside the innerproduct?
-        epot = [ sum(Q[i*Nket:(i+1)*Nket]) for i in range(Nbra) ]
+        epot = [sum(Q[i * Nket:(i + 1) * Nket]) for i in range(Nbra)]
 
         if summed is True:
             epot = sum(epot)

@@ -35,9 +35,9 @@ class ParameterLoader(object):
         # Filter out private variables (the ones prefixed by "_")
         # Instances like "self" and imported modules.
         parameters = localvals.items()
-        parameters = [ item for item in parameters if not type(item[1]) == types.ModuleType ]
-        parameters = [ item for item in parameters if not item[0].startswith("_") ]
-        parameters = [ item for item in parameters if not item[0] == "self" ]
+        parameters = [item for item in parameters if not isinstance(item[1], types.ModuleType)]
+        parameters = [item for item in parameters if not item[0].startswith("_")]
+        parameters = [item for item in parameters if not item[0] == "self"]
 
         return dict(parameters)
 

@@ -86,7 +86,7 @@ class SmolyakQR(QuadratureRule):
 
     def __str__(self):
         s = "Sparse grid (Smolyak) quadrature rule consisting of:\n"
-        l = ["  " + str(rule) + "\n" for k,rule in self._rules.items() if k <= self._level]
+        l = ["  " + str(rule) + "\n" for k, rule in self._rules.items() if k <= self._level]
         s += reduce(op.add, l)
         return s
 
@@ -100,7 +100,7 @@ class SmolyakQR(QuadratureRule):
         d = {}
         d["type"] = "SmolyakQR"
         d["dimension"] = self._dimension
-        d["qr_rules"] = [ qr.get_description() for qr in self._rules ]
+        d["qr_rules"] = [qr.get_description() for qr in self._rules]
         d["options"] = deepcopy(self._options)
         return d
 
@@ -157,58 +157,58 @@ class SmolyakQR(QuadratureRule):
         factors = []
 
         # Index Set
-        for q in range(max(0, K-D), K):
+        for q in range(max(0, K - D), K):
             S = lattice_points_norm(D, q)
             for j, s in enumerate(S):
                 # Only use non-negative nodes for the construction.
                 # The quadrature nodes \gamma.
-                rules = [ self._rules[si+1] for si in s ]
-                nodes = [ rule.get_nodes() for rule in rules ]
-                indices = [ where(n >= 0) for n in nodes ]
-                nodes = meshgrid_nd([ n[i] for n, i in zip(nodes, indices) ])
-                nodes = vstack([ node.reshape(-1) for node in nodes ])
+                rules = [self._rules[si + 1] for si in s]
+                nodes = [rule.get_nodes() for rule in rules]
+                indices = [where(n >= 0) for n in nodes]
+                nodes = meshgrid_nd([n[i] for n, i in zip(nodes, indices)])
+                nodes = vstack([node.reshape(-1) for node in nodes])
                 # The quadrature weights \omega.
-                weights = [ rule.get_weights() for rule in rules ]
-                weights = meshgrid_nd([ w[i] for w, i in zip(weights, indices) ])
+                weights = [rule.get_weights() for rule in rules]
+                weights = meshgrid_nd([w[i] for w, i in zip(weights, indices)])
                 weights = reduce(multiply, weights)
                 allnodes.append(nodes)
                 allweights.append(weights.reshape(-1))
-                factors.append((-1)**(K-1-q) * binom(D-1, K-1-q))
+                factors.append((-1)**(K - 1 - q) * binom(D - 1, K - 1 - q))
 
         # Sort
-        allnodes = hstack(allnodes).reshape(D,-1)
-        allweights = hstack([f*w for f, w in zip(factors,allweights)]).reshape(1,-1)
+        allnodes = hstack(allnodes).reshape(D, -1)
+        allweights = hstack([f * w for f, w in zip(factors, allweights)]).reshape(1, -1)
 
         I = lexsort(map(squeeze, vsplit(allnodes, D))[::-1])
 
-        allnodes = allnodes[:,I].reshape(D,-1)
-        allweights = allweights[:,I].reshape(1,-1)
+        allnodes = allnodes[:, I].reshape(D, -1)
+        allweights = allweights[:, I].reshape(1, -1)
 
         # Remove duplicates
         last = 0
         I = [last]
 
-        no = norm(allnodes[:,:-1] - allnodes[:,1:], axis=0)
+        no = norm(allnodes[:, :-1] - allnodes[:, 1:], axis=0)
 
         for col in range(1, allnodes.shape[1]):
-            if no[col-1] <= tolerance:
-                allweights[0,last] += allweights[0,col]
-                allweights[0,col] = 0
+            if no[col - 1] <= tolerance:
+                allweights[0, last] += allweights[0, col]
+                allweights[0, col] = 0
             else:
                 last = col
                 I.append(last)
 
-        allnodes = allnodes[:,I]
-        allweights = allweights[:,I]
+        allnodes = allnodes[:, I]
+        allweights = allweights[:, I]
 
         # Mirror points to all other hyperoctants
         for d in range(D):
-            indices = abs(allnodes[d,:]) >= tolerance
-            mirrorn = allnodes[:,indices]
-            mirrorn[d,:] *= -1.0
-            mirrorw = allweights[:,indices]
-            allnodes = hstack([allnodes, mirrorn]).reshape(D,-1)
-            allweights = hstack([allweights, mirrorw]).reshape(1,-1)
+            indices = abs(allnodes[d, :]) >= tolerance
+            mirrorn = allnodes[:, indices]
+            mirrorn[d, :] *= -1.0
+            mirrorw = allweights[:, indices]
+            allnodes = hstack([allnodes, mirrorn]).reshape(D, -1)
+            allweights = hstack([allweights, mirrorw]).reshape(1, -1)
 
         self._nodes = allnodes
         self._weights = allweights

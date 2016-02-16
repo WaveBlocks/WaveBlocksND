@@ -63,7 +63,7 @@ class FourierPropagator(Propagator):
         # Exponential '\exp(-i/eps^2*dt*V)' used in the Strang splitting.
         self._potential.calculate_exponential(-0.5j * para["dt"] / para["eps"]**2)
         VE = self._potential.evaluate_exponential_at(self._grid)
-        self._VE = tuple([ ve.reshape(self._grid.get_number_nodes()) for ve in VE ])
+        self._VE = tuple([ve.reshape(self._grid.get_number_nodes()) for ve in VE])
 
 
     # TODO: Consider removing this, duplicate
@@ -92,7 +92,7 @@ class FourierPropagator(Propagator):
         self._KO.calculate_operator()
         T = self._KO.evaluate_at()
         V = self._potential.evaluate_at(self._grid)
-        V = tuple([ v.reshape(self._grid.get_number_nodes()) for v in V ])
+        V = tuple([v.reshape(self._grid.get_number_nodes()) for v in V])
         return (T, V)
 
 
@@ -107,27 +107,27 @@ class FourierPropagator(Propagator):
         # Unpack the values from the current WaveFunction
         values = self._psi.get_values()
 
-        tmp = [ zeros(value.shape, dtype=complexfloating) for value in values ]
+        tmp = [zeros(value.shape, dtype=complexfloating) for value in values]
 
         # The first step with the potential
         for row in range(N):
             for col in range(N):
-                tmp[row] = tmp[row] + self._VE[row*N+col] * values[col]
+                tmp[row] = tmp[row] + self._VE[row * N + col] * values[col]
 
         # Go to Fourier space
-        tmp = [ fftn(component) for component in tmp ]
+        tmp = [fftn(component) for component in tmp]
 
         # Apply the kinetic operator
-        tmp = [ self._TE * component for component in tmp ]
+        tmp = [self._TE * component for component in tmp]
 
         # Go back to real space
-        tmp = [ ifftn(component) for component in tmp ]
+        tmp = [ifftn(component) for component in tmp]
 
         # The second step with the potential
-        values = [ zeros(component.shape, dtype=complexfloating) for component in tmp ]
+        values = [zeros(component.shape, dtype=complexfloating) for component in tmp]
         for row in range(N):
             for col in range(N):
-                values[row] = values[row] + self._VE[row*N+col] * tmp[col]
+                values[row] = values[row] + self._VE[row * N + col] * tmp[col]
 
         # Pack values back to WaveFunction object
         # TODO: Consider squeeze(.) of data before repacking

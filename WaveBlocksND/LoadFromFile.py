@@ -36,8 +36,8 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
 
     # Check if we have data
     tg = IOM.load_wavepacket_timegrid(blockid=blockid)
-    if not timestep in tg:
-        raise ValueError("No data for timestep "+str(timestep))
+    if timestep not in tg:
+        raise ValueError("No data for timestep {}".format(timestep))
 
     # Load data and assemble packet
     BF = BlockFactory()
@@ -57,7 +57,7 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
     Pi = IOM.load_wavepacket_parameters(blockid=blockid, timestep=timestep)
 
     HAWP.set_parameters(Pi)
-    HAWP.set_basis_shapes([ BS[int(h)] for h in ha ])
+    HAWP.set_basis_shapes([BS[int(h)] for h in ha])
     HAWP.set_coefficients(ci)
 
     # Reformat data
@@ -68,7 +68,7 @@ def load_from_file(filepath, blockid=0, timestep=0, sizeK=None):
         cn = HAWP.get_coefficients(component=n)
         l = []
         for i in range(B.get_basis_size()):
-            l.append( (B[i], cn[i,0]) )
+            l.append((B[i], cn[i, 0]))
         C.append(l)
 
     if sizeK is not None:

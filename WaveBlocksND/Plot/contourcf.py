@@ -28,7 +28,7 @@ def contourcf(gridx, gridy, values, leveldist=0.02, ax=None):
     levels = arange(amin(values), amax(values), leveldist)
 
     if ax is None:
-        ax=gca()
+        ax = gca()
 
     # Change axes because x.shape = (Nrows, 1) and y.shape = (1, Ncols)
     # is transposed to what we want to plot as x and y axes,

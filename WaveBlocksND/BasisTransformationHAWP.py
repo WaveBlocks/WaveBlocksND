@@ -92,7 +92,7 @@ class BasisTransformationHAWP(BasisTransformation):
                     for nu in z:
                         result.extend(vsplit(nu, self._N))
                     self._values = tuple(result)
-                return self._values[entry[0]*self._N+entry[1]]
+                return self._values[entry[0] * self._N + entry[1]]
 
         f = F(self._potential)
 
@@ -142,7 +142,7 @@ class BasisTransformationHAWP(BasisTransformation):
                     for nu in z:
                         result.extend(vsplit(nu, self._N))
                     self._values = tuple(result)
-                return self._values[entry[0]*self._N+entry[1]]
+                return self._values[entry[0] * self._N + entry[1]]
 
         f = F(self._potential)
 

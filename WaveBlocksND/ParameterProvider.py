@@ -26,7 +26,7 @@ class ParameterProvider(object):
 
 
     def __getattr__(self, key):
-        print(" Depreceated __getattr__ for key "+str(key)+" at ParameterProvider instance!")
+        print(" Depreceated __getattr__ for key '{}' at ParameterProvider instance!".format(key))
         return self._params[key]
 
 
@@ -36,12 +36,12 @@ class ParameterProvider(object):
             return self._params[key]
         else:
             # If not, try to find a global default value for it and copy over this value
-            print("Warning: parameter '"+str(key)+"' not found, now trying global defaults!")
+            print("Warning: parameter '{}' not found, now trying global defaults!".format(key))
             if key in GlobalDefaults.__dict__:
                 self.__setitem__(key, deepcopy(GlobalDefaults.__dict__[key]))
                 return self._params[key]
             else:
-                raise KeyError("Could not find a default value for parameter "+str(key)+"!")
+                raise KeyError("Could not find a default value for parameter {}!".format(key))
 
 
     def __setitem__(self, key, value):
@@ -134,10 +134,7 @@ class ParameterProvider(object):
     def get_timemanager(self):
         r"""Return the embedded :py:class:`TimeManager` instance.
         """
-        #try:
         return TimeManager(self._params)
-        #except:
-        #    return None
 
 
     def get_parameters(self):

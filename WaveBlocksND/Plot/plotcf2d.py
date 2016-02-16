@@ -53,11 +53,11 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
         axes = gca()
 
     # Region to cut out
-    x = x.reshape(1,-1)
-    y = y.reshape(-1,1)
+    x = x.reshape(1, -1)
+    y = y.reshape(-1, 1)
     i = where((xmin <= x) & (x <= xmax))[1]
     j = where((ymin <= y) & (y <= ymax))[0]
-    I, J = meshgrid(i,j)
+    I, J = meshgrid(i, j)
 
     # Color code and plot the data
-    axes.imshow(color_map(z[I,J], darken=darken), **kw)
+    axes.imshow(color_map(z[I, J], darken=darken), **kw)

@@ -94,7 +94,7 @@ class ObservablesHAWP(Observables):
 
         for n in components:
             Kprime, cnew = self._gradient.apply_gradient(wavepacket, component=n, as_packet=False)
-            ekin.append(0.5 * sum(sum(conjugate(cnew)*cnew, axis=1), axis=0))
+            ekin.append(0.5 * sum(sum(conjugate(cnew) * cnew, axis=1), axis=0))
 
         if summed is True:
             ekin = sum(ekin)
@@ -137,7 +137,7 @@ class ObservablesHAWP(Observables):
             # And don't forget the summation in the matrix multiplication of 'operator' and 'ket'
             # TODO: Should this go inside the innerproduct?
             tmp = list(map(squeeze, Q))
-            epot = [ sum(tmp[i*N:(i+1)*N]) for i in range(N) ]
+            epot = [sum(tmp[i * N:(i + 1) * N]) for i in range(N)]
 
         if summed is True:
             epot = sum(epot)

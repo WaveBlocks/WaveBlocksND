@@ -12,7 +12,7 @@ import pickle
 import numpy as np
 
 
-def add_lincombwp(self, parameters, timeslots=None, lincombsize=None,blockid=0):
+def add_lincombwp(self, parameters, timeslots=None, lincombsize=None, blockid=0):
     r"""Add storage for the linear combination of general wavepackets.
 
     :param parameters: An :py:class:`ParameterProvider` instance with at
@@ -52,9 +52,9 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None,blockid=0):
     daset_tg_p = grp_lc.create_dataset("timegrid_packets", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
     grp_lc.create_dataset("lincomb_size", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,))
     # Coefficients
-    grp_lc.create_dataset("coefficients", (T, J), dtype=np.complexfloating, chunks=(1,csJs), maxshape=(Ts,Js))
+    grp_lc.create_dataset("coefficients", (T, J), dtype=np.complexfloating, chunks=(1, csJs), maxshape=(Ts, Js))
     # Packet IDs
-    daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str,32)), chunks=(1,csJs), maxshape=(Ts,Js))
+    daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str, 32)), chunks=(1, csJs), maxshape=(Ts, Js))
 
     gid = self.create_group(groupid="wavepacketsLCblock"+str(blockid))
     daset_refs.attrs["packet_gid"] = gid
@@ -117,8 +117,8 @@ def save_lincombwp_coefficients(self, coefficients, timestep=None, blockid=0):
     self._srf[pathlcs][timeslot] = J
     self.must_resize(pathd, timeslot)
     if not J == 0:
-        self.must_resize(pathd, J-1, axis=1)
-        self._srf[pathd][timeslot,:J] = np.squeeze(coefficients)
+        self.must_resize(pathd, J - 1, axis=1)
+        self._srf[pathd][timeslot, :J] = np.squeeze(coefficients)
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -146,13 +146,13 @@ def save_lincombwp_wavepackets(self, packetlist, timestep=None, blockid=0):
     self.must_resize(pathd, timeslot)
     K = len(packetlist)
     if not K == 0:
-        self.must_resize(pathd, K-1, axis=1)
+        self.must_resize(pathd, K - 1, axis=1)
 
     # Save the packets
     known_packets = self.get_block_ids(groupid=gid)
     for k, packet in enumerate(packetlist):
-        bid = "LC"+str(blockid)+"WP"+str(packet.get_id())
-        if not bid in known_packets:
+        bid = "LC" + str(blockid) + "WP" + str(packet.get_id())
+        if bid not in known_packets:
             bid = self.create_block(blockid=bid, groupid=gid)
             descr = packet.get_description()
             self.add_genericwp(descr, blockid=bid)
@@ -160,7 +160,7 @@ def save_lincombwp_wavepackets(self, packetlist, timestep=None, blockid=0):
         self.save_genericwp(packet, timestep=timestep, blockid=bid)
 
         # Book keeping
-        self._srf[pathd][timeslot,k] = packet.get_id()
+        self._srf[pathd][timeslot, k] = packet.get_id()
 
     # Write the timestep to which the stored packets belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -237,10 +237,10 @@ def load_lincombwp_coefficients(self, timestep=None, blockid=0):
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         J = self._srf[pathlcs][index]
-        return self._srf[pathd][index,:J]
+        return self._srf[pathd][index, :J]
     else:
         index = slice(None)
-        return self._srf[pathd][index,:]
+        return self._srf[pathd][index, :]
 
 
 def load_lincombwp_wavepackets(self, timestep, packetindex=None, blockid=0):
@@ -259,12 +259,12 @@ def load_lincombwp_wavepackets(self, timestep, packetindex=None, blockid=0):
 
     index = self.find_timestep_index(pathtg, timestep)
     J = self._srf[pathlcs][index]
-    refs = self._srf[pathd][index,:J]
+    refs = self._srf[pathd][index, :J]
 
     if packetindex is None:
         packets = []
         for ref in refs:
-            bid = "LC"+str(blockid)+"WP"+str(ref)
+            bid = "LC" + str(blockid) + "WP" + str(ref)
             packets.append(self.load_genericwp(timestep=timestep, blockid=bid))
 
         return tuple(packets)
@@ -272,7 +272,7 @@ def load_lincombwp_wavepackets(self, timestep, packetindex=None, blockid=0):
         if packetindex >= J:
             raise ValueError("Packet index is invalid.")
 
-        bid = "LC"+str(blockid)+"WP"+str(refs[packetindex])
+        bid = "LC" + str(blockid) + "WP" + str(refs[packetindex])
         return self.load_genericwp(timestep=timestep, blockid=bid)
 
 
@@ -317,7 +317,7 @@ def load_lincombwp_wavepacket_refs(self, timestep=None, blockid=0):
     else:
         index = slice(None)
 
-    return self._srf[pathd][index,:]
+    return self._srf[pathd][index, :]
 
 
 #

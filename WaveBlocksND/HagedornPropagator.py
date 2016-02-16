@@ -80,7 +80,7 @@ class HagedornPropagator(Propagator):
     def _prepare_potential(self):
         r"""Precalculate the potential splittings needed
         """
-        for chi in set([ p[1] for p in self._packets ]):
+        for chi in set([p[1] for p in self._packets]):
             self._potential.calculate_local_quadratic(diagonal_component=chi)
             self._potential.calculate_local_remainder(diagonal_component=chi)
 
@@ -114,7 +114,7 @@ class HagedornPropagator(Propagator):
         """
         # TODO: Does not return leading components. Add this if needed somewhere.
         if packet is None:
-            return [ p[0] for p in self._packets ]
+            return [p[0] for p in self._packets]
         else:
             return self._packets[packet][0]
 
@@ -166,7 +166,7 @@ class HagedornPropagator(Propagator):
             F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j*dt/eps**2)
+            coefficients = self._matrix_exponential(F, coefficients, -1.0j * dt / eps**2)
             packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2

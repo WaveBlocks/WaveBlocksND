@@ -50,7 +50,7 @@ class MatrixPotential2S(MatrixPotential):
         # This number of energy levels.
         assert expression.is_square
         # We only handle the 2x2 case here
-        assert expression.shape == (2,2)
+        assert expression.shape == (2, 2)
         self._number_components = expression.shape[0]
 
         # The the potential, symbolic expressions and evaluatable functions
@@ -117,11 +117,10 @@ class MatrixPotential2S(MatrixPotential):
         # Determine which entries to evaluate
         if entry is not None:
             (row, col) = entry
-            entries = [ row * self._number_components + col ]
+            entries = [row * self._number_components + col]
         else:
             N = self._number_components
-            entries = [ row * N + col for row in range(N) for col in range(N) ]
-            #entries = [ n for n in xrange(N*N) ]
+            entries = [row * N + col for row in range(N) for col in range(N)]
 
         # Evaluate all entries specified
         result = []
@@ -138,7 +137,7 @@ class MatrixPotential2S(MatrixPotential):
 
             # Put the result in correct shape (1, #gridnodes)
             N = grid.get_number_nodes(overall=True)
-            result.append( values.reshape((1,N)) )
+            result.append(values.reshape((1, N)))
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:
@@ -159,8 +158,8 @@ class MatrixPotential2S(MatrixPotential):
         T = self._potential_s.trace()
         D = self._potential_s.det()
 
-        l1 = (T + sympy.sqrt(T**2 - 4*D)) * sympy.Rational(1,2)
-        l2 = (T - sympy.sqrt(T**2 - 4*D)) * sympy.Rational(1,2)
+        l1 = (T + sympy.sqrt(T**2 - 4 * D)) * sympy.Rational(1, 2)
+        l2 = (T - sympy.sqrt(T**2 - 4 * D)) * sympy.Rational(1, 2)
 
         # Symbolic simplification may fail
         if self._try_simplify:
@@ -199,18 +198,18 @@ class MatrixPotential2S(MatrixPotential):
         # Determine which entries to evaluate
         if entry is not None:
             # Single entry only
-            entries = [ entry ]
+            entries = [entry]
         else:
             N = self._number_components
             if as_matrix is True:
                 # All entries
-                entries = [ (row,col) for row in range(N) for col in range(N) ]
+                entries = [(row, col) for row in range(N) for col in range(N)]
             else:
                 # Diagonal entries only
-                entries = [ (row,row) for row in range(N) ]
+                entries = [(row, row) for row in range(N)]
 
         # Compute all diagonal entries first
-        diags = [ e[0] for e in entries if e[0] == e[1] ]
+        diags = [e[0] for e in entries if e[0] == e[1]]
 
         nodes = grid.get_nodes(split=True)
 
@@ -218,7 +217,7 @@ class MatrixPotential2S(MatrixPotential):
 
         for index in diags:
             # Evaluate the eigenvalue at the given nodes
-            values = self._eigenvalues_n[index]( *nodes )
+            values = self._eigenvalues_n[index](*nodes)
 
             # Test for eigenvalue being constant
             if numpy.atleast_1d(values).shape == (1,):
@@ -235,7 +234,7 @@ class MatrixPotential2S(MatrixPotential):
             tmp = numpy.vsplit(numpy.sort(numpy.vstack(tmp), axis=0), N)
 
         # Take in descending order and reshape
-        tmp = [ item.reshape((1,grid.get_number_nodes(overall=True))) for item in reversed(tmp) ]
+        tmp = [item.reshape((1, grid.get_number_nodes(overall=True))) for item in reversed(tmp)]
 
         # Compose the result for all entries specified
         result = []
@@ -244,10 +243,10 @@ class MatrixPotential2S(MatrixPotential):
             (row, col) = ent
             if row == col:
                 # Assumes the diagonal entries are computed and requested 'in order'
-                result.append( tmp.pop(0) )
+                result.append(tmp.pop(0))
             else:
                 # Evaluate an off-diagonal entry which equals zero by definition
-                result.append( numpy.zeros((1,grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating) )
+                result.append(numpy.zeros((1, grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating))
 
         # TODO: Consider unpacking single ndarray iff entry != None
         if entry is not None:
@@ -263,10 +262,10 @@ class MatrixPotential2S(MatrixPotential):
         """
         # Assumption: The matrix is symmetric
         # TODO: Consider generalization for arbitrary 2x2 matrices?
-        V1 = self._potential_s[0,0]
-        V2 = self._potential_s[0,1]
+        V1 = self._potential_s[0, 0]
+        V2 = self._potential_s[0, 1]
 
-        theta = sympy.Rational(1,2) * sympy.atan2(V2,V1)
+        theta = sympy.Rational(1, 2) * sympy.atan2(V2, V1)
 
         # The two eigenvectors
         upper = sympy.Matrix([[ sympy.cos(theta)], [sympy.sin(theta)]])
@@ -280,8 +279,8 @@ class MatrixPotential2S(MatrixPotential):
 
         # Attention, the components get listed in columns-wise order!
         for vector in self._eigenvectors_s:
-            self._eigenvectors_n.append([ sympy.lambdify(self._variables, component, "numpy")
-                                          for component in vector ])
+            self._eigenvectors_n.append([sympy.lambdify(self._variables, component, "numpy")
+                                         for component in vector])
 
 
     def evaluate_eigenvectors_at(self, grid, entry=None):
@@ -311,7 +310,7 @@ class MatrixPotential2S(MatrixPotential):
         for vector in self._eigenvectors_n:
             tmp = numpy.zeros((self._number_components, grid.get_number_nodes(overall=True)), dtype=numpy.complexfloating)
             for index in range(self._number_components):
-                tmp[index,:] = vector[index](*nodes)
+                tmp[index, :] = vector[index](*nodes)
             result.append(tmp)
 
         return tuple(result)
@@ -326,15 +325,15 @@ class MatrixPotential2S(MatrixPotential):
         :param factor: The prefactor :math:`\alpha` in the exponential.
         """
         M = factor * self._potential_s
-        a = M[0,0]
-        b = M[0,1]
-        c = M[1,0]
-        d = M[1,1]
+        a = M[0, 0]
+        b = M[0, 1]
+        c = M[1, 0]
+        d = M[1, 1]
 
-        D = sympy.sqrt((a-d)**2 + 4*b*c)/2
-        t = sympy.exp((a+d)/2)
+        D = sympy.sqrt((a - d)**2 + 4 * b * c) / 2
+        t = sympy.exp((a + d) / 2)
 
-        M = sympy.Matrix([[0,0],[0,0]])
+        M = sympy.Matrix([[0, 0], [0, 0]])
 
         # Symbolic simplification may fail
         if self._try_simplify:
@@ -345,18 +344,18 @@ class MatrixPotential2S(MatrixPotential):
                 pass
 
         # TODO: How should we handle the special case D=0?
-        if False: #sympy.Eq(D,0):
+        if False:
             # special case
-            M[0,0] = t * (1 + (a-d)/2)
-            M[0,1] = t * b
-            M[1,0] = t * c
-            M[1,1] = t * (1 - (a-d)/2)
+            M[0, 0] = t * (1 + (a - d) / 2)
+            M[0, 1] = t * b
+            M[1, 0] = t * c
+            M[1, 1] = t * (1 - (a - d) / 2)
         else:
             # general case
-            M[0,0] = t * (sympy.cosh(D) + (a-d)/2 * sympy.sinh(D)/D)
-            M[0,1] = t * (b * sympy.sinh(D)/D)
-            M[1,0] = t * (c * sympy.sinh(D)/D)
-            M[1,1] = t * (sympy.cosh(D) - (a-d)/2 * sympy.sinh(D)/D)
+            M[0, 0] = t * (sympy.cosh(D) + (a - d) / 2 * sympy.sinh(D) / D)
+            M[0, 1] = t * (b * sympy.sinh(D) / D)
+            M[1, 0] = t * (c * sympy.sinh(D) / D)
+            M[1, 1] = t * (sympy.cosh(D) - (a - d) / 2 * sympy.sinh(D) / D)
 
         self._exponential_s = M
         self._exponential_n = tuple(sympy.lambdify(self._variables, item, "numpy")
@@ -375,17 +374,17 @@ class MatrixPotential2S(MatrixPotential):
         """
         grid = self._grid_wrap(grid)
 
-        tmp = [ f(*grid.get_nodes(split=True)) for f in self._exponential_n ]
-        tmp = [ numpy.array(n, dtype=numpy.complexfloating) for n in tmp ]
+        tmp = [f(*grid.get_nodes(split=True)) for f in self._exponential_n]
+        tmp = [numpy.array(n, dtype=numpy.complexfloating) for n in tmp]
 
         # TODO: Better fix for globally constant functions
         tmp2 = []
 
         for t in tmp:
             if numpy.array(t).ndim == 0:
-                tmp2.append( t * numpy.ones(grid.get_number_nodes()) )
+                tmp2.append(t * numpy.ones(grid.get_number_nodes()))
             else:
-                tmp2.append( t.reshape(grid.get_number_nodes()) )
+                tmp2.append(t.reshape(grid.get_number_nodes()))
 
         return tuple(tmp2)
 
@@ -403,14 +402,14 @@ class MatrixPotential2S(MatrixPotential):
             # TODO: Add symbolic simplification
             for ew in self._eigenvalues_s:
                 tmp = sympy.Matrix([[ew]])
-                self._jacobian_s.append( tmp.jacobian(self._variables).T )
+                self._jacobian_s.append(tmp.jacobian(self._variables).T)
 
             self._jacobian_n = []
 
             # Attention, the components get listed in columns-wise order!
             for jacobian in self._jacobian_s:
-                self._jacobian_n.append([ sympy.lambdify(self._variables, component, "numpy")
-                                          for component in jacobian ])
+                self._jacobian_n.append([sympy.lambdify(self._variables, component, "numpy")
+                                         for component in jacobian])
 
 
     def evaluate_jacobian_at(self, grid, component=None):
@@ -433,7 +432,7 @@ class MatrixPotential2S(MatrixPotential):
         N = grid.get_number_nodes(overall=True)
 
         if component is not None:
-            indices = [ component ]
+            indices = [component]
         else:
             indices = range(self._number_components)
 
@@ -441,7 +440,7 @@ class MatrixPotential2S(MatrixPotential):
 
         for i in indices:
             jacobian = self._jacobian_n[i]
-            J = numpy.zeros((D,N), dtype=numpy.complexfloating)
+            J = numpy.zeros((D, N), dtype=numpy.complexfloating)
             for index, comp in enumerate(jacobian):
                 J[index, :] = comp(*nodes)
             result.append(J)
@@ -465,13 +464,13 @@ class MatrixPotential2S(MatrixPotential):
             self._hessian_s = []
             # TODO: Add symbolic simplification
             for ew in self._eigenvalues_s:
-                self._hessian_s.append( sympy.hessian(ew, self._variables) )
+                self._hessian_s.append(sympy.hessian(ew, self._variables))
 
             self._hessian_n = []
 
             for hessian in self._hessian_s:
-                self._hessian_n.append([ sympy.lambdify(self._variables, entry, "numpy")
-                                         for entry in hessian ])
+                self._hessian_n.append([sympy.lambdify(self._variables, entry, "numpy")
+                                        for entry in hessian])
 
 
     def evaluate_hessian_at(self, grid, component=None):
@@ -494,7 +493,7 @@ class MatrixPotential2S(MatrixPotential):
         N = grid.get_number_nodes(overall=True)
 
         if component is not None:
-            indices = [ component ]
+            indices = [component]
         else:
             indices = range(self._number_components)
 
@@ -502,15 +501,15 @@ class MatrixPotential2S(MatrixPotential):
 
         for i in indices:
             hessian = self._hessian_n[i]
-            H = numpy.zeros((N,D,D), dtype=numpy.complexfloating)
+            H = numpy.zeros((N, D, D), dtype=numpy.complexfloating)
 
             for row in range(D):
                 for col in range(D):
-                    H[:, row, col] = hessian[row*D+col](*nodes)
+                    H[:, row, col] = hessian[row * D + col](*nodes)
 
             # 'squeeze' would be dangerous here, make sure it works in the 1D case too
             if N == 1:
-                H = H[0,:,:]
+                H = H[0, :, :]
 
             result.append(H)
 
@@ -541,12 +540,12 @@ class MatrixPotential2S(MatrixPotential):
             self._taylor_eigen_s[diagonal_component] = []
 
             # Construct function to evaluate the Taylor approximation at point q at the given nodes
-            self._taylor_eigen_s[diagonal_component] = [ (0, self._eigenvalues_s[diagonal_component]),
-                                                         (1, self._jacobian_s[diagonal_component]),
-                                                         (2, self._hessian_s[diagonal_component]) ]
-            self._taylor_eigen_n[diagonal_component] = [ (0, self._eigenvalues_n[diagonal_component]),
-                                                         (1, self._jacobian_n[diagonal_component]),
-                                                         (2, self._hessian_n[diagonal_component]) ]
+            self._taylor_eigen_s[diagonal_component] = [(0, self._eigenvalues_s[diagonal_component]),
+                                                        (1, self._jacobian_s[diagonal_component]),
+                                                        (2, self._hessian_s[diagonal_component])]
+            self._taylor_eigen_n[diagonal_component] = [(0, self._eigenvalues_n[diagonal_component]),
+                                                        (1, self._jacobian_n[diagonal_component]),
+                                                        (2, self._hessian_n[diagonal_component])]
 
 
     def calculate_local_quadratic(self, diagonal_component=None):
@@ -584,7 +583,7 @@ class MatrixPotential2S(MatrixPotential):
 
         # TODO: Relate this to the _taylor_eigen_{s,n} data
         if diagonal_component is not None:
-            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component,diagonal_component))
+            V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component, diagonal_component))
             J = self.evaluate_jacobian_at(grid, component=diagonal_component)
             H = self.evaluate_hessian_at(grid, component=diagonal_component)
             result = (V, J, H)
@@ -592,7 +591,7 @@ class MatrixPotential2S(MatrixPotential):
             Vlist = self.evaluate_eigenvalues_at(grid)
             Jlist = self.evaluate_jacobian_at(grid)
             Hlist = self.evaluate_hessian_at(grid)
-            result = [ (V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist) ]
+            result = [(V, J, H) for V, J, H in zip(Vlist, Jlist, Hlist)]
 
         return tuple(result)
 
@@ -615,16 +614,16 @@ class MatrixPotential2S(MatrixPotential):
 
         # Point q where the Taylor series is computed
         # This is a column vector q = (q1, ... ,qD)
-        qs = [ sympy.Symbol("q"+str(i)) for i in range(len(self._variables)) ]
-        pairs = [ (xi,qi) for xi,qi in zip(self._variables, qs) ]
+        qs = [sympy.Symbol("q"+str(i)) for i in range(len(self._variables))]
+        pairs = [(xi, qi) for xi, qi in zip(self._variables, qs)]
 
         V = self._eigenvalues_s[diagonal_component].subs(pairs)
         J = self._jacobian_s[diagonal_component].subs(pairs)
         H = self._hessian_s[diagonal_component].subs(pairs)
 
         # Symbolic expression for the quadratic Taylor expansion term
-        xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._variables, qs) ])
-        quadratic = sympy.Matrix([[V]]) + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+        xmq = sympy.Matrix([(xi - qi) for xi, qi in zip(self._variables, qs)])
+        quadratic = sympy.Matrix([[V]]) + J.T * xmq + sympy.Rational(1, 2) * xmq.T * H * xmq
 
         # Symbolic simplification may fail
         if self._try_simplify:
@@ -634,7 +633,7 @@ class MatrixPotential2S(MatrixPotential):
                 pass
 
         # Symbolic expression for the Taylor expansion remainder term
-        U = sympy.diag( *self._number_components*[quadratic[0,0]] )
+        U = sympy.diag(*self._number_components * [quadratic[0, 0]])
         remainder = self._potential_s - U
 
         # Symbolic simplification may fail
@@ -673,25 +672,25 @@ class MatrixPotential2S(MatrixPotential):
         for index, eigenvalue in enumerate(self._eigenvalues_s):
             # Point q where the Taylor series is computed
             # This is a column vector q = (q1, ... ,qD)
-            qs = [ sympy.Symbol("q"+str(i)) for i,v in enumerate(self._variables) ]
-            pairs = [ (xi,qi) for xi,qi in zip(self._variables, qs) ]
+            qs = [sympy.Symbol("q"+str(i)) for i, v in enumerate(self._variables)]
+            pairs = [(xi, qi) for xi, qi in zip(self._variables, qs)]
 
             V = self._eigenvalues_s[index].subs(pairs)
             J = self._jacobian_s[index].subs(pairs)
             H = self._hessian_s[index].subs(pairs)
 
             # Symbolic expression for the quadratic Taylor expansion term
-            xmq = sympy.Matrix([ (xi-qi) for xi,qi in zip(self._variables, qs) ])
-            quadratic = sympy.Matrix([[V]]) + J.T*xmq + sympy.Rational(1,2)*xmq.T*H*xmq
+            xmq = sympy.Matrix([(xi - qi) for xi, qi in zip(self._variables, qs)])
+            quadratic = sympy.Matrix([[V]]) + J.T * xmq + sympy.Rational(1, 2) * xmq.T * H * xmq
             try:
                 quadratic = quadratic.applyfunc(sympy.simplify)
             except:
                 pass
 
-            quadratics.append(quadratic[0,0])
+            quadratics.append(quadratic[0, 0])
 
         # Symbolic expression for the Taylor expansion remainder term
-        U = sympy.diag( *quadratics )
+        U = sympy.diag(*quadratics)
         remainder = self._potential_s - U
 
         # Symbolic simplification may fail
@@ -762,14 +761,14 @@ class MatrixPotential2S(MatrixPotential):
 
         if entry is not None:
             (row, col) = entry
-            values = functions[row*self._number_components+col](*args)
+            values = functions[row * self._number_components + col](*args)
 
             # Test for potential being constant
             if numpy.atleast_1d(values).shape == (1,):
                 values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
 
             # Put the result in correct shape (1, #gridnodes)
-            result = values.reshape((1,N))
+            result = values.reshape((1, N))
         else:
             result = []
             for function in functions:
@@ -780,6 +779,6 @@ class MatrixPotential2S(MatrixPotential):
                     values = values * numpy.ones(grid.get_number_nodes(), dtype=numpy.complexfloating)
 
                 # Put the result in correct shape (1, #gridnodes)
-                result.append(values.reshape((1,N)))
+                result.append(values.reshape((1, N)))
 
         return result

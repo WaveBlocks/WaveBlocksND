@@ -73,7 +73,7 @@ def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
 
             # Retrieve simulation data
             values = iom.load_wavefunction(timestep=step, blockid=blockid)
-            values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
+            values = [values[j, ...] for j in range(parameters["ncomponents"])]
             WF.set_values(values)
 
             # Project wavefunction values to eigenbasis
@@ -87,7 +87,7 @@ def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
 
             for index, item in enumerate(values):
                 # tmp is the Vector (0, 0, 0, \psi_i, 0, 0, ...)
-                tmp = [ zeros(item.shape) for z in range(nst) ]
+                tmp = [zeros(item.shape) for z in range(nst)]
                 tmp[index] = item
                 WF2.set_values(tmp)
 
@@ -108,7 +108,7 @@ def compute_energy(iom, blockid=0, eigentrafo=True, iseigen=True):
 
             # Retrieve simulation data
             values = iom.load_wavefunction(timestep=step, blockid=blockid)
-            values = [ values[j,...] for j in range(parameters["ncomponents"]) ]
+            values = [values[j, ...] for j in range(parameters["ncomponents"])]
             WF.set_values(values)
 
             # And calculate the energies of these components

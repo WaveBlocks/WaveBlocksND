@@ -52,10 +52,10 @@ class GaussHermiteOriginalQR(QuadratureRule):
         self._number_nodes = nodes.size
 
         # The quadrature nodes \gamma.
-        self._nodes = nodes.reshape((1,self._number_nodes))
+        self._nodes = nodes.reshape((1, self._number_nodes))
 
         # The quadrature weights \omega.
-        self._weights = weights.reshape((1,self._number_nodes))
+        self._weights = weights.reshape((1, self._number_nodes))
 
 
     def __str__(self):

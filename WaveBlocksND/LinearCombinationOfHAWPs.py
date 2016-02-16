@@ -49,21 +49,21 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         self._basis_shapes = {}
 
         # Coefficients of individual packets
-        self._wp_coefficients = zeros((number_packets,0), dtype=complexfloating)
+        self._wp_coefficients = zeros((number_packets, 0), dtype=complexfloating)
         self._basis_sizes = []
 
         # Default parameters of harmonic oscillator eigenstates
         q = zeros((self._number_packets, self._dimension), dtype=complexfloating)
         p = zeros((self._number_packets, self._dimension), dtype=complexfloating)
-        Q = ones((self._number_packets,1,1)) * eye(self._dimension, dtype=complexfloating)
-        P = 1.0j * ones((self._number_packets,1,1)) * eye(self._dimension, dtype=complexfloating)
-        S = zeros((self._number_packets,1), dtype=complexfloating)
+        Q = ones((self._number_packets, 1, 1)) * eye(self._dimension, dtype=complexfloating)
+        P = 1.0j * ones((self._number_packets, 1, 1)) * eye(self._dimension, dtype=complexfloating)
+        S = zeros((self._number_packets, 1), dtype=complexfloating)
 
         # Parameters
         self._Pis = [q, p, Q, P, S]
 
         # Coefficients of linear combination
-        self._lc_coefficients = zeros((number_packets,1), dtype=complexfloating)
+        self._lc_coefficients = zeros((number_packets, 1), dtype=complexfloating)
 
         # TODO: Handle multi-component packets
         assert number_components == 1
@@ -74,8 +74,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :return: A string describing the linear combination of Hagedorn
                  wavepackets :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j`.
         """
-        s = ("Linear combination of "+str(self._number_packets)+" Hagedorn wavepackets, each with "
-            +str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n")
+        s = ("Linear combination of "+str(self._number_packets)+" Hagedorn wavepackets, each with "+str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n")
         return s
 
 
@@ -118,21 +117,21 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         curlen, cursize = self._wp_coefficients.shape
         diff = bs - cursize
         if diff > 0:
-            Z = zeros((curlen,diff), dtype=complexfloating)
+            Z = zeros((curlen, diff), dtype=complexfloating)
             self._wp_coefficients = hstack([self._wp_coefficients, Z])
         # Append new coefficients
         curlen, cursize = self._wp_coefficients.shape
-        c = packet.get_coefficients(component=0).reshape((1,-1))
-        Z = zeros((1,cursize-bs), dtype=complexfloating)
+        c = packet.get_coefficients(component=0).reshape((1, -1))
+        Z = zeros((1, cursize - bs), dtype=complexfloating)
         self._wp_coefficients = vstack([self._wp_coefficients, hstack([c, Z])])
         # Store the parameter set
         D = self._dimension
         qs, ps, Qs, Ps, Ss = self._Pis
         q, p, Q, P, S = packet.get_parameters(component=0)
-        self._Pis[0] = concatenate([qs, q.reshape((1,D))], axis=0)
-        self._Pis[1] = concatenate([ps, p.reshape((1,D))], axis=0)
-        self._Pis[2] = concatenate([Qs, Q.reshape((1,D,D))], axis=0)
-        self._Pis[3] = concatenate([Ps, P.reshape((1,D,D))], axis=0)
+        self._Pis[0] = concatenate([qs, q.reshape((1, D))], axis=0)
+        self._Pis[1] = concatenate([ps, p.reshape((1, D))], axis=0)
+        self._Pis[2] = concatenate([Qs, Q.reshape((1, D, D))], axis=0)
+        self._Pis[3] = concatenate([Ps, P.reshape((1, D, D))], axis=0)
         self._Pis[4] = concatenate([Ss, S], axis=0)
         # Store the linear combination coefficient
         self._lc_coefficients = vstack([self._lc_coefficients, atleast_2d(coefficient)])
@@ -183,19 +182,19 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :return: The wavepacket :math:`\Psi_j`.
         :type: A :py:class:`HagedornWavepacket` instance.
         """
-        if packetindex > self._number_packets-1 or packetindex < 0:
-            raise ValueError("There is no packet with index "+str(packetindex)+".")
+        if packetindex > self._number_packets - 1 or packetindex < 0:
+            raise ValueError("There is no packet with index {}.".format(packetindex))
 
         HAWP = HagedornWavepacket(self._dimension, self._number_components, self._eps)
         K = self._basis_shapes[self._basis_shapes_hashes[packetindex]]
         HAWP.set_basis_shapes([K])
-        q = self._Pis[0][packetindex,:]
-        p = self._Pis[1][packetindex,:]
-        Q = self._Pis[2][packetindex,:,:]
-        P = self._Pis[3][packetindex,:,:]
-        S = self._Pis[4][packetindex,:]
-        HAWP.set_parameters([q,p,Q,P,S])
-        cj = self._wp_coefficients[packetindex,:]
+        q = self._Pis[0][packetindex, :]
+        p = self._Pis[1][packetindex, :]
+        Q = self._Pis[2][packetindex, :, :]
+        P = self._Pis[3][packetindex, :, :]
+        S = self._Pis[4][packetindex, :]
+        HAWP.set_parameters([q, p, Q, P, S])
+        cj = self._wp_coefficients[packetindex, :]
         HAWP.set_coefficients(cj, component=0)
         return HAWP
 
@@ -207,7 +206,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
         :return: A list of :py:class:`HagedornWavepacket` instances.
         """
-        return [ self.get_wavepacket(j) for j in range(self._number_packets) ]
+        return [self.get_wavepacket(j) for j in range(self._number_packets)]
 
 
     # def set_wavepackets(self, packetlist):
@@ -303,13 +302,13 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :return: A single complex number.
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
-        if packetindex > self._number_packets-1 or packetindex < 0:
-            raise ValueError("There is no packet with index "+str(packetindex)+".")
+        if packetindex > self._number_packets - 1 or packetindex < 0:
+            raise ValueError("There is no packet with index {}.".format(packetindex))
 
         basis_shape = self._basis_shapes[self._basis_shapes_hashes[packetindex]]
 
-        if not index in basis_shape:
-            raise ValueError("There is no basis function with multi-index "+str(index)+".")
+        if index not in basis_shape:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
 
         # Apply linear order mapping here
         key = basis_shape[index]
@@ -327,13 +326,13 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :param value: The new value of the coefficient :math:`c^i_k`.
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
-        if packetindex > self._number_packets-1 or packetindex < 0:
-            raise ValueError("There is no packet with index "+str(packetindex)+".")
+        if packetindex > self._number_packets - 1 or packetindex < 0:
+            raise ValueError("There is no packet with index {}.".format(packetindex))
 
         basis_shape = self._basis_shapes[self._basis_shapes_hashes[packetindex]]
 
-        if not index in basis_shape:
-            raise ValueError("There is no basis function with multi-index "+str(index)+".")
+        if index not in basis_shape:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
 
         # Apply linear order mapping here
         key = basis_shape[index]
@@ -352,11 +351,11 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if packetindex is not None:
-            if packetindex > self._number_packets-1 or packetindex < 0:
-                raise ValueError("There is no packet with index "+str(packetindex)+".")
+            if packetindex > self._number_packets - 1 or packetindex < 0:
+                raise ValueError("There is no packet with index {}.".format(packetindex))
 
             bs = self._basis_sizes[packetindex]
-            return self._wp_coefficients[packetindex,:bs].copy()
+            return self._wp_coefficients[packetindex, :bs].copy()
         else:
             return self._wp_coefficients.copy()
 
@@ -375,8 +374,8 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
         if packetindex is not None:
-            if packetindex > self._number_packets-1 or packetindex < 0:
-                raise ValueError("There is no packet with index "+str(packetindex)+".")
+            if packetindex > self._number_packets - 1 or packetindex < 0:
+                raise ValueError("There is no packet with index {}.".format(packetindex))
 
             if basisshapes is not None:
                 self._basis_shapes_hashes[packetindex] = hash(basisshapes)
@@ -386,19 +385,19 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
             else:
                 bs = self._basis_sizes[packetindex]
 
-            self._wp_coefficients[packetindex,:bs] = squeeze(coefficients)
+            self._wp_coefficients[packetindex, :bs] = squeeze(coefficients)
         else:
             J = self._number_packets
 
             if basisshapes is not None:
-                self._basis_shapes_hashes = [ hash(ashape) for ashape in basisshapes ]
-                self._basis_shapes = { hash(ashape):ashape for ashape in list(set(basisshapes)) }
-                self._basis_sizes = [ K.get_basis_size() for K in basisshapes ]
+                self._basis_shapes_hashes = [hash(ashape) for ashape in basisshapes]
+                self._basis_shapes = {hash(ashape): ashape for ashape in list(set(basisshapes))}
+                self._basis_sizes = [K.get_basis_size() for K in basisshapes]
 
-            self._wp_coefficients = coefficients.reshape((J,-1))
+            self._wp_coefficients = coefficients.reshape((J, -1))
 
 
-    def get_wavepacket_parameters(self, packetindex=None, key=("q","p","Q","P","S")):
+    def get_wavepacket_parameters(self, packetindex=None, key=("q", "p", "Q", "P", "S")):
         r"""Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi_j`.
 
         :param packetindex: The index :math:`0 \leq j < J` of the packet whose parameter
@@ -410,17 +409,17 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
             D = self._dimension
             for k in key:
                 if k == "q":
-                    Pilist.append(self._Pis[0][packetindex].reshape(D,1))
+                    Pilist.append(self._Pis[0][packetindex].reshape(D, 1))
                 elif k == "p":
-                    Pilist.append(self._Pis[1][packetindex].reshape(D,1))
+                    Pilist.append(self._Pis[1][packetindex].reshape(D, 1))
                 elif k == "Q":
-                    Pilist.append(self._Pis[2][packetindex].reshape(D,D))
+                    Pilist.append(self._Pis[2][packetindex].reshape(D, D))
                 elif k == "P":
-                    Pilist.append(self._Pis[3][packetindex].reshape(D,D))
+                    Pilist.append(self._Pis[3][packetindex].reshape(D, D))
                 elif k == "S":
-                    Pilist.append(self._Pis[4][packetindex].reshape(1,1))
+                    Pilist.append(self._Pis[4][packetindex].reshape(1, 1))
                 else:
-                    raise KeyError("Invalid parameter key: "+str(key))
+                    raise KeyError("Invalid parameter key: {}".format(key))
         else:
             Pilist = []
             for k in key:
@@ -435,19 +434,19 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
                 elif k == "S":
                     Pilist.append(self._Pis[4].copy())
                 else:
-                    raise KeyError("Invalid parameter key: "+str(key))
+                    raise KeyError("Invalid parameter key: {}".format(key))
 
         return Pilist
 
 
-    def set_wavepacket_parameters(self, Pilist, packetindex=None, key=("q","p","Q","P","S")):
+    def set_wavepacket_parameters(self, Pilist, packetindex=None, key=("q", "p", "Q", "P", "S")):
         r"""Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi_j`.
 
         :param Pilist: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.
         """
         if packetindex is not None:
-            if packetindex > self._number_packets-1 or packetindex < 0:
-                raise ValueError("There is no packet with index "+str(packetindex)+".")
+            if packetindex > self._number_packets - 1 or packetindex < 0:
+                raise ValueError("There is no packet with index {}.".format(packetindex))
             J = 1
         else:
             packetindex = slice(None)
@@ -457,17 +456,17 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
         for k, item in zip(key, Pilist):
             if k == "q":
-                self._Pis[0][packetindex,:] = item.reshape(J,D)
+                self._Pis[0][packetindex, :] = item.reshape(J, D)
             elif k == "p":
-                self._Pis[1][packetindex,:] = item.reshape(J,D)
+                self._Pis[1][packetindex, :] = item.reshape(J, D)
             elif k == "Q":
-                self._Pis[2][packetindex,:,:] = item.reshape(J,D,D)
+                self._Pis[2][packetindex, :, :] = item.reshape(J, D, D)
             elif k == "P":
-                self._Pis[3][packetindex,:,:] = item.reshape(J,D,D)
+                self._Pis[3][packetindex, :, :] = item.reshape(J, D, D)
             elif k == "S":
-                self._Pis[4][packetindex,:] = item.reshape(J,1)
+                self._Pis[4][packetindex, :] = item.reshape(J, 1)
             else:
-                raise KeyError("Invalid parameter key: "+str(key))
+                raise KeyError("Invalid parameter key: {}".format(key))
 
 
     def get_eps(self):
@@ -515,7 +514,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         if not coefficients.size == self._number_packets:
             raise ValueError("Wrong number of new coefficients.")
 
-        self._lc_coefficients = coefficients.copy().reshape((-1,1))
+        self._lc_coefficients = coefficients.copy().reshape((-1, 1))
 
 
     # TODO: Put all evaluation functions into common class
@@ -548,22 +547,22 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         eps = self._eps
 
         # The current parameters
-        q = self._Pis[0][packetindex,:].reshape((D,1))
-        p = self._Pis[1][packetindex,:].reshape((D,1))
-        Q = self._Pis[2][packetindex,:,:].reshape((D,D))
-        P = self._Pis[3][packetindex,:,:].reshape((D,D))
+        q = self._Pis[0][packetindex, :].reshape((D, 1))
+        p = self._Pis[1][packetindex, :].reshape((D, 1))
+        Q = self._Pis[2][packetindex, :, :].reshape((D, D))
+        P = self._Pis[3][packetindex, :, :].reshape((D, D))
 
         # TODO: Maybe use LU instead of inv(...)
         df = nodes - q
-        pr1 = einsum("ik,ij,jk->k", df, dot(P,inv(Q)), df)
+        pr1 = einsum("ik,ij,jk->k", df, dot(P, inv(Q)), df)
         pr2 = einsum("ij,ik", p, df)
         exponent = 1.0j / eps**2 * (0.5 * pr1 + pr2)
 
         # The problematic prefactor cancels in inner products
         if prefactor is True:
-            prefactor = (pi*eps**2)**(-D*0.25) / sqrt(det(Q))
+            prefactor = (pi * eps**2)**(-D * 0.25) / sqrt(det(Q))
         else:
-            prefactor = (pi*eps**2)**(-D*0.25)
+            prefactor = (pi * eps**2)**(-D * 0.25)
 
         return prefactor * exp(exponent)
 
@@ -587,10 +586,10 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         D = self._dimension
 
         # The current parameters
-        q = self._Pis[0][packetindex,:].reshape((D,1))
-        #p = self._Pis[1][packetindex,:].reshape((D,1))
-        Q = self._Pis[2][packetindex,:,:].reshape((D,D))
-        #P = self._Pis[3][packetindex,:,:].reshape((D,D))
+        q = self._Pis[0][packetindex, :].reshape((D, 1))
+        # p = self._Pis[1][packetindex,:].reshape((D,1))
+        Q = self._Pis[2][packetindex, :, :].reshape((D, D))
+        # P = self._Pis[3][packetindex,:,:].reshape((D,D))
 
         # Precompute some constants
         Qinv = inv(Q)
@@ -599,7 +598,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
 
         # The basis shape
         bas = self._basis_shapes[self._basis_shapes_hashes[packetindex]]
-        Z = tuple(D*[0])
+        Z = tuple(D * [0])
 
         # Book keeping
         todo = []
@@ -616,7 +615,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         # Evaluate phi0
         tmp[Z] = self._evaluate_phi0(nodes, packetindex, prefactor=False)
 
-        psi = self._wp_coefficients[packetindex,bas[Z]] * tmp[Z]
+        psi = self._wp_coefficients[packetindex, bas[Z]] * tmp[Z]
 
         # Iterate for higher order states
         while len(newtodo) != 0:
@@ -638,22 +637,22 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
                 # Access predecessors
                 phim = zeros((D, nn), dtype=complexfloating)
                 for j, kpj in bas.get_neighbours(k, selection="backward"):
-                    phim[j,:] = tmp[kpj]
+                    phim[j, :] = tmp[kpj]
 
                 # Compute the neighbours
                 for d, n in bas.get_neighbours(k, selection="forward"):
-                    if not n in tmp.keys():
+                    if n not in tmp.keys():
                         # Compute 3-term recursion
                         p1 = (nodes - q) * tmp[k]
                         p2 = sqrt(ki) * phim
 
-                        t1 = sqrt(2.0/self._eps**2) * dot(Qinv[d,:], p1)
-                        t2 = dot(QQ[d,:], p2)
+                        t1 = sqrt(2.0 / self._eps**2) * dot(Qinv[d, :], p1)
+                        t2 = dot(QQ[d, :], p2)
 
                         # Store computed value
                         tmp[n] = (t1 - t2) / sqrt(ki[d] + 1.0)
                         # And update the result
-                        psi = psi + self._wp_coefficients[packetindex,bas[n]] * tmp[n]
+                        psi = psi + self._wp_coefficients[packetindex, bas[n]] * tmp[n]
 
                         newtodo.append(n)
                 delete.append(k)
@@ -680,12 +679,12 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         J = self._number_packets
         eps = self._eps
 
-        values = zeros((G,J))
+        values = zeros((G, J))
         # Evaluate each packet individually
         for j in range(J):
-            S = self._Pis[4][j,:]
+            S = self._Pis[4][j, :]
             phase = exp(1.0j * S / eps**2)
-            values[:,j] = phase * self.slim_recursion(grid, j, prefactor=prefactor)
+            values[:, j] = phase * self.slim_recursion(grid, j, prefactor=prefactor)
 
         return values
 
@@ -705,10 +704,10 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
         eps = self._eps
 
         if packetindex is not None:
-            if packetindex > self._number_packets-1 or packetindex < 0:
-                raise ValueError("There is no packet with index "+str(packetindex)+".")
+            if packetindex > self._number_packets - 1 or packetindex < 0:
+                raise ValueError("There is no packet with index {}.".format(packetindex))
 
-            S = self._Pis[4][packetindex,:]
+            S = self._Pis[4][packetindex, :]
             phase = exp(1.0j * S / eps**2)
             values = squeeze(self._lc_coefficients[packetindex]) * phase * self.slim_recursion(grid, packetindex, prefactor=prefactor)
         else:
@@ -716,7 +715,7 @@ class LinearCombinationOfHAWPs(LinearCombinationOfWavepackets):
             values = zeros((grid.get_number_nodes(overall=True),))
             # Evaluate each packet individually
             for j in range(self._number_packets):
-                S = self._Pis[4][j,:]
+                S = self._Pis[4][j, :]
                 phase = exp(1.0j * S / eps**2)
                 values = values + squeeze(self._lc_coefficients[j]) * phase * self.slim_recursion(grid, j, prefactor=prefactor)
 

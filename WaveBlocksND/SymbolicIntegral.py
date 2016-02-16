@@ -13,7 +13,6 @@ from numpy import array, squeeze, conjugate, sqrt, ones, zeros, complexfloating,
 from scipy import exp
 from scipy.misc import factorial
 from scipy.special import binom
-#from scipy.special.orthogonal import eval_hermite
 
 from WaveBlocksND.InnerProduct import InnerProductException
 from WaveBlocksND.Quadrature import Quadrature
@@ -92,7 +91,7 @@ class SymbolicIntegral(Quadrature):
         """
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._operator = lambda nodes, dummy, entry=None: ones((1, nodes.shape[1])) if entry[0] == entry[1] else zeros((1, nodes.shape[1]))
         else:
             raise ValueError("The 'SymbolicIntegral' can not handle operators.")
 
@@ -123,8 +122,8 @@ class SymbolicIntegral(Quadrature):
         H = {}
         H[-1] = 0.0
         H[0] = 1.0
-        for n in range(N+1):
-            H[n+1] = 2.0*x*H[n] - 2.0*n*H[n-1]
+        for n in range(N + 1):
+            H[n + 1] = 2.0 * x * H[n] - 2.0 * n * H[n - 1]
 
         H.pop(-1)
         return H
@@ -158,10 +157,10 @@ class SymbolicIntegral(Quadrature):
         q1, p1, Q1, P1 = Pibra
         q2, p2, Q2, P2 = Piket
         hbar = eps**2
-        X = Q2*conjugate(P1) - P2*conjugate(Q1)
-        I = sqrt(-2.0j/X) * exp( 1.0j/(2*hbar) * (Q2*conjugate(Q1)*(p2 - p1)**2 + P2*conjugate(P1)*(q2 - q1)**2) / X
-                                -1.0j/hbar *     ((q2 - q1)*(Q2*conjugate(P1)*p2 - P2*conjugate(Q1)*p1)) / X
-                               )
+        X = Q2 * conjugate(P1) - P2 * conjugate(Q1)
+        I = sqrt(-2.0j / X) * exp( 1.0j / (2*hbar) * (Q2*conjugate(Q1)*(p2 - p1)**2 + P2*conjugate(P1)*(q2 - q1)**2) / X
+                                  -1.0j / hbar     * ((q2 - q1)*(Q2*conjugate(P1)*p2 - P2*conjugate(Q1)*p1)) / X
+                                 )
         return I
 
 
@@ -213,13 +212,13 @@ class SymbolicIntegral(Quadrature):
 
         # TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2
         #       but q1 \neq q2 and p1 \neq p2.
-        pf = (self._f[(k,l)] * 2**(-(k+l)/2.0) * self._I0 *
-              (1.0j*conjugate(P1)*Q2-1.0j*conjugate(Q1)*P2)**(-(k+l)/2.0))
+        pf = (self._f[(k, l)] * 2**(-(k + l) / 2.0) * self._I0 *
+              (1.0j * conjugate(P1) * Q2 - 1.0j * conjugate(Q1) * P2)**(-(k + l) / 2.0))
 
         S = 0.0j
-        for j in range(min(k,l) + 1):
-            S = S + (self._bk[k,j] * self._bl[l,j] * self._jf[j] *
-                     self._pfk[k-j] * self._pfl[l-j] * self._Hk[k-j] * self._Hl[l-j])
+        for j in range(min(k, l) + 1):
+            S = S + (self._bk[k, j] * self._bl[l, j] * self._jf[j] *
+                     self._pfk[k - j] * self._pfl[l - j] * self._Hk[k - j] * self._Hl[l - j])
 
         Ikl = pf * S
         return squeeze(Ikl)
@@ -254,15 +253,15 @@ class SymbolicIntegral(Quadrature):
 
         # Factorials
         f = factorial(arange(makl))
-        self._f = 1.0 / sqrt(f[:K].reshape(-1,1) * f[:L].reshape(1,-1))
+        self._f = 1.0 / sqrt(f[:K].reshape(-1, 1) * f[:L].reshape(1, -1))
 
         # These prefactors depend only on j
         self._jf = f[:mikl] * 4**arange(mikl)
 
         # Binomials depend on k or l and j
-        ik = arange(K).reshape(-1,1)
-        il = arange(L).reshape(-1,1)
-        ij = arange(mikl).reshape(1,-1)
+        ik = arange(K).reshape(-1, 1)
+        il = arange(L).reshape(-1, 1)
+        ij = arange(mikl).reshape(1, -1)
         self._bk = binom(ik, ij)
         self._bl = binom(il, ij)
 
@@ -284,11 +283,11 @@ class SymbolicIntegral(Quadrature):
         # hence we have that k-j can be in [K-1, K-2, ..., K-1-min(K-1,L-1)]
         # and similar for l-j we have [L-1, L-2, ..., L-1-min(K-1,L-1)]
         # where both K-1-min(K-1,L-1) and L-1-min(K-1,L-1) are non-negative.
-        self._Hk = self._evaluate_hermite(K-1, -1.0/eps * argk)
-        self._Hl = self._evaluate_hermite(L-1,  1.0/eps * argl)
+        self._Hk = self._evaluate_hermite(K - 1, -1.0 / eps * argk)
+        self._Hl = self._evaluate_hermite(L - 1,  1.0 / eps * argl)
 
-        self._pfk = ((1.0j*Q2*P1 - 1.0j*Q1*P2) ** (ik/2.0)).reshape(K)
-        self._pfl = ((1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) ** (il/2.0)).reshape(L)
+        self._pfk = ((1.0j*Q2*P1 - 1.0j*Q1*P2) ** (ik / 2.0)).reshape(K)
+        self._pfl = ((1.0j*conjugate(Q2*P1) - 1.0j*conjugate(Q1*P2)) ** (il / 2.0)).reshape(L)
 
         # And the groundstate value
         self._I0 = self.exact_result_ground(Pibra, Piket, eps)
@@ -317,12 +316,12 @@ class SymbolicIntegral(Quadrature):
 
         for r in Kbra:
             for c in Kket:
-                cr = cbra[Kbra[r],0]
-                cc = cket[Kket[c],0]
+                cr = cbra[Kbra[r], 0]
+                cc = cket[Kket[c], 0]
                 i = self.exact_result_higher(Pibra[:4], Piket[:4], eps, r[0], c[0])
                 result = result + conjugate(cr) * cc * i
 
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
         return phase * result
 
 
@@ -343,11 +342,11 @@ class SymbolicIntegral(Quadrature):
 
         self._cache_factors(Pibra[:4], Piket[:4], Kbra, Kket, eps)
 
-        M = zeros((Kbra.get_basis_size(),Kket.get_basis_size()), dtype=complexfloating)
+        M = zeros((Kbra.get_basis_size(), Kket.get_basis_size()), dtype=complexfloating)
 
         for r in Kbra:
             for c in Kket:
                 M[Kbra[r], Kket[c]] = self.exact_result_higher(Pibra[:4], Piket[:4], eps, r[0], c[0])
 
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
         return phase * M

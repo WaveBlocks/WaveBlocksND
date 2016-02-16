@@ -91,7 +91,7 @@ class ObservablesLCWP(Observables):
         if component is not None:
             N = array([1] * lincomb.get_number_packets())
         else:
-            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+            N = array([wp.get_number_components() for wp in lincomb.get_wavepackets()])
 
         # Prepare the coefficients in case of multiple components
         c = lincomb.get_coefficients()
@@ -152,7 +152,7 @@ class ObservablesLCWP(Observables):
         if component is not None:
             N = array([1] * lincomb.get_number_packets())
         else:
-            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+            N = array([wp.get_number_components() for wp in lincomb.get_wavepackets()])
 
         # Prepare the coefficients in case of multiple components
         c = lincomb.get_coefficients()
@@ -210,7 +210,7 @@ class ObservablesLCWP(Observables):
         if component is not None:
             N = array([1] * lincomb.get_number_packets())
         else:
-            N = array([ wp.get_number_components() for wp in lincomb.get_wavepackets() ])
+            N = array([wp.get_number_components() for wp in lincomb.get_wavepackets()])
 
         # Prepare the coefficients in case of multiple components
         c = lincomb.get_coefficients()

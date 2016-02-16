@@ -54,14 +54,14 @@ class PhaseSpaceLattice(object):
         dimension = self._dimension
         latdist = 0.75 * self._eps * sqrt(pi)
 
-        qslicers = [ slice(lims[0], lims[1]+latdist, latdist) for lims in qlimits ]
-        pslicers = [ slice(lims[0], lims[1]+latdist, latdist) for lims in plimits ]
+        qslicers = [slice(lims[0], lims[1] + latdist, latdist) for lims in qlimits]
+        pslicers = [slice(lims[0], lims[1] + latdist, latdist) for lims in plimits]
 
         qgrid = array(mgrid[qslicers], dtype=complexfloating).reshape((dimension, -1))
         pgrid = array(mgrid[pslicers], dtype=complexfloating).reshape((dimension, -1))
 
         qvals = self._potential(qgrid)
-        pvals = 0.5 * einsum("ij,ij->j", pgrid, pgrid).reshape(-1,1)
+        pvals = 0.5 * einsum("ij,ij->j", pgrid, pgrid).reshape(-1, 1)
 
         Z = qvals + pvals
         indices = (abs(Z - self._energy) < self._energydelta)
@@ -71,19 +71,19 @@ class PhaseSpaceLattice(object):
         rows, cols = indices.shape
         for r in range(rows):
             for c in range(cols):
-                if bool(indices[r,c]) is True:
+                if bool(indices[r, c]) is True:
                     keepq.append(c)
                     keepp.append(r)
 
-        qgridf = qgrid[:,keepq]
-        pgridf = pgrid[:,keepp]
+        qgridf = qgrid[:, keepq]
+        pgridf = pgrid[:, keepp]
 
         ps_size = sum(indices)
         ps_size_full = product(Z.shape)
 
-        print("Phase space lattice size: "+str(ps_size))
-        print(" number candidates tested: "+str(ps_size_full))
-        print(" pruning factor: "+str((1.0 - ps_size / (1.0*ps_size_full)) * 100)+"%")
+        print("Phase space lattice size: {}".format(ps_size))
+        print(" number candidates tested: {}".format(ps_size_full))
+        print(" pruning factor: "+str((1.0 - ps_size / (1.0 * ps_size_full)) * 100)+"%")
 
         self._qgrid = qgridf
         self._pgrid = pgridf

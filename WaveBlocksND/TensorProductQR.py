@@ -67,14 +67,14 @@ class TensorProductQR(QuadratureRule):
                  nodes has a shape of :math:`(D, |\Gamma|)` and the
                  array of weights is of shape :math:`(|\Gamma|)`.
         """
-        self._number_nodes = reduce(multiply, [ rule.get_number_nodes() for rule in self._rules ])
+        self._number_nodes = reduce(multiply, [rule.get_number_nodes() for rule in self._rules])
         # The quadrature nodes \gamma.
-        nodes = meshgrid_nd([ rule.get_nodes() for rule in self._rules ])
-        self._nodes = vstack([ node.reshape(1,-1) for node in nodes ])
+        nodes = meshgrid_nd([rule.get_nodes() for rule in self._rules])
+        self._nodes = vstack([node.reshape(1, -1) for node in nodes])
         # The quadrature weights \omega.
-        weights = meshgrid_nd([ rule.get_weights() for rule in self._rules ])
+        weights = meshgrid_nd([rule.get_weights() for rule in self._rules])
         weights = reduce(multiply, weights)
-        self._weights = weights.reshape(1,-1)
+        self._weights = weights.reshape(1, -1)
 
 
     def __str__(self):
@@ -93,7 +93,7 @@ class TensorProductQR(QuadratureRule):
         d = {}
         d["type"] = "TensorProductQR"
         d["dimension"] = self._dimension
-        d["qr_rules"] = [ qr.get_description() for qr in self._rules ]
+        d["qr_rules"] = [qr.get_description() for qr in self._rules]
         d["options"] = deepcopy(self._options)
         return d
 

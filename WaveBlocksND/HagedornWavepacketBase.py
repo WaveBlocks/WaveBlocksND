@@ -43,18 +43,18 @@ class HagedornWavepacketBase(Wavepacket):
         # Find the intersection of K and K'
         # Optimization: iterate over smaller set
         if bso <= bsn:
-            insec = [ k for k in bs_old if k in bs_new ]
+            insec = [k for k in bs_old if k in bs_new]
         elif bso > bsn:
-            insec = [ k for k in bs_new if k in bs_old ]
+            insec = [k for k in bs_new if k in bs_old]
         # TODO: Consider making this part of the BasisShape interface
         # TODO: Consider implementing set operations for basis shapes
 
         # Construct the index mapping
-        i = array([ bs_old[k] for k in insec ])
-        j = array([ bs_new[k] for k in insec ])
+        i = array([bs_old[k] for k in insec])
+        j = array([bs_new[k] for k in insec])
 
         # Copy over the data
-        cnew = zeros((bsn,1), dtype=complexfloating)
+        cnew = zeros((bsn, 1), dtype=complexfloating)
         cnew[j] = self._coefficients[component][i]
         self._coefficients[component] = cnew
 
@@ -84,7 +84,7 @@ class HagedornWavepacketBase(Wavepacket):
         """
         if component is not None:
             # Check for valid input basis shape
-            if not component in range(self._number_components):
+            if component not in range(self._number_components):
                 raise ValueError("Invalid component index " + str(component))
 
             # Adapt the coefficient storage vectors
@@ -103,7 +103,7 @@ class HagedornWavepacketBase(Wavepacket):
                 self._basis_shapes[index] = bsnew
 
         # And update the caches information
-        self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]
+        self._basis_sizes = [bs.get_basis_size() for bs in self._basis_shapes]
 
 
     # We can handle coefficient set manipulation here as the logic is
@@ -121,10 +121,10 @@ class HagedornWavepacketBase(Wavepacket):
         :param value: The new value of the coefficient :math:`c^i_k`.
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
-        if component > self._number_components-1 or component < 0:
-            raise ValueError("There is no component with index "+str(component)+".")
-        if not index in self._basis_shapes[component]:
-            raise ValueError("There is no basis function with multi-index "+str(index)+".")
+        if component > self._number_components - 1 or component < 0:
+            raise ValueError("There is no component with index {}.".format(component))
+        if index not in self._basis_shapes[component]:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
 
         # Apply linear order mapping here
         key = self._basis_shapes[component][index]
@@ -142,10 +142,10 @@ class HagedornWavepacketBase(Wavepacket):
         :return: A single complex number.
         :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.
         """
-        if component > self._number_components-1 or component < 0:
-            raise ValueError("There is no component with index "+str(component)+".")
-        if not index in self._basis_shapes[component]:
-            raise ValueError("There is no basis function with multi-index "+str(index)+".")
+        if component > self._number_components - 1 or component < 0:
+            raise ValueError("There is no component with index {}.".format(component))
+        if index not in self._basis_shapes[component]:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
 
         # Apply linear order mapping here
         key = self._basis_shapes[component][index]
@@ -170,13 +170,13 @@ class HagedornWavepacketBase(Wavepacket):
 
             for index, value in enumerate(values):
                 bs = self._basis_sizes[index]
-                self._coefficients[index] = value.copy().reshape((bs,1))
+                self._coefficients[index] = value.copy().reshape((bs, 1))
         else:
-            if component > self._number_components-1 or component < 0:
-                raise ValueError("There is no component with index "+str(component)+".")
+            if component > self._number_components - 1 or component < 0:
+                raise ValueError("There is no component with index {}.".format(component))
 
             bs = self._basis_sizes[component]
-            self._coefficients[component] = values.copy().reshape((bs,1))
+            self._coefficients[component] = values.copy().reshape((bs, 1))
 
 
     def get_coefficients(self, component=None):
@@ -193,10 +193,10 @@ class HagedornWavepacketBase(Wavepacket):
         :raise: :py:class:`ValueError` For invalid component indices :math:`i`.
         """
         if component is None:
-            return [ item.copy() for item in self._coefficients ]
+            return [item.copy() for item in self._coefficients]
         else:
-            if component > self._number_components-1 or component < 0:
-                raise ValueError("There is no component with index "+str(component)+".")
+            if component > self._number_components - 1 or component < 0:
+                raise ValueError("There is no component with index {}.".format(component))
 
             return self._coefficients[component].copy()
 
@@ -277,15 +277,15 @@ class HagedornWavepacketBase(Wavepacket):
 
         # TODO: Use LU instead of inv(...)
         df = nodes - q
-        pr1 = einsum("ik,ij,jk->k", df, dot(P,inv(Q)), df)
+        pr1 = einsum("ik,ij,jk->k", df, dot(P, inv(Q)), df)
         pr2 = einsum("ij,ik", p, df)
         exponent = 1.0j / eps**2 * (0.5 * pr1 + pr2)
 
         # The problematic prefactor cancels in inner products
         if prefactor is True:
-            prefactor = (pi*eps**2)**(-d*0.25) / self._get_sqrt(component)(det(Q))
+            prefactor = (pi * eps**2)**(-d * 0.25) / self._get_sqrt(component)(det(Q))
         else:
-            prefactor = (pi*eps**2)**(-d*0.25)
+            prefactor = (pi * eps**2)**(-d * 0.25)
 
         return prefactor * exp(exponent)
 
@@ -323,8 +323,8 @@ class HagedornWavepacketBase(Wavepacket):
         QQ = dot(Qinv, Qbar)
 
         # Compute the ground state phi_0 via direct evaluation
-        mu0 = bas[tuple(D*[0])]
-        phi[mu0,:] = self._evaluate_phi0(component, nodes, prefactor=False)
+        mu0 = bas[tuple(D * [0])]
+        phi[mu0, :] = self._evaluate_phi0(component, nodes, prefactor=False)
 
         # Compute all higher order states phi_k via recursion
         for d in range(D):
@@ -340,14 +340,14 @@ class HagedornWavepacketBase(Wavepacket):
 
                 for j, kpj in bas.get_neighbours(k, selection="backward"):
                     mukpj = bas[kpj]
-                    phim[j,:] = phi[mukpj,:]
+                    phim[j, :] = phi[mukpj, :]
 
                 # Compute 3-term recursion
-                p1 = (nodes - q) * phi[bas[k],:]
+                p1 = (nodes - q) * phi[bas[k], :]
                 p2 = sqrt(ki) * phim
 
-                t1 = sqrt(2.0/self._eps**2) * dot(Qinv[d,:], p1)
-                t2 = dot(QQ[d,:], p2)
+                t1 = sqrt(2.0 / self._eps**2) * dot(Qinv[d, :], p1)
+                t2 = dot(QQ[d, :], p2)
 
                 # Find multi-index where to store the result
                 kped = bas.get_neighbours(k, selection="forward", direction=d)
@@ -357,7 +357,7 @@ class HagedornWavepacketBase(Wavepacket):
                     kped = kped[0]
 
                     # Store computed value
-                    phi[bas[kped[1]],:] = (t1 - t2) / sqrt(ki[d] + 1.0)
+                    phi[bas[kped[1]], :] = (t1 - t2) / sqrt(ki[d] + 1.0)
 
         if prefactor is True:
             phi = phi / self._get_sqrt(component)(det(Q))
@@ -393,7 +393,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         # The basis shape
         bas = self._basis_shapes[component]
-        Z = tuple(D*[0])
+        Z = tuple(D * [0])
 
         # Book keeping
         todo = []
@@ -431,17 +431,17 @@ class HagedornWavepacketBase(Wavepacket):
                 # Access predecessors
                 phim = zeros((D, nn), dtype=complexfloating)
                 for j, kpj in bas.get_neighbours(k, selection="backward"):
-                    phim[j,:] = tmp[kpj]
+                    phim[j, :] = tmp[kpj]
 
                 # Compute the neighbours
                 for d, n in bas.get_neighbours(k, selection="forward"):
-                    if not n in tmp.keys():
+                    if n not in tmp.keys():
                         # Compute 3-term recursion
                         p1 = (nodes - q) * tmp[k]
                         p2 = sqrt(ki) * phim
 
-                        t1 = sqrt(2.0/self._eps**2) * dot(Qinv[d,:], p1)
-                        t2 = dot(QQ[d,:], p2)
+                        t1 = sqrt(2.0 / self._eps**2) * dot(Qinv[d, :], p1)
+                        t2 = dot(QQ[d, :], p2)
 
                         # Store computed value
                         tmp[n] = (t1 - t2) / sqrt(ki[d] + 1.0)
@@ -472,8 +472,6 @@ class HagedornWavepacketBase(Wavepacket):
 
         if component is not None:
             phase = exp(1.0j * Pis[component][4] / self._eps**2)
-            #basis = self.evaluate_basis_at(grid, component=component, prefactor=prefactor)
-            #values = phase * sum(self._coefficients[component] * basis, axis=0)
             values = phase * self.slim_recursion(grid, component, prefactor=prefactor)
 
         else:
@@ -488,9 +486,7 @@ class HagedornWavepacketBase(Wavepacket):
                 # TODO: Find more efficient way to do this
 
                 phase = exp(1.0j * Pis[component][4] / self._eps**2)
-                #basis = self.evaluate_basis_at(grid, component=index, prefactor=prefactor)
-                #values.append( phase * sum(self._coefficients[index] * basis, axis=0) )
-                values.append( phase * self.slim_recursion(grid, component, prefactor=prefactor) )
+                values.append(phase * self.slim_recursion(grid, component, prefactor=prefactor))
 
         return values
 
@@ -514,10 +510,10 @@ class HagedornWavepacketBase(Wavepacket):
         if component is not None:
             result = norm(self._coefficients[component])
         else:
-            result = [ norm(item) for item in self._coefficients ]
+            result = [norm(item) for item in self._coefficients]
 
             if summed is True:
-                result = reduce(lambda x,y: x+conjugate(y)*y, result, 0.0)
+                result = reduce(lambda x, y: x + conjugate(y) * y, result, 0.0)
                 result = sqrt(result)
 
         return result

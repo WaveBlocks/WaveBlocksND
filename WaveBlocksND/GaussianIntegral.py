@@ -80,7 +80,7 @@ class GaussianIntegral(Quadrature):
         """
         # Operator is None is interpreted as identity transformation
         if operator is None:
-            self._operator = lambda nodes, dummy, entry=None: ones((1,nodes.shape[1])) if entry[0] == entry[1] else zeros((1,nodes.shape[1]))
+            self._operator = lambda nodes, dummy, entry=None: ones((1, nodes.shape[1])) if entry[0] == entry[1] else zeros((1, nodes.shape[1]))
         else:
             raise ValueError("The 'GaussianIntegral' can not handle operators.")
 
@@ -154,20 +154,20 @@ class GaussianIntegral(Quadrature):
                  + (dot(conjugate(transpose(qr)), pr) - dot(conjugate(transpose(pc)), qc))
             )
 
-        A = 1.0j/hbar * A
-        b = 1.0j/hbar * b
-        c = 1.0j/hbar * c
+        A = 1.0j / hbar * A
+        b = 1.0j / hbar * b
+        c = 1.0j / hbar * c
 
         A = -2.0 * A
 
         # Gaussian formula
-        I = sqrt(det(2.0*pi*inv(A))) * exp(0.5*dot(transpose(b),dot(conjugate(inv(A)),b))) * exp(c)
+        I = sqrt(det(2.0 * pi * inv(A))) * exp(0.5 * dot(transpose(b), dot(conjugate(inv(A)), b))) * exp(c)
 
         # Prefactors
-        pfbra = (pi*eps**2)**(-D/4.0) * 1.0/sqrt(det(Qr))
-        pfket = (pi*eps**2)**(-D/4.0) * 1.0/sqrt(det(Qc))
+        pfbra = (pi * eps**2)**(-D / 4.0) * 1.0 / sqrt(det(Qr))
+        pfket = (pi * eps**2)**(-D / 4.0) * 1.0 / sqrt(det(Qc))
 
-        return conjugate(pfbra)*pfket * I
+        return conjugate(pfbra) * pfket * I
 
 
     def perform_quadrature(self, row, col):
@@ -195,11 +195,11 @@ class GaussianIntegral(Quadrature):
         Kbra = self._pacbra.get_basis_shapes(component=row)
         Kket = self._packet.get_basis_shapes(component=col)
 
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
 
-        z = tuple(D*[0])
-        cr = cbra[Kbra[z],0]
-        cc = cket[Kket[z],0]
+        z = tuple(D * [0])
+        cr = cbra[Kbra[z], 0]
+        cc = cket[Kket[z], 0]
         i = self.exact_result_gauss(Pibra[:4], Piket[:4], D, eps)
         result = phase * conjugate(cr) * cc * i
 
@@ -229,10 +229,10 @@ class GaussianIntegral(Quadrature):
         Kbra = self._pacbra.get_basis_shapes(component=row)
         Kket = self._packet.get_basis_shapes(component=col)
 
-        phase = exp(1.0j/eps**2 * (Piket[4]-conjugate(Pibra[4])))
+        phase = exp(1.0j / eps**2 * (Piket[4] - conjugate(Pibra[4])))
 
-        z = tuple(D*[0])
-        M = zeros((Kbra.get_basis_size(),Kket.get_basis_size()), dtype=complexfloating)
+        z = tuple(D * [0])
+        M = zeros((Kbra.get_basis_size(), Kket.get_basis_size()), dtype=complexfloating)
         M[Kbra[z], Kket[z]] = squeeze(phase * self.exact_result_gauss(Pibra[:4], Piket[:4], D, eps))
 
         return M
