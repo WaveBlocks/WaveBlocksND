@@ -32,9 +32,10 @@ def add_norm(self, parameters, timeslots=None, blockid=0):
 
     # Check that the "observables" group is present
     grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
-    # Create the dataset with appropriate parameters
+    # Add a new group for norms
     grp_no = grp_ob.create_group("norm")
-    daset_tg = grp_no.create_dataset("timegrid", (N,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
+    # Create the dataset with appropriate parameters
+    daset_tg = grp_no.create_dataset("timegrid", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
     grp_no.create_dataset("norm", (T,N), dtype=np.floating, chunks=(csTs,N), maxshape=(Ts,N))
     daset_tg.attrs["pointer"] = 0
 
