@@ -306,15 +306,16 @@ class IOManager(object):
         """Lookup the index for a given timestep. This assumes the timegrid
         array is strictly monotone.
         """
-        # TODO: Make this more efficient
-        # TODO: allow for slicing etc
-        timegrid = self._srf[timegridpath]
-        index = np.squeeze(np.where(timegrid[:] == timestep))
-
-        if index.shape == (0,):
-            raise ValueError("No data for given timestep!")
-
-        return int(index)
+        # TODO: Allow for slicing etc
+        timegrid = self._srf[timegridpath][:]
+        index = (timegrid == timestep)
+        nrvals = np.sum(index)
+        if nrvals < 1:
+            raise ValueError("No index for given timestep!")
+        elif nrvals > 1:
+            raise ValueError("Multiple indices for given timestep!")
+        else:
+            return int(np.where(index)[0])
 
 
     def split_data(self, data, axis):
