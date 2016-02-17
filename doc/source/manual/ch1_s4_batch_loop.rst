@@ -14,11 +14,12 @@ all the files by hand. However, for a set of simulations where just one or a
 few parameters vary, we can avoid this tedious work. The tool that takes over
 the task is named ``ConfigurationGenerator.py``. It takes a so called `meta configuration`
 and then produces a set of ordinary configuration files. The synopsis for this
-tool is:
+tool is::
+
+    ConfigurationGenerator.py --help
 
 ::
 
-    ConfigurationGenerator.py --help
     usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
 
     positional arguments:
@@ -65,22 +66,16 @@ another one which is used for global preambles. This variable has to be called
 ``PA`` and holds a (multi-line) `Python` string of valid `Python` code. These
 statements are written to the very top of every configuration file generated.
 
-We can run the configuration generator as:
-
-::
+We can run the configuration generator as::
 
     ConfigurationGenerator.py metaconfiguration_02.py
 
 and it will create the directory ``autogen_configurations`` where it puts
-all the configuration files. Let's take a look into this directory:
-
-::
+all the configuration files. Let's take a look into this directory::
 
     ls -l autogen_configurations/
 
-prints:
-
-::
+prints::
 
     Parameters[eps=0.1][delta=0.5eps].py
     Parameters[eps=0.1][delta=1.0eps].py
@@ -126,11 +121,12 @@ The batch loop
 ~~~~~~~~~~~~~~
 
 There is a simple `Python` script called ``BatchLoop.py`` which does nothing else than running
-simulations for a set of configurations. The usage is really simple:
+simulations for a set of configurations. The usage is really simple::
+
+    BatchLoop.py --help
 
 ::
 
-    BatchLoop.py --help
     usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
 
     optional arguments:
@@ -154,30 +150,22 @@ are located. All `Python` files within that directory (excluding recursive desce
 will be treated as simulation configurations. We can provide (with the switch ``-r``)
 also a directory where the simulation results, including numerical data and plots,
 will be placed (this defaults to ``.``, the current directory). Usually we will
-create a dedicated directory, often called ``results``:
-
-::
+create a dedicated directory, often called ``results``::
 
     mkdir results
 
-Now it is time to call the ``BatchLoop.py`` script. The simple call looks like:
-
-::
+Now it is time to call the ``BatchLoop.py`` script. The simple call looks like::
 
     BatchLoop.py -c autogen_configurations -r results
 
 This will create new directories in ``results`` whose names correspond to the
 configuration files used. It will call the ``Main.py`` script for each simulation
 configuration provided. After this it will run a bunch of data computation and plotting
-scripts. If we now look into the results directory by:
-
-::
+scripts. If we now look into the results directory by::
 
     ls results
 
-we see the listing:
-
-::
+we see the listing::
 
     Parameters[eps=0.1][delta=0.5eps]
     Parameters[eps=0.1][delta=1.0eps]
@@ -187,15 +175,11 @@ we see the listing:
     Parameters[eps=0.5][delta=1.5eps]
 
 and for the results of a single simulation (notice the necessary shell character
-escapes, you can also write the name without escapes in a pair of ``"``.):
-
-::
+escapes, you can also write the name without escapes in a pair of ``"``.)::
 
     ls results/Parameters\[eps\=0.1\]\[delta\=0.5eps\]
 
-we have the following bunch of files:
-
-::
+we have the following bunch of files::
 
     energies_block0.png
     energy_drift_block0.png
@@ -219,15 +203,11 @@ batch loop has terminated. Maybe you decided to compute a new observable or
 whatever. It would be tedious to call the script with each ``simulation_results.hdf5``
 and its correct file path manually. Exactly for this reason there is a script named
 ``ForAll.py``. For example assume we want to plot the potential used in each simulation
-(which is identical in our example but never mind). Then we call:
-
-::
+(which is identical in our example but never mind). Then we call::
 
     ForAll.py PlotPotential.py
 
-which starts by printing:
-
-::
+which starts by printing::
 
     Will execute the code in 'PlotPotential.py' for all files in 'results'
      Executing code for datafile in results/Parameters[eps=0.5][delta=1.0eps]
