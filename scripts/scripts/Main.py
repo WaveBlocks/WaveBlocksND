@@ -45,7 +45,7 @@ outputfile = os.path.abspath(os.path.join(args.resultspath, args.outputfile))
 parametersfile = os.path.abspath(args.parametersfile)
 
 print("**************************************************")
-print("***             Running Simulation             ***")
+print("***            Running Simulation              ***")
 print("**************************************************")
 print("Using configuration from file: " + parametersfile)
 print("Storing simulation results at: " + resultspath)

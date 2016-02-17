@@ -64,6 +64,11 @@ blockids = iom.get_block_ids()
 if "all" not in args.blockid:
     blockids = [bid for bid in args.blockid if bid in blockids]
 
+
+print("**************************************************")
+print("***            Computing Norms                 ***")
+print("**************************************************")
+
 # Iterate over all blocks
 for blockid in blockids:
     print("Computing the norms in data block '%s'" % blockid)
@@ -87,3 +92,7 @@ for blockid in blockids:
         print("Warning: Not computing any norm in block '%s'!" % blockid)
 
 iom.finalize()
+
+print("**************************************************")
+print("***            Computing Norms Finished        ***")
+print("**************************************************")

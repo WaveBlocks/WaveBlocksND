@@ -191,7 +191,15 @@ if __name__ == "__main__":
     J = [Job(f, rpath, C) for f in F]
 
     # Batch run
+    print("**************************************************")
+    print("***            Running Batch Loop              ***")
+    print("**************************************************")
     print("Running {} simulations from: {}".format(len(F), fpath))
-    print("Putting results into: {}\n".format(rpath))
+    print("Putting results into: {}".format(rpath))
     print("-------------------")
+
     batch_loop(J, max_workers=args.maxworkers)
+
+    print("**************************************************")
+    print("***            Batch Loop Finished             ***")
+    print("**************************************************")

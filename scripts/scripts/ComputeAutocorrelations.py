@@ -112,6 +112,11 @@ def integrator(description):
     }
     return PA
 
+
+print("**************************************************")
+print("***     Computing Autocorrelations             ***")
+print("**************************************************")
+
 # Iterate over all blocks
 for blockid in blockids:
     print("Computing the autocorrelation in data block '%s'" % blockid)
@@ -146,3 +151,7 @@ for blockid in blockids:
         print("Warning: Not computing any autocorrelations in block '%s'!" % blockid)
 
 iom.finalize()
+
+print("**************************************************")
+print("***     Computing Autocorrelations Finished    ***")
+print("**************************************************")
