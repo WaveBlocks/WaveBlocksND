@@ -34,9 +34,14 @@ parser.add_argument("-r", "--resultspath",
                     nargs = "?",
                     default = '.')
 
-parser.add_argument("-et", "--eigentransform",
-                    help = "Transform the data into the eigenbasis before computing norms.",
+parser.add_argument("-noet", "--noeigentransform",
+                    help = "Disable transformation of data into the eigenbasis before computing norms.",
                     action = "store_false")
+
+parser.add_argument("-eb", "--eigenbasis",
+                    help = "Data are already in the eigenbasis.",
+                    action = "store_true")
+
 
 # TODO: Filter type of objects
 # parser.add_argument("-t", "--type",
@@ -76,13 +81,13 @@ for blockid in blockids:
 
     if iom.has_wavepacket(blockid=blockid):
         from WaveBlocksND.Interface import EnergiesWavepacket
-        EnergiesWavepacket.compute_energy_hawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        EnergiesWavepacket.compute_energy_hawp(iom, blockid=blockid, eigentrafo=args.noeigentransform, iseigen=args.eigenbasis)
     elif iom.has_wavefunction(blockid=blockid):
         from WaveBlocksND.Interface import EnergiesWavefunction
-        EnergiesWavefunction.compute_energy(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        EnergiesWavefunction.compute_energy(iom, blockid=blockid, eigentrafo=args.noeigentransform, iseigen=args.eigenbasis)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         from WaveBlocksND.Interface import EnergiesWavepacket
-        EnergiesWavepacket.compute_energy_inhawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        EnergiesWavepacket.compute_energy_inhawp(iom, blockid=blockid, eigentrafo=args.noeigentransform, iseigen=args.eigenbasis)
     else:
         print("Warning: Not computing any energies in block '%s'!" % blockid)
 
