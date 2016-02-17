@@ -41,8 +41,8 @@ parser.add_argument("-r", "--resultspath",
                     nargs = "?",
                     default = '.')
 
-parser.add_argument("-et", "--eigentransform",
-                    help = "Transform the data into the eigenbasis before computing norms.",
+parser.add_argument("-noet", "--noeigentransform",
+                    help = "Disable transformation of data into the eigenbasis before computing norms.",
                     action = "store_false")
 
 # TODO: Filter type of objects
@@ -135,13 +135,13 @@ for blockid in blockids:
 
     if iom.has_wavepacket(blockid=blockid):
         from WaveBlocksND.Interface import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
+        AutocorrelationWavepacket.compute_autocorrelation_hawp(iom, PA, blockid=blockid, eigentrafo=args.noeigentransform)
     elif iom.has_wavefunction(blockid=blockid):
         from WaveBlocksND.Interface import AutocorrelationWavefunction
-        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
+        AutocorrelationWavefunction.compute_autocorrelation(iom, PA, blockid=blockid, eigentrafo=args.noeigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         from WaveBlocksND.Interface import AutocorrelationWavepacket
-        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=args.eigentransform)
+        AutocorrelationWavepacket.compute_autocorrelation_inhawp(iom, PA, blockid=blockid, eigentrafo=args.noeigentransform)
     else:
         print("Warning: Not computing any autocorrelations in block '%s'!" % blockid)
 
