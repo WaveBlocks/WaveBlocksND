@@ -42,9 +42,9 @@ parser.add_argument("-r", "--resultspath",
                     nargs = "?",
                     default = '.')
 
-parser.add_argument("-et", "--eigentransform",
-                    help = "Transform the data into the eigenbasis before computing norms.",
-                    action = "store_true")
+parser.add_argument("-noet", "--noeigentransform",
+                    help = "Disable transformation of data into the eigenbasis before computing norms.",
+                    action = "store_false")
 
 args = parser.parse_args()
 
@@ -85,10 +85,10 @@ for blockid in blockids:
 
     if iom.has_wavepacket(blockid=blockid):
         from WaveBlocksND.Interface import EvaluateWavepackets
-        EvaluateWavepackets.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.eigentransform)
+        EvaluateWavepackets.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.noeigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         from WaveBlocksND.Interface import EvaluateWavepacketsInhomog
-        EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.eigentransform)
+        EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.noeigentransform)
     else:
         print("Warning: Not evaluating any wavepackets in block '%s'!" % blockid)
 
