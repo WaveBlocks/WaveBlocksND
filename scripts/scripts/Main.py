@@ -82,3 +82,7 @@ SL.run_simulation()
 
 # End the simulation, close output files etc.
 SL.end_simulation()
+
+print("**************************************************")
+print("***            Simulation Finished             ***")
+print("**************************************************")
