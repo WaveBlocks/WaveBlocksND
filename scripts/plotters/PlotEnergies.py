@@ -67,7 +67,7 @@ def plot_energies(data, blockid=0, view=None, path='.'):
 
     # View
     if view[0] is None:
-        view[0] = max(0, min(nanmin(timek), nanmin(timep)))
+        view[0] = min(nanmin(timek), nanmin(timep))
     if view[1] is None:
         view[1] = max(nanmax(timek), nanmax(timep))
 

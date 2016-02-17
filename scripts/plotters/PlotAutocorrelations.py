@@ -70,7 +70,7 @@ def plot_autocorrelations(data, blockid=0, view=None, path='.'):
 
     # View
     if view[0] is None:
-        view[0] = max(0, nanmin(time))
+        view[0] = nanmin(time)
     if view[1] is None:
         view[1] = nanmax(time)
     if view[2] is None:
