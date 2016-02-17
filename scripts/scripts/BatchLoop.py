@@ -84,7 +84,7 @@ class Job:
 
     def commands(self, outputpath):
         configfile = self._configfile
-        return [ command.command(configfile, outputpath) for command in self._commands ]
+        return [command.command(configfile, outputpath) for command in self._commands]
 
 
 
@@ -98,8 +98,8 @@ def run_job(job):
 
     outputpath = os.path.join(job.resultspath, configname)
 
-    stdoutlogfile = os.path.join(outputpath, "simulation_"+str(configname)+"_stdout.log")
-    stderrlogfile = os.path.join(outputpath, "simulation_"+str(configname)+"_stderr.log")
+    stdoutlogfile = os.path.join(outputpath, "simulation_" + str(configname) + "_stdout.log")
+    stderrlogfile = os.path.join(outputpath, "simulation_" + str(configname) + "_stderr.log")
 
     # Make sure the ouput directory exists
     os.makedirs(outputpath, mode=0o700, exist_ok=True)
@@ -122,9 +122,9 @@ def batch_loop(jobs, max_workers=4):
     :param jobs: List of runnable jobs objects.
     :param max_workers: Maximal number of jobs run in parallel.
     """
-    with concurrent.futures.ThreadPoolExecutor(max_workers = max_workers) as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
 
-        F = [ executor.submit(run_job, job) for job in jobs ]
+        F = [executor.submit(run_job, job) for job in jobs]
 
         for future in concurrent.futures.as_completed(F):
             try:
@@ -182,13 +182,13 @@ if __name__ == "__main__":
         raise ValueError("Invalid results path: " + str(rpath))
 
     # Read off commands
-    C = [ Command(c) for c in commands ]
+    C = [Command(c) for c in commands]
 
     # List all configuration files
     F = list_configurations(fpath)
 
     # Set up jobs
-    J = [ Job(f, rpath, C) for f in F ]
+    J = [Job(f, rpath, C) for f in F]
 
     # Batch run
     print("Running {} simulations from: {}".format(len(F), fpath))

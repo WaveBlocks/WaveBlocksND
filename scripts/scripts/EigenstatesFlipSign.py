@@ -49,8 +49,8 @@ iom.open_file(filename=datafile)
 
 # Which blocks to handle
 blockids = iom.get_block_ids()
-if not "all" in args.blockid:
-    blockids = [ bid for bid in args.blockid if bid in blockids ]
+if "all" not in args.blockid:
+    blockids = [bid for bid in args.blockid if bid in blockids]
 
 # Iterate over all blocks
 for blockid in blockids:

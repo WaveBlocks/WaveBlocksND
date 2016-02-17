@@ -69,8 +69,8 @@ iom.open_file(filename=datafile)
 
 # Which blocks to handle
 blockids = iom.get_block_ids()
-if not "all" in args.blockid:
-    blockids = [ bid for bid in args.blockid if bid in blockids ]
+if "all" not in args.blockid:
+    blockids = [bid for bid in args.blockid if bid in blockids]
 
 # Do we have a specifc configuration file holding
 # the definitions for inner products to use?
@@ -103,16 +103,16 @@ if PA is None:
     D = descr["dimension"]
     PA = {}
     PA["innerproduct"] = {
-        "type" : "InhomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "NSDInhomogeneous",
+        "type": "InhomogeneousInnerProduct",
+        "delegate": {
+            "type": "NSDInhomogeneous",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': D,
                 'qr_rules': D * [{'type': 'GaussHermiteOriginalQR', 'order': 5}]
-                }
             }
         }
+    }
 
 # Iterate over all blocks
 for blockid in blockids:

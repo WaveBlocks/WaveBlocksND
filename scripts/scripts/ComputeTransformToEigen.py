@@ -71,14 +71,14 @@ iome.save_parameters(P)
 for groupid in iomc.get_group_ids():
 
     # Create the group if necessary
-    if not groupid in iome.get_group_ids():
+    if groupid not in iome.get_group_ids():
         iome.create_group(groupid=groupid)
 
     for blockid in iomc.get_block_ids(groupid=groupid):
         print("Computing eigentransformation of data in block '%s'" % blockid)
 
         # Create the block if necessary
-        if not blockid in iome.get_block_ids(groupid=groupid):
+        if blockid not in iome.get_block_ids(groupid=groupid):
             iome.create_block(blockid=blockid, groupid=groupid)
 
         # See if we have a wavefunction

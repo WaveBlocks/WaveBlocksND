@@ -70,7 +70,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
             x0 = 0.5 * ones(D)
 
         q0 = fmin(f, x0, xtol=1e-12)
-        q0 = q0.reshape((D,1))
+        q0 = q0.reshape((D, 1))
 
         # We are at the minimum with no momentum
         p0 = zeros_like(q0)
@@ -78,11 +78,11 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
         if "q0" in parameters:
             q0 = atleast_2d(parameters["q0"])
         else:
-            q0 = zeros((D,1))
+            q0 = zeros((D, 1))
         if "p0" in parameters:
             p0 = atleast_2d(parameters["p0"])
         else:
-            p0 = zeros((D,1))
+            p0 = zeros((D, 1))
 
     # Compute spreads
     if computePQ:
@@ -102,7 +102,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
             P0 = 1.0j * inv(Q0)
 
     # The parameter set Pi
-    print(70*"-")
+    print(70 * "-")
     print("Parameter values are:")
     print("---------------------")
     print(" q0:")
@@ -116,7 +116,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
     # Consistency check
     print(" Consistency check:")
     print("   P^T Q - Q^T P  =?=  0")
-    print(dot(P0.T,Q0) - dot(Q0.T,P0))
+    print(dot(P0.T, Q0) - dot(Q0.T, P0))
     print("   Q^H P - P^H Q  =?=  2i")
     print(dot(transpose(conjugate(Q0)), P0) - dot(transpose(conjugate(P0)), Q0))
 
@@ -172,30 +172,30 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
 
     BS = HAWP.get_basis_shapes(component=0)
 
-    KEY = ("q","p","Q","P","S","adQ")
+    KEY = ("q", "p", "Q", "P", "S", "adQ")
 
-    print(70*"-")
+    print(70 * "-")
     for state in states:
         if state > BS.get_basis_size():
-            print("Warning: can not compute energy level "+state+" with basis size of "+str(BS))
+            print("Warning: can not compute energy level {} with basis size of {}".format((state, BS)))
             continue
 
         index = ind[state]
 
-        coeffs = ev[:,index]
+        coeffs = ev[:, index]
         energy = ew[index]
 
         # Try to resolve ambiguities in sign
         imax = argmax(abs(coeffs))
         a = abs(angle(coeffs[imax]))
-        if a > pi/2.0:
+        if a > pi / 2.0:
             coeffs *= -1
 
-        print("State: "+str(state))
-        print("Energy: "+str(energy))
+        print("State: {}".format(state))
+        print("Energy: {}".format(energy))
         print("Coefficients: \n")
         print(str(coeffs))
-        print(70*"-")
+        print(70 * "-")
 
         HAWP.set_coefficient_vector(coeffs.reshape((-1, 1)))
 
@@ -232,10 +232,10 @@ if __name__ == "__main__":
                         default = "eigenstates.hdf5")
 
     parser.add_argument("-r", "--resultspath",
-                    type = str,
-                    help = "Path where to put the results.",
-                    nargs = "?",
-                    default = '.')
+                        type = str,
+                        help = "Path where to put the results.",
+                        nargs = "?",
+                        default = '.')
 
     parser.add_argument("--nopq",
                         help = "Do not compute the parameters q and p.",

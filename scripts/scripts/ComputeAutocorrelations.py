@@ -68,8 +68,8 @@ iom.open_file(filename=datafile)
 
 # Which blocks to handle
 blockids = iom.get_block_ids()
-if not "all" in args.blockid:
-    blockids = [ bid for bid in args.blockid if bid in blockids ]
+if "all" not in args.blockid:
+    blockids = [bid for bid in args.blockid if bid in blockids]
 
 # Do we have a specifc configuration file holding
 # the definitions for inner products to use?
@@ -94,14 +94,15 @@ if PA is not None:
     else:
         PA = None
 
+
 # More or less sane default integrator
 def integrator(description):
     D = description["dimension"]
     PA = {}
     PA["innerproduct"] = {
-        "type" : "InhomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "NSDInhomogeneous",
+        "type": "InhomogeneousInnerProduct",
+        "delegate": {
+            "type": "NSDInhomogeneous",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': D,

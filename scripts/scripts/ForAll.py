@@ -23,7 +23,7 @@ from WaveBlocksND import GlobalDefaults
 #       do not yield collisions. Otherwise the files
 #       will be overwritten without any warning!
 
-save_extensions = [ GlobalDefaults.ext_resultdatafile ]
+save_extensions = [GlobalDefaults.ext_resultdatafile]
 
 try:
     from WaveBlocksND.Interface import GraphicsDefaults
@@ -62,7 +62,7 @@ def execute_for_all(resultspath, command):
             #       do not yield collisions. Otherwise the files
             #       will be overwritten without any warning!
             for ext in save_extensions:
-                for afile in glob("*"+ext):
+                for afile in glob("*" + ext):
                     sp.call(["mv", afile, simulationpath])
 
 
@@ -81,7 +81,7 @@ if __name__ == "__main__":
     parser.add_argument("-c", "--command",
                         type = str,
                         help = "The commands to execute.",
-                        nargs=argparse.REMAINDER)
+                        nargs = argparse.REMAINDER)
 
 
     args = parser.parse_args()

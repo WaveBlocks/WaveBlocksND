@@ -29,7 +29,7 @@ def sort_statements(preamble, alist):
 
     # TODO: Rewrite and improve this using reflection
 
-    ordered_statements= []
+    ordered_statements = []
 
     # The preamble statements, once
     exec(preamble)
@@ -49,8 +49,8 @@ def sort_statements(preamble, alist):
             alist.remove(item)
 
         if len(alist) == curlen:
-            print(50*"=")
-            print("Last item was: "+str(item))
+            print(50 * "=")
+            print("Last item was: {}".format(item))
             raise ValueError("Could not sort configuration statements. Maybe an unescaped string? Or possibly a dependency cycle?")
 
     return ordered_statements
@@ -65,17 +65,17 @@ def construct_name(filename, adict):
     :param names: A dict containing the ``key=value`` pairs.
     """
     # Put all key=value pairs as string into a list
-    kvs = [ GlobalDefaults.kvp_ldel + str(k) + GlobalDefaults.kvp_mdel + str(v) + GlobalDefaults.kvp_rdel for k, v in adict.items() ]
+    kvs = [GlobalDefaults.kvp_ldel + str(k) + GlobalDefaults.kvp_mdel + str(v) + GlobalDefaults.kvp_rdel for k, v in adict.items()]
 
     # Concatenate all key=value pairs in a string
     if len(kvs) == 0:
         s = ""
     else:
-        s = reduce(lambda x, y: x+y, kvs)
+        s = reduce(lambda x, y: x + y, kvs)
 
     # Remove duplicate kvp delimiters
     if GlobalDefaults.kvp_ldel == GlobalDefaults.kvp_rdel:
-        s = s.replace(GlobalDefaults.kvp_ldel+GlobalDefaults.kvp_rdel, GlobalDefaults.kvp_ldel)
+        s = s.replace(GlobalDefaults.kvp_ldel + GlobalDefaults.kvp_rdel, GlobalDefaults.kvp_ldel)
 
     # Remove some possibly harmful characters
     # Warning: destroys meaning of filename if some of them are used as kvp delimiters!
@@ -106,10 +106,10 @@ def write_file(filepath, preamble, settings, sort_code=False):
     f = open(filepath, "w")
 
     header = [
-    "#########################################\n",
-    "# This file was automatically generated #\n",
-    "#########################################\n",
-    "\n" ]
+        "#########################################\n",
+        "# This file was automatically generated #\n",
+        "#########################################\n",
+        "\n"]
 
     f.writelines(header)
 
@@ -164,8 +164,8 @@ def generate_configurations(pa, gp, lp, cfname="Parameters", cfpath=GlobalDefaul
     print(lp)
 
     # Sort into keys and values
-    lpk = [ k for k in lp.keys() ]
-    lpv = [ v for v in lp.values() ]
+    lpk = [k for k in lp.keys()]
+    lpv = [v for v in lp.values()]
 
     # Compute a cartesian product of all local parameters
     VG = product(*lpv)
@@ -174,7 +174,7 @@ def generate_configurations(pa, gp, lp, cfname="Parameters", cfpath=GlobalDefaul
     i = 0
     for cv in VG:
         i += 1
-        params = {k:v for k,v in zip(lpk, cv)}
+        params = {k: v for k, v in zip(lpk, cv)}
 
         filename = construct_name(cfname, params)
         filepath = os.path.join(".", cfpath, filename)
@@ -187,7 +187,7 @@ def generate_configurations(pa, gp, lp, cfname="Parameters", cfpath=GlobalDefaul
 
         write_file(filepath, pa, params, sort_code=True)
 
-    print("Wrote all "+str(i)+" configuration files.")
+    print("Wrote all {} configuration files.".format(i))
 
 
 
