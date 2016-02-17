@@ -11,7 +11,7 @@ Plot the autocorrelations of the different wavepackets as well as the sum of all
 import argparse
 import os
 from functools import reduce
-from numpy import real, imag, abs, add
+from numpy import real, imag, abs, add, where, nan, nanmin, nanmax
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -58,6 +58,9 @@ def plot_autocorrelations(data, blockid=0, view=None, path='.'):
     print("Plotting the autocorrelations of data block '%s'" % blockid)
 
     timegrid, autocorrelations, dt = data
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
 
     if dt is None:
         xlbl = r"Timesteps $n$"
@@ -67,9 +70,9 @@ def plot_autocorrelations(data, blockid=0, view=None, path='.'):
 
     # View
     if view[0] is None:
-        view[0] = dt * timegrid.min()
+        view[0] = max(0, nanmin(time))
     if view[1] is None:
-        view[1] = dt * timegrid.max()
+        view[1] = nanmax(time)
     if view[2] is None:
         view[2] = 0.0
     if view[3] is None:
@@ -81,15 +84,15 @@ def plot_autocorrelations(data, blockid=0, view=None, path='.'):
 
     # Plot the autocorrelations of the individual wavepackets
     for i, datum in enumerate(autocorrelations[:-1]):
-        ax.plot(timegrid*dt, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i,i))
+        ax.plot(time, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i, i))
 
     # Plot the sum of all autocorrelations
-    ax.plot(timegrid*dt, abs(autocorrelations[-1]), color=(1,0,0), label=r"$\sum_i {|\langle \Phi_i(0) | \Phi_i(t) \rangle|}$")
+    ax.plot(time, abs(autocorrelations[-1]), color=(1, 0, 0), label=r"$\sum_i {|\langle \Phi_i(0) | \Phi_i(t) \rangle|}$")
 
     ax.grid(True)
     ax.set_xlim(view[:2])
     ax.set_ylim(view[2:])
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.set_title(r"Autocorrelations of $\Psi$")
     legend(loc="upper right")
     ax.set_xlabel(xlbl)
@@ -98,20 +101,20 @@ def plot_autocorrelations(data, blockid=0, view=None, path='.'):
 
 
     # Plot the autocorrelations
-    N = len(autocorrelations) -1
+    N = len(autocorrelations) - 1
     fig = figure()
 
     # Plot the autocorrelations of the individual wavepackets
     for i, datum in enumerate(autocorrelations[:-1]):
-        ax = fig.add_subplot(N, 1, i+1)
-        ax.plot(timegrid*dt, real(datum), label=r"$\Re \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i,i))
-        ax.plot(timegrid*dt, imag(datum), label=r"$\Im \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i,i))
-        ax.plot(timegrid*dt, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i,i))
+        ax = fig.add_subplot(N, 1, i + 1)
+        ax.plot(time, real(datum), label=r"$\Re \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i, i))
+        ax.plot(time, imag(datum), label=r"$\Im \langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle$" % (i, i))
+        ax.plot(time, abs(datum), label=r"$|\langle \Phi_{%d}(0) | \Phi_{%d}(t) \rangle|$" % (i, i))
 
         ax.grid(True)
         ax.set_xlim(view[:2])
         ax.set_ylim(view[2:])
-        ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+        ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
         ax.set_xlabel(xlbl)
         legend(loc="upper right")
 
@@ -172,8 +175,8 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.trange + args.vrange

@@ -11,7 +11,7 @@ Plot the energies of the different wavepackets as well as the sum of all energie
 import argparse
 import os
 from functools import reduce
-from numpy import abs, add
+from numpy import abs, add, where, nan, nanmax, nanmin
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -53,6 +53,11 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     print("Plotting the energies of data block '%s'" % blockid)
 
     timegridk, timegridp, ekin, epot, dt = data
+    # Filter
+    timek = timegridk * dt
+    timep = timegridp * dt
+    timek = where(timegridk < 0, nan, timek)
+    timep = where(timegridp < 0, nan, timep)
 
     if dt is None:
         xlbl = r"Timesteps $n$"
@@ -62,9 +67,9 @@ def plot_energies(data, blockid=0, view=None, path='.'):
 
     # View
     if view[0] is None:
-        view[0] = dt * min(min(timegridk), min(timegridp))
+        view[0] = max(0, min(nanmin(timek), nanmin(timep)))
     if view[1] is None:
-        view[1] = dt * max(max(timegridk), max(timegridp))
+        view[1] = max(nanmax(timek), nanmax(timep))
 
     # Plot the energies
     fig = figure()
@@ -72,27 +77,27 @@ def plot_energies(data, blockid=0, view=None, path='.'):
 
     # Plot the kinetic energy of the individual wave packets
     for i, kin in enumerate(ekin[:-1]):
-        ax.plot(timegridk*dt, kin, label=r"$E^{kin}_{%d}$" % i)
+        ax.plot(timek, kin, label=r"$E^{kin}_{%d}$" % i)
 
     # Plot the potential energy of the individual wave packets
     for i, pot in enumerate(epot[:-1]):
-        ax.plot(timegridp*dt, pot, label=r"$E^{pot}_{%d}$" % i)
+        ax.plot(timep, pot, label=r"$E^{pot}_{%d}$" % i)
 
     # Plot the sum of kinetic and potential energy for all wave packets
     for i, (kin, pot) in enumerate(list(zip(ekin, epot))[:-1]):
-        ax.plot(timegridk*dt, kin + pot, label=r"$E^{kin}_{%d}+E^{pot}_{%d}$" % (i,i))
+        ax.plot(timek, kin + pot, label=r"$E^{kin}_{%d}+E^{pot}_{%d}$" % (i, i))
 
     # Plot sum of kinetic and sum of potential energy
-    ax.plot(timegridk*dt, ekin[-1], label=r"$\sum_i E^{kin}_i$")
-    ax.plot(timegridp*dt, epot[-1], label=r"$\sum_i E^{pot}_i$")
+    ax.plot(timek, ekin[-1], label=r"$\sum_i E^{kin}_i$")
+    ax.plot(timep, epot[-1], label=r"$\sum_i E^{pot}_i$")
 
     # Plot the overall energy of all wave packets
-    ax.plot(timegridk*dt, ekin[-1] + epot[-1], label=r"$\sum_i E^{kin}_i + \sum_i E^{pot}_i$")
+    ax.plot(timek, ekin[-1] + epot[-1], label=r"$\sum_i E^{kin}_i + \sum_i E^{pot}_i$")
 
     ax.set_xlim(view[:2])
-    if not None in view[2:]:
+    if None not in view[2:]:
         ax.set_ylim(view[2:])
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.grid(True)
     ax.set_xlabel(xlbl)
     legend(loc="outer right")
@@ -102,16 +107,16 @@ def plot_energies(data, blockid=0, view=None, path='.'):
 
 
     # Plot the energy drift
-    e_orig = (ekin[-1]+epot[-1])[0]
-    data = abs(e_orig-(ekin[-1]+epot[-1]))
+    e_orig = (ekin[-1] + epot[-1])[0]
+    data = abs(e_orig - (ekin[-1] + epot[-1]))
 
     fig = figure()
     ax = fig.gca()
 
-    ax.plot(timegridk*dt, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
+    ax.plot(timek, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
 
     ax.set_xlim(view[:2])
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.grid(True)
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
@@ -123,7 +128,7 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     fig = figure()
     ax = fig.gca()
 
-    ax.semilogy(timegridk*dt, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
+    ax.semilogy(timek, data, label=r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
 
     ax.set_xlim(view[:2])
     ax.grid(True)
@@ -186,8 +191,8 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.trange + args.vrange

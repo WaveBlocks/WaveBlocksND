@@ -11,7 +11,7 @@ Plot the norms of the different wavepackets as well as the sum of all norms.
 import argparse
 import os
 from functools import reduce
-from numpy import add, square, sqrt, max
+from numpy import add, square, sqrt, max, where, nan, nanmin, nanmax
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -45,6 +45,9 @@ def plot_norms(data, blockid=0, view=None, path='.'):
     print("Plotting the norms of data block '%s'" % blockid)
 
     timegrid, norms, dt = data
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
 
     if dt is None:
         xlbl = r"Timesteps $n$"
@@ -54,9 +57,9 @@ def plot_norms(data, blockid=0, view=None, path='.'):
 
     # View
     if view[0] is None:
-        view[0] = dt * timegrid.min()
+        view[0] = nanmin(time)
     if view[1] is None:
-        view[1] = dt * timegrid.max()
+        view[1] = nanmax(time)
     if view[2] is None:
         view[2] = 0.0
     if view[3] is None:
@@ -67,17 +70,17 @@ def plot_norms(data, blockid=0, view=None, path='.'):
     ax = fig.gca()
 
     # Plot the norms of the individual wavepackets
-    for i, datum in enumerate(norms[:-1]):
+    for i, norm in enumerate(norms[:-1]):
         label_i = r"$\| \Phi_{%d} \|$" % i
-        ax.plot(timegrid*dt, datum, label=label_i)
+        ax.plot(time, norm, label=label_i)
 
     # Plot the sum of all norms
-    ax.plot(timegrid*dt, norms[-1], color=(1,0,0), label=r"${\sqrt{\sum_i {\| \Phi_i \|^2}}}$")
+    ax.plot(time, norms[-1], color=(1, 0, 0), label=r"${\sqrt{\sum_i {\| \Phi_i \|^2}}}$")
 
     ax.grid(True)
     ax.set_xlim(view[:2])
     ax.set_ylim(view[2], view[3])
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.set_title(r"Norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
@@ -89,17 +92,17 @@ def plot_norms(data, blockid=0, view=None, path='.'):
     ax = fig.gca()
 
     # Plot the squared norms of the individual wavepackets
-    for i, datum in enumerate(norms[:-1]):
+    for i, norm in enumerate(norms[:-1]):
         label_i = r"$\| \Phi_{%d} \|^2$" % i
-        ax.plot(timegrid*dt, datum**2, label=label_i)
+        ax.plot(time, norm**2, label=label_i)
 
     # Plot the squared sum of all norms
-    ax.plot(timegrid*dt, norms[-1]**2, color=(1,0,0), label=r"${\sum_i {\| \Phi_i \|^2}}$")
+    ax.plot(time, norms[-1]**2, color=(1, 0, 0), label=r"${\sum_i {\| \Phi_i \|^2}}$")
 
     ax.grid(True)
     ax.set_xlim(view[:2])
     ax.set_ylim(view[2], view[3]**2)
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.set_title(r"Squared norms of $\Psi$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
@@ -111,11 +114,11 @@ def plot_norms(data, blockid=0, view=None, path='.'):
     fig = figure()
     ax = fig.gca()
 
-    ax.plot(timegrid*dt, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
+    ax.plot(time, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
 
     ax.grid(True)
     ax.set_xlim(view[:2])
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.set_title(r"Drift of $\| \Psi \|$")
     legend(loc="outer right")
     ax.set_xlabel(xlbl)
@@ -127,7 +130,7 @@ def plot_norms(data, blockid=0, view=None, path='.'):
     fig = figure()
     ax = fig.gca()
 
-    ax.semilogy(timegrid*dt, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
+    ax.semilogy(time, abs(norms[-1][0] - norms[-1]), label=r"$\|\Psi\|_0 - \|\Psi\|_t$")
 
     ax.set_xlim(view[:2])
     ax.grid(True)
@@ -191,8 +194,8 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.trange + args.vrange
