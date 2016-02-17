@@ -15,9 +15,7 @@ will show how to compute these data and store them in the output file
 ``simulation_results.hdf5`` too.
 
 All post-processing and plotting scripts can be called with an argument ``--help``
-and provide modern command line switch handling.
-
-::
+and provide modern command line switch handling::
 
     ComputeNorms.py --help
 
@@ -26,7 +24,7 @@ and will print a help message:
 ::
 
     usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
-                           [-r [RESULTSPATH]] [-et]
+                           [-r [RESULTSPATH]] [-noet]
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -36,16 +34,14 @@ and will print a help message:
                             The data block to handle.
       -r [RESULTSPATH], --resultspath [RESULTSPATH]
                             Path where to put the results.
-      -et, --eigentransform
-                            Transform the data into the eigenbasis before
-                            computing norms.
+      -noet, --noeigentransform
+                            Disable transformation of data into the eigenbasis
+                            before computing norms.
 
 Norms
 ~~~~~
 
-Computing norms is trivial and fast. Just run the script:
-
-::
+Computing norms is trivial and fast. Just run the script::
 
     ComputeNorms.py
 
@@ -57,9 +53,7 @@ Energies
 ~~~~~~~~
 
 Asking for the energies is almost equally trivial as computing norms.
-All we need is to run:
-
-::
+All we need is to run::
 
     ComputeEnergies.py
 
@@ -129,9 +123,7 @@ dimensional simulation setup:
             }
         }
 
-The only thing we have to do then is to call the corresponding post-processor script:
-
-::
+The only thing we have to do then is to call the corresponding post-processor script::
 
     ComputeAutocorrelation.py
 
@@ -140,14 +132,16 @@ Wave-packet sampling
 ~~~~~~~~~~~~~~~~~~~~
 
 If we made a simulation with wave-packets only and want to sample them
-on a regular grid for example for plotting then there is a script for this purpose:
+on a regular grid for example for plotting then there is a script for this purpose::
+
+    ComputeEvaluateWavepackets.py --help
 
 ::
 
-    usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
-                                                  [-b [BLOCKID [BLOCKID ...]]]
-                                                  [-p [PARAMETERSFILE]]
-                                                  [-r [RESULTSPATH]] [-et]
+    usage: ComputeEvaluateWavepackets.py [-h] [-d [DATAFILE]]
+                                         [-b [BLOCKID [BLOCKID ...]]]
+                                         [-p [PARAMETERSFILE]] [-r [RESULTSPATH]]
+                                         [-noet]
 
     optional arguments:
       -h, --help            show this help message and exit
@@ -159,9 +153,9 @@ on a regular grid for example for plotting then there is a script for this purpo
                             The configuration parameter file.
       -r [RESULTSPATH], --resultspath [RESULTSPATH]
                             Path where to put the results.
-      -et, --eigentransform
-                            Transform the data into the eigenbasis before
-                            computing norms.
+      -noet, --noeigentransform
+                            Disable transformation of data into the eigenbasis
+                            before computing norms.
 
 Eigentransformations
 ~~~~~~~~~~~~~~~~~~~~
@@ -172,42 +166,21 @@ observables usually should be computed in the eigenbasis there is a
 transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.
 
+
 However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-post-processing scripts which can be recognized by a ``NET`` in their name:
-
-::
-
-    ComputeNormsNET.py
-    ComputeEnergiesNET.py
-    ComputeAutocorrelationNET.py
-
-The ``NET`` (No-Eigen-Transformation) variants never do a basis transformation
-and compute the requested observables on the data given assuming a correct
-basis. There is also a ``CAN`` variant which computes explicitly in the
-canonical basis:
-
-::
-
-    ComputeEnergiesCAN.py
-
-The reason why this script exists is that it makes a difference whether
-we use :math:`V(x)` or :math:`\Lambda(x)` in the code.
+command line switches ``-noet`` in the post-processing scripts.
 
 
 Explicit Eigentransformation
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 In case we want to convert all the simulation data (think: wave-function values
-or wave-packet data) once to the eigenbasis there is this script:
-
-::
+or wave-packet data) once to the eigenbasis there is this script::
 
     ComputeTransformToEigen.py --help
 
-According to its help text:
-
-::
+According to its help text::
 
     usage: ComputeTransformToEigen.py [-h] [-i INPUTFILE] [-o OUTPUTFILE]
 
@@ -219,8 +192,6 @@ According to its help text:
                             The data file to write the transformed data.
 
 it will read the input file ``simulation_results.hdf5`` and write output into a
-new data file. A typical invoke could look like:
-
-::
+new data file. A typical invoke could look like::
 
     ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5

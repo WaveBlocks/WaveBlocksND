@@ -127,23 +127,28 @@ All plot scripts can set the view-port by command line arguments, for example:</
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMFILE]]
-                             [-b [BLOCKID [BLOCKID ...]]] [-x XRANGE XRANGE]
-                             [-y YRANGE YRANGE] [--plotphase]
+<div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMETERSFILE]]
+                             [-b [BLOCKID [BLOCKID ...]]] [-r [RESULTSPATH]]
+                             [-x XRANGE XRANGE] [-y YRANGE YRANGE]
+                             [-t TIMERANGE [TIMERANGE ...]] [--plotphase]
                              [--plotcomponents] [--plotabssqr]
 
 optional arguments:
   -h, --help            show this help message and exit
   -d [DATAFILE], --datafile [DATAFILE]
                         The simulation data file
-  -p [PARAMFILE], --paramfile [PARAMFILE]
+  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
                         The configuration parameter file
   -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
                         The data block to handle
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
   -x XRANGE XRANGE, --xrange XRANGE XRANGE
                         The plot range on the x-axis
   -y YRANGE YRANGE, --yrange YRANGE YRANGE
                         The plot range on the y-axis
+  -t TIMERANGE [TIMERANGE ...], --timerange TIMERANGE [TIMERANGE ...]
+                        Plot only timestep(s) in this range
   --plotphase           Plot the complex phase (slow)
   --plotcomponents      Plot the real/imaginary parts
   --plotabssqr          Plot the absolute value squared

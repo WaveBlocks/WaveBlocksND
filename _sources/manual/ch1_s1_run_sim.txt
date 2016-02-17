@@ -22,11 +22,12 @@ Now we have to run the main simulation program. This is done by the following co
 
 where we have to provide the configuration file as command line option of the ``Main.py``
 program. The ``Main.py`` command (like all other commands) supports an online help listing
-the available options and switches:
+the available options and switches::
+
+       Main.py --help
 
 ::
 
-    Main.py --help
     usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
 
     positional arguments:

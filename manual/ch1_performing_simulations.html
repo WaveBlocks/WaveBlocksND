@@ -137,8 +137,10 @@ collection. The full content of this file is printed below:</p>
 <p>where we have to provide the configuration file as command line option of the <tt class="docutils literal"><span class="pre">Main.py</span></tt>
 program. The <tt class="docutils literal"><span class="pre">Main.py</span></tt> command (like all other commands) supports an online help listing
 the available options and switches:</p>
-<div class="highlight-python"><div class="highlight"><pre>Main.py --help
-usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
+<div class="highlight-python"><div class="highlight"><pre><span class="n">Main</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: Main.py [-h] [-o OUTPUTFILE] [-r [RESULTSPATH]] parametersfile
 
 positional arguments:
   parametersfile        The simulation configuration parameters file.
@@ -181,13 +183,13 @@ but we can get them easily from the stored information. The following sections
 will show how to compute these data and store them in the output file
 <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> too.</p>
 <p>All post-processing and plotting scripts can be called with an argument <tt class="docutils literal"><span class="pre">--help</span></tt>
-and provide modern command line switch handling.</p>
+and provide modern command line switch handling:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>and will print a help message:</p>
 <div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
-                       [-r [RESULTSPATH]] [-et]
+                       [-r [RESULTSPATH]] [-noet]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -197,9 +199,9 @@ optional arguments:
                         The data block to handle.
   -r [RESULTSPATH], --resultspath [RESULTSPATH]
                         Path where to put the results.
-  -et, --eigentransform
-                        Transform the data into the eigenbasis before
-                        computing norms.
+  -noet, --noeigentransform
+                        Disable transformation of data into the eigenbasis
+                        before computing norms.
 </pre></div>
 </div>
 <div class="section" id="norms">
@@ -288,10 +290,13 @@ dimensional simulation setup:</p>
 <h3>Wave-packet sampling<a class="headerlink" href="#wave-packet-sampling" title="Permalink to this headline">¶</a></h3>
 <p>If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:</p>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
-                                              [-b [BLOCKID [BLOCKID ...]]]
-                                              [-p [PARAMETERSFILE]]
-                                              [-r [RESULTSPATH]] [-et]
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEvaluateWavepackets</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepackets.py [-h] [-d [DATAFILE]]
+                                     [-b [BLOCKID [BLOCKID ...]]]
+                                     [-p [PARAMETERSFILE]] [-r [RESULTSPATH]]
+                                     [-noet]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -303,9 +308,9 @@ optional arguments:
                         The configuration parameter file.
   -r [RESULTSPATH], --resultspath [RESULTSPATH]
                         Path where to put the results.
-  -et, --eigentransform
-                        Transform the data into the eigenbasis before
-                        computing norms.
+  -noet, --noeigentransform
+                        Disable transformation of data into the eigenbasis
+                        before computing norms.
 </pre></div>
 </div>
 </div>
@@ -318,21 +323,7 @@ transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.</p>
 <p>However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-post-processing scripts which can be recognized by a <tt class="docutils literal"><span class="pre">NET</span></tt> in their name:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNormsNET</span><span class="o">.</span><span class="n">py</span>
-<span class="n">ComputeEnergiesNET</span><span class="o">.</span><span class="n">py</span>
-<span class="n">ComputeAutocorrelationNET</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The <tt class="docutils literal"><span class="pre">NET</span></tt> (No-Eigen-Transformation) variants never do a basis transformation
-and compute the requested observables on the data given assuming a correct
-basis. There is also a <tt class="docutils literal"><span class="pre">CAN</span></tt> variant which computes explicitly in the
-canonical basis:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergiesCAN</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The reason why this script exists is that it makes a difference whether
-we use <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> or <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> in the code.</p>
+command line switches <tt class="docutils literal"><span class="pre">-noet</span></tt> in the post-processing scripts.</p>
 <div class="section" id="explicit-eigentransformation">
 <h4>Explicit Eigentransformation<a class="headerlink" href="#explicit-eigentransformation" title="Permalink to this headline">¶</a></h4>
 <p>In case we want to convert all the simulation data (think: wave-function values
@@ -442,23 +433,28 @@ All plot scripts can set the view-port by command line arguments, for example:</
 <div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMFILE]]
-                             [-b [BLOCKID [BLOCKID ...]]] [-x XRANGE XRANGE]
-                             [-y YRANGE YRANGE] [--plotphase]
+<div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMETERSFILE]]
+                             [-b [BLOCKID [BLOCKID ...]]] [-r [RESULTSPATH]]
+                             [-x XRANGE XRANGE] [-y YRANGE YRANGE]
+                             [-t TIMERANGE [TIMERANGE ...]] [--plotphase]
                              [--plotcomponents] [--plotabssqr]
 
 optional arguments:
   -h, --help            show this help message and exit
   -d [DATAFILE], --datafile [DATAFILE]
                         The simulation data file
-  -p [PARAMFILE], --paramfile [PARAMFILE]
+  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
                         The configuration parameter file
   -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
                         The data block to handle
+  -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                        Path where to put the results.
   -x XRANGE XRANGE, --xrange XRANGE XRANGE
                         The plot range on the x-axis
   -y YRANGE YRANGE, --yrange YRANGE YRANGE
                         The plot range on the y-axis
+  -t TIMERANGE [TIMERANGE ...], --timerange TIMERANGE [TIMERANGE ...]
+                        Plot only timestep(s) in this range
   --plotphase           Plot the complex phase (slow)
   --plotcomponents      Plot the real/imaginary parts
   --plotabssqr          Plot the absolute value squared
@@ -488,8 +484,10 @@ few parameters vary, we can avoid this tedious work. The tool that takes over
 the task is named <tt class="docutils literal"><span class="pre">ConfigurationGenerator.py</span></tt>. It takes a so called <cite>meta configuration</cite>
 and then produces a set of ordinary configuration files. The synopsis for this
 tool is:</p>
-<div class="highlight-python"><div class="highlight"><pre>ConfigurationGenerator.py --help
-usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ConfigurationGenerator</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
 
 positional arguments:
   metaconfiguration     The meta-configuration file.
@@ -587,8 +585,10 @@ using black magic and may fail now and then!</p>
 <h3>The batch loop<a class="headerlink" href="#the-batch-loop" title="Permalink to this headline">¶</a></h3>
 <p>There is a simple <cite>Python</cite> script called <tt class="docutils literal"><span class="pre">BatchLoop.py</span></tt> which does nothing else than running
 simulations for a set of configurations. The usage is really simple:</p>
-<div class="highlight-python"><div class="highlight"><pre>BatchLoop.py --help
-usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BatchLoop</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
 
 optional arguments:
   -h, --help            show this help message and exit

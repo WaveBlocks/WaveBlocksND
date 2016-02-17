@@ -58,8 +58,10 @@ few parameters vary, we can avoid this tedious work. The tool that takes over
 the task is named <tt class="docutils literal"><span class="pre">ConfigurationGenerator.py</span></tt>. It takes a so called <cite>meta configuration</cite>
 and then produces a set of ordinary configuration files. The synopsis for this
 tool is:</p>
-<div class="highlight-python"><div class="highlight"><pre>ConfigurationGenerator.py --help
-usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ConfigurationGenerator</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: ConfigurationGenerator.py [-h] [-d DESTINATION] metaconfiguration
 
 positional arguments:
   metaconfiguration     The meta-configuration file.
@@ -157,8 +159,10 @@ using black magic and may fail now and then!</p>
 <h2>The batch loop<a class="headerlink" href="#the-batch-loop" title="Permalink to this headline">¶</a></h2>
 <p>There is a simple <cite>Python</cite> script called <tt class="docutils literal"><span class="pre">BatchLoop.py</span></tt> which does nothing else than running
 simulations for a set of configurations. The usage is really simple:</p>
-<div class="highlight-python"><div class="highlight"><pre>BatchLoop.py --help
-usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
+<div class="highlight-python"><div class="highlight"><pre><span class="n">BatchLoop</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: BatchLoop.py [-h] -c CONFIGURATIONS [-r RESULTSPATH] [-m MAXWORKERS]
 
 optional arguments:
   -h, --help            show this help message and exit

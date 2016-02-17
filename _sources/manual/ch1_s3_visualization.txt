@@ -12,9 +12,7 @@ Plotting Observables
 ~~~~~~~~~~~~~~~~~~~~
 
 For plotting the usual observables like norm, energy and autocorrelation the
-following scripts can be used:
-
-::
+following scripts can be used::
 
     PlotNorms.py
     PlotEnergies.py
@@ -25,39 +23,29 @@ Plotting Wavepackets
 
 Given a Hagedorn wave-packet :math:`\Psi` we can plot various quantities like the
 time evolution of the parameter set :math:`\Pi(t)`. In one and :math:`D`
-dimensions this is done with:
-
-::
+dimensions this is done with::
 
     PlotWavepacketParameters1D.py
     PlotWavepacketParametersDD.py
 
 Further in case of a two dimensional simulation we can plot the trajectories
-of :math:`q(t)` and :math:`p(t)` in the :math:`x-y` plane by:
-
-::
+of :math:`q(t)` and :math:`p(t)` in the :math:`x-y` plane by::
 
     PlotWavepacketParametersTrajectory2D.py
 
 For a schematic propagation plot including also the spreads :math:`Q(t)` and
-:math:`P(t)` of the packets we can use:
-
-::
+:math:`P(t)` of the packets we can use::
 
     PlotWavepacketParametersSchema2D.py
 
 Plotting the wave-packet coefficients :math:`c(t)` can be done by several scripts
-available which emphasize different aspects. Usually one wants to use one of:
-
-::
+available which emphasize different aspects. Usually one wants to use one of::
 
     PlotWavepacketCoefficients.py
     PlotWavepacketCoefficientsStem.py
 
 Especially for higher dimensional wave-packets the other two scripts can
-give better visualizations:
-
-::
+give better visualizations::
 
     PlotWavepacketCoefficientsMapEigen.py
     PlotWavepacketCoefficientsMap.py
@@ -67,9 +55,7 @@ give better visualizations:
 	  time-steps.
 
 By evaluating a wave-packet we can also plot contours in case of a two
-dimensional simulation:
-
-::
+dimensional simulation::
 
     PlotWavepacket2DcontourOTF.py
 
@@ -80,48 +66,47 @@ script for wave-functions.
 Plotting Wavefunctions
 ~~~~~~~~~~~~~~~~~~~~~~
 
-Plotting wave-functions is easy. In one dimension we use this script:
-
-::
+Plotting wave-functions is easy. In one dimension we use this script::
 
     PlotWavefunction1D.py
 
 to plot complex valued wave-functions by applying the usual color coding
 representing the phase. In two dimensions we can either make contour plots or
-three dimensional surface plots by calling either of:
-
-::
+three dimensional surface plots by calling either of::
 
     PlotWavefunction2Dcontour.py
     PlotWavefunction2Dsurface.py
 
 Three and higher dimensional wave-functions can not be plotted but
 the need to do so occurs rarely anyway due to the vast amount of data involved.
-All plot scripts can set the view-port by command line arguments, for example:
-
-::
+All plot scripts can set the view-port by command line arguments, for example::
 
     PlotWavefunction1D.py --help
 
 ::
 
-    usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMFILE]]
-                                 [-b [BLOCKID [BLOCKID ...]]] [-x XRANGE XRANGE]
-                                 [-y YRANGE YRANGE] [--plotphase]
+    usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMETERSFILE]]
+                                 [-b [BLOCKID [BLOCKID ...]]] [-r [RESULTSPATH]]
+                                 [-x XRANGE XRANGE] [-y YRANGE YRANGE]
+                                 [-t TIMERANGE [TIMERANGE ...]] [--plotphase]
                                  [--plotcomponents] [--plotabssqr]
 
     optional arguments:
       -h, --help            show this help message and exit
       -d [DATAFILE], --datafile [DATAFILE]
                             The simulation data file
-      -p [PARAMFILE], --paramfile [PARAMFILE]
+      -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
                             The configuration parameter file
       -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
                             The data block to handle
+      -r [RESULTSPATH], --resultspath [RESULTSPATH]
+                            Path where to put the results.
       -x XRANGE XRANGE, --xrange XRANGE XRANGE
                             The plot range on the x-axis
       -y YRANGE YRANGE, --yrange YRANGE YRANGE
                             The plot range on the y-axis
+      -t TIMERANGE [TIMERANGE ...], --timerange TIMERANGE [TIMERANGE ...]
+                            Plot only timestep(s) in this range
       --plotphase           Plot the complex phase (slow)
       --plotcomponents      Plot the real/imaginary parts
       --plotabssqr          Plot the absolute value squared
@@ -130,9 +115,7 @@ All plot scripts can set the view-port by command line arguments, for example:
 Plotting the Potentials
 ~~~~~~~~~~~~~~~~~~~~~~~
 
-One and two dimensional potentials can be plotted by invoking:
-
-::
+One and two dimensional potentials can be plotted by invoking::
 
     PlotPotential1D.py
     PlotPotential2D.py

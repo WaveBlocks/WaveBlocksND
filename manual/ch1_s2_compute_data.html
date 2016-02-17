@@ -58,13 +58,13 @@ but we can get them easily from the stored information. The following sections
 will show how to compute these data and store them in the output file
 <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> too.</p>
 <p>All post-processing and plotting scripts can be called with an argument <tt class="docutils literal"><span class="pre">--help</span></tt>
-and provide modern command line switch handling.</p>
+and provide modern command line switch handling:</p>
 <div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>and will print a help message:</p>
 <div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
-                       [-r [RESULTSPATH]] [-et]
+                       [-r [RESULTSPATH]] [-noet]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -74,9 +74,9 @@ optional arguments:
                         The data block to handle.
   -r [RESULTSPATH], --resultspath [RESULTSPATH]
                         Path where to put the results.
-  -et, --eigentransform
-                        Transform the data into the eigenbasis before
-                        computing norms.
+  -noet, --noeigentransform
+                        Disable transformation of data into the eigenbasis
+                        before computing norms.
 </pre></div>
 </div>
 <div class="section" id="norms">
@@ -165,10 +165,13 @@ dimensional simulation setup:</p>
 <h2>Wave-packet sampling<a class="headerlink" href="#wave-packet-sampling" title="Permalink to this headline">¶</a></h2>
 <p>If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:</p>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepacketsCanonical.py [-h] [-d [DATAFILE]]
-                                              [-b [BLOCKID [BLOCKID ...]]]
-                                              [-p [PARAMETERSFILE]]
-                                              [-r [RESULTSPATH]] [-et]
+<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEvaluateWavepackets</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+</pre></div>
+</div>
+<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepackets.py [-h] [-d [DATAFILE]]
+                                     [-b [BLOCKID [BLOCKID ...]]]
+                                     [-p [PARAMETERSFILE]] [-r [RESULTSPATH]]
+                                     [-noet]
 
 optional arguments:
   -h, --help            show this help message and exit
@@ -180,9 +183,9 @@ optional arguments:
                         The configuration parameter file.
   -r [RESULTSPATH], --resultspath [RESULTSPATH]
                         Path where to put the results.
-  -et, --eigentransform
-                        Transform the data into the eigenbasis before
-                        computing norms.
+  -noet, --noeigentransform
+                        Disable transformation of data into the eigenbasis
+                        before computing norms.
 </pre></div>
 </div>
 </div>
@@ -195,21 +198,7 @@ transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.</p>
 <p>However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-post-processing scripts which can be recognized by a <tt class="docutils literal"><span class="pre">NET</span></tt> in their name:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNormsNET</span><span class="o">.</span><span class="n">py</span>
-<span class="n">ComputeEnergiesNET</span><span class="o">.</span><span class="n">py</span>
-<span class="n">ComputeAutocorrelationNET</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The <tt class="docutils literal"><span class="pre">NET</span></tt> (No-Eigen-Transformation) variants never do a basis transformation
-and compute the requested observables on the data given assuming a correct
-basis. There is also a <tt class="docutils literal"><span class="pre">CAN</span></tt> variant which computes explicitly in the
-canonical basis:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergiesCAN</span><span class="o">.</span><span class="n">py</span>
-</pre></div>
-</div>
-<p>The reason why this script exists is that it makes a difference whether
-we use <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> or <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> in the code.</p>
+command line switches <tt class="docutils literal"><span class="pre">-noet</span></tt> in the post-processing scripts.</p>
 <div class="section" id="explicit-eigentransformation">
 <h3>Explicit Eigentransformation<a class="headerlink" href="#explicit-eigentransformation" title="Permalink to this headline">¶</a></h3>
 <p>In case we want to convert all the simulation data (think: wave-function values
