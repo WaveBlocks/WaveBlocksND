@@ -34,9 +34,9 @@ parser.add_argument("-r", "--resultspath",
                     nargs = "?",
                     default = '.')
 
-parser.add_argument("-et", "--eigentransform",
-                    help = "Transform the data into the eigenbasis before computing norms.",
-                    action = "store_true")
+parser.add_argument("-noet", "--noeigentransform",
+                    help = "Disable transformation of data into the eigenbasis before computing norms.",
+                    action = "store_false")
 
 # TODO: Filter type of objects
 # parser.add_argument("-t", "--type",
@@ -76,13 +76,13 @@ for blockid in blockids:
 
     if iom.has_wavepacket(blockid=blockid):
         from WaveBlocksND.Interface import NormWavepacket
-        NormWavepacket.compute_norm_hawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        NormWavepacket.compute_norm_hawp(iom, blockid=blockid, eigentrafo=args.noeigentransform)
     elif iom.has_wavefunction(blockid=blockid):
         from WaveBlocksND.Interface import NormWavefunction
-        NormWavefunction.compute_norm(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        NormWavefunction.compute_norm(iom, blockid=blockid, eigentrafo=args.noeigentransform)
     elif iom.has_inhomogwavepacket(blockid=blockid):
         from WaveBlocksND.Interface import NormWavepacket
-        NormWavepacket.compute_norm_inhawp(iom, blockid=blockid, eigentrafo=args.eigentransform)
+        NormWavepacket.compute_norm_inhawp(iom, blockid=blockid, eigentrafo=args.noeigentransform)
     else:
         print("Warning: Not computing any norm in block '%s'!" % blockid)
 
