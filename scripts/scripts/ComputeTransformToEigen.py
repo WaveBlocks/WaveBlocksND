@@ -38,7 +38,7 @@ args = parser.parse_args()
 resultspath = os.path.abspath(args.resultspath)
 
 if not os.path.exists(resultspath):
-    raise IOError("The results path does not exist: " + args.resultspath)
+    raise IOError("The results path does not exist: {}".format(args.resultspath))
 
 inputfile = os.path.abspath(os.path.join(args.resultspath, args.inputfile))
 
@@ -50,8 +50,8 @@ else:
 
 outputfile = os.path.abspath(os.path.join(args.resultspath, outputfile))
 
-print("Reading simulation data from the file: "+str(inputfile))
-print("Writing transformed data to the file: "+str(outputfile))
+print("Reading simulation data from the file: {}".format(inputfile))
+print("Writing transformed data to the file: {}".format(outputfile))
 
 # Read file with simulation data
 iomc = IOManager()
@@ -75,7 +75,7 @@ for groupid in iomc.get_group_ids():
         iome.create_group(groupid=groupid)
 
     for blockid in iomc.get_block_ids(groupid=groupid):
-        print("Computing eigentransformation of data in block '%s'" % blockid)
+        print("Computing eigentransformation of data in block '{}'".format(blockid))
 
         # Create the block if necessary
         if blockid not in iome.get_block_ids(groupid=groupid):

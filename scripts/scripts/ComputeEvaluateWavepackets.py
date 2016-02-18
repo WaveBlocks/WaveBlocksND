@@ -53,7 +53,7 @@ args = parser.parse_args()
 resultspath = os.path.abspath(args.resultspath)
 
 if not os.path.exists(resultspath):
-    raise IOError("The results path does not exist: " + args.resultspath)
+    raise IOError("The results path does not exist: {}".format(args.resultspath))
 
 datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -75,10 +75,10 @@ if "all" not in args.blockid:
 
 # Iterate over all blocks
 for blockid in blockids:
-    print("Evaluating wavepackets in data block '%s'" % blockid)
+    print("Evaluating wavepackets in data block '{}'".format(blockid))
 
     if iom.has_wavefunction(blockid=blockid):
-        print("Datablock '%s' already contains wavefunction data, silent skip." % blockid)
+        print("Datablock '{}' already contains wavefunction data, silent skip.".format(blockid))
         continue
 
     # NOTE: Add new algorithms here
@@ -90,6 +90,6 @@ for blockid in blockids:
         from WaveBlocksND.Interface import EvaluateWavepacketsInhomog
         EvaluateWavepacketsInhomog.compute_evaluate_wavepackets(PA, iom, blockid=blockid, eigentrafo=args.noeigentransform)
     else:
-        print("Warning: Not evaluating any wavepackets in block '%s'!" % blockid)
+        print("Warning: Not evaluating any wavepackets in block '{}'!".format(blockid))
 
 iom.finalize()

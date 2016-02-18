@@ -176,10 +176,10 @@ if __name__ == "__main__":
     rpath = os.path.abspath(args.resultspath)
 
     if not (os.path.exists(fpath) and os.path.isdir(fpath)):
-        raise ValueError("Invalid configuration path: " + str(fpath))
+        raise ValueError("Invalid configuration path: {}".format(fpath))
 
     if not (os.path.exists(rpath) and os.path.isdir(rpath)):
-        raise ValueError("Invalid results path: " + str(rpath))
+        raise ValueError("Invalid results path: {}".format(rpath))
 
     # Read off commands
     C = [Command(c) for c in commands]

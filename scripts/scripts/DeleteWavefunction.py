@@ -41,7 +41,7 @@ if "all" not in args.blockid:
 # Iterate over all blocks
 for blockid in blockids:
     if iom.has_wavefunction(blockid=blockid):
-        print("Deleting grid and wavefunction data in block '%s'" % blockid)
+        print("Deleting grid and wavefunction data in block '{}'".format(blockid))
         iom.delete_wavefunction(blockid=blockid)
         if iom.has_grid(blockid=blockid):
             iom.delete_grid(blockid=blockid)

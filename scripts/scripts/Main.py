@@ -39,7 +39,7 @@ args = parser.parse_args()
 resultspath = os.path.abspath(args.resultspath)
 
 if not os.path.exists(resultspath):
-    raise IOError("The results path does not exist: " + args.resultspath)
+    raise IOError("The results path does not exist: {}".format(args.resultspath))
 
 outputfile = os.path.abspath(os.path.join(args.resultspath, args.outputfile))
 parametersfile = os.path.abspath(args.parametersfile)
@@ -47,9 +47,9 @@ parametersfile = os.path.abspath(args.parametersfile)
 print("**************************************************")
 print("***            Running Simulation              ***")
 print("**************************************************")
-print("Using configuration from file: " + parametersfile)
-print("Storing simulation results at: " + resultspath)
-print("Output data file is          : " + outputfile)
+print("Using configuration from file: {}".format(parametersfile))
+print("Storing simulation results at: {}".format(resultspath))
+print("Output data file is          : {}".format(outputfile))
 
 
 # Set up the parameter provider singleton

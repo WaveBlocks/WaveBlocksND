@@ -222,8 +222,8 @@ if __name__ == "__main__":
 
     args = parser.parse_args()
 
-    print("Meta configuration read from: " + args.metaconfiguration)
-    print("Write configurations to: " + args.destination)
+    print("Meta configuration read from: {}".format(args.metaconfiguration))
+    print("Write configurations to: {}".format(args.destination))
 
     # Read the configuration file
     with open(args.metaconfiguration) as f:

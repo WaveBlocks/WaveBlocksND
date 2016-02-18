@@ -41,7 +41,7 @@ def execute_for_all(resultspath, command):
     :param command: The python script that gets called for all simulations.
     """
     for simulationpath in get_result_dirs(resultspath):
-        print(" Executing code for datafile in " + simulationpath)
+        print(" Executing code for datafile in {}".format(simulationpath))
 
         # The file(s) with the simulation data
         resfiles = get_results_file(simulationpath)

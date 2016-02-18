@@ -39,7 +39,7 @@ args = parser.parse_args()
 resultspath = os.path.abspath(args.resultspath)
 
 if not os.path.exists(resultspath):
-    raise IOError("The results path does not exist: " + args.resultspath)
+    raise IOError("The results path does not exist: {}".format(args.resultspath))
 
 datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 

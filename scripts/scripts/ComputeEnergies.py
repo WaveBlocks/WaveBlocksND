@@ -56,7 +56,7 @@ args = parser.parse_args()
 resultspath = os.path.abspath(args.resultspath)
 
 if not os.path.exists(resultspath):
-    raise IOError("The results path does not exist: " + args.resultspath)
+    raise IOError("The results path does not exist: {}".format(args.resultspath))
 
 datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -76,10 +76,10 @@ print("**************************************************")
 
 # Iterate over all blocks
 for blockid in blockids:
-    print("Computing the energies in data block '%s'" % blockid)
+    print("Computing the energies in data block '{}'".format(blockid))
 
     if iom.has_energy(blockid=blockid):
-        print("Datablock '%s' already contains energy data, silent skip." % blockid)
+        print("Datablock '{}' already contains energy data, silent skip.".format(blockid))
         continue
 
     # NOTE: Add new algorithms here
@@ -94,7 +94,7 @@ for blockid in blockids:
         from WaveBlocksND.Interface import EnergiesWavepacket
         EnergiesWavepacket.compute_energy_inhawp(iom, blockid=blockid, eigentrafo=args.noeigentransform, iseigen=args.eigenbasis)
     else:
-        print("Warning: Not computing any energies in block '%s'!" % blockid)
+        print("Warning: Not computing any energies in block '{}'!".format(blockid))
 
 iom.finalize()
 
