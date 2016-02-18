@@ -12,7 +12,7 @@ time propagation.
 
 import argparse
 import os
-from numpy import array, linspace, dot, sin, cos, pi, real
+from numpy import array, linspace, dot, sin, cos, pi, real, where, nan, isnan
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -25,6 +25,13 @@ def read_data_homogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
+    parameters = iom.load_parameters()
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
+
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
@@ -33,13 +40,12 @@ def read_data_homogeneous(iom, blockid=0):
     if not D == 2:
         raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
 
-    Pi = [ [real(qhist.reshape((-1,D)))],
-           [real(phist.reshape((-1,D)))],
-           [Qhist.reshape((-1,D,D))],
-           [Phist.reshape((-1,D,D))],
-           [Shist.reshape((-1,1))] ]
-
-    return Pi
+    return (time,
+            [real(qhist.reshape((-1, D)))],
+            [real(phist.reshape((-1, D)))],
+            [Qhist.reshape((-1, D, D))],
+            [Phist.reshape((-1, D, D))],
+            [Shist.reshape((-1, 1))])
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -47,6 +53,13 @@ def read_data_inhomogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
+    parameters = iom.load_parameters()
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
+
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
     # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
@@ -61,14 +74,14 @@ def read_data_inhomogeneous(iom, blockid=0):
     phist = []
     qhist = []
 
-    for q,p,Q,P,S in Pis:
-        qhist.append(real(q.reshape((-1,D,))))
-        phist.append(real(p.reshape((-1,D,))))
-        Qhist.append(Q.reshape((-1,D,D)))
-        Phist.append(P.reshape((-1,D,D)))
-        Shist.append(S.reshape((-1,1,)))
+    for q, p, Q, P, S in Pis:
+        qhist.append(real(q.reshape((-1, D))))
+        phist.append(real(p.reshape((-1, D))))
+        Qhist.append(Q.reshape((-1, D, D)))
+        Phist.append(P.reshape((-1, D, D)))
+        Shist.append(S.reshape((-1, 1)))
 
-    return (qhist, phist, Qhist, Phist, Shist)
+    return (time, qhist, phist, Qhist, Phist, Shist)
 
 
 def plot_parameters(data, index=0, path='.'):
@@ -78,24 +91,27 @@ def plot_parameters(data, index=0, path='.'):
     """
     print("Plotting the parameters of data block '%s'" % index)
 
-    qhist, phist, Qhist, Phist, Shist = data
+    time, qhist, phist, Qhist, Phist, Shist = data
+    vals = ~isnan(time)
 
     r = 1.0
-    theta = linspace(0, 2*pi, 64)
-    circle = array([r*cos(theta), r*sin(theta)])
+    theta = linspace(0, 2 * pi, 64)
+    circle = array([r * cos(theta), r * sin(theta)])
 
     # Plot the 2D trajectory of the parameters q and p
     fig = figure()
     ax = fig.gca()
     for qitem, Qitem in zip(qhist, Qhist):
-        for q, Q in zip(qitem, Qitem):
-            C = real(q.reshape((-1,1)) + dot(Q, circle))
-            ax.plot(q[0], q[1], "bo")
-            ax.plot(C[0,:], C[1,:], "b-", alpha=0.5)
+        for q, Q, vi, in zip(qitem, Qitem, vals):
+            if vi:
+                C = real(q.reshape((-1, 1)) + dot(Q, circle))
+                ax.plot(q[0], q[1], "bo")
+                ax.plot(C[0, :], C[1, :], "b-", alpha=0.5)
 
-    ax.set_xlabel(r"$q_x$")
-    ax.set_ylabel(r"$q_y$")
+    ax.set_xlabel(r"$q_x(t)$")
+    ax.set_ylabel(r"$q_y(t)$")
     ax.grid(True)
+    ax.set_aspect("equal")
     ax.set_title(r"Schematic evolution of $q$ and $Q$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_schema_pos_block"+str(index)+GD.output_format))
     close(fig)
@@ -104,13 +120,15 @@ def plot_parameters(data, index=0, path='.'):
     fig = figure()
     ax = fig.gca()
     for pitem, Pitem in zip(phist, Phist):
-        for p, P in zip(pitem, Pitem):
-            C = real(p.reshape((-1,1)) + dot(P, circle))
-            ax.plot(p[0], p[1], "bo")
-            ax.plot(C[0,:], C[1,:], "b-", alpha=0.5)
-    ax.set_xlabel(r"$p_x$")
-    ax.set_ylabel(r"$p_y$")
+        for p, P, vi in zip(pitem, Pitem, vals):
+            if vi:
+                C = real(p.reshape((-1, 1)) + dot(P, circle))
+                ax.plot(p[0], p[1], "bo")
+                ax.plot(C[0, :], C[1, :], "b-", alpha=0.5)
+    ax.set_xlabel(r"$p_x(t)$")
+    ax.set_ylabel(r"$p_y(t)$")
     ax.grid(True)
+    ax.set_aspect("equal")
     ax.set_title(r"Schematic evolution of $p$ and $P$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_schema_mom_lock"+str(index)+GD.output_format))
     close(fig)
@@ -156,8 +174,8 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # Iterate over all blocks
     for blockid in blockids:

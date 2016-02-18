@@ -12,7 +12,7 @@ time propagation.
 
 import argparse
 import os
-from numpy import real
+from numpy import real, where, nan, isnan
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -25,6 +25,13 @@ def read_data_homogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
+    parameters = iom.load_parameters()
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
+
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
@@ -33,13 +40,12 @@ def read_data_homogeneous(iom, blockid=0):
     if not D == 2:
         raise NotImplementedError("Trajectory plotting implemented only for 2D wavepackets")
 
-    Pi = [ [real(qhist.reshape((-1,D)))],
-           [real(phist.reshape((-1,D)))],
-           [Qhist.reshape((-1,D,D))],
-           [Phist.reshape((-1,D,D))],
-           [Shist.reshape((-1,1))] ]
-
-    return Pi
+    return (time,
+            [real(qhist.reshape((-1, D)))],
+            [real(phist.reshape((-1, D)))],
+            [Qhist.reshape((-1, D, D))],
+            [Phist.reshape((-1, D, D))],
+            [Shist.reshape((-1, 1))])
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -47,6 +53,13 @@ def read_data_inhomogeneous(iom, blockid=0):
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
     :param blockid: The data block from which the values are read.
     """
+    parameters = iom.load_parameters()
+    timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
+    dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
+    time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
+
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
     # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
@@ -61,14 +74,14 @@ def read_data_inhomogeneous(iom, blockid=0):
     phist = []
     qhist = []
 
-    for q,p,Q,P,S in Pis:
-        qhist.append(real(q.reshape((-1,D,))))
-        phist.append(real(p.reshape((-1,D,))))
-        Qhist.append(Q.reshape((-1,D,D)))
-        Phist.append(P.reshape((-1,D,D)))
-        Shist.append(S.reshape((-1,1,)))
+    for q, p, Q, P, S in Pis:
+        qhist.append(real(q.reshape((-1, D))))
+        phist.append(real(p.reshape((-1, D))))
+        Qhist.append(Q.reshape((-1, D, D)))
+        Phist.append(P.reshape((-1, D, D)))
+        Shist.append(S.reshape((-1, 1)))
 
-    return (qhist, phist, Qhist, Phist, Shist)
+    return (time, qhist, phist, Qhist, Phist, Shist)
 
 
 def plot_parameters(data, index=0, path='.'):
@@ -78,16 +91,18 @@ def plot_parameters(data, index=0, path='.'):
     """
     print("Plotting the parameters of data block '%s'" % index)
 
-    qhist, phist, Qhist, Phist, Shist = data
+    time, qhist, phist, Qhist, Phist, Shist = data
+    vals = ~isnan(time)
 
     # Plot the 2D trajectory of the parameters q and p
     fig = figure()
     ax = fig.gca()
     for item in qhist:
-        ax.plot(item[:,0], item[:,1], "-o", label=r"Trajectory of $q$")
-    ax.set_xlabel(r"$q_x$")
-    ax.set_ylabel(r"$q_y$")
+        ax.plot(item[vals, 0], item[vals, 1], "-o", label=r"Trajectory of $q$")
+    ax.set_xlabel(r"$q_x(t)$")
+    ax.set_ylabel(r"$q_y(t)$")
     ax.grid(True)
+    # ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $q$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryq_block"+str(index)+GD.output_format))
     close(fig)
@@ -95,10 +110,11 @@ def plot_parameters(data, index=0, path='.'):
     fig = figure()
     ax = fig.gca()
     for item in phist:
-        ax.plot(item[:,0], item[:,1], "-o", label=r"Trajectory of $p$")
-    ax.set_xlabel(r"$p_x$")
-    ax.set_ylabel(r"$p_y$")
+        ax.plot(item[vals, 0], item[vals, 1], "-o", label=r"Trajectory of $p$")
+    ax.set_xlabel(r"$p_x(t)$")
+    ax.set_ylabel(r"$p_y(t)$")
     ax.grid(True)
+    # ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $p$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryp_block"+str(index)+GD.output_format))
     close(fig)
@@ -144,8 +160,8 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # Iterate over all blocks
     for blockid in blockids:
