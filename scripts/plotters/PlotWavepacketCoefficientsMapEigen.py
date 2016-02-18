@@ -49,11 +49,11 @@ def read_data_homogeneous(iom, blockid=0):
     BT.set_matrix_builder(HAWP.get_innerproduct())
 
     # Store the resulting coefficients here
-    CI = [ [] for i in range(HAWP.get_number_components()) ]
+    CI = [[] for i in range(HAWP.get_number_components())]
 
     # Iterate over all timesteps, this is an *expensive* transformation
     for i, step in enumerate(timegrid):
-        print(" Computing eigentransformation at timestep %d" % step)
+        print(" Computing eigentransformation at timestep {}".format(step))
         # Retrieve simulation data
         HAWP = iom.load_wavepacket(timestep=step, blockid=blockid)
 
@@ -63,7 +63,7 @@ def read_data_homogeneous(iom, blockid=0):
         for index, item in enumerate(HAWP.get_coefficients()):
             CI[index].append(item)
 
-    CI = [ transpose(hstack(item)) for item in CI ]
+    CI = [transpose(hstack(item)) for item in CI]
 
     return time, CI
 
@@ -91,11 +91,11 @@ def read_data_inhomogeneous(iom, blockid=0):
     BT.set_matrix_builder(HAWP.get_quadrature())
 
     # Store the resulting coefficients here
-    CI = [ [] for i in range(HAWP.get_number_components()) ]
+    CI = [[] for i in range(HAWP.get_number_components())]
 
     # Iterate over all timesteps, this is an *expensive* transformation
     for i, step in enumerate(timegrid):
-        print(" Computing eigentransformation at timestep %d" % step)
+        print(" Computing eigentransformation at timestep {}".format(step))
         # Retrieve simulation data
         HAWP = iom.load_inhomogwavepacket(timestep=step, blockid=blockid)
 
@@ -105,12 +105,12 @@ def read_data_inhomogeneous(iom, blockid=0):
         for index, item in enumerate(HAWP.get_coefficients()):
             CI[index].append(item)
 
-    CI = [ transpose(hstack(item)) for item in CI ]
+    CI = [transpose(hstack(item)) for item in CI]
 
     return time, CI
 
 
-def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20), path='.'):
+def plot_coefficients(parameters, data, blockid=0, imgsize=(10, 20), path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
     :param timegrid: The timegrid that belongs to the coefficient values.
@@ -128,7 +128,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20), path='.'):
 
         # Scale the image to roughly fit the data shape
         v, u = coeff.shape
-        imags = (imgsize[0], int(10*v / (1.0*u)))
+        imags = (imgsize[0], int(10 * v / float(u)))
         if imags[1] < 10000:
             imgsize = imags
 
@@ -199,7 +199,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -211,12 +211,12 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting wavepacket coefficients in data block '%s'" % blockid)
+        print("Plotting wavepacket coefficients in data block '{}'".format(blockid))
 
         # NOTE: Add new algorithms here
 
@@ -225,6 +225,6 @@ if __name__ == "__main__":
         elif iom.has_inhomogwavepacket(blockid=blockid):
             plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), blockid=blockid, path=resultspath)
         else:
-            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
+            print("Warning: Not plotting wavepacket coefficients in block '{}'".format(blockid))
 
     iom.finalize()

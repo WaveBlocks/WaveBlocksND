@@ -42,7 +42,7 @@ def read_data(iom, blockid=0):
 
 
 def plot_norms(data, blockid=0, view=None, path='.'):
-    print("Plotting the norms of data block '%s'" % blockid)
+    print("Plotting the norms of data block '{}'".format(blockid))
 
     timegrid, norms, dt = data
     # Filter
@@ -184,7 +184,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -202,11 +202,11 @@ if __name__ == "__main__":
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting norms in data block '%s'" % blockid)
+        print("Plotting norms in data block '{}'".format(blockid))
 
         if iom.has_norm(blockid=blockid):
             plot_norms(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
-            print("Warning: Not plotting norms in block '%s'" % blockid)
+            print("Warning: Not plotting norms in block '{}'".format(blockid))
 
     iom.finalize()

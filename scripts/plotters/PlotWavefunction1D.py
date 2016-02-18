@@ -21,7 +21,7 @@ from WaveBlocksND.Plot import plotcf
 from WaveBlocksND import GlobalDefaults as GLD
 
 
-def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12,9), path='.'):
+def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, plotcomponents=False, plotabssqr=False, load=True, gridblockid=None, imgsize=(12, 9), path='.'):
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
@@ -68,28 +68,28 @@ def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, p
             raise ValueError("No valid timestep remains!")
 
     for step in timegrid:
-        print(" Plotting frame of timestep # %d" % step)
+        print(" Plotting frame of timestep # {}".format(step))
 
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
-        values = [ wave[j,...] for j in range(parameters["ncomponents"]) ]
+        values = [wave[j, ...] for j in range(parameters["ncomponents"])]
 
         # Plot
         fig = figure(figsize=imgsize)
 
         for index, component in enumerate(values):
-            ax = fig.add_subplot(parameters["ncomponents"],1,index+1)
-            ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+            ax = fig.add_subplot(parameters["ncomponents"], 1, index + 1)
+            ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
 
             if plotcomponents is True:
                 ax.plot(grid, real(component))
                 ax.plot(grid, imag(component))
-                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index,index))
+                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index, index))
             if plotabssqr is True:
-                ax.plot(grid, real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
+                ax.plot(grid, real(component * conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index, index))
             if plotphase is True:
-                plotcf(grid, angle(component), real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
+                plotcf(grid, angle(component), real(component * conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index, index))
 
             ax.set_xlabel(r"$x$")
 
@@ -98,7 +98,7 @@ def plot_frames(PP, iom, blockid=0, timerange=None, view=None, plotphase=True, p
             ax.set_ylim(view[2:])
 
         if "dt" in parameters:
-            fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
+            fig.suptitle(r"$\Psi$ at time $%f$" % (step * parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")
 
@@ -172,7 +172,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
@@ -190,15 +190,15 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting frames of data block '%s'" % blockid)
+        print("Plotting frames of data block '{}'".format(blockid))
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom,
@@ -211,6 +211,6 @@ if __name__ == "__main__":
                         load=False,
                         path=resultspath)
         else:
-            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
+            print("Warning: Not plotting any wavefunctions in block '{}'".format(blockid))
 
     iom.finalize()

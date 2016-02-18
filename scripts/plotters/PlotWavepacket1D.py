@@ -24,11 +24,10 @@ from WaveBlocksND.Plot import plotcf
 
 def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=None,
                 plotphase=True, plotcomponents=False, plotabssqr=False,
-                load=False, gridblockid=None, imgsize=(12,9), path='.'):
+                load=False, gridblockid=None, imgsize=(12, 9), path='.'):
     """Plot the wavepacket for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    :param view: The aspect ratio.
     """
     parameters = iom.load_parameters()
     BF = BlockFactory()
@@ -43,7 +42,7 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
     if load is True:
         if gridblockid is None:
             gridblockid = blockid
-        print("Loading grid data from datablock '%s'" % gridblockid)
+        print("Loading grid data from datablock '{}'".format(gridblockid))
         G = iom.load_grid(blockid=gridblockid)
         grid = real(G.reshape(-1))
     else:
@@ -74,7 +73,7 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
             view[1] = grid.max()
 
     for step in timegrid:
-        print(" Plotting frame of timestep # %d" % step)
+        print(" Plotting frame of timestep # {}".format(step))
 
         HAWP = iom.load_wavepacket(step, blockid=blockid)
 
@@ -88,19 +87,19 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
         fig = figure(figsize=imgsize)
 
         for index, component in enumerate(values):
-            ax = fig.add_subplot(parameters["ncomponents"],1,index+1)
-            ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+            ax = fig.add_subplot(parameters["ncomponents"], 1, index + 1)
+            ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
 
             if plotcomponents is True:
                 ax.plot(grid, real(component))
                 ax.plot(grid, imag(component))
-                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index,index))
+                ax.set_ylabel(r"$\Re \varphi_{%d}, \Im \varphi_{%d}$" % (index, index))
             if plotabssqr is True:
-                ax.plot(grid, real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
+                ax.plot(grid, real(component * conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index, index))
             if plotphase is True:
-                plotcf(grid, angle(component), real(component*conj(component)))
-                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index,index))
+                plotcf(grid, angle(component), real(component * conj(component)))
+                ax.set_ylabel(r"$\langle \varphi_{%d} | \varphi_{%d} \rangle$" % (index, index))
 
             ax.set_xlabel(r"$x$")
 
@@ -109,7 +108,7 @@ def plot_frames(PP, iom, blockid=0, eigentransform=False, timerange=None, view=N
             ax.set_ylim(view[2:])
 
         if "dt" in parameters:
-            fig.suptitle(r"$\Psi$ at time $%f$" % (step*parameters["dt"]))
+            fig.suptitle(r"$\Psi$ at time $%f$" % (step * parameters["dt"]))
         else:
             fig.suptitle(r"$\Psi$")
 
@@ -187,7 +186,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
@@ -205,15 +204,15 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting frames of data block '%s'" % blockid)
+        print("Plotting frames of data block '{}'".format(blockid))
         # See if we have wavepacket values
         if iom.has_wavepacket(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
@@ -222,6 +221,6 @@ if __name__ == "__main__":
                         view=view,
                         path=resultspath)
         else:
-            print("Warning: Not plotting any wavepackets in block '%s'" % blockid)
+            print("Warning: Not plotting any wavepackets in block '{}'".format(blockid))
 
     iom.finalize()

@@ -165,7 +165,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -183,11 +183,11 @@ if __name__ == "__main__":
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting autocorrelations in data block '%s'" % blockid)
+        print("Plotting autocorrelations in data block '{}'".format(blockid))
 
         if iom.has_autocorrelation(blockid=blockid):
             plot_autocorrelations(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
-            print("Warning: Not plotting autocorrelations in block '%s'" % blockid)
+            print("Warning: Not plotting autocorrelations in block '{}'".format(blockid))
 
     iom.finalize()

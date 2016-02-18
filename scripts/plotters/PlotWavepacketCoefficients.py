@@ -15,7 +15,7 @@ basis shapes are adaptive and their mappings mu incompatible!
 
 import argparse
 import os
-from numpy import real, imag, abs, angle
+from numpy import real, imag, abs, angle, where, nan, nanmin, nanmax
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import IOManager
@@ -32,7 +32,9 @@ def read_data_homogeneous(iom, blockid=0):
     parameters = iom.load_parameters()
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
     dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
     time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
 
     hashes, coeffs = iom.load_wavepacket_coefficients(blockid=blockid, get_hashes=True)
 
@@ -47,25 +49,29 @@ def read_data_inhomogeneous(iom, blockid=0):
     parameters = iom.load_parameters()
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
     dt = parameters["dt"] if "dt" in parameters else 1.0
+    # Filter
     time = timegrid * dt
+    time = where(timegrid < 0, nan, time)
 
     hashes, coeffs = iom.load_inhomogwavepacket_coefficients(blockid=blockid, get_hashes=True)
 
     return time, coeffs, [h.reshape(-1) for h in hashes]
 
 
-def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsize=(10,20), path='.'):
+def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsize=(10, 20), view=[None, None], path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
-    :param timegrid: The timegrid that belongs to the coefficient values.
-    :param coeffs: The coefficient values.
-    :param imgsize: The size of the plot. For a large number of plotted
-                    coefficients, we might have to increase this value.
     """
     print("Plotting the coefficients of data block '%s'" % index)
 
     # Check if we have enough coefficients to plot
-    timegrid, coeffs, hashes = data
+    time, coeffs, hashes = data
+
+    # View
+    if view[0] is None:
+        view[0] = nanmin(time)
+    if view[1] is None:
+        view[1] = nanmax(time)
 
     N = len(coeffs)
 
@@ -84,25 +90,26 @@ def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsi
 
     # Plot
     for vect in allvects:
-        print(" Plotting coefficient "+str(vect)+" out of %d" % len(allvects))
+        print(" Plotting coefficient {} out of {}".format(vect, len(allvects)))
 
         fig = figure()
 
         for level in range(N):
             j = BS[level][vect]
             if j is not None:
-                ax = fig.add_subplot(N,1,level+1)
+                ax = fig.add_subplot(N, 1, level + 1)
 
                 if not reim:
-                    ax.plot(timegrid, angle(coeffs[level][:,j]), label=r"$\arg c$")
+                    ax.plot(time, angle(coeffs[level][:, j]), label=r"$\arg c$")
                 else:
-                    ax.plot(timegrid, real(coeffs[level][:,j]), label=r"$\Re c$")
-                    ax.plot(timegrid, imag(coeffs[level][:,j]), label=r"$\Im c$")
+                    ax.plot(time, real(coeffs[level][:, j]), label=r"$\Re c$")
+                    ax.plot(time, imag(coeffs[level][:, j]), label=r"$\Im c$")
 
-                ax.plot(timegrid, abs(coeffs[level][:,j]), "r", label=r"$|c|$")
+                ax.plot(time, abs(coeffs[level][:, j]), "r", label=r"$|c|$")
 
                 ax.grid(True)
-                ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+                ax.set_xlim(view[0], view[1])
+                ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
                 ax.legend(loc='upper right')
                 ax.set_xlabel(r"$t$")
                 ax.set_ylabel(r"$c^{%d}$" % level)
@@ -146,7 +153,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -156,15 +163,15 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # Read the data and plot it, one plot for each data block.
     parameters = iom.load_parameters()
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting wavepacket coefficients in data block '%s'" % blockid)
+        print("Plotting wavepacket coefficients in data block '{}'".format(blockid))
 
         # NOTE: Add new algorithms here
 
@@ -173,6 +180,6 @@ if __name__ == "__main__":
         elif iom.has_inhomogwavepacket(blockid=blockid):
             plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), index=blockid, reim=args.reim, path=resultspath)
         else:
-            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
+            print("Warning: Not plotting wavepacket coefficients in block '{}'".format(blockid))
 
     iom.finalize()

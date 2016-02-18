@@ -50,7 +50,7 @@ def read_data(iom, blockid=0):
 
 
 def plot_energies(data, blockid=0, view=None, path='.'):
-    print("Plotting the energies of data block '%s'" % blockid)
+    print("Plotting the energies of data block '{}'".format(blockid))
 
     timegridk, timegridp, ekin, epot, dt = data
     # Filter
@@ -181,7 +181,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -199,11 +199,11 @@ if __name__ == "__main__":
 
     # Iterate over all blocks
     for blockid in iom.get_block_ids():
-        print("Plotting energies in data block '%s'" % blockid)
+        print("Plotting energies in data block '{}'".format(blockid))
 
         if iom.has_energy(blockid=blockid):
             plot_energies(read_data(iom, blockid=blockid), blockid=blockid, view=view, path=resultspath)
         else:
-            print("Warning: Not plotting energies in block '%s'" % blockid)
+            print("Warning: Not plotting energies in block '{}'".format(blockid))
 
     iom.finalize()

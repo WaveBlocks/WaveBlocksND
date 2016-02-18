@@ -27,7 +27,6 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    :param view: The aspect ratio.
     """
     parameters = iom.load_parameters()
 
@@ -41,8 +40,6 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
     if load is True:
         # TODO: Implement reshaping
         raise NotImplementedError("Loading of 2D grids is not implemented")
-        #G = iom.load_grid(blockid=blockid)
-        #G = grid.reshape((1, -1))
     else:
         G = BlockFactory().create_grid(PP)
 
@@ -82,11 +79,11 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
             view[3] = v.max()
 
     for step in timegrid:
-        print(" Plotting frame of timestep # %d" % step)
+        print(" Plotting frame of timestep # {}".format(step))
 
         # Load the data
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
-        values = [ wave[j,...] for j in range(parameters["ncomponents"]) ]
+        values = [wave[j, ...] for j in range(parameters["ncomponents"])]
         WF.set_values(values)
 
         # Transform the values to the eigenbasis
@@ -103,7 +100,7 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
             z = Psi[level]
             z = z.reshape(G.get_number_nodes())
 
-            fig.add_subplot(N,1,level+1)
+            fig.add_subplot(N, 1, level + 1)
             plotcf2d(u, v, z, darken=0.3, limits=view)
 
         fig.savefig(os.path.join(path, "wavefunction_contour_block_%s_level_%d_timestep_%07d.png" % (blockid, level, step)))
@@ -168,7 +165,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
@@ -186,15 +183,15 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting frames of data block '%s'" % blockid)
+        print("Plotting frames of data block '{}'".format(blockid))
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
@@ -203,6 +200,6 @@ if __name__ == "__main__":
                         view=view,
                         path=resultspath)
         else:
-            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
+            print("Warning: Not plotting any wavefunctions in block '{}'".format(blockid))
 
     iom.finalize()

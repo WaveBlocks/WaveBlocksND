@@ -54,11 +54,9 @@ def read_data_inhomogeneous(iom, blockid=0):
     return time, coeffs
 
 
-def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20), path='.'):
+def plot_coefficients(parameters, data, blockid=0, imgsize=(10, 20), path='.'):
     """
     :param parameters: A :py:class:`ParameterProvider` instance.
-    :param timegrid: The timegrid that belongs to the coefficient values.
-    :param coeffs: The coefficient values.
     :param imgsize: The size of the plot. For a large number of plotted
                     coefficients, we might have to increase this value.
     """
@@ -72,7 +70,7 @@ def plot_coefficients(parameters, data, blockid=0, imgsize=(10,20), path='.'):
 
         # Scale the image to roughly fit the data shape
         v, u = coeff.shape
-        imags = (imgsize[0], int(10*v / (1.0*u)))
+        imags = (imgsize[0], int(10 * v / float(u)))
         if imags[1] < 10000:
             imgsize = imags
 
@@ -143,7 +141,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -155,18 +153,18 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting wavepacket parameters in data block '%s'" % blockid)
+        print("Plotting wavepacket parameters in data block '{}'".format(blockid))
 
         if iom.has_wavepacket(blockid=blockid):
             plot_coefficients(parameters, read_data_homogeneous(iom, blockid=blockid), blockid=blockid, path=resultspath)
         elif iom.has_inhomogwavepacket(blockid=blockid):
             plot_coefficients(parameters, read_data_inhomogeneous(iom, blockid=blockid), blockid=blockid, path=resultspath)
         else:
-            print("Warning: Not plotting wavepacket coefficients in block '%s'" % blockid)
+            print("Warning: Not plotting wavepacket coefficients in block '{}'".format(blockid))
 
     iom.finalize()

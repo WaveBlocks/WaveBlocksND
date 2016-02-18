@@ -23,14 +23,14 @@ from WaveBlocksND import GlobalDefaults as GLD
 from WaveBlocksND.Interface import GraphicsDefaults as GD
 
 
-def plot_potential(grid, potential, view=None, size=(12,9), path='.'):
+def plot_potential(grid, potential, view=None, size=(12, 9), path='.'):
     # The Grid
     u = grid.get_nodes(split=True)
     u = real(u[0])
 
     # Create potential and evaluate eigenvalues
     potew = potential.evaluate_eigenvalues_at(grid)
-    potew = [ real(level).reshape(-1) for level in potew ]
+    potew = [real(level).reshape(-1) for level in potew]
 
     # View
     if view[0] is None:
@@ -45,7 +45,7 @@ def plot_potential(grid, potential, view=None, size=(12,9), path='.'):
     for index, ew in enumerate(potew):
         ax.plot(u, ew, label=r"$\lambda_{%d}$" % index)
 
-    ax.ticklabel_format(style="sci", scilimits=(0,0), axis="y")
+    ax.ticklabel_format(style="sci", scilimits=(0, 0), axis="y")
     ax.grid(True)
     ax.set_xlim(view[:2])
     ax.set_ylim(view[2:])
@@ -105,7 +105,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))

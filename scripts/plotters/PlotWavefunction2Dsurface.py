@@ -27,7 +27,6 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
     """Plot the wave function for a series of timesteps.
 
     :param iom: An :py:class:`IOManager` instance providing the simulation data.
-    :param view: The aspect ratio.
     """
     parameters = iom.load_parameters()
 
@@ -41,8 +40,6 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
     if load is True:
         # TODO: Implement reshaping
         raise NotImplementedError("Loading of 2D grids is not implemented")
-        #G = iom.load_grid(blockid=blockid)
-        #G = grid.reshape((1, -1))
     else:
         G = BlockFactory().create_grid(PP)
 
@@ -67,8 +64,8 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
             raise ValueError("No valid timestep remains!")
 
     u, v = G.get_nodes(split=True, flat=False)
-    u = real(u[::sparsify,::sparsify])
-    v = real(v[::sparsify,::sparsify])
+    u = real(u[::sparsify, ::sparsify])
+    v = real(v[::sparsify, ::sparsify])
 
     # View
     if view is not None:
@@ -82,11 +79,11 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
             view[3] = v.max()
 
     for step in timegrid:
-        print(" Plotting frame of timestep # %d" % step)
+        print(" Plotting frame of timestep # {}".format(step))
 
         # Load the data
         wave = iom.load_wavefunction(blockid=blockid, timestep=step)
-        values = [ wave[j,...] for j in range(parameters["ncomponents"]) ]
+        values = [wave[j, ...] for j in range(parameters["ncomponents"])]
         WF.set_values(values)
 
         # Transform the values to the eigenbasis
@@ -98,20 +95,20 @@ def plot_frames(PP, iom, blockid=0, load=False, eigentransform=False, timerange=
         for level in range(N):
             # Wavefunction data
             z = Psi[level]
-            z = z.reshape(G.get_number_nodes())[::sparsify,::sparsify]
+            z = z.reshape(G.get_number_nodes())[::sparsify, ::sparsify]
 
             # View
             if view is not None:
                 if view[4] is None:
                     view[4] = 0.0
                 if view[5] is None:
-                    view[5] = 1.1*abs(z).max()
+                    view[5] = 1.1 * abs(z).max()
 
             # Plot
-            #if not interactive:
+            # if not interactive:
             #    mlab.options.offscreen = True
 
-            fig = mlab.figure(size=(800,700))
+            fig = mlab.figure(size=(800, 700))
 
             surfcf(u, v, angle(z), abs(z), view=view)
 
@@ -196,7 +193,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))
@@ -214,15 +211,15 @@ if __name__ == "__main__":
 
     # Which blocks to handle
     blockids = iom.get_block_ids()
-    if not "all" in args.blockid:
-        blockids = [ bid for bid in args.blockid if bid in blockids ]
+    if "all" not in args.blockid:
+        blockids = [bid for bid in args.blockid if bid in blockids]
 
     # The axes rectangle that is plotted
     view = args.xrange + args.yrange + args.zrange
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting frames of data block '%s'" % blockid)
+        print("Plotting frames of data block '{}'".format(blockid))
         # See if we have wavefunction values
         if iom.has_wavefunction(blockid=blockid):
             plot_frames(PP, iom, blockid=blockid,
@@ -233,6 +230,6 @@ if __name__ == "__main__":
                         interactive=args.interactive,
                         path=resultspath)
         else:
-            print("Warning: Not plotting any wavefunctions in block '%s'" % blockid)
+            print("Warning: Not plotting any wavefunctions in block '{}'".format(blockid))
 
     iom.finalize()

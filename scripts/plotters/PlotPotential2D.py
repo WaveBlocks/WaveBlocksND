@@ -28,18 +28,18 @@ def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, int
     """
     # The Grid
     u, v = grid.get_nodes(split=True, flat=False)
-    u = real(u[::sparsify,::sparsify])
-    v = real(v[::sparsify,::sparsify])
+    u = real(u[::sparsify, ::sparsify])
+    v = real(v[::sparsify, ::sparsify])
 
     # Create potential and evaluate eigenvalues
     potew = potential.evaluate_eigenvalues_at(grid)
-    potew = [ real(level).reshape(grid.get_number_nodes(overall=False))[::sparsify,::sparsify] for level in potew ]
+    potew = [real(level).reshape(grid.get_number_nodes(overall=False))[::sparsify, ::sparsify] for level in potew]
 
     # Plot
     if not interactive:
         mlab.options.offscreen = True
 
-    fig = mlab.figure(size=(800,700))
+    fig = mlab.figure(size=(800, 700))
 
     for level in potew:
         # The energy surfaces of the potential
@@ -60,7 +60,7 @@ def plot_potential(grid, potential, sparsify=1, along_axes=False, view=None, int
 
     fig.scene.parallel_projection = True
     fig.scene.isometric_view()
-    #fig.scene.show_axes = True
+    # fig.scene.show_axes = True
 
     mlab.draw()
     if interactive:
@@ -133,7 +133,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
     parametersfile = os.path.abspath(os.path.join(args.resultspath, args.parametersfile))

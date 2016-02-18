@@ -164,7 +164,7 @@ if __name__ == "__main__":
     resultspath = os.path.abspath(args.resultspath)
 
     if not os.path.exists(resultspath):
-        raise IOError("The results path does not exist: " + args.resultspath)
+        raise IOError("The results path does not exist: {}".format(args.resultspath))
 
     datafile = os.path.abspath(os.path.join(args.resultspath, args.datafile))
 
@@ -179,7 +179,7 @@ if __name__ == "__main__":
 
     # Iterate over all blocks
     for blockid in blockids:
-        print("Plotting wavepacket parameters in data block '%s'" % blockid)
+        print("Plotting wavepacket parameters in data block '{}'".format(blockid))
 
         # NOTE: Add new algorithms here
 
@@ -188,6 +188,6 @@ if __name__ == "__main__":
         elif iom.has_inhomogwavepacket(blockid=blockid):
             plot_parameters(read_data_inhomogeneous(iom, blockid=blockid), index=blockid, path=resultspath)
         else:
-            print("Warning: Not plotting wavepacket parameters in block '%s'" % blockid)
+            print("Warning: Not plotting wavepacket parameters in block '{}'".format(blockid))
 
     iom.finalize()
