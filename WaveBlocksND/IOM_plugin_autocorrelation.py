@@ -31,7 +31,7 @@ def add_autocorrelation(self, parameters, timeslots=None, blockid=0):
         csTs = min(64, Ts)
 
     # Check that the "observables" group is present
-    grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
+    grp_ob = self._srf[self._prefixb + str(blockid)].require_group("observables")
     # Create the dataset with appropriate parameters
     grp_ac = grp_ob.create_group("autocorrelation")
     daset_tg = grp_ac.create_dataset("timegrid", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
@@ -45,10 +45,10 @@ def delete_autocorrelation(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/observables/autocorrelation"]
+        del self._srf[self._prefixb + str(blockid) + "/observables/autocorrelation"]
         # Check if there are other children, if not remove the whole node.
-        if len(self._srf[self._prefixb+str(blockid)+"/observables"].keys()) == 0:
-            del self._srf[self._prefixb+str(blockid)+"/observables"]
+        if len(self._srf[self._prefixb + str(blockid) + "/observables"].keys()) == 0:
+            del self._srf[self._prefixb + str(blockid) + "/observables"]
     except KeyError:
         pass
 
@@ -58,8 +58,8 @@ def has_autocorrelation(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return ("observables" in self._srf[self._prefixb+str(blockid)].keys() and
-            "autocorrelation" in self._srf[self._prefixb+str(blockid)]["observables"].keys())
+    return ("observables" in self._srf[self._prefixb + str(blockid)].keys() and
+            "autocorrelation" in self._srf[self._prefixb + str(blockid)]["observables"].keys())
 
 
 def save_autocorrelation(self, autocorrelations, timestep=None, blockid=0):
@@ -69,8 +69,8 @@ def save_autocorrelation(self, autocorrelations, timestep=None, blockid=0):
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/autocorrelation/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/observables/autocorrelation/autocorrelation"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/autocorrelation/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/observables/autocorrelation/autocorrelation"
     timeslot = self._srf[pathtg].attrs["pointer"]
 
     # TODO: refactor, remove np.array
@@ -93,7 +93,7 @@ def load_autocorrelation_timegrid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/autocorrelation/timegrid"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/autocorrelation/timegrid"
     return self._srf[pathtg][:]
 
 
@@ -104,8 +104,8 @@ def load_autocorrelation(self, timestep=None, split=False, blockid=0):
     :param split: Split the data array into one array for each component.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/autocorrelation/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/observables/autocorrelation/autocorrelation"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/autocorrelation/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/observables/autocorrelation/autocorrelation"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)

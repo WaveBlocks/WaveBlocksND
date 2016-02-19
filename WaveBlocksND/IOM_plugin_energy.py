@@ -33,7 +33,7 @@ def add_energy(self, parameters, timeslots=None, blockid=0, key=("kin", "pot")):
         csTs = min(64, Ts)
 
     # Check that the "observables" group is present
-    grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
+    grp_ob = self._srf[self._prefixb + str(blockid)].require_group("observables")
     # Add a new group for energies
     grp_en = grp_ob.create_group("energies")
 
@@ -60,10 +60,10 @@ def delete_energy(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/observables/energies"]
+        del self._srf[self._prefixb + str(blockid) + "/observables/energies"]
         # Check if there are other children, if not remove the whole node.
-        if len(self._srf[self._prefixb+str(blockid)+"/observables"].keys()) == 0:
-            del self._srf[self._prefixb+str(blockid)+"/observables"]
+        if len(self._srf[self._prefixb + str(blockid) + "/observables"].keys()) == 0:
+            del self._srf[self._prefixb + str(blockid) + "/observables"]
     except KeyError:
         pass
 
@@ -77,17 +77,17 @@ def has_energy(self, blockid=0, key=("kin", "pot")):
                Default is ``("kin", "pot")``.
     """
     r = True
-    r &= ("observables" in self._srf[self._prefixb+str(blockid)].keys())
+    r &= ("observables" in self._srf[self._prefixb + str(blockid)].keys())
 
     if r is True:
-        r &= ("energies" in self._srf[self._prefixb+str(blockid)]["observables"].keys())
+        r &= ("energies" in self._srf[self._prefixb + str(blockid)]["observables"].keys())
 
     if r and "kin" in key:
-        r &= ("kinetic" in self._srf[self._prefixb+str(blockid)]["observables/energies"].keys())
+        r &= ("kinetic" in self._srf[self._prefixb + str(blockid)]["observables/energies"].keys())
     if r and "pot" in key:
-        r &= ("potential" in self._srf[self._prefixb+str(blockid)]["observables/energies"].keys())
+        r &= ("potential" in self._srf[self._prefixb + str(blockid)]["observables/energies"].keys())
     if r and "tot" in key:
-        r &= ("total" in self._srf[self._prefixb+str(blockid)]["observables/energies"].keys())
+        r &= ("total" in self._srf[self._prefixb + str(blockid)]["observables/energies"].keys())
 
     return r
 
@@ -106,14 +106,14 @@ def save_energy(self, energies, timestep=None, blockid=0, key=("kin", "pot")):
     """
     for item, datum in zip(key, energies):
         if item == "kin":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_kin"
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/kinetic"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_kin"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/kinetic"
         elif item == "pot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_pot"
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/potential"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_pot"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/potential"
         elif item == "tot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_tot"
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/total"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_tot"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/total"
 
         timeslot = self._srf[pathtg].attrs["pointer"]
 
@@ -143,13 +143,13 @@ def load_energy_timegrid(self, blockid=0, key=("kin", "pot")):
     tg = []
     for item in key:
         if item == "kin":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_kin"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_kin"
             tg.append(self._srf[pathtg][:])
         elif item == "pot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_pot"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_pot"
             tg.append(self._srf[pathtg][:])
         elif item == "tot":
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_tot"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_tot"
             tg.append(self._srf[pathtg][:])
 
     if len(tg) == 1:
@@ -172,14 +172,14 @@ def load_energy(self, timestep=None, split=False, blockid=0, key=("kin", "pot"))
 
     for item in key:
         if item == "kin":
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/kinetic"
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_ek"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/kinetic"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_ek"
         elif item == "pot":
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/potential"
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_ep"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/potential"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_ep"
         elif item == "tot":
-            pathd = "/"+self._prefixb+str(blockid)+"/observables/energies/total"
-            pathtg = "/"+self._prefixb+str(blockid)+"/observables/energies/timegrid_et"
+            pathd = "/" + self._prefixb + str(blockid) + "/observables/energies/total"
+            pathtg = "/" + self._prefixb + str(blockid) + "/observables/energies/timegrid_et"
 
         if timestep is not None:
             index = self.find_timestep_index(pathtg, timestep)

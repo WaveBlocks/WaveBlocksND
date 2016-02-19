@@ -31,7 +31,7 @@ def add_norm(self, parameters, timeslots=None, blockid=0):
         csTs = min(64, Ts)
 
     # Check that the "observables" group is present
-    grp_ob = self._srf[self._prefixb+str(blockid)].require_group("observables")
+    grp_ob = self._srf[self._prefixb + str(blockid)].require_group("observables")
     # Add a new group for norms
     grp_no = grp_ob.create_group("norm")
     # Create the dataset with appropriate parameters
@@ -46,10 +46,10 @@ def delete_norm(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/observables/norm"]
+        del self._srf[self._prefixb + str(blockid) + "/observables/norm"]
         # Check if there are other children, if not remove the whole node.
-        if len(self._srf[self._prefixb+str(blockid)+"/observables"].keys()) == 0:
-            del self._srf[self._prefixb+str(blockid)+"/observables"]
+        if len(self._srf[self._prefixb + str(blockid) + "/observables"].keys()) == 0:
+            del self._srf[self._prefixb + str(blockid) + "/observables"]
     except KeyError:
         pass
 
@@ -59,8 +59,8 @@ def has_norm(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return ("observables" in self._srf[self._prefixb+str(blockid)].keys() and
-            "norm" in self._srf[self._prefixb+str(blockid)]["observables"].keys())
+    return ("observables" in self._srf[self._prefixb + str(blockid)].keys() and
+            "norm" in self._srf[self._prefixb + str(blockid)]["observables"].keys())
 
 
 def save_norm(self, norm, timestep=None, blockid=0):
@@ -70,8 +70,8 @@ def save_norm(self, norm, timestep=None, blockid=0):
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/norm/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/observables/norm/norm"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/norm/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/observables/norm/norm"
     timeslot = self._srf[pathtg].attrs["pointer"]
 
     # TODO: refactor, remove np.array
@@ -94,7 +94,7 @@ def load_norm_timegrid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/norm/timegrid"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/norm/timegrid"
     return self._srf[pathtg][:]
 
 
@@ -105,8 +105,8 @@ def load_norm(self, timestep=None, split=False, blockid=0):
     :param split: Split the data array into one array for each component.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/observables/norm/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/observables/norm/norm"
+    pathtg = "/" + self._prefixb + str(blockid) + "/observables/norm/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/observables/norm/norm"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)

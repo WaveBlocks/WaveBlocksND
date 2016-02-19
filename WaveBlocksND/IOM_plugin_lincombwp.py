@@ -8,7 +8,6 @@ linear combinations of general wavepackets.
 @license: Modified BSD License
 """
 
-import pickle
 import numpy as np
 
 
@@ -45,7 +44,7 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None, blockid=0)
         csJs = min(32, Js)
 
     # The overall group containing all lincombwp data
-    grp_lc = self._srf[self._prefixb+str(blockid)].require_group("lincombwp")
+    grp_lc = self._srf[self._prefixb + str(blockid)].require_group("lincombwp")
 
     # Create the dataset with appropriate parameters
     daset_tg_c = grp_lc.create_dataset("timegrid_coefficients", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,), fillvalue=-1)
@@ -56,7 +55,7 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None, blockid=0)
     # Packet IDs
     daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str, 32)), chunks=(1, csJs), maxshape=(Ts, Js))
 
-    gid = self.create_group(groupid="wavepacketsLCblock"+str(blockid))
+    gid = self.create_group(groupid="wavepacketsLCblock" + str(blockid))
     daset_refs.attrs["packet_gid"] = gid
 
     # Attach pointer to timegrid
@@ -70,7 +69,7 @@ def delete_lincombwp(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/lincombwp"]
+        del self._srf[self._prefixb + str(blockid) + "/lincombwp"]
     except KeyError:
         pass
 
@@ -80,7 +79,7 @@ def has_lincombwp(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "lincombwp" in self._srf[self._prefixb+str(blockid)].keys()
+    return "lincombwp" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_lincombwp_description(self, descr, blockid=0):
@@ -89,12 +88,10 @@ def save_lincombwp_description(self, descr, blockid=0):
     :param descr: The description.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp"
     # Save the description
     for key, value in descr.items():
-        # Store all the values as pickled strings because hdf can
-        # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
+        self._srf[pathd].attrs[key] = self._save_attr_value(value)
 
 
 def save_lincombwp_coefficients(self, coefficients, timestep=None, blockid=0):
@@ -105,9 +102,9 @@ def save_lincombwp_coefficients(self, coefficients, timestep=None, blockid=0):
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombwp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/coefficients"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombwp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp/coefficients"
 
     timeslot = self._srf[pathtg].attrs["pointer"]
 
@@ -136,8 +133,8 @@ def save_lincombwp_wavepackets(self, packetlist, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_packets"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/packet_refs"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_packets"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp/packet_refs"
     gid = self._srf[pathd].attrs["packet_gid"]
 
     timeslot = self._srf[pathtg].attrs["pointer"]
@@ -175,7 +172,7 @@ def load_lincombwp_description(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp"
 
     # Load and return all descriptions available
     descr = {}
@@ -195,10 +192,10 @@ def load_lincombwp_timegrid(self, blockid=0, key=("coeffs", "packets")):
     tg = []
     for item in key:
         if item == "coeffs":
-            pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_coefficients"
+            pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_coefficients"
             tg.append(self._srf[pathtg][:])
         elif item == "packets":
-            pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_packets"
+            pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_packets"
             tg.append(self._srf[pathtg][:])
 
     if len(tg) == 1:
@@ -213,8 +210,8 @@ def load_lincombwp_size(self, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombwp/lincomb_size"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombwp/lincomb_size"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -230,9 +227,9 @@ def load_lincombwp_coefficients(self, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombwp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/coefficients"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombwp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp/coefficients"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -253,9 +250,9 @@ def load_lincombwp_wavepackets(self, timestep, packetindex=None, blockid=0):
                         then load all packets for the given timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_packets"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombwp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/packet_refs"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_packets"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombwp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp/packet_refs"
 
     index = self.find_timestep_index(pathtg, timestep)
     J = self._srf[pathlcs][index]
@@ -309,8 +306,8 @@ def load_lincombwp_wavepacket_refs(self, timestep=None, blockid=0):
     :param blockid: The ID of the data block to operate on.
     :return: A :py:class:`ndarray` of strings.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombwp/timegrid_packets"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombwp/packet_refs"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombwp/timegrid_packets"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombwp/packet_refs"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)

@@ -8,7 +8,6 @@ homogeneous Hagedorn wavepacket data.
 @license: Modified BSD License
 """
 
-import pickle
 import numpy as np
 
 
@@ -35,7 +34,7 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q", "p", "
         Ts = timeslots
 
     # The overall group containing all wavepacket data
-    grp_wp = self._srf[self._prefixb+str(blockid)].require_group("wavepacket")
+    grp_wp = self._srf[self._prefixb + str(blockid)].require_group("wavepacket")
     # The group for storing the basis shapes
     grp_wp.create_group("basisshapes")
     # The group for storing the parameter set Pi
@@ -61,7 +60,7 @@ def add_wavepacket(self, parameters, timeslots=None, blockid=0, key=("q", "p", "
         grp_pi.create_dataset("adQ", (T, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, 1, 1))
     # Coefficients
     for i in range(N):
-        grp_ci.create_dataset("c_"+str(i), (T, 1), dtype=np.complexfloating, chunks=(1, 8), maxshape=(Ts, None))
+        grp_ci.create_dataset("c_" + str(i), (T, 1), dtype=np.complexfloating, chunks=(1, 8), maxshape=(Ts, None))
 
     # Attach pointer to data instead timegrid
     grp_pi.attrs["pointer"] = 0
@@ -74,7 +73,7 @@ def delete_wavepacket(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/wavepacket"]
+        del self._srf[self._prefixb + str(blockid) + "/wavepacket"]
     except KeyError:
         pass
 
@@ -84,7 +83,7 @@ def has_wavepacket(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "wavepacket" in self._srf[self._prefixb+str(blockid)].keys()
+    return "wavepacket" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_wavepacket_description(self, descr, blockid=0):
@@ -93,12 +92,10 @@ def save_wavepacket_description(self, descr, blockid=0):
     :param descr: The description.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket"
     # Save the description
     for key, value in descr.items():
-        # Store all the values as pickled strings because hdf can
-        # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
+        self._srf[pathd].attrs[key] = self._save_attr_value(value)
 
 
 def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0, key=("q", "p", "Q", "P", "S")):
@@ -112,8 +109,8 @@ def save_wavepacket_parameters(self, parameters, timestep=None, blockid=0, key=(
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/Pi/"
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # Write the data
@@ -141,10 +138,10 @@ def save_wavepacket_coefficients(self, coefficients, basisshapes, timestep=None,
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket/timegrid"
+    pathbs = "/" + self._prefixb + str(blockid) + "/wavepacket/basis_shape_hash"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/wavepacket/basis_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/coefficients/"
 
     timeslot = self._srf[pathd].attrs["pointer"]
 
@@ -152,13 +149,13 @@ def save_wavepacket_coefficients(self, coefficients, basisshapes, timestep=None,
     self.must_resize(pathbs, timeslot)
     self.must_resize(pathbsi, timeslot)
     for index, (bs, ci) in enumerate(zip(basisshapes, coefficients)):
-        self.must_resize(pathd+"c_"+str(index), timeslot)
+        self.must_resize(pathd + "c_" + str(index), timeslot)
         size = bs.get_basis_size()
         # Do we have to resize due to changed number of coefficients
-        self.must_resize(pathd+"c_"+str(index), size - 1, axis=1)
+        self.must_resize(pathd + "c_" + str(index), size - 1, axis=1)
         self._srf[pathbsi][timeslot, index] = size
         self._srf[pathbs][timeslot, index] = hash(bs)
-        self._srf[pathd+"c_"+str(index)][timeslot, :size] = np.squeeze(ci)
+        self._srf[pathd + "c_" + str(index)][timeslot, :size] = np.squeeze(ci)
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -174,23 +171,21 @@ def save_wavepacket_basisshapes(self, basisshape, blockid=0):
     :param basisshape: The basis shape of the Hagedorn wavepacket.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/basisshapes/"
 
     ha = hash(basisshape)
-    name = "basis_shape_"+str(ha)
+    name = "basis_shape_" + str(ha)
 
     # Chech if we already stored this basis shape
     if name not in self._srf[pathd].keys():
         # Create new data set
-        daset = self._srf[pathd].create_dataset("basis_shape_"+str(ha), (1,), dtype=np.integer)
+        daset = self._srf[pathd].create_dataset(name, (1,), dtype=np.integer)
         daset[0] = ha
 
         # Save the description
         descr = basisshape.get_description()
         for key, value in descr.items():
-            # Store all the values as pickled strings because hdf can
-            # only store strings or ndarrays as attributes.
-            daset.attrs[key] = np.void(pickle.dumps(value))
+            daset.attrs[key] = self._save_attr_value(value)
 
         # TODO: Consider to save the mapping. Do we want or need this?
 
@@ -200,7 +195,7 @@ def load_wavepacket_description(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket"
 
     # Load and return all descriptions available
     descr = {}
@@ -214,7 +209,7 @@ def load_wavepacket_timegrid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket/timegrid"
     return self._srf[pathtg][:]
 
 
@@ -227,8 +222,8 @@ def load_wavepacket_parameters(self, timestep=None, blockid=0, key=("q", "p", "Q
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/Pi/"
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         params = tuple([self._srf[pathd + k][index, :, :] for k in key])
@@ -246,10 +241,10 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
     :param component: Load only data from this component.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket/timegrid"
+    pathbs = "/" + self._prefixb + str(blockid) + "/wavepacket/basis_shape_hash"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/wavepacket/basis_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/coefficients/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -278,10 +273,10 @@ def load_wavepacket_coefficients(self, timestep=None, get_hashes=False, componen
     if timestep is not None:
         for i in components:
             size = self._srf[pathbsi][index, i]
-            data.append(self._srf[pathd+"c_"+str(i)][index, :size])
+            data.append(self._srf[pathd + "c_" + str(i)][index, :size])
     else:
         for i in components:
-            data.append(self._srf[pathd+"c_"+str(i)][index, ...])
+            data.append(self._srf[pathd + "c_" + str(i)][index, ...])
 
     # TODO: Consider unpacking data for single components
 
@@ -297,7 +292,7 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
     :param the_hash: The hash of the basis shape whose description we want to load.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket/basisshapes/"
 
     if the_hash is None:
         # Load and return all descriptions available
@@ -314,7 +309,7 @@ def load_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         # Be sure the hash is a plain number and not something
         # else like a numpy array with one element.
         the_hash = int(the_hash)
-        name = "basis_shape_"+str(the_hash)
+        name = "basis_shape_" + str(the_hash)
         # Check if we already stored this basis shape
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?

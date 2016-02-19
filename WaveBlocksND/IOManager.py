@@ -10,6 +10,8 @@ This file contains code for serializing simulation data.
 import os
 import types
 import pickle
+import json
+import six
 import h5py as hdf
 import numpy as np
 
@@ -329,12 +331,22 @@ class IOManager(object):
         return np.split(data, parts, axis=axis)
 
 
+    def _save_attr_value(self, value):
+        # TODO: Fix for old python 2.x
+        #       Remove after 3.x transition
+        # Store all the values as pickled strings because hdf can
+        # only store strings or ndarrays as attributes.
+        bpv = pickle.dumps(value)
+        if not isinstance(bpv, bytes):
+            bpv = six.b(bpv)
+        npvbpv = np.void(bpv)
+        return npvbpv
+
+
     def _load_attr_value(self, value):
         # TODO: Fix for old python 2.x
         #       Remove after 3.x transition
-        # TODO: Maybe rather use base64?
-        try:
-            upv = pickle.loads(value.tostring())
-        except:
-            upv = pickle.loads(value)
-        return upv
+        npvbpv = value
+        bpv = value.tobytes(npvbpv)
+        pv = pickle.loads(bpv)
+        return pv

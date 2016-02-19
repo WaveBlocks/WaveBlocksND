@@ -8,7 +8,6 @@ homogeneous Hagedorn wavepacket data.
 @license: Modified BSD License
 """
 
-import pickle
 import numpy as np
 
 
@@ -34,7 +33,7 @@ def add_inhomogwavepacket(self, parameters, timeslots=None, blockid=0, key=("q",
         Ts = timeslots
 
     # The overall group containing all wavepacket data
-    grp_wp = self._srf[self._prefixb+str(blockid)].require_group("wavepacket_inhomog")
+    grp_wp = self._srf[self._prefixb + str(blockid)].require_group("wavepacket_inhomog")
     # The group for storing the basis shapes
     grp_wp.create_group("basisshapes")
     # The group for storing the parameter set Pi
@@ -49,20 +48,20 @@ def add_inhomogwavepacket(self, parameters, timeslots=None, blockid=0, key=("q",
     # Parameters
     for i in range(N):
         if "q" in key and "q" not in grp_pi.keys():
-            grp_pi.create_dataset("q_"+str(i), (T, D, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, 1))
+            grp_pi.create_dataset("q_" + str(i), (T, D, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, 1))
         if "p" in key and "p" not in grp_pi.keys():
-            grp_pi.create_dataset("p_"+str(i), (T, D, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, 1))
+            grp_pi.create_dataset("p_" + str(i), (T, D, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, 1))
         if "Q" in key and "Q" not in grp_pi.keys():
-            grp_pi.create_dataset("Q_"+str(i), (T, D, D), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, D))
+            grp_pi.create_dataset("Q_" + str(i), (T, D, D), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, D))
         if "P" in key and "P" not in grp_pi.keys():
-            grp_pi.create_dataset("P_"+str(i), (T, D, D), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, D))
+            grp_pi.create_dataset("P_" + str(i), (T, D, D), dtype=np.complexfloating, chunks=True, maxshape=(Ts, D, D))
         if "S" in key and "S" not in grp_pi.keys():
-            grp_pi.create_dataset("S_"+str(i), (T, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, 1, 1))
+            grp_pi.create_dataset("S_" + str(i), (T, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, 1, 1))
         if "adQ" in key and "adQ" not in grp_pi.keys():
-            grp_pi.create_dataset("adQ_"+str(i), (T, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, 1, 1))
+            grp_pi.create_dataset("adQ_" + str(i), (T, 1, 1), dtype=np.complexfloating, chunks=True, maxshape=(Ts, 1, 1))
     # Coefficients
     for i in range(N):
-        grp_ci.create_dataset("c_"+str(i), (T, 1), dtype=np.complexfloating, chunks=(1, 8), maxshape=(Ts, None))
+        grp_ci.create_dataset("c_" + str(i), (T, 1), dtype=np.complexfloating, chunks=(1, 8), maxshape=(Ts, None))
 
     # Attach pointer to data instead timegrid
     grp_pi.attrs["pointer"] = 0
@@ -73,7 +72,7 @@ def delete_inhomogwavepacket(self, blockid=0):
     r"""Remove the stored wavepackets.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/wavepacket_inhomog"]
+        del self._srf[self._prefixb + str(blockid) + "/wavepacket_inhomog"]
     except KeyError:
         pass
 
@@ -81,16 +80,14 @@ def delete_inhomogwavepacket(self, blockid=0):
 def has_inhomogwavepacket(self, blockid=0):
     r"""Ask if the specified data block has the desired data tensor.
     """
-    return "wavepacket_inhomog" in self._srf[self._prefixb+str(blockid)].keys()
+    return "wavepacket_inhomog" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_inhomogwavepacket_description(self, descr, blockid=0):
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog"
     # Save the description
     for key, value in descr.items():
-        # Store all the values as pickled strings because hdf can
-        # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
+        self._srf[pathd].attrs[key] = self._save_attr_value(value)
 
 
 def save_inhomogwavepacket_parameters(self, parameters, timestep=None, blockid=0, key=("q", "p", "Q", "P", "S")):
@@ -102,15 +99,15 @@ def save_inhomogwavepacket_parameters(self, parameters, timestep=None, blockid=0
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/Pi/"
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # Write the data
     for i, piset in enumerate(parameters):
         for k, item in zip(key, piset):
-            self.must_resize(pathd+k+"_"+str(i), timeslot)
-            self._srf[pathd+k+"_"+str(i)][timeslot, :, :] = item
+            self.must_resize(pathd + k + "_" + str(i), timeslot)
+            self._srf[pathd + k + "_" + str(i)][timeslot, :, :] = item
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -130,10 +127,10 @@ def save_inhomogwavepacket_coefficients(self, coefficients, basisshapes, timeste
     :param basisshapes: The corresponding basis shapes of the Hagedorn wavepacket.
     :type basisshapes: A ``list`` with :math:`N` :py:class:`BasisShape` subclass instances.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/timegrid"
+    pathbs = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basis_shape_hash"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basis_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/coefficients/"
 
     timeslot = self._srf[pathd].attrs["pointer"]
 
@@ -141,14 +138,14 @@ def save_inhomogwavepacket_coefficients(self, coefficients, basisshapes, timeste
     self.must_resize(pathbs, timeslot)
     self.must_resize(pathbsi, timeslot)
     for index, (bs, ci) in enumerate(zip(basisshapes, coefficients)):
-        self.must_resize(pathd+"c_"+str(index), timeslot)
+        self.must_resize(pathd + "c_" + str(index), timeslot)
         size = bs.get_basis_size()
         # Do we have to resize due to changed number of coefficients
-        if self._srf[pathd+"c_"+str(index)].shape[1] < size:
-            self._srf[pathd+"c_"+str(index)].resize(size, axis=1)
+        if self._srf[pathd + "c_" + str(index)].shape[1] < size:
+            self._srf[pathd + "c_" + str(index)].resize(size, axis=1)
         self._srf[pathbsi][timeslot, index] = size
         self._srf[pathbs][timeslot, index] = hash(bs)
-        self._srf[pathd+"c_"+str(index)][timeslot, :size] = np.squeeze(ci)
+        self._srf[pathd + "c_" + str(index)][timeslot, :size] = np.squeeze(ci)
 
     # Write the timestep to which the stored values belong into the timegrid
     self.must_resize(pathtg, timeslot)
@@ -163,7 +160,7 @@ def save_inhomogwavepacket_basisshapes(self, basisshape, blockid=0):
 
     :param coefficients: The basis shapes of the Hagedorn wavepacket.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basisshapes/"
 
     ha = hash(basisshape)
     name = "basis_shape_" + str(ha)
@@ -177,15 +174,13 @@ def save_inhomogwavepacket_basisshapes(self, basisshape, blockid=0):
         # Save the description
         descr = basisshape.get_description()
         for key, value in descr.items():
-            # Store all the values as pickled strings because hdf can
-            # only store strings or ndarrays as attributes.
-            daset.attrs[key] = np.void(pickle.dumps(value))
+            daset.attrs[key] = self._save_attr_value(value)
 
         # TODO: Consider to save the mapping. Do we want or need this?
 
 
 def load_inhomogwavepacket_description(self, blockid=0):
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog"
 
     # Load and return all descriptions available
     descr = {}
@@ -195,7 +190,7 @@ def load_inhomogwavepacket_description(self, blockid=0):
 
 
 def load_inhomogwavepacket_timegrid(self, blockid=0):
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/timegrid"
     return self._srf[pathtg][:]
 
 
@@ -208,8 +203,8 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/Pi/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -217,17 +212,17 @@ def load_inhomogwavepacket_parameters(self, timestep=None, component=None, block
     data = []
     for i in range(len(self._srf[pathd].keys()) // int(self._srf[pathd].attrs["number_parameters"])):
         if timestep is not None:
-            data.append(tuple([self._srf[pathd+k+"_"+str(i)][index, :, :] for k in key]))
+            data.append(tuple([self._srf[pathd + k + "_" + str(i)][index, :, :] for k in key]))
         else:
-            data.append(tuple([self._srf[pathd+k+"_"+str(i)][..., :, :] for k in key]))
+            data.append(tuple([self._srf[pathd + k + "_" + str(i)][..., :, :] for k in key]))
     return tuple(data)
 
 
 def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, component=None, blockid=0):
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/timegrid"
-    pathbs = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_shape_hash"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basis_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/timegrid"
+    pathbs = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basis_shape_hash"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basis_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/coefficients/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -244,9 +239,9 @@ def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, c
     for i in range(len(list(self._srf[pathd].keys()))):
         if timestep is not None:
             size = self._srf[pathbsi][index, i]
-            data.append(self._srf[pathd+"c_"+str(i)][index, :size])
+            data.append(self._srf[pathd + "c_" + str(i)][index, :size])
         else:
-            data.append(self._srf[pathd+"c_"+str(i)][index, ...])
+            data.append(self._srf[pathd + "c_" + str(i)][index, ...])
 
     if get_hashes is True:
         return (hashes, data)
@@ -257,7 +252,7 @@ def load_inhomogwavepacket_coefficients(self, timestep=None, get_hashes=False, c
 def load_inhomogwavepacket_basisshapes(self, the_hash=None, blockid=0):
     r"""Load the basis shapes by hash.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/wavepacket_inhomog/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavepacket_inhomog/basisshapes/"
 
     if the_hash is None:
         # Load and return all descriptions available

@@ -23,7 +23,7 @@ def add_grid(self, parameters, blockid=0):
     # TODO: Remove quick hack:
     overall_nr_nodes = np.prod(parameters["number_nodes"])
     # Store gird as flattened array of nodes
-    self._srf[self._prefixb+str(blockid)].create_dataset("grid", [parameters["dimension"], overall_nr_nodes], np.floating)
+    self._srf[self._prefixb + str(blockid)].create_dataset("grid", [parameters["dimension"], overall_nr_nodes], np.floating)
 
 
 def delete_grid(self, blockid=0):
@@ -32,7 +32,7 @@ def delete_grid(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/grid"]
+        del self._srf[self._prefixb + str(blockid) + "/grid"]
     except KeyError:
         pass
 
@@ -42,7 +42,7 @@ def has_grid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "grid" in self._srf[self._prefixb+str(blockid)].keys()
+    return "grid" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_grid(self, gridnodes, blockid=0):
@@ -51,7 +51,7 @@ def save_grid(self, gridnodes, blockid=0):
     :param gridnodes: The grid nodes to store.
     :param blockid: The ID of the data block to operate on.
     """
-    path = "/"+self._prefixb+str(blockid)+"/grid"
+    path = "/" + self._prefixb + str(blockid) + "/grid"
     self._srf[path][...] = np.real(gridnodes)
 
 
@@ -60,5 +60,5 @@ def load_grid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    path = "/"+self._prefixb+str(blockid)+"/grid"
+    path = "/" + self._prefixb + str(blockid) + "/grid"
     return np.squeeze(self._srf[path])
