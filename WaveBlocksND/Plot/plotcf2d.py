@@ -44,7 +44,7 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
 
     kw = {'extent': extent,
           'origin': 'lower',
-          'interpolation': 'nearest',
+          'interpolation': 'bilinear',
           'aspect': 'equal'}
     kw.update(kwargs)
 
@@ -60,4 +60,4 @@ def plotcf2d(x, y, z, darken=None, axes=None, limits=None, **kwargs):
     I, J = meshgrid(i, j)
 
     # Color code and plot the data
-    axes.imshow(color_map(z[I, J], darken=darken), **kw)
+    axes.imshow(color_map(z[J, I], darken=darken), **kw)
