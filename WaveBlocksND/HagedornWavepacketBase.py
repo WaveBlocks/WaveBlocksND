@@ -3,13 +3,13 @@
 This file contains the basic interface for general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, vsplit, vstack, zeros
-from scipy import conjugate, exp, sqrt
-from scipy.linalg import det, inv, norm
+from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, vsplit, vstack, zeros, conjugate, transpose
+from scipy import exp, sqrt
+from scipy.linalg import det, inv, norm, eig, polar
 
 from WaveBlocksND.Wavepacket import Wavepacket
 from WaveBlocksND.AbstractGrid import AbstractGrid
@@ -290,7 +290,7 @@ class HagedornWavepacketBase(Wavepacket):
         return prefactor * exp(exponent)
 
 
-    def evaluate_basis_at(self, grid, component, prefactor=False):
+    def evaluate_basis_at(self, grid, component, prefactor=False, new=False):
         r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -321,6 +321,13 @@ class HagedornWavepacketBase(Wavepacket):
         Qinv = inv(Q)
         Qbar = conjugate(Q)
         QQ = dot(Qinv, Qbar)
+
+        if new:
+            PA, UA = polar(Q, side='left')
+            _, EV = eig(PA)
+            AL = dot(conjugate(transpose(EV)), UA)
+            Qinv = dot(AL, Qinv)
+            QQ = dot(AL, dot(QQ, conjugate(transpose(AL))))
 
         # Compute the ground state phi_0 via direct evaluation
         mu0 = bas[tuple(D * [0])]
