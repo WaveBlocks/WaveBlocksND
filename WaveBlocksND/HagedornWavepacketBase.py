@@ -321,7 +321,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
-        QQ = dot(Qinv, Qbar)
+        QQ = transpose(dot(Qinv, Qbar))
 
         if new:
             UA, PA = polar(Q, side='left')
@@ -399,7 +399,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
-        QQ = dot(Qinv, Qbar)
+        QQ = transpose(dot(Qinv, Qbar))
 
         # The basis shape
         bas = self._basis_shapes[component]
