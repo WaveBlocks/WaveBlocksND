@@ -8,7 +8,6 @@ linear combinations of Hagedorn wavepackets.
 @license: Modified BSD License
 """
 
-import pickle
 import numpy as np
 
 
@@ -62,7 +61,7 @@ def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepack
         csKs = min(8, Ks)
 
     # The overall group containing all lincombwp data
-    grp_lc = self._srf[self._prefixb+str(blockid)].require_group("lincombhawp")
+    grp_lc = self._srf[self._prefixb + str(blockid)].require_group("lincombhawp")
 
     # The group for storing the wavepacket basis shapes
     grp_lc.create_group("basisshapes")
@@ -94,7 +93,7 @@ def add_lincombhawp(self, parameters, timeslots=None, lincombsize=None, wavepack
         grp_wppi.create_dataset("S", (T, J, 1), dtype=np.complexfloating, chunks=(1, csJs, 1), maxshape=(Ts, Js, 1))
     # Wavepacket coefficients
     for i in range(N):
-        grp_wpci.create_dataset("c_"+str(i), (T, J, K), dtype=np.complexfloating, chunks=(1, csJs, csKs), maxshape=(Ts, Js, Ks))
+        grp_wpci.create_dataset("c_" + str(i), (T, J, K), dtype=np.complexfloating, chunks=(1, csJs, csKs), maxshape=(Ts, Js, Ks))
 
     # Attach pointer to timegrid
     daset_tg_lc.attrs["pointer"] = 0
@@ -108,7 +107,7 @@ def delete_lincombhawp(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/lincombhawp"]
+        del self._srf[self._prefixb + str(blockid) + "/lincombhawp"]
     except KeyError:
         pass
 
@@ -118,7 +117,7 @@ def has_lincombhawp(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "lincombhawp" in self._srf[self._prefixb+str(blockid)].keys()
+    return "lincombhawp" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_lincombhawp_description(self, descr, blockid=0):
@@ -127,12 +126,10 @@ def save_lincombhawp_description(self, descr, blockid=0):
     :param descr: The description.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp"
     # Save the description
     for key, value in descr.items():
-        # Store all the values as pickled strings because hdf can
-        # only store strings or ndarrays as attributes.
-        self._srf[pathd].attrs[key] = np.void(pickle.dumps(value))
+        self._srf[pathd].attrs[key] = self._save_attr_value(value)
 
 
 def save_lincombhawp_coefficients(self, coefficients, timestep, blockid=0):
@@ -143,9 +140,9 @@ def save_lincombhawp_coefficients(self, coefficients, timestep, blockid=0):
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_lc_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/lc_coefficients"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_lc_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/lc_coefficients"
 
     timeslot = self._srf[pathtg].attrs["pointer"]
 
@@ -177,9 +174,9 @@ def save_lincombhawp_wavepacket_parameters(self, parameters, timestep, blockid=0
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_wp_parameters"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_wp_parameters"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/Pi/"
     timeslot = self._srf[pathd].attrs["pointer"]
 
     # TODO: This an assumption based on data layout and stable
@@ -215,11 +212,11 @@ def save_lincombhawp_wavepacket_coefficients(self, coefficients, basisshapes, ti
     :param timestep: The timestep at which we save the data.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_wp_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/lincombhawp/basis_sizes"
-    pathbsh = "/"+self._prefixb+str(blockid)+"/lincombhawp/basis_shapes_hashes"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/wp_coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_wp_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/lincombhawp/basis_sizes"
+    pathbsh = "/" + self._prefixb + str(blockid) + "/lincombhawp/basis_shapes_hashes"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/wp_coefficients/"
 
     timeslot = self._srf[pathd].attrs["pointer"]
 
@@ -246,7 +243,7 @@ def save_lincombhawp_wavepacket_coefficients(self, coefficients, basisshapes, ti
     j, k = coefficients.shape
     # TODO: Allow wavepackets with multiple components
     index = 0
-    pathc = pathd+"c_"+str(index)
+    pathc = pathd + "c_" + str(index)
     # Do we have to resize due to changed number of packets or coefficients
     self.must_resize(pathc, timeslot)
     self.must_resize(pathc, j - 1, axis=1)
@@ -268,25 +265,23 @@ def save_lincombhawp_wavepacket_basisshapes(self, basisshapes, blockid=0):
     :param basisshapes: A list of the basis shapes of the linear combination.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/basisshapes/"
 
     for basisshape in basisshapes:
         ha = hash(basisshape)
-        name = "basis_shape_"+str(ha)
+        name = "basis_shape_" + str(ha)
 
         # Chech if we already stored this basis shape
         if name not in self._srf[pathd].keys():
             # TODO: Consider storing all hashes in one big dataset
             # Create new data set
-            daset = self._srf[pathd].create_dataset("basis_shape_"+str(ha), (1,), dtype=np.integer)
+            daset = self._srf[pathd].create_dataset("basis_shape_" + str(ha), (1,), dtype=np.integer)
             daset[0] = ha
 
             # Save the description
             descr = basisshape.get_description()
             for key, value in descr.items():
-                # Store all the values as pickled strings because hdf can
-                # only store strings or ndarrays as attributes.
-                daset.attrs[key] = np.void(pickle.dumps(value))
+                daset.attrs[key] = self._save_attr_value(value)
 
 
 def load_lincombhawp_description(self, blockid=0):
@@ -294,7 +289,7 @@ def load_lincombhawp_description(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp"
 
     # Load and return all descriptions available
     descr = {}
@@ -314,10 +309,10 @@ def load_lincombhawp_timegrid(self, blockid=0, key=("coeffs", "packets")):
     tg = []
     for item in key:
         if item == "coeffs":
-            pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_lc_coefficients"
+            pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_lc_coefficients"
             tg.append(self._srf[pathtg][:])
         elif item == "packets":
-            pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_lc_packets"
+            pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_lc_packets"
             tg.append(self._srf[pathtg][:])
 
     if len(tg) == 1:
@@ -332,8 +327,8 @@ def load_lincombhawp_size(self, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_lc_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_lc_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -349,9 +344,9 @@ def load_lincombhawp_coefficients(self, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_lc_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/lc_coefficients"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_lc_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/lc_coefficients"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -371,9 +366,9 @@ def load_lincombhawp_wavepacket_parameters(self, timestep=None, blockid=0, key=(
     :type key: Tuple of valid identifier strings that are ``q``, ``p``, ``Q``, ``P``, ``S`` and ``adQ``.
                Default is ``("q", "p", "Q", "P", "S")``.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_wp_parameters"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/Pi/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_wp_parameters"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/Pi/"
 
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
@@ -392,11 +387,11 @@ def load_lincombhawp_wavepacket_coefficients(self, timestep=None, get_hashes=Fal
     :param get_hashes: Return the corresponding basis shape hashes.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/lincombhawp/timegrid_wp_coefficients"
-    pathlcs = "/"+self._prefixb+str(blockid)+"/lincombhawp/lincomb_size"
-    pathbsh = "/"+self._prefixb+str(blockid)+"/lincombhawp/basis_shapes_hashes"
-    pathbsi = "/"+self._prefixb+str(blockid)+"/lincombhawp/basis_sizes"
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/wp_coefficients/"
+    pathtg = "/" + self._prefixb + str(blockid) + "/lincombhawp/timegrid_wp_coefficients"
+    pathlcs = "/" + self._prefixb + str(blockid) + "/lincombhawp/lincomb_size"
+    pathbsh = "/" + self._prefixb + str(blockid) + "/lincombhawp/basis_shapes_hashes"
+    pathbsi = "/" + self._prefixb + str(blockid) + "/lincombhawp/basis_sizes"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/wp_coefficients/"
 
     # TODO: Allow wavepackets with multiple components
     i = 0
@@ -415,7 +410,7 @@ def load_lincombhawp_wavepacket_coefficients(self, timestep=None, get_hashes=Fal
         hashes = self._srf[pathbsh][index, Js]
 
     # Load the coefficient data
-    data = self._srf[pathd+"c_"+str(i)][index, Js, Ks]
+    data = self._srf[pathd + "c_" + str(i)][index, Js, Ks]
 
     if get_hashes is True:
         return (hashes, data)
@@ -429,7 +424,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
     :param the_hash: The hash of the basis shape whose description we want to load.
     :param blockid: The ID of the data block to operate on.
     """
-    pathd = "/"+self._prefixb+str(blockid)+"/lincombhawp/basisshapes/"
+    pathd = "/" + self._prefixb + str(blockid) + "/lincombhawp/basisshapes/"
 
     if the_hash is None:
         # Load and return all descriptions available
@@ -444,7 +439,7 @@ def load_lincombhawp_wavepacket_basisshapes(self, the_hash=None, blockid=0):
         return descrs
     else:
         the_hash = int(the_hash)
-        name = "basis_shape_"+str(the_hash)
+        name = "basis_shape_" + str(the_hash)
         # Chech if we already stored this basis shape
         if name in self._srf[pathd].keys():
             # TODO: What data exactly do we want to return?

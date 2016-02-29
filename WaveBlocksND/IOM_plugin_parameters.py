@@ -7,9 +7,6 @@ IOM plugin providing functions for handling simulation parameter data.
 @license: Modified BSD License
 """
 
-import pickle
-import numpy
-
 from WaveBlocksND.ParameterProvider import ParameterProvider
 
 
@@ -21,7 +18,7 @@ def add_parameters(self, blockid="global"):
     # Store the simulation parameters
     # We are only interested in the attributes of this data set
     # as they are used to store the simulation parameters.
-    self._srf[self._prefixb+str(blockid)].create_dataset("simulation_parameters", (1, 1))
+    self._srf[self._prefixb + str(blockid)].create_dataset("simulation_parameters", (1, 1))
 
 
 def delete_parameters(self, blockid="global"):
@@ -30,7 +27,7 @@ def delete_parameters(self, blockid="global"):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/simulation_parameters"]
+        del self._srf[self._prefixb + str(blockid) + "/simulation_parameters"]
     except KeyError:
         pass
 
@@ -40,7 +37,7 @@ def has_parameters(self, blockid="global"):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "simulation_parameters" in self._srf[self._prefixb+str(blockid)].keys()
+    return "simulation_parameters" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_parameters(self, parameters, blockid="global"):
@@ -49,12 +46,10 @@ def save_parameters(self, parameters, blockid="global"):
     :param parameters: The simulation parameters to store.
     :param blockid: The ID of the data block to operate on.
     """
-    paset = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"]
+    paset = self._srf["/" + self._prefixb + str(blockid) + "/simulation_parameters"]
 
     for param, value in parameters:
-        # Store all the values as pickled strings because hdf can
-        # only store strings or ndarrays as attributes.
-        paset.attrs[param] = numpy.void(pickle.dumps(value))
+        paset.attrs[param] = self._save_attr_value(value)
 
 
 def load_parameters(self, blockid="global"):
@@ -62,7 +57,7 @@ def load_parameters(self, blockid="global"):
 
     :param blockid: The ID of the data block to operate on.
     """
-    p = self._srf["/"+self._prefixb+str(blockid)+"/simulation_parameters"].attrs
+    p = self._srf["/" + self._prefixb + str(blockid) + "/simulation_parameters"].attrs
     PP = ParameterProvider()
 
     for key, value in p.items():

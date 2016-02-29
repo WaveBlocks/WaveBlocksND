@@ -25,7 +25,7 @@ def add_wavefunction(self, parameters, flat=False, timeslots=None, blockid=0):
                       to get automatically growing datasets.
     :param blockid: The ID of the data block to operate on.
     """
-    grp_wf = self._srf[self._prefixb+str(blockid)].require_group("wavefunction")
+    grp_wf = self._srf[self._prefixb + str(blockid)].require_group("wavefunction")
 
     # TODO: Remove quick hack:
     if flat:
@@ -53,7 +53,7 @@ def delete_wavefunction(self, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     try:
-        del self._srf[self._prefixb+str(blockid)+"/wavefunction"]
+        del self._srf[self._prefixb + str(blockid) + "/wavefunction"]
     except KeyError:
         pass
 
@@ -63,7 +63,7 @@ def has_wavefunction(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "wavefunction" in self._srf[self._prefixb+str(blockid)].keys()
+    return "wavefunction" in self._srf[self._prefixb + str(blockid)].keys()
 
 
 def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
@@ -75,8 +75,8 @@ def save_wavefunction(self, wavefunctionvalues, timestep=None, blockid=0):
     :param blockid: The ID of the data block to operate on.
     """
     # TODO: take wavefunction or wavefunction.get_values() as input?
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavefunction/Psi"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavefunction/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavefunction/Psi"
     timeslot = self._srf[pathtg].attrs["pointer"]
 
     # Store the values given
@@ -98,7 +98,7 @@ def load_wavefunction_timegrid(self, blockid=0):
 
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavefunction/timegrid"
     return self._srf[pathtg][...]
 
 
@@ -108,8 +108,8 @@ def load_wavefunction(self, timestep=None, blockid=0):
     :param timestep: Load only the data of this timestep.
     :param blockid: The ID of the data block to operate on.
     """
-    pathtg = "/"+self._prefixb+str(blockid)+"/wavefunction/timegrid"
-    pathd = "/"+self._prefixb+str(blockid)+"/wavefunction/Psi"
+    pathtg = "/" + self._prefixb + str(blockid) + "/wavefunction/timegrid"
+    pathd = "/" + self._prefixb + str(blockid) + "/wavefunction/Psi"
     if timestep is not None:
         index = self.find_timestep_index(pathtg, timestep)
         return self._srf[pathd][index, ...]
