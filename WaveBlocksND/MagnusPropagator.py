@@ -162,6 +162,25 @@ class MagnusPropagator(Propagator, SplittingParameters):
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
         The semiclassical propagation scheme is used.
+
+        The Gauss-Legendre rule on the interval :math:`[-1,1]` has two nodes
+        :math:`n_1 = -\frac{1}{\sqrt{3}}` and
+        :math:`n_2 = \frac{1}{\sqrt{3}}`.
+        The integration time step is :math:`[0, 1] dt`, hence we rescale the nodes
+        onto the interval :math:`[0, 1]` to get
+        :math:`n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and
+        :math:`n_2^{\prime} = \frac{1}{2} + \frac{1}{2\sqrt{3}}`.
+        The two time point :math:`h_1` and :math:`h_2` are then given by
+        :math:`h_1 = n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and
+        :math:`h_2 = n_2^{\prime} - n_1^{\prime} = \frac{1}{\sqrt{3}}`.
+
+        More details can be found in [1]_ and [2]_.
+
+        .. [1] S. Blanes and P.C. Moan, "Fourth- and sixth-order commutator-free Magnus integrators for linear and non-linear dynamical systems",
+               Applied Numerical Mathematics, volume 56 number 12 (2006) 1519-1537.
+
+        .. [2] S. Blanes and F. Casas and J. Ros, "Improved high order integrators based on the Magnus expansion",
+               BIT, volume 40 (1999) 434-450.
         """
         # Cache some parameter values
         dt = self._dt

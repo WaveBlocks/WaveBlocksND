@@ -164,6 +164,10 @@ class McL42scPropagator(Propagator, PerturbedSplittingParameters):
         wavepacket at time :math:`t + \tau`. We perform exactly one timestep of size
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
+
+        More details can be found in [1]_.
+
+        .. [1] S. Blanes, R. Bourquin and V. Gradinaru, "Raising the Order of Convergence in the Semiclassical Splitting"
         """
         # Cache some parameter values
         dt = self._dt

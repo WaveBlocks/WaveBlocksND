@@ -120,6 +120,11 @@ class HagedornPropagatorInhomogeneous(Propagator):
         wavepacket at time :math:`t + \tau`. We perform exactly one timestep of size
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
+
+        More details can be found in [1]_.
+
+        .. [1] E. Faou, V. Gradinaru and C. Lubich, "Computing semiclassical quantum dynamics with Hagedorn wavepackets",
+               SIAM Journal on Scientific Computing, volume 31 number 4 (2009) 3027-3041.
         """
         # Cache some parameter values
         dt = self._dt
