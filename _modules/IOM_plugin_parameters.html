@@ -56,9 +56,6 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">pickle</span>
-<span class="kn">import</span> <span class="nn">numpy</span>
-
 <span class="kn">from</span> <span class="nn">WaveBlocksND.ParameterProvider</span> <span class="kn">import</span> <span class="n">ParameterProvider</span>
 
 
@@ -70,7 +67,7 @@
     <span class="c"># Store the simulation parameters</span>
     <span class="c"># We are only interested in the attributes of this data set</span>
     <span class="c"># as they are used to store the simulation parameters.</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;simulation_parameters&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;simulation_parameters&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
 </div>
 <div class="viewcode-block" id="delete_parameters"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_parameters.html#IOM_plugin_parameters.delete_parameters">[docs]</a><span class="k">def</span> <span class="nf">delete_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="s">&quot;global&quot;</span><span class="p">):</span>
@@ -79,7 +76,7 @@
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="k">pass</span>
 
@@ -89,7 +86,7 @@
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s">&quot;simulation_parameters&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s">&quot;simulation_parameters&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
 
 </div>
 <div class="viewcode-block" id="save_parameters"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_parameters.html#IOM_plugin_parameters.save_parameters">[docs]</a><span class="k">def</span> <span class="nf">save_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="s">&quot;global&quot;</span><span class="p">):</span>
@@ -98,12 +95,10 @@
 <span class="sd">    :param parameters: The simulation parameters to store.</span>
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">paset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span>
+    <span class="n">paset</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span>
 
     <span class="k">for</span> <span class="n">param</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
-        <span class="c"># Store all the values as pickled strings because hdf can</span>
-        <span class="c"># only store strings or ndarrays as attributes.</span>
-        <span class="n">paset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">))</span>
+        <span class="n">paset</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">param</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_save_attr_value</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
 
 </div>
 <div class="viewcode-block" id="load_parameters"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_parameters.html#IOM_plugin_parameters.load_parameters">[docs]</a><span class="k">def</span> <span class="nf">load_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="s">&quot;global&quot;</span><span class="p">):</span>
@@ -111,7 +106,7 @@
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">+</span><span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+    <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/simulation_parameters&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
     <span class="n">PP</span> <span class="o">=</span> <span class="n">ParameterProvider</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">p</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
