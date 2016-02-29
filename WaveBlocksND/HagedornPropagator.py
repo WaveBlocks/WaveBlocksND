@@ -135,9 +135,9 @@ class HagedornPropagator(Propagator):
         :math:`\tau` here. This propagation is done for all packets in the list
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
 
-        More details can be found in [1]_.
+        More details can be found in [#]_.
 
-        .. [1] E. Faou, V. Gradinaru and C. Lubich, "Computing semiclassical quantum dynamics with Hagedorn wavepackets",
+        .. [#] E. Faou, V. Gradinaru and C. Lubich, "Computing semiclassical quantum dynamics with Hagedorn wavepackets",
                SIAM Journal on Scientific Computing, volume 31 number 4 (2009) 3027-3041.
         """
         # Cache some parameter values

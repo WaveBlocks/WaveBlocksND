@@ -162,9 +162,9 @@ class SemiclassicalPropagator(Propagator, SplittingParameters):
         :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.
         The semiclassical propagation scheme is used.
 
-        More details can be found in [1]_.
+        More details can be found in [#]_.
 
-        .. [1] V. Gradinaru and G.A. Hagedorn, "Convergence of a semiclassical wavepacket based time-splitting for the Schroedinger equation",
+        .. [#] V. Gradinaru and G.A. Hagedorn, "Convergence of a semiclassical wavepacket based time-splitting for the Schroedinger equation",
                Numerische Mathematik, volume 126 number 1 (2013) 53-73.
         """
         # Cache some parameter values

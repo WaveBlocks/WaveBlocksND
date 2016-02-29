@@ -174,12 +174,12 @@ class MagnusPropagator(Propagator, SplittingParameters):
         :math:`h_1 = n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and
         :math:`h_2 = n_2^{\prime} - n_1^{\prime} = \frac{1}{\sqrt{3}}`.
 
-        More details can be found in [1]_ and [2]_.
+        More details can be found in [#]_ and [#]_.
 
-        .. [1] S. Blanes and P.C. Moan, "Fourth- and sixth-order commutator-free Magnus integrators for linear and non-linear dynamical systems",
+        .. [#] S. Blanes and P.C. Moan, "Fourth- and sixth-order commutator-free Magnus integrators for linear and non-linear dynamical systems",
                Applied Numerical Mathematics, volume 56 number 12 (2006) 1519-1537.
 
-        .. [2] S. Blanes and F. Casas and J. Ros, "Improved high order integrators based on the Magnus expansion",
+        .. [#] S. Blanes and F. Casas and J. Ros, "Improved high order integrators based on the Magnus expansion",
                BIT, volume 40 (1999) 434-450.
         """
         # Cache some parameter values
