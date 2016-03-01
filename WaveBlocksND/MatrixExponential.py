@@ -21,9 +21,9 @@ def matrix_exp_pade(A, v, factor):
     :param A: The matrix :math:`A` of shape :math:`N \times N`.
     :param v: The vector :math:`v` of length :math:`N`.
     :param factor: An additional scalar factor :math:`\alpha`.
-    :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`
+    :return: The (approximate) value of :math:`\exp\left(\alpha A\right) v`
     """
-    return dot(expm(A * factor), v)
+    return dot(expm(factor * A), v)
 
 
 def arnoldi(A, v0, k):
@@ -62,7 +62,7 @@ def matrix_exp_arnoldi(A, v, factor, k):
     :param v: The vector :math:`v` of length :math:`N`.
     :param factor: An additional scalar factor :math:`\alpha`.
     :param k: The number :math:`k` of Krylov steps performed.
-    :return: The (approximate) value of :math:`\exp\left(-i \alpha A\right) v`.
+    :return: The (approximate) value of :math:`\exp\left(\alpha A\right) v`.
     """
     V, H = arnoldi(A, v, min(min(A.shape), k))
     eH = expm(factor * H[:-1, :])
