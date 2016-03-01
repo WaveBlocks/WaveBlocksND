@@ -168,19 +168,46 @@ class MagnusPropagator(Propagator, SplittingParameters):
         :math:`n_2 = \frac{1}{\sqrt{3}}`.
         The integration time step is :math:`[0, 1] dt`, hence we rescale the nodes
         onto the interval :math:`[0, 1]` to get
-        :math:`n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and
-        :math:`n_2^{\prime} = \frac{1}{2} + \frac{1}{2\sqrt{3}}`.
-        The two time point :math:`h_1` and :math:`h_2` are then given by
+        :math:`n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}} =  \frac{1}{2} - \frac{\sqrt{3}}{6}` and
+        :math:`n_2^{\prime} = \frac{1}{2} + \frac{1}{2\sqrt{3}} =  \frac{1}{2} + \frac{\sqrt{3}}{6}`.
+        The two time points :math:`h_1` and :math:`h_2` are then given by
         :math:`h_1 = n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and
         :math:`h_2 = n_2^{\prime} - n_1^{\prime} = \frac{1}{\sqrt{3}}`.
+        Given a (matrix) differential equation:
 
-        More details can be found in [#]_ and [#]_.
+        .. math::
+
+            y^{\prime}(t) = A(t) y(t)
+
+        with :math:`t \geq 0`. In each timestep of size :math:`h` we compute:
+
+        .. math::
+
+            A_1 &= A \left( t_n + \left(\frac{1}{2} - \frac{\sqrt{3}}{6} \right) h \right) \\
+            A_2 &= A \left( t_n + \left(\frac{1}{2} + \frac{\sqrt{3}}{6} \right) h \right)
+
+        from which we get:
+
+        .. math::
+
+            \sigma_n = \frac{1}{2} h (A_1 + A_2) + \frac{\sqrt{3}}{12} h^2 [A_2, A_1]
+
+        and then we find for the solution:
+
+        .. math::
+
+            y_{n+1} = e^{\sigma_n} y_n
+
+        More details can be found in [#]_ and [#]_ and especially formula 2.9 in [#]_.
 
         .. [#] S. Blanes and P.C. Moan, "Fourth- and sixth-order commutator-free Magnus integrators for linear and non-linear dynamical systems",
                Applied Numerical Mathematics, volume 56 number 12 (2006) 1519-1537.
 
         .. [#] S. Blanes and F. Casas and J. Ros, "Improved high order integrators based on the Magnus expansion",
-               BIT, volume 40 (1999) 434-450.
+               BIT Numerical Mathematics, volume 40 (1999) 434-450.
+
+        .. [#] A. Iserles, A. Marthinsen and S.P. Norsett, "On the Implementation of the Method of Magnus Series for Linear Differential Equations",
+               BIT Numerical Mathematics, volume 39 number 2 (1999) 281-304.
         """
         # Cache some parameter values
         dt = self._dt
