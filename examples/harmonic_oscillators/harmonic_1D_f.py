@@ -26,7 +26,7 @@ wp0 = {
     "type" : "HagedornWavepacket",
     "dimension" : 1,
     "ncomponents": 1,
-    "eps" : 0.1,
+    "eps" : eps,
     "Pi" : [q,p,Q,P,S],
     "basis_shapes" : [{
         "type" : "HyperbolicCutShape",

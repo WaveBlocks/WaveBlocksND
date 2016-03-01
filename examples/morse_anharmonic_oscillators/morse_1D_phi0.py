@@ -10,12 +10,14 @@ ncomponents = 1
 
 eps = 0.1
 
-potential = "quadratic"
+potential = "morse_zero_2"
+l = 1.0
+x0 = 0.0
 
 # The parameter set of the initial wavepacket
 Q = [[1.0]]
 P = [[1.0j]]
-q = [[1.0]]
+q = [[0.4]]
 p = [[0.0]]
 S = [[0.0]]
 
@@ -28,7 +30,7 @@ wp0 = {
     "Pi" : [q,p,Q,P,S],
     "basis_shapes" : [{
         "type" : "HyperbolicCutShape",
-        "K" : 10,
+        "K" : 32,
         "dimension" : 1
     }],
     "coefficients" : [[ ((0,), 1.0) ]],
@@ -39,7 +41,7 @@ wp0 = {
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
-                'qr_rules': [{'dimension': 1, 'order': 14, 'type': 'GaussHermiteQR'}]
+                'qr_rules': [{'dimension': 1, 'order': 36, 'type': 'GaussHermiteQR'}]
             }
         }
     }
