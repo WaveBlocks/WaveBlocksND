@@ -1,9 +1,9 @@
 """The WaveBlocks Project
 
-This file contains the Hagedorn propagator class for homogeneous wavepackets.
+This file contains the Magnus propagator class for homogeneous wavepackets.
 
 @author: V. Gradinaru
-@copyright: Copyright (C) 2012, 2014, 2015 V. Gradinaru, R. Bourquin
+@copyright: Copyright (C) 2012, 2014, 2015, 2016 V. Gradinaru, R. Bourquin
 @license: Modified BSD License
 """
 
@@ -220,8 +220,11 @@ class MagnusPropagator(Propagator, SplittingParameters):
 
             # Propagate until c1 * dt
             h1 = (0.5 - sqrt(3.0) / 6.0) * dt
-            nrN1 = max(1, 1 + int(h1**0.5 * eps**(-3.0 / 8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrN1, [packet], [packet, leading_chi])
+
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", h1**0.5 * eps**(-3.0 / 8.0))
+            nrlocalsteps1 = max(1, 1 + int(nrinnersteps))
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrlocalsteps1, [packet], [packet, leading_chi])
 
             # Build a first matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
@@ -229,8 +232,11 @@ class MagnusPropagator(Propagator, SplittingParameters):
 
             # Propagate until c2 * dt
             h2 = 1.0 / sqrt(3.0) * dt
-            nrN2 = max(1, 1 + int(h2**0.5 * eps**(-3.0 / 8.0)))
-            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h2], nrN2, [packet], [packet, leading_chi])
+
+            # Inner time step
+            nrinnersteps = self._parameters.get("innersteps", h2**0.5 * eps**(-3.0 / 8.0))
+            nrlocalsteps2 = max(1, 1 + int(nrinnersteps))
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h2], nrlocalsteps2, [packet], [packet, leading_chi])
 
             # Build a second matrix here with the current parameters of the wavepacket
             innerproduct = packet.get_innerproduct()
@@ -244,5 +250,5 @@ class MagnusPropagator(Propagator, SplittingParameters):
             coefficients = self._matrix_exponential(F, coefficients, 1.0)
             packet.set_coefficient_vector(coefficients)
 
-            # Finish current timestep and propagate until dt
-            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrN1, [packet], [packet, leading_chi])
+            # Propagate until dt to finish the current timestep
+            self.intsplit(self._propkin, self._proppotquad, a, b, [0.0, h1], nrlocalsteps1, [packet], [packet, leading_chi])
