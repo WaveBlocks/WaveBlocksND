@@ -7,11 +7,13 @@ This file contains the Morse eigenstates.
 @license: Modified BSD License
 """
 
-from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange, sum
+from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange, sum, atleast_2d
 from scipy.linalg import norm
 from scipy.special import gamma, eval_genlaguerre
 
 from WaveBlocksND.Wavepacket import Wavepacket
+from WaveBlocksND.AbstractGrid import AbstractGrid
+from WaveBlocksND.GridWrapper import GridWrapper
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 
 __all__ = ["MorseEigenstate"]
@@ -242,33 +244,51 @@ class MorseEigenstate(Wavepacket):
         return r2 * r4 * exp(-self._nu / 2 * ex)
 
 
-    def _evaluate_basis_at_direct(self, x):
+    def _grid_wrap(self, agrid):
+        # TODO: Consider additional input types for "nodes":
+        #       list of numpy ndarrays, list of single python scalars
+        if not isinstance(agrid, AbstractGrid):
+            agrid = atleast_2d(agrid)
+            agrid = agrid.reshape(self._dimension, -1)
+            agrid = GridWrapper(agrid)
+        return agrid
+
+
+    def _evaluate_basis_at_direct(self, grid):
         r"""Evaluate the eigenstates :math:`\mu_n` by direct computation via the analytic formula.
 
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+        :param grid: Array of grid nodes to evaluate :math:`\mu_n` on.
 
         .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
                      small :math:`\varepsilon` due to the gamma functions involved.
         """
-        g = x.shape[1]
-        B = zeros((self._basis_size, g), dtype=complexfloating)
+        # The grid
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
+        nn = grid.get_number_nodes(overall=True)
+
+        B = zeros((self._basis_size, nn), dtype=complexfloating)
 
         for n in range(self._basis_size):
-            B[n, :] = self._evaluate_mun(n, x)
+            B[n, :] = self._evaluate_mun(n, nodes)
         return B
 
 
-    def evaluate_basis_at(self, x):
+    def evaluate_basis_at(self, grid):
         r"""Evaluate the eigenstates :math:`\mu_n` by a recursive scheme, starting
         with an approximation to the groundstate :math:`\mu_0`.
 
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+        :param grid: Array of grid nodes to evaluate :math:`\mu_n` on.
         """
-        g = x.shape[1]
-        B = zeros((self._basis_size, g), dtype=complexfloating)
+        # The grid
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
+        nn = grid.get_number_nodes(overall=True)
+
+        B = zeros((self._basis_size, nn), dtype=complexfloating)
 
         # Groundstate
-        B[0, :] = self._evaluate_mu0(x)
+        B[0, :] = self._evaluate_mu0(nodes)
 
         # Recursion
         for n in range(0, self._basis_size - 1):
@@ -277,14 +297,14 @@ class MorseEigenstate(Wavepacket):
             sn = 1 / 2 * (self._nu - 2 * n - 1)
             pf1 =  1 / rn * sqrt((sn - 1) / sn      ) * (2 * sn)     / (2 * sn + 1)
             pf2 = ln / rn * sqrt((sn - 1) / (sn + 1)) * (2 * sn - 1) / (2 * sn + 1)
-            pf1 *= ((4 * sn**2 - 1) * exp(self._beta * x) / self._nu - self._nu)
+            pf1 *= ((4 * sn**2 - 1) * exp(self._beta * nodes) / self._nu - self._nu)
             # Note: Index wraps around for n = 0
             B[n + 1, :] = pf1 * B[n, :] - pf2 * B[n - 1, :]
 
         return B
 
 
-    def evaluate_at(self, x):
+    def evaluate_at(self, grid):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -295,7 +315,7 @@ class MorseEigenstate(Wavepacket):
         :type prefactor: Boolean, default is ``False``.
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
         """
-        B = self.evaluate_basis_at(x)
+        B = self.evaluate_basis_at(grid)
         mu = sum(self._coefficients * B, axis=0).reshape(1, -1)
         return mu
 
