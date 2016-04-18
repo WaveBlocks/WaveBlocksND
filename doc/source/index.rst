@@ -110,6 +110,8 @@ Wavepackets
    waveblocks_classes/GradientLCWP
    waveblocks_classes/GradientLinearCombinationHAWP
 
+   waveblocks_classes/MorseEigenstate
+
 Inner Products
 ^^^^^^^^^^^^^^
 

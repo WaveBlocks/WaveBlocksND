@@ -63,6 +63,8 @@ from WaveBlocksND.HagedornWavepacketInhomogeneous import HagedornWavepacketInhom
 from WaveBlocksND.Gradient import Gradient
 from WaveBlocksND.GradientHAWP import GradientHAWP
 
+from WaveBlocksND.MorseEigenstate import MorseEigenstate
+
 # Linear combinations
 from WaveBlocksND.LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from WaveBlocksND.LinearCombinationOfWPs import LinearCombinationOfWPs
