@@ -133,7 +133,7 @@ if __name__ == '__main__':
 
     # Set up serialization of simulation data
     IOM = IOManager()
-    IOM.create_file(args.outputfile)
+    IOM.create_file(outputfile)
     IOM.create_block()
 
     # Save the simulation parameters
