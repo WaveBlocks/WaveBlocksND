@@ -7,7 +7,7 @@ This file contains the Morse eigenstates.
 @license: Modified BSD License
 """
 
-from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange
+from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange, sum
 from scipy.linalg import norm
 from scipy.special import gamma, eval_genlaguerre
 
@@ -49,7 +49,7 @@ class MorseEigenstate(Wavepacket):
         self._coefficients = zeros((self._basis_shape.get_basis_size(), 1), dtype=complexfloating)
 
         # Cache basis sizes
-        self._basis_sizes = self._basis_shape.get_basis_size()
+        self._basis_size = self._basis_shape.get_basis_size()
 
 
     def get_eps(self):
@@ -174,7 +174,7 @@ class MorseEigenstate(Wavepacket):
         :param values: The new values of the coefficients :math:`c^i` of :math:`\Phi_i`.
         :type values: An ndarray of suitable shape or a list of ndarrays.
         """
-        bs = self._basis_sizes
+        bs = self._basis_size
         self._coefficients = values.copy().reshape((bs, 1))
 
 
@@ -296,7 +296,7 @@ class MorseEigenstate(Wavepacket):
         :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
         """
         B = self.evaluate_basis_at(x)
-        mu = sum(self.coefficients * B, axis=0).reshape(1, -1)
+        mu = sum(self._coefficients * B, axis=0).reshape(1, -1)
         return mu
 
 
