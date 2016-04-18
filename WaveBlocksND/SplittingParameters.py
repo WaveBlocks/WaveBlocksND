@@ -164,8 +164,8 @@ class SplittingParameters(object):
             a[4] =  0.08221359629355080023149045
             a[5] =  0.79854399093483008353899777
             a[6:] = flipud(a[1:5])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
-            b[s/2:] = flipud(b[:s/2])
+            b[:s//2] = a[:s//2] + diff(a[:s//2+1]) * 0.5
+            b[s//2:] = flipud(b[:s//2])
         elif method == "KL8":
             s = 18
             a = zeros(s)
@@ -181,8 +181,8 @@ class SplittingParameters(object):
             a[8] =  0.29501172360931029887096624
             a[9] = -0.60550853383003451169892108
             a[10:] = flipud(a[1:9])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
-            b[s/2:] = flipud(b[:s/2])
+            b[:s//2] = a[:s//2] + diff(a[:s//2+1]) * 0.5
+            b[s//2:] = flipud(b[:s//2])
         elif method == "KL10":
             s = 34
             a = zeros(s)
@@ -206,8 +206,8 @@ class SplittingParameters(object):
             a[16] =  0.05246957188100069574521612
             a[17] =  0.44373380805019087955111365
             a[18:] = flipud(a[1:17])
-            b[:s/2] = a[:s/2] + diff(a[:s/2+1]) * 0.5
-            b[s/2:] = flipud(b[:s/2])
+            b[:s//2] = a[:s//2] + diff(a[:s//2+1]) * 0.5
+            b[s//2:] = flipud(b[:s//2])
         else:
             raise NotImplementedError("Unknown method: " + method)
 
