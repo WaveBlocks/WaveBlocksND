@@ -7,10 +7,11 @@ This file contains the Morse eigenstates.
 @license: Modified BSD License
 """
 
-from numpy import arange, zeros, exp, sqrt, floor, linspace, complexfloating, sum, zeros_like, pi, log
+from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array
 from scipy.special import gamma, eval_genlaguerre
 
 from WaveBlocksND.Wavepacket import Wavepacket
+from WaveBlocksND.HyperCubicShape import HyperCubicShape
 
 __all__ = ["MorseEigenstate"]
 
@@ -37,6 +38,25 @@ class MorseEigenstate(Wavepacket):
         self._V0 = V0
 
         self._nu = sqrt(8 * V0 / (beta**2 * eps**4))
+        self._Kmax = int(floor((self._nu - 1) / 2))
+
+
+        # Default basis shape
+        self._basis_shape = HyperCubicShape([1])
+
+        # A Groundstate
+        self._coefficients = zeros((self._basis_shape.get_basis_size(), 1), dtype=complexfloating)
+
+        # Cache basis sizes
+        self._basis_sizes = self._basis_shape.get_basis_size()
+
+
+    def get_eps(self):
+        r"""Retrieve the semi-classical scaling parameter :math:`\varepsilon` of the wavepacket.
+
+        :return: The value of :math:`\varepsilon`.
+        """
+        return self._eps
 
 
     def get_nu(self):
@@ -48,7 +68,7 @@ class MorseEigenstate(Wavepacket):
     def get_max_levels(self):
         r"""The maximal number of eigenstates possible with the given values of :math:`\beta` and :math:`V_0`.
         """
-        return int(floor((self._nu - 1) / 2))
+        return self._Kmax
 
 
     def _Nn(self, n):
@@ -143,3 +163,129 @@ class MorseEigenstate(Wavepacket):
         :param n: Number of the eigenstate.
         """
         return -1 / 2 * (sqrt(2 * self._V0) - self._eps**2 * abs(self._beta) * (n + 1 / 2))**2
+
+
+    def _resize_coefficient_storage(self, bs_old, bs_new):
+        r"""
+        """
+        bso = bs_old.get_basis_size()
+        bsn = bs_new.get_basis_size()
+
+        # Find the intersection of K and K'
+        # Optimization: iterate over smaller set
+        if bso <= bsn:
+            insec = [k for k in bs_old if k in bs_new]
+        elif bso > bsn:
+            insec = [k for k in bs_new if k in bs_old]
+        # TODO: Consider making this part of the BasisShape interface
+        # TODO: Consider implementing set operations for basis shapes
+
+        # Construct the index mapping
+        i = array([bs_old[k] for k in insec])
+        j = array([bs_new[k] for k in insec])
+
+        # Copy over the data
+        cnew = zeros((bsn, 1), dtype=complexfloating)
+        cnew[j] = self._coefficients[i]
+        self._coefficients = cnew
+
+
+    def get_basis_shapes(self):
+        r"""Retrieve the basis shape :math:`\mathfrak{K}`.
+
+        :return: The basis shape.
+        """
+        return self._basis_shape
+
+
+    def set_basis_shapes(self, basis_shape):
+        r"""Set the basis shape :math:`\mathfrak{K}`.
+
+        :param basis_shape: The basis shape.
+        :type basis_shape: A subclass of :py:class:`BasisShape`.
+        """
+        # Adapt the coefficient storage vectors
+        self._resize_coefficient_storage(self._basis_shape, basis_shape)
+        # Set the new basis shape for the given component
+        self._basis_shape = basis_shape
+        # And update the caches information
+        self._basis_size = self._basis_shape.get_basis_size()
+
+
+    def set_coefficient(self, index, value):
+        r"""Set a single coefficient :math:`c^i` of :math:`\mu_i`.
+
+        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
+        :type index: A tuple of :math:`D` integers.
+        :param value: The new value of the coefficient :math:`c^i_k`.
+        :raise: :py:class:`ValueError` For invalid indices :math:`i`.
+        """
+        if index not in self._basis_shape:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
+
+        # Apply linear order mapping here
+        key = self._basis_shape[index]
+        self._coefficients[key] = value
+
+
+    def get_coefficient(self, index):
+        r"""Retrieve a single coefficient :math:`c^i` of :math:`\mu_i`.
+
+        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
+        :type index: A tuple of :math:`D` integers.
+        :return: A single complex number.
+        :raise: :py:class:`ValueError` For invalid indices :math:`i`.
+        """
+        if index not in self._basis_shape:
+            raise ValueError("There is no basis function with multi-index {}.".format(index))
+
+        # Apply linear order mapping here
+        key = self._basis_shape[index]
+        return self._coefficients[key]
+
+
+    def set_coefficients(self, values):
+        r"""Update all the coefficients :math:`c` of :math:`\mu`.
+
+        Note: this method copies the data arrays.
+
+        :param values: The new values of the coefficients :math:`c^i` of :math:`\Phi_i`.
+        :type values: An ndarray of suitable shape or a list of ndarrays.
+        """
+        bs = self._basis_sizes
+        self._coefficients = values.copy().reshape((bs, 1))
+
+
+    def get_coefficients(self):
+        r"""Returns the coefficients :math:`c` of :math:`\mu`
+
+        Note: this method copies the data arrays.
+
+        :return: A single ndarray with the coefficients of the given component or
+                 a list containing the ndarrays for each component. Each ndarray
+                 is two-dimensional with a shape of :math:`(|\mathfrak{K}_i|, 1)`.
+        """
+        return self._coefficients.copy()
+
+
+    def get_coefficient_vector(self):
+        r"""Retrieve the coefficients :math:`c` of :math:`\mu`.
+
+        .. warning:: This function does *not* copy the input data!
+                     This is for efficiency as this routine is used in the innermost loops.
+
+        :return: The coefficients :math:`c` of :math:`\mu`.
+        """
+        return self._coefficients
+
+
+    def set_coefficient_vector(self, vector):
+        """Set the coefficients of :math:`\mu`.
+
+        .. warning:: This function does *not* copy the input data!
+                     This is for efficiency as this routine is used in the innermost loops.
+
+        :param vector: The coefficients of all components as a single long column vector.
+        :type vector: A two-dimensional ndarray of appropriate shape.
+        """
+        self._coefficients = vector
