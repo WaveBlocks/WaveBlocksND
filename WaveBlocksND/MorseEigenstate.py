@@ -7,7 +7,8 @@ This file contains the Morse eigenstates.
 @license: Modified BSD License
 """
 
-from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array
+from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange
+from scipy.linalg import norm
 from scipy.special import gamma, eval_genlaguerre
 
 from WaveBlocksND.Wavepacket import Wavepacket
@@ -82,89 +83,6 @@ class MorseEigenstate(Wavepacket):
         return sqrt(self._beta * (self._nu - 2 * n - 1) * gamma(n + 1) / gamma(self._nu - n))
 
 
-    def _mun(self, n, x):
-        r"""Evaluate the :math:`n`-th eigenstate :math:`\mu_n` by direct computation via the analytic formula.
-
-        :param n: Number of the eigenstate.
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
-
-        .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
-                     small :math:`\varepsilon` due to the gamma functions involved.
-        """
-        sn = 1 / 2 * (self._nu - 2 * n - 1)
-        z = self._nu * exp(-self._beta * x.reshape(-1))
-        mun = self.Nn(n) * exp(-z / 2) * z**sn * eval_genlaguerre(n, 2 * sn, z)
-        return mun
-
-
-    def _mu0(self, x):
-        r"""Evaluate the groundstate :math:`\mu_0` by direct computation
-        via an improved (but approximate) analytic formula.
-
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
-        """
-        # Improved version for small epsilon
-        delta = ((self._nu - 1) + 1 / (12 * (self._nu - 1) - 1 / (10 * (self._nu - 1))))
-        r2 = sqrt(self._beta * delta / (exp(1) * self._nu))
-        r4 = ((self._nu - 1) / (2 * pi)) ** 0.25
-        ex = log(delta) - 1 - log(self._nu) + (self._nu - 1) / self._nu * self._beta * x + exp(-self._beta * x)
-        return r2 * r4 * exp(-self._nu / 2 * ex)
-
-
-    def evaluate_direct(self, K, x):
-        r"""Evaluate the first :math:`K` eigenstates :math:`\mu_n` by direct computation via the analytic formula.
-
-        :param K: List of the eigenstates to compute.
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
-
-        .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
-                     small :math:`\varepsilon` due to the gamma functions involved.
-        """
-        Kmax = K.shape[0]
-        g = x.shape[1]
-        B = zeros((Kmax, g), dtype=complexfloating)
-
-        for n in K:
-            B[n, :] = self.mu(n, x)
-        return B
-
-
-    def evaluate_recursive(self, K, x):
-        r"""Evaluate the first :math:`K` eigenstates :math:`\mu_n` by a recursive scheme, starting
-        with an approximation to the groundstate :math:`\mu_0`.
-
-        :param K: List of the eigenstates to compute.
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
-        """
-        Kmax = K.shape[0]
-        g = x.shape[1]
-        B = zeros((Kmax, g), dtype=complexfloating)
-
-        # Groundstate
-        B[0, :] = self._mu0(x)
-
-        # Recursion
-        for n in range(0, Kmax - 1):
-            rn = sqrt((n + 1) * (self._nu - n - 1))
-            ln = sqrt(n * (self._nu - n))
-            sn = 1 / 2 * (self._nu - 2 * n - 1)
-            pf1 =  1 / rn * sqrt((sn - 1) / sn      ) * (2 * sn)     / (2 * sn + 1)
-            pf2 = ln / rn * sqrt((sn - 1) / (sn + 1)) * (2 * sn - 1) / (2 * sn + 1)
-            pf1 *= ((4 * sn**2 - 1) * exp(self._beta * x) / self._nu - self._nu)
-            # Note: Index wraps around for n = 0
-            B[n + 1, :] = pf1 * B[n, :] - pf2 * B[n - 1, :]
-
-        return B
-
-
-    def En(self, n):
-        r"""Compute the energy of the :math:`n`-th eigenstate :math:`\mu_n` by the analytic formula.
-
-        :param n: Number of the eigenstate.
-        """
-        return -1 / 2 * (sqrt(2 * self._V0) - self._eps**2 * abs(self._beta) * (n + 1 / 2))**2
-
-
     def _resize_coefficient_storage(self, bs_old, bs_new):
         r"""
         """
@@ -204,12 +122,16 @@ class MorseEigenstate(Wavepacket):
         :param basis_shape: The basis shape.
         :type basis_shape: A subclass of :py:class:`BasisShape`.
         """
+        basis_size = basis_shape.get_basis_size()
+        if basis_size > self._Kmax:
+            raise ValueError("Basis shape too large (size: {}) because only {} eigenstates exist.".format(basis_size, self._Kmax))
+
         # Adapt the coefficient storage vectors
         self._resize_coefficient_storage(self._basis_shape, basis_shape)
         # Set the new basis shape for the given component
         self._basis_shape = basis_shape
         # And update the caches information
-        self._basis_size = self._basis_shape.get_basis_size()
+        self._basis_size = basis_size
 
 
     def set_coefficient(self, index, value):
@@ -289,3 +211,107 @@ class MorseEigenstate(Wavepacket):
         :type vector: A two-dimensional ndarray of appropriate shape.
         """
         self._coefficients = vector
+
+
+    def _evaluate_mun(self, n, x):
+        r"""Evaluate the :math:`n`-th eigenstate :math:`\mu_n` by direct computation via the analytic formula.
+
+        :param n: Number of the eigenstate.
+        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+
+        .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
+                     small :math:`\varepsilon` due to the gamma functions involved.
+        """
+        sn = 1 / 2 * (self._nu - 2 * n - 1)
+        z = self._nu * exp(-self._beta * x.reshape(-1))
+        mun = self.Nn(n) * exp(-z / 2) * z**sn * eval_genlaguerre(n, 2 * sn, z)
+        return mun
+
+
+    def _evaluate_mu0(self, x):
+        r"""Evaluate the groundstate :math:`\mu_0` by direct computation
+        via an improved (but approximate) analytic formula.
+
+        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+        """
+        # Improved version for small epsilon
+        delta = ((self._nu - 1) + 1 / (12 * (self._nu - 1) - 1 / (10 * (self._nu - 1))))
+        r2 = sqrt(self._beta * delta / (exp(1) * self._nu))
+        r4 = ((self._nu - 1) / (2 * pi)) ** 0.25
+        ex = log(delta) - 1 - log(self._nu) + (self._nu - 1) / self._nu * self._beta * x + exp(-self._beta * x)
+        return r2 * r4 * exp(-self._nu / 2 * ex)
+
+
+    def _evaluate_basis_at_direct(self, x):
+        r"""Evaluate the eigenstates :math:`\mu_n` by direct computation via the analytic formula.
+
+        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+
+        .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
+                     small :math:`\varepsilon` due to the gamma functions involved.
+        """
+        g = x.shape[1]
+        B = zeros((self._basis_size, g), dtype=complexfloating)
+
+        for n in range(self._basis_size):
+            B[n, :] = self._evaluate_mun(n, x)
+        return B
+
+
+    def evaluate_basis_at(self, x):
+        r"""Evaluate the eigenstates :math:`\mu_n` by a recursive scheme, starting
+        with an approximation to the groundstate :math:`\mu_0`.
+
+        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+        """
+        g = x.shape[1]
+        B = zeros((self._basis_size, g), dtype=complexfloating)
+
+        # Groundstate
+        B[0, :] = self._evaluate_mu0(x)
+
+        # Recursion
+        for n in range(0, self._basis_size - 1):
+            rn = sqrt((n + 1) * (self._nu - n - 1))
+            ln = sqrt(n * (self._nu - n))
+            sn = 1 / 2 * (self._nu - 2 * n - 1)
+            pf1 =  1 / rn * sqrt((sn - 1) / sn      ) * (2 * sn)     / (2 * sn + 1)
+            pf2 = ln / rn * sqrt((sn - 1) / (sn + 1)) * (2 * sn - 1) / (2 * sn + 1)
+            pf1 *= ((4 * sn**2 - 1) * exp(self._beta * x) / self._nu - self._nu)
+            # Note: Index wraps around for n = 0
+            B[n + 1, :] = pf1 * B[n, :] - pf2 * B[n - 1, :]
+
+        return B
+
+
+    def evaluate_at(self, x):
+        r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
+
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
+        :type grid: A class having a :py:meth:`get_nodes(...)` method.
+        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
+                          (Defaults to ``None`` for evaluating all components.)
+        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
+        :type prefactor: Boolean, default is ``False``.
+        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
+        """
+        B = self.evaluate_basis_at(x)
+        mu = sum(self.coefficients * B, axis=0).reshape(1, -1)
+        return mu
+
+
+    def norm(self):
+        r"""Calculate the :math:`L^2` norm :math:`\mu\Psi|\mu\rangle` of the wavepacket :math:`\mu`.
+
+        :return: The norm of :math:`\mu`.
+        """
+        return norm(self._coefficients)
+
+
+    def energy_levels(self):
+        r"""Compute the energy of the :math:`n`-th eigenstate :math:`\mu_n` by the analytic formula.
+
+        :param n: Number of the eigenstate.
+        """
+        K = arange(self._basis_size)
+        return -1 / 2 * (sqrt(2 * self._V0) - self._eps**2 * abs(self._beta) * (K + 1 / 2))**2
