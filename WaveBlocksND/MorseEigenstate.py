@@ -63,19 +63,27 @@ class MorseEigenstate(Wavepacket):
 
 
     def get_nu(self):
-        r"""The value :math:`nu = \sqrt{\frac{8 V_0}{\beta^2 \varepsilon^4}}`.
+        r"""The value:
+
+        .. math:: \nu = \sqrt{\frac{8 V_0}{\beta^2 \varepsilon^4}}
+
+        :return: The value of :math:`\nu`.
         """
         return self._nu
 
 
     def get_max_levels(self):
-        r"""The maximal number of eigenstates possible with the given values of :math:`\beta` and :math:`V_0`.
+        r"""The maximal number of eigenstates possible with the given values of :math:`\beta`, :math:`V_0` and :math:`\varepsilon`:
+
+        .. math:: n_{\max} = \left\lfloor \frac{\nu - 1}{2} \right\rfloor
         """
         return self._Kmax
 
 
     def _Nn(self, n):
-        r"""The normalization constant :math:`N_n`.
+        r"""The normalization constant:
+
+        .. math:: N_n := \sqrt{\beta \frac{(\nu-2n-1) \Gamma(n+1)}{\Gamma(\nu-n)} }
 
         :param n: Number of the eigenstate.
 
@@ -218,6 +226,13 @@ class MorseEigenstate(Wavepacket):
     def _evaluate_mun(self, n, x):
         r"""Evaluate the :math:`n`-th eigenstate :math:`\mu_n` by direct computation via the analytic formula.
 
+        .. math:: \mu_n(x) := N_n \, e^{-\frac{z}{2}} \, z^{s_n} \, \mathrm{L}_n^{2{s_n}}(z)
+
+        where:
+
+        .. math:: s_n & := \frac{1}{2} (\nu - 2n - 1) \\
+                  z   & := \nu \exp(-\beta x)
+
         :param n: Number of the eigenstate.
         :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
 
@@ -255,7 +270,7 @@ class MorseEigenstate(Wavepacket):
 
 
     def _evaluate_basis_at_direct(self, grid):
-        r"""Evaluate the eigenstates :math:`\mu_n` by direct computation via the analytic formula.
+        r"""Evaluate the eigenstates :math:`\{\mu_k\}_{k \in \mathcal{K}}` by direct computation via the analytic formula.
 
         :param grid: Array of grid nodes to evaluate :math:`\mu_n` on.
 
@@ -305,15 +320,11 @@ class MorseEigenstate(Wavepacket):
 
 
     def evaluate_at(self, grid):
-        r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
+        r"""Evaluate the Morse wavepacket :math:`\mu` at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
-        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.
-                          (Defaults to ``None`` for evaluating all components.)
-        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
-        :type prefactor: Boolean, default is ``False``.
-        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.
+        :return: An array containing the values of the :math:`\mu` at the nodes :math:`\gamma`.
         """
         B = self.evaluate_basis_at(grid)
         mu = sum(self._coefficients * B, axis=0).reshape(1, -1)
@@ -321,7 +332,7 @@ class MorseEigenstate(Wavepacket):
 
 
     def norm(self):
-        r"""Calculate the :math:`L^2` norm :math:`\mu\Psi|\mu\rangle` of the wavepacket :math:`\mu`.
+        r"""Calculate the :math:`L^2` norm :math:`\langle\mu|\mu\rangle` of the wavepacket :math:`\mu`.
 
         :return: The norm of :math:`\mu`.
         """
@@ -330,6 +341,8 @@ class MorseEigenstate(Wavepacket):
 
     def energy_levels(self):
         r"""Compute the energy of the :math:`n`-th eigenstate :math:`\mu_n` by the analytic formula.
+
+        .. math:: E_n = -\frac{1}{2} {\left(\sqrt{2 V_0} - \varepsilon^2 |\beta| \left(n + \frac{1}{2}\right)\right)}^2
 
         :param n: Number of the eigenstate.
         """
