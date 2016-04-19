@@ -134,7 +134,8 @@ class MorseEigenstate(Wavepacket):
         :type basis_shape: A subclass of :py:class:`BasisShape`.
         """
         basis_size = basis_shape.get_basis_size()
-        if basis_size > self._Kmax:
+        if basis_size > self._Kmax + 1:
+            # Counting from zero
             raise ValueError("Basis shape too large (size: {}) because only {} eigenstates exist.".format(basis_size, self._Kmax))
 
         # Adapt the coefficient storage vectors
