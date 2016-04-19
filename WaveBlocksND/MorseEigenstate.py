@@ -26,7 +26,9 @@ class MorseEigenstate(Wavepacket):
 
     def __init__(self, eps, beta, V0):
         r"""
-        A Morse eigenstate.
+        An eigenstate :math:`\mu` of the Morse potential:
+
+        .. math:: M(x) := V_0 \left(e^{-2 \beta x} - 2 e^{-\beta x}\right)
 
         :param eps: The semiclassical scaling parameter.
         :param beta: Parameter describing the Morse potential.
@@ -42,7 +44,6 @@ class MorseEigenstate(Wavepacket):
 
         self._nu = sqrt(8 * V0 / (beta**2 * eps**4))
         self._Kmax = int(floor((self._nu - 1) / 2))
-
 
         # Default basis shape
         self._basis_shape = HyperCubicShape([1])
@@ -145,12 +146,12 @@ class MorseEigenstate(Wavepacket):
 
 
     def set_coefficient(self, index, value):
-        r"""Set a single coefficient :math:`c^i` of :math:`\mu_i`.
+        r"""Set a single coefficient :math:`c_k` of :math:`\mu_k`.
 
-        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
+        :param index: The multi-index :math:`k` of the coefficient :math:`c_k` we want to update.
         :type index: A tuple of :math:`D` integers.
-        :param value: The new value of the coefficient :math:`c^i_k`.
-        :raise: :py:class:`ValueError` For invalid indices :math:`i`.
+        :param value: The new value of the coefficient :math:`c_k`.
+        :raise: :py:class:`ValueError` For invalid indices :math:`k`.
         """
         if index not in self._basis_shape:
             raise ValueError("There is no basis function with multi-index {}.".format(index))
@@ -161,12 +162,12 @@ class MorseEigenstate(Wavepacket):
 
 
     def get_coefficient(self, index):
-        r"""Retrieve a single coefficient :math:`c^i` of :math:`\mu_i`.
+        r"""Retrieve a single coefficient :math:`c_k` of :math:`\mu_k`.
 
-        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.
+        :param index: The multi-index :math:`k` of the coefficient :math:`c_k` we want to update.
         :type index: A tuple of :math:`D` integers.
         :return: A single complex number.
-        :raise: :py:class:`ValueError` For invalid indices :math:`i`.
+        :raise: :py:class:`ValueError` For invalid indices :math:`k`.
         """
         if index not in self._basis_shape:
             raise ValueError("There is no basis function with multi-index {}.".format(index))
@@ -179,10 +180,10 @@ class MorseEigenstate(Wavepacket):
     def set_coefficients(self, values):
         r"""Update all the coefficients :math:`c` of :math:`\mu`.
 
-        Note: this method copies the data arrays.
+        .. note:: This method copies the data arrays.
 
-        :param values: The new values of the coefficients :math:`c^i` of :math:`\Phi_i`.
-        :type values: An ndarray of suitable shape or a list of ndarrays.
+        :param values: The new values of the coefficients :math:`c` of :math:`\mu`.
+        :type values: An ndarray of shape :math:`(|\mathfrak{K}|, 1)`.
         """
         bs = self._basis_size
         self._coefficients = values.copy().reshape((bs, 1))
@@ -191,11 +192,10 @@ class MorseEigenstate(Wavepacket):
     def get_coefficients(self):
         r"""Returns the coefficients :math:`c` of :math:`\mu`
 
-        Note: this method copies the data arrays.
+        .. note:: This method copies the data arrays.
 
-        :return: A single ndarray with the coefficients of the given component or
-                 a list containing the ndarrays for each component. Each ndarray
-                 is two-dimensional with a shape of :math:`(|\mathfrak{K}_i|, 1)`.
+        :return: A single ndarray with the coefficients. The ndarray
+                 is two-dimensional with a shape of :math:`(|\mathfrak{K}|, 1)`.
         """
         return self._coefficients.copy()
 
@@ -203,10 +203,10 @@ class MorseEigenstate(Wavepacket):
     def get_coefficient_vector(self):
         r"""Retrieve the coefficients :math:`c` of :math:`\mu`.
 
-        .. warning:: This function does *not* copy the input data!
-                     This is for efficiency as this routine is used in the innermost loops.
+        .. note:: This function does *not* copy the input data!
+                  This is for efficiency as this routine is used in the innermost loops.
 
-        :return: The coefficients :math:`c` of :math:`\mu`.
+        :return: The coefficients :math:`c` of :math:`\mu` as an ndarray of shape :math:`(|\mathfrak{K}|, 1)`.
         """
         return self._coefficients
 
@@ -214,17 +214,17 @@ class MorseEigenstate(Wavepacket):
     def set_coefficient_vector(self, vector):
         """Set the coefficients of :math:`\mu`.
 
-        .. warning:: This function does *not* copy the input data!
-                     This is for efficiency as this routine is used in the innermost loops.
+        .. note:: This function does *not* copy the input data!
+                  This is for efficiency as this routine is used in the innermost loops.
 
-        :param vector: The coefficients of all components as a single long column vector.
-        :type vector: A two-dimensional ndarray of appropriate shape.
+        :param vector: The coefficients as a single long column vector.
+        :type vector: A two-dimensional ndarray of shape :math:`(|\mathfrak{K}|, 1)`.
         """
         self._coefficients = vector
 
 
     def _evaluate_mun(self, n, x):
-        r"""Evaluate the :math:`n`-th eigenstate :math:`\mu_n` by direct computation via the analytic formula.
+        r"""Evaluate the :math:`n`-th eigenstate :math:`\mu_n` by direct computation via the analytic formula:
 
         .. math:: \mu_n(x) := N_n \, e^{-\frac{z}{2}} \, z^{s_n} \, \mathrm{L}_n^{2{s_n}}(z)
 
@@ -247,9 +247,9 @@ class MorseEigenstate(Wavepacket):
 
     def _evaluate_mu0(self, x):
         r"""Evaluate the groundstate :math:`\mu_0` by direct computation
-        via an improved (but approximate) analytic formula.
+        via a more numerically stable but approximate analytic formula.
 
-        :param x: Array of grid nodes to evaluate :math:`\mu_n` on.
+        :param x: Array of grid nodes to evaluate :math:`\mu_0` on.
         """
         # Improved version for small epsilon
         delta = ((self._nu - 1) + 1 / (12 * (self._nu - 1) - 1 / (10 * (self._nu - 1))))
@@ -270,11 +270,11 @@ class MorseEigenstate(Wavepacket):
 
 
     def _evaluate_basis_at_direct(self, grid):
-        r"""Evaluate the eigenstates :math:`\{\mu_k\}_{k \in \mathcal{K}}` by direct computation via the analytic formula.
+        r"""Evaluate the eigenstates :math:`\{\mu_k\}_{k \in \mathfrak{K}}` by direct computation via the analytic formula.
 
-        :param grid: Array of grid nodes to evaluate :math:`\mu_n` on.
+        :param grid: Array of grid nodes to evaluate :math:`\mu_k` on.
 
-        .. warning:: Evaluation becomes inaccurate of fails for large :math:`n` or
+        .. warning:: Evaluation becomes inaccurate of fails for large :math:`k` or
                      small :math:`\varepsilon` due to the gamma functions involved.
         """
         # The grid
@@ -290,10 +290,12 @@ class MorseEigenstate(Wavepacket):
 
 
     def evaluate_basis_at(self, grid):
-        r"""Evaluate the eigenstates :math:`\mu_n` by a recursive scheme, starting
+        r"""Evaluate the eigenstates :math:`\{\mu_k\}_{k \in \mathfrak{K}}` by a recursive scheme, starting
         with an approximation to the groundstate :math:`\mu_0`.
 
-        :param grid: Array of grid nodes to evaluate :math:`\mu_n` on.
+        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
+        :type grid: A class having a :py:meth:`get_nodes(...)` method.
+        :return: An array containing the values of the :math:`\mu` at the nodes :math:`\gamma`.
         """
         # The grid
         grid = self._grid_wrap(grid)
@@ -340,11 +342,9 @@ class MorseEigenstate(Wavepacket):
 
 
     def energy_levels(self):
-        r"""Compute the energy of the :math:`n`-th eigenstate :math:`\mu_n` by the analytic formula.
+        r"""Compute the energy levels of the eigenstates :math:`\{\mu_n\}_{n \in \mathfrak{K}}` by the analytic formula:
 
         .. math:: E_n = -\frac{1}{2} {\left(\sqrt{2 V_0} - \varepsilon^2 |\beta| \left(n + \frac{1}{2}\right)\right)}^2
-
-        :param n: Number of the eigenstate.
         """
         K = arange(self._basis_size)
         return -1 / 2 * (sqrt(2 * self._V0) - self._eps**2 * abs(self._beta) * (K + 1 / 2))**2
