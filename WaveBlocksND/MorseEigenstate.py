@@ -7,7 +7,7 @@ This file contains the Morse eigenstates.
 @license: Modified BSD License
 """
 
-from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, arange, sum, atleast_2d
+from numpy import zeros, exp, sqrt, floor, complexfloating, pi, log, array, sum, atleast_2d
 from scipy.linalg import norm
 from scipy.special import gamma, eval_genlaguerre
 
@@ -44,6 +44,8 @@ class MorseEigenstate(Wavepacket):
 
         self._nu = sqrt(8 * V0 / (beta**2 * eps**4))
         self._Kmax = int(floor((self._nu - 1) / 2))
+        # Counting from zero, mu_Kmax is the largest possible eigenstate.
+        self._number_eigenstates = self._Kmax + 1
 
         # Default basis shape
         self._basis_shape = HyperCubicShape([1])
@@ -73,12 +75,12 @@ class MorseEigenstate(Wavepacket):
         return self._nu
 
 
-    def get_max_levels(self):
+    def get_number_eigenstates(self):
         r"""The maximal number of eigenstates possible with the given values of :math:`\beta`, :math:`V_0` and :math:`\varepsilon`:
 
         .. math:: n_{\max} = \left\lfloor \frac{\nu - 1}{2} \right\rfloor
         """
-        return self._Kmax
+        return self._number_eigenstates
 
 
     def _Nn(self, n):
@@ -133,17 +135,17 @@ class MorseEigenstate(Wavepacket):
         :param basis_shape: The basis shape.
         :type basis_shape: A subclass of :py:class:`BasisShape`.
         """
-        basis_size = basis_shape.get_basis_size()
-        if basis_size > self._Kmax + 1:
-            # Counting from zero
-            raise ValueError("Basis shape too large (size: {}) because only {} eigenstates exist.".format(basis_size, self._Kmax))
+        if basis_shape.get_dimension() != 1:
+            raise ValueError("Basis shape must be one-dimensional.")
+        if basis_shape.get_limits()[0] > self._number_eigenstates:
+            raise ValueError("Basis shape too large (size: {}) because only {} eigenstates exist.".format(basis_shape.get_basis_size(), self._number_eigenstates))
 
         # Adapt the coefficient storage vectors
         self._resize_coefficient_storage(self._basis_shape, basis_shape)
         # Set the new basis shape for the given component
         self._basis_shape = basis_shape
         # And update the caches information
-        self._basis_size = basis_size
+        self._basis_size = basis_shape.get_basis_size()
 
 
     def set_coefficient(self, index, value):
@@ -309,7 +311,7 @@ class MorseEigenstate(Wavepacket):
         B[0, :] = self._evaluate_mu0(nodes)
 
         # Recursion
-        for n in range(0, self._basis_size - 1):
+        for n in range(self._basis_size - 1):
             rn = sqrt((n + 1) * (self._nu - n - 1))
             ln = sqrt(n * (self._nu - n))
             sn = 1 / 2 * (self._nu - 2 * n - 1)
@@ -347,5 +349,5 @@ class MorseEigenstate(Wavepacket):
 
         .. math:: E_n = -\frac{1}{2} {\left(\sqrt{2 V_0} - \varepsilon^2 |\beta| \left(n + \frac{1}{2}\right)\right)}^2
         """
-        K = arange(self._basis_size)
+        K = array([k[0] for k in self._basis_shape.get_node_iterator()])
         return -1 / 2 * (sqrt(2 * self._V0) - self._eps**2 * abs(self._beta) * (K + 1 / 2))**2
