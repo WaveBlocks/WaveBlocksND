@@ -9,7 +9,7 @@ from WaveBlocksND import MorseEigenstate
 from WaveBlocksND import IOManager
 from WaveBlocksND import GlobalDefaults
 
-    
+
 parser = argparse.ArgumentParser()
 
 parser.add_argument("parametersfile",
@@ -45,7 +45,7 @@ PP = ParameterLoader().load_from_file(args.parametersfile)
 
 # Initial value
 MWP = MorseEigenstate(PP['eps'], PP['beta'], PP['V0'])
-Kmax = min(PP['Kmax'], MWP.get_max_levels())
+Kmax = min(PP['Kmax'], MWP.get_number_eigenstates())
 K = HyperCubicShape([Kmax])
 MWP.set_basis_shapes(K)
 
@@ -93,5 +93,6 @@ for i in range(1, nsteps + 1):
     Cnew = P * Cold
     Cnew = MWP.set_coefficients(Cnew)
 
-    WF = MWP.evaluate_at(X)
-    IOM.save_wavefunction(WF, timestep=i)
+    if TM.is_event(i):
+        WF = MWP.evaluate_at(X)
+        IOM.save_wavefunction(WF, timestep=i)
