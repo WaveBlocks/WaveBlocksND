@@ -52,7 +52,6 @@ MWP.set_basis_shapes(K)
 C = MWP.get_coefficients()
 C[0] = 1.0 / sqrt(2)
 C[1] = 1.0 / sqrt(2)
-#C[11] = 1.0 / sqrt(3)
 MWP.set_coefficients(C)
 
 TM = TimeManager(PP)
