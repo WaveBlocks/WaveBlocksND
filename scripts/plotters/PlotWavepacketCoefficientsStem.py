@@ -28,7 +28,13 @@ def read_data_homogeneous(iom, blockid=0, timerange=None, path='.'):
     """
     BF = BlockFactory()
 
-    parameters = iom.load_parameters()
+    if iom.has_parameters():
+        parameters = iom.load_parameters()
+        if "dt" in parameters:
+            dt = parameters["dt"]
+    else:
+        dt = None
+
     timegrid = iom.load_wavepacket_timegrid(blockid=blockid)
     if timerange is not None:
         if len(timerange) == 1:
@@ -59,7 +65,6 @@ def read_data_homogeneous(iom, blockid=0, timerange=None, path='.'):
             ki.sort()
             k.append(ki)
 
-        dt = parameters["dt"] if "dt" in parameters else None
         plot_coefficients(k, ck, step, dt, blockid=blockid, path=path)
 
 
@@ -70,7 +75,13 @@ def read_data_inhomogeneous(iom, blockid=0, timerange=None, path='.'):
     """
     BF = BlockFactory()
 
-    parameters = iom.load_parameters()
+    if iom.has_parameters():
+        parameters = iom.load_parameters()
+        if "dt" in parameters:
+            dt = parameters["dt"]
+    else:
+        dt = None
+
     timegrid = iom.load_inhomogwavepacket_timegrid(blockid=blockid)
     if timerange is not None:
         if len(timerange) == 1:
@@ -101,7 +112,6 @@ def read_data_inhomogeneous(iom, blockid=0, timerange=None, path='.'):
             ki.sort()
             k.append(ki)
 
-        dt = parameters["dt"] if "dt" in parameters else None
         plot_coefficients(k, ck, step, dt, blockid=blockid, path=path)
 
 
