@@ -258,7 +258,7 @@ class MorseEigenstate(Wavepacket):
         delta = ((self._nu - 1) + 1 / (12 * (self._nu - 1) - 1 / (10 * (self._nu - 1))))
         r2 = sqrt(self._beta * delta / (exp(1) * self._nu))
         r4 = ((self._nu - 1) / (2 * pi)) ** 0.25
-        ex = log(delta) - 1 - log(self._nu) + (self._nu - 1) / self._nu * self._beta * x + exp(-self._beta * x)
+        ex = log(delta / self._nu) + (self._nu - 1) / self._nu * self._beta * x + exp(-self._beta * x) - 1
         return r2 * r4 * exp(-self._nu / 2 * ex)
 
 
