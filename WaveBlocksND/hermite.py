@@ -157,7 +157,7 @@ def hermite_asy_pos(n, x):
 def get_tau(n):
     r"""
     """
-    if not _tauvalues.has_key(n):
+    if n not in _tauvalues:
         if n % 2 == 0:
             p = 0.0
         else:
