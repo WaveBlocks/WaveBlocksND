@@ -7,7 +7,7 @@ Asymptotic approximation to Hermite polynomials of very high degree.
 @license: Modified BSD License
 """
 
-from numpy import (pi, sqrt, log, sin, cos, arccos, sinh, cosh, arccosh,
+from numpy import (sqrt, log, sin, cos, arccos, sinh, cosh, arccosh,
                    zeros_like, floating, atleast_1d)
 from scipy.special import airy
 
@@ -48,8 +48,6 @@ def pbcf_series(mu, ct, zeta, phi):
     u = (u0, u1, u2, u3, u4, u5)
     # Airy Evaluation (Bi and Bip unused)
     Ai, Aip, Bi, Bip = airy(mu**(4.0/6.0) * zeta)
-    # Prefactor for U
-    P = 2.0*sqrt(pi) * mu**(1.0/6.0) * phi
     # Terms for U
     # http://dlmf.nist.gov/12.10#E42
     A0 =   b[0]*u[0]
@@ -60,8 +58,8 @@ def pbcf_series(mu, ct, zeta, phi):
     B2 = -(a[5]*u[0] + phi**6*a[4]*u[1] + phi**12*a[3]*u[2] + phi**18*a[2]*u[3] + phi**24*a[1]*u[4] + phi**30*a[0]*u[5]) / zeta**8
     # U
     # http://dlmf.nist.gov/12.10#E35
-    U = P * (Ai  * (A0 + A1/mu**2.0 + A2/mu**4.0) +
-             Aip * (B0 + B1/mu**2.0 + B2/mu**4.0) / mu**(8.0/6.0))
+    U = phi * (Ai  * (A0 + A1/mu**2.0 + A2/mu**4.0) +
+               Aip * (B0 + B1/mu**2.0 + B2/mu**4.0) / mu**(8.0/6.0))
     return U
 
 
@@ -119,8 +117,6 @@ def pbcf_asy_tp(n, t):
            2.2303187354615670009*10**-8*t**20)
     # Airy Evaluation (Bi and Bip unused)
     Ai, Aip, Bi, Bip = airy(mu**(4.0/6.0) * zeta)
-    # Prefactor for U
-    P = 2.0*sqrt(pi) * mu**(1.0/6.0) * phi
     # Terms for U
     # http://dlmf.nist.gov/12.10#E42
     A0 = 1.0
@@ -131,8 +127,8 @@ def pbcf_asy_tp(n, t):
     B2 = -0.021934053543058220142  + 0.022346550505843322786*zeta  - 0.024595927387236822024*zeta**2  + 0.025053467465276891847*zeta**3  - 0.023734309391991717696*zeta**4  + 0.021194552738417480440*zeta**5
     # U
     # http://dlmf.nist.gov/12.10#E35
-    U = P * (Ai  * (A0 + A1/mu**2.0 + A2/mu**4.0) +
-             Aip * (B0 + B1/mu**2.0 + B2/mu**4.0) / mu**(8.0/6.0))
+    U = phi * (Ai  * (A0 + A1/mu**2.0 + A2/mu**4.0) +
+               Aip * (B0 + B1/mu**2.0 + B2/mu**4.0) / mu**(8.0/6.0))
     return U
 
 
