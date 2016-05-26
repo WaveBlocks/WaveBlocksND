@@ -7,14 +7,11 @@ Asymptotic approximation to Hermite polynomials of very high degree.
 @license: Modified BSD License
 """
 
-from numpy import (sqrt, log, sin, cos, arccos, sinh, cosh, arccosh,
+from numpy import (sqrt, log, sin, cos, arccos, sinh, cosh, arccosh, exp,
                    zeros_like, floating, atleast_1d)
 from scipy.special import airy
 
 from .orthogonal import hermite_recursion, h_roots
-
-# Cache some numerical values
-_tauvalues = {}
 
 
 def pbcf_series(mu, ct, zeta, phi):
@@ -157,16 +154,12 @@ def hermite_asy_pos(n, x):
 def get_tau(n):
     r"""
     """
-    if n not in _tauvalues:
-        if n % 2 == 0:
-            p = 0.0
-        else:
-            # First maximum
-            p = abs(h_roots(n+1)[0]).min()
-        yrec = hermite_recursion(n, p)
-        yasy = hermite_asy_pos(n, p)
-        _tauvalues[n] = yrec / yasy
-    return _tauvalues[n]
+    d = (n+1) + 1/(12*(n+1) - 1/(10*(n+1)))
+    tauexp = 1/4 - (n/2 - 1/4)*log(2) - ((n+1)/2)*log(d) + (n+1/3)*log(sqrt(2*n+1)) + log(n+1)/4
+    gams = [1.0, -1/24.0, 1/1152.0, 1003/414720.0, -4027/39813120.0]
+    s = 1.0 + 0.5 * (sum(gams[i] / (n + 0.5)**i for i in range(1, 5)))
+    tau = s * exp(tauexp)
+    return tau
 
 
 def hermite_asy(n, x):
