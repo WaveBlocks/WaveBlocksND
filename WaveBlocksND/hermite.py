@@ -3,7 +3,7 @@
 Asymptotic approximation to Hermite polynomials of very high degree.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2015 R. Bourquin
+@copyright: Copyright (C) 2015, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -11,11 +11,16 @@ from numpy import (sqrt, log, sin, cos, arccos, sinh, cosh, arccosh, exp,
                    zeros_like, floating, atleast_1d)
 from scipy.special import airy
 
-from .orthogonal import hermite_recursion, h_roots
-
 
 def pbcf_series(mu, ct, zeta, phi):
-    r"""
+    r"""Asymptotic series expansion of parabolic cylinder function:
+
+    .. math:: U\left(-\frac{1}{2}\mu^{2},\mu t\sqrt{2}\right)
+
+    :param mu: The value of :math:`\mu = 2n + 1`
+    :param ct: The value of :math:`t = \frac{x}{\sqrt{\mu}}`
+    :param zeta: The value of :math:`\zeta`
+    :param phi: The value of :math:`\phi(\zeta)`
     """
     # Coefficients
     # http://dlmf.nist.gov/12.10#E43
@@ -36,12 +41,11 @@ def pbcf_series(mu, ct, zeta, phi):
     # Polynomials
     # http://dlmf.nist.gov/12.10#E9
     u0 = 1.0
-    u1 = (       1.0*ct**3 -          6.0*ct) / 24.0
-    u2 = (      -9.0*ct**4 +        249.0*ct**2 +         145.0) / 1152.0
-    u3 = (   -4042.0*ct**9 +      18189.0*ct**7 -       28287.0*ct**5 -      151995.0*ct**3 -     259290.0*ct) / 414720.0
-    u4 = (   72756.0*ct**10 -    321339.0*ct**8 -      154982.0*ct**6 +    50938215.0*ct**4 +  122602962.0*ct**2 + 12773113.0) / 39813120.0
-    u5 = (82393456.0*ct**15 - 617950920.0*ct**13 + 1994971575.0*ct**11 - 3630137104.0*ct**9 + 4433574213.0*ct**7
-          - 37370295816.0*ct**5 - 119582875013.0*ct**3 -34009066266.0*ct) /6688604160.0
+    u1 = (       1.0*ct**3  -         6.0*ct) / 24.0
+    u2 = (      -9.0*ct**4  +       249.0*ct**2  +        145.0) / 1152.0
+    u3 = (   -4042.0*ct**9  +     18189.0*ct**7  -      28287.0*ct**5  -     151995.0*ct**3 -     259290.0*ct) / 414720.0
+    u4 = (   72756.0*ct**10 -    321339.0*ct**8  -     154982.0*ct**6  +   50938215.0*ct**4 +  122602962.0*ct**2 +    12773113.0) / 39813120.0
+    u5 = (82393456.0*ct**15 - 617950920.0*ct**13 + 1994971575.0*ct**11 - 3630137104.0*ct**9 + 4433574213.0*ct**7 - 37370295816.0*ct**5 - 119582875013.0*ct**3 - 34009066266.0*ct) / 6688604160.0
     u = (u0, u1, u2, u3, u4, u5)
     # Airy Evaluation (Bi and Bip unused)
     Ai, Aip, Bi, Bip = airy(mu**(4.0/6.0) * zeta)
@@ -61,7 +65,14 @@ def pbcf_series(mu, ct, zeta, phi):
 
 
 def pbcf_asy_s(n, t):
-    r"""Asymptotic series expansion of parabolic cylinder function.
+    r"""Asymptotic series expansion of parabolic cylinder function:
+
+    .. math:: U\left(-\frac{1}{2}\mu^{2},\mu t\sqrt{2}\right)
+
+    for :math:`0 \leq t < 1`.
+
+    :param n: The order :math:`n`
+    :param t: The rescaled variable :math:`t`
     """
     theta = arccos(t)
     st = sin(theta)
@@ -71,14 +82,21 @@ def pbcf_asy_s(n, t):
     # http://dlmf.nist.gov/12.10#E23
     eta = 0.5*theta - 0.5*st*ct
     # http://dlmf.nist.gov/12.10#E39
-    zeta = -(3.0*eta/2.0) ** (2.0/3.0)
+    zeta = -(3.0 * eta / 2.0) ** (2.0 / 3.0)
     # http://dlmf.nist.gov/12.10#E40
     phi = (-zeta / st**2) ** (0.25)
     return pbcf_series(mu, ct, zeta, phi)
 
 
 def pbcf_asy_l(n, t):
-    r"""Asymptotic series expansion of parabolic cylinder function.
+    r"""Asymptotic series expansion of parabolic cylinder function:
+
+    .. math:: U\left(-\frac{1}{2}\mu^{2},\mu t\sqrt{2}\right)
+
+    for :math:`1 < t`.
+
+    :param n: The order :math:`n`
+    :param t: The rescaled variable :math:`t`
     """
     theta = arccosh(t)
     st = sinh(theta)
@@ -88,14 +106,21 @@ def pbcf_asy_l(n, t):
     # http://dlmf.nist.gov/12.10#E23
     eta = 0.5*st*ct - 0.5*log(st + ct)
     # http://dlmf.nist.gov/12.10#E39
-    zeta = (3.0*eta/2.0) ** (2.0/3.0)
+    zeta = (3.0 * eta / 2.0) ** (2.0 / 3.0)
     # http://dlmf.nist.gov/12.10#E40
     phi = (zeta / st**2) ** (0.25)
     return pbcf_series(mu, ct, zeta, phi)
 
 
 def pbcf_asy_tp(n, t):
-    r"""Asymptotic series expansion of parabolic cylinder function.
+    r"""Asymptotic series expansion of parabolic cylinder function:
+
+    .. math:: U\left(-\frac{1}{2}\mu^{2},\mu t\sqrt{2}\right)
+
+    for :math:`t \approx 1`. This is the turning point special case.
+
+    :param n: The order :math:`n`
+    :param t: The rescaled variable :math:`t`
     """
     mu = 2.0*n + 1.0
     # Series inversion
@@ -130,7 +155,14 @@ def pbcf_asy_tp(n, t):
 
 
 def hermite_asy_pos(n, x):
-    r"""
+    r"""Expand the Hermite function :math:`h_n(x)` in terms
+    of the parabolic cylinder function :math:`U`. The scalar
+    prefactor is omitted. This function uses asymptotic formulas
+    and is accurate to machine precision for about :math:`n > 100`.
+    The variable :math:`x` must have a non-negative real value.
+
+    :param n: The order :math:`n`
+    :param x: The variable :math:`x`
     """
     # Rescale the x values
     mu = sqrt(2.0*n + 1.0)
@@ -152,7 +184,9 @@ def hermite_asy_pos(n, x):
 
 
 def get_tau(n):
-    r"""
+    r"""Compute the scalar prefactor :math:`\tau(n)`.
+
+    :param n: The order :math:`n`
     """
     d = (n+1) + 1/(12*(n+1) - 1/(10*(n+1)))
     tauexp = 1/4 - (n/2 - 1/4)*log(2) - ((n+1)/2)*log(d) + (n+1/3)*log(sqrt(2*n+1)) + log(n+1)/4
@@ -163,7 +197,14 @@ def get_tau(n):
 
 
 def hermite_asy(n, x):
-    r"""
+    r"""Expand the Hermite function :math:`h_n(x)` in terms
+    of the parabolic cylinder function :math:`U`. This function
+    uses asymptotic formulas and is accurate to machine precision
+    for about :math:`n > 100`. The variable :math:`x` can be any
+    small or large value on the real axis.
+
+    :param n: The order :math:`n`
+    :param x: The variable :math:`x`
     """
     x = atleast_1d(x)
     neg = x < 0
