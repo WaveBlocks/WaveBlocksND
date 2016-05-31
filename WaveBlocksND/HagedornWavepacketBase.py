@@ -7,10 +7,10 @@ This file contains the basic interface for general wavepackets.
 @license: Modified BSD License
 """
 
-from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, vsplit, vstack, zeros, conjugate, transpose
-from numpy.linalg import eigh
+from numpy import array, atleast_2d, complexfloating, cumsum, dot, einsum, pi, vsplit, vstack, zeros, conjugate, transpose, identity, diag, real
+from numpy.linalg import eigh, eig
 from scipy import exp, sqrt
-from scipy.linalg import det, inv, norm, polar
+from scipy.linalg import det, inv, norm, polar, svd
 
 from WaveBlocksND.Wavepacket import Wavepacket
 from WaveBlocksND.AbstractGrid import AbstractGrid
@@ -60,7 +60,7 @@ class HagedornWavepacketBase(Wavepacket):
         self._coefficients[component] = cnew
 
 
-    def get_basis_shapes(self, component=None):
+    def get_basis_shapes(self, *, component=None):
         r"""Retrieve the basis shapes :math:`\mathfrak{K}_i` for each component :math:`i`.
 
         :param component: The component :math:`i` whose basis shape we request. (Default is
@@ -74,7 +74,7 @@ class HagedornWavepacketBase(Wavepacket):
             return tuple(self._basis_shapes)
 
 
-    def set_basis_shapes(self, basis_shape, component=None):
+    def set_basis_shapes(self, basis_shape, *, component=None):
         r"""Set the basis shape :math:`\mathfrak{K}` of a given component or for all components.
 
         :param basis_shape: The basis shape for an individual component or a list with all :math:`N` shapes.
@@ -153,7 +153,7 @@ class HagedornWavepacketBase(Wavepacket):
         return self._coefficients[component][key]
 
 
-    def set_coefficients(self, values, component=None):
+    def set_coefficients(self, values, *, component=None):
         r"""Update all the coefficients :math:`c` of :math:`\Psi` or update
         the coefficients :math:`c^i` of the components :math:`\Phi_i` only.
 
@@ -180,7 +180,7 @@ class HagedornWavepacketBase(Wavepacket):
             self._coefficients[component] = values.copy().reshape((bs, 1))
 
 
-    def get_coefficients(self, component=None):
+    def get_coefficients(self, *, component=None):
         r"""Returns the coefficients :math:`c^i` for some component :math:`\Phi_i` of
         :math:`\Psi` or all the coefficients :math:`c` of all components.
 
@@ -202,7 +202,7 @@ class HagedornWavepacketBase(Wavepacket):
             return self._coefficients[component].copy()
 
 
-    def get_coefficient_vector(self, component=None):
+    def get_coefficient_vector(self, *, component=None):
         r"""Retrieve the coefficients for all components :math:`\Phi_i` simultaneously.
 
         .. warning:: This function does *not* copy the input data!
@@ -258,7 +258,7 @@ class HagedornWavepacketBase(Wavepacket):
         return agrid
 
 
-    def _evaluate_phi0(self, component, nodes, prefactor=False):
+    def _evaluate_phi0(self, component, nodes, *, prefactor=False):
         r"""Evaluate the lowest order basis function :math:`\phi_0` on a
         grid :math:`\Gamma` of nodes.
 
@@ -291,7 +291,7 @@ class HagedornWavepacketBase(Wavepacket):
         return prefactor * exp(exponent)
 
 
-    def evaluate_basis_at(self, grid, component, prefactor=False, new=False):
+    def evaluate_basis_at(self, grid, component, *, prefactor=False, new=True):
         r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -321,16 +321,13 @@ class HagedornWavepacketBase(Wavepacket):
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
-        QQ = transpose(dot(Qinv, Qbar))
+        QQ = dot(Qinv, Qbar)
 
         if new:
-            UA, PA = polar(Q, side='left')
-            _, EV = eigh(PA)
-            AL = dot(transpose(conjugate(EV)), UA)
-            # ALhinv = transpose(conjugate(inv(AL)))
-            ALhinv = conjugate(inv(AL))
-            Qinv = dot(AL, Qinv)
-            QQ = dot(AL, dot(QQ, ALhinv))
+            _, PA = polar(Q, side='left')
+            EW, EV = eigh(real(PA))
+            Qinv = dot(diag(1.0 / EW), EV.T)
+            QQ = identity(D)
 
         # Compute the ground state phi_0 via direct evaluation
         mu0 = bas[tuple(D * [0])]
@@ -375,7 +372,7 @@ class HagedornWavepacketBase(Wavepacket):
         return phi
 
 
-    def slim_recursion(self, grid, component, prefactor=False):
+    def slim_recursion(self, grid, component, *, prefactor=False, new=True):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
         This routine is a slim version compared to the full basis evaluation. At every moment
         we store only the data we really need to compute the next step until we hit the highest
@@ -399,7 +396,13 @@ class HagedornWavepacketBase(Wavepacket):
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
-        QQ = transpose(dot(Qinv, Qbar))
+        QQ = dot(Qinv, Qbar)
+
+        if new:
+            _, PA = polar(Q, side='left')
+            EW, EV = eigh(real(PA))
+            Qinv = dot(diag(1.0 / EW), EV.T)
+            QQ = identity(D)
 
         # The basis shape
         bas = self._basis_shapes[component]
@@ -467,7 +470,7 @@ class HagedornWavepacketBase(Wavepacket):
         return psi
 
 
-    def evaluate_at(self, grid, component=None, prefactor=False):
+    def evaluate_at(self, grid, *, component=None, prefactor=False, new=True):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -482,7 +485,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         if component is not None:
             phase = exp(1.0j * Pis[component][4] / self._eps**2)
-            values = phase * self.slim_recursion(grid, component, prefactor=prefactor)
+            values = phase * self.slim_recursion(grid, component, prefactor=prefactor, new=new)
 
         else:
             values = []
@@ -496,7 +499,7 @@ class HagedornWavepacketBase(Wavepacket):
                 # TODO: Find more efficient way to do this
 
                 phase = exp(1.0j * Pis[component][4] / self._eps**2)
-                values.append(phase * self.slim_recursion(grid, component, prefactor=prefactor))
+                values.append(phase * self.slim_recursion(grid, component, prefactor=prefactor, new=new))
 
         return values
 
