@@ -317,7 +317,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         # Precompute some constants
         Pi = self.get_parameters(component=component)
-        q, p, Q, P, S = Pi
+        q, p, Q, P, _ = Pi
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
@@ -392,7 +392,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         # Precompute some constants
         Pi = self.get_parameters(component=component)
-        q, p, Q, P, S = Pi
+        q, p, Q, P, _ = Pi
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
