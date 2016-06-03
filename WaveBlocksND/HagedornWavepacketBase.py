@@ -291,7 +291,7 @@ class HagedornWavepacketBase(Wavepacket):
         return prefactor * exp(exponent)
 
 
-    def evaluate_basis_at(self, grid, component, *, prefactor=False, new=True):
+    def evaluate_basis_at(self, grid, component, *, prefactor=False):
         r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -323,7 +323,7 @@ class HagedornWavepacketBase(Wavepacket):
         Qbar = conjugate(Q)
         QQ = dot(Qinv, Qbar)
 
-        if new:
+        if self._new:
             _, PA = polar(Q, side='left')
             EW, EV = eigh(real(PA))
             Qinv = dot(diag(1.0 / EW), EV.T)
@@ -372,7 +372,7 @@ class HagedornWavepacketBase(Wavepacket):
         return phi
 
 
-    def slim_recursion(self, grid, component, *, prefactor=False, new=True):
+    def slim_recursion(self, grid, component, *, prefactor=False):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
         This routine is a slim version compared to the full basis evaluation. At every moment
         we store only the data we really need to compute the next step until we hit the highest
@@ -398,7 +398,7 @@ class HagedornWavepacketBase(Wavepacket):
         Qbar = conjugate(Q)
         QQ = dot(Qinv, Qbar)
 
-        if new:
+        if self._new:
             _, PA = polar(Q, side='left')
             EW, EV = eigh(real(PA))
             Qinv = dot(diag(1.0 / EW), EV.T)

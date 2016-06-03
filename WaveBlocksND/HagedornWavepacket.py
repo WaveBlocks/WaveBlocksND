@@ -22,7 +22,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
 
-    def __init__(self, dimension, ncomponents, eps):
+    def __init__(self, dimension, ncomponents, eps, new=True):
         r"""Initialize a new homogeneous Hagedorn wavepacket.
 
         :param dimension: The space dimension :math:`D` the packet has.
@@ -66,6 +66,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
 
         # Function for taking continuous roots
         self._sqrt = ContinuousSqrt(reference=angle(det(Q)))
+
+        self._new = new
 
 
     def __str__(self):
