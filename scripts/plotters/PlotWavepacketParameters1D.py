@@ -12,7 +12,7 @@ time propagation.
 
 import argparse
 import os
-from numpy import real, imag, abs, where, nan, nanmin, nanmax, isnan
+from numpy import real, imag, abs, where, nan, nanmin, nanmax, isnan, conjugate
 from matplotlib.pyplot import figure, close
 
 from WaveBlocksND import ComplexMath
@@ -245,6 +245,19 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_ylabel(r"$\Im Q(t)$")
     ax.set_title(r"Trajectory of $Q$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format))
+    close(fig)
+
+
+    fig = figure()
+    ax = fig.gca()
+    for P, Q in zip(Phist, Qhist):
+        ax.plot(time, abs(P.T * Q - Q.T * P), label=r'$P^{T} Q - Q^{T} P$')
+        ax.plot(time, abs(conjugate(P.T) * Q - conjugate(Q.T) * P + 2.0j), label=r'$P^{H} Q - Q^{H} P$')
+    ax.set_xlim(view[0], view[1])
+    ax.grid(True)
+    ax.legend(loc='upper left')
+    fig.suptitle("Wavepacket PQ relation check")
+    fig.savefig(os.path.join(path, "wavepacket_PQrelation_block"+str(index)+GD.output_format))
     close(fig)
 
 
