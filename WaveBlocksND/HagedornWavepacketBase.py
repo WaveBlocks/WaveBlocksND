@@ -470,7 +470,7 @@ class HagedornWavepacketBase(Wavepacket):
         return psi
 
 
-    def evaluate_at(self, grid, *, component=None, prefactor=False, new=True):
+    def evaluate_at(self, grid, *, component=None, prefactor=False):
         r"""Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
@@ -485,7 +485,7 @@ class HagedornWavepacketBase(Wavepacket):
 
         if component is not None:
             phase = exp(1.0j * Pis[component][4] / self._eps**2)
-            values = phase * self.slim_recursion(grid, component, prefactor=prefactor, new=new)
+            values = phase * self.slim_recursion(grid, component, prefactor=prefactor)
 
         else:
             values = []
@@ -499,7 +499,7 @@ class HagedornWavepacketBase(Wavepacket):
                 # TODO: Find more efficient way to do this
 
                 phase = exp(1.0j * Pis[component][4] / self._eps**2)
-                values.append(phase * self.slim_recursion(grid, component, prefactor=prefactor, new=new))
+                values.append(phase * self.slim_recursion(grid, component, prefactor=prefactor))
 
         return values
 
