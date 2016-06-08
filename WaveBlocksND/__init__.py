@@ -61,7 +61,9 @@ from WaveBlocksND.HagedornWavepacket import HagedornWavepacket
 from WaveBlocksND.HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 
 from WaveBlocksND.Gradient import Gradient
+from WaveBlocksND.WavepacketGradient import WavepacketGradient
 from WaveBlocksND.GradientHAWP import GradientHAWP
+from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
 from WaveBlocksND.PositionHAWP import PositionHAWP
 
 # Linear combinations

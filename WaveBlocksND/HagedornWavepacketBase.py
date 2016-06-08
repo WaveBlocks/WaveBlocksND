@@ -16,6 +16,7 @@ from WaveBlocksND.Wavepacket import Wavepacket
 from WaveBlocksND.AbstractGrid import AbstractGrid
 from WaveBlocksND.GridWrapper import GridWrapper
 from WaveBlocksND.GradientHAWP import GradientHAWP
+from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
 from functools import reduce
 
 __all__ = ["HagedornWavepacketBase"]
@@ -542,7 +543,10 @@ class HagedornWavepacketBase(Wavepacket):
 
         :return: A :py:class:`GradientHAWP` instance.
         """
-        return GradientHAWP()
+        if self._new:
+            return GradientHAWPnew()
+        else:
+            return GradientHAWP()
 
 
     # A wavepacket knows how to compute inner products

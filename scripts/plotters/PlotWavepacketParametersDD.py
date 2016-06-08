@@ -12,7 +12,7 @@ time propagation.
 
 import argparse
 import os
-from numpy import real, imag, abs, array, where, nan, isnan, nanmin, nanmax
+from numpy import real, imag, abs, array, where, nan, isnan, nanmin, nanmax, conjugate, dot, identity
 from numpy.linalg import norm, det
 from matplotlib.pyplot import figure, close
 
@@ -43,7 +43,11 @@ def read_data_homogeneous(iom, blockid=0):
     Phist = array([det(Phist[i, :, :]) for i in range(Phist.shape[0])]).reshape(-1)
     Shist = Shist.reshape(-1)
 
-    return (time, [qhist], [phist], [Qhist], [Phist], [Shist])
+    #relPQ1 = norm(dot(Phist.T, Q) - dot(Q.T, P), ord='fro', axis=0)
+    #relPQ2 = norm(dot(conjugate(P.T), Q) - dot(conjugate(Q.T), P) + 2.0j * identity(D), ord='fro', axis=0)
+
+
+    return (time, [qhist], [phist], [Qhist], [Phist], [Shist], [relPQ1], [relPQ2])
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -84,7 +88,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     """
     print("Plotting the parameters of data block '{}'".format(index))
 
-    time, qhist, phist, Qhist, Phist, Shist = data
+    time, qhist, phist, Qhist, Phist, Shist, relPQ1, relPQ2 = data
 
     # View
     if view[0] is None:
@@ -235,6 +239,19 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_title(r"Trajectory of $\det Q$")
     fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format))
     close(fig)
+
+
+    # fig = figure()
+    # ax = fig.gca()
+    # for P, Q in zip(Phist, Qhist):
+    #     ax.plot(time, norm(dot(P.T, Q) - dot(Q.T, P), ord='fro', axis=0), label=r'$P^{T} Q - Q^{T} P$')
+    #     ax.plot(time, norm(dot(conjugate(P.T), Q) - dot(conjugate(Q.T), P) + 2.0j * identity(D), ord='fro', axis=0), label=r'$P^{H} Q - Q^{H} P$')
+    # ax.set_xlim(view[0], view[1])
+    # ax.grid(True)
+    # ax.legend(loc='upper left')
+    # fig.suptitle("Wavepacket PQ relation check")
+    # fig.savefig(os.path.join(path, "wavepacket_PQrelation_block"+str(index)+GD.output_format))
+    # close(fig)
 
 
 

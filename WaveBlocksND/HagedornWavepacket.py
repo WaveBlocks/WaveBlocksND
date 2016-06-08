@@ -22,7 +22,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
 
-    def __init__(self, dimension, ncomponents, eps, new=True):
+    def __init__(self, dimension, ncomponents, eps, *, new=True):
         r"""Initialize a new homogeneous Hagedorn wavepacket.
 
         :param dimension: The space dimension :math:`D` the packet has.
@@ -120,6 +120,8 @@ class HagedornWavepacket(HagedornWavepacketBase):
         other.set_innerproduct(self.get_innerproduct())
         # The complex root cache
         other._sqrt = self._sqrt.clone()
+
+        other._new = self._new
 
         return other
 
