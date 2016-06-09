@@ -108,7 +108,10 @@ This assumes that the dependencies are installed globally on the system.
 If we want a truly isolated environment, we can omit the switch ``--system-site-packages``.
 This will cause all packages to be built and installed locally to this `virtualenv`.
 
-Next, we switch into the directory and active the `virtualenv`:
+.. note:: Make sure you adapt the path to the `Python` interpreter, in this
+          example ``/usr/bin/python3.4``, to fit your own system.
+
+Next, we switch into the directory and activate the `virtualenv`:
 
 ::
 
@@ -123,6 +126,13 @@ by running:
    pip install git+https://github.com/WaveBlocks/WaveBlocksND.git#egg=WaveBlocksND
 
 That is all we have to do.
+
+.. note:: If you want to install another branch instead of ``master`` from the `git` repository,
+          use the ``@`` syntax of `pip`. For example, to install a branch named ``newfeature``
+          use the command::
+
+            pip install git+https://github.com/WaveBlocks/WaveBlocksND.git@newfeature#egg=WaveBlocksND
+
 
 .. note:: Before using the software, **always** go back to the ``waveblocks`` directory
           and run ``source ./bin/activate`` there to active the ``virtualenv``.

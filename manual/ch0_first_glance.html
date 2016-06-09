@@ -137,7 +137,12 @@ all the <cite>Python</cite> packages that are already installed on the system:</
 <p>This assumes that the dependencies are installed globally on the system.
 If we want a truly isolated environment, we can omit the switch <tt class="docutils literal"><span class="pre">--system-site-packages</span></tt>.
 This will cause all packages to be built and installed locally to this <cite>virtualenv</cite>.</p>
-<p>Next, we switch into the directory and active the <cite>virtualenv</cite>:</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">Make sure you adapt the path to the <cite>Python</cite> interpreter, in this
+example <tt class="docutils literal"><span class="pre">/usr/bin/python3.4</span></tt>, to fit your own system.</p>
+</div>
+<p>Next, we switch into the directory and activate the <cite>virtualenv</cite>:</p>
 <div class="highlight-python"><div class="highlight"><pre>cd waveblocks
 source ./bin/activate
 </pre></div>
@@ -148,6 +153,15 @@ by running:</p>
 </pre></div>
 </div>
 <p>That is all we have to do.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p>If you want to install another branch instead of <tt class="docutils literal"><span class="pre">master</span></tt> from the <cite>git</cite> repository,
+use the <tt class="docutils literal"><span class="pre">&#64;</span></tt> syntax of <cite>pip</cite>. For example, to install a branch named <tt class="docutils literal"><span class="pre">newfeature</span></tt>
+use the command:</p>
+<div class="last highlight-python"><div class="highlight"><pre>pip install git+https://github.com/WaveBlocks/WaveBlocksND.git@newfeature#egg=WaveBlocksND
+</pre></div>
+</div>
+</div>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">Before using the software, <strong>always</strong> go back to the <tt class="docutils literal"><span class="pre">waveblocks</span></tt> directory
