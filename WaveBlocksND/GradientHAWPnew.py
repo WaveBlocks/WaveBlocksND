@@ -46,7 +46,6 @@ class GradientHAWPnew(WavepacketGradient):
         if not wavepacket._new:
             raise ValueError("Old style wavepacket in new style gradient operator!")
 
-        # TODO: Consider moving this method into the HAWP class?
         D = wavepacket.get_dimension()
         eps = wavepacket.get_eps()
         q, p, Q, P, S = wavepacket.get_parameters(component=component)
@@ -54,9 +53,9 @@ class GradientHAWPnew(WavepacketGradient):
         _, PA = polar(Q, side='left')
         EW, EV = eigh(real(PA))
 
-        C = 1.0j * conjugate((conjugate(dot(P, inv(Q))) + dot(P, inv(Q)))).T
-        Gb =  dot(inv(EV.T), diag(1.0 / EW)) - 0.5 * dot(C, dot(inv(EV.T), diag(EW)))
-        Gf = -dot(inv(EV.T), diag(1.0 / EW)) - 0.5 * dot(C, dot(inv(EV.T), diag(EW)))
+        C = -1.0j * conjugate(conjugate(dot(P, inv(Q))) + dot(P, inv(Q))).T
+        Gb = 0.5 * dot(C, dot(inv(EV.T), diag(EW))) - dot(inv(EV.T), diag(1.0 / EW))
+        Gf = 0.5 * dot(C, dot(inv(EV.T), diag(EW))) + dot(inv(EV.T), diag(1.0 / EW))
 
         coeffs = wavepacket.get_coefficients(component=component)
 
@@ -70,7 +69,6 @@ class GradientHAWPnew(WavepacketGradient):
         for k in K.get_node_iterator():
             # Central phi_i coefficient
             cnew[Ke[k], :] += squeeze(coeffs[K[k]] * p)
-            cnew[Ke[k], :] += squeeze(coeffs[K[k]] * q) # TODO
 
             # Backward neighbours phi_{i - e_d}
             nbw = Ke.get_neighbours(k, selection="backward")

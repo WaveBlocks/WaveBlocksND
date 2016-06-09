@@ -40,7 +40,6 @@ class GradientHAWP(WavepacketGradient):
                  one column per dimension :math:`d`. The :math:`c^\prime` array is of shape
                  :math:`|\mathfrak{\dot{K}}| \times D`.
         """
-        # TODO: Consider moving this method into the HAWP class?
         D = wavepacket.get_dimension()
         eps = wavepacket.get_eps()
         q, p, Q, P, S = wavepacket.get_parameters(component=component)
