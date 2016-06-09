@@ -7,7 +7,7 @@ Compute the action of the gradient operator applied to a new Hagedorn wavepacket
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, squeeze, dot, transpose, diag, real, identity
+from numpy import zeros, complexfloating, conjugate, squeeze, dot, diag, real
 from numpy.linalg import inv
 from scipy import sqrt
 from scipy.linalg import polar, eigh
