@@ -4,7 +4,7 @@ Compute some observables like norm, kinetic and potential energy
 of linear combinations of general wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -22,7 +22,7 @@ class ObservablesLCWP(Observables):
     :math:`\Psi_j` in :math:`\Upsilon := \sum_{j=0}^J c_j \Psi_j`.
     """
 
-    def __init__(self, innerproduct=None):
+    def __init__(self, *, innerproduct=None, gradient=None):
         r"""Initialize a new :py:class:`ObservablesLCWP` instance for observable computation
         of linear combinations :math:`\Upsilon` of wavepackets :math:`\Psi_j`.
 
@@ -36,7 +36,10 @@ class ObservablesLCWP(Observables):
         if innerproduct is not None:
             self._innerproduct = innerproduct
 
-        self._gradient = GradientLCWP()
+        if gradient is not None:
+            self._gradient = gradient
+        else:
+            self._gradient = GradientLCWP()
 
 
     def set_innerproduct(self, innerproduct):
@@ -51,7 +54,7 @@ class ObservablesLCWP(Observables):
         self._innerproduct = innerproduct
 
 
-    def overlap_matrix(self, lincomb, component=None):
+    def overlap_matrix(self, lincomb, *, component=None):
         r"""Compute the overlap matrix :math:`M_{r,c} = \langle\Upsilon_r|\Upsilon_c\rangle`.
 
         Note that this function is just a shortcut for calling the inner
@@ -68,7 +71,7 @@ class ObservablesLCWP(Observables):
         return OM
 
 
-    def norm(self, lincomb, matrix=None, component=None, summed=False, return_matrix=False):
+    def norm(self, lincomb, *, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the :math:`L^2` norm :math:`\langle\Upsilon|\Upsilon\rangle`
         of a linear combination :math:`\Upsilon` of wavepackets.
 
@@ -108,7 +111,7 @@ class ObservablesLCWP(Observables):
             return norm
 
 
-    def kinetic_overlap_matrix(self, lincomb, component=None):
+    def kinetic_overlap_matrix(self, lincomb, *, component=None):
         r"""Compute the kinetic overlap matrix :math:`{M_T}_{r,c} = \langle\Upsilon_r|T|\Upsilon_c\rangle`.
 
         :param lincomb: The linear combination :math:`\Upsilon`.
@@ -128,7 +131,7 @@ class ObservablesLCWP(Observables):
         return OMT
 
 
-    def kinetic_energy(self, lincomb, matrix=None, component=None, summed=False, return_matrix=False):
+    def kinetic_energy(self, lincomb, *, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the kinetic energy :math:`E_{\text{kin}} := \langle\Upsilon|T|\Upsilon\rangle`
         of a linear combination :math:`\Upsilon` of wavepackets.
 
@@ -168,7 +171,7 @@ class ObservablesLCWP(Observables):
             return ekin
 
 
-    def potential_overlap_matrix(self, lincomb, potential, component=None):
+    def potential_overlap_matrix(self, lincomb, potential, *, component=None):
         r"""Compute the potential overlap matrix :math:`{M_V}_{r,c} = \langle\Upsilon_r|V|\Upsilon_c\rangle`.
 
         :param lincomb: The linear combination :math:`\Upsilon`.
@@ -184,7 +187,7 @@ class ObservablesLCWP(Observables):
         return OMV
 
 
-    def potential_energy(self, lincomb, potential, matrix=None, component=None, summed=False, return_matrix=False):
+    def potential_energy(self, lincomb, potential, *, matrix=None, component=None, summed=False, return_matrix=False):
         r"""Compute the potential energy :math:`E_{\text{pot}} := \langle\Upsilon|V|\Upsilon\rangle`.
         of a linear combination :math:`\Upsilon` of wavepackets.
 

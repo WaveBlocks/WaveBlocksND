@@ -3,7 +3,7 @@
 This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -71,7 +71,7 @@ class HagedornWavepacket(HagedornWavepacketBase):
     def __str__(self):
         r""":return: A string describing the Hagedorn wavepacket :math:`\Psi`.
         """
-        s = "Homogeneous Hagedorn wavepacket with "+str(self._number_components)+" component(s) in "+str(self._dimension)+" space dimension(s)\n"
+        s = "Homogeneous Hagedorn wavepacket with " + str(self._number_components) + " component(s) in " + str(self._dimension) + " space dimension(s)\n"
         return s
 
 

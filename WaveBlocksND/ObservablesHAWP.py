@@ -4,7 +4,7 @@ Compute some observables like norm, kinetic and potential energy
 of Hagedorn wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -21,7 +21,7 @@ class ObservablesHAWP(Observables):
     r"""This class implements observable computation for Hagedorn wavepackets :math:`\Psi`.
     """
 
-    def __init__(self, innerproduct=None):
+    def __init__(self, *, innerproduct=None, gradient=None):
         r"""Initialize a new :py:class:`ObservablesHAWP` instance for observable computation
         of Hagedorn wavepackets.
 
@@ -34,7 +34,10 @@ class ObservablesHAWP(Observables):
         if innerproduct is not None:
             self._innerproduct = innerproduct
 
-        self._gradient = GradientHAWP()
+        if gradient is not None:
+            self._gradient = gradient
+        else:
+            self._gradient = GradientHAWP()
 
 
     def set_innerproduct(self, innerproduct):
@@ -48,7 +51,7 @@ class ObservablesHAWP(Observables):
         self._innerproduct = innerproduct
 
 
-    def norm(self, wavepacket, component=None, summed=False):
+    def norm(self, wavepacket, *, component=None, summed=False):
         r"""Calculate the :math:`L^2` norm :math:`\langle \Psi | \Psi \rangle` of the wavepacket :math:`\Psi`.
 
         .. note:: This method is just a shortcut and calls the :py:meth:`HagedornWavepacketBase.norm`
@@ -68,7 +71,7 @@ class ObservablesHAWP(Observables):
         return wavepacket.norm(component=component, summed=summed)
 
 
-    def kinetic_energy(self, wavepacket, component=None, summed=False):
+    def kinetic_energy(self, wavepacket, *, component=None, summed=False):
         r"""Compute the kinetic energy :math:`E_{\text{kin}} := \langle \Psi | T | \Psi \rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 
@@ -105,7 +108,7 @@ class ObservablesHAWP(Observables):
         return ekin
 
 
-    def potential_energy(self, wavepacket, potential, component=None, summed=False):
+    def potential_energy(self, wavepacket, potential, *, component=None, summed=False):
         r"""Compute the potential energy :math:`E_{\text{pot}} := \langle \Psi | V(x) | \Psi \rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 

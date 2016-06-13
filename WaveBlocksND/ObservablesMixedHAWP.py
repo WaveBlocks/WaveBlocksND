@@ -5,7 +5,7 @@ of Hagedorn wavepackets. This class implements the mixed case
 where the bra does not equal the ket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2014 R. Bourquin
+@copyright: Copyright (C) 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -25,7 +25,7 @@ class ObservablesMixedHAWP(Observables):
     the ket :math:`\Psi^\prime`.
     """
 
-    def __init__(self, innerproduct=None):
+    def __init__(self, *, innerproduct=None, gradient=None):
         r"""Initialize a new :py:class:`ObservablesMixedHAWP` instance for observable computation of
         Hagedorn wavepackets.
 
@@ -40,7 +40,10 @@ class ObservablesMixedHAWP(Observables):
         if innerproduct is not None:
             self._innerproduct = innerproduct
 
-        self._gradient = GradientHAWP()
+        if gradient is not None:
+            self._gradient = gradient
+        else:
+            self._gradient = GradientHAWP()
 
 
     def set_innerproduct(self, innerproduct):
@@ -56,7 +59,7 @@ class ObservablesMixedHAWP(Observables):
         self._innerproduct = innerproduct
 
 
-    def overlap(self, pacbra, packet, component=None, summed=False):
+    def overlap(self, pacbra, packet, *, component=None, summed=False):
         r"""Calculate the overlap :math:`\langle \Psi | \Psi^\prime \rangle` of the wavepackets
         :math:`\Psi` and :math:`\Psi^\prime`.
 
@@ -79,7 +82,7 @@ class ObservablesMixedHAWP(Observables):
         return self._innerproduct.quadrature(pacbra, packet, diag_component=component, diagonal=True, summed=summed)
 
 
-    def norm(self, wavepacket, component=None, summed=False):
+    def norm(self, wavepacket, *, component=None, summed=False):
         r"""Calculate the :math:`L^2` norm :math:`\langle \Psi | \Psi \rangle` of the wavepacket :math:`\Psi`.
 
         :param wavepacket: The wavepacket :math:`\Psi` of which we compute the norm.
@@ -98,7 +101,7 @@ class ObservablesMixedHAWP(Observables):
         return wavepacket.norm(component=component, summed=summed)
 
 
-    def kinetic_overlap_energy(self, pacbra, packet, component=None, summed=False):
+    def kinetic_overlap_energy(self, pacbra, packet, *, component=None, summed=False):
         r"""Compute the kinetic energy overlap :math:`\langle \Psi | T | \Psi^\prime \rangle`
         of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
         wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
@@ -146,7 +149,7 @@ class ObservablesMixedHAWP(Observables):
         return ekin
 
 
-    def kinetic_energy(self, wavepacket, component=None, summed=False):
+    def kinetic_energy(self, wavepacket, *, component=None, summed=False):
         r"""Compute the kinetic energy :math:`E_{\text{kin}} := \langle \Psi | T | \Psi \rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 
@@ -168,7 +171,7 @@ class ObservablesMixedHAWP(Observables):
         return self.kinetic_overlap_energy(wavepacket, wavepacket, component=component, summed=summed)
 
 
-    def potential_overlap_energy(self, pacbra, packet, potential, component=None, summed=False):
+    def potential_overlap_energy(self, pacbra, packet, potential, *, component=None, summed=False):
         r"""Compute the potential energy overlap :math:`\langle \Psi | V(x) | \Psi^\prime \rangle`
         of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
         wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
@@ -221,7 +224,7 @@ class ObservablesMixedHAWP(Observables):
         return epot
 
 
-    def potential_energy(self, wavepacket, potential, component=None, summed=False):
+    def potential_energy(self, wavepacket, potential, *, component=None, summed=False):
         r"""Compute the potential energy :math:`E_{\text{pot}} := \langle \Psi | V(x) | \Psi \rangle`
         of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.
 
