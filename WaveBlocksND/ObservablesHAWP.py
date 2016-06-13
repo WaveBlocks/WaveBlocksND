@@ -12,7 +12,6 @@ from functools import partial
 from numpy import conjugate, squeeze, sum
 
 from WaveBlocksND.Observables import Observables
-from WaveBlocksND.GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesHAWP"]
 
@@ -21,23 +20,11 @@ class ObservablesHAWP(Observables):
     r"""This class implements observable computation for Hagedorn wavepackets :math:`\Psi`.
     """
 
-    def __init__(self, *, innerproduct=None, gradient=None):
-        r"""Initialize a new :py:class:`ObservablesHAWP` instance for observable computation
-        of Hagedorn wavepackets.
-
-        :param innerproduct: An inner product for computing the integrals. The inner product is only used for
-                             the computation of the potential energy :math:`\langle \Psi | V(x) | \Psi \rangle`
-                             but not for the kinetic energy.
-        :type innerproduct: A :py:class:`InnerProduct` subclass instance.
+    def __init__(self):
+        r"""Initialize a new :py:class:`ObservablesHAWP` instance for observable computation of Hagedorn wavepackets.
         """
-        # A innerproduct to compute the integrals
-        if innerproduct is not None:
-            self._innerproduct = innerproduct
-
-        if gradient is not None:
-            self._gradient = gradient
-        else:
-            self._gradient = GradientHAWP()
+        self._innerproduct = None
+        self._gradient = None
 
 
     def set_innerproduct(self, innerproduct):
@@ -49,6 +36,16 @@ class ObservablesHAWP(Observables):
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
         """
         self._innerproduct = innerproduct
+
+
+    def set_gradient(self, gradient):
+        r"""Set the gradient.
+
+        :param gradient: A gradient operator. The gradient is only used for the computation of the kinetic
+                         energy :math:`\langle \Psi | T | \Psi \rangle`.
+        :type gradient: A :py:class:`Gradient` subclass instance.
+        """
+        self._gradient = gradient
 
 
     def norm(self, wavepacket, *, component=None, summed=False):
@@ -129,7 +126,7 @@ class ObservablesHAWP(Observables):
         N = wavepacket.get_number_components()
 
         # TODO: Better take 'V' instead of 'V.evaluate_at' as argument?
-        #f = partial(potential.evaluate_at, as_matrix=True)
+        # f = partial(potential.evaluate_at, as_matrix=True)
         f = partial(potential, as_matrix=True)
 
         # Compute the brakets for each component

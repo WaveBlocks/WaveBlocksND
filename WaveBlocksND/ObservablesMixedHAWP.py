@@ -13,37 +13,22 @@ from functools import partial
 from numpy import squeeze, sum
 
 from WaveBlocksND.Observables import Observables
-from WaveBlocksND.GradientHAWP import GradientHAWP
 
 __all__ = ["ObservablesMixedHAWP"]
 
 
 class ObservablesMixedHAWP(Observables):
     r"""This class implements the mixed case observable computation
-    :math:`\langle \Psi | \cdot | \Psi^\prime \rangle` for Hagedorn
+    :math:`\langle \Psi | \cdot | \Psi^{\prime} \rangle` for Hagedorn
     wavepackets :math:`\Psi` where the bra :math:`\Psi` does not equal
-    the ket :math:`\Psi^\prime`.
+    the ket :math:`\Psi^{\prime}`.
     """
 
     def __init__(self, *, innerproduct=None, gradient=None):
-        r"""Initialize a new :py:class:`ObservablesMixedHAWP` instance for observable computation of
-        Hagedorn wavepackets.
-
-        :param innerproduct: An inner product for computing the integrals. The inner product is used
-                             for the computation of all brakets
-                             :math:`\langle \Psi | \cdot | \Psi^\prime \rangle`.
-        :type innerproduct: A :py:class:`InnerProduct` subclass instance.
-
-        .. note:: Make sure to use an inhomogeneous inner product here.
+        r"""Initialize a new :py:class:`ObservablesMixedHAWP` instance for observable computation of Hagedorn wavepackets.
         """
-        # A innerproduct to compute the integrals
-        if innerproduct is not None:
-            self._innerproduct = innerproduct
-
-        if gradient is not None:
-            self._gradient = gradient
-        else:
-            self._gradient = GradientHAWP()
+        self._innerproduct = None
+        self._gradient = None
 
 
     def set_innerproduct(self, innerproduct):
@@ -51,7 +36,7 @@ class ObservablesMixedHAWP(Observables):
 
         :param innerproduct: An inner product for computing the integrals. The inner product is used
                              for the computation of all brakets
-                             :math:`\langle \Psi | \cdot | \Psi^\prime \rangle`.
+                             :math:`\langle \Psi | \cdot | \Psi^{\prime} \rangle`.
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
 
         .. note:: Make sure to use an inhomogeneous inner product here.
@@ -59,24 +44,34 @@ class ObservablesMixedHAWP(Observables):
         self._innerproduct = innerproduct
 
 
+    def set_gradient(self, gradient):
+        r"""Set the gradient.
+
+        :param gradient: A gradient operator. The gradient is only used for the computation of the kinetic
+                         energy :math:`\langle \Psi | T | \Psi^{\prime} \rangle`.
+        :type gradient: A :py:class:`Gradient` subclass instance.
+        """
+        self._gradient = gradient
+
+
     def overlap(self, pacbra, packet, *, component=None, summed=False):
-        r"""Calculate the overlap :math:`\langle \Psi | \Psi^\prime \rangle` of the wavepackets
-        :math:`\Psi` and :math:`\Psi^\prime`.
+        r"""Calculate the overlap :math:`\langle \Psi | \Psi^{\prime} \rangle` of the wavepackets
+        :math:`\Psi` and :math:`\Psi^{\prime}`.
 
         :param pacbra: The wavepacket :math:`\Psi` which takes part in the overlap integral.
         :type pacbra: A :py:class:`HagedornWavepacketBase` subclass instance.
-        :param packet: The wavepacket :math:`\Psi^\prime` which takes part in the overlap integral.
+        :param packet: The wavepacket :math:`\Psi^{\prime}` which takes part in the overlap integral.
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
-                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` whose overlap is
+                          and :math:`\Phi_i^{\prime}` of :math:`\Psi^{\prime}` whose overlap is
                           computed. The default value is ``None`` which means to compute the
                           overlaps with all :math:`N` components involved.
         :type component: Integer or ``None``.
-        :param summed: Whether to sum up the overlaps :math:`\langle \Phi_i | \Phi_i^\prime \rangle`
-                       of the individual components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
+        :param summed: Whether to sum up the overlaps :math:`\langle \Phi_i | \Phi_i^{\prime} \rangle`
+                       of the individual components :math:`\Phi_i` and :math:`\Phi_i^{\prime}`.
         :type summed: Boolean, default is ``False``.
-        :return: The overlap of :math:`\Psi` with :math:`\Psi^\prime` or the overlap of :math:`\Phi_i`
-                 with :math:`\Phi_i^\prime` or a list with the :math:`N` overlaps of all components.
+        :return: The overlap of :math:`\Psi` with :math:`\Psi^{\prime}` or the overlap of :math:`\Phi_i`
+                 with :math:`\Phi_i^{\prime}` or a list with the :math:`N` overlaps of all components.
                  (Depending on the optional arguments.)
         """
         return self._innerproduct.quadrature(pacbra, packet, diag_component=component, diagonal=True, summed=summed)
@@ -102,21 +97,21 @@ class ObservablesMixedHAWP(Observables):
 
 
     def kinetic_overlap_energy(self, pacbra, packet, *, component=None, summed=False):
-        r"""Compute the kinetic energy overlap :math:`\langle \Psi | T | \Psi^\prime \rangle`
-        of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
-        wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
+        r"""Compute the kinetic energy overlap :math:`\langle \Psi | T | \Psi^{\prime} \rangle`
+        of the different components :math:`\Phi_i` and :math:`\Phi_i^{\prime}` of the
+        wavepackets :math:`\Psi` and :math:`\Psi^{\prime}`.
 
         :param pacbra: The wavepacket :math:`\Psi` which takes part in the kinetic energy integral.
         :type pacbra: A :py:class:`HagedornWavepacketBase` subclass instance.
-        :param packet: The wavepacket :math:`\Psi^\prime` which takes part in the kinetic energy integral.
+        :param packet: The wavepacket :math:`\Psi^{\prime}` which takes part in the kinetic energy integral.
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
-                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` which take part in the
+                          and :math:`\Phi_i^{\prime}` of :math:`\Psi^{\prime}` which take part in the
                           kinetic energy integral. If set to ``None`` the computation is performed for
-                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^\prime`.
+                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^{\prime}`.
         :type component: Integer or ``None``.
         :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual
-                       components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
+                       components :math:`\Phi_i` and :math:`\Phi_i^{\prime}`.
         :type summed: Boolean, default is ``False``.
         :return: A list of the kinetic energy overlap integrals of the individual components or
                  the overall kinetic energy overlap of the wavepackets. (Depending on the optional arguments.)
@@ -172,23 +167,23 @@ class ObservablesMixedHAWP(Observables):
 
 
     def potential_overlap_energy(self, pacbra, packet, potential, *, component=None, summed=False):
-        r"""Compute the potential energy overlap :math:`\langle \Psi | V(x) | \Psi^\prime \rangle`
-        of the different components :math:`\Phi_i` and :math:`\Phi_i^\prime` of the
-        wavepackets :math:`\Psi` and :math:`\Psi^\prime`.
+        r"""Compute the potential energy overlap :math:`\langle \Psi | V(x) | \Psi^{\prime} \rangle`
+        of the different components :math:`\Phi_i` and :math:`\Phi_i^{\prime}` of the
+        wavepackets :math:`\Psi` and :math:`\Psi^{\prime}`.
 
         :param pacbra: The wavepacket :math:`\Psi` which takes part in the potential energy integral.
         :type pacbra: A :py:class:`HagedornWavepacketBase` subclass instance.
-        :param packet: The wavepacket :math:`\Psi^\prime` which takes part in the potential energy integral.
+        :param packet: The wavepacket :math:`\Psi^{\prime}` which takes part in the potential energy integral.
         :type packet: A :py:class:`HagedornWavepacketBase` subclass instance.
         :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself
                           but one of its ``V.evaluate_*`` methods.)
         :param component: The index :math:`i` of the components :math:`\Phi_i` of :math:`\Psi`
-                          and :math:`\Phi_i^\prime` of :math:`\Psi^\prime` which take part in the
+                          and :math:`\Phi_i^{\prime}` of :math:`\Psi^{\prime}` which take part in the
                           potential energy integral. If set to ``None`` the computation is performed for
-                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^\prime`.
+                          all :math:`N` components of :math:`\Psi` and :math:`\Psi^{\prime}`.
         :type component: Integer or ``None``.
         :param summed: Whether to sum up the potential energies :math:`E_i` of the individual
-                       components :math:`\Phi_i` and :math:`\Phi_i^\prime`.
+                       components :math:`\Phi_i` and :math:`\Phi_i^{\prime}`.
         :type summed: Boolean, default is ``False``.
         :return: A list of the potential energy overlap integrals of the individual components or
                  the overall potential energy overlap of the wavepackets. (Depending on the optional arguments.)
@@ -200,7 +195,7 @@ class ObservablesMixedHAWP(Observables):
             raise ValueError("Number of components in bra (%d) and ket (%d) differs!" % (Nbra, Nket))
 
         # TODO: Better take 'V' instead of 'V.evaluate_at' as argument?
-        #f = partial(potential.evaluate_at, as_matrix=True)
+        # f = partial(potential.evaluate_at, as_matrix=True)
         f = partial(potential, as_matrix=True)
 
         # Compute the brakets for each component

@@ -11,7 +11,6 @@ of linear combinations of general wavepackets.
 from numpy import conjugate, transpose, dot, sqrt, array, repeat
 
 from WaveBlocksND.Observables import Observables
-from WaveBlocksND.GradientLCWP import GradientLCWP
 
 __all__ = ["ObservablesLCWP"]
 
@@ -22,36 +21,33 @@ class ObservablesLCWP(Observables):
     :math:`\Psi_j` in :math:`\Upsilon := \sum_{j=0}^J c_j \Psi_j`.
     """
 
-    def __init__(self, *, innerproduct=None, gradient=None):
+    def __init__(self):
         r"""Initialize a new :py:class:`ObservablesLCWP` instance for observable computation
         of linear combinations :math:`\Upsilon` of wavepackets :math:`\Psi_j`.
-
-        :param innerproduct: An inner product for computing the integrals. The inner product is
-                             used for the computation of brakets :math:`\langle\Psi|\cdot|\Psi\rangle`.
-        :type innerproduct: A :py:class:`InnerProduct` subclass instance.
-
-        .. note:: Make sure to use an inhomogeneous inner product here.
         """
-        # A innerproduct to compute the integrals
-        if innerproduct is not None:
-            self._innerproduct = innerproduct
-
-        if gradient is not None:
-            self._gradient = gradient
-        else:
-            self._gradient = GradientLCWP()
+        self._innerproduct = None
+        self._gradient = None
 
 
     def set_innerproduct(self, innerproduct):
         r"""Set the innerproduct.
 
         :param innerproduct: An inner product for computing the integrals. The inner product is
-                             used for the computation of brakets :math:`\langle\Psi|\cdot|\Psi\rangle`.
+                             used for the computation of brakets :math:`\langle \Psi | \cdot | \Psi \rangle`.
         :type innerproduct: A :py:class:`InnerProduct` subclass instance.
 
         .. note:: Make sure to use an inhomogeneous inner product here.
         """
         self._innerproduct = innerproduct
+
+
+    def set_gradient(self, gradient):
+        r"""Set the gradient.
+
+        :param gradient: A gradient operator.
+        :type gradient: A :py:class:`Gradient` subclass instance.
+        """
+        self._gradient = gradient
 
 
     def overlap_matrix(self, lincomb, *, component=None):
