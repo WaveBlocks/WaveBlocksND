@@ -8,7 +8,7 @@
     
     <title>MatrixPotential &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="MatrixPotential1S" href="MatrixPotential1S.html" />
     <link rel="prev" title="WaveFunction" href="WaveFunction.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="WaveFunction.html" title="WaveFunction"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="matrixpotential">
 <h1>MatrixPotential<a class="headerlink" href="#matrixpotential" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-matrixpotential-class"></span><h2>About the <tt class="docutils literal"><span class="pre">MatrixPotential</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-matrixpotential-class"></span><h2>About the <code class="docutils literal"><span class="pre">MatrixPotential</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,31 +63,29 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-1b45fbe4b8dce14510b41594a7482d3e7407a9e9.png" alt="Inheritance diagram of MatrixPotential" usemap="#inheritancea8446bdf56" class="inheritance"/>
+<img src="../_images/inheritance-82ca516b0fa24448a3d69d56aa3929f5de4c7c34.png" alt="Inheritance diagram of MatrixPotential" usemap="#inheritancea8446bdf56" class="inheritance"/>
 <map id="inheritancea8446bdf56" name="inheritancea8446bdf56">
 <area shape="rect" id="node1" title="This class represents a potential :math:`V(x)` with :math:`x \in \mathbb{R}^D`." alt="" coords="5,5,221,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.MatrixPotential">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">MatrixPotential</tt><a class="headerlink" href="#WaveBlocksND.MatrixPotential" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">MatrixPotential</code><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents a potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
 The potential is given as an analytic expression. Some calculations with the
 potential are supported. For example calculation of eigenvalues <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/>
 and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> and numerical evaluation on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.calculate_eigenvalues">
-<tt class="descname">calculate_eigenvalues</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_eigenvalues" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calculate_eigenvalues</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.calculate_eigenvalues"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_eigenvalues" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the eigenvalue <img class="math" src="../_images/math/e813b92cb8d0f00f9005c66a07bd23b6be318d82.png" alt="\lambda_0(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -95,13 +93,13 @@ and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89ef
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.calculate_eigenvectors">
-<tt class="descname">calculate_eigenvectors</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_eigenvectors" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calculate_eigenvectors</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.calculate_eigenvectors"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_eigenvectors" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -109,7 +107,7 @@ and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89ef
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.calculate_exponential">
-<tt class="descname">calculate_exponential</tt><big>(</big><em>factor=1</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_exponential" title="Permalink to this definition">¶</a></dt>
+<code class="descname">calculate_exponential</code><span class="sig-paren">(</span><em>factor=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.calculate_exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.calculate_exponential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the matrix exponential <img class="math" src="../_images/math/ae7f8cdc94f67b7595d2bdab5c604444ddb26d77.png" alt="\exp(\alpha V)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,7 +115,7 @@ and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89ef
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The prefactor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> in the exponential.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -125,7 +123,7 @@ and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89ef
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.evaluate_at">
-<tt class="descname">evaluate_at</tt><big>(</big><em>grid</em>, <em>entry=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_at" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid</em>, <em>entry=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.evaluate_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -135,11 +133,11 @@ and eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89ef
 <li><strong>grid</strong> &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
 to evaluate the potential at.</li>
 <li><strong>entry</strong> &#8211; The indices <img class="math" src="../_images/math/0de78069ab15c688f6d8c6f59d5c5805bc969595.png" alt="(i,j)"/> of the component <img class="math" src="../_images/math/85c629034bc5fc3cc106a37b901bda9d0d110f5c.png" alt="V_{i,j}(x)"/>
-we want to evaluate or <tt class="docutils literal"><span class="pre">None</span></tt> to evaluate all entries.</li>
+we want to evaluate or <code class="docutils literal"><span class="pre">None</span></code> to evaluate all entries.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</p>
 </td>
 </tr>
 </tbody>
@@ -148,7 +146,7 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.evaluate_eigenvalues_at">
-<tt class="descname">evaluate_eigenvalues_at</tt><big>(</big><em>grid</em>, <em>entry=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_eigenvalues_at" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evaluate_eigenvalues_at</code><span class="sig-paren">(</span><em>grid</em>, <em>entry=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.evaluate_eigenvalues_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_eigenvalues_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the eigenvalues <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -158,11 +156,11 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 <li><strong>grid</strong> &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
 to evaluate the eigenvalues at.</li>
 <li><strong>entry</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvalue <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/>
-we want to evaluate or <tt class="docutils literal"><span class="pre">None</span></tt> to evaluate all eigenvalues.</li>
+we want to evaluate or <code class="docutils literal"><span class="pre">None</span></code> to evaluate all eigenvalues.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</p>
 </td>
 </tr>
 </tbody>
@@ -171,7 +169,7 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.evaluate_eigenvectors_at">
-<tt class="descname">evaluate_eigenvectors_at</tt><big>(</big><em>grid</em>, <em>entry=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_eigenvectors_at" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evaluate_eigenvectors_at</code><span class="sig-paren">(</span><em>grid</em>, <em>entry=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.evaluate_eigenvectors_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_eigenvectors_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> elementwise on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -181,11 +179,11 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 <li><strong>grid</strong> &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
 to evaluate the eigenvectors at.</li>
 <li><strong>entry</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the eigenvector <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/>
-we want to evaluate or <tt class="docutils literal"><span class="pre">None</span></tt> to evaluate all eigenvectors.</li>
+we want to evaluate or <code class="docutils literal"><span class="pre">None</span></code> to evaluate all eigenvectors.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</p>
 </td>
 </tr>
 </tbody>
@@ -194,7 +192,7 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.evaluate_exponential_at">
-<tt class="descname">evaluate_exponential_at</tt><big>(</big><em>grid</em><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_exponential_at" title="Permalink to this definition">¶</a></dt>
+<code class="descname">evaluate_exponential_at</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.evaluate_exponential_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.evaluate_exponential_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the exponential of the potential matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> on a grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -203,7 +201,7 @@ we want to evaluate or <tt class="docutils literal"><span class="pre">None</span
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grid</strong> &#8211; The grid containing the nodes <img class="math" src="../_images/math/c0a367a725bde748cd7d77d56c15a2159bed91c8.png" alt="\gamma_i"/> we want
 to evaluate the exponential at.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -211,7 +209,7 @@ to evaluate the exponential at.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.get_dimension">
-<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.get_dimension" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.get_dimension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.get_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.
 The dimension is equal to the number of free variables <img class="math" src="../_images/math/33dfc32d00ebd5c5791c824010a155d9e5630b6f.png" alt="x_i"/>
 where <img class="math" src="../_images/math/342c9c9e999f0568e992a131851146b08fa99040.png" alt="x := (x_1, x_2, ..., x_D)"/>.</p>
@@ -219,7 +217,7 @@ where <img class="math" src="../_images/math/342c9c9e999f0568e992a131851146b08fa
 
 <dl class="method">
 <dt id="WaveBlocksND.MatrixPotential.get_number_components">
-<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.MatrixPotential.get_number_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/MatrixPotential.html#MatrixPotential.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.MatrixPotential.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>
 supports. This is equivalent to the number of energy levels <img class="math" src="../_images/math/c7a201688ccfa9cb30f9d0a6fcdbea0d0359b820.png" alt="\lambda_i(x)"/>.</p>
 </dd></dl>
@@ -233,12 +231,12 @@ supports. This is equivalent to the number of energy levels <img class="math" sr
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">MatrixPotential</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">MatrixPotential</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">MatrixPotential</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -251,29 +249,28 @@ supports. This is equivalent to the number of energy levels <img class="math" sr
   <h4>Next topic</h4>
   <p class="topless"><a href="MatrixPotential1S.html"
                         title="next chapter">MatrixPotential1S</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/MatrixPotential.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/MatrixPotential.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -288,12 +285,12 @@ supports. This is equivalent to the number of energy levels <img class="math" sr
         <li class="right" >
           <a href="WaveFunction.html" title="WaveFunction"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>NSDInhomogeneous &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="SparsityOracle" href="SparsityOracle.html" />
     <link rel="prev" title="SymbolicIntegral" href="SymbolicIntegral.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="SymbolicIntegral.html" title="SymbolicIntegral"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="nsdinhomogeneous">
 <h1>NSDInhomogeneous<a class="headerlink" href="#nsdinhomogeneous" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-nsdinhomogeneous-class"></span><h2>About the <tt class="docutils literal"><span class="pre">NSDInhomogeneous</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-nsdinhomogeneous-class"></span><h2>About the <code class="docutils literal"><span class="pre">NSDInhomogeneous</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,28 +63,26 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-d3c3852c85748ae15b546904814923e650c77762.png" alt="Inheritance diagram of NSDInhomogeneous" usemap="#inheritance985a2b4335" class="inheritance"/>
+<img src="../_images/inheritance-3d700474b7e82f3c9ccb95ec2ff4ef281c9971be.png" alt="Inheritance diagram of NSDInhomogeneous" usemap="#inheritance985a2b4335" class="inheritance"/>
 <map id="inheritance985a2b4335" name="inheritance985a2b4335">
 <area shape="rect" id="node2" title="This class is an abstract interface to quadratures in general." alt="" coords="5,5,276,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.NSDInhomogeneous">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">NSDInhomogeneous</tt><big>(</big><em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">NSDInhomogeneous</code><span class="sig-paren">(</span><em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize the numerical steepest descent transformation
 for quadrature of highly oscillatory overlap integrals.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; Typically one uses an instance of <a class="reference internal" href="GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR" title="WaveBlocksND.GaussHermiteOriginalQR"><tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt></a>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; Typically one uses an instance of <a class="reference internal" href="GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR" title="WaveBlocksND.GaussHermiteOriginalQR"><code class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></code></a>.</td>
 </tr>
 </tbody>
 </table>
@@ -92,7 +90,7 @@ for quadrature of highly oscillatory overlap integrals.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.build_bilinear">
-<tt class="descname">build_bilinear</tt><big>(</big><em>Pibra</em>, <em>Piket</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.build_bilinear" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build_bilinear</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.build_bilinear"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.build_bilinear" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the oscillator <img class="math" src="../_images/math/1429c56b096c2710d9662b51c8c2cb61ce4bf90b.png" alt="-\overline{g_k} + g_l"/>
 occuring in the integral <img class="math" src="../_images/math/1548b37da773e0afbff5ebcc66013ec45972314d.png" alt="\langle\phi_k\left[\Pi_k\right] | \phi_l\left[\Pi_l\right]\rangle"/>
 into a bilinear form
@@ -117,7 +115,7 @@ a vector <img class="math" src="../_images/math/fca931570b68cd0a7b9a36eeed67ab77
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.do_nsd">
-<tt class="descname">do_nsd</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.do_nsd" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_nsd</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.do_nsd"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.do_nsd" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by numerical steepest descent the integral
 <img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
 function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -140,17 +138,17 @@ function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this quadrature object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.get_qr">
-<tt class="descname">get_qr</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">get_qr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.get_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -163,7 +161,7 @@ never contains any data.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.initialize_operator">
-<tt class="descname">initialize_operator</tt><big>(</big><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_operator" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_operator</code><span class="sig-paren">(</span><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.initialize_operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the operator part of the inner product to evaluate.
 This function initializes the operator used for quadratures
 and for building matrices.</p>
@@ -175,12 +173,12 @@ maximally polynomial but not exponential.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>operator</strong> &#8211; The operator of the inner product.
-If <tt class="docutils literal"><span class="pre">None</span></tt> a suitable identity is used.</li>
-<li><strong>matrix</strong> &#8211; Set this to <tt class="docutils literal"><span class="pre">True</span></tt> (Default is <tt class="docutils literal"><span class="pre">False</span></tt>) in case
+If <code class="docutils literal"><span class="pre">None</span></code> a suitable identity is used.</li>
+<li><strong>matrix</strong> &#8211; Set this to <code class="docutils literal"><span class="pre">True</span></code> (Default is <code class="docutils literal"><span class="pre">False</span></code>) in case
 we want to compute the matrix elements.
 For nasty technical reasons we can not yet unify
 the operator call syntax.</li>
-<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.</li>
+<li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
@@ -190,7 +188,7 @@ the operator call syntax.</li>
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.initialize_packet">
-<tt class="descname">initialize_packet</tt><big>(</big><em>pacbra</em>, <em>packet=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_packet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_packet</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.initialize_packet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.initialize_packet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the wavepacket parts of the inner product to evaluate.
 Since the quadrature is inhomogeneous, different wavepackets can be
 used for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
@@ -210,7 +208,7 @@ used for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.mix_parameters">
-<tt class="descname">mix_parameters</tt><big>(</big><em>Pibra</em>, <em>Piket</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.mix_parameters" title="Permalink to this definition">¶</a></dt>
+<code class="descname">mix_parameters</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.mix_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.mix_parameters" title="Permalink to this definition">¶</a></dt>
 <dd><p>Mix the two parameter sets <img class="math" src="../_images/math/7dec972d634439bf5a19ed81c57d4acbdcab587c.png" alt="\Pi_i"/> and <img class="math" src="../_images/math/797501c1a4b0c3a07d7c0ee7d87c0848d71f4f7a.png" alt="\Pi_j"/>
 from the &#8216;bra&#8217; and the &#8216;ket&#8217; wavepackets <img class="math" src="../_images/math/4ebbd138d74ec566a2838325c988a614d1dd1276.png" alt="\Phi\left[\Pi_i\right]"/>
 and <img class="math" src="../_images/math/db14dff0f9663705d33ffd6ce75ba3ec1762fc25.png" alt="\Phi^\prime\left[\Pi_j\right]"/>.</p>
@@ -233,7 +231,7 @@ and <img class="math" src="../_images/math/db14dff0f9663705d33ffd6ce75ba3ec1762f
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.perform_build_matrix">
-<tt class="descname">perform_build_matrix</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_build_matrix</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.perform_build_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes by standard quadrature the matrix elements
 <img class="math" src="../_images/math/95754092d910f9d6e6cb0fef991c2377bcdee3cf.png" alt="\langle\Phi_i | f |\Phi^\prime_j\rangle"/> for a general function
 <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -256,7 +254,7 @@ and <img class="math" src="../_images/math/db14dff0f9663705d33ffd6ce75ba3ec1762f
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.perform_quadrature">
-<tt class="descname">perform_quadrature</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_quadrature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.perform_quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.perform_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by numerical steepest descent the integral
 <img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
 function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -279,7 +277,7 @@ function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.prepare">
-<tt class="descname">prepare</tt><big>(</big><em>rows</em>, <em>cols</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.prepare" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepare</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/NSDInhomogeneous.html#NSDInhomogeneous.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precompute some values needed for evaluating the quadrature
 <img class="math" src="../_images/math/d02563476e7f9ceb5b255b99e15fa76b4e4318dd.png" alt="\langle \Phi_i | f(x) | \Phi^\prime_j \rangle"/> or the corresponding
 matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/>.</p>
@@ -302,13 +300,13 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
 
 <dl class="method">
 <dt id="WaveBlocksND.NSDInhomogeneous.set_qr">
-<tt class="descname">set_qr</tt><big>(</big><em>QR</em><big>)</big><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.set_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">set_qr</code><span class="sig-paren">(</span><em>QR</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.NSDInhomogeneous.set_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> instance.</td>
 </tr>
 </tbody>
 </table>
@@ -323,12 +321,12 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">NSDInhomogeneous</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">NSDInhomogeneous</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">NSDInhomogeneous</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -341,29 +339,28 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
   <h4>Next topic</h4>
   <p class="topless"><a href="SparsityOracle.html"
                         title="next chapter">SparsityOracle</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/NSDInhomogeneous.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/NSDInhomogeneous.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -378,12 +375,12 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
         <li class="right" >
           <a href="SymbolicIntegral.html" title="SymbolicIntegral"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

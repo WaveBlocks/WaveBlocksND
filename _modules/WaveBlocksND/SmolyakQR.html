@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SmolyakQR &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SmolyakQR</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the class for constructing high dimensional</span>
+<span class="sd">quadrature rules from one-dimensional ones by using the</span>
+<span class="sd">Smolyak construction.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">operator</span> <span class="kn">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">vsplit</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="n">lexsort</span><span class="p">,</span> <span class="n">where</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">multiply</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="kn">import</span> <span class="n">binom</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.QuadratureRule</span> <span class="kn">import</span> <span class="n">QuadratureRule</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Combinatorics</span> <span class="kn">import</span> <span class="n">lattice_points_norm</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Utils</span> <span class="kn">import</span> <span class="n">meshgrid_nd</span>
+
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SmolyakQR&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SmolyakQR"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR">[docs]</a><span class="k">class</span> <span class="nc">SmolyakQR</span><span class="p">(</span><span class="n">QuadratureRule</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements the construction of high dimensional</span>
+<span class="sd">    quadrature rules from one-dimensional ones by applying the</span>
+<span class="sd">    Smolyak construction.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SmolyakQR.__init__"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">rules</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Initialize a :py:class:`SmolyakQR` instance.</span>
+
+<span class="sd">        :param dimension: The dimension :math:`D` of the final</span>
+<span class="sd">                          quadrature rule.</span>
+<span class="sd">        :param level: The level :math:`k` of the Smolyak construction.</span>
+<span class="sd">                      From theory we know that a Smolyak rule of order</span>
+<span class="sd">                      :math:`k` is exact up to :math:`2 k - 1` if the</span>
+<span class="sd">                      individual rules :math:`Q_i` are exact up to</span>
+<span class="sd">                      :math:`2 i - 1`. The level has to be larger than</span>
+<span class="sd">                      or equal 1.</span>
+<span class="sd">        :param rules: A collection of :py:class:`QuadratureRule` subclass</span>
+<span class="sd">                      instances. Their nodes and weights will be used</span>
+<span class="sd">                      in the Smolyak construction.</span>
+
+<span class="sd">        .. note:: The ``rules`` object must implement simple indexing by</span>
+<span class="sd">                  non-negative numbers and for a given index :math:`j` return</span>
+<span class="sd">                  a univariate quadrature rule of order :math:`j`. Special attention</span>
+<span class="sd">                  must be payed in case this object is mutable. We do not copy it.</span>
+
+<span class="sd">        .. warning:: This implementation uses a special optimization that</span>
+<span class="sd">                     speeds up the computation of all quadrature nodes, especially</span>
+<span class="sd">                     in high dimension, but is only valid if all one dimensional</span>
+<span class="sd">                     rules have symmetric nodes and weights. That is, for every node</span>
+<span class="sd">                     weight pair :math:`(\gamma, \omega)` that is part of the rule,</span>
+<span class="sd">                     the pair :math:`(-\gamma, \omega)` is also contained</span>
+<span class="sd">                     in the quadrature rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The space dimension of the quadrature rule.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="n">dimension</span>
+
+        <span class="c1"># The level of the Smolyak construction.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">=</span> <span class="n">level</span>
+
+        <span class="c1"># The individual quadrature rules.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span> <span class="o">=</span> <span class="n">rules</span>
+
+        <span class="c1"># Set the options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
+
+        <span class="c1"># The number of nodes in this quadrature rule.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The quadrature nodes \gamma.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The quadrature weights \omega.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># Actually compute the nodes and weights.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">construct_rule</span><span class="p">(</span><span class="n">level</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Sparse grid (Smolyak) quadrature rule consisting of:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_level</span><span class="p">]</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+
+<div class="viewcode-block" id="SmolyakQR.get_description"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this quadrature rule object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SmolyakQR&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;qr_rules&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">qr</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span> <span class="k">for</span> <span class="n">qr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="SmolyakQR.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the quadrature nodes :math:`\{\gamma_i\}_i`.</span>
+
+<span class="sd">        :param flat: Dummy parameter for API compatibility with Grids.</span>
+<span class="sd">        :type flat: Boolean, default is ``True``.</span>
+<span class="sd">        :param split: Dummy parameter for API compatibility with Grids.</span>
+<span class="sd">        :type split: Boolean, default is ``False``.</span>
+<span class="sd">        :return: An ndarray containing the quadrature nodes :math:`\{\gamma_i\}_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">construct_rule</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SmolyakQR.get_weights"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the quadrature weights :math:`\{\omega_i\}_i`.</span>
+
+<span class="sd">        :return: An ndarray containing the quadrature weights :math:`\{\omega_i\}_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">construct_rule</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="SmolyakQR.construct_rule"><a class="viewcode-back" href="../../waveblocks_classes/SmolyakQR.html#WaveBlocksND.SmolyakQR.construct_rule">[docs]</a>    <span class="k">def</span> <span class="nf">construct_rule</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">tolerance</span><span class="o">=</span><span class="mf">1e-15</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the quadrature nodes :math:`\{\gamma_i\}_i` and quadrature</span>
+<span class="sd">        weights :math:`\{\omega_i\}_i`.</span>
+
+<span class="sd">        :param K: The level :math:`K` of the Smolyak construction.</span>
+<span class="sd">        :param tolerance: Tolerance for dropping identical quadrature nodes.</span>
+
+<span class="sd">        .. note:: This is an internal method and there should be no reason</span>
+<span class="sd">                  to explicitely call it manually.</span>
+
+<span class="sd">        .. warning:: This method is very expensive and may take a long time</span>
+<span class="sd">                     to finish. Also, the quadrature nodes may use large amounts</span>
+<span class="sd">                     of memory depending on the dimension and level parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Check for valid level parameter</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">K</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Smolyak level has to be 1 at least.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Not enough quadrature rules to build Smolyak grid of level </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">K</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_level</span> <span class="o">=</span> <span class="n">K</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+
+        <span class="n">allnodes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">allweights</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">factors</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Index Set</span>
+        <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">K</span> <span class="o">-</span> <span class="n">D</span><span class="p">),</span> <span class="n">K</span><span class="p">):</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="n">lattice_points_norm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+                <span class="c1"># Only use non-negative nodes for the construction.</span>
+                <span class="c1"># The quadrature nodes \gamma.</span>
+                <span class="n">rules</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">[</span><span class="n">si</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">si</span> <span class="ow">in</span> <span class="n">s</span><span class="p">]</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">]</span>
+                <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">where</span><span class="p">(</span><span class="n">n</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">]</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">meshgrid_nd</span><span class="p">([</span><span class="n">n</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">indices</span><span class="p">)])</span>
+                <span class="n">nodes</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">])</span>
+                <span class="c1"># The quadrature weights \omega.</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="n">rules</span><span class="p">]</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">meshgrid_nd</span><span class="p">([</span><span class="n">w</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">w</span><span class="p">,</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">weights</span><span class="p">,</span> <span class="n">indices</span><span class="p">)])</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+                <span class="n">allnodes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
+                <span class="n">allweights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+                <span class="n">factors</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="n">K</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">binom</span><span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">K</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">q</span><span class="p">))</span>
+
+        <span class="c1"># Sort</span>
+        <span class="n">allnodes</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">(</span><span class="n">allnodes</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">allweights</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">f</span> <span class="o">*</span> <span class="n">w</span> <span class="k">for</span> <span class="n">f</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">factors</span><span class="p">,</span> <span class="n">allweights</span><span class="p">)])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">I</span> <span class="o">=</span> <span class="n">lexsort</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">squeeze</span><span class="p">,</span> <span class="n">vsplit</span><span class="p">(</span><span class="n">allnodes</span><span class="p">,</span> <span class="n">D</span><span class="p">))[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">allnodes</span> <span class="o">=</span> <span class="n">allnodes</span><span class="p">[:,</span> <span class="n">I</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">allweights</span> <span class="o">=</span> <span class="n">allweights</span><span class="p">[:,</span> <span class="n">I</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># Remove duplicates</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="p">[</span><span class="n">last</span><span class="p">]</span>
+
+        <span class="n">no</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">allnodes</span><span class="p">[:,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">allnodes</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">allnodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+            <span class="k">if</span> <span class="n">no</span><span class="p">[</span><span class="n">col</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">tolerance</span><span class="p">:</span>
+                <span class="n">allweights</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">last</span><span class="p">]</span> <span class="o">+=</span> <span class="n">allweights</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span>
+                <span class="n">allweights</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">last</span> <span class="o">=</span> <span class="n">col</span>
+                <span class="n">I</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">last</span><span class="p">)</span>
+
+        <span class="n">allnodes</span> <span class="o">=</span> <span class="n">allnodes</span><span class="p">[:,</span> <span class="n">I</span><span class="p">]</span>
+        <span class="n">allweights</span> <span class="o">=</span> <span class="n">allweights</span><span class="p">[:,</span> <span class="n">I</span><span class="p">]</span>
+
+        <span class="c1"># Mirror points to all other hyperoctants</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">allnodes</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:])</span> <span class="o">&gt;=</span> <span class="n">tolerance</span>
+            <span class="n">mirrorn</span> <span class="o">=</span> <span class="n">allnodes</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">]</span>
+            <span class="n">mirrorn</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="o">-</span><span class="mf">1.0</span>
+            <span class="n">mirrorw</span> <span class="o">=</span> <span class="n">allweights</span><span class="p">[:,</span> <span class="n">indices</span><span class="p">]</span>
+            <span class="n">allnodes</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">allnodes</span><span class="p">,</span> <span class="n">mirrorn</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">allweights</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="n">allweights</span><span class="p">,</span> <span class="n">mirrorw</span><span class="p">])</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">allnodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">allweights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="n">allnodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

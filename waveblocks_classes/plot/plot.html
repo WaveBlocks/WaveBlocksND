@@ -8,7 +8,7 @@
     
     <title>Plot &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Plot 3D" href="../plot3d/plot3d.html" />
     <link rel="prev" title="BlockFactory" href="../BlockFactory.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,23 +43,23 @@
         <li class="right" >
           <a href="../BlockFactory.html" title="BlockFactory"
              accesskey="P">previous</a> |</li>
-        <li><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="plot">
 <h1>Plot<a class="headerlink" href="#plot" title="Permalink to this headline">¶</a></h1>
 <p>The following plot function need only matplotlib for plotting.</p>
 <div class="section" id="plotcf">
-<h2><tt class="docutils literal"><span class="pre">plotcf</span></tt><a class="headerlink" href="#plotcf" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">plotcf</span></code><a class="headerlink" href="#plotcf" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.plotcf">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">plotcf</tt><big>(</big><em>grid</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>axes=None</em>, <em>linestylep='solid'</em>, <em>linewidthp=1</em>, <em>color='k'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.plotcf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">plotcf</code><span class="sig-paren">(</span><em>grid</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>axes=None</em>, <em>linestylep='solid'</em>, <em>linewidthp=1</em>, <em>color='k'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/plotcf.html#plotcf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.plotcf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot the modulus of a complex valued function
 <img class="math" src="../../_images/math/8f9bd8005434d15c29bf4339cf0f070dafe758e3.png" alt="f:\mathbb{R} \rightarrow \mathbb{C}"/>
 together with its phase in a color coded fashion.</p>
@@ -85,10 +85,10 @@ together with its phase in a color coded fashion.</p>
 
 </div>
 <div class="section" id="plotcm">
-<h2><tt class="docutils literal"><span class="pre">plotcm</span></tt><a class="headerlink" href="#plotcm" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">plotcm</span></code><a class="headerlink" href="#plotcm" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.plotcm">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">plotcm</tt><big>(</big><em>matrix</em>, <em>phase=None</em>, <em>modulus=None</em>, <em>darken=None</em>, <em>axes=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.plotcm" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">plotcm</code><span class="sig-paren">(</span><em>matrix</em>, <em>phase=None</em>, <em>modulus=None</em>, <em>darken=None</em>, <em>axes=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/plotcm.html#plotcm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.plotcm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot complex matrices with the phase of the entries encoded into the usual color code.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -110,10 +110,10 @@ together with its phase in a color coded fashion.</p>
 
 </div>
 <div class="section" id="stemcf">
-<h2><tt class="docutils literal"><span class="pre">stemcf</span></tt><a class="headerlink" href="#stemcf" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">stemcf</span></code><a class="headerlink" href="#stemcf" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.stemcf">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">stemcf</tt><big>(</big><em>grid</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>axes=None</em>, <em>linestylep='solid'</em>, <em>linewidthp=2</em>, <em>color=None</em>, <em>markerp='o'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.stemcf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">stemcf</code><span class="sig-paren">(</span><em>grid</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>axes=None</em>, <em>linestylep='solid'</em>, <em>linewidthp=2</em>, <em>color=None</em>, <em>markerp='o'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/stemcf.html#stemcf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.stemcf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stemplot the modulus of a complex valued function <img class="math" src="../../_images/math/d337bb3dcdc880a1d9bc3e4b55aaad4cde03904e.png" alt="f:I -&gt; \mathbb{C}"/> together with its phase in a color coded fashion.
 Additional keyword arguments are passed to the plot function.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -139,10 +139,10 @@ Additional keyword arguments are passed to the plot function.</p>
 
 </div>
 <div class="section" id="plotcf2d">
-<h2><tt class="docutils literal"><span class="pre">plotcf2d</span></tt><a class="headerlink" href="#plotcf2d" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">plotcf2d</span></code><a class="headerlink" href="#plotcf2d" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.plotcf2d">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">plotcf2d</tt><big>(</big><em>x</em>, <em>y</em>, <em>z</em>, <em>darken=None</em>, <em>axes=None</em>, <em>limits=None</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.plotcf2d" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">plotcf2d</code><span class="sig-paren">(</span><em>x</em>, <em>y</em>, <em>z</em>, <em>darken=None</em>, <em>axes=None</em>, <em>limits=None</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/plotcf2d.html#plotcf2d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.plotcf2d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot complex valued functions <img class="math" src="../../_images/math/d00d1998114f33a4cc8185af9326498595c74baf.png" alt="\mathbb{R}^2 \rightarrow \mathbb{C}"/>
 with the usual color code.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -153,7 +153,7 @@ with the usual color code.</p>
 <li><strong>x</strong> &#8211; The <img class="math" src="../../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> values.</li>
 <li><strong>x</strong> &#8211; The <img class="math" src="../../_images/math/b124ff74afb0914bb434e8fb849eb56d734412f8.png" alt="y"/> values.</li>
 <li><strong>z</strong> &#8211; The values <img class="math" src="../../_images/math/e4af8dccac00219b863b8d3e54ec16c00b56bab2.png" alt="z = f(x,y)"/>.</li>
-<li><strong>darken</strong> (Float or <tt class="docutils literal"><span class="pre">None</span></tt> to disable darkening of colors. Default is <img class="math" src="../../_images/math/18dc2ed6a7888e610c722c48a799acf080a61e66.png" alt="R = 1.0"/>.) &#8211; How strong to take into account the modulus of the data to darken colors.
+<li><strong>darken</strong> (Float or <code class="docutils literal"><span class="pre">None</span></code> to disable darkening of colors. Default is <img class="math" src="../../_images/math/18dc2ed6a7888e610c722c48a799acf080a61e66.png" alt="R = 1.0"/>.) &#8211; How strong to take into account the modulus of the data to darken colors.
 Values with <img class="math" src="../../_images/math/d39de7d03be50a097f3592721cd0576e8ee0d789.png" alt="|z| = R"/> will get fully saturated colors
 while <img class="math" src="../../_images/math/9b96052f483c6ec198afa3bac6ea702024cd4a6f.png" alt="|z| = 0"/> is black and <img class="math" src="../../_images/math/89d2e1f877bc8f9f0b1c49e019e465ba4629f2a3.png" alt="|z| \rightarrow \infty"/>
 get whiter and whiter.</li>
@@ -167,10 +167,10 @@ get whiter and whiter.</li>
 
 </div>
 <div class="section" id="contourcf">
-<h2><tt class="docutils literal"><span class="pre">contourcf</span></tt><a class="headerlink" href="#contourcf" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">contourcf</span></code><a class="headerlink" href="#contourcf" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.contourcf">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">contourcf</tt><big>(</big><em>gridx</em>, <em>gridy</em>, <em>values</em>, <em>leveldist=0.02</em>, <em>ax=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.contourcf" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">contourcf</code><span class="sig-paren">(</span><em>gridx</em>, <em>gridy</em>, <em>values</em>, <em>leveldist=0.02</em>, <em>ax=None</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/contourcf.html#contourcf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.contourcf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Plot a function <img class="math" src="../../_images/math/5e24bd3ff865de2cb87b8094b65416430c9d477a.png" alt="f:I^2 \rightarrow C"/> with contour levels.
 Put levels in linear and fixed distances on the third axis.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -191,19 +191,19 @@ Put levels in linear and fixed distances on the third axis.</p>
 
 </div>
 <div class="section" id="stem3d">
-<h2><tt class="docutils literal"><span class="pre">stem3d</span></tt><a class="headerlink" href="#stem3d" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">stem3d</span></code><a class="headerlink" href="#stem3d" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.stem3d">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">stem3d</tt><big>(</big><em>u</em>, <em>v</em>, <em>w</em>, <em>fig=None</em>, <em>markerp='o'</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.stem3d" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">stem3d</code><span class="sig-paren">(</span><em>u</em>, <em>v</em>, <em>w</em>, <em>fig=None</em>, <em>markerp='o'</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/stem3d.html#stem3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.stem3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>This function makes a three dimensional stem plot.</p>
 </dd></dl>
 
 </div>
 <div class="section" id="stemcf3d">
-<h2><tt class="docutils literal"><span class="pre">stemcf3d</span></tt><a class="headerlink" href="#stemcf3d" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">stemcf3d</span></code><a class="headerlink" href="#stemcf3d" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.stemcf3d">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">stemcf3d</tt><big>(</big><em>gridu</em>, <em>gridv</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>fig=None</em>, <em>markerp='o'</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.stemcf3d" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">stemcf3d</code><span class="sig-paren">(</span><em>gridu</em>, <em>gridv</em>, <em>phase</em>, <em>modulus</em>, <em>darken=None</em>, <em>fig=None</em>, <em>markerp='o'</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/stemcf3d.html#stemcf3d"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.stemcf3d" title="Permalink to this definition">¶</a></dt>
 <dd><p>Stemplot the modulus of a complex valued function <img class="math" src="../../_images/math/957ba8022402a5593954c81d56d18c5679d320c2.png" alt="f:I\times I -&gt; \mathbb{C}"/> together with its
 phase in a color coded fashion. Additional keyword arguments are passed to the plot function.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -227,10 +227,10 @@ phase in a color coded fashion. Additional keyword arguments are passed to the p
 
 </div>
 <div class="section" id="legend">
-<h2><tt class="docutils literal"><span class="pre">legend</span></tt><a class="headerlink" href="#legend" title="Permalink to this headline">¶</a></h2>
+<h2><code class="docutils literal"><span class="pre">legend</span></code><a class="headerlink" href="#legend" title="Permalink to this headline">¶</a></h2>
 <dl class="function">
 <dt id="WaveBlocksND.Plot.legend">
-<tt class="descclassname">WaveBlocksND.Plot.</tt><tt class="descname">legend</tt><big>(</big><em>*args</em>, <em>**kwargs</em><big>)</big><a class="headerlink" href="#WaveBlocksND.Plot.legend" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">WaveBlocksND.Plot.</code><code class="descname">legend</code><span class="sig-paren">(</span><em>*args</em>, <em>**kwargs</em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/WaveBlocksND/Plot/legend.html#legend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Plot.legend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Overwrites the pylab legend function.</p>
 <p>It adds another location identfier &#8216;outer right&#8217;
 which locates the legend on the right side of the plot</p>
@@ -244,19 +244,19 @@ which locates the legend on the right side of the plot</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Plot</a><ul>
-<li><a class="reference internal" href="#plotcf"><tt class="docutils literal"><span class="pre">plotcf</span></tt></a></li>
-<li><a class="reference internal" href="#plotcm"><tt class="docutils literal"><span class="pre">plotcm</span></tt></a></li>
-<li><a class="reference internal" href="#stemcf"><tt class="docutils literal"><span class="pre">stemcf</span></tt></a></li>
-<li><a class="reference internal" href="#plotcf2d"><tt class="docutils literal"><span class="pre">plotcf2d</span></tt></a></li>
-<li><a class="reference internal" href="#contourcf"><tt class="docutils literal"><span class="pre">contourcf</span></tt></a></li>
-<li><a class="reference internal" href="#stem3d"><tt class="docutils literal"><span class="pre">stem3d</span></tt></a></li>
-<li><a class="reference internal" href="#stemcf3d"><tt class="docutils literal"><span class="pre">stemcf3d</span></tt></a></li>
-<li><a class="reference internal" href="#legend"><tt class="docutils literal"><span class="pre">legend</span></tt></a></li>
+<li><a class="reference internal" href="#plotcf"><code class="docutils literal"><span class="pre">plotcf</span></code></a></li>
+<li><a class="reference internal" href="#plotcm"><code class="docutils literal"><span class="pre">plotcm</span></code></a></li>
+<li><a class="reference internal" href="#stemcf"><code class="docutils literal"><span class="pre">stemcf</span></code></a></li>
+<li><a class="reference internal" href="#plotcf2d"><code class="docutils literal"><span class="pre">plotcf2d</span></code></a></li>
+<li><a class="reference internal" href="#contourcf"><code class="docutils literal"><span class="pre">contourcf</span></code></a></li>
+<li><a class="reference internal" href="#stem3d"><code class="docutils literal"><span class="pre">stem3d</span></code></a></li>
+<li><a class="reference internal" href="#stemcf3d"><code class="docutils literal"><span class="pre">stemcf3d</span></code></a></li>
+<li><a class="reference internal" href="#legend"><code class="docutils literal"><span class="pre">legend</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -267,29 +267,28 @@ which locates the legend on the right side of the plot</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="../plot3d/plot3d.html"
                         title="next chapter">Plot 3D</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../../_sources/waveblocks_classes/plot/plot.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../../_sources/waveblocks_classes/plot/plot.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -304,12 +303,12 @@ which locates the legend on the right side of the plot</p>
         <li class="right" >
           <a href="../BlockFactory.html" title="BlockFactory"
              >previous</a> |</li>
-        <li><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

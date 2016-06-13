@@ -8,7 +8,7 @@
     
     <title>Visualization &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -35,28 +35,28 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="visualization">
 <h1>Visualization<a class="headerlink" href="#visualization" title="Permalink to this headline">¶</a></h1>
 <p>The post processing step usually splits into two sub-steps. First we compute
 additional data and then we visualize these data. The two sub-steps are performed
 by individual scripts. All these scripts optionally take the file-name or
-file-path of the <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> as a further command line argument.
+file-path of the <code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code> as a further command line argument.
 In this section we look at the plotting scripts used to visualize
 common aspects of the simulated objects.</p>
 <div class="section" id="plotting-observables">
 <h2>Plotting Observables<a class="headerlink" href="#plotting-observables" title="Permalink to this headline">¶</a></h2>
 <p>For plotting the usual observables like norm, energy and autocorrelation the
 following scripts can be used:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotNorms</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotNorms</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotEnergies</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotAutocorrelations</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -67,29 +67,29 @@ following scripts can be used:</p>
 <p>Given a Hagedorn wave-packet <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> we can plot various quantities like the
 time evolution of the parameter set <img class="math" src="../_images/math/954d4334741b0d5eb565f847bb4b58493f74e591.png" alt="\Pi(t)"/>. In one and <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/>
 dimensions this is done with:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketParameters1D</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacketParameters1D</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavepacketParametersDD</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Further in case of a two dimensional simulation we can plot the trajectories
 of <img class="math" src="../_images/math/b73191f0a80b96b5e944911e77fa2b61c11bc85e.png" alt="q(t)"/> and <img class="math" src="../_images/math/1e9194773ee92c201d9ca785b348761aeae8001a.png" alt="p(t)"/> in the <img class="math" src="../_images/math/2beae53edd0fd852a630f9d58e89f54ecf2405aa.png" alt="x-y"/> plane by:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketParametersTrajectory2D</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacketParametersTrajectory2D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>For a schematic propagation plot including also the spreads <img class="math" src="../_images/math/28671f777356b768e2872f1c1b0357e17ed515c1.png" alt="Q(t)"/> and
 <img class="math" src="../_images/math/c56e0a7e40558869b6d6b558a57458e5b3091a67.png" alt="P(t)"/> of the packets we can use:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketParametersSchema2D</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacketParametersSchema2D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Plotting the wave-packet coefficients <img class="math" src="../_images/math/83208c30e4108d67519822499963411aa1eb3ecf.png" alt="c(t)"/> can be done by several scripts
 available which emphasize different aspects. Usually one wants to use one of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketCoefficients</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacketCoefficients</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavepacketCoefficientsStem</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Especially for higher dimensional wave-packets the other two scripts can
 give better visualizations:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacketCoefficientsMapEigen</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacketCoefficientsMapEigen</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavepacketCoefficientsMap</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
@@ -101,7 +101,7 @@ time-steps.</p>
 </div>
 <p>By evaluating a wave-packet we can also plot contours in case of a two
 dimensional simulation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavepacket2DcontourOTF</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavepacket2DcontourOTF</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>This script does plot each wave-packet immediately after evaluation and hence is
@@ -111,54 +111,54 @@ script for wave-functions.</p>
 <div class="section" id="plotting-wavefunctions">
 <h2>Plotting Wavefunctions<a class="headerlink" href="#plotting-wavefunctions" title="Permalink to this headline">¶</a></h2>
 <p>Plotting wave-functions is easy. In one dimension we use this script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>to plot complex valued wave-functions by applying the usual color coding
 representing the phase. In two dimensions we can either make contour plots or
 three dimensional surface plots by calling either of:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction2Dcontour</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavefunction2Dcontour</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotWavefunction2Dsurface</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>Three and higher dimensional wave-functions can not be plotted but
 the need to do so occurs rarely anyway due to the vast amount of data involved.
 All plot scripts can set the view-port by command line arguments, for example:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>usage: PlotWavefunction1D.py [-h] [-d [DATAFILE]] [-p [PARAMETERSFILE]]
-                             [-b [BLOCKID [BLOCKID ...]]] [-r [RESULTSPATH]]
-                             [-x XRANGE XRANGE] [-y YRANGE YRANGE]
-                             [-t TIMERANGE [TIMERANGE ...]] [--plotphase]
-                             [--plotcomponents] [--plotabssqr]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">PlotWavefunction1D</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">]]</span>
+                             <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]]</span>
+                             <span class="p">[</span><span class="o">-</span><span class="n">x</span> <span class="n">XRANGE</span> <span class="n">XRANGE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">y</span> <span class="n">YRANGE</span> <span class="n">YRANGE</span><span class="p">]</span>
+                             <span class="p">[</span><span class="o">-</span><span class="n">t</span> <span class="n">TIMERANGE</span> <span class="p">[</span><span class="n">TIMERANGE</span> <span class="o">...</span><span class="p">]]</span> <span class="p">[</span><span class="o">--</span><span class="n">plotphase</span><span class="p">]</span>
+                             <span class="p">[</span><span class="o">--</span><span class="n">plotcomponents</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">plotabssqr</span><span class="p">]</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -d [DATAFILE], --datafile [DATAFILE]
-                        The simulation data file
-  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
-                        The configuration parameter file
-  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
-                        The data block to handle
-  -r [RESULTSPATH], --resultspath [RESULTSPATH]
-                        Path where to put the results.
-  -x XRANGE XRANGE, --xrange XRANGE XRANGE
-                        The plot range on the x-axis
-  -y YRANGE YRANGE, --yrange YRANGE YRANGE
-                        The plot range on the y-axis
-  -t TIMERANGE [TIMERANGE ...], --timerange TIMERANGE [TIMERANGE ...]
-                        Plot only timestep(s) in this range
-  --plotphase           Plot the complex phase (slow)
-  --plotcomponents      Plot the real/imaginary parts
-  --plotabssqr          Plot the absolute value squared
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">],</span> <span class="o">--</span><span class="n">datafile</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]</span>
+                        <span class="n">The</span> <span class="n">simulation</span> <span class="n">data</span> <span class="n">file</span>
+  <span class="o">-</span><span class="n">p</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">],</span> <span class="o">--</span><span class="n">parametersfile</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">]</span>
+                        <span class="n">The</span> <span class="n">configuration</span> <span class="n">parameter</span> <span class="n">file</span>
+  <span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]],</span> <span class="o">--</span><span class="n">blockid</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]</span>
+                        <span class="n">The</span> <span class="n">data</span> <span class="n">block</span> <span class="n">to</span> <span class="n">handle</span>
+  <span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">],</span> <span class="o">--</span><span class="n">resultspath</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]</span>
+                        <span class="n">Path</span> <span class="n">where</span> <span class="n">to</span> <span class="n">put</span> <span class="n">the</span> <span class="n">results</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">x</span> <span class="n">XRANGE</span> <span class="n">XRANGE</span><span class="p">,</span> <span class="o">--</span><span class="n">xrange</span> <span class="n">XRANGE</span> <span class="n">XRANGE</span>
+                        <span class="n">The</span> <span class="n">plot</span> <span class="nb">range</span> <span class="n">on</span> <span class="n">the</span> <span class="n">x</span><span class="o">-</span><span class="n">axis</span>
+  <span class="o">-</span><span class="n">y</span> <span class="n">YRANGE</span> <span class="n">YRANGE</span><span class="p">,</span> <span class="o">--</span><span class="n">yrange</span> <span class="n">YRANGE</span> <span class="n">YRANGE</span>
+                        <span class="n">The</span> <span class="n">plot</span> <span class="nb">range</span> <span class="n">on</span> <span class="n">the</span> <span class="n">y</span><span class="o">-</span><span class="n">axis</span>
+  <span class="o">-</span><span class="n">t</span> <span class="n">TIMERANGE</span> <span class="p">[</span><span class="n">TIMERANGE</span> <span class="o">...</span><span class="p">],</span> <span class="o">--</span><span class="n">timerange</span> <span class="n">TIMERANGE</span> <span class="p">[</span><span class="n">TIMERANGE</span> <span class="o">...</span><span class="p">]</span>
+                        <span class="n">Plot</span> <span class="n">only</span> <span class="n">timestep</span><span class="p">(</span><span class="n">s</span><span class="p">)</span> <span class="ow">in</span> <span class="n">this</span> <span class="nb">range</span>
+  <span class="o">--</span><span class="n">plotphase</span>           <span class="n">Plot</span> <span class="n">the</span> <span class="nb">complex</span> <span class="n">phase</span> <span class="p">(</span><span class="n">slow</span><span class="p">)</span>
+  <span class="o">--</span><span class="n">plotcomponents</span>      <span class="n">Plot</span> <span class="n">the</span> <span class="n">real</span><span class="o">/</span><span class="n">imaginary</span> <span class="n">parts</span>
+  <span class="o">--</span><span class="n">plotabssqr</span>          <span class="n">Plot</span> <span class="n">the</span> <span class="n">absolute</span> <span class="n">value</span> <span class="n">squared</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="plotting-the-potentials">
 <h2>Plotting the Potentials<a class="headerlink" href="#plotting-the-potentials" title="Permalink to this headline">¶</a></h2>
 <p>One and two dimensional potentials can be plotted by invoking:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">PlotPotential1D</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">PlotPotential1D</span><span class="o">.</span><span class="n">py</span>
 <span class="n">PlotPotential2D</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
@@ -169,7 +169,7 @@ optional arguments:
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -182,29 +182,28 @@ optional arguments:
 </li>
 </ul>
 
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/manual/ch1_s3_visualization.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/manual/ch1_s3_visualization.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -213,12 +212,12 @@ optional arguments:
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

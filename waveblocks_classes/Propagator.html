@@ -8,7 +8,7 @@
     
     <title>Propagator &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="FourierPropagator" href="FourierPropagator.html" />
     <link rel="prev" title="ProcessingSplittingParameters" href="ProcessingSplittingParameters.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="ProcessingSplittingParameters.html" title="ProcessingSplittingParameters"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="propagator">
 <h1>Propagator<a class="headerlink" href="#propagator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-propagator-class"></span><h2>About the <tt class="docutils literal"><span class="pre">Propagator</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-propagator-class"></span><h2>About the <code class="docutils literal"><span class="pre">Propagator</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,36 +63,34 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-8aab71ddbcfcd7f1aa1af0eb99a3243d39786f0a.png" alt="Inheritance diagram of Propagator" usemap="#inheritancebbe391b2a5" class="inheritance"/>
+<img src="../_images/inheritance-263279338ea975674f97b762e51f3c1ad922714c.png" alt="Inheritance diagram of Propagator" usemap="#inheritancebbe391b2a5" class="inheritance"/>
 <map id="inheritancebbe391b2a5" name="inheritancebbe391b2a5">
 <area shape="rect" id="node1" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="5,5,172,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.Propagator">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">Propagator</tt><a class="headerlink" href="#WaveBlocksND.Propagator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">Propagator</code><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Propagators can numerically simulate the time evolution of quantum states
 <img class="math" src="../_images/math/f6ddc1d13565af7e1f5a25dcb3409f9e78beb2ae.png" alt="\psi(x,t)"/> as described by the time-dependent Schroedinger equation</p>
 <div class="math">
-<p><img src="../_images/math/5137638e7a89b45e7c23aa3731378d9ee4dea3a2.png" alt="i \varepsilon^2 \frac{\partial}{\partial t} \psi(x,t) = H \psi(x,t)"/></p>
+<p><img src="../_images/math/29dfa44481484756fe0884b79dedc538cca9b1af.png" alt="i \varepsilon^2 \frac{\partial}{\partial t} \psi(x,t) = H \psi(x,t)"/></p>
 </div><p>where the semi-classical scaling parameter <img class="math" src="../_images/math/cd6eafa4bba4aa03fc36c58e65ea69a9b2aa1744.png" alt="\varepsilon &gt; 0"/> is already included.
 The Hamiltonian operator <img class="math" src="../_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/> is defined as</p>
 <div class="math">
-<p><img src="../_images/math/69cec163be80c80b3245a070fcc1f0f85f23ee9e.png" alt="H = T + V(x) = -\frac{\varepsilon^4}{2} \Delta + V(x)"/></p>
+<p><img src="../_images/math/b2d3f7df6bc670a334ff2d72d739602e1f8a8b27.png" alt="H = T + V(x) = -\frac{\varepsilon^4}{2} \Delta + V(x)"/></p>
 </div><dl class="method">
 <dt id="WaveBlocksND.Propagator.get_number_components">
-<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.Propagator.get_number_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components of <img class="math" src="../_images/math/f6ddc1d13565af7e1f5a25dcb3409f9e78beb2ae.png" alt="\psi(x,t)"/>.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -100,13 +98,13 @@ The Hamiltonian operator <img class="math" src="../_images/math/48f75e0b463f2fdb
 
 <dl class="method">
 <dt id="WaveBlocksND.Propagator.get_potential">
-<tt class="descname">get_potential</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.Propagator.get_potential" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator.get_potential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator.get_potential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> used for time propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><tt class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></tt></a> subclass instance.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><code class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></code></a> subclass instance.</td>
 </tr>
 </tbody>
 </table>
@@ -114,7 +112,7 @@ The Hamiltonian operator <img class="math" src="../_images/math/48f75e0b463f2fdb
 
 <dl class="method">
 <dt id="WaveBlocksND.Propagator.post_propagate">
-<tt class="descname">post_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.Propagator.post_propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator.post_propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator.post_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at final time <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>,
 perform some computations exactly once after running the ordinary
 time propagation and before each time simulation data will be saved.</p>
@@ -124,7 +122,7 @@ nothing and returns.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.Propagator.pre_propagate">
-<tt class="descname">pre_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.Propagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator.pre_propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/fb761c2e199ad45ccf14767f48b88169479d840f.png" alt="t_0"/>,
 perform some computations exactly once before running the ordinary
 time propagation and after each time simulation data was saved.</p>
@@ -134,7 +132,7 @@ nothing and returns.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.Propagator.propagate">
-<tt class="descname">propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.Propagator.propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Propagator.html#Propagator.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Propagator.propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, calculate
 the new <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at time <img class="math" src="../_images/math/248f20efaf95b4d4c73e23e7cb9ece1b73e10098.png" alt="t + \tau"/>. We do exactly one timestep
 of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> here.</p>
@@ -142,7 +140,7 @@ of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a1
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> This is an abstract base class.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> This is an abstract base class.</td>
 </tr>
 </tbody>
 </table>
@@ -157,12 +155,12 @@ of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a1
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Propagator</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">Propagator</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">Propagator</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -175,29 +173,28 @@ of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a1
   <h4>Next topic</h4>
   <p class="topless"><a href="FourierPropagator.html"
                         title="next chapter">FourierPropagator</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/Propagator.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/Propagator.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -212,12 +209,12 @@ of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a1
         <li class="right" >
           <a href="ProcessingSplittingParameters.html" title="ProcessingSplittingParameters"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

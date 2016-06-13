@@ -1,0 +1,194 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.KineticOperator &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.KineticOperator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for the representation of the kinetic</span>
+<span class="sd">operator :math:`-\frac{1}{2} \Delta` in the Fourier space.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">roll</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">square</span><span class="p">,</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="kn">import</span> <span class="n">fftfreq</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;KineticOperator&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="KineticOperator"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator">[docs]</a><span class="k">class</span> <span class="nc">KineticOperator</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This class represents the kinetic operator :math:`T` in Fourier space.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="KineticOperator.__init__"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the Fourier transformation of the position space representation</span>
+<span class="sd">        of the kinetic operator :math:`T`.</span>
+
+<span class="sd">        :param grid: The position space grid :math:`\Gamma` of which we compute</span>
+<span class="sd">                     its Fourier transform :math:`\Omega`.</span>
+<span class="sd">        :param eps: The semi-classical scaling parameter :math:`\varepsilon`. (optional)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Cache the value of eps if given</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span> <span class="o">=</span> <span class="n">eps</span>
+
+        <span class="c1"># TODO: Consider class &quot;FourierSpaceGrid&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_extensions</span><span class="p">()</span>
+
+        <span class="c1"># Fourier domain nodes</span>
+        <span class="n">prefactors</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">pi</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">T</span><span class="p">]</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftfreq</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">d</span><span class="o">=</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">N</span><span class="p">]</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span> <span class="o">/</span> <span class="n">p</span> <span class="k">for</span> <span class="n">o</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">omega</span><span class="p">,</span> <span class="n">prefactors</span><span class="p">)]</span>
+
+        <span class="c1"># Reshape properly</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">omega</span> <span class="o">=</span> <span class="p">[</span><span class="n">o</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">roll</span><span class="p">(</span><span class="n">shape</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">o</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">omega</span><span class="p">)]</span>
+
+        <span class="c1"># Compute the dot product of omega with itself</span>
+        <span class="n">omega_sqr</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">add</span><span class="p">,</span> <span class="nb">map</span><span class="p">(</span><span class="n">square</span><span class="p">,</span> <span class="n">omega</span><span class="p">))</span>
+
+        <span class="c1"># Fourier space grid axes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span> <span class="o">=</span> <span class="n">omega</span>
+        <span class="c1"># Omega dot Omega</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_omega_sqr</span> <span class="o">=</span> <span class="n">omega_sqr</span></div>
+
+
+<div class="viewcode-block" id="KineticOperator.get_fourier_grid_axes"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.get_fourier_grid_axes">[docs]</a>    <span class="k">def</span> <span class="nf">get_fourier_grid_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the grid axes of the Fourier space grid :math:`\Omega`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">o</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="KineticOperator.calculate_operator"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.calculate_operator">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">eps</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the kinetic operator :math:`\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}`</span>
+<span class="sd">        in Fourier space.</span>
+
+<span class="sd">        :param eps: The semi-classical scaling parameter :math:`\varepsilon`. It has to</span>
+<span class="sd">                    be given here or during the initialization of the current instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">eps</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+        <span class="k">if</span> <span class="n">eps</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># The value was not cached at initialization</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="s2">&quot;Parameter eps not given&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_OpT</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">4</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega_sqr</span></div>
+
+
+<div class="viewcode-block" id="KineticOperator.calculate_exponential"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.calculate_exponential">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_exponential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the exponential :math:`\exp(\alpha \underline{\omega} \cdot \underline{\omega})`</span>
+<span class="sd">        used in the Strang splitting.</span>
+
+<span class="sd">        :param factor: The prefactor :math:`\alpha`. It defaults to 1 but is</span>
+<span class="sd">                       usually set to :math:`-\frac{i}{2} \varepsilon^2 \tau`</span>
+<span class="sd">                       by the caller.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expOpT</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_omega_sqr</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KineticOperator.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the kinetic operator :math:`\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}`</span>
+<span class="sd">        in Fourier space. This returns an numpy ``ndarray`` by using a specific :math:`\underline{\omega}`.</span>
+
+<span class="sd">        :param grid: Unused dummy parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_OpT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="KineticOperator.evaluate_exponential_at"><a class="viewcode-back" href="../../waveblocks_classes/KineticOperator.html#WaveBlocksND.KineticOperator.evaluate_exponential_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_exponential_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the exponential :math:`\exp(\alpha \hat{T})` in Fourier space.</span>
+<span class="sd">        This returns a numpy ``ndarray`` by using a specific :math:`\underline{\omega}`.</span>
+<span class="sd">        The factor :math:`\alpha` can be set by the corresponding method.</span>
+
+<span class="sd">        :param grid: Unused dummy parameter.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expOpT</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

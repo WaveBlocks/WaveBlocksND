@@ -1,0 +1,222 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.LinearCombinationOfWavepackets &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.LinearCombinationOfWavepackets</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the basic interface for linear</span>
+<span class="sd">combinations of general but compatible wavepackets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LinearCombinationOfWavepackets&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets">[docs]</a><span class="k">class</span> <span class="nc">LinearCombinationOfWavepackets</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class is an abstract interface to linear combinations</span>
+<span class="sd">    of general but compatible wavepackets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.__init__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">ncomponents</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new linear combination of wavepackets. This</span>
+<span class="sd">        object represents :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.</span>
+<span class="sd">        All :math:`J` wavepackets :math:`\Psi_j` have the same number :math:`N`</span>
+<span class="sd">        components and are defined in the :math:`D` dimensional space.</span>
+
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.__str__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: A string describing the linear combination of wavepackets.</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.clone"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;clone&#39; not yet implemented.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_dimension"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_dimension">[docs]</a>    <span class="k">def</span> <span class="nf">get_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: The space dimension :math:`D` of all the wavepackets :math:`\Psi_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_number_components"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_number_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: The number :math:`N` of components all the wavepackets :math:`\Psi_j` have.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_number_packets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_number_packets">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_packets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: The number :math:`J` of wavepackets in the linear combination :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.add_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.add_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packets</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.remove_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.remove_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">remove_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.set_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.set_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.set_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.get_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWavepackets.set_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

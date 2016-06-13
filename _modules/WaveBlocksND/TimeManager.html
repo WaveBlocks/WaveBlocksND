@@ -1,0 +1,392 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.TimeManager &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.TimeManager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">Provides several computation routines for</span>
+<span class="sd">handling time and timesteps.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">floor</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TimeManager&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="TimeManager"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager">[docs]</a><span class="k">class</span> <span class="nc">TimeManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class performs several computations with time, timesteps and so forth.</span>
+
+<span class="sd">    The important quantities here are:</span>
+
+<span class="sd">    ============ ============== ======================================================</span>
+<span class="sd">    Quantity     Parameter Name Description</span>
+<span class="sd">    ============ ============== ======================================================</span>
+<span class="sd">    :math:`T`    T              the fixed simulation end time</span>
+<span class="sd">    :math:`\tau` dt             the size of the timestep</span>
+<span class="sd">    :math:`N`    nsteps         the overall number of timesteps.</span>
+<span class="sd">    :math:`t`                   an unspecified time in the interval :math:`[0, T]`</span>
+<span class="sd">    :math:`n`                   an unspecified timestep in the interval :math:`[0, N]`</span>
+<span class="sd">    ============ ============== ======================================================</span>
+
+<span class="sd">    The important relations that hold are :math:`T = N \tau` and</span>
+<span class="sd">    in analogy :math:`t = n \tau`. There are also conversion routines</span>
+<span class="sd">    for :math:`t` and :math:`n`.</span>
+
+<span class="sd">    The simulation parameters handed over to the constructor must contain at least</span>
+<span class="sd">    two out of the three values :math:`T`, :math:`\tau` and :math:`N`. If all three</span>
+<span class="sd">    are given, the user is responsible for compatible values.</span>
+
+<span class="sd">    Additionally the class contains some routines for determining</span>
+<span class="sd">    if and when some events (for example saving data) should occur.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">parameters</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># We need two out of three: T, dt and nsteps</span>
+        <span class="n">have_enough</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="s2">&quot;T&quot;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;T&quot;</span><span class="p">])</span>
+            <span class="n">have_enough</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="s2">&quot;dt&quot;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">])</span>
+            <span class="n">have_enough</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="s2">&quot;nsteps&quot;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;nsteps&quot;</span><span class="p">])</span>
+            <span class="n">have_enough</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="k">if</span> <span class="n">have_enough</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Parameters provide to little data to construct a &#39;TimeManager&#39;.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_endtime</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_timestep_size</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">compute_number_timesteps</span><span class="p">()</span>
+
+        <span class="c1"># Interval for regular events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="s2">&quot;write_nth&quot;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_interval</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;write_nth&quot;</span><span class="p">]))</span>
+
+        <span class="c1"># List of timesteps of irregular events</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="s2">&quot;save_at&quot;</span> <span class="ow">in</span> <span class="n">parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_to_eventlist</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;save_at&quot;</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">s</span>  <span class="o">=</span> <span class="s2">&quot;TimeManager configured with:</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; Final time     T: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; Timestep size dt: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; Number of steps : &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+
+<div class="viewcode-block" id="TimeManager.set_T"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.set_T">[docs]</a>    <span class="k">def</span> <span class="nf">set_T</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the simulation endtime :math:`T`.</span>
+
+<span class="sd">        :param T: The simulation end time.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">T</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.set_dt"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.set_dt">[docs]</a>    <span class="k">def</span> <span class="nf">set_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dt</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the simulation timestep size :math:`\tau`.</span>
+
+<span class="sd">        :param dt: The simulation timestep size.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">dt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.set_nsteps"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.set_nsteps">[docs]</a>    <span class="k">def</span> <span class="nf">set_nsteps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nsteps</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the number of timesteps the simulation runs.</span>
+
+<span class="sd">        :param nsteps: The number :math:`n` timesteps we do.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nsteps</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.get_T"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.get_T">[docs]</a>    <span class="k">def</span> <span class="nf">get_T</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the simulation endtime :math:`T`.</span>
+
+<span class="sd">        :returns: The endtime :math:`T`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.get_dt"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.get_dt">[docs]</a>    <span class="k">def</span> <span class="nf">get_dt</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the simulation timestep size :math:`\tau`.</span>
+
+<span class="sd">        :returns: The timestep :math:`\tau`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.get_nsteps"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.get_nsteps">[docs]</a>    <span class="k">def</span> <span class="nf">get_nsteps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the number :math:`n` of timesteps the simulation runs.</span>
+
+<span class="sd">        :returns: the number :math:`n` of timesteps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_endtime"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_endtime">[docs]</a>    <span class="k">def</span> <span class="nf">compute_endtime</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Computes the simulation endtime :math:`T`.</span>
+
+<span class="sd">        :returns: The endtime :math:`T`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_timestep_size"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_timestep_size">[docs]</a>    <span class="k">def</span> <span class="nf">compute_timestep_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Computes the simulation timestep size :math:`\tau`.</span>
+
+<span class="sd">        :returns: The timestep :math:`\tau`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_number_timesteps"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_number_timesteps">[docs]</a>    <span class="k">def</span> <span class="nf">compute_number_timesteps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Computes the number :math:`n` of time steps we will perform.</span>
+
+<span class="sd">        :returns: the number :math:`n` of timesteps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">floor</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_T</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_timestep"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_timestep">[docs]</a>    <span class="k">def</span> <span class="nf">compute_timestep</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the timestep :math:`n` from a time :math:`t` such that</span>
+<span class="sd">        :math:`t = n \tau` holds.</span>
+
+<span class="sd">        :param t: The time t of which we want to find the timestep number.</span>
+<span class="sd">        :returns: The corresponding timestep :math:`n`.</span>
+
+<span class="sd">        Note that the user has to ensure that time :math:`t` is an integral</span>
+<span class="sd">        multiple of :math:`\tau`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">stepo</span> <span class="o">=</span> <span class="n">t</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span>
+        <span class="n">step</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">stepo</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">stepo</span> <span class="o">-</span> <span class="n">step</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mf">1e-10</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: Questionable rounding for timestep computation!&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">step</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_time"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_time">[docs]</a>    <span class="k">def</span> <span class="nf">compute_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the time :math:`t` from a timestep :math:`n` such that</span>
+<span class="sd">        :math:`t = n \tau` holds.</span>
+
+<span class="sd">        :param n: The timestep n of which we want to find the corresponding time.</span>
+<span class="sd">        :returns: The corresponding time :math:`t`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.set_interval"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.set_interval">[docs]</a>    <span class="k">def</span> <span class="nf">set_interval</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the interval for regular events.</span>
+
+<span class="sd">        :param interval: The interval at which regular events get triggered.</span>
+
+<span class="sd">        Note that a value of ``0`` means there are no regular events.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">interval</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.add_to_eventlist"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.add_to_eventlist">[docs]</a>    <span class="k">def</span> <span class="nf">add_to_eventlist</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">alist</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a list of times and/or timesteps to the list of</span>
+<span class="sd">        times when irregular events get triggered.</span>
+
+<span class="sd">        :param alist: A list with integers (interpreted as timesteps)</span>
+<span class="sd">                      and/or floats (interpreted as times)</span>
+
+<span class="sd">        Note that the times and timesteps can be mixed and need not to be</span>
+<span class="sd">        given in monotone order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">timesteps</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># If the list is empty (global default), shortcut</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">alist</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Integers are interpreted as timesteps, floats are interpreted as times (and converted to timesteps)</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">alist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span><span class="p">:</span>
+                <span class="n">timesteps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">item</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">type</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">==</span> <span class="nb">float</span><span class="p">:</span>
+                <span class="n">timesteps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">compute_timestep</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+
+        <span class="c1"># Validate timesteps and check if n in [0,...,N]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+        <span class="n">timesteps</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">timesteps</span> <span class="k">if</span> <span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">tmp</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">timesteps</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: Dropped </span><span class="si">%d</span><span class="s2"> timestep(s) due to invalidity!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">tmp</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)))</span>
+
+        <span class="c1"># Assure unique elements, just silently remove duplicates</span>
+        <span class="n">oldlist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span><span class="p">)</span>
+        <span class="n">newlist</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">timesteps</span><span class="p">)</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">oldlist</span><span class="o">.</span><span class="n">union</span><span class="p">(</span><span class="n">newlist</span><span class="p">))</span>
+        <span class="c1"># Sort in ascending order</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
+        <span class="c1"># Write back</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span> <span class="o">=</span> <span class="n">times</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.compute_number_events"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.compute_number_events">[docs]</a>    <span class="k">def</span> <span class="nf">compute_number_events</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the number of events we will perform during the simulation.</span>
+<span class="sd">        This can for example be used to determine how much space to allocate</span>
+<span class="sd">        in the output files if the events are times at which simulation data</span>
+<span class="sd">        is saved.</span>
+
+<span class="sd">        :returns: The number of events.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># We do not save at regular intervals</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># The number of saves resulting from saving at a regular interval is zero</span>
+            <span class="n">n_si</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="c1"># Determine the number of saves resulting from the savelist</span>
+            <span class="n">n_sl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span><span class="p">)</span>
+        <span class="c1"># We do save at regular intervals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Determine the number of saves resulting from saving at a regular interval</span>
+            <span class="n">n_si</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nsteps</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span>
+            <span class="c1"># Determine the number of saves resulting from the savelist and</span>
+            <span class="c1"># exclude the timesteps which coincide with the regular intervals</span>
+            <span class="n">n_sl</span> <span class="o">=</span> <span class="nb">len</span><span class="p">([</span><span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span> <span class="k">if</span> <span class="n">i</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Total number of saves we will perform is given by the sum</span>
+        <span class="n">number_events</span> <span class="o">=</span> <span class="n">n_si</span> <span class="o">+</span> <span class="n">n_sl</span>
+
+        <span class="k">return</span> <span class="n">number_events</span></div>
+
+
+<div class="viewcode-block" id="TimeManager.is_event"><a class="viewcode-back" href="../../waveblocks_classes/TimeManager.html#WaveBlocksND.TimeManager.is_event">[docs]</a>    <span class="k">def</span> <span class="nf">is_event</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Determine if an event occurs right now.</span>
+
+<span class="sd">        :param n: The current timestep in question.</span>
+<span class="sd">        :returns: ``True`` or ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="c1"># Save every timestep</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">!=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">n</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_interval</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Save every k-th timestep specified by the interval</span>
+            <span class="k">return</span> <span class="bp">True</span>
+        <span class="k">elif</span> <span class="n">n</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eventtimes</span><span class="p">:</span>
+            <span class="c1"># Save if the n is in the list of timesteps</span>
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">return</span> <span class="bp">False</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

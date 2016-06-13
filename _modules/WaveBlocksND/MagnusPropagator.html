@@ -1,0 +1,343 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.MagnusPropagator &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.MagnusPropagator</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the Magnus propagator class for homogeneous wavepackets.</span>
+
+<span class="sd">@author: V. Gradinaru</span>
+<span class="sd">@copyright: Copyright (C) 2012, 2014, 2015, 2016 V. Gradinaru, R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">dot</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">det</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Propagator</span> <span class="kn">import</span> <span class="n">Propagator</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SplittingParameters</span> <span class="kn">import</span> <span class="n">SplittingParameters</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.ComplexMath</span> <span class="kn">import</span> <span class="n">cont_angle</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MagnusPropagator&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="MagnusPropagator"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator">[docs]</a><span class="k">class</span> <span class="nc">MagnusPropagator</span><span class="p">(</span><span class="n">Propagator</span><span class="p">,</span> <span class="n">SplittingParameters</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class can numerically propagate given initial values :math:`\Psi` in</span>
+<span class="sd">    a potential :math:`V(x)`. The propagation is done for a given set of homogeneous</span>
+<span class="sd">    Hagedorn wavepackets neglecting interaction.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`MagnusPropagator` instance.</span>
+
+<span class="sd">        :param parameters: A :py:class:`ParameterProvider` instance containing at least</span>
+<span class="sd">                           the key ``dt`` for providing the timestep :math:`\tau`.</span>
+<span class="sd">        :type parameters: A :py:class:`ParameterProvider` instance</span>
+
+<span class="sd">        :param potential: The potential :math:`V(x)` the wavepacket :math:`\Psi` feels during the time propagation.</span>
+<span class="sd">        :param packet: The initial homogeneous Hagedorn wavepacket :math:`\Psi` we propagate in time.</span>
+<span class="sd">        :raises ValueError: If the number of components of :math:`\Psi` does not match</span>
+<span class="sd">                            the number of energy levels :math:`\lambda_i` of the potential.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The potential :math:`V(x)` the packet(s) feel.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span> <span class="o">=</span> <span class="n">potential</span>
+
+        <span class="c1"># Number :math:`N` of components the wavepacket :math:`\Psi` has got.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+
+        <span class="c1"># A list of Hagedorn wavepackets :math:`\Psi` together with some codata</span>
+        <span class="c1"># like the leading component :math:`\chi` which is the index of the eigenvalue</span>
+        <span class="c1"># :math:`\lambda_\chi` of the potential :math:`V` that is responsible for</span>
+        <span class="c1"># propagating the Hagedorn parameters.</span>
+        <span class="c1"># TODO: We assume a list of (packet, leading_component) tuples here. Generalize tuples to dicts!</span>
+        <span class="c1"># TODO: Do not use a list but better use a hashtable by packet IDs?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span> <span class="o">=</span> <span class="n">packets</span><span class="p">[:]</span>
+
+        <span class="c1"># Keep a reference to the parameter provider instance</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span>
+
+        <span class="c1"># The relative mass scaling matrix M</span>
+        <span class="k">if</span> <span class="s2">&quot;mass_scaling&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_M</span> <span class="o">=</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="p">[</span><span class="s2">&quot;mass_scaling&quot;</span><span class="p">])</span>
+            <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Minv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_M</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># No mass matrix given. Scale all masses equally</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_M</span> <span class="o">=</span> <span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Minv</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_M</span>
+
+        <span class="c1"># Decide about the matrix exponential algorithm to use</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s2">&quot;_matrix_exponential&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_matrixexponential</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+        <span class="c1"># Precalculate the potential splittings needed</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_potential</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;splitting_method&quot;</span><span class="p">])</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Prepare a printable string representing the :py:class:`MagnusPropagator` instance.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s2">&quot;Homogeneous Magnus propagator for &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; components.</span><span class="se">\n</span><span class="s2">&quot;</span>
+
+
+    <span class="k">def</span> <span class="nf">_prepare_potential</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Precalculate the potential splittings needed</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">chi</span> <span class="ow">in</span> <span class="nb">set</span><span class="p">([</span><span class="n">p</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">]):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_local_quadratic</span><span class="p">(</span><span class="n">diagonal_component</span><span class="o">=</span><span class="n">chi</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_local_remainder</span><span class="p">(</span><span class="n">diagonal_component</span><span class="o">=</span><span class="n">chi</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MagnusPropagator.add_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator.add_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a new wavepacket :math:`\Psi` to the list of propagated wavepackets.</span>
+
+<span class="sd">        :param packet: The new wavepacket :math:`\Psi` and its leading component :math:`\chi \in [0,N-1]`.</span>
+<span class="sd">        :type packet: A tuple :math:`(\Psi, \chi)` with :math:`\Psi` a :py:class:`HagedornWavepacket`</span>
+<span class="sd">                      instance and :math:`\chi` an integer.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">packet</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_potential</span><span class="p">()</span></div>
+
+
+    <span class="c1"># TODO: Consider removing this, duplicate</span>
+<div class="viewcode-block" id="MagnusPropagator.get_number_components"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator.get_number_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;:return: The number :math:`N` of components :math:`\Phi_i` of :math:`\Psi`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span></div>
+
+
+<div class="viewcode-block" id="MagnusPropagator.get_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator.get_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the wavepackets :math:`\{\Psi_i\}_i` that take part in the time propagation by the</span>
+<span class="sd">        current :py:class:`MagnusPropagator` instance.</span>
+
+<span class="sd">        :param packet: The index :math:`i` (in this list) of a single packet :math:`\Psi_i` that is</span>
+<span class="sd">                       to be returned. If set to ``None`` (default) return the full list with all packets.</span>
+<span class="sd">        :type packet: Integer or ``None``</span>
+<span class="sd">        :return: A list of :py:class:`HagedornWavepacket` instances or a single instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Does not return leading components. Add this if needed somewhere.</span>
+        <span class="k">if</span> <span class="n">packet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">p</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="n">packet</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="MagnusPropagator.set_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator.set_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the list :math:`\{\Psi_i\}_i` of wavepackets that the propagator will propagate.</span>
+
+<span class="sd">        :param packetlist: A list of new wavepackets :math:`\Psi_i` and their</span>
+<span class="sd">                           leading components :math:`\chi_i` to propagate.</span>
+<span class="sd">        :type packetlist: A list of :math:`(\Psi_i, \chi_i)` tuples.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span> <span class="o">=</span> <span class="n">packetlist</span><span class="p">[:]</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_propkin</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">packet</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Do a kinetic step of size h.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Mi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Minv</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;adQ&quot;</span><span class="p">)</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">adQ</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">q</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Mi</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">Q</span> <span class="o">+</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Mi</span><span class="p">,</span> <span class="n">P</span><span class="p">)</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">Mi</span><span class="p">,</span> <span class="n">p</span><span class="p">))</span>
+        <span class="n">adQn</span> <span class="o">=</span> <span class="n">cont_angle</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">),</span> <span class="n">reference</span><span class="o">=</span><span class="n">adQ</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">packet</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">((</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">,</span> <span class="n">adQn</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_proppotquad</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">h</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">leading_chi</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Do a potential step of size h with the local quadratic part.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_local_quadratic_at</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="n">leading_chi</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">p</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">V</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="n">P</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">Q</span><span class="p">)</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">S</span> <span class="o">-</span> <span class="n">h</span> <span class="o">*</span> <span class="n">V</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">packet</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">((</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">))</span>
+
+
+<div class="viewcode-block" id="MagnusPropagator.propagate"><a class="viewcode-back" href="../../waveblocks_classes/MagnusPropagator.html#WaveBlocksND.MagnusPropagator.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Given a wavepacket :math:`\Psi` at time :math:`t` compute the propagated</span>
+<span class="sd">        wavepacket at time :math:`t + \tau`. We perform exactly one timestep of size</span>
+<span class="sd">        :math:`\tau` here. This propagation is done for all packets in the list</span>
+<span class="sd">        :math:`\{\Psi_i\}_i` and neglects any interaction between two packets.</span>
+<span class="sd">        The semiclassical propagation scheme is used.</span>
+
+<span class="sd">        The Gauss-Legendre rule on the interval :math:`[-1,1]` has two nodes</span>
+<span class="sd">        :math:`n_1 = -\frac{1}{\sqrt{3}}` and</span>
+<span class="sd">        :math:`n_2 = \frac{1}{\sqrt{3}}`.</span>
+<span class="sd">        The integration time step is :math:`[0, 1] dt`, hence we rescale the nodes</span>
+<span class="sd">        onto the interval :math:`[0, 1]` to get</span>
+<span class="sd">        :math:`n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}} =  \frac{1}{2} - \frac{\sqrt{3}}{6}` and</span>
+<span class="sd">        :math:`n_2^{\prime} = \frac{1}{2} + \frac{1}{2\sqrt{3}} =  \frac{1}{2} + \frac{\sqrt{3}}{6}`.</span>
+<span class="sd">        The two time points :math:`h_1` and :math:`h_2` are then given by</span>
+<span class="sd">        :math:`h_1 = n_1^{\prime} = \frac{1}{2} - \frac{1}{2\sqrt{3}}` and</span>
+<span class="sd">        :math:`h_2 = n_2^{\prime} - n_1^{\prime} = \frac{1}{\sqrt{3}}`.</span>
+<span class="sd">        Given a (matrix) differential equation:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y^{\prime}(t) = A(t) y(t)</span>
+
+<span class="sd">        with :math:`t \geq 0`. In each timestep of size :math:`h = dt` we compute:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            A_1 &amp;= A \left( t_n + \left(\frac{1}{2} - \frac{\sqrt{3}}{6} \right) h \right) \\</span>
+<span class="sd">            A_2 &amp;= A \left( t_n + \left(\frac{1}{2} + \frac{\sqrt{3}}{6} \right) h \right)</span>
+
+<span class="sd">        from which we get:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            \sigma_n = \frac{1}{2} h (A_1 + A_2) + \frac{\sqrt{3}}{12} h^2 [A_2, A_1]</span>
+
+<span class="sd">        and then we find for the solution:</span>
+
+<span class="sd">        .. math::</span>
+
+<span class="sd">            y_{n+1} = e^{\sigma_n} y_n</span>
+
+<span class="sd">        More details can be found in [#]_ and [#]_ and especially formula 2.9 in [#]_.</span>
+
+<span class="sd">        .. [#] S. Blanes and P.C. Moan, &quot;Fourth- and sixth-order commutator-free Magnus integrators for linear and non-linear dynamical systems&quot;,</span>
+<span class="sd">               Applied Numerical Mathematics, volume 56 number 12 (2006) 1519-1537.</span>
+
+<span class="sd">        .. [#] S. Blanes and F. Casas and J. Ros, &quot;Improved high order integrators based on the Magnus expansion&quot;,</span>
+<span class="sd">               BIT Numerical Mathematics, volume 40 (1999) 434-450.</span>
+
+<span class="sd">        .. [#] A. Iserles, A. Marthinsen and S.P. Norsett, &quot;On the Implementation of the Method of Magnus Series for Linear Differential Equations&quot;,</span>
+<span class="sd">               BIT Numerical Mathematics, volume 39 number 2 (1999) 281-304.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Cache some parameter values</span>
+        <span class="n">dt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dt</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_a</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span>
+
+        <span class="c1"># Propagate all packets</span>
+        <span class="k">for</span> <span class="n">packet</span><span class="p">,</span> <span class="n">leading_chi</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">:</span>
+            <span class="n">eps</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+
+            <span class="c1"># Propagate until c1 * dt</span>
+            <span class="n">h1</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">-</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">6.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+
+            <span class="c1"># Inner time step</span>
+            <span class="n">nrinnersteps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;innersteps&quot;</span><span class="p">,</span> <span class="n">h1</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">))</span>
+            <span class="n">nrlocalsteps1</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nrinnersteps</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intsplit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_propkin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proppotquad</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">h1</span><span class="p">],</span> <span class="n">nrlocalsteps1</span><span class="p">,</span> <span class="p">[</span><span class="n">packet</span><span class="p">],</span> <span class="p">[</span><span class="n">packet</span><span class="p">,</span> <span class="n">leading_chi</span><span class="p">])</span>
+
+            <span class="c1"># Build a first matrix here with the current parameters of the wavepacket</span>
+            <span class="n">innerproduct</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_innerproduct</span><span class="p">()</span>
+            <span class="n">A1</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_local_remainder_at</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="n">leading_chi</span><span class="p">))</span>
+
+            <span class="c1"># Propagate until c2 * dt</span>
+            <span class="n">h2</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">dt</span>
+
+            <span class="c1"># Inner time step</span>
+            <span class="n">nrinnersteps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parameters</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;innersteps&quot;</span><span class="p">,</span> <span class="n">h2</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">3.0</span> <span class="o">/</span> <span class="mf">8.0</span><span class="p">))</span>
+            <span class="n">nrlocalsteps2</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">nrinnersteps</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intsplit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_propkin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proppotquad</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">h2</span><span class="p">],</span> <span class="n">nrlocalsteps2</span><span class="p">,</span> <span class="p">[</span><span class="n">packet</span><span class="p">],</span> <span class="p">[</span><span class="n">packet</span><span class="p">,</span> <span class="n">leading_chi</span><span class="p">])</span>
+
+            <span class="c1"># Build a second matrix here with the current parameters of the wavepacket</span>
+            <span class="n">innerproduct</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_innerproduct</span><span class="p">()</span>
+            <span class="n">A2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">partial</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_local_remainder_at</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="n">leading_chi</span><span class="p">))</span>
+
+            <span class="c1"># Combine A1 and A2 and build the F matrix for Magnus of 4-th order split</span>
+            <span class="n">F</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="p">(</span><span class="n">A1</span> <span class="o">+</span> <span class="n">A2</span><span class="p">)</span> <span class="o">+</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">3.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">12.0</span> <span class="o">*</span> <span class="n">dt</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">A2</span><span class="p">,</span> <span class="n">A1</span><span class="p">)</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">A1</span><span class="p">,</span> <span class="n">A2</span><span class="p">))</span>
+
+            <span class="c1"># Propagate the coefficients</span>
+            <span class="n">coefficients</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_coefficient_vector</span><span class="p">()</span>
+            <span class="n">coefficients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_matrix_exponential</span><span class="p">(</span><span class="n">F</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">packet</span><span class="o">.</span><span class="n">set_coefficient_vector</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span>
+
+            <span class="c1"># Propagate until dt to finish the current timestep</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">intsplit</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_propkin</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_proppotquad</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">h1</span><span class="p">],</span> <span class="n">nrlocalsteps1</span><span class="p">,</span> <span class="p">[</span><span class="n">packet</span><span class="p">],</span> <span class="p">[</span><span class="n">packet</span><span class="p">,</span> <span class="n">leading_chi</span><span class="p">])</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

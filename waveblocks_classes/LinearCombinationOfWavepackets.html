@@ -8,7 +8,7 @@
     
     <title>LinearCombinationOfWavepackets &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="LinearCombinationOfWPs" href="LinearCombinationOfWPs.html" />
     <link rel="prev" title="BasisTransformationHAWP" href="BasisTransformationHAWP.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="BasisTransformationHAWP.html" title="BasisTransformationHAWP"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="linearcombinationofwavepackets">
 <h1>LinearCombinationOfWavepackets<a class="headerlink" href="#linearcombinationofwavepackets" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-linearcombinationofwavepackets-class"></span><h2>About the <tt class="docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-linearcombinationofwavepackets-class"></span><h2>About the <code class="docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,23 +63,21 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-2f5afd4be74e8d1daa48e00cb3a5b59ff322339b.png" alt="Inheritance diagram of LinearCombinationOfWavepackets" usemap="#inheritance1e682493c4" class="inheritance"/>
+<img src="../_images/inheritance-d86cd87a57e3ad15acf54a09e1c36378b3b98a22.png" alt="Inheritance diagram of LinearCombinationOfWavepackets" usemap="#inheritance1e682493c4" class="inheritance"/>
 <map id="inheritance1e682493c4" name="inheritance1e682493c4">
 <area shape="rect" id="node1" title="This class is an abstract interface to linear combinations" alt="" coords="5,5,465,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">LinearCombinationOfWavepackets</tt><big>(</big><em>dimension</em>, <em>ncomponents</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">LinearCombinationOfWavepackets</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is an abstract interface to linear combinations
 of general but compatible wavepackets.</p>
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>dimension</em>, <em>ncomponents</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new linear combination of wavepackets. This
 object represents <img class="math" src="../_images/math/9a528819d124a32289b0b9a1f9552b42ae47f1a6.png" alt="\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j"/>.
 All <img class="math" src="../_images/math/372c2a0702e1e5866656215408b37a2ddb8d2d45.png" alt="J"/> wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> have the same number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>
@@ -88,7 +86,7 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -96,14 +94,14 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.__str__">
-<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.__str__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the linear combination of wavepackets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -111,12 +109,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.add_wavepacket">
-<tt class="descname">add_wavepacket</tt><big>(</big><em>packet</em>, <em>coefficient</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepacket" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_wavepacket</code><span class="sig-paren">(</span><em>packet</em>, <em>coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.add_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -124,12 +122,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.add_wavepackets">
-<tt class="descname">add_wavepackets</tt><big>(</big><em>packets</em>, <em>coefficients</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_wavepackets</code><span class="sig-paren">(</span><em>packets</em>, <em>coefficients</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.add_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.add_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -137,12 +135,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.clone">
-<tt class="descname">clone</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.clone" title="Permalink to this definition">¶</a></dt>
+<code class="descname">clone</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.clone"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.clone" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -150,12 +148,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_coefficient">
-<tt class="descname">get_coefficient</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficient" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_coefficient</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_coefficient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficient" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -163,12 +161,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_coefficients">
-<tt class="descname">get_coefficients</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficients" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_coefficients</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -176,7 +174,7 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_dimension">
-<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_dimension" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_dimension"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -189,7 +187,7 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_number_components">
-<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_number_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -202,7 +200,7 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_number_packets">
-<tt class="descname">get_number_packets</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_number_packets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_packets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_number_packets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_number_packets" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -215,12 +213,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_wavepacket">
-<tt class="descname">get_wavepacket</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepacket" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_wavepacket</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -228,12 +226,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.get_wavepackets">
-<tt class="descname">get_wavepackets</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_wavepackets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.get_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.get_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -241,12 +239,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.remove_wavepacket">
-<tt class="descname">remove_wavepacket</tt><big>(</big><em>index</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.remove_wavepacket" title="Permalink to this definition">¶</a></dt>
+<code class="descname">remove_wavepacket</code><span class="sig-paren">(</span><em>index</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.remove_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.remove_wavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -254,12 +252,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.set_coefficient">
-<tt class="descname">set_coefficient</tt><big>(</big><em>index</em>, <em>coefficient</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficient" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_coefficient</code><span class="sig-paren">(</span><em>index</em>, <em>coefficient</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.set_coefficient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficient" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -267,12 +265,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.set_coefficients">
-<tt class="descname">set_coefficients</tt><big>(</big><em>coefficients</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficients" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_coefficients</code><span class="sig-paren">(</span><em>coefficients</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.set_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -280,12 +278,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
 
 <dl class="method">
 <dt id="WaveBlocksND.LinearCombinationOfWavepackets.set_wavepackets">
-<tt class="descname">set_wavepackets</tt><big>(</big><em>packetlist</em><big>)</big><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_wavepackets</code><span class="sig-paren">(</span><em>packetlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/LinearCombinationOfWavepackets.html#LinearCombinationOfWavepackets.set_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.LinearCombinationOfWavepackets.set_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -300,12 +298,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">LinearCombinationOfWavepackets</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -318,29 +316,28 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
   <h4>Next topic</h4>
   <p class="topless"><a href="LinearCombinationOfWPs.html"
                         title="next chapter">LinearCombinationOfWPs</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/LinearCombinationOfWavepackets.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/LinearCombinationOfWavepackets.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -355,12 +352,12 @@ components and are defined in the <img class="math" src="../_images/math/9dfa314
         <li class="right" >
           <a href="BasisTransformationHAWP.html" title="BasisTransformationHAWP"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

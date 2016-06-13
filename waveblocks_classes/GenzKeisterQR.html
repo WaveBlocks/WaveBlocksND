@@ -8,7 +8,7 @@
     
     <title>GenzKeisterQR &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="MatrixExponential" href="MatrixExponential.html" />
     <link rel="prev" title="GenzKeisterOriginalQR" href="GenzKeisterOriginalQR.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="GenzKeisterOriginalQR.html" title="GenzKeisterOriginalQR"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="genzkeisterqr">
 <h1>GenzKeisterQR<a class="headerlink" href="#genzkeisterqr" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-genzkeisterqr-class"></span><h2>About the <tt class="docutils literal"><span class="pre">GenzKeisterQR</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-genzkeisterqr-class"></span><h2>About the <code class="docutils literal"><span class="pre">GenzKeisterQR</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,24 +63,22 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-7d7b5092a59e39e4e2a4b0f8140fdbed593167b8.png" alt="Inheritance diagram of GenzKeisterQR" usemap="#inheritance0046885739" class="inheritance"/>
+<img src="../_images/inheritance-eece52755fe6816f0c4644ca1f93ae7c85a8b2de.png" alt="Inheritance diagram of GenzKeisterQR" usemap="#inheritance0046885739" class="inheritance"/>
 <map id="inheritance0046885739" name="inheritance0046885739">
 <area shape="rect" id="node1" title="This class implements a Genz&#45;Keister quadrature rule." alt="" coords="607,4,764,22"/>
 <area shape="rect" id="node2" title="This class implements a Genz&#45;Keister quadrature rule." alt="" coords="274,4,572,22"/>
 <area shape="rect" id="node3" title="This class is an abstract interface to quadrature rules in general." alt="" coords="4,4,239,22"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.GenzKeisterQR">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">GenzKeisterQR</tt><big>(</big><em>dimension</em>, <em>level</em>, <em>options={}</em><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">GenzKeisterQR</code><span class="sig-paren">(</span><em>dimension</em>, <em>level</em>, <em>options={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GenzKeisterQR.html#GenzKeisterQR"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements a Genz-Keister quadrature rule.</p>
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>dimension</em>, <em>level</em>, <em>options={}</em><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dimension</em>, <em>level</em>, <em>options={}</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GenzKeisterQR.html#GenzKeisterQR.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize a new Genz-Keister quadrature rule.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -92,7 +90,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> if the <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is not in the range <img class="math" src="../_images/math/87178b5a0b8825729b252575f9002a54f84cab5d.png" alt="[1, \ldots, 18]"/>.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> if the <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is not in the range <img class="math" src="../_images/math/87178b5a0b8825729b252575f9002a54f84cab5d.png" alt="[1, \ldots, 18]"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -116,7 +114,7 @@ J. Comp. Appl. Math. 71 (1996), pp. 299-309.</td></tr>
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.construct_rule">
-<tt class="descname">construct_rule</tt><big>(</big><em>K</em><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.construct_rule" title="Permalink to this definition">¶</a></dt>
+<code class="descname">construct_rule</code><span class="sig-paren">(</span><em>K</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.construct_rule" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a Genz-Keister quadrature rule.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -141,16 +139,16 @@ of memory depending on the dimension and level parameters.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GenzKeisterQR.html#GenzKeisterQR.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this quadrature rule object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.get_dimension">
-<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_dimension" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -163,7 +161,7 @@ never contains any data.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.get_nodes">
-<tt class="descname">get_nodes</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the quadrature nodes <img class="math" src="../_images/math/72c82a512fdcf651b011831d045774d332782320.png" alt="\{\gamma_i\}_i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -177,7 +175,7 @@ never contains any data.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.get_number_nodes">
-<tt class="descname">get_number_nodes</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_number_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_nodes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_number_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -191,7 +189,7 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
 
 <dl class="method">
 <dt id="WaveBlocksND.GenzKeisterQR.get_weights">
-<tt class="descname">get_weights</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_weights" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GenzKeisterQR.get_weights" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the quadrature weights <img class="math" src="../_images/math/e9a1cc441abfee5dc1f5b96317326e843502d221.png" alt="\{\omega_i\}_i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -212,12 +210,12 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">GenzKeisterQR</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">GenzKeisterQR</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">GenzKeisterQR</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -230,29 +228,28 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
   <h4>Next topic</h4>
   <p class="topless"><a href="MatrixExponential.html"
                         title="next chapter">MatrixExponential</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/GenzKeisterQR.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/GenzKeisterQR.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -267,12 +264,12 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
         <li class="right" >
           <a href="GenzKeisterOriginalQR.html" title="GenzKeisterOriginalQR"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

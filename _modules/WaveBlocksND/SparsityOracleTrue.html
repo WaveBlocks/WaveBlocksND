@@ -1,0 +1,127 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SparsityOracleTrue &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SparsityOracleTrue</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the code for a sparsity oracle</span>
+<span class="sd">always saying the integrals are non-zero.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SparsityOracle</span> <span class="kn">import</span> <span class="n">SparsityOracle</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SparsityOracleTrue&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SparsityOracleTrue"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOracleTrue.html#WaveBlocksND.SparsityOracleTrue">[docs]</a><span class="k">class</span> <span class="nc">SparsityOracleTrue</span><span class="p">(</span><span class="n">SparsityOracle</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements an oracle always saying</span>
+<span class="sd">    the integrals are non-zero.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SparsityOracleTrue.__init__"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOracleTrue.html#WaveBlocksND.SparsityOracleTrue.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize an oracle for estimating if a specific overlap integral</span>
+<span class="sd">        :math:`\langle \Psi_k | \Psi_l \rangle` is approximately zero. This</span>
+<span class="sd">        oracle always returns ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="SparsityOracleTrue.is_not_zero"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOracleTrue.html#WaveBlocksND.SparsityOracleTrue.is_not_zero">[docs]</a>    <span class="k">def</span> <span class="nf">is_not_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`</span>
+<span class="sd">        is zero or at least negligible.</span>
+
+<span class="sd">        :param pacbra: The packet :math:`\Psi_k` that is used for the &#39;bra&#39; part.</span>
+<span class="sd">        :param packet: The packet :math:`\Psi_l` that is used for the &#39;ket&#39; part.</span>
+<span class="sd">        :param component: The component of the packet that is considered.</span>
+<span class="sd">        :return: ``True`` independent of any input or condition.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

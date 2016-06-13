@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.QuadratureRule &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.QuadratureRule</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the interface for general quadrature rules.</span>
+<span class="sd">Do not confuse quadratures with quadrature rules! Quadrature rules</span>
+<span class="sd">are structs containing just nodes and weights and some convenience</span>
+<span class="sd">methods. Quadratures are classes that really can compute things</span>
+<span class="sd">like inner products (brakets) etc.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;QuadratureRule&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="QuadratureRule"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule">[docs]</a><span class="k">class</span> <span class="nc">QuadratureRule</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class is an abstract interface to quadrature rules in general.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;General interface for quadrature rules.</span>
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;QuadratureRule&#39; is an abstract interface.&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;QuadratureRule&#39; is an abstract interface.&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Handle quadrature rule options.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span>
+
+
+<div class="viewcode-block" id="QuadratureRule.get_description"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this quadrature rule object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;QuadratureRule&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuadratureRule.get_dimension"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule.get_dimension">[docs]</a>    <span class="k">def</span> <span class="nf">get_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;:return: The space dimension :math:`D` of the quadrature rule.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span></div>
+
+
+<div class="viewcode-block" id="QuadratureRule.get_number_nodes"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule.get_number_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+
+<span class="sd">        :return: The number of quadrature nodes denoted by :math:`|\Gamma|` that are</span>
+<span class="sd">                 part of this quadrature rule :math:`\Gamma = (\gamma, \omega)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span></div>
+
+
+<div class="viewcode-block" id="QuadratureRule.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+
+<span class="sd">        :return: A two-dimensional ndarray containing the quadrature nodes :math:`\gamma_i`.</span>
+<span class="sd">                 The array must have a shape of :math:`(D, |\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;QuadratureRule&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="QuadratureRule.get_weights"><a class="viewcode-back" href="../../waveblocks_classes/QuadratureRule.html#WaveBlocksND.QuadratureRule.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+
+<span class="sd">        :return: A two-dimensional ndarray containing the quadrature weights :math:`\omega_i`.</span>
+<span class="sd">                 The array must have a shape of :math:`(1, |\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;QuadratureRule&#39; is an abstract interface.&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

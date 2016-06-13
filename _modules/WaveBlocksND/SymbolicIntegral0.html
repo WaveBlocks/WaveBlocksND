@@ -1,0 +1,233 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SymbolicIntegral0 &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SymbolicIntegral0</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">Use a symbolic exact formula for computing the inner product</span>
+<span class="sd">between two semi-classical wavepackets. The formula is</span>
+<span class="sd">constructed explicitly for the inhomogeneous case.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">squeeze</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">isnan</span>
+<span class="kn">from</span> <span class="nn">scipy.misc</span> <span class="kn">import</span> <span class="n">factorial</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.InnerProduct</span> <span class="kn">import</span> <span class="n">InnerProductException</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SymbolicIntegral</span> <span class="kn">import</span> <span class="n">SymbolicIntegral</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SymbolicIntegral0&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SymbolicIntegral0"><a class="viewcode-back" href="../../waveblocks_classes/SymbolicIntegral0.html#WaveBlocksND.SymbolicIntegral0">[docs]</a><span class="k">class</span> <span class="nc">SymbolicIntegral0</span><span class="p">(</span><span class="n">SymbolicIntegral</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Inhomogeneous inner product &lt;0|l&gt; computed using a symbolic exact formula.&quot;</span>
+
+
+<div class="viewcode-block" id="SymbolicIntegral0.get_description"><a class="viewcode-back" href="../../waveblocks_classes/SymbolicIntegral0.html#WaveBlocksND.SymbolicIntegral0.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this integral object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SymbolicIntegral0&quot;</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="SymbolicIntegral0.exact_result_higher"><a class="viewcode-back" href="../../waveblocks_classes/SymbolicIntegral0.html#WaveBlocksND.SymbolicIntegral0.exact_result_higher">[docs]</a>    <span class="k">def</span> <span class="nf">exact_result_higher</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">l</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the overlap integral :math:`\langle \phi_0 | \phi_l \rangle` of</span>
+<span class="sd">        two states :math:`\phi_0` and :math:`\phi_l` by using the symbolic formula:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \langle \phi_0 | \phi_l \rangle =</span>
+<span class="sd">            \frac{1}{\sqrt{l!}} 2^{-\frac{l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot</span>
+<span class="sd">            \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{l}{2}} \cdot</span>
+<span class="sd">            \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l}{2}}</span>
+<span class="sd">            \cdot</span>
+<span class="sd">            \\</span>
+<span class="sd">            H_{l}\left(</span>
+<span class="sd">              \frac{1}{\varepsilon}</span>
+<span class="sd">              \frac{\overline{ P_1}\left(q_1-q_2\right)-\overline{Q_1}\left(p_1-p_2\right)}</span>
+<span class="sd">                   {\sqrt{\overline{Q_2 P_1}-\overline{Q_1 P_2}}\sqrt{\overline{ P_1}Q_2-\overline{Q_1} P_2}}\right)</span>
+
+<span class="sd">        Note that this is an internal method and usually there is no</span>
+<span class="sd">        reason to call it from outside.</span>
+
+<span class="sd">        :param Pibra: The parameter set :math:`\Pi = \{q_1,p_1,Q_1,P_1\}` of the bra :math:`\langle \phi_0 |`.</span>
+<span class="sd">        :param Piket: The parameter set :math:`\Pi^\prime = \{q_2,p_2,Q_2,P_2\}` of the ket :math:`| \phi_l \rangle`.</span>
+<span class="sd">        :param eps: The semi-classical scaling parameter :math:`\varepsilon`.</span>
+<span class="sd">        :param k: Index :math:`k=0` of the wavepacket basis function :math:`\phi_0`.</span>
+<span class="sd">        :param l: Index :math:`l` of the wavepacket basis function :math:`\phi_l`.</span>
+<span class="sd">        :return: The value of the integral :math:`\langle \phi_0 | \phi_l \rangle`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Do not raise because wavepackets might have a larger basis shape</span>
+        <span class="c1"># with only the coefficient 0 having a non-zero value. Returning</span>
+        <span class="c1"># a value 0.0j for k &gt; 0 seems to be a safe default behaviour.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">k</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">0.0j</span>
+
+        <span class="c1"># &lt; phi_0[Pi1] | phi_l[Pi2] &gt;</span>
+        <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Q1</span><span class="p">,</span> <span class="n">P1</span> <span class="o">=</span> <span class="n">Pibra</span>
+        <span class="n">q2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Q2</span><span class="p">,</span> <span class="n">P2</span> <span class="o">=</span> <span class="n">Piket</span>
+
+        <span class="c1"># If both parameter sets are identical, we are back in the</span>
+        <span class="c1"># homogeneous case where the phi are orthonormal.</span>
+        <span class="c1"># This early returns just serves to avoid introducing NaN</span>
+        <span class="c1"># elements in arg1 and arg2 further below. It is allowed to</span>
+        <span class="c1"># compare floats on exact equality because the inhomogeneous</span>
+        <span class="c1"># formula works even if the floats differ only by tiny amounts.</span>
+        <span class="k">if</span> <span class="n">q1</span> <span class="o">==</span> <span class="n">q2</span> <span class="ow">and</span> <span class="n">p1</span> <span class="o">==</span> <span class="n">p2</span> <span class="ow">and</span> <span class="n">Q1</span> <span class="o">==</span> <span class="n">Q2</span> <span class="ow">and</span> <span class="n">P1</span> <span class="o">==</span> <span class="n">P2</span><span class="p">:</span>
+            <span class="k">return</span> <span class="mf">1.0</span> <span class="k">if</span> <span class="n">l</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="mf">0.0</span>
+
+        <span class="c1"># TODO: Note that the formula can still fail if Q1 = Q2 and P1 = P2</span>
+        <span class="c1">#       but q1 \neq q2 and p1 \neq p2.</span>
+        <span class="n">pf</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_f</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">l</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">l</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_I0</span> <span class="o">*</span>
+              <span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">P1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q2</span> <span class="o">-</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q1</span><span class="p">)</span> <span class="o">*</span> <span class="n">P2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">l</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span>
+
+        <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pfl</span><span class="p">[</span><span class="n">l</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Hl</span><span class="p">[</span><span class="n">l</span><span class="p">]</span>
+
+        <span class="n">Ikl</span> <span class="o">=</span> <span class="n">pf</span> <span class="o">*</span> <span class="n">S</span>
+        <span class="k">return</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">Ikl</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_cache_factors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">Kbra</span><span class="p">,</span> <span class="n">Kket</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Cache some summands to speed up the computation of the sum.</span>
+
+<span class="sd">        :param Pibra: The parameter set :math:`\Pi` of the bra :math:`\langle \Phi |`.</span>
+<span class="sd">        :param Piket: The parameter set :math:`\Pi^\prime` of the ket :math:`| \Phi^\prime \rangle`.</span>
+<span class="sd">        :param Kbra: The basis shape :math:`\mathfrak{K}` of the bra :math:`\langle \Phi |`.</span>
+<span class="sd">        :type Kbra: A :py:class:`BasisShape` instance.</span>
+<span class="sd">        :param Kket: The basis shape :math:`\mathfrak{K}^\prime` of the ket :math:`| \Phi^\prime \rangle`.</span>
+<span class="sd">        :type Kket: A :py:class:`BasisShape` instance.</span>
+<span class="sd">        :param eps: The semi-classical scaling parameter :math:`\varepsilon`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">q1</span><span class="p">,</span> <span class="n">p1</span><span class="p">,</span> <span class="n">Q1</span><span class="p">,</span> <span class="n">P1</span> <span class="o">=</span> <span class="n">Pibra</span>
+        <span class="n">q2</span><span class="p">,</span> <span class="n">p2</span><span class="p">,</span> <span class="n">Q2</span><span class="p">,</span> <span class="n">P2</span> <span class="o">=</span> <span class="n">Piket</span>
+
+        <span class="c1"># If both parameter sets are identical, we are back in the homogeneous case.</span>
+        <span class="k">if</span> <span class="n">q1</span> <span class="o">==</span> <span class="n">q2</span> <span class="ow">and</span> <span class="n">p1</span> <span class="o">==</span> <span class="n">p2</span> <span class="ow">and</span> <span class="n">Q1</span> <span class="o">==</span> <span class="n">Q2</span> <span class="ow">and</span> <span class="n">P1</span> <span class="o">==</span> <span class="n">P2</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_Hl</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># We have k in [0, 1, ..., K-1] where |K| is the basis size</span>
+        <span class="c1"># hence K-1 is the maximal index.</span>
+        <span class="n">L</span> <span class="o">=</span> <span class="n">Kket</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span>
+
+        <span class="n">makl</span> <span class="o">=</span> <span class="n">L</span>
+
+        <span class="c1"># Factorials</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">factorial</span><span class="p">(</span><span class="n">arange</span><span class="p">(</span><span class="n">makl</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_f</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">f</span><span class="p">[:</span><span class="n">L</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="c1"># Note: formula currently fails for non-inhomogeneous case</span>
+        <span class="c1">#       because of divisions by zero in the two args below.</span>
+        <span class="n">argl</span> <span class="o">=</span> <span class="p">((</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">P1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">q1</span> <span class="o">-</span> <span class="n">q2</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q1</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">p1</span> <span class="o">-</span> <span class="n">p2</span><span class="p">))</span> <span class="o">/</span>
+                <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q2</span> <span class="o">*</span> <span class="n">P1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q1</span> <span class="o">*</span> <span class="n">P2</span><span class="p">))</span> <span class="o">*</span>
+                 <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">P1</span><span class="p">)</span> <span class="o">*</span> <span class="n">Q2</span> <span class="o">-</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q1</span><span class="p">)</span> <span class="o">*</span> <span class="n">P2</span><span class="p">)))</span>
+
+        <span class="c1"># TODO: Better test for failure?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_doraise</span> <span class="ow">and</span> <span class="n">isnan</span><span class="p">(</span><span class="n">squeeze</span><span class="p">(</span><span class="n">argl</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="n">InnerProductException</span><span class="p">(</span><span class="s2">&quot;Symbolic formula failed due to Q_k = Q_l and P_k = P_l.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># The parameter j varies in the range [0, 1, ..., min(K-1,L-1)]</span>
+        <span class="c1"># hence we have that k-j can be in [K-1, K-2, ..., K-1-min(K-1,L-1)]</span>
+        <span class="c1"># and similar for l-j we have [L-1, L-2, ..., L-1-min(K-1,L-1)]</span>
+        <span class="c1"># where both K-1-min(K-1,L-1) and L-1-min(K-1,L-1) are non-negative.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Hl</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_hermite</span><span class="p">(</span><span class="n">L</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">argl</span><span class="p">)</span>
+
+        <span class="n">il</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">L</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pfl</span> <span class="o">=</span> <span class="p">((</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q2</span> <span class="o">*</span> <span class="n">P1</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q1</span> <span class="o">*</span> <span class="n">P2</span><span class="p">))</span> <span class="o">**</span> <span class="p">(</span><span class="n">il</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">L</span><span class="p">)</span>
+
+        <span class="c1"># And the groundstate value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_I0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exact_result_ground</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

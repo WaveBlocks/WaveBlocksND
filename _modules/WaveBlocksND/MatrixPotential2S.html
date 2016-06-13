@@ -1,0 +1,873 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.MatrixPotential2S &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.MatrixPotential2S</h1><div class="highlight"><pre>
+<span></span><span class="sd">r&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for the representation of potentials :math:`V(x)`</span>
+<span class="sd">that contain exactly two energy levels :math:`\lambda_i`. The number</span>
+<span class="sd">of space dimensions can be arbitrary, :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">sympy</span>
+<span class="kn">import</span> <span class="nn">numpy</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.MatrixPotential</span> <span class="kn">import</span> <span class="n">MatrixPotential</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="kn">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="kn">import</span> <span class="n">GridWrapper</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">GlobalDefaults</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MatrixPotential2S&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="MatrixPotential2S"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S">[docs]</a><span class="k">class</span> <span class="nc">MatrixPotential2S</span><span class="p">(</span><span class="n">MatrixPotential</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class represents a matrix potential :math:`V(x)`. The potential is</span>
+<span class="sd">    given as an analytic :math:`2 \times 2` matrix expression. Some symbolic</span>
+<span class="sd">    calculations with the potential are supported.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expression</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Create a new :py:class:`MatrixPotential2S` instance for a given</span>
+<span class="sd">        potential matrix :math:`V(x)`.</span>
+
+<span class="sd">        :param expression: The mathematical expression representing the potential.</span>
+<span class="sd">        :type expressiom: A `Sympy` matrix type.</span>
+<span class="sd">        :param variables: The variables corresponding to the space dimensions.</span>
+<span class="sd">        :type variables: A list of `Sympy` symbols.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The variables that represents position space. The order matters!</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span> <span class="o">=</span> <span class="n">variables</span>
+
+        <span class="c1"># The dimension of position space.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">variables</span><span class="p">)</span>
+
+        <span class="c1"># Try symbolic simplification</span>
+        <span class="k">if</span> <span class="s2">&quot;try_simplification&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span> <span class="o">=</span> <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;try_simplification&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span> <span class="o">=</span> <span class="n">GlobalDefaults</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s2">&quot;try_simplification&quot;</span><span class="p">]</span>
+
+        <span class="c1"># This number of energy levels.</span>
+        <span class="k">assert</span> <span class="n">expression</span><span class="o">.</span><span class="n">is_square</span>
+        <span class="c1"># We only handle the 2x2 case here</span>
+        <span class="k">assert</span> <span class="n">expression</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">=</span> <span class="n">expression</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># The the potential, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span> <span class="o">=</span> <span class="n">expression</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential_n</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="p">)</span>
+
+        <span class="c1"># The cached eigenvalues, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The cached eigenvectors, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The cached exponential, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The cached Jacobian of the eigenvalues, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The cached Hessian of the eigenvalues, symbolic expressions and evaluatable functions</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># {}[chi] -&gt; [(order, function),...]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_s</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_n</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># {}[chi] -&gt; [remainder]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_s</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_n</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Remainder in the inhomogeneous case</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_s</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_n</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">_grid_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agrid</span><span class="p">):</span>
+        <span class="c1"># TODO: Consider additional input types for &quot;nodes&quot;:</span>
+        <span class="c1">#       list of numpy ndarrays, list of single python scalars</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agrid</span><span class="p">,</span> <span class="n">AbstractGrid</span><span class="p">):</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">agrid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">GridWrapper</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">agrid</span>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
+<span class="sd">                     to evaluate the potential at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param entry: The indices :math:`(i,j)` of the component :math:`V_{i,j}(x)`</span>
+<span class="sd">                      we want to evaluate or ``None`` to evaluate all entries.</span>
+<span class="sd">        :type entry: A python tuple of two integers.</span>
+<span class="sd">        :param as_matrix: Dummy parameter which has no effect here.</span>
+<span class="sd">        :return: A list containing 4 numpy ndarrays of shape :math:`(1, |\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+        <span class="c1"># Determine which entries to evaluate</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+
+        <span class="c1"># Evaluate all entries specified</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="c1"># Evaluate the potential at the given nodes</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_n</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="o">*</span><span class="n">nodes</span><span class="p">)</span>
+
+            <span class="c1"># Test for potential being constant</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,):</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+
+            <span class="c1"># Put the result in correct shape (1, #gridnodes)</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)))</span>
+
+        <span class="c1"># TODO: Consider unpacking single ndarray iff entry != None</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_eigenvalues"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_eigenvalues">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_eigenvalues</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the two eigenvalues :math:`\lambda_i(x)` of the potential :math:`V(x)`.</span>
+<span class="sd">        We can do this by symbolic calculations. The multiplicities are taken into account.</span>
+<span class="sd">        Note: This function is idempotent and the eigenvalues are memoized for later reuse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Symbolic formula for the eigenvalues of a general 2x2 matrix</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="o">.</span><span class="n">trace</span><span class="p">()</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="o">.</span><span class="n">det</span><span class="p">()</span>
+
+        <span class="n">l1</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">+</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">D</span><span class="p">))</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">l2</span> <span class="o">=</span> <span class="p">(</span><span class="n">T</span> <span class="o">-</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">T</span><span class="o">**</span><span class="mi">2</span> <span class="o">-</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">D</span><span class="p">))</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Symbolic simplification may fail</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">l1</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">l1</span><span class="p">)</span>
+                <span class="n">l2</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">l2</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># The symbolic expressions for the eigenvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">l1</span><span class="p">,</span> <span class="n">l2</span><span class="p">)</span>
+
+        <span class="c1"># The numerical functions for the eigenvalues</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_n</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_eigenvalues_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_eigenvalues_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvalues_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the eigenvalues :math:`\lambda_i(x)` elementwise on a grid :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma_i` we want</span>
+<span class="sd">                     to evaluate the eigenvalues at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param entry: The indices :math:`(i,j)` of the component :math:`\Lambda_{i,j}(x)`</span>
+<span class="sd">                      we want to evaluate or ``None`` to evaluate all entries. If :math:`j = i`</span>
+<span class="sd">                      then we evaluate the eigenvalue :math:`\lambda_i(x)`.</span>
+<span class="sd">        :type entry: A python tuple of two integers.</span>
+<span class="sd">        :param as_matrix: Whether to include the off-diagonal zero entries of</span>
+<span class="sd">                          :math:`\Lambda_{i,j}(x)` in the return value.</span>
+<span class="sd">        :return: A list containing the numpy ``ndarray``, all of shape :math:`(1, |\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_n</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+        <span class="c1"># Determine which entries to evaluate</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Single entry only</span>
+            <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
+            <span class="k">if</span> <span class="n">as_matrix</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="c1"># All entries</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Diagonal entries only</span>
+                <span class="n">entries</span> <span class="o">=</span> <span class="p">[(</span><span class="n">row</span><span class="p">,</span> <span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+
+        <span class="c1"># Compute all diagonal entries first</span>
+        <span class="n">diags</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">entries</span> <span class="k">if</span> <span class="n">e</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">e</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">diags</span><span class="p">:</span>
+            <span class="c1"># Evaluate the eigenvalue at the given nodes</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_n</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="o">*</span><span class="n">nodes</span><span class="p">)</span>
+
+            <span class="c1"># Test for eigenvalue being constant</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,):</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+
+            <span class="n">tmp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
+
+        <span class="c1"># Sort the eigenvalues pointwise. We can do this because we</span>
+        <span class="c1"># assume that the different eigenvalues never cross.</span>
+        <span class="c1"># TODO: Sort will fail iff energy levels really cross!</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">diags</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">N</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vsplit</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">tmp</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># Take in descending order and reshape</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)))</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">tmp</span><span class="p">)]</span>
+
+        <span class="c1"># Compose the result for all entries specified</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">ent</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">ent</span>
+            <span class="k">if</span> <span class="n">row</span> <span class="o">==</span> <span class="n">col</span><span class="p">:</span>
+                <span class="c1"># Assumes the diagonal entries are computed and requested &#39;in order&#39;</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="c1"># Evaluate an off-diagonal entry which equals zero by definition</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">))</span>
+
+        <span class="c1"># TODO: Consider unpacking single ndarray iff entry != None</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_eigenvectors"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_eigenvectors">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_eigenvectors</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the two eigenvectors :math:`\nu_i(x)` of the potential :math:`V(x)`.</span>
+<span class="sd">        We can do this by symbolic calculations.</span>
+<span class="sd">        Note: This function is idempotent and the eigenvectors are memoized for later reuse.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Assumption: The matrix is symmetric</span>
+        <span class="c1"># TODO: Consider generalization for arbitrary 2x2 matrices?</span>
+        <span class="n">V1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">V2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">theta</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">atan2</span><span class="p">(</span><span class="n">V2</span><span class="p">,</span> <span class="n">V1</span><span class="p">)</span>
+
+        <span class="c1"># The two eigenvectors</span>
+        <span class="n">upper</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span> <span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)],</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)]])</span>
+        <span class="n">lower</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="o">-</span><span class="n">sympy</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta</span><span class="p">)],</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)]])</span>
+
+        <span class="c1"># The symbolic expressions for the eigenvectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_s</span> <span class="o">=</span> <span class="p">(</span><span class="n">upper</span><span class="p">,</span> <span class="n">lower</span><span class="p">)</span>
+
+        <span class="c1"># The numerical functions for the eigenvectors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_n</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Attention, the components get listed in columns-wise order!</span>
+        <span class="k">for</span> <span class="n">vector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_s</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_n</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
+                                         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">vector</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_eigenvectors_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_eigenvectors_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvectors_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the two eigenvectors :math:`\nu_i(x)` elementwise on a grid :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
+<span class="sd">                     to evaluate the eigenvectors at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param entry: The index :math:`i` of the eigenvector :math:`\nu_i(x)`</span>
+<span class="sd">                      we want to evaluate or ``None`` to evaluate all eigenvectors.</span>
+<span class="sd">        :type entry: A single python  integer.</span>
+<span class="sd">        :return: A list containing the numpy ndarrays, all of shape :math:`(N, |\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Rethink about the &#39;entry&#39; parameter here. Do we need it?</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_n</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvectors</span><span class="p">()</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># Assure real values as atan2 is only defined for real values!</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">numpy</span><span class="o">.</span><span class="n">real</span><span class="p">,</span> <span class="n">nodes</span><span class="p">))</span>
+
+        <span class="c1"># Evaluate the eigenvectors on the grid</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">vector</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvectors_n</span><span class="p">:</span>
+            <span class="n">tmp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">,</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="n">tmp</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">vector</span><span class="p">[</span><span class="n">index</span><span class="p">](</span><span class="o">*</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_exponential"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_exponential">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_exponential</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the matrix exponential :math:`\exp(\alpha V)`. In the case</span>
+<span class="sd">        of this class the matrix is of size :math:`2 \times 2` thus the exponential</span>
+<span class="sd">        can be calculated analytically for a general matrix.</span>
+<span class="sd">        Note: This function is idempotent.</span>
+
+<span class="sd">        :param factor: The prefactor :math:`\alpha` in the exponential.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">factor</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="mi">4</span> <span class="o">*</span> <span class="n">b</span> <span class="o">*</span> <span class="n">c</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">a</span> <span class="o">+</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+
+        <span class="c1"># Symbolic simplification may fail</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">D</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># TODO: How should we handle the special case D=0?</span>
+        <span class="k">if</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="c1"># special case</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">b</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="n">c</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># general case</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">cosh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">c</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>
+            <span class="n">M</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">t</span> <span class="o">*</span> <span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">cosh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">a</span> <span class="o">-</span> <span class="n">d</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">sympy</span><span class="o">.</span><span class="n">sinh</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">/</span> <span class="n">D</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_s</span> <span class="o">=</span> <span class="n">M</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_n</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">item</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
+                                    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_s</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_exponential_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_exponential_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_exponential_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the exponential of the potential matrix :math:`V(x)` on a grid :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
+<span class="sd">                     to evaluate the exponential at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :return: The numerical approximation of the matrix exponential at the given grid nodes.</span>
+<span class="sd">                 A list contains the exponentials for all entries :math:`(i,j)`, each having the</span>
+<span class="sd">                 same shape as the grid.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span><span class="p">(</span><span class="o">*</span><span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">))</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exponential_n</span><span class="p">]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># TODO: Better fix for globally constant functions</span>
+        <span class="n">tmp2</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">t</span><span class="p">)</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">tmp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">tmp2</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()))</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tmp2</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_jacobian"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_jacobian">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_jacobian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the Jacobian matrix :math:`\nabla \lambda_i` of the potential&#39;s</span>
+<span class="sd">        eigenvalues :math:`\Lambda(x)` with :math:`x \in \mathbb{R}^D`. For potentials</span>
+<span class="sd">        which depend only one variable, this equals the first derivative and :math:`D=1`.</span>
+<span class="sd">        Note that this function is idempotent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># TODO: Add symbolic simplification</span>
+            <span class="k">for</span> <span class="n">ew</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">:</span>
+                <span class="n">tmp</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="n">ew</span><span class="p">]])</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tmp</span><span class="o">.</span><span class="n">jacobian</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span><span class="o">.</span><span class="n">T</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_n</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Attention, the components get listed in columns-wise order!</span>
+            <span class="k">for</span> <span class="n">jacobian</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_n</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
+                                         <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">jacobian</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_jacobian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_jacobian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_jacobian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the list of Jacobian matrices :math:`\nabla \lambda_i(x)` at some grid</span>
+<span class="sd">        nodes :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid nodes :math:`\Gamma` the Jacobian gets evaluated at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param component: Dummy parameter that has no effect here.</span>
+<span class="sd">        :return: The value of the potential&#39;s Jacobian at the given nodes. The result</span>
+<span class="sd">                 is a list of ``ndarray`` each of shape :math:`(D,1)` is we evaluate</span>
+<span class="sd">                 at a single grid node or of shape :math:`(D,|\Gamma|)`</span>
+<span class="sd">                 if we evaluate at multiple nodes simultaneously.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Rethink about the &#39;component&#39; parameter here. Do we need it?</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">jacobian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_n</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">comp</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">jacobian</span><span class="p">):</span>
+                <span class="n">J</span><span class="p">[</span><span class="n">index</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">comp</span><span class="p">(</span><span class="o">*</span><span class="n">nodes</span><span class="p">)</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">J</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Consider unpacking single ndarray iff entry != None</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_hessian"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_hessian">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_hessian</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the Hessian matrix :math:`\nabla^2 \lambda_i` of the potential&#39;s</span>
+<span class="sd">        eigenvalues :math:`\Lambda(x)` with :math:`x \in \mathbb{R}^D`. For potentials</span>
+<span class="sd">        which depend only one variable, this equals the second derivative and :math:`D=1`.</span>
+<span class="sd">        Note that this function is idempotent.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="c1"># TODO: Add symbolic simplification</span>
+            <span class="k">for</span> <span class="n">ew</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">hessian</span><span class="p">(</span><span class="n">ew</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_n</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">hessian</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_n</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span>
+                                        <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">hessian</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_hessian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_hessian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_hessian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the list of Hessian matrices :math:`\nabla^2 \lambda_i(x)` at some grid</span>
+<span class="sd">        nodes :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid nodes :math:`\Gamma` the Hessian gets evaluated at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param component: Dummy parameter that has no effect here.</span>
+<span class="sd">        :return: The value of the potential&#39;s Hessian at the given nodes. The result</span>
+<span class="sd">                 is an ``ndarray`` of shape :math:`(D,D)` is we evaluate at a single</span>
+<span class="sd">                 grid node or of shape :math:`(|\Gamma|,D,D)` if we evaluate at multiple</span>
+<span class="sd">                 nodes simultaneously.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Rethink about the &#39;component&#39; parameter here. Do we need it?</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+            <span class="n">hessian</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_n</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+                    <span class="n">H</span><span class="p">[:,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="n">hessian</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">D</span> <span class="o">+</span> <span class="n">col</span><span class="p">](</span><span class="o">*</span><span class="n">nodes</span><span class="p">)</span>
+
+            <span class="c1"># &#39;squeeze&#39; would be dangerous here, make sure it works in the 1D case too</span>
+            <span class="k">if</span> <span class="n">N</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">H</span> <span class="o">=</span> <span class="n">H</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">H</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Consider unpacking single ndarray iff entry != None</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_calculate_local_quadratic_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the local quadratic approximation matrix :math:`U(x)` of the potential&#39;s</span>
+<span class="sd">        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case</span>
+<span class="sd">        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.</span>
+
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_s</span><span class="p">:</span>
+            <span class="c1"># Calculation already done at some earlier time</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Calculation already done at some earlier time?</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_jacobian</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">calculate_hessian</span><span class="p">()</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Construct function to evaluate the Taylor approximation at point q at the given nodes</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]),</span>
+                                                        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]),</span>
+                                                        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">])]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_taylor_eigen_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]),</span>
+                                                        <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]),</span>
+                                                        <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">])]</span>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_local_quadratic"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_local_quadratic">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_quadratic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the local quadratic approximation matrix :math:`U(x)` of the potential&#39;s</span>
+<span class="sd">        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case</span>
+<span class="sd">        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.</span>
+<span class="sd">        If the parameter :math:`i` is not given, calculate the local quadratic approximation</span>
+<span class="sd">        matrix :math:`U(x)` of all the potential&#39;s eigenvalues in :math:`\Lambda`. This case</span>
+<span class="sd">        can be used for the inhomogeneous case.</span>
+
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i`.</span>
+<span class="sd">        :type diagonal_component: Integer or ``None`` (default)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_local_quadratic_component</span><span class="p">(</span><span class="n">diagonal_component</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_local_quadratic_component</span><span class="p">(</span><span class="n">component</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_local_quadratic_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_local_quadratic_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_quadratic_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Numerically evaluate the local quadratic approximation matrix :math:`U(x)` of</span>
+<span class="sd">        the potential&#39;s eigenvalues in :math:`\Lambda(x)` at the given grid nodes :math:`\Gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma` we want to</span>
+<span class="sd">                     evaluate the quadratic approximation at.</span>
+<span class="sd">        :type grid: A :py:class:`Grid` instance. (Numpy arrays are not directly supported yet.)</span>
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i`.</span>
+<span class="sd">        :return: A list of tuples or a single tuple. Each tuple :math:`(\lambda, J, H)` contains the</span>
+<span class="sd">                 the evaluated eigenvalues :math:`\lambda_i(\Gamma)`, the Jacobian :math:`J(\Gamma)`</span>
+<span class="sd">                 and the Hessian :math:`H(\Gamma)` in this order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: Relate this to the _taylor_eigen_{s,n} data</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvalues_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="p">(</span><span class="n">diagonal_component</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="p">))</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_jacobian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">diagonal_component</span><span class="p">)</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_hessian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">diagonal_component</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">(</span><span class="n">V</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Vlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvalues_at</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+            <span class="n">Jlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_jacobian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+            <span class="n">Hlist</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_hessian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[(</span><span class="n">V</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span><span class="p">)</span> <span class="k">for</span> <span class="n">V</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">Vlist</span><span class="p">,</span> <span class="n">Jlist</span><span class="p">,</span> <span class="n">Hlist</span><span class="p">)]</span>
+
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_calculate_local_remainder_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the non-quadratic remainder :math:`W(x) = V(x) - U(x)` of the quadratic</span>
+<span class="sd">        Taylor approximation :math:`U(x)` of the potential&#39;s eigenvalue :math:`\lambda_i(x)`.</span>
+<span class="sd">        Note that this function is idempotent.</span>
+
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Calculation already done at some earlier time?</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_s</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_jacobian</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_hessian</span><span class="p">()</span>
+
+        <span class="c1"># Point q where the Taylor series is computed</span>
+        <span class="c1"># This is a column vector q = (q1, ... ,qD)</span>
+        <span class="n">qs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">))]</span>
+        <span class="n">pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">xi</span><span class="p">,</span> <span class="n">qi</span><span class="p">)</span> <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">qi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">qs</span><span class="p">)]</span>
+
+        <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+        <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+
+        <span class="c1"># Symbolic expression for the quadratic Taylor expansion term</span>
+        <span class="n">xmq</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([(</span><span class="n">xi</span> <span class="o">-</span> <span class="n">qi</span><span class="p">)</span> <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">qi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">qs</span><span class="p">)])</span>
+        <span class="n">quadratic</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="n">V</span><span class="p">]])</span> <span class="o">+</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">xmq</span> <span class="o">+</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">xmq</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">H</span> <span class="o">*</span> <span class="n">xmq</span>
+
+        <span class="c1"># Symbolic simplification may fail</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">quadratic</span> <span class="o">=</span> <span class="n">quadratic</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="c1"># Symbolic expression for the Taylor expansion remainder term</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">*</span> <span class="p">[</span><span class="n">quadratic</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="n">remainder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span> <span class="o">-</span> <span class="n">U</span>
+
+        <span class="c1"># Symbolic simplification may fail</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">remainder</span> <span class="o">=</span> <span class="n">remainder</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_s</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span> <span class="o">=</span> <span class="n">remainder</span>
+
+        <span class="c1"># Construct functions to evaluate the approximation at point q at the given nodes</span>
+        <span class="c1"># The variable ordering in lambdify is [x1, ..., xD, q1, ...., qD]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">+</span> <span class="n">qs</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">remainder</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">_calculate_local_remainder_inhomogeneous</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the</span>
+<span class="sd">        quadratic approximation matrix :math:`U(x)` of the potential&#39;s eigenvalue matrix</span>
+<span class="sd">        :math:`\Lambda(x)`. This function is used for the inhomogeneous case.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Calculation already done at some earlier time</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_s</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_eigenvalues</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_jacobian</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">calculate_hessian</span><span class="p">()</span>
+
+        <span class="c1"># Quadratic Taylor series for all eigenvalues</span>
+        <span class="n">quadratics</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">eigenvalue</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">):</span>
+            <span class="c1"># Point q where the Taylor series is computed</span>
+            <span class="c1"># This is a column vector q = (q1, ... ,qD)</span>
+            <span class="n">qs</span> <span class="o">=</span> <span class="p">[</span><span class="n">sympy</span><span class="o">.</span><span class="n">Symbol</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)]</span>
+            <span class="n">pairs</span> <span class="o">=</span> <span class="p">[(</span><span class="n">xi</span><span class="p">,</span> <span class="n">qi</span><span class="p">)</span> <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">qi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">qs</span><span class="p">)]</span>
+
+            <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eigenvalues_s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_jacobian_s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+            <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hessian_s</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">subs</span><span class="p">(</span><span class="n">pairs</span><span class="p">)</span>
+
+            <span class="c1"># Symbolic expression for the quadratic Taylor expansion term</span>
+            <span class="n">xmq</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([(</span><span class="n">xi</span> <span class="o">-</span> <span class="n">qi</span><span class="p">)</span> <span class="k">for</span> <span class="n">xi</span><span class="p">,</span> <span class="n">qi</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">qs</span><span class="p">)])</span>
+            <span class="n">quadratic</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Matrix</span><span class="p">([[</span><span class="n">V</span><span class="p">]])</span> <span class="o">+</span> <span class="n">J</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">xmq</span> <span class="o">+</span> <span class="n">sympy</span><span class="o">.</span><span class="n">Rational</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">xmq</span><span class="o">.</span><span class="n">T</span> <span class="o">*</span> <span class="n">H</span> <span class="o">*</span> <span class="n">xmq</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">quadratic</span> <span class="o">=</span> <span class="n">quadratic</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+            <span class="n">quadratics</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">quadratic</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Symbolic expression for the Taylor expansion remainder term</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">sympy</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="o">*</span><span class="n">quadratics</span><span class="p">)</span>
+        <span class="n">remainder</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span> <span class="o">-</span> <span class="n">U</span>
+
+        <span class="c1"># Symbolic simplification may fail</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_try_simplify</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">remainder</span> <span class="o">=</span> <span class="n">remainder</span><span class="o">.</span><span class="n">applyfunc</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">simplify</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_s</span> <span class="o">=</span> <span class="n">remainder</span>
+
+        <span class="c1"># Construct functions to evaluate the approximation at point q at the given nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_n</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span>
+            <span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">)</span> <span class="o">+</span> <span class="n">qs</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">remainder</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.calculate_local_remainder"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.calculate_local_remainder">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_remainder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the</span>
+<span class="sd">        quadratic approximation matrix :math:`U(x)` of the potential&#39;s eigenvalue matrix</span>
+<span class="sd">        :math:`\Lambda(x)`. In the homogeneous case the matrix :math:`U` is given by</span>
+<span class="sd">        :math:`U(x) = \text{diag}([u_i,\ldots,u_i])` where in the inhomogeneous case it</span>
+<span class="sd">        is given by :math:`U(x) = \text{diag}([u_0,\ldots,u_{N-1}])`.</span>
+
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i`. If set to</span>
+<span class="sd">                                   ``None`` the inhomogeneous case is computed.</span>
+<span class="sd">        :type diagonal_component: Integer or ``None`` (default)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_local_remainder_component</span><span class="p">(</span><span class="n">diagonal_component</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_local_remainder_inhomogeneous</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="MatrixPotential2S.evaluate_local_remainder_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotential2S.html#WaveBlocksND.MatrixPotential2S.evaluate_local_remainder_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_remainder_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic</span>
+<span class="sd">        approximation :math:`U(x)` of the potential&#39;s eigenvalue :math:`\Lambda(x)` at the</span>
+<span class="sd">        given nodes :math:`\Gamma`.</span>
+
+<span class="sd">         Warning: do not set the ``diagonal_component`` and the ``entry`` parameter both to ``None``.</span>
+
+<span class="sd">        :param grid: The grid nodes :math:`\Gamma` the remainder :math:`W` gets evaluated at.</span>
+<span class="sd">        :param position: The point :math:`q \in \mathbb{R}^D` where the Taylor series is computed.</span>
+<span class="sd">        :param diagonal_component: Specifies the index :math:`i` of the eigenvalue :math:`\lambda_i`</span>
+<span class="sd">                                   that gets expanded into a Taylor series :math:`u_i` and whose</span>
+<span class="sd">                                   remainder matrix :math:`W(x) = V(x) - \text{diag}([u_i,\ldots,u_i])`</span>
+<span class="sd">                                   we evaluate. If set to ``None`` the inhomogeneous case given by</span>
+<span class="sd">                                   :math:`W(x) = V(x) - \text{diag}([u_0,\ldots,u_{N-1}])` is computed.</span>
+<span class="sd">        :type diagonal_component: Integer or ``None`` (default)</span>
+<span class="sd">        :param entry: The entry :math:`\left(i,j\right)` of the remainder matrix :math:`W`</span>
+<span class="sd">                      that is evaluated.</span>
+<span class="sd">        :type entry: A python tuple of two integers.</span>
+<span class="sd">        :return: A list with :math:`N^2` ``ndarray`` elements or a single ``ndarray``. Each</span>
+<span class="sd">                 containing the values of :math:`W_{i,j}(\Gamma)`. Each array is of shape</span>
+<span class="sd">                 :math:`(1,|\Gamma|)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">functions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_n</span><span class="p">[</span><span class="n">diagonal_component</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">functions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_remainder_eigen_ih_n</span>
+
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">position</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">position</span><span class="p">)</span>
+
+        <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># Evaluate the remainder at the given nodes</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span> <span class="o">+</span> <span class="n">numpy</span><span class="o">.</span><span class="n">vsplit</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">position</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">functions</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">+</span> <span class="n">col</span><span class="p">](</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+            <span class="c1"># Test for potential being constant</span>
+            <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,):</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+
+            <span class="c1"># Put the result in correct shape (1, #gridnodes)</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">function</span> <span class="ow">in</span> <span class="n">functions</span><span class="p">:</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span>
+
+                <span class="c1"># Test for potential being constant</span>
+                <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">values</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,):</span>
+                    <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
+
+                <span class="c1"># Put the result in correct shape (1, #gridnodes)</span>
+                <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)))</span>
+
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

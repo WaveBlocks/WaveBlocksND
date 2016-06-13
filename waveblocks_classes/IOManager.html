@@ -8,7 +8,7 @@
     
     <title>IOManager &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="IOM_plugin_parameters" href="IOM_plugin_parameters.html" />
     <link rel="prev" title="SimulationLoopHagedornInhomogeneous" href="SimulationLoopHagedornInhomogeneous.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="SimulationLoopHagedornInhomogeneous.html" title="SimulationLoopHagedornInhomogeneous"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="iomanager">
 <h1>IOManager<a class="headerlink" href="#iomanager" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-iomanager-class"></span><h2>About the <tt class="docutils literal"><span class="pre">IOManager</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-iomanager-class"></span><h2>About the <code class="docutils literal"><span class="pre">IOManager</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,25 +63,23 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-f8e6c458139dca042ae92b548fb6de6f94372116.png" alt="Inheritance diagram of IOManager" usemap="#inheritance0ab1bed375" class="inheritance"/>
+<img src="../_images/inheritance-ed59452783c32fdb4c7b115b1eadbceb27fee2c6.png" alt="Inheritance diagram of IOManager" usemap="#inheritance0ab1bed375" class="inheritance"/>
 <map id="inheritance0ab1bed375" name="inheritance0ab1bed375">
 <area shape="rect" id="node1" title="An IOManager class that can save various simulation results into data" alt="" coords="5,5,168,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.IOManager">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">IOManager</tt><a class="headerlink" href="#WaveBlocksND.IOManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">IOManager</code><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>An IOManager class that can save various simulation results into data
 files. For storing the data we use the well established HDF5 file format.
 An IOManager instance abstracts the input and output operations and translates
 requests into low-level operations.</p>
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.create_block">
-<tt class="descname">create_block</tt><big>(</big><em>blockid=None</em>, <em>groupid='global'</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.create_block" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_block</code><span class="sig-paren">(</span><em>blockid=None</em>, <em>groupid='global'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.create_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.create_block" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a data block with the specified block ID. Each data block can
 store several chunks of information, and there can be an arbitrary number
 of data blocks per file.</p>
@@ -100,8 +98,8 @@ be choosen automatically. The block ID has to be unique.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.create_file">
-<tt class="descname">create_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.create_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set up a new <a class="reference internal" href="#WaveBlocksND.IOManager" title="WaveBlocksND.IOManager"><tt class="xref py py-class docutils literal"><span class="pre">IOManager</span></tt></a> instance. The output file is created and opened.</p>
+<code class="descname">create_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.create_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.create_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set up a new <a class="reference internal" href="#WaveBlocksND.IOManager" title="WaveBlocksND.IOManager"><code class="xref py py-class docutils literal"><span class="pre">IOManager</span></code></a> instance. The output file is created and opened.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -115,7 +113,7 @@ If not given the default value from <cite>GlobalDefaults</cite> is used.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.create_group">
-<tt class="descname">create_group</tt><big>(</big><em>groupid=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.create_group" title="Permalink to this definition">¶</a></dt>
+<code class="descname">create_group</code><span class="sig-paren">(</span><em>groupid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.create_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.create_group" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a data group with the specified group ID. Each data group can
 contain an arbitrary number of data blocks, and there can be an arbitrary
 number of data groups per file.</p>
@@ -134,20 +132,20 @@ be chosen automatically. The group ID has to be unique.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.finalize">
-<tt class="descname">finalize</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.finalize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">finalize</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.finalize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.finalize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Close the open output file and reset the internal information.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.find_timestep_index">
-<tt class="descname">find_timestep_index</tt><big>(</big><em>timegridpath</em>, <em>timestep</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.find_timestep_index" title="Permalink to this definition">¶</a></dt>
+<code class="descname">find_timestep_index</code><span class="sig-paren">(</span><em>timegridpath</em>, <em>timestep</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.find_timestep_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.find_timestep_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lookup the index for a given timestep. This assumes the timegrid
 array is strictly monotone.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.get_block_ids">
-<tt class="descname">get_block_ids</tt><big>(</big><em>groupid=None</em>, <em>grouped=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.get_block_ids" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_block_ids</code><span class="sig-paren">(</span><em>groupid=None</em>, <em>grouped=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.get_block_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.get_block_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list containing the IDs for all blocks in the current file structure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -155,8 +153,8 @@ array is strictly monotone.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>groupid</strong> &#8211; An optional group ID. If given we return only block IDs for blocks
-which are a member of this group. If it is <tt class="docutils literal"><span class="pre">None</span></tt> we return all block IDs.</li>
-<li><strong>grouped</strong> &#8211; If <tt class="docutils literal"><span class="pre">True</span></tt> we group the block IDs by their group into lists.
+which are a member of this group. If it is <code class="docutils literal"><span class="pre">None</span></code> we return all block IDs.</li>
+<li><strong>grouped</strong> &#8211; If <code class="docutils literal"><span class="pre">True</span></code> we group the block IDs by their group into lists.
 This option is only relevant in case the <cite>groupid</cite> is not given.</li>
 </ul>
 </td>
@@ -167,7 +165,7 @@ This option is only relevant in case the <cite>groupid</cite> is not given.</li>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.get_group_ids">
-<tt class="descname">get_group_ids</tt><big>(</big><em>exclude=[]</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.get_group_ids" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_group_ids</code><span class="sig-paren">(</span><em>exclude=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.get_group_ids"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.get_group_ids" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a list containing the IDs for all groups in the current file structure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -181,8 +179,8 @@ This option is only relevant in case the <cite>groupid</cite> is not given.</li>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.get_group_of_block">
-<tt class="descname">get_group_of_block</tt><big>(</big><em>blockid</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.get_group_of_block" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the ID of the group a given block belongs to or <tt class="docutils literal"><span class="pre">None</span></tt>
+<code class="descname">get_group_of_block</code><span class="sig-paren">(</span><em>blockid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.get_group_of_block"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.get_group_of_block" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the ID of the group a given block belongs to or <code class="docutils literal"><span class="pre">None</span></code>
 if there is no such data block.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -196,14 +194,14 @@ if there is no such data block.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.get_number_blocks">
-<tt class="descname">get_number_blocks</tt><big>(</big><em>groupid=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.get_number_blocks" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_blocks</code><span class="sig-paren">(</span><em>groupid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.get_number_blocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.get_number_blocks" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of data blocks in the current file structure.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>groupid</strong> &#8211; An optional group ID. If given we count only data blocks which are a
-member of this group. If it is <tt class="docutils literal"><span class="pre">None</span></tt> (default) we count all data blocks.</td>
+member of this group. If it is <code class="docutils literal"><span class="pre">None</span></code> (default) we count all data blocks.</td>
 </tr>
 </tbody>
 </table>
@@ -211,19 +209,19 @@ member of this group. If it is <tt class="docutils literal"><span class="pre">No
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.get_number_groups">
-<tt class="descname">get_number_groups</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.get_number_groups" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_groups</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.get_number_groups"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.get_number_groups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the number of data block groups in the current file structure.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.must_resize">
-<tt class="descname">must_resize</tt><big>(</big><em>path</em>, <em>size</em>, <em>axis=0</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.must_resize" title="Permalink to this definition">¶</a></dt>
+<code class="descname">must_resize</code><span class="sig-paren">(</span><em>path</em>, <em>size</em>, <em>axis=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.must_resize"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.must_resize" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if we must resize a given dataset and if yes, resize it.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.open_file">
-<tt class="descname">open_file</tt><big>(</big><em>filename</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.open_file" title="Permalink to this definition">¶</a></dt>
+<code class="descname">open_file</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.open_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.open_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a given file that contains the results from another simulation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -238,7 +236,7 @@ If not given the default value from <cite>GlobalDefaults</cite> is used.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.IOManager.split_data">
-<tt class="descname">split_data</tt><big>(</big><em>data</em>, <em>axis</em><big>)</big><a class="headerlink" href="#WaveBlocksND.IOManager.split_data" title="Permalink to this definition">¶</a></dt>
+<code class="descname">split_data</code><span class="sig-paren">(</span><em>data</em>, <em>axis</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/IOManager.html#IOManager.split_data"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.IOManager.split_data" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split a multi-dimensional data block into slabs along a given axis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -266,12 +264,12 @@ If not given the default value from <cite>GlobalDefaults</cite> is used.</td>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IOManager</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">IOManager</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">IOManager</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -284,29 +282,28 @@ If not given the default value from <cite>GlobalDefaults</cite> is used.</td>
   <h4>Next topic</h4>
   <p class="topless"><a href="IOM_plugin_parameters.html"
                         title="next chapter">IOM_plugin_parameters</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/IOManager.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/IOManager.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -321,12 +318,12 @@ If not given the default value from <cite>GlobalDefaults</cite> is used.</td>
         <li class="right" >
           <a href="SimulationLoopHagedornInhomogeneous.html" title="SimulationLoopHagedornInhomogeneous"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

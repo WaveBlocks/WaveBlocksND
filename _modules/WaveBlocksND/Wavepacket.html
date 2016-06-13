@@ -1,0 +1,182 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.Wavepacket &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.Wavepacket</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the basic interface for general wavepackets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">hashlib</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Wavepacket&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="Wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket">[docs]</a><span class="k">class</span> <span class="nc">Wavepacket</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class is an abstract interface to wavepackets in general.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a wavepacket object that represents :math:`\Psi`. A wavepacket</span>
+<span class="sd">        has :math:`N` components :math:`\Phi_i` with :math:`i \in 1 \ldots N`. Each</span>
+<span class="sd">        component is defined over :math:`D` dimensional space.</span>
+
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;Wavepacket&#39; is an abstract interface.&quot;</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;:return: A string describing the wavepacket.</span>
+
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;Wavepacket&#39; is an abstract interface.&quot;</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="Wavepacket.clone"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.clone">[docs]</a>    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Clone the wavepacket. Return a new copy of the wavepacket and</span>
+<span class="sd">        make sure that all references between the two wavepackets get broken.</span>
+
+<span class="sd">        :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;Wavepacket&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Wavepacket.gen_id"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.gen_id">[docs]</a>    <span class="k">def</span> <span class="nf">gen_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Generate an (unique) ID per wavepacket instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Generate the packet ID from the current time as well as</span>
+        <span class="c1"># memory location and take the md5 hash. The hash can be</span>
+        <span class="c1"># assumed collision free for this usecase. The &#39;id&#39; part</span>
+        <span class="c1"># assures that different instances get different IDs even</span>
+        <span class="c1"># in case the timer resolution is too small. The &#39;time&#39; part</span>
+        <span class="c1"># assures that in case one instance gets deleted and another</span>
+        <span class="c1"># created at the same location, their IDs still differ.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="Wavepacket.get_id"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.get_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the packet ID of this wavepacket instance.</span>
+<span class="sd">        The ID may be used for storing packets in associative lists.</span>
+
+<span class="sd">        :return: The ID of the current instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;_id&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">gen_id</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_id</span></div>
+
+
+<div class="viewcode-block" id="Wavepacket.set_id"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.set_id">[docs]</a>    <span class="k">def</span> <span class="nf">set_id</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">anid</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Manually set a new ID for the current wavepacket instance.</span>
+
+<span class="sd">        :param anid: The new ID.</span>
+<span class="sd">        :type anid: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Currently we force integers as ID s. However in general IDs</span>
+        <span class="c1"># could be of any object type, as long as we can avoid name clashes.</span>
+        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">anid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">anid</span></div>
+
+
+<div class="viewcode-block" id="Wavepacket.get_dimension"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.get_dimension">[docs]</a>    <span class="k">def</span> <span class="nf">get_dimension</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;:return: The space dimension :math:`D` of the wavepacket :math:`\Psi`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span></div>
+
+
+<div class="viewcode-block" id="Wavepacket.get_number_components"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.get_number_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;:return: The number :math:`N` of components the wavepacket :math:`\Psi` has.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

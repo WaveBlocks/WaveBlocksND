@@ -8,7 +8,7 @@
     
     <title>Data storage &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="Interactive use" href="ch4_interactive_use.html" />
     <link rel="prev" title="Configuration and Settings" href="ch2_configuration.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,34 +43,34 @@
         <li class="right" >
           <a href="ch2_configuration.html" title="Configuration and Settings"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="data-storage">
 <h1>Data storage<a class="headerlink" href="#data-storage" title="Permalink to this headline">¶</a></h1>
-<p>What data are written to disk. How can we retrieve data, <tt class="docutils literal"><span class="pre">IOManager</span></tt>
+<p>What data are written to disk. How can we retrieve data, <code class="docutils literal"><span class="pre">IOManager</span></code>
 basics and usage.</p>
 <div class="section" id="how-io-works">
 <h2>How IO works<a class="headerlink" href="#how-io-works" title="Permalink to this headline">¶</a></h2>
-<p>The so-called <tt class="docutils literal"><span class="pre">IOManager</span></tt> (<tt class="docutils literal"><span class="pre">IOM</span></tt> for short) is responsible for
+<p>The so-called <code class="docutils literal"><span class="pre">IOManager</span></code> (<code class="docutils literal"><span class="pre">IOM</span></code> for short) is responsible for
 storing all our data. It provides a meaningful API for storing and
 retrieving simulation data and the goal is to make data handling for
-scripts and interactive use as easy as possible. The <tt class="docutils literal"><span class="pre">IOManager</span></tt>
-uses the low-level <tt class="docutils literal"><span class="pre">hdf5</span></tt> file format to actually store the
-numerical data efficiently. Dealing directly with the <tt class="docutils literal"><span class="pre">hdf5</span></tt> API
-provided by the <cite>Python</cite> package <tt class="docutils literal"><span class="pre">h5py</span></tt> would be cumbersome as we
+scripts and interactive use as easy as possible. The <code class="docutils literal"><span class="pre">IOManager</span></code>
+uses the low-level <code class="docutils literal"><span class="pre">hdf5</span></code> file format to actually store the
+numerical data efficiently. Dealing directly with the <code class="docutils literal"><span class="pre">hdf5</span></code> API
+provided by the <cite>Python</cite> package <code class="docutils literal"><span class="pre">h5py</span></code> would be cumbersome as we
 would have to remember much more details about how the data are stored
-inside an <tt class="docutils literal"><span class="pre">hdf</span></tt> file. With this thin layer we just tell the <tt class="docutils literal"><span class="pre">IOM</span></tt>
+inside an <code class="docutils literal"><span class="pre">hdf</span></code> file. With this thin layer we just tell the <code class="docutils literal"><span class="pre">IOM</span></code>
 which data we want to store or load and it performs all the low-level
 stuff behind our back.</p>
-<p>Please note that the tab-completion of <tt class="docutils literal"><span class="pre">ipython</span></tt> will not work as
-usual on <tt class="docutils literal"><span class="pre">IOManager</span></tt> instances because of its plugin
+<p>Please note that the tab-completion of <code class="docutils literal"><span class="pre">ipython</span></code> will not work as
+usual on <code class="docutils literal"><span class="pre">IOManager</span></code> instances because of its plugin
 architecture. The plugins allow to add functionality at run-time and
 only when its really used. Thus a (member)function may be loaded right
 at the moment it gets called the first time.  This is the reason why
@@ -88,9 +88,9 @@ data related to wave-packets, wave-functions and observables. Each of
 these data sets is optional and there are functions to query if
 specified data is available. The next figure shows the coarse
 structure of any simulation results file.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id1">
 <img alt="../_images/structure_result_file.png" src="../_images/structure_result_file.png" />
-<p class="caption">Coarse structure of a file containing simulation results.</p>
+<p class="caption"><span class="caption-text">Coarse structure of a file containing simulation results.</span></p>
 </div>
 <p>The figure below shows the internal structure of a single data block.
 In this structure not all data objects always exist depending on what
@@ -101,9 +101,9 @@ group can have different subsets. For example if you never computed
 observables, then this entire block is missing. The wave-function data
 can come from a simulation with the Fourier propagator or from the
 evaluation of wave-packets on a given domain-wide grid.</p>
-<div class="figure align-center">
+<div class="figure align-center" id="id2">
 <img alt="../_images/structure_datablock.png" src="../_images/structure_datablock.png" />
-<p class="caption">Possible structure of a single data block. Not all data always exist.</p>
+<p class="caption"><span class="caption-text">Possible structure of a single data block. Not all data always exist.</span></p>
 </div>
 </div>
 <div class="section" id="saving-data-at-times-and-time-steps">
@@ -111,24 +111,24 @@ evaluation of wave-packets on a given domain-wide grid.</p>
 <p>Storing simulation data can happen in various different ways. For
 example you can store data at regular time intervals. Or at a list of
 fixed points in time. Both is easily possible with the tools provided
-by the <tt class="docutils literal"><span class="pre">IOManager</span></tt> together with the <tt class="docutils literal"><span class="pre">TimeManager</span></tt>. While the
-<tt class="docutils literal"><span class="pre">IOManager</span></tt> is responsible for saving and loading the data, the
-<tt class="docutils literal"><span class="pre">TimeManager</span></tt> is used for all computations related to time,
+by the <code class="docutils literal"><span class="pre">IOManager</span></code> together with the <code class="docutils literal"><span class="pre">TimeManager</span></code>. While the
+<code class="docutils literal"><span class="pre">IOManager</span></code> is responsible for saving and loading the data, the
+<code class="docutils literal"><span class="pre">TimeManager</span></code> is used for all computations related to time,
 time-steps and so on, for example to convert a list of times into a
 list of time-steps or checking if a given time is is within the
 simulated time range etc.</p>
-<p>The two parameters <tt class="docutils literal"><span class="pre">write_nth</span></tt> and <tt class="docutils literal"><span class="pre">save_at</span></tt> are used to configure
+<p>The two parameters <code class="docutils literal"><span class="pre">write_nth</span></code> and <code class="docutils literal"><span class="pre">save_at</span></code> are used to configure
 the way you wish to save data. While the first is used to specify the
 details of saving at regular time intervals, the second one provides
 the means to specify a list of points in time when saving should take
 place. A few examples of saving at regular intervals:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Save data at each timestep</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Save data at each timestep</span>
 <span class="n">write_nth</span> <span class="o">=</span> <span class="mi">1</span>
 
-<span class="c"># Save data each 5th timestep</span>
+<span class="c1"># Save data each 5th timestep</span>
 <span class="n">write_nth</span> <span class="o">=</span> <span class="mi">5</span>
 
-<span class="c"># Never save data</span>
+<span class="c1"># Never save data</span>
 <span class="n">write_nth</span> <span class="o">=</span> <span class="mi">0</span>
 </pre></div>
 </div>
@@ -136,65 +136,65 @@ place. A few examples of saving at regular intervals:</p>
 the time-step corresponding to the end of the simulation is not an
 integer multiple of the value of this parameter then the data from the
 end is missing. (This should be quite obvious!)</p>
-<p>The parameter <tt class="docutils literal"><span class="pre">save_at</span></tt> has to be a <cite>Python</cite> list containing
+<p>The parameter <code class="docutils literal"><span class="pre">save_at</span></code> has to be a <cite>Python</cite> list containing
 integers and/or floats. There is a <em>big difference</em> between the two
 data types you always have to be aware of! Integer values are
 interpreted as <cite>timesteps</cite> while floats will be taken as <cite>times</cite>. A
 few examples on saving at specified times only:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Save at timestep 3, 6, 7, 13 and 19</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Save at timestep 3, 6, 7, 13 and 19</span>
 <span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mi">3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">13</span><span class="p">,</span> <span class="mi">19</span><span class="p">]</span>
 
-<span class="c"># Save at the end time only</span>
-<span class="c"># Assuming T = 5.34 and T is an integer multiple of dt!</span>
+<span class="c1"># Save at the end time only</span>
+<span class="c1"># Assuming T = 5.34 and T is an integer multiple of dt!</span>
 <span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.34</span><span class="p">]</span>
 
-<span class="c"># Save at a few times</span>
-<span class="c"># This is usefull to compare simulation results of simulations</span>
-<span class="c"># with different timestep sizes. Of course the times have to be</span>
-<span class="c"># integer multiples of *all* timestep sizes in consideration!</span>
+<span class="c1"># Save at a few times</span>
+<span class="c1"># This is usefull to compare simulation results of simulations</span>
+<span class="c1"># with different timestep sizes. Of course the times have to be</span>
+<span class="c1"># integer multiples of *all* timestep sizes in consideration!</span>
 <span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mf">3.2</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mf">8.7</span><span class="p">,</span> <span class="mf">19.3</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>You can freely mix the two approaches and specify crazy things like
 the following:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">15</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">15</span>
 <span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">3.2</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mf">23.45</span><span class="p">,</span> <span class="mf">23.55</span><span class="p">]</span>
 </pre></div>
 </div>
 <p>which translates to: <cite>Save the data each 15 steps and additionally
 save the data at the time-steps 1, 2, 3, 10 and 40 and save the data at
 the time 3.2, 23.45 and 23.55.</cite> It is assumed that <cite>time</cite> is an
-integer multiple of the <tt class="docutils literal"><span class="pre">timestep</span></tt> size. (Otherwise more or less
+integer multiple of the <code class="docutils literal"><span class="pre">timestep</span></code> size. (Otherwise more or less
 careful rounding will be applied.)  The list doesn&#8217;t have to be in
 monotone order and duplicates will be removed as well as values
 outside the interval <img class="math" src="../_images/math/1d3cb81063fd04cd699285c31684aa3e5b20ada6.png" alt="[0, T]"/> where <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> is the time at
 which the simulation stops. A good use case for a mixed specification
 is for example saving at big intervals but including the very end of
 the simulation:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">35</span>
-<span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.34</span><span class="p">]</span>    <span class="c"># Same assumption as above</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">35</span>
+<span class="n">save_at</span> <span class="o">=</span> <span class="p">[</span><span class="mf">5.34</span><span class="p">]</span>    <span class="c1"># Same assumption as above</span>
 </pre></div>
 </div>
 <p>Note that even if you disable saving data entirely by setting:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c"># Default is 1</span>
-<span class="n">save_at</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c"># Default is []</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">write_nth</span> <span class="o">=</span> <span class="mi">0</span>     <span class="c1"># Default is 1</span>
+<span class="n">save_at</span> <span class="o">=</span> <span class="p">[]</span>      <span class="c1"># Default is []</span>
 </pre></div>
 </div>
-<p>you will end up with a <tt class="docutils literal"><span class="pre">hdf5</span></tt> file still containing the initial
+<p>you will end up with a <code class="docutils literal"><span class="pre">hdf5</span></code> file still containing the initial
 values as they are at time equal 0 (before the first time-step was
 made).</p>
 </div>
 <div class="section" id="retrieving-the-simulation-parameters">
 <h2>Retrieving the simulation parameters<a class="headerlink" href="#retrieving-the-simulation-parameters" title="Permalink to this headline">¶</a></h2>
-<p>From a <tt class="docutils literal"><span class="pre">hdf5</span></tt> file with the simulation data we can get back the
+<p>From a <code class="docutils literal"><span class="pre">hdf5</span></code> file with the simulation data we can get back the
 parameters this simulation used. Retrieval is trivial, the following
 commented interactive <cite>Python</cite> session shows the basics which can of
 course be used in a user script too:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">IOManager</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>                         <span class="c"># create an IOM instance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s">&quot;simulation_results.hdf5&quot;</span><span class="p">)</span>  <span class="c"># load the data file</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_params</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>         <span class="c"># request the parameters</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">sim_params</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">IOManager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>                         <span class="c1"># create an IOM instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">load_file</span><span class="p">(</span><span class="s2">&quot;simulation_results.hdf5&quot;</span><span class="p">)</span>  <span class="c1"># load the data file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">sim_params</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>         <span class="c1"># request the parameters</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">sim_params</span><span class="p">)</span>
 <span class="go">====================================</span>
 <span class="go">Parameters of the current simulation</span>
 <span class="go">------------------------------------</span>
@@ -206,56 +206,56 @@ that were used for the simulation!</p>
 </div>
 <div class="section" id="load-simulation-data">
 <h2>Load simulation data<a class="headerlink" href="#load-simulation-data" title="Permalink to this headline">¶</a></h2>
-<p>Simulation data can be loaded from a given <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>
-file by an <tt class="docutils literal"><span class="pre">IOManager</span></tt> instance. You can even do this inside an
-interactive <tt class="docutils literal"><span class="pre">ipython</span></tt> session. The API is quite trivial, all
-functions for loading data have their name prefixed by <tt class="docutils literal"><span class="pre">load_</span></tt> as
-for example in <tt class="docutils literal"><span class="pre">load_energy(...)</span></tt>. Every function for loading and
-saving data has a keyword argument <tt class="docutils literal"><span class="pre">blockid</span></tt> defaulting to 0 which
-tells the <tt class="docutils literal"><span class="pre">IOManager</span></tt> from which data block to take the requested
+<p>Simulation data can be loaded from a given <code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code>
+file by an <code class="docutils literal"><span class="pre">IOManager</span></code> instance. You can even do this inside an
+interactive <code class="docutils literal"><span class="pre">ipython</span></code> session. The API is quite trivial, all
+functions for loading data have their name prefixed by <code class="docutils literal"><span class="pre">load_</span></code> as
+for example in <code class="docutils literal"><span class="pre">load_energy(...)</span></code>. Every function for loading and
+saving data has a keyword argument <code class="docutils literal"><span class="pre">blockid</span></code> defaulting to 0 which
+tells the <code class="docutils literal"><span class="pre">IOManager</span></code> from which data block to take the requested
 data. For quantities that represent time series, the load functions
-also provide a keyword argument <tt class="docutils literal"><span class="pre">timestep</span></tt> that can be used to load
-data from a single time-step. The default is <tt class="docutils literal"><span class="pre">None</span></tt> meaning <cite>load the
+also provide a keyword argument <code class="docutils literal"><span class="pre">timestep</span></code> that can be used to load
+data from a single time-step. The default is <code class="docutils literal"><span class="pre">None</span></code> meaning <cite>load the
 data from all time-steps</cite>. A sample of such an interactive session
 could look like this:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">IOManager</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>                          <span class="c"># Create a new IOManager instance</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="s">&quot;simulation_results.hdf5&quot;</span><span class="p">)</span>   <span class="c"># And open a given hdf5 file</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">IOManager</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>                          <span class="c1"># Create a new IOManager instance</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="s2">&quot;simulation_results.hdf5&quot;</span><span class="p">)</span>   <span class="c1"># And open a given hdf5 file</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">print</span><span class="p">(</span><span class="n">iom</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="nb">print</span><span class="p">(</span><span class="n">iom</span><span class="p">)</span>
 <span class="go">  IOManager instance with open file simulation_results.hdf5</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ekin</span><span class="p">,</span> <span class="n">epot</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">load_energy</span><span class="p">()</span>         <span class="c"># Load the energies from a simulation</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekin</span><span class="p">,</span> <span class="n">epot</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">load_energy</span><span class="p">()</span>         <span class="c1"># Load the energies from a simulation</span>
 <span class="go">  Requested function: load_energy          # Don&#39;t bother about the messages</span>
 <span class="go">  Plugin to load: IOM_plugin_energy        # concerning the plugins.</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">ekin</span><span class="o">.</span><span class="n">shape</span>                             <span class="c"># We see the the energies are given</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">ekin</span><span class="o">.</span><span class="n">shape</span>                             <span class="c1"># We see the the energies are given</span>
 <span class="go">  (301, 1)                                 # as time series over 301 timesteps</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">epot</span><span class="o">.</span><span class="n">shape</span>
 <span class="go">  (301, 1)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tg</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">load_energy_timegrid</span><span class="p">()</span>        <span class="c"># Load the corresponding timegrid which</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tg</span> <span class="o">=</span> <span class="n">iom</span><span class="o">.</span><span class="n">load_energy_timegrid</span><span class="p">()</span>        <span class="c1"># Load the corresponding timegrid which</span>
 <span class="go">                                           # contains the timesteps when the data</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">tg</span><span class="o">.</span><span class="n">shape</span>                               <span class="c"># was saved. This is important if the</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">tg</span><span class="o">.</span><span class="n">shape</span>                               <span class="c1"># was saved. This is important if the</span>
 <span class="go">  (301,)                                   # data was saved at non-regular intervalls.</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>                         <span class="c"># Close the hdf5 file</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span>                         <span class="c1"># Close the hdf5 file</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">tg</span><span class="p">,</span> <span class="n">ekin</span><span class="p">)</span>                         <span class="c"># Plot the kinetic energy over time</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">plot</span><span class="p">(</span><span class="n">tg</span><span class="p">,</span> <span class="n">ekin</span><span class="p">)</span>                         <span class="c1"># Plot the kinetic energy over time</span>
 </pre></div>
 </div>
 <p>Of course all this works exactly the same inside any regular <cite>Python</cite>
-script. For a complete list of all the <tt class="docutils literal"><span class="pre">load_</span></tt> functions please see
+script. For a complete list of all the <code class="docutils literal"><span class="pre">load_</span></code> functions please see
 the API documentation or the docstrings.</p>
 </div>
 <div class="section" id="working-with-simulation-data">
 <h2>Working with simulation data<a class="headerlink" href="#working-with-simulation-data" title="Permalink to this headline">¶</a></h2>
 <p>The following code snippet shows how to perform a data transformation task
 for all blocks of a simulation results file.:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="s">&quot;testdata.hdf5&quot;</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">iom</span><span class="o">.</span><span class="n">open_file</span><span class="p">(</span><span class="s2">&quot;testdata.hdf5&quot;</span><span class="p">)</span>
 
-<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">blockid</span> <span class="ow">in</span> <span class="n">iom</span><span class="o">.</span><span class="n">get_block_ids</span><span class="p">():</span>      <span class="c"># Iterate over all data blocks</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="k">for</span> <span class="n">blockid</span> <span class="ow">in</span> <span class="n">iom</span><span class="o">.</span><span class="n">get_block_ids</span><span class="p">():</span>      <span class="c1"># Iterate over all data blocks</span>
 <span class="go">        if iom.has_energy(block=blockid):    # If the current data block contains</span>
 <span class="go">            ...                              # energies we may do something</span>
 </pre></div>
@@ -267,7 +267,7 @@ for all blocks of a simulation results file.:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -288,29 +288,28 @@ for all blocks of a simulation results file.:</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ch4_interactive_use.html"
                         title="next chapter">Interactive use</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/manual/ch3_data_storage.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/manual/ch3_data_storage.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -325,12 +324,12 @@ for all blocks of a simulation results file.:</p>
         <li class="right" >
           <a href="ch2_configuration.html" title="Configuration and Settings"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

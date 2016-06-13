@@ -1,0 +1,412 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.NSDInhomogeneous &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.NSDInhomogeneous</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for evaluating inner products</span>
+<span class="sd">and matrix elements by using a specially adapted</span>
+<span class="sd">numerical steepest descent technique.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="p">(</span><span class="n">array</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">diag</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span>
+                   <span class="n">einsum</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">imag</span><span class="p">,</span> <span class="n">nan_to_num</span><span class="p">,</span> <span class="n">triu</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">inv</span><span class="p">,</span> <span class="n">schur</span><span class="p">,</span> <span class="n">det</span><span class="p">,</span> <span class="n">sqrtm</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Quadrature</span> <span class="kn">import</span> <span class="n">Quadrature</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NSDInhomogeneous&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous">[docs]</a><span class="k">class</span> <span class="nc">NSDInhomogeneous</span><span class="p">(</span><span class="n">Quadrature</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="NSDInhomogeneous.__init__"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize the numerical steepest descent transformation</span>
+<span class="sd">        for quadrature of highly oscillatory overlap integrals.</span>
+
+<span class="sd">        :param QR: Typically one uses an instance of :py:class:`GaussHermiteOriginalQR`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Pure convenience to allow setting of quadrature rule in constructor</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_qr</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Inhomogeneous numerical steepest descent using a &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.get_description"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this quadrature object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NSDInhomogeneous&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;qr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.initialize_packet"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.initialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Provide the wavepacket parts of the inner product to evaluate.</span>
+<span class="sd">        Since the quadrature is inhomogeneous, different wavepackets can be</span>
+<span class="sd">        used for the &#39;bra&#39; as well as the &#39;ket&#39; part.</span>
+
+<span class="sd">        :param pacbra: The packet that is used for the &#39;bra&#39; part.</span>
+<span class="sd">        :param packet: The packet that is used for the &#39;ket&#39; part.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
+        <span class="k">if</span> <span class="n">packet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">packet</span> <span class="o">=</span> <span class="n">pacbra</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span> <span class="o">=</span> <span class="n">pacbra</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span> <span class="o">=</span> <span class="n">packet</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Provide the operator part of the inner product to evaluate.</span>
+<span class="sd">        This function initializes the operator used for quadratures</span>
+<span class="sd">        and for building matrices.</span>
+
+<span class="sd">        Note that the operator must not have residues and can be</span>
+<span class="sd">        maximally polynomial but not exponential.</span>
+
+<span class="sd">        :param operator: The operator of the inner product.</span>
+<span class="sd">                         If ``None`` a suitable identity is used.</span>
+<span class="sd">        :param matrix: Set this to ``True`` (Default is ``False``) in case</span>
+<span class="sd">                       we want to compute the matrix elements.</span>
+<span class="sd">                       For nasty technical reasons we can not yet unify</span>
+<span class="sd">                       the operator call syntax.</span>
+<span class="sd">        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.</span>
+<span class="sd">        :type eval_at_once: Boolean, default is ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Make this more efficient, only compute values needed at each (r,c) step.</span>
+        <span class="c1">#       For this, &#39;operator&#39; must support the &#39;component=(r,c)&#39; option.</span>
+        <span class="c1"># Operator is None is interpreted as identity transformation</span>
+        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Wrap the operator inside a lambda ignoring the dummy parameter</span>
+            <span class="c1"># This allows to use the same nsd code for quadrature and matrix construction.</span>
+            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="n">operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="o">=</span> <span class="n">eval_at_once</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.mix_parameters"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.mix_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">mix_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Mix the two parameter sets :math:`\Pi_i` and :math:`\Pi_j`</span>
+<span class="sd">        from the &#39;bra&#39; and the &#39;ket&#39; wavepackets :math:`\Phi\left[\Pi_i\right]`</span>
+<span class="sd">        and :math:`\Phi^\prime\left[\Pi_j\right]`.</span>
+
+<span class="sd">        :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.</span>
+<span class="sd">        :param Piket: The parameter set :math:`\Pi_j` from the ket part wavepacket.</span>
+<span class="sd">        :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># &lt;Pibra | ... | Piket&gt;</span>
+        <span class="n">qr</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">Qr</span><span class="p">,</span> <span class="n">Pr</span> <span class="o">=</span> <span class="n">Pibra</span>
+        <span class="n">qc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">Qc</span><span class="p">,</span> <span class="n">Pc</span> <span class="o">=</span> <span class="n">Piket</span>
+
+        <span class="c1"># Mix the parameters</span>
+        <span class="n">Gr</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pr</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qr</span><span class="p">))</span>
+        <span class="n">Gc</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pc</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qc</span><span class="p">))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">imag</span><span class="p">(</span><span class="n">Gc</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Gr</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">imag</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">qc</span><span class="p">)</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Gr</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">qr</span><span class="p">))</span>
+
+        <span class="n">q0</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">Q0</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">r</span>
+
+        <span class="c1"># Here we can not avoid the matrix root by using svd</span>
+        <span class="n">Qs</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">Q0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">Qs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.build_bilinear"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.build_bilinear">[docs]</a>    <span class="k">def</span> <span class="nf">build_bilinear</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Convert the oscillator :math:`-\overline{g_k} + g_l`</span>
+<span class="sd">        occuring in the integral :math:`\langle\phi_k\left[\Pi_k\right] | \phi_l\left[\Pi_l\right]\rangle`</span>
+<span class="sd">        into a bilinear form</span>
+<span class="sd">        :math:`g(x) = \underline{x}^{\mathrm{H}} \mathbf{A} \underline{x} + \underline{b}^{\mathrm{T}} \underline{x} + c`.</span>
+
+<span class="sd">        :param Pibra: The parameters :math:`\Pi_k = (\underline{q_k}, \underline{p_k}, \mathbf{Q_k}, \mathbf{P_k})` from the &#39;bra&#39; packet.</span>
+<span class="sd">        :param Piket: The parameters :math:`\Pi_l = (\underline{q_l}, \underline{p_l}, \mathbf{Q_l}, \mathbf{P_l})` from the &#39;ket&#39; packet.</span>
+<span class="sd">        :return: Three arrays: a matrix :math:`\mathbf{A}` of shape :math:`D \times D`,</span>
+<span class="sd">                 a vector :math:`\underline{b}` of shape :math:`D \times 1` and a scalar value :math:`c`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">qr</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">Qr</span><span class="p">,</span> <span class="n">Pr</span> <span class="o">=</span> <span class="n">Pibra</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">qc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">Qc</span><span class="p">,</span> <span class="n">Pc</span> <span class="o">=</span> <span class="n">Piket</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+
+        <span class="n">Gr</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pr</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qr</span><span class="p">))</span>
+        <span class="n">Gc</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pc</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qc</span><span class="p">))</span>
+
+        <span class="c1"># Merge into a single oscillator</span>
+        <span class="n">A</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">Gc</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gr</span><span class="p">)))</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span>  <span class="n">dot</span><span class="p">(</span><span class="n">Gr</span><span class="p">,</span> <span class="n">qr</span><span class="p">)</span>
+                    <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gc</span><span class="p">)),</span> <span class="n">qc</span><span class="p">)</span>
+                    <span class="o">+</span> <span class="n">dot</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gr</span><span class="p">),</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">qr</span><span class="p">))</span>
+                    <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Gc</span><span class="p">),</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">qc</span><span class="p">))</span>
+                   <span class="p">)</span>
+             <span class="o">+</span> <span class="p">(</span><span class="n">pc</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">pr</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="n">b</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">b</span><span class="p">)</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span>  <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">qc</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">qc</span><span class="p">))</span>
+                    <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">qr</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">Gr</span><span class="p">)),</span> <span class="n">qr</span><span class="p">)))</span>
+                 <span class="o">+</span> <span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">qr</span><span class="p">)),</span> <span class="n">pr</span><span class="p">)</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">pc</span><span class="p">)),</span> <span class="n">qc</span><span class="p">))</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.prepare"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Precompute some values needed for evaluating the quadrature</span>
+<span class="sd">        :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding</span>
+<span class="sd">        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.</span>
+
+<span class="sd">        :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`</span>
+<span class="sd">                     selecting the :math:`\Phi_i` for which te precompute values.</span>
+<span class="sd">        :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`</span>
+<span class="sd">                     selecting the :math:`\Phi^\prime_j` for which te precompute values.</span>
+
+<span class="sd">        Note that the two arguments are not used in the current implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Unpack quadrature rules</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.do_nsd"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.do_nsd">[docs]</a>    <span class="k">def</span> <span class="nf">do_nsd</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluates by numerical steepest descent the integral</span>
+<span class="sd">        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial</span>
+<span class="sd">        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.</span>
+<span class="sd">        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.</span>
+<span class="sd">        :return: A complex valued matrix of shape :math:`|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+        <span class="n">Pibra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">Piket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">Pimix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mix_parameters</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">Piket</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+
+        <span class="c1"># Combine oscillators</span>
+        <span class="n">A</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_bilinear</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[:</span><span class="mi">4</span><span class="p">],</span> <span class="n">Piket</span><span class="p">[:</span><span class="mi">4</span><span class="p">])</span>
+
+        <span class="c1"># Schur decomposition of A = U^H T U</span>
+        <span class="n">T</span><span class="p">,</span> <span class="n">U</span> <span class="o">=</span> <span class="n">schur</span><span class="p">(</span><span class="n">A</span><span class="p">,</span> <span class="n">output</span><span class="o">=</span><span class="s2">&quot;complex&quot;</span><span class="p">)</span>
+        <span class="n">U</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">U</span><span class="p">))</span>
+
+        <span class="c1"># Oscillator updates</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="c1"># TODO: Prove that this never happens or handle it correctly!</span>
+                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: &#39;update_oscillator&#39; encountered a RESIDUE situation!&quot;</span><span class="p">)</span>
+
+            <span class="c1"># Diagonal Elements</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+                <span class="n">T</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span> <span class="o">-</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+            <span class="c1"># Others</span>
+            <span class="k">for</span> <span class="n">rowi</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">coli</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rowi</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+                    <span class="n">T</span><span class="p">[</span><span class="n">rowi</span><span class="p">,</span> <span class="n">coli</span><span class="p">]</span> <span class="o">=</span> <span class="n">T</span><span class="p">[</span><span class="n">rowi</span><span class="p">,</span> <span class="n">coli</span><span class="p">]</span> <span class="o">-</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rowi</span><span class="p">]</span> <span class="o">*</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">coli</span><span class="p">]</span> <span class="o">/</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">T</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span>
+
+        <span class="c1"># Compute remaining parts</span>
+        <span class="n">X</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">A</span> <span class="o">+</span> <span class="n">transpose</span><span class="p">(</span><span class="n">A</span><span class="p">))</span>
+        <span class="n">ctilde</span> <span class="o">=</span> <span class="n">c</span> <span class="o">-</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">b</span><span class="p">),</span> <span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">b</span><span class="p">))</span>
+
+        <span class="c1"># Prefactor originating from constant term c</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+        <span class="n">w</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span>
+        <span class="n">prefactor</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">w</span> <span class="o">*</span> <span class="n">ctilde</span><span class="p">)</span>
+
+        <span class="c1"># Take out diagonals of T</span>
+        <span class="n">Dk</span> <span class="o">=</span> <span class="n">diag</span><span class="p">(</span><span class="n">T</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># Tau (path parametrization variable)</span>
+        <span class="n">tk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+
+        <span class="c1"># Path Precomposition</span>
+        <span class="n">Tu</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">triu</span><span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">Dk</span>
+        <span class="n">paths</span> <span class="o">=</span> <span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">Dk</span><span class="p">)</span> <span class="o">*</span> <span class="n">tk</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">)):</span>
+            <span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">paths</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">Tu</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">paths</span><span class="p">)</span>
+
+        <span class="c1"># Path derivatives</span>
+        <span class="n">pathderivs</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">Dk</span><span class="p">)</span>
+        <span class="n">pdp</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">pathderivs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Backtransformation of paths</span>
+        <span class="n">pathst</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">U</span><span class="p">)),</span> <span class="n">paths</span><span class="p">)</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">X</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="c1"># Another normalization prefactor</span>
+        <span class="c1"># This is what differs the constant part of phi_0 from 1.</span>
+        <span class="c1"># We loose it when dividing by phi_0 hence manually add it again.</span>
+        <span class="c1"># TODO: Do we need mixing parameters here?</span>
+        <span class="c1">#       Preliminary answer: no</span>
+        <span class="n">fr</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">D</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">fc</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span> <span class="o">*</span> <span class="n">D</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">Piket</span><span class="p">[</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">normfactor</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">fr</span><span class="p">)</span> <span class="o">*</span> <span class="n">fc</span>
+
+        <span class="c1"># Compute global phase difference</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Piket</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
+
+        <span class="c1"># Non-oscillatory parts</span>
+        <span class="c1"># Wavepacket</span>
+        <span class="c1"># TODO: This is a huge hack: division by phi_0 not stable?</span>
+        <span class="n">basisr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">pathst</span><span class="p">),</span> <span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">basisr</span> <span class="o">=</span> <span class="n">basisr</span> <span class="o">/</span> <span class="n">basisr</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">basisc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">pathst</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">basisc</span> <span class="o">=</span> <span class="n">basisc</span> <span class="o">/</span> <span class="n">basisc</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="c1"># Basis division by phi0 may introduce NaNs</span>
+        <span class="c1">#basisr = nan_to_num(basisr)</span>
+        <span class="c1">#basisc = nan_to_num(basisc)</span>
+
+        <span class="c1"># Operator should support the component notation for efficiency</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c1"># TODO: Sure, this is inefficient, but we can not do better right now.</span>
+            <span class="n">opath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="n">pathst</span><span class="p">,</span> <span class="n">Pimix</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">opath</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="n">pathst</span><span class="p">,</span> <span class="n">Pimix</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">entry</span><span class="o">=</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+
+        <span class="c1"># Do the quadrature</span>
+        <span class="n">quadrand</span> <span class="o">=</span> <span class="p">(</span><span class="n">opath</span> <span class="o">*</span> <span class="n">pdp</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
+        <span class="c1"># Sum up matrices over all quadrature nodes</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;k,ik,jk&quot;</span><span class="p">,</span> <span class="n">quadrand</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">basisr</span><span class="p">),</span> <span class="n">basisc</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">phase</span> <span class="o">*</span> <span class="n">normfactor</span> <span class="o">*</span> <span class="n">prefactor</span> <span class="o">*</span> <span class="n">M</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">w</span><span class="p">)</span><span class="o">**</span><span class="n">D</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.perform_quadrature"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.perform_quadrature">[docs]</a>    <span class="k">def</span> <span class="nf">perform_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluates by numerical steepest descent the integral</span>
+<span class="sd">        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial</span>
+<span class="sd">        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.</span>
+<span class="sd">        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.</span>
+<span class="sd">        :return: A single complex floating point number.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Quadrature dimension does not match the wavepacket dimension&quot;</span><span class="p">)</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_nsd</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+        <span class="c1"># Include the coefficients as c^H M c</span>
+        <span class="n">cbra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">cket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">cbra</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">cket</span><span class="p">)))</span>
+        <span class="c1"># Handle NaNs if any</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">I</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">I</span></div>
+
+
+<div class="viewcode-block" id="NSDInhomogeneous.perform_build_matrix"><a class="viewcode-back" href="../../waveblocks_classes/NSDInhomogeneous.html#WaveBlocksND.NSDInhomogeneous.perform_build_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">perform_build_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Computes by standard quadrature the matrix elements</span>
+<span class="sd">        :math:`\langle\Phi_i | f |\Phi^\prime_j\rangle` for a general function</span>
+<span class="sd">        :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.</span>
+<span class="sd">        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.</span>
+<span class="sd">        :return: A complex valued matrix of shape :math:`|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Quadrature dimension does not match the wavepacket dimension&quot;</span><span class="p">)</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">do_nsd</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span>
+        <span class="c1"># Handle NaNs if any</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">nan_to_num</span><span class="p">(</span><span class="n">M</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">M</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

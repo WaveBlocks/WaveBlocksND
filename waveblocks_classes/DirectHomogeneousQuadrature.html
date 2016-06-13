@@ -8,7 +8,7 @@
     
     <title>DirectHomogeneousQuadrature &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="DirectInhomogeneousQuadrature" href="DirectInhomogeneousQuadrature.html" />
     <link rel="prev" title="DirectQuadrature" href="DirectQuadrature.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="DirectQuadrature.html" title="DirectQuadrature"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="directhomogeneousquadrature">
 <h1>DirectHomogeneousQuadrature<a class="headerlink" href="#directhomogeneousquadrature" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-directhomogeneousquadrature-class"></span><h2>About the <tt class="docutils literal"><span class="pre">DirectHomogeneousQuadrature</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-directhomogeneousquadrature-class"></span><h2>About the <code class="docutils literal"><span class="pre">DirectHomogeneousQuadrature</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,21 +63,19 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-3a04e888dfcae3e5dd8adee4b665320a6bedf9d6.png" alt="Inheritance diagram of DirectHomogeneousQuadrature" usemap="#inheritance9f7ba68017" class="inheritance"/>
+<img src="../_images/inheritance-7884be3b9b9c763f36f914f859a4c6685abbd0b3.png" alt="Inheritance diagram of DirectHomogeneousQuadrature" usemap="#inheritance9f7ba68017" class="inheritance"/>
 <map id="inheritance9f7ba68017" name="inheritance9f7ba68017">
 <area shape="rect" id="node3" title="This class is an abstract interface to quadratures in general." alt="" coords="4,4,183,20"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">DirectHomogeneousQuadrature</tt><big>(</big><em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">DirectHomogeneousQuadrature</code><span class="sig-paren">(</span><em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.do_quadrature">
-<tt class="descname">do_quadrature</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.do_quadrature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">do_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.do_quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.do_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by standard quadrature the integral
 <img class="math" src="../_images/math/5043f2e0523a09611e24be7ca84953e64bb70519.png" alt="\langle \Phi_i | f | \Phi_j \rangle"/> for a polynomial
 function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -100,17 +98,17 @@ function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this quadrature object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.get_qr">
-<tt class="descname">get_qr</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.get_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">get_qr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.get_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -123,7 +121,7 @@ never contains any data.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.initialize_operator">
-<tt class="descname">initialize_operator</tt><big>(</big><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.initialize_operator" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_operator</code><span class="sig-paren">(</span><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.initialize_operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.initialize_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the operator part of the inner product to evaluate.
 This function initializes the operator used for quadratures
 and for building matrices.</p>
@@ -133,12 +131,12 @@ and for building matrices.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>operator</strong> &#8211; The operator of the inner product.
-If <tt class="docutils literal"><span class="pre">None</span></tt> a suitable identity is used.</li>
-<li><strong>matrix</strong> &#8211; Set this to <tt class="docutils literal"><span class="pre">True</span></tt> (Default is <tt class="docutils literal"><span class="pre">False</span></tt>) in case
+If <code class="docutils literal"><span class="pre">None</span></code> a suitable identity is used.</li>
+<li><strong>matrix</strong> &#8211; Set this to <code class="docutils literal"><span class="pre">True</span></code> (Default is <code class="docutils literal"><span class="pre">False</span></code>) in case
 we want to compute the matrix elements.
 For nasty technical reasons we can not yet unify
 the operator call syntax.</li>
-<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.</li>
+<li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
@@ -148,7 +146,7 @@ the operator call syntax.</li>
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.initialize_packet">
-<tt class="descname">initialize_packet</tt><big>(</big><em>packet</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.initialize_packet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_packet</code><span class="sig-paren">(</span><em>packet</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.initialize_packet"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.initialize_packet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the wavepacket part of the inner product to evaluate.
 Since the quadrature is homogeneous the same wavepacket is used
 for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
@@ -164,7 +162,7 @@ for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.perform_build_matrix">
-<tt class="descname">perform_build_matrix</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_build_matrix</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes by standard quadrature the matrix elements
 <img class="math" src="../_images/math/95754092d910f9d6e6cb0fef991c2377bcdee3cf.png" alt="\langle\Phi_i | f |\Phi^\prime_j\rangle"/> for a general function
 <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -187,7 +185,7 @@ for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.perform_quadrature">
-<tt class="descname">perform_quadrature</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_quadrature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by numerical steepest descent the integral
 <img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
 function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
@@ -210,7 +208,7 @@ function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.prepare">
-<tt class="descname">prepare</tt><big>(</big><em>rows</em>, <em>cols</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.prepare" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepare</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precompute some values needed for evaluating the quadrature
 <img class="math" src="../_images/math/8dd72d7a872f6ba433aa59d98100b4b8c8221a46.png" alt="\langle \Phi_i | f(x) | \Phi_j \rangle"/> or the corresponding
 matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c88139b0c48f6df1e0.png" alt="\Phi_j"/>.</p>
@@ -232,13 +230,13 @@ selecting the <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c8813
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.set_qr">
-<tt class="descname">set_qr</tt><big>(</big><em>QR</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.set_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">set_qr</code><span class="sig-paren">(</span><em>QR</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.set_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> instance.</td>
 </tr>
 </tbody>
 </table>
@@ -246,7 +244,7 @@ selecting the <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c8813
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes">
-<tt class="descname">transform_nodes</tt><big>(</big><em>Pi</em>, <em>eps</em>, <em>QR=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform_nodes</code><span class="sig-paren">(</span><em>Pi</em>, <em>eps</em>, <em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.transform_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the quadrature nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/> such that they
 fit the given wavepacket <img class="math" src="../_images/math/8df5705a740354c696cde3f58c144189ac1009f3.png" alt="\Phi\left[\Pi\right]"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -278,12 +276,12 @@ the nodes. If not given the internal quadrature rule will be used.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">DirectHomogeneousQuadrature</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">DirectHomogeneousQuadrature</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">DirectHomogeneousQuadrature</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -296,29 +294,28 @@ the nodes. If not given the internal quadrature rule will be used.</li>
   <h4>Next topic</h4>
   <p class="topless"><a href="DirectInhomogeneousQuadrature.html"
                         title="next chapter">DirectInhomogeneousQuadrature</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/DirectHomogeneousQuadrature.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/DirectHomogeneousQuadrature.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -333,12 +330,12 @@ the nodes. If not given the internal quadrature rule will be used.</li>
         <li class="right" >
           <a href="DirectQuadrature.html" title="DirectQuadrature"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

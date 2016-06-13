@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.GaussHermiteOriginalQR &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.GaussHermiteOriginalQR</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the class for Gauss-Hermite quadrature.</span>
+<span class="sd">The quadrature is not transformed to exclude the exponential</span>
+<span class="sd">weight factor.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.orthogonal</span> <span class="kn">import</span> <span class="n">h_roots</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.QuadratureRule</span> <span class="kn">import</span> <span class="n">QuadratureRule</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="GaussHermiteOriginalQR"><a class="viewcode-back" href="../../waveblocks_classes/GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR">[docs]</a><span class="k">class</span> <span class="nc">GaussHermiteOriginalQR</span><span class="p">(</span><span class="n">QuadratureRule</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements a Gauss-Hermite quadrature rule.</span>
+<span class="sd">    The quadrature is not transformed to exclude the exponential</span>
+<span class="sd">    weight factor :math:`\exp(-x^2)`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="p">{}):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new quadrature rule.</span>
+
+<span class="sd">        :param order: The order :math:`k` of the Gauss-Hermite quadrature.</span>
+<span class="sd">                      From theory we know that a Gauss quadrature rule</span>
+<span class="sd">                      of order :math:`k` is exact for polynomials up to</span>
+<span class="sd">                      degree :math:`2 k - 1`.</span>
+
+<span class="sd">        :raise: :py:class:`ValueError` if the ``order`` is not 1 or above.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Quadrature has to have at least a single (node,weight) pair.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">order</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Quadrature rule has to be of order 1 at least.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># The space dimension of the quadrature rule.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># The order of the Gauss-Hermite quadrature.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_order</span> <span class="o">=</span> <span class="n">order</span>
+
+        <span class="c1"># Set the options</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
+
+        <span class="n">nodes</span><span class="p">,</span> <span class="n">weights</span> <span class="o">=</span> <span class="n">h_roots</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_order</span><span class="p">)</span>
+
+        <span class="c1"># The number of nodes in this quadrature rule</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">size</span>
+
+        <span class="c1"># The quadrature nodes \gamma.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">nodes</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span><span class="p">))</span>
+
+        <span class="c1"># The quadrature weights \omega.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span><span class="p">))</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Gauss-Hermite quadrature rule (untransformed) of order </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order</span>
+
+
+<div class="viewcode-block" id="GaussHermiteOriginalQR.get_description"><a class="viewcode-back" href="../../waveblocks_classes/GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this quadrature rule object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_order</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_options</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="GaussHermiteOriginalQR.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the quadrature nodes :math:`\{\gamma_i\}_i`.</span>
+
+<span class="sd">        :return: An array containing the quadrature nodes :math:`\{\gamma_i\}_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="GaussHermiteOriginalQR.get_weights"><a class="viewcode-back" href="../../waveblocks_classes/GaussHermiteOriginalQR.html#WaveBlocksND.GaussHermiteOriginalQR.get_weights">[docs]</a>    <span class="k">def</span> <span class="nf">get_weights</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the quadrature weights :math:`\{\omega_i\}_i`.</span>
+
+<span class="sd">        :return: An array containing the quadrature weights :math:`\{\omega_i\}_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

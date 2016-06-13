@@ -8,7 +8,7 @@
     
     <title>TimeManager &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="FileTools" href="FileTools.html" />
     <link rel="prev" title="ParameterProvider" href="ParameterProvider.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="ParameterProvider.html" title="ParameterProvider"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="timemanager">
 <h1>TimeManager<a class="headerlink" href="#timemanager" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-timemanager-class"></span><h2>About the <tt class="docutils literal"><span class="pre">TimeManager</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-timemanager-class"></span><h2>About the <code class="docutils literal"><span class="pre">TimeManager</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,18 +63,16 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-05b5a8c27edd436a6a5f3ca44b465568bc800c87.png" alt="Inheritance diagram of TimeManager" usemap="#inheritance78e679c0c9" class="inheritance"/>
+<img src="../_images/inheritance-d2994d3c11511ca4694b316e5696782985d2a23e.png" alt="Inheritance diagram of TimeManager" usemap="#inheritance78e679c0c9" class="inheritance"/>
 <map id="inheritance78e679c0c9" name="inheritance78e679c0c9">
 <area shape="rect" id="node1" title="This class performs several computations with time, timesteps and so forth." alt="" coords="5,5,204,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.TimeManager">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">TimeManager</tt><big>(</big><em>parameters</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">TimeManager</code><span class="sig-paren">(</span><em>parameters</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class performs several computations with time, timesteps and so forth.</p>
 <p>The important quantities here are:</p>
 <table border="1" class="docutils">
@@ -122,7 +120,7 @@ are given, the user is responsible for compatible values.</p>
 if and when some events (for example saving data) should occur.</p>
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.add_to_eventlist">
-<tt class="descname">add_to_eventlist</tt><big>(</big><em>alist</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.add_to_eventlist" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_to_eventlist</code><span class="sig-paren">(</span><em>alist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.add_to_eventlist"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.add_to_eventlist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a list of times and/or timesteps to the list of
 times when irregular events get triggered.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -140,7 +138,7 @@ given in monotone order.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_endtime">
-<tt class="descname">compute_endtime</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_endtime" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_endtime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_endtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_endtime" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,7 +152,7 @@ given in monotone order.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_number_events">
-<tt class="descname">compute_number_events</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_number_events" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_number_events</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_number_events"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_number_events" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the number of events we will perform during the simulation.
 This can for example be used to determine how much space to allocate
 in the output files if the events are times at which simulation data
@@ -171,7 +169,7 @@ is saved.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_number_timesteps">
-<tt class="descname">compute_number_timesteps</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_number_timesteps" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_number_timesteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_number_timesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_number_timesteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of time steps we will perform.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -185,7 +183,7 @@ is saved.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_time">
-<tt class="descname">compute_time</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_time" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_time</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_time" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> from a timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> such that
 <img class="math" src="../_images/math/62a81619a9d2019873a7fb017fe2f2dc906cd8cd.png" alt="t = n \tau"/> holds.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -202,7 +200,7 @@ is saved.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_timestep">
-<tt class="descname">compute_timestep</tt><big>(</big><em>t</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_timestep</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_timestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> from a time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> such that
 <img class="math" src="../_images/math/62a81619a9d2019873a7fb017fe2f2dc906cd8cd.png" alt="t = n \tau"/> holds.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -221,7 +219,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_timestep_size">
-<tt class="descname">compute_timestep_size</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep_size" title="Permalink to this definition">¶</a></dt>
+<code class="descname">compute_timestep_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_timestep_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -235,7 +233,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_T">
-<tt class="descname">get_T</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.get_T" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_T</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -249,7 +247,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_dt">
-<tt class="descname">get_dt</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.get_dt" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_dt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_dt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -263,7 +261,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_nsteps">
-<tt class="descname">get_nsteps</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.get_nsteps" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_nsteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_nsteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_nsteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of timesteps the simulation runs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -277,7 +275,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.is_event">
-<tt class="descname">is_event</tt><big>(</big><em>n</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.is_event" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_event</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.is_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.is_event" title="Permalink to this definition">¶</a></dt>
 <dd><p>Determine if an event occurs right now.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -285,7 +283,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> &#8211; The current timestep in question.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -293,7 +291,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_T">
-<tt class="descname">set_T</tt><big>(</big><em>T</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.set_T" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_T</code><span class="sig-paren">(</span><em>T</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_T" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -307,7 +305,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_dt">
-<tt class="descname">set_dt</tt><big>(</big><em>dt</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.set_dt" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_dt</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_dt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -321,7 +319,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_interval">
-<tt class="descname">set_interval</tt><big>(</big><em>interval</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.set_interval" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_interval</code><span class="sig-paren">(</span><em>interval</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_interval"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_interval" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the interval for regular events.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -331,12 +329,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 </tr>
 </tbody>
 </table>
-<p>Note that a value of <tt class="docutils literal"><span class="pre">0</span></tt> means there are no regular events.</p>
+<p>Note that a value of <code class="docutils literal"><span class="pre">0</span></code> means there are no regular events.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_nsteps">
-<tt class="descname">set_nsteps</tt><big>(</big><em>nsteps</em><big>)</big><a class="headerlink" href="#WaveBlocksND.TimeManager.set_nsteps" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_nsteps</code><span class="sig-paren">(</span><em>nsteps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_nsteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_nsteps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the number of timesteps the simulation runs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -357,12 +355,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">TimeManager</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">TimeManager</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">TimeManager</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -375,29 +373,28 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
   <h4>Next topic</h4>
   <p class="topless"><a href="FileTools.html"
                         title="next chapter">FileTools</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/TimeManager.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/TimeManager.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -412,12 +409,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
         <li class="right" >
           <a href="ParameterProvider.html" title="ParameterProvider"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

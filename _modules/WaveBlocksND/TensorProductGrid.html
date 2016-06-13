@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.TensorProductGrid &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.TensorProductGrid</h1><div class="highlight"><pre>
+<span></span><span class="sd">r&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains a class for representing</span>
+<span class="sd">dense regular tensor product grids.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">operator</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">atleast_1d</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">diff</span><span class="p">,</span> <span class="n">floating</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">mgrid</span><span class="p">,</span> <span class="n">ogrid</span><span class="p">,</span> <span class="n">squeeze</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.DenseGrid</span> <span class="kn">import</span> <span class="n">DenseGrid</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TensorProductGrid&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="TensorProductGrid"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid">[docs]</a><span class="k">class</span> <span class="nc">TensorProductGrid</span><span class="p">(</span><span class="n">DenseGrid</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class represents a dense tensor product grid. It can</span>
+<span class="sd">    have an arbitrary dimension :math:`D`. The grid nodes are</span>
+<span class="sd">    enclosed in a hypercubic bounding box. This box can have</span>
+<span class="sd">    different limits :math:`min_i`, :math:`max_i` along each</span>
+<span class="sd">    axis :math:`x_i`. In each of these intervals we place</span>
+<span class="sd">    :math:`N_i` grid nodes. Note that the point :math:`max_i`</span>
+<span class="sd">    is not part of the grid. The grid interior is build as the</span>
+<span class="sd">    tensor product of all the grid nodes along all the axes.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">limits</span><span class="p">,</span> <span class="n">number_nodes</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Construct a tensor product grid instance.</span>
+
+<span class="sd">        :param limits: The grid domain limits along each axis.</span>
+<span class="sd">        :type limits: A list of two-element tuples.</span>
+<span class="sd">        :param number_nodes: The number of grid nodes along each axis.</span>
+<span class="sd">        :type number_nodes: A list of positive integers.</span>
+<span class="sd">        :return: A :py:class:`TensorProductGrid` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">number_nodes</span><span class="p">)</span>
+
+        <span class="c1"># Regular grid spacing</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_is_regular</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="c1"># The dimension of the grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span>
+
+        <span class="c1"># The number of grid nodes along each axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="n">number_nodes</span>
+        <span class="c1"># format: [N_1, ..., N_D]</span>
+
+        <span class="c1"># The limits of the bounding box of the grid</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_limits</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">limit</span><span class="p">)</span> <span class="k">for</span> <span class="n">limit</span> <span class="ow">in</span> <span class="n">limits</span><span class="p">]</span>
+        <span class="c1"># format: [(min_0,max_0), ..., (min_D,max_D)]</span>
+
+        <span class="c1"># The extensions (edge length) of the bounding box</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="nb">abs</span><span class="p">(</span><span class="n">diff</span><span class="p">(</span><span class="n">limit</span><span class="p">))</span> <span class="k">for</span> <span class="n">limit</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limits</span><span class="p">])</span>
+
+        <span class="c1"># Compute the grid spacings along each axis</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_meshwidths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span> <span class="o">/</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">floating</span><span class="p">))</span>
+        <span class="c1"># format: [h_1, ..., h_D]</span>
+
+        <span class="c1"># Cached values</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gridaxes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_limits"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the limits of the bounding box.</span>
+
+<span class="sd">        :param axes: The axes for which we want to get the limits.</span>
+<span class="sd">        :type axes: A single integer or a list of integers. If set</span>
+<span class="sd">                    to ``None`` (default) we return the limits for all axes.</span>
+<span class="sd">        :return: A list of :math:`(min_i, max_i)` ndarrays.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_limits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_extensions"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the extensions (length of the edges) of the bounding box.</span>
+
+<span class="sd">        :param axes: The axes for which we want to get the extensions.</span>
+<span class="sd">        :type axes: A single integer or a list of integers. If set</span>
+<span class="sd">                    to ``None`` (default) we return the extensions for all axes.</span>
+<span class="sd">        :return: A list of :math:`|max_i-min_i|` values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_meshwidths"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_meshwidths">[docs]</a>    <span class="k">def</span> <span class="nf">get_meshwidths</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the meshwidths of the grid.</span>
+
+<span class="sd">        :param axes: The axes for which we want to get the meshwidths.</span>
+<span class="sd">        :type axes: A single integer or a list of integers. If set</span>
+<span class="sd">                    to ``None`` (default) we return the data for all axes.</span>
+<span class="sd">        :return: A list of :math:`h_i` values or a single value.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_meshwidths</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span></div>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_number_nodes"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_number_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the number of grid nodes along a set of axes.</span>
+
+<span class="sd">        :param axes: The axes for which we want to get the number of nodes.</span>
+<span class="sd">        :type axes: A single integer or a list of integers. If set</span>
+<span class="sd">                    to ``None`` (default) we return the data for all axes.</span>
+<span class="sd">        :param overall: Compute the product :math:`\prod_i^D N_i` of the</span>
+<span class="sd">                        number :math:`N_i` of grid nodes along each axis</span>
+<span class="sd">                        :math:`i` specified.</span>
+<span class="sd">        :type overall: Boolean, default is ``False``</span>
+<span class="sd">        :return: A list of :math:`N_i` values or a single value :math:`N`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">overall</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">operator</span><span class="o">.</span><span class="n">mul</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">values</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_build_slicers</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Helper routine to build the necessary slicing</span>
+        <span class="c1"># objects used for constructing the grid nodes.</span>
+        <span class="n">slicers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">lims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lims</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">step</span><span class="p">)</span> <span class="k">for</span> <span class="n">lims</span><span class="p">,</span> <span class="n">step</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_limits</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_meshwidths</span><span class="p">)]</span>
+        <span class="k">return</span> <span class="n">slicers</span>
+
+
+    <span class="k">def</span> <span class="nf">_compute_grid_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Helper routine which computes the one-dimensional</span>
+        <span class="c1"># grids along all axes and caches the result. Each</span>
+        <span class="c1"># grid is a D-dimensional ndarray of correct shape.</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_slicers</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gridaxes</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">ogrid</span><span class="p">[</span><span class="n">S</span><span class="p">]]</span>
+
+
+    <span class="k">def</span> <span class="nf">_compute_grid_full</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Helper routine which computes the full set of</span>
+        <span class="c1"># tensor product grid nodes and caches the result.</span>
+        <span class="c1"># The result is a (D, product(N_i)) shaped ndarray.</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_slicers</span><span class="p">()</span>
+        <span class="c1"># TODO: Code is 4x slower withOUT complex floating</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">mgrid</span><span class="p">[</span><span class="n">S</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)))</span>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_axes"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_axes">[docs]</a>    <span class="k">def</span> <span class="nf">get_axes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the one-dimensional grids along the axes.</span>
+
+<span class="sd">        :param axes: The axes for which we want to get the grid.</span>
+<span class="sd">        :type axes: A single integer or a list of integers. If set</span>
+<span class="sd">                    to ``None`` (default) we return the data for all axes.</span>
+<span class="sd">        :return: A list of ndarrays, each having a shape of :math:`(1,...,N_i,...,1)`.</span>
+<span class="sd">                 We return a list even if it contains just a single element.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridaxes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_grid_axes</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
+        <span class="n">axes</span> <span class="o">=</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_gridaxes</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">axes</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="TensorProductGrid.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductGrid.html#WaveBlocksND.TensorProductGrid.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns all grid nodes of the full tensor product grid.</span>
+
+<span class="sd">        :param flat: Whether to return the grid with a `hypercubic`</span>
+<span class="sd">                     :math:`(D, N_1, ..., N_D)` shape or a `flat`</span>
+<span class="sd">                     :math:`(D, \prod_i^D N_i)` shape.</span>
+<span class="sd">        :type flat: Boolean, default is ``True``.</span>
+<span class="sd">        :param split: Whether to return the different components, one for each</span>
+<span class="sd">                      dimension inside a single ndarray or a list with ndarrays,</span>
+<span class="sd">                      with one item per dimension.</span>
+<span class="sd">        :type split: Boolean, default is ``False``.</span>
+<span class="sd">        :return: Depends of the optional arguments.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_grid_full</span><span class="p">()</span>
+
+        <span class="c1"># All operations here only return views to the original grid data</span>
+        <span class="k">if</span> <span class="n">flat</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">split</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">split</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span><span class="o">.</span><span class="n">reshape</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_gridnodes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)])</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

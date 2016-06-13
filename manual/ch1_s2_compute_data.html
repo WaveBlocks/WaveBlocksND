@@ -8,7 +8,7 @@
     
     <title>Computing more data &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -25,8 +25,8 @@
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -35,65 +35,65 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="computing-more-data">
 <h1>Computing more data<a class="headerlink" href="#computing-more-data" title="Permalink to this headline">¶</a></h1>
-<p>After we have run a simulation the output file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>
+<p>After we have run a simulation the output file <code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code>
 contains all data that were computed during the simulation. This is for example
 wave-function values or wave-packet parameters etc. depending on the exact setup
 run. Usually we want also to compute some properties of the time evolution. This
 is done in a second step called <cite>post processing</cite> of the data. There are several
-scripts in the <tt class="docutils literal"><span class="pre">scripts/</span></tt> sub-directory which post-process the simulation data.</p>
+scripts in the <code class="docutils literal"><span class="pre">scripts/</span></code> sub-directory which post-process the simulation data.</p>
 <p>Assume we want to compute the norms and energies of the wave function during its
 time evolution. These properties are not computed while running the simulation,
 but we can get them easily from the stored information. The following sections
 will show how to compute these data and store them in the output file
-<tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> too.</p>
-<p>All post-processing and plotting scripts can be called with an argument <tt class="docutils literal"><span class="pre">--help</span></tt>
+<code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code> too.</p>
+<p>All post-processing and plotting scripts can be called with an argument <code class="docutils literal"><span class="pre">--help</span></code>
 and provide modern command line switch handling:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>and will print a help message:</p>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeNorms.py [-h] [-d [DATAFILE]] [-b [BLOCKID [BLOCKID ...]]]
-                       [-r [RESULTSPATH]] [-noet]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]]</span>
+                       <span class="p">[</span><span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">noet</span><span class="p">]</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -d [DATAFILE], --datafile [DATAFILE]
-                        The simulation data file.
-  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
-                        The data block to handle.
-  -r [RESULTSPATH], --resultspath [RESULTSPATH]
-                        Path where to put the results.
-  -noet, --noeigentransform
-                        Disable transformation of data into the eigenbasis
-                        before computing norms.
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">],</span> <span class="o">--</span><span class="n">datafile</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]</span>
+                        <span class="n">The</span> <span class="n">simulation</span> <span class="n">data</span> <span class="n">file</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]],</span> <span class="o">--</span><span class="n">blockid</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]</span>
+                        <span class="n">The</span> <span class="n">data</span> <span class="n">block</span> <span class="n">to</span> <span class="n">handle</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">],</span> <span class="o">--</span><span class="n">resultspath</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]</span>
+                        <span class="n">Path</span> <span class="n">where</span> <span class="n">to</span> <span class="n">put</span> <span class="n">the</span> <span class="n">results</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">noet</span><span class="p">,</span> <span class="o">--</span><span class="n">noeigentransform</span>
+                        <span class="n">Disable</span> <span class="n">transformation</span> <span class="n">of</span> <span class="n">data</span> <span class="n">into</span> <span class="n">the</span> <span class="n">eigenbasis</span>
+                        <span class="n">before</span> <span class="n">computing</span> <span class="n">norms</span><span class="o">.</span>
 </pre></div>
 </div>
 <div class="section" id="norms">
 <h2>Norms<a class="headerlink" href="#norms" title="Permalink to this headline">¶</a></h2>
 <p>Computing norms is trivial and fast. Just run the script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeNorms</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>This will compute the norms of all wave-packets or wave functions
 depending on what the simulation setup was and what is already stored
-in <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt>.</p>
+in <code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code>.</p>
 </div>
 <div class="section" id="energies">
 <h2>Energies<a class="headerlink" href="#energies" title="Permalink to this headline">¶</a></h2>
 <p>Asking for the energies is almost equally trivial as computing norms.
 All we need is to run:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEnergies</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeEnergies</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 <p>which will compute kinetic and potential energies.</p>
@@ -104,24 +104,24 @@ All we need is to run:</p>
 we want to compute is the following overlap integral (here discussed
 in case of wave-packets):</p>
 <div class="math">
-<p><img src="../_images/math/49be9b68526c612afc28c602ca69cc985638a63b.png" alt="\langle \Psi(0) | \Psi(t) \rangle"/></p>
+<p><img src="../_images/math/ab00cc99ca6ccc8181b223b7258c91ec1feaae2a.png" alt="\langle \Psi(0) | \Psi(t) \rangle"/></p>
 </div><p>which compares the wave-packet at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> with the initial value
 <img class="math" src="../_images/math/5e631906dfd06ee73cfb37637f44553e08d9f6d2.png" alt="\Psi(0)"/> at time 0. Because this involves wave-packets at two different
 times we need a specialized quadrature to get accurate results.  We have to tell
 the script which quadrature we would like to use. This is done best by adding a
 top-level snippet like the following to the original simulation setup
 configuration <em>before</em> the simulation is run. This will choose the
-<tt class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></tt> quadrature transformation using
-<tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt> with 4 nodes and is for a one-dimensional
+<code class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></code> quadrature transformation using
+<code class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></code> with 4 nodes and is for a one-dimensional
 setup:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Configurations needed for computation of observables</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Configurations needed for computation of observables</span>
 <span class="n">observables</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
-            <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
-                <span class="s">&quot;qr&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}</span>
+    <span class="s2">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;qr&quot;</span> <span class="p">:</span> <span class="p">{</span><span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
         <span class="p">}</span>
@@ -130,25 +130,25 @@ setup:</p>
 </div>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
-<p class="last">It is essential to take <tt class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></tt> as quadrature rule
-used by the <tt class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></tt> transformation.</p>
+<p class="last">It is essential to take <code class="xref py py-class docutils literal"><span class="pre">GaussHermiteOriginalQR</span></code> as quadrature rule
+used by the <code class="xref py py-class docutils literal"><span class="pre">NSDInhomogeneous</span></code> transformation.</p>
 </div>
 <p>As a second example we show the corresponding snippet in case of a three
 dimensional simulation setup:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="c"># Configurations needed for computation of observables</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Configurations needed for computation of observables</span>
 <span class="n">observables</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
-            <span class="s">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
-                <span class="s">&quot;type&quot;</span> <span class="p">:</span> <span class="s">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
-                <span class="s">&quot;qr&quot;</span><span class="p">:</span> <span class="p">{</span>
-                    <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;TensorProductQR&quot;</span><span class="p">,</span>
-                    <span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-                    <span class="s">&quot;qr_rules&quot;</span><span class="p">:</span> <span class="p">[</span>
-                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
-                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
-                        <span class="p">{</span><span class="s">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s">&quot;type&quot;</span><span class="p">:</span> <span class="s">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}],</span>
+    <span class="s2">&quot;autocorrelation&quot;</span> <span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;NSDInhomogeneous&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;qr&quot;</span><span class="p">:</span> <span class="p">{</span>
+                    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;TensorProductQR&quot;</span><span class="p">,</span>
+                    <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+                    <span class="s2">&quot;qr_rules&quot;</span><span class="p">:</span> <span class="p">[</span>
+                        <span class="p">{</span><span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">},</span>
+                        <span class="p">{</span><span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;order&quot;</span><span class="p">:</span> <span class="mi">5</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">}],</span>
                     <span class="p">}</span>
                 <span class="p">}</span>
             <span class="p">}</span>
@@ -157,7 +157,7 @@ dimensional simulation setup:</p>
 </pre></div>
 </div>
 <p>The only thing we have to do then is to call the corresponding post-processor script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeAutocorrelation</span><span class="o">.</span><span class="n">py</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeAutocorrelation</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
 </div>
@@ -165,27 +165,27 @@ dimensional simulation setup:</p>
 <h2>Wave-packet sampling<a class="headerlink" href="#wave-packet-sampling" title="Permalink to this headline">¶</a></h2>
 <p>If we made a simulation with wave-packets only and want to sample them
 on a regular grid for example for plotting then there is a script for this purpose:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeEvaluateWavepackets</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeEvaluateWavepackets</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeEvaluateWavepackets.py [-h] [-d [DATAFILE]]
-                                     [-b [BLOCKID [BLOCKID ...]]]
-                                     [-p [PARAMETERSFILE]] [-r [RESULTSPATH]]
-                                     [-noet]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ComputeEvaluateWavepackets</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]]</span>
+                                     <span class="p">[</span><span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]]</span>
+                                     <span class="p">[</span><span class="o">-</span><span class="n">p</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">]]</span> <span class="p">[</span><span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]]</span>
+                                     <span class="p">[</span><span class="o">-</span><span class="n">noet</span><span class="p">]</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -d [DATAFILE], --datafile [DATAFILE]
-                        The simulation data file.
-  -b [BLOCKID [BLOCKID ...]], --blockid [BLOCKID [BLOCKID ...]]
-                        The data block to handle.
-  -p [PARAMETERSFILE], --parametersfile [PARAMETERSFILE]
-                        The configuration parameter file.
-  -r [RESULTSPATH], --resultspath [RESULTSPATH]
-                        Path where to put the results.
-  -noet, --noeigentransform
-                        Disable transformation of data into the eigenbasis
-                        before computing norms.
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">d</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">],</span> <span class="o">--</span><span class="n">datafile</span> <span class="p">[</span><span class="n">DATAFILE</span><span class="p">]</span>
+                        <span class="n">The</span> <span class="n">simulation</span> <span class="n">data</span> <span class="n">file</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">b</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]],</span> <span class="o">--</span><span class="n">blockid</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="p">[</span><span class="n">BLOCKID</span> <span class="o">...</span><span class="p">]]</span>
+                        <span class="n">The</span> <span class="n">data</span> <span class="n">block</span> <span class="n">to</span> <span class="n">handle</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">p</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">],</span> <span class="o">--</span><span class="n">parametersfile</span> <span class="p">[</span><span class="n">PARAMETERSFILE</span><span class="p">]</span>
+                        <span class="n">The</span> <span class="n">configuration</span> <span class="n">parameter</span> <span class="n">file</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">r</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">],</span> <span class="o">--</span><span class="n">resultspath</span> <span class="p">[</span><span class="n">RESULTSPATH</span><span class="p">]</span>
+                        <span class="n">Path</span> <span class="n">where</span> <span class="n">to</span> <span class="n">put</span> <span class="n">the</span> <span class="n">results</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">noet</span><span class="p">,</span> <span class="o">--</span><span class="n">noeigentransform</span>
+                        <span class="n">Disable</span> <span class="n">transformation</span> <span class="n">of</span> <span class="n">data</span> <span class="n">into</span> <span class="n">the</span> <span class="n">eigenbasis</span>
+                        <span class="n">before</span> <span class="n">computing</span> <span class="n">norms</span><span class="o">.</span>
 </pre></div>
 </div>
 </div>
@@ -198,28 +198,28 @@ transformation involved. The scripts shown above do this transformation
 internally and there is no need to worry.</p>
 <p>However, in case we explicitly do not want the transformation to take place
 (for example when working with single-level potentials) there are suitable
-command line switches <tt class="docutils literal"><span class="pre">-noet</span></tt> in the post-processing scripts.</p>
+command line switches <code class="docutils literal"><span class="pre">-noet</span></code> in the post-processing scripts.</p>
 <div class="section" id="explicit-eigentransformation">
 <h3>Explicit Eigentransformation<a class="headerlink" href="#explicit-eigentransformation" title="Permalink to this headline">¶</a></h3>
 <p>In case we want to convert all the simulation data (think: wave-function values
 or wave-packet data) once to the eigenbasis there is this script:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="o">--</span><span class="n">help</span>
 </pre></div>
 </div>
 <p>According to its help text:</p>
-<div class="highlight-python"><div class="highlight"><pre>usage: ComputeTransformToEigen.py [-h] [-i INPUTFILE] [-o OUTPUTFILE]
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">i</span> <span class="n">INPUTFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">-</span><span class="n">o</span> <span class="n">OUTPUTFILE</span><span class="p">]</span>
 
-optional arguments:
-  -h, --help            show this help message and exit
-  -i INPUTFILE, --inputfile INPUTFILE
-                        The data file to read the data from.
-  -o OUTPUTFILE, --outputfile OUTPUTFILE
-                        The data file to write the transformed data.
+<span class="n">optional</span> <span class="n">arguments</span><span class="p">:</span>
+  <span class="o">-</span><span class="n">h</span><span class="p">,</span> <span class="o">--</span><span class="n">help</span>            <span class="n">show</span> <span class="n">this</span> <span class="n">help</span> <span class="n">message</span> <span class="ow">and</span> <span class="n">exit</span>
+  <span class="o">-</span><span class="n">i</span> <span class="n">INPUTFILE</span><span class="p">,</span> <span class="o">--</span><span class="n">inputfile</span> <span class="n">INPUTFILE</span>
+                        <span class="n">The</span> <span class="n">data</span> <span class="n">file</span> <span class="n">to</span> <span class="n">read</span> <span class="n">the</span> <span class="n">data</span> <span class="n">from</span><span class="o">.</span>
+  <span class="o">-</span><span class="n">o</span> <span class="n">OUTPUTFILE</span><span class="p">,</span> <span class="o">--</span><span class="n">outputfile</span> <span class="n">OUTPUTFILE</span>
+                        <span class="n">The</span> <span class="n">data</span> <span class="n">file</span> <span class="n">to</span> <span class="n">write</span> <span class="n">the</span> <span class="n">transformed</span> <span class="n">data</span><span class="o">.</span>
 </pre></div>
 </div>
-<p>it will read the input file <tt class="docutils literal"><span class="pre">simulation_results.hdf5</span></tt> and write output into a
+<p>it will read the input file <code class="docutils literal"><span class="pre">simulation_results.hdf5</span></code> and write output into a
 new data file. A typical invoke could look like:</p>
-<div class="highlight-python"><div class="highlight"><pre>ComputeTransformToEigen.py -i simulation_results.hdf5 -o simulation_results_eigen.hdf5
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeTransformToEigen</span><span class="o">.</span><span class="n">py</span> <span class="o">-</span><span class="n">i</span> <span class="n">simulation_results</span><span class="o">.</span><span class="n">hdf5</span> <span class="o">-</span><span class="n">o</span> <span class="n">simulation_results_eigen</span><span class="o">.</span><span class="n">hdf5</span>
 </pre></div>
 </div>
 </div>
@@ -230,7 +230,7 @@ new data file. A typical invoke could look like:</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
@@ -247,29 +247,28 @@ new data file. A typical invoke could look like:</p>
 </li>
 </ul>
 
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/manual/ch1_s2_compute_data.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/manual/ch1_s2_compute_data.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -278,12 +277,12 @@ new data file. A typical invoke could look like:</p>
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

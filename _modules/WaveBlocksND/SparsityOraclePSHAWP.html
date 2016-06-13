@@ -1,0 +1,211 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SparsityOraclePSHAWP &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SparsityOraclePSHAWP</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the code for a sparsity oracle looking</span>
+<span class="sd">at the phase space distance between both packets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">atleast_1d</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SparsityOracle</span> <span class="kn">import</span> <span class="n">SparsityOracle</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SparsityOraclePSHAWP&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SparsityOraclePSHAWP"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP">[docs]</a><span class="k">class</span> <span class="nc">SparsityOraclePSHAWP</span><span class="p">(</span><span class="n">SparsityOracle</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements an oracle by looking at a phase space distance.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="SparsityOraclePSHAWP.__init__"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">factor</span><span class="o">=</span><span class="mf">1.5</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize an oracle for estimating if a specific overlap integral</span>
+<span class="sd">        :math:`\langle \Psi_k | \Psi_l \rangle` is approximately zero. The</span>
+<span class="sd">        oracle works by computing first and second moments :math:`\mu` and :math:`\sigma`</span>
+<span class="sd">        of the highest order function :math:`\phi_i` of both wavepackts :math:`\Psi_k`</span>
+<span class="sd">        and :math:`\Psi_l` for both, position and momentum. Then we compute the</span>
+<span class="sd">        estimators:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \|q_k - q_l\| \leq \alpha ( \|\sigma^q_k\| + \|\sigma^q_l\| )</span>
+
+<span class="sd">        and</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \|p_k - p_l\| \leq \alpha ( \|\sigma^p_k\| + \|\sigma^p_l\| )</span>
+
+<span class="sd">        :param factor: The factor :math:`\alpha` in the phase space distance.</span>
+<span class="sd">                       The default value of 1.5 should be reasonable in most cases.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">=</span> <span class="n">factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="bp">False</span></div>
+
+
+<div class="viewcode-block" id="SparsityOraclePSHAWP.is_not_zero"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero">[docs]</a>    <span class="k">def</span> <span class="nf">is_not_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`</span>
+<span class="sd">        is zero or at least negligible.</span>
+
+<span class="sd">        :param pacbra: The packet :math:`\Psi_k` that is used for the &#39;bra&#39; part.</span>
+<span class="sd">        :param packet: The packet :math:`\Psi_l` that is used for the &#39;ket&#39; part.</span>
+<span class="sd">        :param component: The component of the packet that is considered.</span>
+<span class="sd">        :return: ``True`` or ``False`` whether the inner product is negligible.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+        <span class="n">qbra</span><span class="p">,</span> <span class="n">Qbra</span><span class="p">,</span> <span class="n">pbra</span><span class="p">,</span> <span class="n">Pbra</span> <span class="o">=</span> <span class="n">pacbra</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">))</span>
+        <span class="n">qket</span><span class="p">,</span> <span class="n">Qket</span><span class="p">,</span> <span class="n">pket</span><span class="p">,</span> <span class="n">Pket</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">))</span>
+
+        <span class="c1"># First strategy</span>
+        <span class="c1"># TODO: Can there be a &#39;wrong&#39; largest index in case there are more than one?</span>
+        <span class="c1">#kbra = array(pacbra.get_basis_shapes(component=component).find_largest_index())</span>
+        <span class="c1">#kket = array(packet.get_basis_shapes(component=component).find_largest_index())</span>
+
+        <span class="c1"># Second strategy</span>
+        <span class="c1">#Kbra = pacbra.get_basis_shapes(component=component)</span>
+        <span class="c1">#indices = array([ node for node in Kbra.get_node_iterator() ])</span>
+        <span class="c1">#kbra = indices.max(axis=0)</span>
+        <span class="c1">#Kket = packet.get_basis_shapes(component=component)</span>
+        <span class="c1">#indices = array([ node for node in Kket.get_node_iterator() ])</span>
+        <span class="c1">#kket = indices.max(axis=0)</span>
+
+        <span class="c1"># Third strategy</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">kbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">pacbra</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">())</span>
+            <span class="n">kket</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">kbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="n">K</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">()</span> <span class="k">for</span> <span class="n">K</span> <span class="ow">in</span> <span class="n">pacbra</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">()]))</span>
+            <span class="n">kket</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="nb">max</span><span class="p">([</span><span class="n">K</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">()</span> <span class="k">for</span> <span class="n">K</span> <span class="ow">in</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">()]))</span>
+
+        <span class="c1"># Bias for small k</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">kbra</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k_norm</span><span class="p">:</span>
+                <span class="n">kbra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">norm</span><span class="p">(</span><span class="n">kket</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k_norm</span><span class="p">:</span>
+                <span class="n">kket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="n">pacbra</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+        <span class="n">kbra</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">kbra</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+        <span class="n">kket</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">kket</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">D</span><span class="p">)</span> <span class="o">*</span> <span class="n">ones</span><span class="p">(</span><span class="n">D</span><span class="p">)</span>
+
+        <span class="c1"># Compute second moments</span>
+        <span class="n">sigqbra</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Qbra</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kbra</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sigqket</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Qket</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kket</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">sigpbra</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Pbra</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kbra</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">sigpket</span> <span class="o">=</span> <span class="n">eps</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Pket</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">kket</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">qbra</span> <span class="o">-</span> <span class="n">qket</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">sigqbra</span><span class="p">)</span> <span class="o">+</span> <span class="n">norm</span><span class="p">(</span><span class="n">sigqket</span><span class="p">))</span> <span class="ow">and</span>
+                <span class="n">norm</span><span class="p">(</span><span class="n">pbra</span> <span class="o">-</span> <span class="n">pket</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">sigpbra</span><span class="p">)</span> <span class="o">+</span> <span class="n">norm</span><span class="p">(</span><span class="n">sigpket</span><span class="p">)))</span></div>
+
+
+<div class="viewcode-block" id="SparsityOraclePSHAWP.bias"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.bias">[docs]</a>    <span class="k">def</span> <span class="nf">bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bramink</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ketmink</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Bias the sparsity oracle. The oracle tends to underestimate</span>
+<span class="sd">        the wavepacket spread for small basis shapes :math:`\mathfrak{K}`</span>
+<span class="sd">        and therefore small maximal indices :math:`k \in \mathfrak{K}`.</span>
+<span class="sd">        This method allows to set a minimal :math:`k` for both the bra</span>
+<span class="sd">        and ket independently.</span>
+
+<span class="sd">        :param bramink: Minimal :math:`k` for :math:`\langle \Psi |`</span>
+<span class="sd">        :param ketmink: Minimal :math:`k` for :math:`| \Psi \rangle`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">bramink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k</span> <span class="o">=</span> <span class="n">bramink</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k_norm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">bramink</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">if</span> <span class="n">ketmink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k</span> <span class="o">=</span> <span class="n">ketmink</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k_norm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ketmink</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="bp">True</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

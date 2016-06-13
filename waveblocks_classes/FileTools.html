@@ -8,7 +8,7 @@
     
     <title>FileTools &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="BlockFactory" href="BlockFactory.html" />
     <link rel="prev" title="TimeManager" href="TimeManager.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="TimeManager.html" title="TimeManager"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="filetools">
 <h1>FileTools<a class="headerlink" href="#filetools" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-filetools-class"></span><h2>About the <tt class="docutils literal"><span class="pre">FileTools</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-filetools-class"></span><h2>About the <code class="docutils literal"><span class="pre">FileTools</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -73,7 +73,7 @@ ID is just the base name of the path or the configuration file.</p>
 &#64;license: Modified BSD License</p>
 <dl class="function">
 <dt id="FileTools.compare_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">compare_by</tt><big>(</big><em>namea</em>, <em>nameb</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#compare_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.compare_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">compare_by</code><span class="sig-paren">(</span><em>namea</em>, <em>nameb</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#compare_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.compare_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compare two simulation IDs with respect to a (numerical) value in the ID.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -86,7 +86,7 @@ ID is just the base name of the path or the configuration file.</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats.</li>
 </ul>
 </td>
 </tr>
@@ -99,7 +99,7 @@ ID is just the base name of the path or the configuration file.</p>
 
 <dl class="function">
 <dt id="FileTools.exclude">
-<tt class="descclassname">FileTools.</tt><tt class="descname">exclude</tt><big>(</big><em>lista</em>, <em>listb</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#exclude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.exclude" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">exclude</code><span class="sig-paren">(</span><em>lista</em>, <em>listb</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#exclude"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.exclude" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove from a list of simulation IDs another such list of IDs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,7 +120,7 @@ ID is just the base name of the path or the configuration file.</p>
 
 <dl class="function">
 <dt id="FileTools.gather_all">
-<tt class="descclassname">FileTools.</tt><tt class="descname">gather_all</tt><big>(</big><em>stringlist</em>, <em>pattern</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#gather_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.gather_all" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">gather_all</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#gather_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.gather_all" title="Permalink to this definition">¶</a></dt>
 <dd><p>Collects all simulation IDs which contain a specific pattern from a given list.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -141,15 +141,15 @@ ID is just the base name of the path or the configuration file.</p>
 
 <dl class="function">
 <dt id="FileTools.get_by_item">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_by_item</tt><big>(</big><em>stringlist</em>, <em>item</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_by_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_by_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a filtered list of simulation IDs containing a given <tt class="docutils literal"><span class="pre">key=value</span></tt> item.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_by_item</code><span class="sig-paren">(</span><em>stringlist</em>, <em>item</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_by_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_by_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a filtered list of simulation IDs containing a given <code class="docutils literal"><span class="pre">key=value</span></code> item.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>stringlist</strong> &#8211; A list with the simulation IDs.</li>
-<li><strong>item</strong> &#8211; The <tt class="docutils literal"><span class="pre">key=value</span></tt> item to search for.</li>
+<li><strong>item</strong> &#8211; The <code class="docutils literal"><span class="pre">key=value</span></code> item to search for.</li>
 </ul>
 </td>
 </tr>
@@ -162,24 +162,24 @@ ID is just the base name of the path or the configuration file.</p>
 
 <dl class="function">
 <dt id="FileTools.get_by_value">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_by_value</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>value</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_by_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_by_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a filtered list of simulation IDs by specifying the <tt class="docutils literal"><span class="pre">key</span></tt>
-and <tt class="docutils literal"><span class="pre">value</span></tt> of some <tt class="docutils literal"><span class="pre">key=value</span></tt> pair.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_by_value</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>value</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_by_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_by_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a filtered list of simulation IDs by specifying the <code class="docutils literal"><span class="pre">key</span></code>
+and <code class="docutils literal"><span class="pre">value</span></code> of some <code class="docutils literal"><span class="pre">key=value</span></code> pair.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>stringlist</strong> &#8211; A list with the simulation IDs.</li>
-<li><strong>pattern</strong> &#8211; The pattern that is used for <tt class="docutils literal"><span class="pre">key</span></tt>.</li>
-<li><strong>value</strong> &#8211; The value that is used for <tt class="docutils literal"><span class="pre">value</span></tt>.</li>
+<li><strong>pattern</strong> &#8211; The pattern that is used for <code class="docutils literal"><span class="pre">key</span></code>.</li>
+<li><strong>value</strong> &#8211; The value that is used for <code class="docutils literal"><span class="pre">value</span></code>.</li>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of IDs that contain a <tt class="docutils literal"><span class="pre">key</span></tt> with given <tt class="docutils literal"><span class="pre">value</span></tt>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of IDs that contain a <code class="docutils literal"><span class="pre">key</span></code> with given <code class="docutils literal"><span class="pre">value</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -188,21 +188,21 @@ and <tt class="docutils literal"><span class="pre">value</span></tt> of some <tt
 
 <dl class="function">
 <dt id="FileTools.get_item">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_item</tt><big>(</big><em>name</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>unpack=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_item" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a single <tt class="docutils literal"><span class="pre">key=value</span></tt> item out of the name.
-The <tt class="docutils literal"><span class="pre">pattern</span></tt> specifies the <tt class="docutils literal"><span class="pre">key</span></tt> part.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_item</code><span class="sig-paren">(</span><em>name</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>unpack=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_item"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_item" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a single <code class="docutils literal"><span class="pre">key=value</span></code> item out of the name.
+The <code class="docutils literal"><span class="pre">pattern</span></code> specifies the <code class="docutils literal"><span class="pre">key</span></code> part.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> &#8211; The name from which to get the item.</li>
-<li><strong>pattern</strong> &#8211; The pattern whose value is used for <tt class="docutils literal"><span class="pre">key</span></tt>.</li>
-<li><strong>unpack</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">True</span></tt>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
+<li><strong>pattern</strong> &#8211; The pattern whose value is used for <code class="docutils literal"><span class="pre">key</span></code>.</li>
+<li><strong>unpack</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A (list of the) item(s) whose <tt class="docutils literal"><span class="pre">key</span></tt> part matches <tt class="docutils literal"><span class="pre">pattern</span></tt>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A (list of the) item(s) whose <code class="docutils literal"><span class="pre">key</span></code> part matches <code class="docutils literal"><span class="pre">pattern</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -211,15 +211,15 @@ The <tt class="docutils literal"><span class="pre">pattern</span></tt> specifies
 
 <dl class="function">
 <dt id="FileTools.get_items">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_items</tt><big>(</big><em>name</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_items" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get a list of all the <tt class="docutils literal"><span class="pre">key=value</span></tt> items in the name.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_items</code><span class="sig-paren">(</span><em>name</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_items"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_items" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get a list of all the <code class="docutils literal"><span class="pre">key=value</span></code> items in the name.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>name</strong> &#8211; The name from which to get the items.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of all <tt class="docutils literal"><span class="pre">key=value</span></tt> items present in the <tt class="docutils literal"><span class="pre">name</span></tt>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of all <code class="docutils literal"><span class="pre">key=value</span></code> items present in the <code class="docutils literal"><span class="pre">name</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -227,7 +227,7 @@ The <tt class="docutils literal"><span class="pre">pattern</span></tt> specifies
 
 <dl class="function">
 <dt id="FileTools.get_max_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_max_by</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_max_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_max_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_max_by</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_max_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_max_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the maximum of a list with simulation IDs with respect to a (numerical) value in the ID.
 This is just a simple convenience function so that the user needs not to remember if the
 sort order is ascending or descending which plays no role for iteration.</p>
@@ -241,7 +241,7 @@ sort order is ascending or descending which plays no role for iteration.</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats.</li>
 </ul>
 </td>
 </tr>
@@ -254,7 +254,7 @@ sort order is ascending or descending which plays no role for iteration.</p>
 
 <dl class="function">
 <dt id="FileTools.get_min_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_min_by</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_min_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_min_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_min_by</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_min_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_min_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the minimum of a list with simulation IDs with respect to a (numerical) value in the ID.
 This is just a simple convenience function so that the user needs not to remember if the
 sort order is ascending or descending which plays no role for iteration.</p>
@@ -268,7 +268,7 @@ sort order is ascending or descending which plays no role for iteration.</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats.</li>
 </ul>
 </td>
 </tr>
@@ -281,7 +281,7 @@ sort order is ascending or descending which plays no role for iteration.</p>
 
 <dl class="function">
 <dt id="FileTools.get_number_simulations">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_number_simulations</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_number_simulations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_number_simulations" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_number_simulations</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_number_simulations"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_number_simulations" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number of simulations at hand below the given path.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -297,7 +297,7 @@ sort order is ascending or descending which plays no role for iteration.</p>
 
 <dl class="function">
 <dt id="FileTools.get_parameters_file">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_parameters_file</tt><big>(</big><em>path</em>, <em>unpack=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_parameters_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_parameters_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_parameters_file</code><span class="sig-paren">(</span><em>path</em>, <em>unpack=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_parameters_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_parameters_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for a configuration file containing the simulation parameters
 under a given path. Note that in case there are more than one .py file
 under the given path we return a list of all.</p>
@@ -307,7 +307,7 @@ under the given path we return a list of all.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>path</strong> &#8211; The path under which we search for a configuration file.</li>
-<li><strong>unpack</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">True</span></tt>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
+<li><strong>unpack</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
 </ul>
 </td>
 </tr>
@@ -320,7 +320,7 @@ under the given path we return a list of all.</p>
 
 <dl class="function">
 <dt id="FileTools.get_result_dirs">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_result_dirs</tt><big>(</big><em>path</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_result_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_result_dirs" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_result_dirs</code><span class="sig-paren">(</span><em>path</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_result_dirs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_result_dirs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lists all simulations (IDs) that can be found under the given path.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -336,7 +336,7 @@ under the given path we return a list of all.</p>
 
 <dl class="function">
 <dt id="FileTools.get_results_file">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_results_file</tt><big>(</big><em>path</em>, <em>fileext='.hdf5'</em>, <em>unpack=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_results_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_results_file" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">get_results_file</code><span class="sig-paren">(</span><em>path</em>, <em>fileext='.hdf5'</em>, <em>unpack=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_results_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_results_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Search for a file containing the simulation results under a given path.
 Note that in case there are more than one .hdf5 file under the given path
 we return a list of all.</p>
@@ -346,7 +346,7 @@ we return a list of all.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>path</strong> &#8211; The path under which we search for a output file.</li>
-<li><strong>unpack</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">True</span></tt>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
+<li><strong>unpack</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
 </ul>
 </td>
 </tr>
@@ -359,21 +359,21 @@ we return a list of all.</p>
 
 <dl class="function">
 <dt id="FileTools.get_value">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_value</tt><big>(</big><em>item</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_value" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the <tt class="docutils literal"><span class="pre">value</span></tt> part of a given <tt class="docutils literal"><span class="pre">key=value</span></tt> pair.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_value</code><span class="sig-paren">(</span><em>item</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal"><span class="pre">value</span></code> part of a given <code class="docutils literal"><span class="pre">key=value</span></code> pair.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>item</strong> &#8211; The <tt class="docutils literal"><span class="pre">key=value</span></tt> item.</li>
+<li><strong>item</strong> &#8211; The <code class="docutils literal"><span class="pre">key=value</span></code> item.</li>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The <tt class="docutils literal"><span class="pre">value</span></tt> part of the given item.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The <code class="docutils literal"><span class="pre">value</span></code> part of the given item.</p>
 </td>
 </tr>
 </tbody>
@@ -382,23 +382,23 @@ we return a list of all.</p>
 
 <dl class="function">
 <dt id="FileTools.get_value_of">
-<tt class="descclassname">FileTools.</tt><tt class="descname">get_value_of</tt><big>(</big><em>name</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>unpack=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#get_value_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_value_of" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the <tt class="docutils literal"><span class="pre">value</span></tt> part corresponding to a given <tt class="docutils literal"><span class="pre">key</span></tt> of an item.</p>
+<code class="descclassname">FileTools.</code><code class="descname">get_value_of</code><span class="sig-paren">(</span><em>name</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>unpack=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#get_value_of"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.get_value_of" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the <code class="docutils literal"><span class="pre">value</span></code> part corresponding to a given <code class="docutils literal"><span class="pre">key</span></code> of an item.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>name</strong> &#8211; The name from which to get the value.</li>
-<li><strong>pattern</strong> &#8211; The pattern whose value is used for <tt class="docutils literal"><span class="pre">key</span></tt>.</li>
+<li><strong>pattern</strong> &#8211; The pattern whose value is used for <code class="docutils literal"><span class="pre">key</span></code>.</li>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>unpack</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">True</span></tt>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
+<li><strong>unpack</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to unpack a single unique result instead of returning it inside a list.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The <tt class="docutils literal"><span class="pre">value</span></tt> part of the found item. (If there
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The <code class="docutils literal"><span class="pre">value</span></code> part of the found item. (If there
 are multiple matching items, return all values.)</p>
 </td>
 </tr>
@@ -408,7 +408,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.group_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">group_by</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#group_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.group_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">group_by</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#group_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.group_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Groups simulation IDs with respect to a pattern.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -420,7 +420,7 @@ are multiple matching items, return all values.)</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats. Not used here.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats. Not used here.</li>
 </ul>
 </td>
 </tr>
@@ -433,7 +433,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.intersect_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">intersect_by</tt><big>(</big><em>lista</em>, <em>listb</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#intersect_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.intersect_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">intersect_by</code><span class="sig-paren">(</span><em>lista</em>, <em>listb</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#intersect_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.intersect_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the intersection of two lists containing simulation IDs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -446,7 +446,7 @@ are multiple matching items, return all values.)</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats.</li>
 </ul>
 </td>
 </tr>
@@ -459,7 +459,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.name_contains">
-<tt class="descclassname">FileTools.</tt><tt class="descname">name_contains</tt><big>(</big><em>name</em>, <em>pattern</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#name_contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.name_contains" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">name_contains</code><span class="sig-paren">(</span><em>name</em>, <em>pattern</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#name_contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.name_contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a simulation ID contains a given pattern.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -480,7 +480,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.sort_and_group_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">sort_and_group_by</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#sort_and_group_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.sort_and_group_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">sort_and_group_by</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#sort_and_group_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.sort_and_group_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sorts and groups simulation IDs with respect to a pattern.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -492,7 +492,7 @@ are multiple matching items, return all values.)</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats. Not used here.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats. Not used here.</li>
 </ul>
 </td>
 </tr>
@@ -505,7 +505,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.sort_by">
-<tt class="descclassname">FileTools.</tt><tt class="descname">sort_by</tt><big>(</big><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#sort_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.sort_by" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">sort_by</code><span class="sig-paren">(</span><em>stringlist</em>, <em>pattern</em>, <em>ldel='['</em>, <em>mdel='='</em>, <em>rdel=']'</em>, <em>as_string=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#sort_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.sort_by" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sorts simulation IDs with respect to a (numerical) value in the ID.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -517,7 +517,7 @@ are multiple matching items, return all values.)</p>
 <li><strong>ldel</strong> &#8211; Left delimiter of the pattern.</li>
 <li><strong>mdel</strong> &#8211; Middle delimiter of the pattern.</li>
 <li><strong>rdel</strong> &#8211; Right delimiter of the pattern.</li>
-<li><strong>as_string</strong> &#8211; Determines if the values for <tt class="docutils literal"><span class="pre">pattern</span></tt> get converted to floats.</li>
+<li><strong>as_string</strong> &#8211; Determines if the values for <code class="docutils literal"><span class="pre">pattern</span></code> get converted to floats.</li>
 </ul>
 </td>
 </tr>
@@ -530,7 +530,7 @@ are multiple matching items, return all values.)</p>
 
 <dl class="function">
 <dt id="FileTools.split_list">
-<tt class="descclassname">FileTools.</tt><tt class="descname">split_list</tt><big>(</big><em>alist</em>, <em>n</em><big>)</big><a class="reference internal" href="../_modules/FileTools.html#split_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.split_list" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">FileTools.</code><code class="descname">split_list</code><span class="sig-paren">(</span><em>alist</em>, <em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/FileTools.html#split_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#FileTools.split_list" title="Permalink to this definition">¶</a></dt>
 <dd><p>Split a list into <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> parts.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -560,12 +560,12 @@ are multiple matching items, return all values.)</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">FileTools</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">FileTools</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">FileTools</span></code> class</a></li>
 <li><a class="reference internal" href="#module-FileTools">Class documentation</a></li>
 </ul>
 </li>
@@ -577,29 +577,28 @@ are multiple matching items, return all values.)</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="BlockFactory.html"
                         title="next chapter">BlockFactory</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/FileTools.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/FileTools.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -614,12 +613,12 @@ are multiple matching items, return all values.)</p>
         <li class="right" >
           <a href="TimeManager.html" title="TimeManager"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

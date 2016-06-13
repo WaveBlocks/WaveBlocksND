@@ -1,0 +1,441 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.IOManager &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.IOManager</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for serializing simulation data.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">types</span>
+<span class="kn">import</span> <span class="nn">pickle</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">six</span>
+<span class="kn">import</span> <span class="nn">h5py</span> <span class="kn">as</span> <span class="nn">hdf</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;IOManager&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="IOManager"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager">[docs]</a><span class="k">class</span> <span class="nc">IOManager</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;An IOManager class that can save various simulation results into data</span>
+<span class="sd">    files. For storing the data we use the well established HDF5 file format.</span>
+<span class="sd">    An IOManager instance abstracts the input and output operations and translates</span>
+<span class="sd">    requests into low-level operations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_hdf_file_version</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">=</span> <span class="s2">&quot;datablock_&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span> <span class="o">=</span> <span class="s2">&quot;group_&quot;</span>
+
+        <span class="c1"># The current open data file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># Book keeping data</span>
+        <span class="c1"># TODO: consider storing these values inside the data files</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;IOManager instance without an open file.&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;IOManager instance with open file &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; containing &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; data blocks in &quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; data groups.&quot;</span>
+        <span class="k">return</span> <span class="n">s</span>
+
+
+    <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Try to load a plugin if a member function is not available.</span>
+<span class="sd">        Plugins implement the actual I/O operations for specific data objects.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">key</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Plugin name convention, we only trigger plugin loading</span>
+        <span class="c1"># for requests starting with &quot;add&quot;, &quot;load&quot; or &quot;save&quot;.</span>
+        <span class="c1"># However, IF we load a plugin, we load ALL functions it defines.</span>
+        <span class="k">if</span> <span class="n">parts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;delete&quot;</span><span class="p">,</span> <span class="s2">&quot;has&quot;</span><span class="p">,</span> <span class="s2">&quot;load&quot;</span><span class="p">,</span> <span class="s2">&quot;save&quot;</span><span class="p">,</span> <span class="s2">&quot;update&quot;</span><span class="p">):</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Requested function: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="s2">&quot;IOM_plugin_&quot;</span> <span class="o">+</span> <span class="n">parts</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Load the necessary plugin</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Plugin to load: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">plugin</span> <span class="o">=</span> <span class="nb">__import__</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;IOM plugin &#39;{}&#39; not found!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">name</span><span class="p">))</span>
+
+        <span class="c1"># Filter out functions we want to add to IOM and</span>
+        <span class="c1"># bind the methods to the current IOM instance</span>
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">plugin</span><span class="o">.</span><span class="n">__dict__</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">types</span><span class="o">.</span><span class="n">FunctionType</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">types</span><span class="o">.</span><span class="n">MethodType</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
+
+        <span class="c1"># Now return the new function to complete it&#39;s call</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="IOManager.create_file"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.create_file">[docs]</a>    <span class="k">def</span> <span class="nf">create_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set up a new :py:class:`IOManager` instance. The output file is created and opened.</span>
+
+<span class="sd">        :param filename: The filename (optionally with filepath) of the file we try to create.</span>
+<span class="sd">                         If not given the default value from `GlobalDefaults` is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Create the file if it does not yet exist.</span>
+        <span class="c1"># Otherwise raise an exception to avoid overwriting data.</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Output file &#39;{}&#39; already exists!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="o">=</span> <span class="n">hdf</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+        <span class="c1"># Initialize the internal book keeping data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># The version of the current file format</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdf_file_version</span>
+
+        <span class="c1"># Save the simulation parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">groupid</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">create_block</span><span class="p">(</span><span class="n">blockid</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">,</span> <span class="n">groupid</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IOManager.open_file"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.open_file">[docs]</a>    <span class="k">def</span> <span class="nf">open_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Load a given file that contains the results from another simulation.</span>
+
+<span class="sd">        :param filename: The filename (optionally with filepath) of the file we try to load.</span>
+<span class="sd">                         If not given the default value from `GlobalDefaults` is used.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Try to open the file or raise an exception if it does not exist.</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">lexists</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">hdf</span><span class="o">.</span><span class="n">is_hdf5</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="o">=</span> <span class="n">hdf</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File &#39;{}&#39; is not a hdf5 file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;File &#39;{}&#39; does not exist!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
+
+        <span class="c1"># Check if the file format can be read by the IOManager</span>
+        <span class="k">if</span> <span class="s2">&quot;file_version&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Unsupported file format without version number&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_version&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_hdf_file_version</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="s2">&quot;Unsupported file format version &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;file_version&quot;</span><span class="p">]))</span>
+
+        <span class="c1"># Initialize the internal book keeping data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="p">):]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span><span class="p">):]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="n">s</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span><span class="p">)]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IOManager.finalize"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.finalize">[docs]</a>    <span class="k">def</span> <span class="nf">finalize</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Close the open output file and reset the internal information.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Close the file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">flush</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c1"># Reset book keeping data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="IOManager.get_number_blocks"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.get_number_blocks">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_blocks</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of data blocks in the current file structure.</span>
+
+<span class="sd">        :param groupid: An optional group ID. If given we count only data blocks which are a</span>
+<span class="sd">                        member of this group. If it is ``None`` (default) we count all data blocks.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">groupid</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">get_block_ids</span><span class="p">(</span><span class="n">groupid</span><span class="o">=</span><span class="n">groupid</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="IOManager.get_number_groups"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.get_number_groups">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_groups</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the number of data block groups in the current file structure.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span></div>
+
+
+<div class="viewcode-block" id="IOManager.get_block_ids"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.get_block_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_block_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">grouped</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list containing the IDs for all blocks in the current file structure.</span>
+
+<span class="sd">        :param groupid: An optional group ID. If given we return only block IDs for blocks</span>
+<span class="sd">                        which are a member of this group. If it is ``None`` we return all block IDs.</span>
+<span class="sd">        :param grouped: If ``True`` we group the block IDs by their group into lists.</span>
+<span class="sd">                        This option is only relevant in case the `groupid` is not given.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">groupid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">grouped</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="p">[:]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">gid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_group_ids</span><span class="p">()]</span></div>
+
+
+<div class="viewcode-block" id="IOManager.get_group_ids"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.get_group_ids">[docs]</a>    <span class="k">def</span> <span class="nf">get_group_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exclude</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">&quot;&quot;&quot;Return a list containing the IDs for all groups in the current file structure.</span>
+
+<span class="sd">        :param exclude: A list of group IDs to exclude. Per default no group is excluded.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="n">gid</span> <span class="k">for</span> <span class="n">gid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span> <span class="k">if</span> <span class="n">gid</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">exclude</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="IOManager.get_group_of_block"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.get_group_of_block">[docs]</a>    <span class="k">def</span> <span class="nf">get_group_of_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the ID of the group a given block belongs to or ``None``</span>
+<span class="sd">        if there is no such data block.</span>
+
+<span class="sd">        :param blockid: The ID of the given block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="IOManager.create_block"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.create_block">[docs]</a>    <span class="k">def</span> <span class="nf">create_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">groupid</span><span class="o">=</span><span class="s2">&quot;global&quot;</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a data block with the specified block ID. Each data block can</span>
+<span class="sd">        store several chunks of information, and there can be an arbitrary number</span>
+<span class="sd">        of data blocks per file.</span>
+
+<span class="sd">        :param blockid: The ID for the new data block. If not given the blockid will</span>
+<span class="sd">                        be choosen automatically. The block ID has to be unique.</span>
+<span class="sd">        :return: The block ID of the created block.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">blockid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Block ID allows only characters A-Z, a-z and 0-9 and no leading digit.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">blockid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid or already used block ID: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">blockid</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Try to find a valid autonumber</span>
+            <span class="n">autonumber</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="nb">str</span><span class="p">(</span><span class="n">autonumber</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="p">:</span>
+                <span class="n">autonumber</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">blockid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">autonumber</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_block_count</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="c1"># Create the data block</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">))</span>
+
+        <span class="c1"># Does the group already exist?</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="n">groupid</span><span class="o">=</span><span class="n">groupid</span><span class="p">)</span>
+
+        <span class="c1"># Put the data block into the group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span> <span class="o">=</span> <span class="n">hdf</span><span class="o">.</span><span class="n">SoftLink</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">blockid</span></div>
+
+
+<div class="viewcode-block" id="IOManager.create_group"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.create_group">[docs]</a>    <span class="k">def</span> <span class="nf">create_group</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">groupid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create a data group with the specified group ID. Each data group can</span>
+<span class="sd">        contain an arbitrary number of data blocks, and there can be an arbitrary</span>
+<span class="sd">        number of data groups per file.</span>
+
+<span class="sd">        :param groupid: The ID for the new data group. If not given the group ID will</span>
+<span class="sd">                        be chosen automatically. The group ID has to be unique.</span>
+<span class="sd">        :return: The group ID of the created group.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span>
+
+        <span class="k">if</span> <span class="n">groupid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span><span class="o">.</span><span class="n">isalnum</span><span class="p">()):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Group ID allows only characters A-Z, a-z and 0-9 and no leading digit.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">groupid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid or already used group ID: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">))</span>
+
+        <span class="k">if</span> <span class="n">groupid</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Try to find a valid autonumber</span>
+            <span class="n">autonumber</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="nb">str</span><span class="p">(</span><span class="n">autonumber</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="p">:</span>
+                <span class="n">autonumber</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="n">groupid</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">autonumber</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_group_count</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Create the group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixg</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">groupid</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">groupid</span></div>
+
+
+<div class="viewcode-block" id="IOManager.must_resize"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.must_resize">[docs]</a>    <span class="k">def</span> <span class="nf">must_resize</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if we must resize a given dataset and if yes, resize it.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Ok, it&#39;s inefficient but sufficient for now.</span>
+        <span class="c1"># TODO: Consider resizing in bigger chunks and shrinking at the end if necessary.</span>
+
+        <span class="c1"># Current size of the array</span>
+        <span class="n">cur_len</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">path</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+
+        <span class="c1"># Is the current size smaller than the new &quot;size&quot;?</span>
+        <span class="c1"># If yes, then resize the array along the given axis.</span>
+        <span class="k">if</span> <span class="n">cur_len</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">&lt;</span> <span class="n">size</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">path</span><span class="p">]</span><span class="o">.</span><span class="n">resize</span><span class="p">(</span><span class="n">size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="IOManager.find_timestep_index"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.find_timestep_index">[docs]</a>    <span class="k">def</span> <span class="nf">find_timestep_index</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timegridpath</span><span class="p">,</span> <span class="n">timestep</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Lookup the index for a given timestep. This assumes the timegrid</span>
+<span class="sd">        array is strictly monotone.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Allow for slicing etc</span>
+        <span class="n">timegrid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">timegridpath</span><span class="p">][:]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">timegrid</span> <span class="o">==</span> <span class="n">timestep</span><span class="p">)</span>
+        <span class="n">nrvals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">nrvals</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No index for given timestep!&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">nrvals</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Multiple indices for given timestep!&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">index</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="IOManager.split_data"><a class="viewcode-back" href="../../waveblocks_classes/IOManager.html#WaveBlocksND.IOManager.split_data">[docs]</a>    <span class="k">def</span> <span class="nf">split_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Split a multi-dimensional data block into slabs along a given axis.</span>
+
+<span class="sd">        :param data: The data tensor given.</span>
+<span class="sd">        :param axis: The axis along which to split the data.</span>
+<span class="sd">        :return: A list of slices.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">parts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">parts</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_save_attr_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># TODO: Fix for old python 2.x</span>
+        <span class="c1">#       Remove after 3.x transition</span>
+        <span class="c1"># Store all the values as pickled strings because hdf can</span>
+        <span class="c1"># only store strings or ndarrays as attributes.</span>
+        <span class="n">bpv</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bpv</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+            <span class="n">bpv</span> <span class="o">=</span> <span class="n">six</span><span class="o">.</span><span class="n">b</span><span class="p">(</span><span class="n">bpv</span><span class="p">)</span>
+        <span class="n">npvbpv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">void</span><span class="p">(</span><span class="n">bpv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">npvbpv</span>
+
+
+    <span class="k">def</span> <span class="nf">_load_attr_value</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="c1"># TODO: Fix for old python 2.x</span>
+        <span class="c1">#       Remove after 3.x transition</span>
+        <span class="n">npvbpv</span> <span class="o">=</span> <span class="n">value</span>
+        <span class="n">bpv</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">tobytes</span><span class="p">(</span><span class="n">npvbpv</span><span class="p">)</span>
+        <span class="n">pv</span> <span class="o">=</span> <span class="n">pickle</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">bpv</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">pv</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

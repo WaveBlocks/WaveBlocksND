@@ -8,7 +8,7 @@
     
     <title>SemiclassicalPropagator &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="McL42scPropagator" href="McL42scPropagator.html" />
     <link rel="prev" title="MagnusPropagator" href="MagnusPropagator.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="MagnusPropagator.html" title="MagnusPropagator"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="semiclassicalpropagator">
 <h1>SemiclassicalPropagator<a class="headerlink" href="#semiclassicalpropagator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-semiclassicalpropagator-class"></span><h2>About the <tt class="docutils literal"><span class="pre">SemiclassicalPropagator</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-semiclassicalpropagator-class"></span><h2>About the <code class="docutils literal"><span class="pre">SemiclassicalPropagator</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,31 +63,29 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-76d760073f6c26c1a1cebbd4dcac2787443dc42d.png" alt="Inheritance diagram of SemiclassicalPropagator" usemap="#inheritancee78b1128a9" class="inheritance"/>
+<img src="../_images/inheritance-42d3ac32e2e0b6a33955a3b78c93b09520ce3881.png" alt="Inheritance diagram of SemiclassicalPropagator" usemap="#inheritancee78b1128a9" class="inheritance"/>
 <map id="inheritancee78b1128a9" name="inheritancee78b1128a9">
 <area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi` in" alt="" coords="426,30,763,56"/>
 <area shape="rect" id="node2" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="60,5,324,30"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.SemiclassicalPropagator">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">SemiclassicalPropagator</tt><big>(</big><em>parameters</em>, <em>potential</em>, <em>packets=[]</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">SemiclassicalPropagator</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>packets=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> in
 a potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. The propagation is done for a given set of homogeneous
 Hagedorn wavepackets neglecting interaction.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.add_wavepacket">
-<tt class="descname">add_wavepacket</tt><big>(</big><em>packet</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.add_wavepacket" title="Permalink to this definition">¶</a></dt>
+<code class="descname">add_wavepacket</code><span class="sig-paren">(</span><em>packet</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.add_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.add_wavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> to the list of propagated wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (A tuple <img class="math" src="../_images/math/91989a06ae3d2582be4e597cf7efc43aaa76421a.png" alt="(\Psi, \chi)"/> with <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> a <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (A tuple <img class="math" src="../_images/math/91989a06ae3d2582be4e597cf7efc43aaa76421a.png" alt="(\Psi, \chi)"/> with <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> a <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></code></a>
 instance and <img class="math" src="../_images/math/f632c791f693410fc1bf07ad7cb02c6fcfef9aed.png" alt="\chi"/> an integer.) &#8211; The new wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> and its leading component <img class="math" src="../_images/math/e42c974e4f72f1cc2a72c01ed46c711b29445e03.png" alt="\chi \in [0,N-1]"/>.</td>
 </tr>
 </tbody>
@@ -96,7 +94,7 @@ instance and <img class="math" src="../_images/math/f632c791f693410fc1bf07ad7cb0
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.build">
-<tt class="descname">build</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.build" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build</code><span class="sig-paren">(</span><em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.build" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -228,7 +226,7 @@ Math. Comput. 66 (1997) 1089-1099.</td></tr>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.get_number_components">
-<tt class="descname">get_number_components</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -241,13 +239,13 @@ Math. Comput. 66 (1997) 1089-1099.</td></tr>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.get_potential">
-<tt class="descname">get_potential</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> used for time propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><tt class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></tt></a> subclass instance.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><code class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></code></a> subclass instance.</td>
 </tr>
 </tbody>
 </table>
@@ -255,17 +253,17 @@ Math. Comput. 66 (1997) 1089-1099.</td></tr>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.get_wavepackets">
-<tt class="descname">get_wavepackets</tt><big>(</big><em>packet=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_wavepackets</code><span class="sig-paren">(</span><em>packet=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.get_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.get_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the wavepackets <img class="math" src="../_images/math/f208d849d195bf8aa2dcdee96350b0e486b7d291.png" alt="\{\Psi_i\}_i"/> that take part in the time propagation by the
-current <a class="reference internal" href="#WaveBlocksND.SemiclassicalPropagator" title="WaveBlocksND.SemiclassicalPropagator"><tt class="xref py py-class docutils literal"><span class="pre">SemiclassicalPropagator</span></tt></a> instance.</p>
+current <a class="reference internal" href="#WaveBlocksND.SemiclassicalPropagator" title="WaveBlocksND.SemiclassicalPropagator"><code class="xref py py-class docutils literal"><span class="pre">SemiclassicalPropagator</span></code></a> instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> (in this list) of a single packet <img class="math" src="../_images/math/034b3ac6431b79d3aa58a3ebe8c185f94fc75713.png" alt="\Psi_i"/> that is
-to be returned. If set to <tt class="docutils literal"><span class="pre">None</span></tt> (default) return the full list with all packets.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> (in this list) of a single packet <img class="math" src="../_images/math/034b3ac6431b79d3aa58a3ebe8c185f94fc75713.png" alt="\Psi_i"/> that is
+to be returned. If set to <code class="docutils literal"><span class="pre">None</span></code> (default) return the full list with all packets.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></tt></a> instances or a single instance.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></code></a> instances or a single instance.</td>
 </tr>
 </tbody>
 </table>
@@ -273,7 +271,7 @@ to be returned. If set to <tt class="docutils literal"><span class="pre">None</s
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.intsplit">
-<tt class="descname">intsplit</tt><big>(</big><em>psi1</em>, <em>psi2</em>, <em>a</em>, <em>b</em>, <em>tspan</em>, <em>N</em>, <em>args1=[]</em>, <em>args2=[]</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.intsplit" title="Permalink to this definition">¶</a></dt>
+<code class="descname">intsplit</code><span class="sig-paren">(</span><em>psi1</em>, <em>psi2</em>, <em>a</em>, <em>b</em>, <em>tspan</em>, <em>N</em>, <em>args1=[]</em>, <em>args2=[]</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.intsplit" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a single, full propagation step by operator splitting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -295,14 +293,14 @@ to be returned. If set to <tt class="docutils literal"><span class="pre">None</s
 </table>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">The values for <tt class="docutils literal"><span class="pre">args1</span></tt> and <tt class="docutils literal"><span class="pre">args2</span></tt> have to be
-of type <tt class="docutils literal"><span class="pre">list</span></tt> even in case of single items.</p>
+<p class="last">The values for <code class="docutils literal"><span class="pre">args1</span></code> and <code class="docutils literal"><span class="pre">args2</span></code> have to be
+of type <code class="docutils literal"><span class="pre">list</span></code> even in case of single items.</p>
 </div>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.order">
-<tt class="descname">order</tt><big>(</big><em>method</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.order" title="Permalink to this definition">¶</a></dt>
+<code class="descname">order</code><span class="sig-paren">(</span><em>method</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.order" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -317,7 +315,7 @@ of type <tt class="docutils literal"><span class="pre">list</span></tt> even in 
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.post_propagate">
-<tt class="descname">post_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at final time <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>,
 perform some computations exactly once after running the ordinary
 time propagation and before each time simulation data will be saved.</p>
@@ -327,7 +325,7 @@ nothing and returns.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.pre_propagate">
-<tt class="descname">pre_propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/fb761c2e199ad45ccf14767f48b88169479d840f.png" alt="t_0"/>,
 perform some computations exactly once before running the ordinary
 time propagation and after each time simulation data was saved.</p>
@@ -337,7 +335,7 @@ nothing and returns.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.propagate">
-<tt class="descname">propagate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.propagate" title="Permalink to this definition">¶</a></dt>
+<code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given a wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> compute the propagated
 wavepacket at time <img class="math" src="../_images/math/248f20efaf95b4d4c73e23e7cb9ece1b73e10098.png" alt="t + \tau"/>. We perform exactly one timestep of size
 <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> here. This propagation is done for all packets in the list
@@ -355,7 +353,7 @@ Numerische Mathematik, volume 126 number 1 (2013) 53-73.</td></tr>
 
 <dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.set_wavepackets">
-<tt class="descname">set_wavepackets</tt><big>(</big><em>packetlist</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.set_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_wavepackets</code><span class="sig-paren">(</span><em>packetlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.set_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.set_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the list <img class="math" src="../_images/math/f208d849d195bf8aa2dcdee96350b0e486b7d291.png" alt="\{\Psi_i\}_i"/> of wavepackets that the propagator will propagate.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -377,12 +375,12 @@ leading components <img class="math" src="../_images/math/cc6ea38e465ef83538fbaf
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SemiclassicalPropagator</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">SemiclassicalPropagator</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">SemiclassicalPropagator</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -395,29 +393,28 @@ leading components <img class="math" src="../_images/math/cc6ea38e465ef83538fbaf
   <h4>Next topic</h4>
   <p class="topless"><a href="McL42scPropagator.html"
                         title="next chapter">McL42scPropagator</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/SemiclassicalPropagator.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/SemiclassicalPropagator.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -432,12 +429,12 @@ leading components <img class="math" src="../_images/math/cc6ea38e465ef83538fbaf
         <li class="right" >
           <a href="MagnusPropagator.html" title="MagnusPropagator"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

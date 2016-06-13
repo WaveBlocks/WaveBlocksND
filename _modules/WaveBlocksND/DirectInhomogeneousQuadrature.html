@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.DirectInhomogeneousQuadrature &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.DirectInhomogeneousQuadrature</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for evaluating inner products</span>
+<span class="sd">and matrix elements by using standard quadrature rules.</span>
+<span class="sd">Here we handle the inhomogeneous case.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">imag</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">einsum</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">exp</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">sqrtm</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> <span class="n">det</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectQuadrature</span> <span class="kn">import</span> <span class="n">DirectQuadrature</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DirectInhomogeneousQuadrature&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature">[docs]</a><span class="k">class</span> <span class="nc">DirectInhomogeneousQuadrature</span><span class="p">(</span><span class="n">DirectQuadrature</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="c1"># Pure convenience to allow setting of quadrature rule in constructor</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">set_qr</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="bp">None</span>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Inhomogeneous direct quadrature using a &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.get_description"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this quadrature object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;DirectInhomogeneousQuadrature&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;qr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_packet"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Provide the wavepacket parts of the inner product to evaluate.</span>
+<span class="sd">        Since the quadrature is inhomogeneous different wavepackets can be</span>
+<span class="sd">        used for the &#39;bra&#39; as well as the &#39;ket&#39; part.</span>
+
+<span class="sd">        :param pacbra: The packet that is used for the &#39;bra&#39; part.</span>
+<span class="sd">        :param packet: The packet that is used for the &#39;ket&#39; part.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
+        <span class="k">if</span> <span class="n">packet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">packet</span> <span class="o">=</span> <span class="n">pacbra</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span> <span class="o">=</span> <span class="n">pacbra</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span> <span class="o">=</span> <span class="n">packet</span>
+
+        <span class="c1"># Adapt the quadrature nodes and weights</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+
+        <span class="c1"># Force a call of &#39;preprare&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffbra</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffket</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Provide the operator part of the inner product to evaluate.</span>
+<span class="sd">        This function initializes the operator used for quadratures</span>
+<span class="sd">        and for building matrices.</span>
+
+<span class="sd">        :param operator: The operator of the inner product.</span>
+<span class="sd">                         If ``None`` a suitable identity is used.</span>
+<span class="sd">        :param matrix: Set this to ``True`` (Default is ``False``) in case</span>
+<span class="sd">                       we want to compute the matrix elements.</span>
+<span class="sd">                       For nasty technical reasons we can not yet unify</span>
+<span class="sd">                       the operator call syntax.</span>
+<span class="sd">        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.</span>
+<span class="sd">        :type eval_at_once: Boolean, default is ``False``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Make this more efficient, only compute values needed at each (r,c) step.</span>
+        <span class="c1">#       For this, &#39;operator&#39; must support the &#39;component=(r,c)&#39; option.</span>
+        <span class="c1"># Operator is None is interpreted as identity transformation</span>
+        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="n">operator</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="o">=</span> <span class="n">eval_at_once</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.prepare"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.prepare">[docs]</a>    <span class="k">def</span> <span class="nf">prepare</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Precompute some values needed for evaluating the quadrature</span>
+<span class="sd">        :math:`\langle \Phi_i | f(x) | \Phi^\prime_j \rangle` or the corresponding</span>
+<span class="sd">        matrix over the basis functions of :math:`\Phi_i` and :math:`\Phi^\prime_j`.</span>
+
+<span class="sd">        :param rows: A list of all :math:`i` with :math:`0 \leq i \leq N`</span>
+<span class="sd">                     selecting the :math:`\Phi_i` for which we precompute values.</span>
+<span class="sd">        :param cols: A list of all :math:`j` with :math:`0 \leq j \leq N`</span>
+<span class="sd">                     selecting the :math:`\Phi^\prime_j` for which we precompute values.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffbra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.mix_parameters"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.mix_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">mix_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Mix the two parameter sets :math:`\Pi_i` and :math:`\Pi_j`</span>
+<span class="sd">        from the bra and the ket wavepackets :math:`\Phi\left[\Pi_i\right]`</span>
+<span class="sd">        and :math:`\Phi^\prime\left[\Pi_j\right]`.</span>
+
+<span class="sd">        :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.</span>
+<span class="sd">        :param Piket: The parameter set :math:`\Pi_j` from the ket part wavepacket.</span>
+<span class="sd">        :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># &lt;Pibra | ... | Piket&gt;</span>
+        <span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">Qr</span><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <span class="n">Sr</span><span class="p">)</span> <span class="o">=</span> <span class="n">Pibra</span>
+        <span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">Qc</span><span class="p">,</span> <span class="n">Pc</span><span class="p">,</span> <span class="n">Sc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Piket</span>
+
+        <span class="c1"># Mix the parameters</span>
+        <span class="n">Gr</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pr</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qr</span><span class="p">))</span>
+        <span class="n">Gc</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pc</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qc</span><span class="p">))</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="n">imag</span><span class="p">(</span><span class="n">Gc</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Gr</span><span class="o">.</span><span class="n">T</span><span class="p">))</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">imag</span><span class="p">(</span><span class="n">dot</span><span class="p">(</span><span class="n">Gc</span><span class="p">,</span> <span class="n">qc</span><span class="p">)</span> <span class="o">-</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">Gr</span><span class="o">.</span><span class="n">T</span><span class="p">),</span> <span class="n">qr</span><span class="p">))</span>
+
+        <span class="n">q0</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">inv</span><span class="p">(</span><span class="n">r</span><span class="p">),</span> <span class="n">s</span><span class="p">)</span>
+        <span class="n">Q0</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">r</span>
+        <span class="n">Q0</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">Q0</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">Q0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.transform_nodes"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.transform_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">transform_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Transform the quadrature nodes :math:`\gamma` such that they</span>
+<span class="sd">        fit the given wavepackets :math:`\Phi\left[\Pi_i\right]` and</span>
+<span class="sd">        :math:`\Phi^\prime\left[\Pi_j\right]` best.</span>
+
+<span class="sd">        :param Pibra: The parameter set :math:`\Pi_i` from the bra part wavepacket.</span>
+<span class="sd">        :param Piket: The parameter set :math:`\Pi_j` from the ket part wavepacket.</span>
+<span class="sd">        :param eps: The value of :math:`\varepsilon` of the wavepacket.</span>
+<span class="sd">        :param QR: An optional quadrature rule :math:`\Gamma = (\gamma, \omega)` providing</span>
+<span class="sd">                   the nodes. If not given the internal quadrature rule will be used.</span>
+<span class="sd">        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where</span>
+<span class="sd">                 :math:`|\Gamma|` denotes the total number of quadrature nodes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span>
+
+        <span class="k">if</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">QR</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+
+        <span class="c1"># Mix the parameters and compute the affine transformation</span>
+        <span class="n">q0</span><span class="p">,</span> <span class="n">Q0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mix_parameters</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">)</span>
+
+        <span class="c1"># Transform the quadrature nodes</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">q0</span> <span class="o">+</span> <span class="n">eps</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Q0</span><span class="p">,</span> <span class="n">QR</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">nodes</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.do_quadrature"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.do_quadrature">[docs]</a>    <span class="k">def</span> <span class="nf">do_quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluates by standard quadrature the integral</span>
+<span class="sd">        :math:`\langle \Phi_i | f | \Phi^\prime_j \rangle` for a polynomial</span>
+<span class="sd">        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">        :param row: The index :math:`i` of the component :math:`\Phi_i` of :math:`\Psi`.</span>
+<span class="sd">        :param row: The index :math:`j` of the component :math:`\Phi^\prime_j` of :math:`\Psi^\prime`.</span>
+<span class="sd">        :return: A complex valued matrix of shape :math:`|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+        <span class="c1"># Mix wavepacket parameters</span>
+        <span class="n">Pibra</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">)</span>
+        <span class="n">Piket</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">)</span>
+        <span class="n">Pimix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mix_parameters</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">)</span>
+        <span class="c1"># Transform nodes and evaluate bases</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_nodes</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">basisr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">basisc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="c1"># Operator should support the component notation for efficiency</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c1"># TODO: Sure, this is inefficient, but we can not do better right now.</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">Pimix</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">Pimix</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">entry</span><span class="o">=</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">))</span>
+        <span class="c1"># Recheck what we got</span>
+        <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="ow">is</span> <span class="n">ndarray</span>
+        <span class="k">assert</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span>
+        <span class="c1"># Main part of the integrand</span>
+        <span class="n">factor</span> <span class="o">=</span> <span class="p">(</span><span class="n">eps</span><span class="o">**</span><span class="n">D</span> <span class="o">*</span> <span class="n">values</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">*</span> <span class="n">det</span><span class="p">(</span><span class="n">Pimix</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,))</span>
+        <span class="c1"># Sum up matrices over all quadrature nodes</span>
+        <span class="n">M</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;k,ik,jk&quot;</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">basisr</span><span class="p">),</span> <span class="n">basisc</span><span class="p">)</span>
+        <span class="c1"># Compute global phase difference</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Piket</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
+        <span class="k">return</span> <span class="n">phase</span> <span class="o">*</span> <span class="n">M</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

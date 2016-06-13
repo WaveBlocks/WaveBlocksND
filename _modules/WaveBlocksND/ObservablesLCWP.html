@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.ObservablesLCWP &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.ObservablesLCWP</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">Compute some observables like norm, kinetic and potential energy</span>
+<span class="sd">of linear combinations of general wavepackets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Observables</span> <span class="kn">import</span> <span class="n">Observables</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ObservablesLCWP&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ObservablesLCWP"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP">[docs]</a><span class="k">class</span> <span class="nc">ObservablesLCWP</span><span class="p">(</span><span class="n">Observables</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements observable computation for linear combinations :math:`\Upsilon`</span>
+<span class="sd">    of wavepackets :math:`\Psi_j`. There are no assumptions made on the type of the wavepackets</span>
+<span class="sd">    :math:`\Psi_j` in :math:`\Upsilon := \sum_{j=0}^J c_j \Psi_j`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ObservablesLCWP.__init__"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`ObservablesLCWP` instance for observable computation</span>
+<span class="sd">        of linear combinations :math:`\Upsilon` of wavepackets :math:`\Psi_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="bp">None</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.set_innerproduct"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.set_innerproduct">[docs]</a>    <span class="k">def</span> <span class="nf">set_innerproduct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">innerproduct</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the innerproduct.</span>
+
+<span class="sd">        :param innerproduct: An inner product for computing the integrals. The inner product is</span>
+<span class="sd">                             used for the computation of brakets :math:`\langle \Psi | \cdot | \Psi \rangle`.</span>
+<span class="sd">        :type innerproduct: A :py:class:`InnerProduct` subclass instance.</span>
+
+<span class="sd">        .. note:: Make sure to use an inhomogeneous inner product here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="n">innerproduct</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.set_gradient"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.set_gradient">[docs]</a>    <span class="k">def</span> <span class="nf">set_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gradient</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the gradient.</span>
+
+<span class="sd">        :param gradient: A gradient operator.</span>
+<span class="sd">        :type gradient: A :py:class:`Gradient` subclass instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="n">gradient</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the overlap matrix :math:`M_{r,c} = \langle\Upsilon_r|\Upsilon_c\rangle`.</span>
+
+<span class="sd">        Note that this function is just a shortcut for calling the inner</span>
+<span class="sd">        product evaluator directly.</span>
+
+<span class="sd">        :param lincomb: The linear combination :math:`\Upsilon`.</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose overlap</span>
+<span class="sd">                          is calculated. The default value is ``None`` which means to compute</span>
+<span class="sd">                          overlaps of all :math:`N` components.</span>
+<span class="sd">        :type component: int or ``None``.</span>
+<span class="sd">        :return: The matrix :math:`M`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">OM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OM</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.norm"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the :math:`L^2` norm :math:`\langle\Upsilon|\Upsilon\rangle`</span>
+<span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
+
+<span class="sd">        :param lincomb: The linear combination :math:`\Upsilon` of which we compute the norm.</span>
+<span class="sd">        :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.</span>
+<span class="sd">        :param matrix: The overlap matrix. If ``None`` the matrix is computed internally.</span>
+<span class="sd">        :type matrix: An ``ndarray`` or ``None`` (default).</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose norm</span>
+<span class="sd">                          is calculated. The default value is ``None`` which means to compute</span>
+<span class="sd">                          norms of all :math:`N` components.</span>
+<span class="sd">        :param return_matrix: Whether to return the overlap matrix used internally.</span>
+<span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
+<span class="sd">        :return: The norm of :math:`\Upsilon` and optionally the overlap matrix :math:`M`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">OM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">OM</span> <span class="o">=</span> <span class="n">matrix</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
+
+        <span class="c1"># Prepare the coefficients in case of multiple components</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># Compute the norm</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">OM</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+        <span class="n">norm</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">norm</span><span class="p">)</span>
+
+        <span class="c1"># Allow to return the overlap matrix.</span>
+        <span class="k">if</span> <span class="n">return_matrix</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">norm</span><span class="p">,</span> <span class="n">OM</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">norm</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.kinetic_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the kinetic overlap matrix :math:`{M_T}_{r,c} = \langle\Upsilon_r|T|\Upsilon_c\rangle`.</span>
+
+<span class="sd">        :param lincomb: The linear combination :math:`\Upsilon`.</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose</span>
+<span class="sd">                          kinetic energy we want to compute. If set to ``None`` the</span>
+<span class="sd">                          computation is performed for all :math:`N` components.</span>
+<span class="sd">        :type component: Integer or ``None``.</span>
+<span class="sd">        :return: The matrix :math:`M_T`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">gradients</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span><span class="o">.</span><span class="n">apply_gradient</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+
+        <span class="c1"># Compute the matrices and sum up</span>
+        <span class="n">OMT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">gradients</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">gradient</span> <span class="ow">in</span> <span class="n">gradients</span><span class="p">[</span><span class="mi">1</span><span class="p">:]:</span>
+            <span class="n">OMT</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">gradient</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">OMT</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the kinetic energy :math:`E_{\text{kin}} := \langle\Upsilon|T|\Upsilon\rangle`</span>
+<span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
+
+<span class="sd">        :param linbomc: The linear combination :math:`\Upsilon` of which we compute the kinetic energy.</span>
+<span class="sd">        :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.</span>
+<span class="sd">        :param matrix: The kinetic overlap matrix. If ``None`` the matrix is computed internally.</span>
+<span class="sd">        :type matrix: An ``ndarray`` or ``None`` (default).</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose</span>
+<span class="sd">                          kinetic energy we want to compute. If set to ``None`` the</span>
+<span class="sd">                          computation is performed for all :math:`N` components.</span>
+<span class="sd">        :type component: Integer or ``None``.</span>
+<span class="sd">        :param return_matrix: Whether to return the kinetic overlap matrix used internally.</span>
+<span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
+<span class="sd">        :return: The kinetic energy of :math:`\Upsilon` and optionally the kinetic overlap matrix :math:`M_T`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">OMT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kinetic_overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">OMT</span> <span class="o">=</span> <span class="n">matrix</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
+
+        <span class="c1"># Prepare the coefficients in case of multiple components</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># Compute the kinetic energy</span>
+        <span class="n">ekin</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">OMT</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+
+        <span class="c1"># Allow to return the overlap matrix.</span>
+        <span class="k">if</span> <span class="n">return_matrix</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">ekin</span><span class="p">,</span> <span class="n">OMT</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">ekin</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.potential_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">potential_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the potential overlap matrix :math:`{M_V}_{r,c} = \langle\Upsilon_r|V|\Upsilon_c\rangle`.</span>
+
+<span class="sd">        :param lincomb: The linear combination :math:`\Upsilon`.</span>
+<span class="sd">        :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself</span>
+<span class="sd">                          but one of its ``V.evaluate_*`` methods.)</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose</span>
+<span class="sd">                          potential energy we want to compute. If set to ``None`` the</span>
+<span class="sd">                          computation is performed for all :math:`N` components.</span>
+<span class="sd">        :type component: Integer or ``None``.</span>
+<span class="sd">        :return: The matrix :math:`M_V`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">OMV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">potential</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">OMV</span></div>
+
+
+<div class="viewcode-block" id="ObservablesLCWP.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the potential energy :math:`E_{\text{pot}} := \langle\Upsilon|V|\Upsilon\rangle`.</span>
+<span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
+
+<span class="sd">        :param linbomc: The linear combination :math:`\Upsilon` of which we compute the potential energy.</span>
+<span class="sd">        :type lincomb: A :py:class:`LinearCombinationOfWavepackets` subclass instance.</span>
+<span class="sd">        :param potential: The potential :math:`V(x)`. (Actually, not the potential object itself</span>
+<span class="sd">                          but one of its ``V.evaluate_*`` methods.)</span>
+<span class="sd">        :param matrix: The potential overlap matrix. If ``None`` the matrix is computed internally.</span>
+<span class="sd">        :type matrix: An ``ndarray`` or ``None`` per default.</span>
+<span class="sd">        :param component: The index :math:`i` of the components :math:`\Phi_i` whose</span>
+<span class="sd">                          potential energy we want to compute. If set to ``None`` the</span>
+<span class="sd">                          computation is performed for all :math:`N` components.</span>
+<span class="sd">        :type component: Integer or ``None``.</span>
+<span class="sd">        :param return_matrix: Whether to return the potential overlap matrix used internally.</span>
+<span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
+<span class="sd">        :return: The potential energy of :math:`\Upsilon` and optionally the potential overlap matrix :math:`M_V`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">OMV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">OMV</span> <span class="o">=</span> <span class="n">matrix</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
+
+        <span class="c1"># Prepare the coefficients in case of multiple components</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">c</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
+        <span class="c1"># Compute the potential energy</span>
+        <span class="n">epot</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">c</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">OMV</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span>
+
+        <span class="c1"># Allow to return the overlap matrix.</span>
+        <span class="k">if</span> <span class="n">return_matrix</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="n">epot</span><span class="p">,</span> <span class="n">OMV</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">epot</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

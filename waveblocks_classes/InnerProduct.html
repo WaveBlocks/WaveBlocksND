@@ -8,7 +8,7 @@
     
     <title>InnerProduct &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="HomogeneousInnerProduct" href="HomogeneousInnerProduct.html" />
     <link rel="prev" title="GradientLinearCombinationHAWP" href="GradientLinearCombinationHAWP.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="GradientLinearCombinationHAWP.html" title="GradientLinearCombinationHAWP"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="innerproduct">
 <h1>InnerProduct<a class="headerlink" href="#innerproduct" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-innerproduct-class"></span><h2>About the <tt class="docutils literal"><span class="pre">InnerProduct</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-innerproduct-class"></span><h2>About the <code class="docutils literal"><span class="pre">InnerProduct</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,23 +63,21 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-2f639f4ff73353292a020a5cac6ba313d971e58c.png" alt="Inheritance diagram of InnerProduct" usemap="#inheritancea2008c2191" class="inheritance"/>
+<img src="../_images/inheritance-a390a1549d737c16ab9bd931525978aead8cb00a.png" alt="Inheritance diagram of InnerProduct" usemap="#inheritancea2008c2191" class="inheritance"/>
 <map id="inheritancea2008c2191" name="inheritancea2008c2191">
 <area shape="rect" id="node1" title="This class is an abstract interface to inner products in general." alt="" coords="37,55,225,80"/>
 <area shape="rect" id="node2" title="Exception to raise in case an inner product fails for whatever reason." alt="" coords="5,5,256,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.InnerProduct">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">InnerProduct</tt><a class="headerlink" href="#WaveBlocksND.InnerProduct" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">InnerProduct</code><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class is an abstract interface to inner products in general.</p>
 <dl class="method">
 <dt id="WaveBlocksND.InnerProduct.build_matrix">
-<tt class="descname">build_matrix</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InnerProduct.build_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">build_matrix</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct.build_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct.build_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the matrix elements of <img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/>
 for a general function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
 Note that the arguments may vary through subclasses!</p>
@@ -87,7 +85,7 @@ Note that the arguments may vary through subclasses!</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -95,8 +93,8 @@ Note that the arguments may vary through subclasses!</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.InnerProduct.get_delegate">
-<tt class="descname">get_delegate</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InnerProduct.get_delegate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> subclass instance
+<code class="descname">get_delegate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct.get_delegate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct.get_delegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><code class="xref py py-class docutils literal"><span class="pre">Quadrature</span></code></a> subclass instance
 used for evaluation of this inner product.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -110,16 +108,16 @@ used for evaluation of this inner product.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.InnerProduct.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InnerProduct.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this inner product object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.InnerProduct.quadrature">
-<tt class="descname">quadrature</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.InnerProduct.quadrature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">quadrature</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct.quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct.quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Performs the quadrature of <img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/> for a general
 function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
 Note that the arguments may vary through subclasses!</p>
@@ -127,7 +125,7 @@ Note that the arguments may vary through subclasses!</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -135,13 +133,13 @@ Note that the arguments may vary through subclasses!</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.InnerProduct.set_delegate">
-<tt class="descname">set_delegate</tt><big>(</big><em>delegate</em><big>)</big><a class="headerlink" href="#WaveBlocksND.InnerProduct.set_delegate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">set_delegate</code><span class="sig-paren">(</span><em>delegate</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProduct.set_delegate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProduct.set_delegate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><code class="xref py py-class docutils literal"><span class="pre">Quadrature</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delegate</strong> &#8211; The new <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><tt class="xref py py-class docutils literal"><span class="pre">Quadrature</span></tt></a> instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>delegate</strong> &#8211; The new <a class="reference internal" href="Quadrature.html#WaveBlocksND.Quadrature" title="WaveBlocksND.Quadrature"><code class="xref py py-class docutils literal"><span class="pre">Quadrature</span></code></a> instance.</td>
 </tr>
 </tbody>
 </table>
@@ -151,7 +149,7 @@ Note that the arguments may vary through subclasses!</p>
 
 <dl class="class">
 <dt id="WaveBlocksND.InnerProductException">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">InnerProductException</tt><a class="headerlink" href="#WaveBlocksND.InnerProductException" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">InnerProductException</code><a class="reference internal" href="../_modules/WaveBlocksND/InnerProduct.html#InnerProductException"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InnerProductException" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exception to raise in case an inner product fails for whatever reason.</p>
 </dd></dl>
 
@@ -162,12 +160,12 @@ Note that the arguments may vary through subclasses!</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">InnerProduct</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">InnerProduct</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">InnerProduct</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -180,29 +178,28 @@ Note that the arguments may vary through subclasses!</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="HomogeneousInnerProduct.html"
                         title="next chapter">HomogeneousInnerProduct</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/InnerProduct.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/InnerProduct.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -217,12 +214,12 @@ Note that the arguments may vary through subclasses!</p>
         <li class="right" >
           <a href="GradientLinearCombinationHAWP.html" title="GradientLinearCombinationHAWP"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.PerturbedSplittingParameters &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.PerturbedSplittingParameters</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains data to build several closely</span>
+<span class="sd">related splitting methods for perturbed operators.</span>
+
+<span class="sd">@author: V. Gradinaru, R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">floating</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PerturbedSplittingParameters&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="PerturbedSplittingParameters"><a class="viewcode-back" href="../../waveblocks_classes/PerturbedSplittingParameters.html#WaveBlocksND.PerturbedSplittingParameters">[docs]</a><span class="k">class</span> <span class="nc">PerturbedSplittingParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+
+<div class="viewcode-block" id="PerturbedSplittingParameters.build"><a class="viewcode-back" href="../../waveblocks_classes/PerturbedSplittingParameters.html#WaveBlocksND.PerturbedSplittingParameters.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :param method: A string specifying the method for time integration.</span>
+<span class="sd">        :return: Two arrays :math:`a` and :math:`b`.</span>
+
+<span class="sd">        ====== ====== ========= =========</span>
+<span class="sd">        Method Order  Authors   Reference</span>
+<span class="sd">        ====== ====== ========= =========</span>
+<span class="sd">        L42    (4,2)  McLachlan [1]_ page 6</span>
+<span class="sd">        L62    (6,2)  McLachlan [1]_ page 6</span>
+<span class="sd">        L82    (8,2)  McLachlan [1]_ page 6</span>
+<span class="sd">        L102   (10,2) McLachlan [1]_ page 6</span>
+<span class="sd">        L84    (8,4)  McLachlan [1]_ page 8</span>
+<span class="sd">        ====== ====== ========= =========</span>
+
+<span class="sd">        .. [1] R.I. McLachlan, &quot;Composition methods in the presence of small parameters&quot;,</span>
+<span class="sd">               BIT Numerical Mathematics, Volume 35, Issue 2, (1995) 258-268.</span>
+<span class="sd">               There is also a 2003 version which was used for the implementation.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;L42&quot;</span><span class="p">:</span>
+            <span class="c1"># Pattern ABA and m = s = 2</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.21132486540518713</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.57735026918962584</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.21132486540518713</span>
+            <span class="c1">#</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;L62&quot;</span><span class="p">:</span>
+            <span class="c1"># Pattern ABA and m = s = 3</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">3</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1127016653792583</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.3872983346207417</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.3872983346207417</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.1127016653792583</span>
+            <span class="c1">#</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2777777777777778</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.4444444444444444</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.2777777777777778</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;L82&quot;</span><span class="p">:</span>
+            <span class="c1"># Pattern ABA and m = s = 4</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.069431844202973714</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.26057763400459816</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.33998104358485626</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.26057763400459816</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.069431844202973714</span>
+            <span class="c1">#</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.17392742256872692</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.3260725774312731</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.3260725774312731</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.17392742256872692</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;L102&quot;</span><span class="p">:</span>
+            <span class="c1"># Pattern ABA and m = s = 5</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">5</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.046910077030668018</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.18385526791649043</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.26923465505284155</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.26923465505284155</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.18385526791649043</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.046910077030668018</span>
+            <span class="c1">#</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.11846344252809454</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.23931433524968324</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.28444444444444444</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.23931433524968324</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.11846344252809454</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;L84&quot;</span><span class="p">:</span>
+            <span class="c1"># Pattern ABA and m = 5</span>
+            <span class="n">m</span> <span class="o">=</span> <span class="mi">5</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+            <span class="c1">#</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.07534696026989288842</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.51791685468825678230</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.09326381495814967072</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.09326381495814967072</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.51791685468825678230</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.07534696026989288842</span>
+            <span class="c1">#</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.19022593937367661925</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.84652407044352625706</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.07350001963440575260</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.84652407044352625706</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.19022593937367661925</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown method: &quot;</span> <span class="o">+</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="PerturbedSplittingParameters.intsplit"><a class="viewcode-back" href="../../waveblocks_classes/PerturbedSplittingParameters.html#WaveBlocksND.PerturbedSplittingParameters.intsplit">[docs]</a>    <span class="k">def</span> <span class="nf">intsplit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psia</span><span class="p">,</span> <span class="n">psib</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tspan</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">argsa</span><span class="o">=</span><span class="p">[],</span> <span class="n">argsb</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Compute a single, full propagation step by operator splitting.</span>
+
+<span class="sd">        :param psia: First evolution operator :math:`\Psi_a`</span>
+<span class="sd">        :param psib: Second evolution operator :math:`\Psi_b`</span>
+<span class="sd">        :param a: Parameters for evolution with :math:`\Psi_a`</span>
+<span class="sd">        :param b: Parameters for evolution with :math:`\Psi_b`</span>
+<span class="sd">        :param tspan: Timespan :math:`t` of a single, full splitting step</span>
+<span class="sd">        :param N: Number of substeps to perform</span>
+<span class="sd">        :param argsa: Additional optional arguments of :math:`\Psi_a`</span>
+<span class="sd">        :param argsb: Additional optional arguments of :math:`\Psi_b`</span>
+
+<span class="sd">        .. note:: The values for ``argsa`` and ``argsb`` have to be</span>
+<span class="sd">                  of type ``list`` even in case of single items.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="p">(</span><span class="n">psia</span><span class="p">,</span> <span class="n">psib</span><span class="p">)</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">argsa</span><span class="p">,</span> <span class="n">argsb</span><span class="p">)</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">tspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tspan</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+        <span class="n">sa</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sb</span> <span class="o">=</span> <span class="n">b</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">floating</span><span class="p">)</span>
+        <span class="n">c</span><span class="p">[::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span>
+        <span class="n">c</span><span class="p">[</span><span class="mi">1</span><span class="p">::</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">b</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sa</span> <span class="o">+</span> <span class="n">sb</span><span class="p">):</span>
+                <span class="n">psi</span><span class="p">[</span><span class="n">j</span> <span class="o">%</span> <span class="mi">2</span><span class="p">](</span><span class="n">c</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">[</span><span class="n">j</span> <span class="o">%</span> <span class="mi">2</span><span class="p">])</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

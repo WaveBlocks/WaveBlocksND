@@ -8,7 +8,7 @@
     
     <title>IOM_plugin_grid &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="IOM_plugin_wavefunction" href="IOM_plugin_wavefunction.html" />
     <link rel="prev" title="IOM_plugin_parameters" href="IOM_plugin_parameters.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="IOM_plugin_parameters.html" title="IOM_plugin_parameters"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="iom-plugin-grid">
 <h1>IOM_plugin_grid<a class="headerlink" href="#iom-plugin-grid" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-iom-plugin-grid-class"></span><h2>About the <tt class="docutils literal"><span class="pre">IOM_plugin_grid</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-iom-plugin-grid-class"></span><h2>About the <code class="docutils literal"><span class="pre">IOM_plugin_grid</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -70,14 +70,14 @@
 &#64;license: Modified BSD License</p>
 <dl class="function">
 <dt id="IOM_plugin_grid.add_grid">
-<tt class="descclassname">IOM_plugin_grid.</tt><tt class="descname">add_grid</tt><big>(</big><em>self</em>, <em>parameters</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_grid.html#add_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.add_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_grid.</code><code class="descname">add_grid</code><span class="sig-paren">(</span><em>self</em>, <em>parameters</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_grid.html#add_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.add_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add storage for a tensor product grid.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parameters</strong> &#8211; A <tt class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></tt> instance containing
+<li><strong>parameters</strong> &#8211; A <code class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></code> instance containing
 at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -89,7 +89,7 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_grid.delete_grid">
-<tt class="descclassname">IOM_plugin_grid.</tt><tt class="descname">delete_grid</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_grid.html#delete_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.delete_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_grid.</code><code class="descname">delete_grid</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_grid.html#delete_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.delete_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the stored grid.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -103,7 +103,7 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_grid.has_grid">
-<tt class="descclassname">IOM_plugin_grid.</tt><tt class="descname">has_grid</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_grid.html#has_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.has_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_grid.</code><code class="descname">has_grid</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_grid.html#has_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.has_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask if the specified data block has the desired data tensor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -117,7 +117,7 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_grid.load_grid">
-<tt class="descclassname">IOM_plugin_grid.</tt><tt class="descname">load_grid</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_grid.html#load_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.load_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_grid.</code><code class="descname">load_grid</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_grid.html#load_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.load_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the grid nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -131,7 +131,7 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_grid.save_grid">
-<tt class="descclassname">IOM_plugin_grid.</tt><tt class="descname">save_grid</tt><big>(</big><em>self</em>, <em>gridnodes</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_grid.html#save_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.save_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_grid.</code><code class="descname">save_grid</code><span class="sig-paren">(</span><em>self</em>, <em>gridnodes</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_grid.html#save_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_grid.save_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the grid nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,12 +154,12 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IOM_plugin_grid</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">IOM_plugin_grid</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">IOM_plugin_grid</span></code> class</a></li>
 <li><a class="reference internal" href="#module-IOM_plugin_grid">Class documentation</a></li>
 </ul>
 </li>
@@ -171,29 +171,28 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
   <h4>Next topic</h4>
   <p class="topless"><a href="IOM_plugin_wavefunction.html"
                         title="next chapter">IOM_plugin_wavefunction</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/IOM_plugin_grid.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/IOM_plugin_grid.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -208,12 +207,12 @@ at least the keys <cite>number_nodes</cite> and <cite>dimension</cite>.</li>
         <li class="right" >
           <a href="IOM_plugin_parameters.html" title="IOM_plugin_parameters"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

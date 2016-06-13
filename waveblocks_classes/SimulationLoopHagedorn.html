@@ -8,7 +8,7 @@
     
     <title>SimulationLoopHagedorn &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="SimulationLoopHagedornInhomogeneous" href="SimulationLoopHagedornInhomogeneous.html" />
     <link rel="prev" title="SimulationLoopFourier" href="SimulationLoopFourier.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="SimulationLoopFourier.html" title="SimulationLoopFourier"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="simulationloophagedorn">
 <h1>SimulationLoopHagedorn<a class="headerlink" href="#simulationloophagedorn" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-simulationloophagedorn-class"></span><h2>About the <tt class="docutils literal"><span class="pre">SimulationLoopHagedorn</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-simulationloophagedorn-class"></span><h2>About the <code class="docutils literal"><span class="pre">SimulationLoopHagedorn</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,38 +63,36 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-5b5f1623783413eb97b9627fde66598b186d2cc9.png" alt="Inheritance diagram of SimulationLoopHagedorn" usemap="#inheritance34cbaa5648" class="inheritance"/>
+<img src="../_images/inheritance-304bb6d4dc946120ee0ca42bfc719a7d2893bbfe.png" alt="Inheritance diagram of SimulationLoopHagedorn" usemap="#inheritance34cbaa5648" class="inheritance"/>
 <map id="inheritance34cbaa5648" name="inheritance34cbaa5648">
 <area shape="rect" id="node1" title="This class acts as the main simulation loop. It owns a propagator that" alt="" coords="376,5,727,31"/>
 <area shape="rect" id="node2" title="This class acts as the main simulation loop. It owns a propagator that" alt="" coords="5,5,328,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.SimulationLoopHagedorn">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">SimulationLoopHagedorn</tt><big>(</big><em>parameters</em>, <em>resultsfile</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">SimulationLoopHagedorn</code><span class="sig-paren">(</span><em>parameters</em>, <em>resultsfile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SimulationLoopHagedorn.html#SimulationLoopHagedorn"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class acts as the main simulation loop. It owns a propagator that
 propagates a set of initial values during a time evolution.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SimulationLoopHagedorn.end_simulation">
-<tt class="descname">end_simulation</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.end_simulation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">end_simulation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SimulationLoopHagedorn.html#SimulationLoopHagedorn.end_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.end_simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Do the necessary cleanup after a simulation. For example request the
-<a class="reference internal" href="IOManager.html#WaveBlocksND.IOManager" title="WaveBlocksND.IOManager"><tt class="xref py py-class docutils literal"><span class="pre">IOManager</span></tt></a> to write the data and close the output files.</p>
+<a class="reference internal" href="IOManager.html#WaveBlocksND.IOManager" title="WaveBlocksND.IOManager"><code class="xref py py-class docutils literal"><span class="pre">IOManager</span></code></a> to write the data and close the output files.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.SimulationLoopHagedorn.prepare_simulation">
-<tt class="descname">prepare_simulation</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.prepare_simulation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepare_simulation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SimulationLoopHagedorn.html#SimulationLoopHagedorn.prepare_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.prepare_simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set up a Hagedorn propagator for the simulation loop. Set the
 potential and initial values according to the configuration.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> For invalid or missing input data.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid or missing input data.</td>
 </tr>
 </tbody>
 </table>
@@ -102,7 +100,7 @@ potential and initial values according to the configuration.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SimulationLoopHagedorn.run_simulation">
-<tt class="descname">run_simulation</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.run_simulation" title="Permalink to this definition">¶</a></dt>
+<code class="descname">run_simulation</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SimulationLoopHagedorn.html#SimulationLoopHagedorn.run_simulation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SimulationLoopHagedorn.run_simulation" title="Permalink to this definition">¶</a></dt>
 <dd><p>Run the simulation loop for a number of time steps.</p>
 </dd></dl>
 
@@ -115,12 +113,12 @@ potential and initial values according to the configuration.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SimulationLoopHagedorn</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">SimulationLoopHagedorn</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">SimulationLoopHagedorn</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -133,29 +131,28 @@ potential and initial values according to the configuration.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="SimulationLoopHagedornInhomogeneous.html"
                         title="next chapter">SimulationLoopHagedornInhomogeneous</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/SimulationLoopHagedorn.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/SimulationLoopHagedorn.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -170,12 +167,12 @@ potential and initial values according to the configuration.</p>
         <li class="right" >
           <a href="SimulationLoopFourier.html" title="SimulationLoopFourier"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

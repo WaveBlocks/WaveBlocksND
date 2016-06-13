@@ -1,0 +1,347 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SplittingParameters &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SplittingParameters</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains data to build several closely</span>
+<span class="sd">related splitting methods.</span>
+
+<span class="sd">@author: V. Gradinaru, R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2011, 2012, 2013, 2014, 2015 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">flipud</span><span class="p">,</span> <span class="n">diff</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SplittingParameters&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SplittingParameters"><a class="viewcode-back" href="../../waveblocks_classes/SplittingParameters.html#WaveBlocksND.SplittingParameters">[docs]</a><span class="k">class</span> <span class="nc">SplittingParameters</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+
+
+<div class="viewcode-block" id="SplittingParameters.build"><a class="viewcode-back" href="../../waveblocks_classes/SplittingParameters.html#WaveBlocksND.SplittingParameters.build">[docs]</a>    <span class="k">def</span> <span class="nf">build</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :param method: A string specifying the method for time integration.</span>
+<span class="sd">        :return: Two arrays :math:`a` and :math:`b`.</span>
+
+<span class="sd">        ====== ===== =========== =========</span>
+<span class="sd">        Method Order Authors     Reference</span>
+<span class="sd">        ====== ===== =========== =========</span>
+<span class="sd">        LT     1     Lie/Trotter [1]_, [3]_ page 42, equation 5.2</span>
+<span class="sd">        S2     2     Strang      [2]_, [3]_ page 42, equation 5.3</span>
+<span class="sd">        SS     2     Strang      [2]_, [3]_ page 42, equation 5.3</span>
+<span class="sd">        PRKS6  4     Blanes/Moan [4]_ page 318, table 2, &#39;S6&#39;</span>
+<span class="sd">        BM42   4     Blanes/Moan [4]_ page 318, table 3, &#39;SRKNb6&#39;</span>
+<span class="sd">        Y4     4     Yoshida     [5]_, [3]_ page 40, equation 4.4</span>
+<span class="sd">        Y61    6     Yoshida     [5]_, [3]_ page 144, equation 3.11</span>
+<span class="sd">        BM63   6     Blanes/Moan [4]_ page 318, table 3, &#39;SRKNa14&#39;</span>
+<span class="sd">        KL6    6     Kahan/Li    [6]_, [3]_ page 144, equation 3.12</span>
+<span class="sd">        KL8    8     Kahan/Li    [6]_, [3]_ page 145, equation 3.14</span>
+<span class="sd">        KL10   10    Kahan/Li    [6]_, [3]_ page 146, equation 3.15</span>
+<span class="sd">        ====== ===== =========== =========</span>
+
+<span class="sd">        .. [1] H.F. Trotter, &quot;On the product of semi-groups of operators&quot;,</span>
+<span class="sd">               Proc. Am. Math. Soc.1O (1959) 545-551.</span>
+
+<span class="sd">        .. [2] G. Strang, &quot;On the construction and comparison of difference schemes&quot;,</span>
+<span class="sd">               SIAM J. Numer. Anal. 5 (1968) 506-517.</span>
+
+<span class="sd">        .. [3] E. Hairer, C. Lubich, and G. Wanner, &quot;Geometric Numerical Integration -</span>
+<span class="sd">               Structure-Preserving Algorithms for Ordinary Differential Equations&quot;,</span>
+<span class="sd">               Springer-Verlag, New York, 2002 (Corrected second printing 2004).</span>
+
+<span class="sd">        .. [4] S. Blanes and P.C. Moan, &quot;Practical Symplectic Partitioned</span>
+<span class="sd">               Runge-Kutta and Runge-Kutta-Nystrom Methods&quot;, J. Computational and</span>
+<span class="sd">               Applied Mathematics, Volume 142, Issue 2, (2002) 313-330.</span>
+
+<span class="sd">        .. [5] H. Yoshida, &quot;Construction of higher order symplectic integrators&quot;,</span>
+<span class="sd">               Phys. Lett. A 150 (1990) 262-268.</span>
+
+<span class="sd">        .. [6] W. Kahan and  R.-c. Li, &quot;Composition constants for raising the orders</span>
+<span class="sd">               of unconventional schemes for ordinary differential equations&quot;,</span>
+<span class="sd">               Math. Comput. 66 (1997) 1089-1099.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;LT&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;S2&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;SS&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;PRKS6&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">7</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.209515106613362</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.143851773179818</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.5</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.0792036964311957</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.353172906049774</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0420650803577195</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;BM42&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">7</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.245298957184271</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.604872665711080</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.0829844064174052</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.396309801498368</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0390563049223486</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="mi">3</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;Y4&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">pp</span> <span class="o">=</span> <span class="mf">3.0</span>
+            <span class="n">theta</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">-</span> <span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">pp</span><span class="p">))</span>
+            <span class="n">vi</span> <span class="o">=</span> <span class="o">-</span><span class="mi">2</span><span class="o">**</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">pp</span><span class="p">)</span> <span class="o">*</span> <span class="n">theta</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">vi</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">theta</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">theta</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="n">vi</span> <span class="o">+</span> <span class="n">theta</span><span class="p">)</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;Y61&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">8</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.78451361047755726381949763</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.23557321335935813368479318</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.17767998417887100694641568</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">:</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;BM63&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">15</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.09171915262446165</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.183983170005006</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.05653436583288827</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.004914688774712854</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.143761127168358</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.328567693746804</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.5</span> <span class="o">-</span> <span class="n">a</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">8</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.0378593198406116</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.102635633102435</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.0258678882665587</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.314241403071447</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.130144459517415</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.106417700369543</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.00879424312851058</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">1.0</span> <span class="o">-</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">b</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+            <span class="n">b</span><span class="p">[</span><span class="mi">8</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="mi">7</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;KL6&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">10</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.0</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.39216144400731413927925056</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.33259913678935943859974864</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.70624617255763935980996482</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.08221359629355080023149045</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.79854399093483008353899777</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">5</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">diff</span><span class="p">(</span><span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;KL8&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">18</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.0</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.13020248308889008087881763</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.56116298177510838456196441</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.38947496264484728640807860</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.15884190655515560089621075</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.39590389413323757733623154</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.18453964097831570709183254</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.25837438768632204729397911</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.29501172360931029887096624</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.60550853383003451169892108</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">9</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">diff</span><span class="p">(</span><span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">elif</span> <span class="n">method</span> <span class="o">==</span> <span class="s2">&quot;KL10&quot;</span><span class="p">:</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mi">34</span>
+            <span class="n">a</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">b</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.0</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.09040619368607278492161150</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.53591815953030120213784983</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.35123257547493978187517736</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">0.31116802097815835426086544</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">5</span><span class="p">]</span>  <span class="o">=</span> <span class="o">-</span><span class="mf">0.52556314194263510431065549</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">6</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.14447909410225247647345695</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">7</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.02983588609748235818064083</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">8</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.17786179923739805133592238</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">9</span><span class="p">]</span>  <span class="o">=</span>  <span class="mf">0.09826906939341637652532377</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.46179986210411860873242126</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">11</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.33377845599881851314531820</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.07095684836524793621031152</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">13</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.23666960070126868771909819</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">14</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.49725977950660985445028388</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">15</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.30399616617237257346546356</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">16</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.05246957188100069574521612</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">17</span><span class="p">]</span> <span class="o">=</span>  <span class="mf">0.44373380805019087955111365</span>
+            <span class="n">a</span><span class="p">[</span><span class="mi">18</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="mi">17</span><span class="p">])</span>
+            <span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">diff</span><span class="p">(</span><span class="n">a</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span> <span class="o">*</span> <span class="mf">0.5</span>
+            <span class="n">b</span><span class="p">[</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">:]</span> <span class="o">=</span> <span class="n">flipud</span><span class="p">(</span><span class="n">b</span><span class="p">[:</span><span class="n">s</span><span class="o">//</span><span class="mi">2</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown method: &quot;</span> <span class="o">+</span> <span class="n">method</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span></div>
+
+
+<div class="viewcode-block" id="SplittingParameters.order"><a class="viewcode-back" href="../../waveblocks_classes/SplittingParameters.html#WaveBlocksND.SplittingParameters.order">[docs]</a>    <span class="k">def</span> <span class="nf">order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">method</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :param method: A string specifying the method for time integration.</span>
+<span class="sd">        :return: The order of this method.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">{</span>
+            <span class="s2">&quot;LT&quot;</span><span class="p">:</span>    <span class="mi">1</span><span class="p">,</span>
+            <span class="s2">&quot;S2&quot;</span><span class="p">:</span>    <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;SS&quot;</span><span class="p">:</span>    <span class="mi">2</span><span class="p">,</span>
+            <span class="s2">&quot;PRKS6&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;BM42&quot;</span><span class="p">:</span>  <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;Y4&quot;</span><span class="p">:</span>    <span class="mi">4</span><span class="p">,</span>
+            <span class="s2">&quot;Y61&quot;</span><span class="p">:</span>   <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;BM63&quot;</span><span class="p">:</span>  <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;KL6&quot;</span><span class="p">:</span>   <span class="mi">6</span><span class="p">,</span>
+            <span class="s2">&quot;KL8&quot;</span><span class="p">:</span>   <span class="mi">8</span><span class="p">,</span>
+            <span class="s2">&quot;KL10&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">}[</span><span class="n">method</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="SplittingParameters.intsplit"><a class="viewcode-back" href="../../waveblocks_classes/SplittingParameters.html#WaveBlocksND.SplittingParameters.intsplit">[docs]</a>    <span class="k">def</span> <span class="nf">intsplit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">psi1</span><span class="p">,</span> <span class="n">psi2</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">tspan</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">args1</span><span class="o">=</span><span class="p">[],</span> <span class="n">args2</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Compute a single, full propagation step by operator splitting.</span>
+
+<span class="sd">        :param psi1: First evolution operator :math:`\Psi_a`</span>
+<span class="sd">        :param psi2: Second evolution operator :math:`\Psi_b`</span>
+<span class="sd">        :param a: Parameters for evolution with :math:`\Psi_a`</span>
+<span class="sd">        :param b: Parameters for evolution with :math:`\Psi_b`</span>
+<span class="sd">        :param tspan: Timespan :math:`t` of a single, full splitting step</span>
+<span class="sd">        :param N: Number of substeps to perform</span>
+<span class="sd">        :param args1: Additional optional arguments of :math:`\Psi_a`</span>
+<span class="sd">        :param args2: Additional optional arguments of :math:`\Psi_b`</span>
+
+<span class="sd">        .. note:: The values for ``args1`` and ``args2`` have to be</span>
+<span class="sd">                  of type ``list`` even in case of single items.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">h</span> <span class="o">=</span> <span class="p">(</span><span class="n">tspan</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">tspan</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">):</span>
+                <span class="n">psi1</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args1</span><span class="p">)</span>
+                <span class="n">psi2</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">*</span> <span class="n">h</span><span class="p">,</span> <span class="o">*</span><span class="n">args2</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

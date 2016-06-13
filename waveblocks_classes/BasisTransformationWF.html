@@ -8,7 +8,7 @@
     
     <title>BasisTransformationWF &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="BasisTransformationHAWP" href="BasisTransformationHAWP.html" />
     <link rel="prev" title="BasisTransformation" href="BasisTransformation.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="BasisTransformation.html" title="BasisTransformation"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="basistransformationwf">
 <h1>BasisTransformationWF<a class="headerlink" href="#basistransformationwf" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-basistransformationwf-class"></span><h2>About the <tt class="docutils literal"><span class="pre">BasisTransformationWF</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-basistransformationwf-class"></span><h2>About the <code class="docutils literal"><span class="pre">BasisTransformationWF</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,34 +63,32 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-3ceb0710491de423b2111a26759106e980bbbc46.png" alt="Inheritance diagram of BasisTransformationWF" usemap="#inheritancee6489e3f1b" class="inheritance"/>
+<img src="../_images/inheritance-2639814c0f63a7698c1c8dc3b5156efc65e96e91.png" alt="Inheritance diagram of BasisTransformationWF" usemap="#inheritancee6489e3f1b" class="inheritance"/>
 <map id="inheritancee6489e3f1b" name="inheritancee6489e3f1b">
 <area shape="rect" id="node1" title="This class implements basis transformations of wavefunctions :math:`\psi(x)`" alt="" coords="436,5,755,31"/>
 <area shape="rect" id="node2" title="This class is the interface definition for general basis transformation" alt="" coords="5,5,388,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.BasisTransformationWF">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">BasisTransformationWF</tt><big>(</big><em>potential</em>, <em>grid=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">BasisTransformationWF</code><span class="sig-paren">(</span><em>potential</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements basis transformations of wavefunctions <img class="math" src="../_images/math/e60ce0558b237ca2c209ea6715a552d6fedeebb6.png" alt="\psi(x)"/>
 between the canonical basis of and the basis <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> spanned
 by the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>potential</em>, <em>grid=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a new <a class="reference internal" href="BasisTransformation.html#WaveBlocksND.BasisTransformation" title="WaveBlocksND.BasisTransformation"><tt class="xref py py-class docutils literal"><span class="pre">BasisTransformation</span></tt></a> instance for a given potential
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>potential</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Create a new <a class="reference internal" href="BasisTransformation.html#WaveBlocksND.BasisTransformation" title="WaveBlocksND.BasisTransformation"><code class="xref py py-class docutils literal"><span class="pre">BasisTransformation</span></code></a> instance for a given potential
 matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>potential</strong> (A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><tt class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></tt></a> instance.) &#8211; The potential underlying the basis transformation.</li>
-<li><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> subclass instance.) &#8211; The grid.</li>
+<li><strong>potential</strong> (A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><code class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></code></a> instance.) &#8211; The potential underlying the basis transformation.</li>
+<li><strong>grid</strong> (A <code class="xref py py-class docutils literal"><span class="pre">Grid</span></code> subclass instance.) &#8211; The grid.</li>
 </ul>
 </td>
 </tr>
@@ -100,7 +98,7 @@ matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9
 
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.set_grid">
-<tt class="descname">set_grid</tt><big>(</big><em>grid</em><big>)</big><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.set_grid" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_grid</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.set_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.set_grid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/> on
 which the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> was evaluated. The <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> eigenvectors
 <img class="math" src="../_images/math/b64f0104caa39246ba6988c5b48b5a028857c035.png" alt="\nu_i"/> will be evaluated on the same grid nodes.</p>
@@ -108,7 +106,7 @@ which the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dc
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grid</strong> (A <tt class="xref py py-class docutils literal"><span class="pre">Grid</span></tt> subclass instance.) &#8211; The grid</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>grid</strong> (A <code class="xref py py-class docutils literal"><span class="pre">Grid</span></code> subclass instance.) &#8211; The grid</td>
 </tr>
 </tbody>
 </table>
@@ -116,16 +114,16 @@ which the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dc
 
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.transform_to_canonical">
-<tt class="descname">transform_to_canonical</tt><big>(</big><em>wavefunction</em><big>)</big><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_canonical" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform_to_canonical</code><span class="sig-paren">(</span><em>wavefunction</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.transform_to_canonical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_canonical" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0bdb3772e8bc252ce8c6a5dee.png" alt="\psi(\Gamma)"/> given
 in the eigenbasis to the canonical basis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><tt class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></tt></a> instance.) &#8211; The wavefunction to transform.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance.) &#8211; The wavefunction to transform.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><tt class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></tt></a> instance containing the
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance containing the
 transformed wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a81b1438b79650a34b091f3d87.png" alt="\psi^\prime(\Gamma)"/>.</td>
 </tr>
 </tbody>
@@ -134,16 +132,16 @@ transformed wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a8
 
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.transform_to_eigen">
-<tt class="descname">transform_to_eigen</tt><big>(</big><em>wavefunction</em><big>)</big><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_eigen" title="Permalink to this definition">¶</a></dt>
+<code class="descname">transform_to_eigen</code><span class="sig-paren">(</span><em>wavefunction</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.transform_to_eigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_eigen" title="Permalink to this definition">¶</a></dt>
 <dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a81b1438b79650a34b091f3d87.png" alt="\psi^\prime(\Gamma)"/> given
 in the canonical basis to the eigenbasis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><tt class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></tt></a> instance.) &#8211; The wavefunction to transform.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance.) &#8211; The wavefunction to transform.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><tt class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></tt></a> instance containing the
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance containing the
 transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0bdb3772e8bc252ce8c6a5dee.png" alt="\psi(\Gamma)"/>.</td>
 </tr>
 </tbody>
@@ -159,12 +157,12 @@ transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">BasisTransformationWF</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">BasisTransformationWF</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">BasisTransformationWF</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -177,29 +175,28 @@ transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0
   <h4>Next topic</h4>
   <p class="topless"><a href="BasisTransformationHAWP.html"
                         title="next chapter">BasisTransformationHAWP</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/BasisTransformationWF.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/BasisTransformationWF.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -214,12 +211,12 @@ transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0
         <li class="right" >
           <a href="BasisTransformation.html" title="BasisTransformation"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

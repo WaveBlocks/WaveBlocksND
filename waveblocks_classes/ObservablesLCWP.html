@@ -8,7 +8,7 @@
     
     <title>ObservablesLCWP &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="KineticOperator" href="KineticOperator.html" />
     <link rel="prev" title="ObservablesMixedHAWP" href="ObservablesMixedHAWP.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="ObservablesMixedHAWP.html" title="ObservablesMixedHAWP"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="observableslcwp">
 <h1>ObservablesLCWP<a class="headerlink" href="#observableslcwp" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-observableslcwp-class"></span><h2>About the <tt class="docutils literal"><span class="pre">ObservablesLCWP</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-observableslcwp-class"></span><h2>About the <code class="docutils literal"><span class="pre">ObservablesLCWP</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,45 +63,30 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-2bfe1fa78e19ced07744ce23443296f3b9ed0d7d.png" alt="Inheritance diagram of ObservablesLCWP" usemap="#inheritance36aaf4f919" class="inheritance"/>
+<img src="../_images/inheritance-689efb7f6a6db665ba2351a035f09ea54956a129.png" alt="Inheritance diagram of ObservablesLCWP" usemap="#inheritance36aaf4f919" class="inheritance"/>
 <map id="inheritance36aaf4f919" name="inheritance36aaf4f919">
 <area shape="rect" id="node1" title="This class implements observable computation for linear combinations :math:`\Upsilon`" alt="" coords="336,5,588,31"/>
 <area shape="rect" id="node2" title="This class is the interface definition for general observable" alt="" coords="5,5,288,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.ObservablesLCWP">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">ObservablesLCWP</tt><big>(</big><em>innerproduct=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">ObservablesLCWP</code><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements observable computation for linear combinations <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>
 of wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>. There are no assumptions made on the type of the wavepackets
 <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/> in <img class="math" src="../_images/math/bbfa6bbabc2a66e18ca2269a641607f071c75c64.png" alt="\Upsilon := \sum_{j=0}^J c_j \Psi_j"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>innerproduct=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a new <a class="reference internal" href="#WaveBlocksND.ObservablesLCWP" title="WaveBlocksND.ObservablesLCWP"><tt class="xref py py-class docutils literal"><span class="pre">ObservablesLCWP</span></tt></a> instance for observable computation
+<code class="descname">__init__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#WaveBlocksND.ObservablesLCWP" title="WaveBlocksND.ObservablesLCWP"><code class="xref py py-class docutils literal"><span class="pre">ObservablesLCWP</span></code></a> instance for observable computation
 of linear combinations <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</p>
-<table class="docutils field-list" frame="void" rules="none">
-<col class="field-name" />
-<col class="field-body" />
-<tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>innerproduct</strong> (A <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProduct" title="WaveBlocksND.InnerProduct"><tt class="xref py py-class docutils literal"><span class="pre">InnerProduct</span></tt></a> subclass instance.) &#8211; An inner product for computing the integrals. The inner product is
-used for the computation of brakets <img class="math" src="../_images/math/7a1d37442d441073ca3b0d6b448ad0776f9d570c.png" alt="\langle\Psi|\cdot|\Psi\rangle"/>.</td>
-</tr>
-</tbody>
-</table>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">Make sure to use an inhomogeneous inner product here.</p>
-</div>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.kinetic_energy">
-<tt class="descname">kinetic_energy</tt><big>(</big><em>lincomb</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.kinetic_energy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">kinetic_energy</code><span class="sig-paren">(</span><em>lincomb</em>, <em>*</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.kinetic_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.kinetic_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the kinetic energy <img class="math" src="../_images/math/27607bdeea8e877d7029c62145cccd9af7b8d5d5.png" alt="E_{\text{kin}} := \langle\Upsilon|T|\Upsilon\rangle"/>
 of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -110,11 +95,11 @@ of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>linbomc</strong> &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of which we compute the kinetic energy.</li>
-<li><strong>matrix</strong> (An <tt class="docutils literal"><span class="pre">ndarray</span></tt> or <tt class="docutils literal"><span class="pre">None</span></tt> (default).) &#8211; The kinetic overlap matrix. If <tt class="docutils literal"><span class="pre">None</span></tt> the matrix is computed internally.</li>
-<li><strong>component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
-kinetic energy we want to compute. If set to <tt class="docutils literal"><span class="pre">None</span></tt> the
+<li><strong>matrix</strong> (An <code class="docutils literal"><span class="pre">ndarray</span></code> or <code class="docutils literal"><span class="pre">None</span></code> (default).) &#8211; The kinetic overlap matrix. If <code class="docutils literal"><span class="pre">None</span></code> the matrix is computed internally.</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
+kinetic energy we want to compute. If set to <code class="docutils literal"><span class="pre">None</span></code> the
 computation is performed for all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>return_matrix</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to return the kinetic overlap matrix used internally.</li>
+<li><strong>return_matrix</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to return the kinetic overlap matrix used internally.</li>
 </ul>
 </td>
 </tr>
@@ -127,7 +112,7 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix">
-<tt class="descname">kinetic_overlap_matrix</tt><big>(</big><em>lincomb</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">kinetic_overlap_matrix</code><span class="sig-paren">(</span><em>lincomb</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.kinetic_overlap_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the kinetic overlap matrix <img class="math" src="../_images/math/af3c5881a77eff150d03ff82481b0b4936242688.png" alt="{M_T}_{r,c} = \langle\Upsilon_r|T|\Upsilon_c\rangle"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -135,8 +120,8 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>lincomb</strong> &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>.</li>
-<li><strong>component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
-kinetic energy we want to compute. If set to <tt class="docutils literal"><span class="pre">None</span></tt> the
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
+kinetic energy we want to compute. If set to <code class="docutils literal"><span class="pre">None</span></code> the
 computation is performed for all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
 </ul>
 </td>
@@ -150,7 +135,7 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.norm">
-<tt class="descname">norm</tt><big>(</big><em>lincomb</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.norm" title="Permalink to this definition">¶</a></dt>
+<code class="descname">norm</code><span class="sig-paren">(</span><em>lincomb</em>, <em>*</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.norm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.norm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the <img class="math" src="../_images/math/8e53b35e6dba31d49686a9f1ea7ef219da16e494.png" alt="L^2"/> norm <img class="math" src="../_images/math/7d33da274a03272a679aa0a97e24cf41bdbc6508.png" alt="\langle\Upsilon|\Upsilon\rangle"/>
 of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -158,12 +143,12 @@ of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lincomb</strong> (A <a class="reference internal" href="LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets" title="WaveBlocksND.LinearCombinationOfWavepackets"><tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></tt></a> subclass instance.) &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of which we compute the norm.</li>
-<li><strong>matrix</strong> (An <tt class="docutils literal"><span class="pre">ndarray</span></tt> or <tt class="docutils literal"><span class="pre">None</span></tt> (default).) &#8211; The overlap matrix. If <tt class="docutils literal"><span class="pre">None</span></tt> the matrix is computed internally.</li>
+<li><strong>lincomb</strong> (A <a class="reference internal" href="LinearCombinationOfWavepackets.html#WaveBlocksND.LinearCombinationOfWavepackets" title="WaveBlocksND.LinearCombinationOfWavepackets"><code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWavepackets</span></code></a> subclass instance.) &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of which we compute the norm.</li>
+<li><strong>matrix</strong> (An <code class="docutils literal"><span class="pre">ndarray</span></code> or <code class="docutils literal"><span class="pre">None</span></code> (default).) &#8211; The overlap matrix. If <code class="docutils literal"><span class="pre">None</span></code> the matrix is computed internally.</li>
 <li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose norm
-is calculated. The default value is <tt class="docutils literal"><span class="pre">None</span></tt> which means to compute
+is calculated. The default value is <code class="docutils literal"><span class="pre">None</span></code> which means to compute
 norms of all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>return_matrix</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to return the overlap matrix used internally.</li>
+<li><strong>return_matrix</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to return the overlap matrix used internally.</li>
 </ul>
 </td>
 </tr>
@@ -176,7 +161,7 @@ norms of all <img class="math" src="../_images/math/75e27f04188974063be3230dca20
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.overlap_matrix">
-<tt class="descname">overlap_matrix</tt><big>(</big><em>lincomb</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.overlap_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">overlap_matrix</code><span class="sig-paren">(</span><em>lincomb</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.overlap_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.overlap_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the overlap matrix <img class="math" src="../_images/math/a58f0fdeb5f086c228310b976852ee9184ff0460.png" alt="M_{r,c} = \langle\Upsilon_r|\Upsilon_c\rangle"/>.</p>
 <p>Note that this function is just a shortcut for calling the inner
 product evaluator directly.</p>
@@ -186,8 +171,8 @@ product evaluator directly.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>lincomb</strong> &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>.</li>
-<li><strong>component</strong> (int or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose overlap
-is calculated. The default value is <tt class="docutils literal"><span class="pre">None</span></tt> which means to compute
+<li><strong>component</strong> (int or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose overlap
+is calculated. The default value is <code class="docutils literal"><span class="pre">None</span></code> which means to compute
 overlaps of all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
 </ul>
 </td>
@@ -201,7 +186,7 @@ overlaps of all <img class="math" src="../_images/math/75e27f04188974063be3230dc
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.potential_energy">
-<tt class="descname">potential_energy</tt><big>(</big><em>lincomb</em>, <em>potential</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.potential_energy" title="Permalink to this definition">¶</a></dt>
+<code class="descname">potential_energy</code><span class="sig-paren">(</span><em>lincomb</em>, <em>potential</em>, <em>*</em>, <em>matrix=None</em>, <em>component=None</em>, <em>summed=False</em>, <em>return_matrix=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.potential_energy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.potential_energy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the potential energy <img class="math" src="../_images/math/92810122c86e255355fadae6579eff603efc5fa0.png" alt="E_{\text{pot}} := \langle\Upsilon|V|\Upsilon\rangle"/>.
 of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -211,12 +196,12 @@ of a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>linbomc</strong> &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of which we compute the potential energy.</li>
 <li><strong>potential</strong> &#8211; The potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. (Actually, not the potential object itself
-but one of its <tt class="docutils literal"><span class="pre">V.evaluate_*</span></tt> methods.)</li>
-<li><strong>matrix</strong> (An <tt class="docutils literal"><span class="pre">ndarray</span></tt> or <tt class="docutils literal"><span class="pre">None</span></tt> per default.) &#8211; The potential overlap matrix. If <tt class="docutils literal"><span class="pre">None</span></tt> the matrix is computed internally.</li>
-<li><strong>component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
-potential energy we want to compute. If set to <tt class="docutils literal"><span class="pre">None</span></tt> the
+but one of its <code class="docutils literal"><span class="pre">V.evaluate_*</span></code> methods.)</li>
+<li><strong>matrix</strong> (An <code class="docutils literal"><span class="pre">ndarray</span></code> or <code class="docutils literal"><span class="pre">None</span></code> per default.) &#8211; The potential overlap matrix. If <code class="docutils literal"><span class="pre">None</span></code> the matrix is computed internally.</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
+potential energy we want to compute. If set to <code class="docutils literal"><span class="pre">None</span></code> the
 computation is performed for all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>return_matrix</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Whether to return the potential overlap matrix used internally.</li>
+<li><strong>return_matrix</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to return the potential overlap matrix used internally.</li>
 </ul>
 </td>
 </tr>
@@ -229,7 +214,7 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 
 <dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.potential_overlap_matrix">
-<tt class="descname">potential_overlap_matrix</tt><big>(</big><em>lincomb</em>, <em>potential</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.potential_overlap_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">potential_overlap_matrix</code><span class="sig-paren">(</span><em>lincomb</em>, <em>potential</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.potential_overlap_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.potential_overlap_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the potential overlap matrix <img class="math" src="../_images/math/09347b12c7f3c4c3ded56403b0563700206aac86.png" alt="{M_V}_{r,c} = \langle\Upsilon_r|V|\Upsilon_c\rangle"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -238,9 +223,9 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>lincomb</strong> &#8211; The linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/>.</li>
 <li><strong>potential</strong> &#8211; The potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. (Actually, not the potential object itself
-but one of its <tt class="docutils literal"><span class="pre">V.evaluate_*</span></tt> methods.)</li>
-<li><strong>component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
-potential energy we want to compute. If set to <tt class="docutils literal"><span class="pre">None</span></tt> the
+but one of its <code class="docutils literal"><span class="pre">V.evaluate_*</span></code> methods.)</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose
+potential energy we want to compute. If set to <code class="docutils literal"><span class="pre">None</span></code> the
 computation is performed for all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
 </ul>
 </td>
@@ -253,15 +238,29 @@ computation is performed for all <img class="math" src="../_images/math/75e27f04
 </dd></dl>
 
 <dl class="method">
+<dt id="WaveBlocksND.ObservablesLCWP.set_gradient">
+<code class="descname">set_gradient</code><span class="sig-paren">(</span><em>gradient</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.set_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.set_gradient" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the gradient.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>gradient</strong> (A <a class="reference internal" href="Gradient.html#WaveBlocksND.Gradient" title="WaveBlocksND.Gradient"><code class="xref py py-class docutils literal"><span class="pre">Gradient</span></code></a> subclass instance.) &#8211; A gradient operator.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="WaveBlocksND.ObservablesLCWP.set_innerproduct">
-<tt class="descname">set_innerproduct</tt><big>(</big><em>innerproduct</em><big>)</big><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.set_innerproduct" title="Permalink to this definition">¶</a></dt>
+<code class="descname">set_innerproduct</code><span class="sig-paren">(</span><em>innerproduct</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ObservablesLCWP.html#ObservablesLCWP.set_innerproduct"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ObservablesLCWP.set_innerproduct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the innerproduct.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>innerproduct</strong> (A <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProduct" title="WaveBlocksND.InnerProduct"><tt class="xref py py-class docutils literal"><span class="pre">InnerProduct</span></tt></a> subclass instance.) &#8211; An inner product for computing the integrals. The inner product is
-used for the computation of brakets <img class="math" src="../_images/math/7a1d37442d441073ca3b0d6b448ad0776f9d570c.png" alt="\langle\Psi|\cdot|\Psi\rangle"/>.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>innerproduct</strong> (A <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProduct" title="WaveBlocksND.InnerProduct"><code class="xref py py-class docutils literal"><span class="pre">InnerProduct</span></code></a> subclass instance.) &#8211; An inner product for computing the integrals. The inner product is
+used for the computation of brakets <img class="math" src="../_images/math/3e50cc2889884bb0365c55789f2ab63d6fbd03e7.png" alt="\langle \Psi | \cdot | \Psi \rangle"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -280,12 +279,12 @@ used for the computation of brakets <img class="math" src="../_images/math/7a1d3
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">ObservablesLCWP</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">ObservablesLCWP</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">ObservablesLCWP</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -298,29 +297,28 @@ used for the computation of brakets <img class="math" src="../_images/math/7a1d3
   <h4>Next topic</h4>
   <p class="topless"><a href="KineticOperator.html"
                         title="next chapter">KineticOperator</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/ObservablesLCWP.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/ObservablesLCWP.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -335,12 +333,12 @@ used for the computation of brakets <img class="math" src="../_images/math/7a1d3
         <li class="right" >
           <a href="ObservablesMixedHAWP.html" title="ObservablesMixedHAWP"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

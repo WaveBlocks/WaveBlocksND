@@ -1,0 +1,201 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.PhaseSpaceLattice &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.PhaseSpaceLattice</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for constructing phase space lattices.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">mgrid</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">einsum</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="nb">sum</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;PhaseSpaceLattice&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="PhaseSpaceLattice"><a class="viewcode-back" href="../../waveblocks_classes/PhaseSpaceLattice.html#WaveBlocksND.PhaseSpaceLattice">[docs]</a><span class="k">class</span> <span class="nc">PhaseSpaceLattice</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;A phase space lattice centered around an energy :math:`E_0`</span>
+<span class="sd">    and bounded by an energy delta :math:`\Delta E`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="PhaseSpaceLattice.__init__"><a class="viewcode-back" href="../../waveblocks_classes/PhaseSpaceLattice.html#WaveBlocksND.PhaseSpaceLattice.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">energy</span><span class="p">,</span> <span class="n">energydelta</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        Configure a new phase space lattice centered around an energy :math:`E_0`</span>
+<span class="sd">        and bounded by an energy delta :math:`\Delta E`. The actual lattice points</span>
+<span class="sd">        are computed by the member function :py:func:`compute_lattice`.</span>
+
+<span class="sd">        :param potential: The potential :math:`V`.</span>
+<span class="sd">        :type potential: Not a :py:class:`MatrixPotential` instance but possible a (partially evaluated)</span>
+<span class="sd">                         member method like :py:func:`evaluate_at` or any scalar valued function.</span>
+<span class="sd">        :param energy: The energy :math:`E_0` around which to center the lattice points.</span>
+<span class="sd">        :param energydelta: The energy delta :math:`\Delta E`.</span>
+<span class="sd">        :param eps: The semiclassical scaling parameter :math:`\varepsilon`.</span>
+<span class="sd">        :param D: The dimensionality :math:`D` of position space.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span> <span class="o">=</span> <span class="n">potential</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span> <span class="o">=</span> <span class="n">eps</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span> <span class="o">=</span> <span class="n">energy</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_energydelta</span> <span class="o">=</span> <span class="n">energydelta</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="n">D</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_computed</span> <span class="o">=</span> <span class="bp">False</span></div>
+
+
+<div class="viewcode-block" id="PhaseSpaceLattice.compute_lattice"><a class="viewcode-back" href="../../waveblocks_classes/PhaseSpaceLattice.html#WaveBlocksND.PhaseSpaceLattice.compute_lattice">[docs]</a>    <span class="k">def</span> <span class="nf">compute_lattice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">qlimits</span><span class="p">,</span> <span class="n">plimits</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the lattice points. Search for valid points an a hypercubic</span>
+<span class="sd">        region of phase space given by limits for position :math:`q` and</span>
+<span class="sd">        momentum :math:`p`.</span>
+
+<span class="sd">        :param qlimits: The position limits :math:`q^d_{\mathrm{min}}` and :math:`q^d_{\mathrm{max}}`</span>
+<span class="sd">                        for all dimensions :math:`d \in [0,\ldots,D-1]`.</span>
+<span class="sd">        :type qlimits: A list of pairs of floats.</span>
+<span class="sd">        :param plimits: The momentum limit :math:`p^d_{\mathrm{min}}` and :math:`p^d_{\mathrm{max}}`</span>
+<span class="sd">                        for all dimensions :math:`d \in [0,\ldots,D-1]`.</span>
+<span class="sd">        :type plimits: A list of pairs of floats.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">dimension</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">latdist</span> <span class="o">=</span> <span class="mf">0.75</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span> <span class="o">*</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">pi</span><span class="p">)</span>
+
+        <span class="n">qslicers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">lims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">latdist</span><span class="p">,</span> <span class="n">latdist</span><span class="p">)</span> <span class="k">for</span> <span class="n">lims</span> <span class="ow">in</span> <span class="n">qlimits</span><span class="p">]</span>
+        <span class="n">pslicers</span> <span class="o">=</span> <span class="p">[</span><span class="nb">slice</span><span class="p">(</span><span class="n">lims</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">lims</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">latdist</span><span class="p">,</span> <span class="n">latdist</span><span class="p">)</span> <span class="k">for</span> <span class="n">lims</span> <span class="ow">in</span> <span class="n">plimits</span><span class="p">]</span>
+
+        <span class="n">qgrid</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">mgrid</span><span class="p">[</span><span class="n">qslicers</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">pgrid</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">mgrid</span><span class="p">[</span><span class="n">pslicers</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">qvals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="p">(</span><span class="n">qgrid</span><span class="p">)</span>
+        <span class="n">pvals</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ij-&gt;j&quot;</span><span class="p">,</span> <span class="n">pgrid</span><span class="p">,</span> <span class="n">pgrid</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">qvals</span> <span class="o">+</span> <span class="n">pvals</span>
+        <span class="n">indices</span> <span class="o">=</span> <span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Z</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energy</span><span class="p">)</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_energydelta</span><span class="p">)</span>
+
+        <span class="n">keepq</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">keepp</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">indices</span><span class="o">.</span><span class="n">shape</span>
+        <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">rows</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">cols</span><span class="p">):</span>
+                <span class="k">if</span> <span class="nb">bool</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">])</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                    <span class="n">keepq</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+                    <span class="n">keepp</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+
+        <span class="n">qgridf</span> <span class="o">=</span> <span class="n">qgrid</span><span class="p">[:,</span> <span class="n">keepq</span><span class="p">]</span>
+        <span class="n">pgridf</span> <span class="o">=</span> <span class="n">pgrid</span><span class="p">[:,</span> <span class="n">keepp</span><span class="p">]</span>
+
+        <span class="n">ps_size</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+        <span class="n">ps_size_full</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">Z</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Phase space lattice size: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ps_size</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot; number candidates tested: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ps_size_full</span><span class="p">))</span>
+        <span class="k">print</span><span class="p">(</span><span class="s2">&quot; pruning factor: &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">ps_size</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">ps_size_full</span><span class="p">))</span> <span class="o">*</span> <span class="mi">100</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;%&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_qgrid</span> <span class="o">=</span> <span class="n">qgridf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_pgrid</span> <span class="o">=</span> <span class="n">pgridf</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_size</span> <span class="o">=</span> <span class="n">ps_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_computed</span> <span class="o">=</span> <span class="bp">True</span></div>
+
+
+<div class="viewcode-block" id="PhaseSpaceLattice.get_lattice"><a class="viewcode-back" href="../../waveblocks_classes/PhaseSpaceLattice.html#WaveBlocksND.PhaseSpaceLattice.get_lattice">[docs]</a>    <span class="k">def</span> <span class="nf">get_lattice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: The phase space lattice in the form ``(qgrid, pgrid)``</span>
+<span class="sd">                 where each grid is an :py:class:`ndarray` of shape ``(D, lattice_size)``</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_computed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_qgrid</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pgrid</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Phase space lattice not yet computed&quot;</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="PhaseSpaceLattice.get_lattice_size"><a class="viewcode-back" href="../../waveblocks_classes/PhaseSpaceLattice.html#WaveBlocksND.PhaseSpaceLattice.get_lattice_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_lattice_size</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: The number of points :math:`(q_i,p_i)` in the lattice.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_computed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lattice_size</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Phase space lattice not yet computed&quot;</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

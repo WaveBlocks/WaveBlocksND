@@ -1,0 +1,644 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.HagedornWavepacketBase &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.HagedornWavepacketBase</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the basic interface for general wavepackets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012, 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">einsum</span><span class="p">,</span> <span class="n">pi</span><span class="p">,</span> <span class="n">vsplit</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">zeros</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">det</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> <span class="n">norm</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Wavepacket</span> <span class="kn">import</span> <span class="n">Wavepacket</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="kn">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="kn">import</span> <span class="n">GridWrapper</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GradientHAWP</span> <span class="kn">import</span> <span class="n">GradientHAWP</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HagedornWavepacketBase&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase">[docs]</a><span class="k">class</span> <span class="nc">HagedornWavepacketBase</span><span class="p">(</span><span class="n">Wavepacket</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements the abstract :py:class:`Wavepacket` interface</span>
+<span class="sd">    and contains code common to all types of Hagedorn wavepackets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a wavepacket object that represents :math:`\Psi`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;HagedornWavepacketBase&#39; should not be instantiated.&quot;</span><span class="p">)</span>
+
+
+    <span class="c1"># We can handle basis shapes here as the logic is the same for</span>
+    <span class="c1"># homogeneous and inhomogeneous Hagedorn wavepackets.</span>
+
+    <span class="k">def</span> <span class="nf">_resize_coefficient_storage</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">bs_old</span><span class="p">,</span> <span class="n">bs_new</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">bso</span> <span class="o">=</span> <span class="n">bs_old</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span>
+        <span class="n">bsn</span> <span class="o">=</span> <span class="n">bs_new</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span>
+
+        <span class="c1"># Find the intersection of K and K&#39;</span>
+        <span class="c1"># Optimization: iterate over smaller set</span>
+        <span class="k">if</span> <span class="n">bso</span> <span class="o">&lt;=</span> <span class="n">bsn</span><span class="p">:</span>
+            <span class="n">insec</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bs_old</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bs_new</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">bso</span> <span class="o">&gt;</span> <span class="n">bsn</span><span class="p">:</span>
+            <span class="n">insec</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bs_new</span> <span class="k">if</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">bs_old</span><span class="p">]</span>
+        <span class="c1"># TODO: Consider making this part of the BasisShape interface</span>
+        <span class="c1"># TODO: Consider implementing set operations for basis shapes</span>
+
+        <span class="c1"># Construct the index mapping</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">bs_old</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">insec</span><span class="p">])</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">bs_new</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">insec</span><span class="p">])</span>
+
+        <span class="c1"># Copy over the data</span>
+        <span class="n">cnew</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">bsn</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="n">cnew</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">cnew</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_basis_shapes"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_basis_shapes">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the basis shapes :math:`\mathfrak{K}_i` for each component :math:`i`.</span>
+
+<span class="sd">        :param component: The component :math:`i` whose basis shape we request. (Default is</span>
+<span class="sd">                          ``None`` which means to return the basis shapes for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        :return: The basis shape for an individual component or a list with all shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.set_basis_shapes"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.set_basis_shapes">[docs]</a>    <span class="k">def</span> <span class="nf">set_basis_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">basis_shape</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the basis shape :math:`\mathfrak{K}` of a given component or for all components.</span>
+
+<span class="sd">        :param basis_shape: The basis shape for an individual component or a list with all :math:`N` shapes.</span>
+<span class="sd">        :type basis_shape: A subclass of :py:class:`BasisShape`.</span>
+<span class="sd">        :param component: The component :math:`i` whose basis shape we want to set. (Default is</span>
+<span class="sd">                          ``None`` which means to set the basis shapes for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Check for valid input basis shape</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid component index &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+
+            <span class="c1"># Adapt the coefficient storage vectors</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_resize_coefficient_storage</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">],</span> <span class="n">basis_shape</span><span class="p">)</span>
+            <span class="c1"># Set the new basis shape for the given component</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">basis_shape</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Check for valid input basis shape</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">basis_shape</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of basis shape(s) does not match to number of components.&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">bsnew</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">basis_shape</span><span class="p">):</span>
+                <span class="c1"># Adapt the coefficient storage vectors</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_resize_coefficient_storage</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="n">bsnew</span><span class="p">)</span>
+                <span class="c1"># Set the new basis shape for the given component</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">bsnew</span>
+
+        <span class="c1"># And update the caches information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">bs</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span> <span class="k">for</span> <span class="n">bs</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">]</span></div>
+
+
+    <span class="c1"># We can handle coefficient set manipulation here as the logic is</span>
+    <span class="c1"># the same for homogeneous and inhomogeneous Hagedorn wavepackets.</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.set_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.set_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :param value: The new value of the coefficient :math:`c^i_k`.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">component</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no component with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no basis function with multi-index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># Apply linear order mapping here</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :return: A single complex number.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">component</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no component with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no basis function with multi-index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># Apply linear order mapping here</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.set_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.set_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Update all the coefficients :math:`c` of :math:`\Psi` or update</span>
+<span class="sd">        the coefficients :math:`c^i` of the components :math:`\Phi_i` only.</span>
+
+<span class="sd">        Note: this method copies the data arrays.</span>
+
+<span class="sd">        :param values: The new values of the coefficients :math:`c^i` of :math:`\Phi_i`.</span>
+<span class="sd">        :type values: An ndarray of suitable shape or a list of ndarrays.</span>
+<span class="sd">        :param component: The index :math:`i` of the component we want to update with new coefficients.</span>
+<span class="sd">        :type component: int (Default is ``None`` meaning all)</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid component indices :math:`i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too less or too many data provided.&quot;</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">values</span><span class="p">):</span>
+                <span class="n">bs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">bs</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">component</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no component with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+
+            <span class="n">bs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">bs</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Returns the coefficients :math:`c^i` for some component :math:`\Phi_i` of</span>
+<span class="sd">        :math:`\Psi` or all the coefficients :math:`c` of all components.</span>
+
+<span class="sd">        Note: this method copies the data arrays.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component we want to retrieve.</span>
+<span class="sd">        :type component: int (Default is ``None`` meaning all)</span>
+<span class="sd">        :return: A single ndarray with the coefficients of the given component or</span>
+<span class="sd">                 a list containing the ndarrays for each component. Each ndarray</span>
+<span class="sd">                 is two-dimensional with a shape of :math:`(|\mathfrak{K}_i|, 1)`.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid component indices :math:`i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">[</span><span class="n">item</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">component</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no component with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">component</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_coefficient_vector"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_coefficient_vector">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the coefficients for all components :math:`\Phi_i` simultaneously.</span>
+
+<span class="sd">        .. warning:: This function does *not* copy the input data!</span>
+<span class="sd">                     This is for efficiency as this routine is used in the innermost loops.</span>
+
+<span class="sd">        :param component: The component :math:`i` whose coefficients we request. (Default is</span>
+<span class="sd">                          ``None`` which means to return the coefficients for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        :return: The coefficients :math:`c^i` of all components</span>
+<span class="sd">                 :math:`\Phi_i` stacked into a single long column vector.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">vstack</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.set_coefficient_vector"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.set_coefficient_vector">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficient_vector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">vector</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the coefficients for all components :math:`\Phi_i` simultaneously.</span>
+
+<span class="sd">        .. warning:: This function does *not* copy the input data!</span>
+<span class="sd">                     This is for efficiency as this routine is used in the innermost loops.</span>
+
+<span class="sd">        :param vector: The coefficients of all components as a single long column vector.</span>
+<span class="sd">        :type vector: A two-dimensional ndarray of appropriate shape.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compute the partition of the block-vector from the basis sizes</span>
+        <span class="n">partition</span> <span class="o">=</span> <span class="n">cumsum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="c1"># Split the block-vector with the given partition and assign</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">vsplit</span><span class="p">(</span><span class="n">vector</span><span class="p">,</span> <span class="n">partition</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_eps"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_eps">[docs]</a>    <span class="k">def</span> <span class="nf">get_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the semi-classical scaling parameter :math:`\varepsilon` of the wavepacket.</span>
+
+<span class="sd">        :return: The value of :math:`\varepsilon`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span></div>
+
+
+    <span class="c1"># We can evaluate the ground state basis function phi_0 on a set of nodes</span>
+    <span class="c1"># the same way for homogeneous and inhomogeneous Hagedorn wavepackets.</span>
+
+
+    <span class="k">def</span> <span class="nf">_grid_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agrid</span><span class="p">):</span>
+        <span class="c1"># TODO: Consider additional input types for &quot;nodes&quot;:</span>
+        <span class="c1">#       list of numpy ndarrays, list of single python scalars</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agrid</span><span class="p">,</span> <span class="n">AbstractGrid</span><span class="p">):</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">agrid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">GridWrapper</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">agrid</span>
+
+
+    <span class="k">def</span> <span class="nf">_evaluate_phi0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the lowest order basis function :math:`\phi_0` on a</span>
+<span class="sd">        grid :math:`\Gamma` of nodes.</span>
+
+<span class="sd">        :param Pi: The parameter set :math:`\Pi`.</span>
+<span class="sd">        :param nodes: The nodes we evaluate :math:`\phi_0` at.</span>
+<span class="sd">        :type nodes: An ndarray of shape ``(D, |\Gamma|)``.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :param root: The function used to compute the square root in the prefactor.</span>
+<span class="sd">                     Defaults to the ``sqrt`` function of ``numpy`` but can be any</span>
+<span class="sd">                     callable object and especially an instance of :py:class:`ContinuousSqrt`.</span>
+<span class="sd">        :return: An ndarray of shape ``(|\Gamma|)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Use LU instead of inv(...)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span>
+        <span class="n">pr1</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ik,ij,jk-&gt;k&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)),</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">pr2</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ik&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pr1</span> <span class="o">+</span> <span class="n">pr2</span><span class="p">)</span>
+
+        <span class="c1"># The problematic prefactor cancels in inner products</span>
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sqrt</span><span class="p">(</span><span class="n">component</span><span class="p">)(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">prefactor</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.evaluate_basis_at"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.evaluate_basis_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a :py:meth:`get_nodes(...)` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathfrak{K}_i|, |\Gamma|)` where</span>
+<span class="sd">                 the entry :math:`H[\mu(k), i]` is the value of :math:`\phi_k(\gamma_i)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+
+        <span class="n">bas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span>
+
+        <span class="c1"># The grid</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+        <span class="n">nn</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="c1"># Allocate the storage array</span>
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">bs</span><span class="p">,</span> <span class="n">nn</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="c1"># Precompute some constants</span>
+        <span class="n">Pi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">Pi</span>
+
+        <span class="n">Qinv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">Qbar</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">QQ</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">,</span> <span class="n">Qbar</span><span class="p">)</span>
+
+        <span class="c1"># Compute the ground state phi_0 via direct evaluation</span>
+        <span class="n">mu0</span> <span class="o">=</span> <span class="n">bas</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">D</span> <span class="o">*</span> <span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+        <span class="n">phi</span><span class="p">[</span><span class="n">mu0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_phi0</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="c1"># Compute all higher order states phi_k via recursion</span>
+        <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+            <span class="c1"># Iterator for all valid index vectors k</span>
+            <span class="n">indices</span> <span class="o">=</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_node_iterator</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;chain&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">indices</span><span class="p">:</span>
+                <span class="c1"># Current index vector</span>
+                <span class="n">ki</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+                <span class="c1"># Access predecessors</span>
+                <span class="n">phim</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">nn</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">kpj</span> <span class="ow">in</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">):</span>
+                    <span class="n">mukpj</span> <span class="o">=</span> <span class="n">bas</span><span class="p">[</span><span class="n">kpj</span><span class="p">]</span>
+                    <span class="n">phim</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">phi</span><span class="p">[</span><span class="n">mukpj</span><span class="p">,</span> <span class="p">:]</span>
+
+                <span class="c1"># Compute 3-term recursion</span>
+                <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">bas</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="p">:]</span>
+                <span class="n">p2</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">)</span> <span class="o">*</span> <span class="n">phim</span>
+
+                <span class="n">t1</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p1</span><span class="p">)</span>
+                <span class="n">t2</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">QQ</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p2</span><span class="p">)</span>
+
+                <span class="c1"># Find multi-index where to store the result</span>
+                <span class="n">kped</span> <span class="o">=</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="n">d</span><span class="p">)</span>
+
+                <span class="c1"># Did we find this k?</span>
+                <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">kped</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">kped</span> <span class="o">=</span> <span class="n">kped</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+                    <span class="c1"># Store computed value</span>
+                    <span class="n">phi</span><span class="p">[</span><span class="n">bas</span><span class="p">[</span><span class="n">kped</span><span class="p">[</span><span class="mi">1</span><span class="p">]],</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t2</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">phi</span> <span class="o">=</span> <span class="n">phi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sqrt</span><span class="p">(</span><span class="n">component</span><span class="p">)(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">phi</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.slim_recursion"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.slim_recursion">[docs]</a>    <span class="k">def</span> <span class="nf">slim_recursion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.</span>
+<span class="sd">        This routine is a slim version compared to the full basis evaluation. At every moment</span>
+<span class="sd">        we store only the data we really need to compute the next step until we hit the highest</span>
+<span class="sd">        order basis functions.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a :py:meth:`get_nodes(...)` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i`</span>
+<span class="sd">                 at the nodes :math:`\gamma`.</span>
+
+<span class="sd">        Note that this function does not include the global phase :math:`\exp(\frac{i S}{\varepsilon^2})`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+
+        <span class="c1"># Precompute some constants</span>
+        <span class="n">Pi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">Pi</span>
+
+        <span class="n">Qinv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">Qbar</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">QQ</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">,</span> <span class="n">Qbar</span><span class="p">)</span>
+
+        <span class="c1"># The basis shape</span>
+        <span class="n">bas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">component</span><span class="p">]</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">D</span> <span class="o">*</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Book keeping</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">newtodo</span> <span class="o">=</span> <span class="p">[</span><span class="n">Z</span><span class="p">]</span>
+        <span class="n">olddelete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># The grid nodes</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">nn</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+
+        <span class="c1"># Evaluate phi0</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">Z</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_phi0</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">bas</span><span class="p">[</span><span class="n">Z</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">Z</span><span class="p">]</span>
+
+        <span class="c1"># Iterate for higher order states</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">newtodo</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Delete results that never will be used again</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">olddelete</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">tmp</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+            <span class="c1"># Exchange queues</span>
+            <span class="n">todo</span> <span class="o">=</span> <span class="n">newtodo</span>
+            <span class="n">newtodo</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">olddelete</span> <span class="o">=</span> <span class="n">delete</span>
+            <span class="n">delete</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Compute new results</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">todo</span><span class="p">:</span>
+                <span class="c1"># Center stencil at node k</span>
+                <span class="n">ki</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+                <span class="c1"># Access predecessors</span>
+                <span class="n">phim</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">nn</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">kpj</span> <span class="ow">in</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">):</span>
+                    <span class="n">phim</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">kpj</span><span class="p">]</span>
+
+                <span class="c1"># Compute the neighbours</span>
+                <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="c1"># Compute 3-term recursion</span>
+                        <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="n">p2</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">)</span> <span class="o">*</span> <span class="n">phim</span>
+
+                        <span class="n">t1</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p1</span><span class="p">)</span>
+                        <span class="n">t2</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">QQ</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p2</span><span class="p">)</span>
+
+                        <span class="c1"># Store computed value</span>
+                        <span class="n">tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t2</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+                        <span class="c1"># And update the result</span>
+                        <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="n">bas</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+                        <span class="n">newtodo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sqrt</span><span class="p">(</span><span class="n">component</span><span class="p">)(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">psi</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a :py:meth:`get_nodes(...)` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.</span>
+<span class="sd">                          (Defaults to ``None`` for evaluating all components.)</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Pis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">aslist</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">Pis</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="c1"># Note: This is very inefficient! We may evaluate the same basis functions multiple</span>
+                <span class="c1">#       times. But as long as we don&#39;t know that the basis shapes are true subsets</span>
+                <span class="c1">#       of the largest one, we can not evaluate just all functions in this</span>
+                <span class="c1">#       maximal set.</span>
+
+                <span class="c1"># TODO: Find more efficient way to do this</span>
+
+                <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">Pis</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">values</span></div>
+
+
+    <span class="c1"># We can compute the norms the same way for homogeneous and inhomogeneous Hagedorn wavepackets.</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.norm"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the :math:`L^2` norm :math:`\langle\Psi|\Psi\rangle` of the wavepacket :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` whose norm is calculated.</span>
+<span class="sd">                          The default value is ``None`` which means to compute the norms of all :math:`N` components.</span>
+<span class="sd">        :type component: int or ``None``.</span>
+<span class="sd">        :param summed: Whether to sum up the norms :math:`\langle\Phi_i|\Phi_i\rangle` of the</span>
+<span class="sd">                       individual components :math:`\Phi_i`.</span>
+<span class="sd">        :type summed: Boolean, default is ``False``.</span>
+<span class="sd">        :type summed: Boolean, default is ``False``.</span>
+<span class="sd">        :return: The norm of :math:`\Psi` or the norm of :math:`\Phi_i` or a list with the :math:`N`</span>
+<span class="sd">                 norms of all components. Depending on the values of ``component`` and ``summed``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">component</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">norm</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">+</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">y</span><span class="p">)</span> <span class="o">*</span> <span class="n">y</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">result</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">result</span></div>
+
+
+    <span class="c1"># A wavepacket knows how to compute gradients</span>
+    <span class="c1"># TODO: Consider moving this inside the general codata framework</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_gradient_operator"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_gradient_operator">[docs]</a>    <span class="k">def</span> <span class="nf">get_gradient_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the :py:class:`Gradient` subclass suitable for</span>
+<span class="sd">        computing gradients of this wavepacket.</span>
+
+<span class="sd">        :return: A :py:class:`GradientHAWP` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">GradientHAWP</span><span class="p">()</span></div>
+
+
+    <span class="c1"># A wavepacket knows how to compute inner products</span>
+    <span class="c1"># TODO: Consider moving this inside the general codata framework</span>
+    <span class="c1"># TODO: Rethink if wavepackets should contain a QR</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.set_innerproduct"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.set_innerproduct">[docs]</a>    <span class="k">def</span> <span class="nf">set_innerproduct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">innerproduct</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Set the :py:class:`InnerProduct` subclass instance used for computing</span>
+<span class="sd">        inner products and evaluating brakets.</span>
+
+<span class="sd">        :param innerproduct: The new :py:class:`InnerProduct` subclass instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_IP</span> <span class="o">=</span> <span class="n">innerproduct</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketBase.get_innerproduct"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase.get_innerproduct">[docs]</a>    <span class="k">def</span> <span class="nf">get_innerproduct</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return the :py:class:`InnerProduct` subclass instance used computing</span>
+<span class="sd">        inner products and evaluating brakets.</span>
+
+<span class="sd">        :return: The current :py:class:`InnerProduct` subclass instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_IP</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

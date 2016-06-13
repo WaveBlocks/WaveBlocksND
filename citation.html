@@ -8,7 +8,7 @@
     
     <title>Citation &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,10 +24,11 @@
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="index.html" />
-    <link rel="prev" title="Plot 3D" href="waveblocks_classes/plot3d/plot3d.html" /> 
+    <link rel="next" title="Ready made Potentials" href="potlib/potentials.html" />
+    <link rel="prev" title="Extending WaveBlocksND" href="manual/ch5_extending_waveblocks.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -37,38 +38,41 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="waveblocks_classes/plot3d/plot3d.html" title="Plot 3D"
+          <a href="potlib/potentials.html" title="Ready made Potentials"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="manual/ch5_extending_waveblocks.html" title="Extending WaveBlocksND"
              accesskey="P">previous</a> |</li>
-        <li><a href="index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="citation">
 <h1>Citation<a class="headerlink" href="#citation" title="Permalink to this headline">¶</a></h1>
 <p>For citation of this project please use one of the following bibtex snippets.</p>
 <p>The code for one-dimensional simulations:</p>
-<div class="highlight-python"><div class="highlight"><pre>@misc{waveblocks,
-    author = {R. Bourquin and V. Gradinaru},
-    title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
-    year = {2010 - 2016},
-    url = {https://github.com/WaveBlocks/WaveBlocks},
-    howpublished = {\url{https://github.com/WaveBlocks/WaveBlocks}}
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">waveblocks</span><span class="p">,</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">R</span><span class="o">.</span> <span class="n">Bourquin</span> <span class="ow">and</span> <span class="n">V</span><span class="o">.</span> <span class="n">Gradinaru</span><span class="p">},</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="p">{{</span><span class="n">WaveBlocks</span><span class="p">}:</span> <span class="n">Reusable</span> <span class="n">building</span> <span class="n">blocks</span> <span class="k">for</span> <span class="n">simulations</span> <span class="k">with</span> <span class="n">semiclassical</span> <span class="n">wavepackets</span><span class="p">},</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2010</span> <span class="o">-</span> <span class="mi">2016</span><span class="p">},</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="p">},</span>
+    <span class="n">howpublished</span> <span class="o">=</span> <span class="p">{</span>\<span class="n">url</span><span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="p">}}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 <p>The code for multi-dimensional simulations:</p>
-<div class="highlight-python"><div class="highlight"><pre>@misc{waveblocksnd,
-    author = {R. Bourquin and V. Gradinaru},
-    title = {{WaveBlocks}: Reusable building blocks for simulations with semiclassical wavepackets},
-    year = {2010 - 2016},
-    url = {https://github.com/WaveBlocks/WaveBlocksND},
-    howpublished = {\url{https://github.com/WaveBlocks/WaveBlocksND}}
-}
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="nd">@misc</span><span class="p">{</span><span class="n">waveblocksnd</span><span class="p">,</span>
+    <span class="n">author</span> <span class="o">=</span> <span class="p">{</span><span class="n">R</span><span class="o">.</span> <span class="n">Bourquin</span> <span class="ow">and</span> <span class="n">V</span><span class="o">.</span> <span class="n">Gradinaru</span><span class="p">},</span>
+    <span class="n">title</span> <span class="o">=</span> <span class="p">{{</span><span class="n">WaveBlocks</span><span class="p">}:</span> <span class="n">Reusable</span> <span class="n">building</span> <span class="n">blocks</span> <span class="k">for</span> <span class="n">simulations</span> <span class="k">with</span> <span class="n">semiclassical</span> <span class="n">wavepackets</span><span class="p">},</span>
+    <span class="n">year</span> <span class="o">=</span> <span class="p">{</span><span class="mi">2010</span> <span class="o">-</span> <span class="mi">2016</span><span class="p">},</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="o">/</span><span class="n">WaveBlocksND</span><span class="p">},</span>
+    <span class="n">howpublished</span> <span class="o">=</span> <span class="p">{</span>\<span class="n">url</span><span class="p">{</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">WaveBlocks</span><span class="o">/</span><span class="n">WaveBlocksND</span><span class="p">}}</span>
+<span class="p">}</span>
 </pre></div>
 </div>
 </div>
@@ -77,34 +81,36 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h4>Previous topic</h4>
-  <p class="topless"><a href="waveblocks_classes/plot3d/plot3d.html"
-                        title="previous chapter">Plot 3D</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/citation.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <p class="topless"><a href="manual/ch5_extending_waveblocks.html"
+                        title="previous chapter">Extending <code class="docutils literal"><span class="pre">WaveBlocksND</span></code></a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="potlib/potentials.html"
+                        title="next chapter">Ready made Potentials</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/citation.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -114,14 +120,17 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="waveblocks_classes/plot3d/plot3d.html" title="Plot 3D"
+          <a href="potlib/potentials.html" title="Ready made Potentials"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="manual/ch5_extending_waveblocks.html" title="Extending WaveBlocksND"
              >previous</a> |</li>
-        <li><a href="index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

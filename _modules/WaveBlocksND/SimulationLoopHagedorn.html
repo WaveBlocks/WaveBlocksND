@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.SimulationLoopHagedorn &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.SimulationLoopHagedorn</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the main simulation loop</span>
+<span class="sd">for the homogeneous Hagedorn propagator.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2015, 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SimulationLoop</span> <span class="kn">import</span> <span class="n">SimulationLoop</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.IOManager</span> <span class="kn">import</span> <span class="n">IOManager</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="kn">import</span> <span class="n">TimeManager</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformationHAWP</span> <span class="kn">import</span> <span class="n">BasisTransformationHAWP</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SimulationLoopHagedorn&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="SimulationLoopHagedorn"><a class="viewcode-back" href="../../waveblocks_classes/SimulationLoopHagedorn.html#WaveBlocksND.SimulationLoopHagedorn">[docs]</a><span class="k">class</span> <span class="nc">SimulationLoopHagedorn</span><span class="p">(</span><span class="n">SimulationLoop</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class acts as the main simulation loop. It owns a propagator that</span>
+<span class="sd">    propagates a set of initial values during a time evolution.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">resultsfile</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Create a new simulation loop instance for a simulation</span>
+<span class="sd">        using the semiclassical Hagedorn wavepacket based propagation</span>
+<span class="sd">        method.</span>
+
+<span class="sd">        :param parameters: The simulation parameters.</span>
+<span class="sd">        :type parameters: A :py:class:`ParameterProvider` instance.</span>
+<span class="sd">        :param resultsfile: Path and filename of the hdf5 output file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Keep a reference to the simulation parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
+
+        <span class="c1"># The time propagator instance driving the simulation.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># A `IOManager` instance for saving simulation results.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c1"># The time manager</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span> <span class="o">=</span> <span class="n">TimeManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+        <span class="c1"># Set up serialization of simulation data</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span> <span class="o">=</span> <span class="n">IOManager</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">create_file</span><span class="p">(</span><span class="n">resultsfile</span><span class="p">)</span>
+
+        <span class="c1"># Save the simulation parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">add_parameters</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_parameters</span><span class="p">(</span><span class="n">parameters</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="SimulationLoopHagedorn.prepare_simulation"><a class="viewcode-back" href="../../waveblocks_classes/SimulationLoopHagedorn.html#WaveBlocksND.SimulationLoopHagedorn.prepare_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">prepare_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set up a Hagedorn propagator for the simulation loop. Set the</span>
+<span class="sd">        potential and initial values according to the configuration.</span>
+
+<span class="sd">        :raise: :py:class:`ValueError` For invalid or missing input data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The potential instance</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_potential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+
+        <span class="c1"># Project the initial values to the canonical basis</span>
+        <span class="n">BT</span> <span class="o">=</span> <span class="n">BasisTransformationHAWP</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
+
+        <span class="c1"># Finally create and initialize the propagator instance</span>
+        <span class="c1"># TODO: Attach the &quot;leading_component to the hawp as codata</span>
+        <span class="c1"># TODO: Clean up this ugly if tree</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;magnus_split&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.MagnusPropagator</span> <span class="kn">import</span> <span class="n">MagnusPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">MagnusPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;semiclassical&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.SemiclassicalPropagator</span> <span class="kn">import</span> <span class="n">SemiclassicalPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">SemiclassicalPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL42sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL42scPropagator</span> <span class="kn">import</span> <span class="n">McL42scPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL42scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pre764sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.Pre764scPropagator</span> <span class="kn">import</span> <span class="n">Pre764scPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">Pre764scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL84sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL84scPropagator</span> <span class="kn">import</span> <span class="n">McL84scPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL84scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hagedorn&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="kn">import</span> <span class="n">HagedornPropagator</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown propagator type: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Create suitable wavepackets</span>
+        <span class="n">chi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;leading_component&quot;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">packet_descr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;initvals&quot;</span><span class="p">]:</span>
+            <span class="n">packet</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_wavepacket</span><span class="p">(</span><span class="n">packet_descr</span><span class="p">)</span>
+            <span class="c1"># Transform to canonical basis</span>
+            <span class="n">BT</span><span class="o">.</span><span class="n">set_matrix_builder</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_innerproduct</span><span class="p">())</span>
+            <span class="n">BT</span><span class="o">.</span><span class="n">transform_to_canonical</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>
+            <span class="c1"># And hand over</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">add_wavepacket</span><span class="p">((</span><span class="n">packet</span><span class="p">,</span> <span class="n">chi</span><span class="p">))</span>
+
+        <span class="c1"># Add storage for each packet</span>
+        <span class="n">npackets</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;initvals&quot;</span><span class="p">])</span>
+        <span class="n">slots</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span><span class="o">.</span><span class="n">compute_number_events</span><span class="p">()</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;adQ&quot;</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">npackets</span><span class="p">):</span>
+            <span class="n">bid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">create_block</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">add_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">timeslots</span><span class="o">=</span><span class="n">slots</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="n">bid</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+
+        <span class="c1"># Write some initial values to disk</span>
+        <span class="k">for</span> <span class="n">packet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">():</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_description</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_description</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span><span class="o">.</span><span class="n">is_event</span><span class="p">(</span><span class="mi">0</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">packet</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">():</span>
+                <span class="c1"># Pi</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_parameters</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">),</span> <span class="n">timestep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+                <span class="c1"># Basis shapes</span>
+                <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">():</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_basisshapes</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                <span class="c1"># Coefficients</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_coefficients</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(),</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(),</span> <span class="n">timestep</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="SimulationLoopHagedorn.run_simulation"><a class="viewcode-back" href="../../waveblocks_classes/SimulationLoopHagedorn.html#WaveBlocksND.SimulationLoopHagedorn.run_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">run_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Run the simulation loop for a number of time steps.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The number of time steps we will perform.</span>
+        <span class="n">nsteps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span><span class="o">.</span><span class="n">compute_number_timesteps</span><span class="p">()</span>
+
+        <span class="c1"># Which parameter data to save.</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">,</span> <span class="s2">&quot;adQ&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Run the prepropagate step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">pre_propagate</span><span class="p">()</span>
+        <span class="c1"># Note: We do not save any data here</span>
+
+        <span class="c1"># Run the simulation for a given number of timesteps</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nsteps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="k">print</span><span class="p">(</span><span class="s2">&quot; doing timestep {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">propagate</span><span class="p">()</span>
+
+            <span class="c1"># Save some simulation data</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span><span class="o">.</span><span class="n">is_event</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+                <span class="c1"># Run the postpropagate step</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">post_propagate</span><span class="p">()</span>
+
+                <span class="c1"># TODO: Generalize for arbitrary number of wavepackets</span>
+                <span class="n">packets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()</span>
+                <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">packets</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span>
+
+                <span class="k">for</span> <span class="n">packet</span> <span class="ow">in</span> <span class="n">packets</span><span class="p">:</span>
+                    <span class="c1"># Pi</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_parameters</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">),</span> <span class="n">timestep</span><span class="o">=</span><span class="n">i</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="n">key</span><span class="p">)</span>
+                    <span class="c1"># Basis shapes (in case they changed!)</span>
+                    <span class="k">for</span> <span class="n">shape</span> <span class="ow">in</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">():</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_basisshapes</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
+                    <span class="c1"># Coefficients</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">save_wavepacket_coefficients</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(),</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(),</span> <span class="n">timestep</span><span class="o">=</span><span class="n">i</span><span class="p">)</span>
+
+                <span class="c1"># Run the prepropagate step</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">pre_propagate</span><span class="p">()</span>
+
+        <span class="c1"># Run the postpropagate step</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">post_propagate</span><span class="p">()</span></div>
+        <span class="c1"># Note: We do not save any data here</span>
+
+
+<div class="viewcode-block" id="SimulationLoopHagedorn.end_simulation"><a class="viewcode-back" href="../../waveblocks_classes/SimulationLoopHagedorn.html#WaveBlocksND.SimulationLoopHagedorn.end_simulation">[docs]</a>    <span class="k">def</span> <span class="nf">end_simulation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Do the necessary cleanup after a simulation. For example request the</span>
+<span class="sd">        :py:class:`IOManager` to write the data and close the output files.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span><span class="o">.</span><span class="n">finalize</span><span class="p">()</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

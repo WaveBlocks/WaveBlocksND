@@ -8,7 +8,7 @@
     
     <title>IOM_plugin_lincombwp &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="IOM_plugin_lincombhawp" href="IOM_plugin_lincombhawp.html" />
     <link rel="prev" title="IOM_plugin_inhomogwavepacket" href="IOM_plugin_inhomogwavepacket.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="IOM_plugin_inhomogwavepacket.html" title="IOM_plugin_inhomogwavepacket"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="iom-plugin-lincombwp">
 <h1>IOM_plugin_lincombwp<a class="headerlink" href="#iom-plugin-lincombwp" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-iom-plugin-lincombwp-class"></span><h2>About the <tt class="docutils literal"><span class="pre">IOM_plugin_lincombwp</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-iom-plugin-lincombwp-class"></span><h2>About the <code class="docutils literal"><span class="pre">IOM_plugin_lincombwp</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -71,19 +71,19 @@ linear combinations of general wavepackets.</p>
 &#64;license: Modified BSD License</p>
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.add_lincombwp">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">add_lincombwp</tt><big>(</big><em>self</em>, <em>parameters</em>, <em>timeslots=None</em>, <em>lincombsize=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#add_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.add_lincombwp" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">add_lincombwp</code><span class="sig-paren">(</span><em>self</em>, <em>parameters</em>, <em>timeslots=None</em>, <em>lincombsize=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#add_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.add_lincombwp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add storage for the linear combination of general wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parameters</strong> &#8211; An <tt class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></tt> instance with at
-least the key <tt class="docutils literal"><span class="pre">ncomponents</span></tt>.</li>
-<li><strong>timeslots</strong> &#8211; The number of time slots we need. Can be set to <tt class="docutils literal"><span class="pre">None</span></tt>
+<li><strong>parameters</strong> &#8211; An <code class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></code> instance with at
+least the key <code class="docutils literal"><span class="pre">ncomponents</span></code>.</li>
+<li><strong>timeslots</strong> &#8211; The number of time slots we need. Can be set to <code class="docutils literal"><span class="pre">None</span></code>
 to get automatically growing datasets.</li>
-<li><strong>lincombsize</strong> &#8211; The (maximal) size <tt class="docutils literal"><span class="pre">J</span></tt> of the linear combination of wavepackets. If specified
-this remains fixed for all timeslots. Can be set to <tt class="docutils literal"><span class="pre">None</span></tt> (default)
+<li><strong>lincombsize</strong> &#8211; The (maximal) size <code class="docutils literal"><span class="pre">J</span></code> of the linear combination of wavepackets. If specified
+this remains fixed for all timeslots. Can be set to <code class="docutils literal"><span class="pre">None</span></code> (default)
 to get automatically growing datasets.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -95,7 +95,7 @@ to get automatically growing datasets.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.delete_lincombwp">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">delete_lincombwp</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#delete_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.delete_lincombwp" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">delete_lincombwp</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#delete_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.delete_lincombwp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove the stored linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -109,7 +109,7 @@ to get automatically growing datasets.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.has_lincombwp">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">has_lincombwp</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#has_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.has_lincombwp" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">has_lincombwp</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#has_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.has_lincombwp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Ask if the specified data block has the desired data tensor.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -123,10 +123,10 @@ to get automatically growing datasets.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp</tt><big>(</big><em>self</em>, <em>timestep</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp</code><span class="sig-paren">(</span><em>self</em>, <em>timestep</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load a linear combination at a given timestep and return a fully configured
-<tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></tt> instance. This method just calls some other
-<tt class="xref py py-class docutils literal"><span class="pre">IOManager</span></tt> methods in the correct order. It is included only for
+<code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code> instance. This method just calls some other
+<code class="xref py py-class docutils literal"><span class="pre">IOManager</span></code> methods in the correct order. It is included only for
 convenience and is not particularly efficient.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -138,7 +138,7 @@ convenience and is not particularly efficient.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></tt> instance.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code> instance.</p>
 </td>
 </tr>
 </tbody>
@@ -147,7 +147,7 @@ convenience and is not particularly efficient.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_coefficients">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_coefficients</tt><big>(</big><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_coefficients" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_coefficients</code><span class="sig-paren">(</span><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the coefficients of this linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -165,7 +165,7 @@ convenience and is not particularly efficient.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_description">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_description</tt><big>(</big><em>self</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_description" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_description</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the description of this linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -179,7 +179,7 @@ convenience and is not particularly efficient.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_size">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_size</tt><big>(</big><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_size" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_size</code><span class="sig-paren">(</span><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the size (number of packets) of this linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -197,7 +197,7 @@ convenience and is not particularly efficient.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_timegrid">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_timegrid</tt><big>(</big><em>self</em>, <em>blockid=0</em>, <em>key=('coeffs'</em>, <em>'packets')</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_timegrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_timegrid" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_timegrid</code><span class="sig-paren">(</span><em>self</em>, <em>blockid=0</em>, <em>key=('coeffs'</em>, <em>'packets')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_timegrid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_timegrid" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the timegrid of this linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -205,8 +205,8 @@ convenience and is not particularly efficient.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
-<li><strong>key</strong> (Tuple of valid identifier strings that are <tt class="docutils literal"><span class="pre">coeffs</span></tt> and <tt class="docutils literal"><span class="pre">packets</span></tt>.
-Default is <tt class="docutils literal"><span class="pre">(&quot;coeffs&quot;,</span> <span class="pre">&quot;packets&quot;)</span></tt>.) &#8211; Specify which linear combination timegrids to load. All are independent.</li>
+<li><strong>key</strong> (Tuple of valid identifier strings that are <code class="docutils literal"><span class="pre">coeffs</span></code> and <code class="docutils literal"><span class="pre">packets</span></code>.
+Default is <code class="docutils literal"><span class="pre">(&quot;coeffs&quot;,</span> <span class="pre">&quot;packets&quot;)</span></code>.) &#8211; Specify which linear combination timegrids to load. All are independent.</li>
 </ul>
 </td>
 </tr>
@@ -216,12 +216,12 @@ Default is <tt class="docutils literal"><span class="pre">(&quot;coeffs&quot;,</
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_wavepacket_refs">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_wavepacket_refs</tt><big>(</big><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_wavepacket_refs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_wavepacket_refs" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_wavepacket_refs</code><span class="sig-paren">(</span><em>self</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_wavepacket_refs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_wavepacket_refs" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the references of the wavepackets being part of
-this linear combination. References can be used as <tt class="docutils literal"><span class="pre">blockid</span></tt>
+this linear combination. References can be used as <code class="docutils literal"><span class="pre">blockid</span></code>
 for loading selected wavepackets manually. If for example a
-<tt class="docutils literal"><span class="pre">ref</span></tt> obtained through this method is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">refs</span> <span class="o">=</span> <span class="n">anIom</span><span class="o">.</span><span class="n">load_lincombwp_wavepacket_refs</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
+<code class="docutils literal"><span class="pre">ref</span></code> obtained through this method is:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">refs</span> <span class="o">=</span> <span class="n">anIom</span><span class="o">.</span><span class="n">load_lincombwp_wavepacket_refs</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="mi">4</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">refs</span>
 <span class="go">array([&#39;673290fd36a0fa80f28973ae31f10378&#39;,</span>
 <span class="go">       &#39;075dc9d7d2c558c97608e2fe08a7d53d&#39;,</span>
@@ -229,19 +229,19 @@ for loading selected wavepackets manually. If for example a
 <span class="go">       dtype=&#39;|S32&#39;)</span>
 </pre></div>
 </div>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">ref</span> <span class="o">=</span> <span class="n">refs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ref</span> <span class="o">=</span> <span class="n">refs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 <span class="go">&#39;673290fd36a0fa80f28973ae31f10378&#39;</span>
 </pre></div>
 </div>
 <p>the the corresponding block ID is:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">bid</span> <span class="o">=</span> <span class="s">&quot;LC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;WP&quot;</span> <span class="o">+</span> <span class="n">ref</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">bid</span> <span class="o">=</span> <span class="s2">&quot;LC&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;WP&quot;</span> <span class="o">+</span> <span class="n">ref</span>
 <span class="go">&#39;LC0WP673290fd36a0fa80f28973ae31f10378&#39;</span>
 </pre></div>
 </div>
-<p>with <tt class="docutils literal"><span class="pre">blockid</span></tt> the block ID where the linear combination
-was stored. With that <tt class="docutils literal"><span class="pre">bid</span></tt> we can now for example load
+<p>with <code class="docutils literal"><span class="pre">blockid</span></code> the block ID where the linear combination
+was stored. With that <code class="docutils literal"><span class="pre">bid</span></code> we can now for example load
 data of a selected wavepacket:</p>
-<div class="highlight-python"><div class="highlight"><pre><span class="gp">&gt;&gt;&gt; </span><span class="n">Pi</span> <span class="o">=</span> <span class="n">anIom</span><span class="o">.</span><span class="n">load_wavepacket_parameters</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="n">bid</span><span class="p">)</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">Pi</span> <span class="o">=</span> <span class="n">anIom</span><span class="o">.</span><span class="n">load_wavepacket_parameters</span><span class="p">(</span><span class="n">timestep</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="n">bid</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>in case of a Hagedorn wavepacket.</p>
@@ -255,7 +255,7 @@ data of a selected wavepacket:</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <tt class="xref py py-class docutils literal"><span class="pre">ndarray</span></tt> of strings.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A <code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code> of strings.</p>
 </td>
 </tr>
 </tbody>
@@ -264,7 +264,7 @@ data of a selected wavepacket:</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.load_lincombwp_wavepackets">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">load_lincombwp_wavepackets</tt><big>(</big><em>self</em>, <em>timestep</em>, <em>packetindex=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">load_lincombwp_wavepackets</code><span class="sig-paren">(</span><em>self</em>, <em>timestep</em>, <em>packetindex=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#load_lincombwp_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.load_lincombwp_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Load the wavepackets being part of this linear combination.</p>
 <p>Note that this is quite an expensive operation.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -273,7 +273,7 @@ data of a selected wavepacket:</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>timestep</strong> &#8211; Load only the data of this timestep.</li>
-<li><strong>packetindex</strong> &#8211; Load only the packet with this index. If <tt class="docutils literal"><span class="pre">None</span></tt>
+<li><strong>packetindex</strong> &#8211; Load only the packet with this index. If <code class="docutils literal"><span class="pre">None</span></code>
 then load all packets for the given timestep.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -285,19 +285,19 @@ then load all packets for the given timestep.</li>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.save_lincombwp">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">save_lincombwp</tt><big>(</big><em>self</em>, <em>lincomb</em>, <em>timestep</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">save_lincombwp</code><span class="sig-paren">(</span><em>self</em>, <em>lincomb</em>, <em>timestep</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save a linear combination of general wavepackets at a given timestep and read
-all data to save from the <tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></tt> instance provided. This
-method just calls some other <tt class="xref py py-class docutils literal"><span class="pre">IOManager</span></tt> methods in the correct order.
+all data to save from the <code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code> instance provided. This
+method just calls some other <code class="xref py py-class docutils literal"><span class="pre">IOManager</span></code> methods in the correct order.
 It is included only for convenience and is not particularly efficient. We assume
-the linear combination is already set up with the correct <a class="reference internal" href="#IOM_plugin_lincombwp.add_lincombwp" title="IOM_plugin_lincombwp.add_lincombwp"><tt class="xref py py-meth docutils literal"><span class="pre">add_lincombwp()</span></tt></a>
+the linear combination is already set up with the correct <a class="reference internal" href="#IOM_plugin_lincombwp.add_lincombwp" title="IOM_plugin_lincombwp.add_lincombwp"><code class="xref py py-meth docutils literal"><span class="pre">add_lincombwp()</span></code></a>
 method call.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>lincomb</strong> &#8211; The <tt class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></tt> instance we want to save.</li>
+<li><strong>lincomb</strong> &#8211; The <code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code> instance we want to save.</li>
 <li><strong>timestep</strong> &#8211; The timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> at which we save the linear combination.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -309,14 +309,14 @@ method call.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.save_lincombwp_coefficients">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">save_lincombwp_coefficients</tt><big>(</big><em>self</em>, <em>coefficients</em>, <em>timestep=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_coefficients" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">save_lincombwp_coefficients</code><span class="sig-paren">(</span><em>self</em>, <em>coefficients</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_coefficients"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the coefficients of the linear combination to a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>coefficients</strong> (A single, suitable <tt class="xref py py-class docutils literal"><span class="pre">ndarray</span></tt>.) &#8211; The coefficients of the linear combination of wavepackets.</li>
+<li><strong>coefficients</strong> (A single, suitable <code class="xref py py-class docutils literal"><span class="pre">ndarray</span></code>.) &#8211; The coefficients of the linear combination of wavepackets.</li>
 <li><strong>timestep</strong> &#8211; The timestep at which we save the data.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -328,7 +328,7 @@ method call.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.save_lincombwp_description">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">save_lincombwp_description</tt><big>(</big><em>self</em>, <em>descr</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_description" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">save_lincombwp_description</code><span class="sig-paren">(</span><em>self</em>, <em>descr</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the description of this linear combination.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -346,7 +346,7 @@ method call.</p>
 
 <dl class="function">
 <dt id="IOM_plugin_lincombwp.save_lincombwp_wavepackets">
-<tt class="descclassname">IOM_plugin_lincombwp.</tt><tt class="descname">save_lincombwp_wavepackets</tt><big>(</big><em>self</em>, <em>packetlist</em>, <em>timestep=None</em>, <em>blockid=0</em><big>)</big><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_wavepackets" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">IOM_plugin_lincombwp.</code><code class="descname">save_lincombwp_wavepackets</code><span class="sig-paren">(</span><em>self</em>, <em>packetlist</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombwp.html#save_lincombwp_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombwp.save_lincombwp_wavepackets" title="Permalink to this definition">¶</a></dt>
 <dd><p>Save the wavepackets being part of this linear combination.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -373,12 +373,12 @@ method call.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">IOM_plugin_lincombwp</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">IOM_plugin_lincombwp</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">IOM_plugin_lincombwp</span></code> class</a></li>
 <li><a class="reference internal" href="#module-IOM_plugin_lincombwp">Class documentation</a></li>
 </ul>
 </li>
@@ -390,29 +390,28 @@ method call.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="IOM_plugin_lincombhawp.html"
                         title="next chapter">IOM_plugin_lincombhawp</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/IOM_plugin_lincombwp.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/IOM_plugin_lincombwp.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -427,12 +426,12 @@ method call.</p>
         <li class="right" >
           <a href="IOM_plugin_inhomogwavepacket.html" title="IOM_plugin_inhomogwavepacket"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>IOM_plugin_overlaplcwp &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,18 +36,18 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for IOM_plugin_overlaplcwp</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
 
 <span class="sd">IOM plugin providing functions for handling various</span>
 <span class="sd">overlap matrices of linear combinations of general</span>
@@ -61,7 +61,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="kn">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="add_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.add_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">add_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">timeslots</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrixsize</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+<div class="viewcode-block" id="add_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.add_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">add_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">timeslots</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrixsize</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Add storage for various overlap matrices. We can store one matrix type</span>
 <span class="sd">    per key.</span>
 
@@ -89,10 +89,10 @@
 <span class="sd">    :type key: Tuple of valid identifier strings that are ``ov``, ``ovkin`` and ``ovpot``.</span>
 <span class="sd">               Default is ``(&quot;ov&quot;, &quot;ovkin&quot;, &quot;ovpot&quot;)``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">valid_keys</span> <span class="o">=</span> <span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)</span>
+    <span class="n">valid_keys</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)</span>
 
-    <span class="c"># Create the dataset with appropriate parameters</span>
-    <span class="n">grp_ov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s">&quot;overlaplcwp&quot;</span><span class="p">)</span>
+    <span class="c1"># Create the dataset with appropriate parameters</span>
+    <span class="n">grp_ov</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">create_group</span><span class="p">(</span><span class="s2">&quot;overlaplcwp&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">timeslots</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="mi">0</span>
@@ -118,29 +118,29 @@
 
     <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">valid_keys</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unknown key value &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown key value &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
 
         <span class="n">name</span> <span class="o">=</span> <span class="n">k</span><span class="p">[</span><span class="mi">2</span><span class="p">:]</span>
 
-        <span class="n">daset_tg</span> <span class="o">=</span> <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;timegrid&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,),</span> <span class="n">fillvalue</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-        <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;shape&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">csTs</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-        <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;overlap&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Jr</span><span class="p">,</span> <span class="n">Jc</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">csJrs</span><span class="p">,</span> <span class="n">csJcs</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Jrs</span><span class="p">,</span> <span class="n">Jcs</span><span class="p">))</span>
+        <span class="n">daset_tg</span> <span class="o">=</span> <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;timegrid&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,),</span> <span class="n">fillvalue</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;shape&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="n">csTs</span><span class="p">,</span> <span class="mi">2</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">grp_ov</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;overlap&quot;</span> <span class="o">+</span> <span class="n">name</span><span class="p">,</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">Jr</span><span class="p">,</span> <span class="n">Jc</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">csJrs</span><span class="p">,</span> <span class="n">csJcs</span><span class="p">),</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">(</span><span class="n">Ts</span><span class="p">,</span> <span class="n">Jrs</span><span class="p">,</span> <span class="n">Jcs</span><span class="p">))</span>
 
-        <span class="n">daset_tg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">daset_tg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-</div>
+
 <div class="viewcode-block" id="delete_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.delete_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">delete_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Remove the stored overlap matrices.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="k">pass</span></div>
 
-</div>
-<div class="viewcode-block" id="has_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.has_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">has_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+
+<div class="viewcode-block" id="has_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.has_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">has_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Ask if the specified data block has the desired data tensor.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
@@ -149,19 +149,19 @@
 <span class="sd">               Default is ``(&quot;ov&quot;, &quot;ovkin&quot;, &quot;ovpot&quot;)``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">r</span> <span class="o">=</span> <span class="bp">True</span>
-    <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s">&quot;overlaplcwp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s2">&quot;overlaplcwp&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s">&quot;ov&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s">&quot;overlap&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s">&quot;ovpot&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s">&quot;overlappot&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s">&quot;ovkin&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s">&quot;overlapkin&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s2">&quot;ov&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s2">&quot;overlap&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s2">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s2">&quot;ovpot&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s2">&quot;overlappot&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s2">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+    <span class="k">if</span> <span class="n">r</span> <span class="ow">and</span> <span class="s2">&quot;ovkin&quot;</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">&amp;=</span> <span class="p">(</span><span class="s2">&quot;overlapkin&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)][</span><span class="s2">&quot;overlaplcwp&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
-    <span class="k">return</span> <span class="n">r</span>
+    <span class="k">return</span> <span class="n">r</span></div>
 
-</div>
-<div class="viewcode-block" id="save_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.save_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">save_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+
+<div class="viewcode-block" id="save_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.save_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">save_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Save overlap matrices of linear combinations of general wavepackets.</span>
 <span class="sd">    In principle this function also supports non-square matrices.</span>
 
@@ -174,24 +174,24 @@
 <span class="sd">               Default is ``(&quot;ov&quot;, &quot;ovkin&quot;, &quot;ovpot&quot;)``.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">item</span><span class="p">,</span> <span class="n">datum</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">data</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ov&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegrid&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shape&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlap&quot;</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovkin&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridkin&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapekin&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlapkin&quot;</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovpot&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridpot&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapepot&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlappot&quot;</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ov&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegrid&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shape&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlap&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridkin&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapekin&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlapkin&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridpot&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapepot&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlappot&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 
-        <span class="n">timeslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span>
+        <span class="n">timeslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span>
 
-        <span class="c"># Write the data</span>
+        <span class="c1"># Write the data</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">must_resize</span><span class="p">(</span><span class="n">pathd</span><span class="p">,</span> <span class="n">timeslot</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">data</span><span class="p">))</span>
         <span class="n">rows</span><span class="p">,</span> <span class="n">cols</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span>
@@ -201,15 +201,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">must_resize</span><span class="p">(</span><span class="n">pathsh</span><span class="p">,</span> <span class="n">timeslot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathsh</span><span class="p">][</span><span class="n">timeslot</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rows</span><span class="p">,</span> <span class="n">cols</span><span class="p">])</span>
 
-        <span class="c"># Write the timestep to which the stored values belong into the timegrid</span>
+        <span class="c1"># Write the timestep to which the stored values belong into the timegrid</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">must_resize</span><span class="p">(</span><span class="n">pathtg</span><span class="p">,</span> <span class="n">timeslot</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][</span><span class="n">timeslot</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestep</span>
 
-        <span class="c"># Update the pointer</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="c1"># Update the pointer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-</div>
-<div class="viewcode-block" id="load_overlaplcwp_timegrid"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp_timegrid">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp_timegrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+
+<div class="viewcode-block" id="load_overlaplcwp_timegrid"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp_timegrid">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp_timegrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Load the timegrid corresponding to the overlap matrices specified.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
@@ -220,26 +220,26 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tg</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ov&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegrid&quot;</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ov&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegrid&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][:])</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovkin&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridkin&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridkin&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][:])</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovpot&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridpot&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridpot&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][:])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="load_overlaplcwp_shape"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp_shape">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+
+<div class="viewcode-block" id="load_overlaplcwp_shape"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp_shape">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp_shape</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Load the shape of the overlap matrices specified.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
@@ -250,26 +250,26 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">tg</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ov&quot;</span><span class="p">:</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shape&quot;</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ov&quot;</span><span class="p">:</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shape&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathsh</span><span class="p">][:])</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovkin&quot;</span><span class="p">:</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapekin&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">:</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapekin&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathsh</span><span class="p">][:])</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovpot&quot;</span><span class="p">:</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapepot&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">:</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapepot&quot;</span>
             <span class="n">tg</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathsh</span><span class="p">][:])</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">print</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">tg</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tg</span><span class="p">)</span></div>
 
-</div>
-<div class="viewcode-block" id="load_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s">&quot;ov&quot;</span><span class="p">,</span> <span class="s">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s">&quot;ovpot&quot;</span><span class="p">)):</span>
+
+<div class="viewcode-block" id="load_overlaplcwp"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_overlaplcwp.html#IOM_plugin_overlaplcwp.load_overlaplcwp">[docs]</a><span class="k">def</span> <span class="nf">load_overlaplcwp</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;ov&quot;</span><span class="p">,</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">,</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">)):</span>
     <span class="sd">r&quot;&quot;&quot;Load overlap matrices of linear combinations of general wavepackets.</span>
 
 <span class="sd">    :param timestep: Load only the data of this timestep.</span>
@@ -284,20 +284,20 @@
     <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ov&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegrid&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shape&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlap&quot;</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovkin&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridkin&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapekin&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlapkin&quot;</span>
-        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s">&quot;ovpot&quot;</span><span class="p">:</span>
-            <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/timegridpot&quot;</span>
-            <span class="n">pathsh</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/shapepot&quot;</span>
-            <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/overlaplcwp/overlappot&quot;</span>
+        <span class="k">if</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ov&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegrid&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shape&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlap&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovkin&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridkin&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapekin&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlapkin&quot;</span>
+        <span class="k">elif</span> <span class="n">item</span> <span class="o">==</span> <span class="s2">&quot;ovpot&quot;</span><span class="p">:</span>
+            <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/timegridpot&quot;</span>
+            <span class="n">pathsh</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/shapepot&quot;</span>
+            <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/overlaplcwp/overlappot&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown key value {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">item</span><span class="p">))</span>
 
         <span class="k">if</span> <span class="n">timestep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
             <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_timestep_index</span><span class="p">(</span><span class="n">pathtg</span><span class="p">,</span> <span class="n">timestep</span><span class="p">)</span>
@@ -317,26 +317,23 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -345,13 +342,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
-          <li><a href="index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

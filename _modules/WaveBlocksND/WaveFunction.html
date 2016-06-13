@@ -1,0 +1,323 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.WaveFunction &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.WaveFunction</h1><div class="highlight"><pre>
+<span></span><span class="sd">r&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code to numerically represent multiple</span>
+<span class="sd">components of vector valued wave functions together with</span>
+<span class="sd">the grid nodes the values belong to. In addition there</span>
+<span class="sd">are some methods for calculating obervables as for example</span>
+<span class="sd">:math:`L^2` norms and kinetic and potential energies.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">floating</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">atleast_1d</span><span class="p">,</span> <span class="n">product</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">square</span>
+<span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="kn">import</span> <span class="n">fftn</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span> <span class="k">as</span> <span class="n">la</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;WaveFunction&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="WaveFunction"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction">[docs]</a><span class="k">class</span> <span class="nc">WaveFunction</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class represents a vector valued wavefunction :math:`\Psi`</span>
+<span class="sd">    as used in the vector valued time-dependent Schroedinger equation. The</span>
+<span class="sd">    state :math:`\Psi` consists of the components :math:`\psi_0` to</span>
+<span class="sd">    :math:`\psi_{N-1}`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize the :py:class:`WaveFunction` instance that represents</span>
+<span class="sd">        the vector :math:`\Psi` of components :math:`\psi_i`.</span>
+
+<span class="sd">        :param parameters: A :py:class:`ParameterProvider` instance having at</span>
+<span class="sd">                           least the number :math:`N` of components.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">=</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="p">[]</span>
+
+
+<div class="viewcode-block" id="WaveFunction.get_number_components"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.get_number_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;The number of components :math:`\psi_i` the vector :math:`\Psi` consists of.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.get_grid"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.get_grid">[docs]</a>    <span class="k">def</span> <span class="nf">get_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the :py:class:`Grid` instance representing the grid :math:`\Gamma`.</span>
+<span class="sd">        The wavefunction :math:`\Psi` is evaluated on the grid nodes to get :math:`\Psi(\Gamma)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.set_grid"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.set_grid">[docs]</a>    <span class="k">def</span> <span class="nf">set_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Assign a new grid :math:`\Gamma` to this :py:class:`WaveFunction` instance.</span>
+
+<span class="sd">        Note: The user of this class has to make sure that the grid :math:`\Gamma` and</span>
+<span class="sd">        the wavefunction values :math:`\Psi(\Gamma)` are consistent with each other!</span>
+
+<span class="sd">        :param grid: A new :py:class:`Grid` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">grid</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.get_values"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.get_values">[docs]</a>    <span class="k">def</span> <span class="nf">get_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the wavefunction values :math:`\psi(\Gamma)` for each</span>
+<span class="sd">        component :math:`\psi_i` of :math:`\Psi`.</span>
+
+<span class="sd">        :param components: The components :math:`i` for which we want to get</span>
+<span class="sd">                           the wavefunction values :math:`\psi_i`.</span>
+<span class="sd">        :type components: A single integer or a list of integers. If set to</span>
+<span class="sd">                          ``None`` (default) we return the data for all components.</span>
+<span class="sd">        :param flat: Whether to return the wavefunction with a `hypercubic`</span>
+<span class="sd">                     :math:`(N, N_1, ..., N_D)` shape or a `flat`</span>
+<span class="sd">                     :math:`(N, \prod_i^D N_i)` shape.</span>
+<span class="sd">        :type flat: Boolean or ``None`` , default is ``None``.</span>
+<span class="sd">        :return: A list of the values :math:`\psi_i` for all components :math:`i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">flat</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="c1"># Do not change the shape</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">components</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="n">flat</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="c1"># Return as flat array</span>
+            <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">c</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">components</span><span class="p">)]</span>
+        <span class="k">elif</span> <span class="n">flat</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+            <span class="c1"># Return as non-flat array</span>
+            <span class="c1"># Not implemented yet, not needed yet</span>
+            <span class="k">pass</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.set_values"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.set_values">[docs]</a>    <span class="k">def</span> <span class="nf">set_values</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Assign new wavefunction values :math:`\psi_i(\Gamma)` for each component</span>
+<span class="sd">        :math:`i` of :math:`\Psi` to the current :py:class:`WaveFunction` instance.</span>
+
+<span class="sd">        :param values: A list with the new values of all components we want to change.</span>
+<span class="sd">        :type values: Each entry of the list has to be an :py:class:`ndarray`.</span>
+<span class="sd">        :param components: The components :math:`i` for which we want to set</span>
+<span class="sd">                           the new wavefunction values :math:`\psi_i`.</span>
+<span class="sd">        :type components: A single integer or a list of integers. If set to</span>
+<span class="sd">                          ``None`` (default) we set the data for all components.</span>
+<span class="sd">        :param flat: Whether the wavefunction is given in `hypercubic`</span>
+<span class="sd">                     :math:`(N, N_1, ..., N_D)` shape or a `flat`</span>
+<span class="sd">                     :math:`(N, \prod_i^D N_i)` shape. Note that this has no effect yet.</span>
+<span class="sd">        :type flat: Boolean or ``None`` , default is ``None``.</span>
+
+<span class="sd">        Note: This method does NOT copy the input data arrays.</span>
+
+<span class="sd">        :raise: :py:class:`ValueError` If the list of `values` has the wrong length.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
+            <span class="c1"># Set all components</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="n">values</span><span class="p">[:]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Set only specified components</span>
+            <span class="k">for</span> <span class="n">component</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">components</span><span class="p">),</span> <span class="n">values</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">component</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+    <span class="c1"># TODO: Decide whether to move the following methods into an own class</span>
+
+<div class="viewcode-block" id="WaveFunction.norm"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">values</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">components</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the :math:`L^2` norm of the whole vector values wavefunction</span>
+<span class="sd">        :math:`\Psi` or some individual components :math:`\psi_i`. The calculation</span>
+<span class="sd">        is done in momentum space.</span>
+
+<span class="sd">        :param values: Allows to use this function for external data, similar to a</span>
+<span class="sd">                       static function.</span>
+<span class="sd">        :param summed: Whether to sum up the norms of the individual components.</span>
+<span class="sd">        :type summed: Boolean, default is ``False``.</span>
+<span class="sd">        :param components: The components :math:`\psi_i` of which the norms are calculated.</span>
+<span class="sd">        :type components: A single integer or a list of integers. If set to</span>
+<span class="sd">                          ``None`` (default) we compute the norm for all components.</span>
+<span class="sd">        :return: The :math:`L^2` norm of :math:`\Psi` or a list of :math:`L^2`</span>
+<span class="sd">                 norms of the specified components :math:`\psi_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Assumption: values[i].shape is (N_1, ..., N_D) and not (D, product(N_i))</span>
+        <span class="k">if</span> <span class="n">values</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span>
+
+        <span class="k">if</span> <span class="n">components</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">components</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span>
+
+        <span class="c1"># Compute the prefactor</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_extensions</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span>
+        <span class="n">prefactor</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">sqrt</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">T</span><span class="p">))</span> <span class="o">/</span> <span class="n">array</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">floating</span><span class="p">))</span>
+
+
+        <span class="c1"># Compute the norm for all components specified</span>
+        <span class="c1"># TODO: Consider splitting into cases `fft` versus `fftn`</span>
+        <span class="n">norms</span> <span class="o">=</span> <span class="n">prefactor</span> <span class="o">*</span> <span class="n">array</span><span class="p">([</span><span class="n">la</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">fftn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">component</span><span class="p">]))</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">components</span><span class="p">)])</span>
+
+        <span class="c1"># Sum the individual norms if requested</span>
+        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">norms</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">square</span><span class="p">,</span> <span class="n">norms</span><span class="p">))</span>
+            <span class="k">return</span> <span class="n">sqrt</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">norms</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">norms</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">kinetic</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the kinetic energy :math:`E_{\text{kin}} := \langle\Psi|T|\Psi\rangle`</span>
+<span class="sd">        of the different components :math:`\psi_i`.</span>
+
+<span class="sd">        :param kinetic: The kinetic energy operator :math:`T(\omega)`.</span>
+<span class="sd">        :type kinetic: A :py:class:`KineticOperator` instance.</span>
+<span class="sd">        :param summed: Whether to sum up the kinetic energies :math:`E_i` of the individual</span>
+<span class="sd">                       components :math:`\psi_i`. Default is ``False``.</span>
+<span class="sd">        :return: A list with the kinetic energies of the individual components</span>
+<span class="sd">                 or the overall kinetic energy of the wavefunction. (Depending on the optional arguments.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: Consider using less declarative coding style.</span>
+        <span class="c1">#       Issue: Compute fft of each component only once</span>
+        <span class="c1">#              AND avoid storing fft of all components.</span>
+
+        <span class="c1"># Fourier transform the components</span>
+        <span class="n">ftc</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">]</span>
+
+        <span class="c1"># Compute the prefactor</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_extensions</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span>
+        <span class="n">prefactor</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">array</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">floating</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Consider taking the result of this call as input for efficiency?</span>
+        <span class="n">KO</span> <span class="o">=</span> <span class="n">kinetic</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">()</span>
+
+        <span class="c1"># Compute the braket in Fourier space</span>
+        <span class="n">ekin</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefactor</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">item</span><span class="p">)</span> <span class="o">*</span> <span class="n">KO</span> <span class="o">*</span> <span class="n">item</span><span class="p">)</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">ftc</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">ekin</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ekin</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">ekin</span></div>
+
+
+<div class="viewcode-block" id="WaveFunction.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/WaveFunction.html#WaveBlocksND.WaveFunction.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Calculate the potential energy :math:`E_{\text{pot}} := \langle\Psi|V|\Psi\rangle`</span>
+<span class="sd">        of the different components :math:`\psi_i`.</span>
+
+<span class="sd">        :param potential: The potential energy operator :math:`V(x)`.</span>
+<span class="sd">        :param summed: Whether to sum up the potential energies :math:`E_i` of the individual</span>
+<span class="sd">                       components :math:`\psi_i`. Default is ``False``.</span>
+<span class="sd">        :return: A list with the potential energies of the individual components</span>
+<span class="sd">                 or the overall potential energy of the wavefunction. (Depending on the optional arguments.)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Compute the prefactor</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_extensions</span><span class="p">()</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span>
+        <span class="n">prefactor</span> <span class="o">=</span> <span class="n">product</span><span class="p">(</span><span class="n">array</span><span class="p">(</span><span class="n">T</span><span class="p">)</span> <span class="o">/</span> <span class="n">array</span><span class="p">(</span><span class="n">N</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">floating</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+        <span class="c1"># Reshape from (1, prod_d^D N_d) to (N_1, ..., N_D) shape</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="p">[</span><span class="n">pot</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">pot</span> <span class="ow">in</span> <span class="n">potential</span><span class="p">]</span>
+
+        <span class="c1"># Apply the matrix potential to the ket</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="n">tmp</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="n">potential</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+        <span class="c1"># Fourier transform the components</span>
+        <span class="n">ftcbra</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_values</span><span class="p">]</span>
+        <span class="n">ftcket</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># Compute the braket in Fourier space</span>
+        <span class="n">epot</span> <span class="o">=</span> <span class="p">[</span><span class="n">prefactor</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">cbra</span><span class="p">)</span> <span class="o">*</span> <span class="n">cket</span><span class="p">)</span> <span class="k">for</span> <span class="n">cbra</span><span class="p">,</span> <span class="n">cket</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ftcbra</span><span class="p">,</span> <span class="n">ftcket</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">epot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">epot</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">epot</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

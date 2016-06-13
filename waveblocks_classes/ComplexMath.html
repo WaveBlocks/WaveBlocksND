@@ -8,7 +8,7 @@
     
     <title>ComplexMath &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="AbstractGrid" href="Grid.html" />
     <link rel="prev" title="Ready made Potentials" href="../potlib/potentials.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="../potlib/potentials.html" title="Ready made Potentials"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="complexmath">
 <h1>ComplexMath<a class="headerlink" href="#complexmath" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-complexmath-class"></span><h2>About the <tt class="docutils literal"><span class="pre">ComplexMath</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-complexmath-class"></span><h2>About the <code class="docutils literal"><span class="pre">ComplexMath</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -70,7 +70,7 @@
 &#64;license: Modified BSD License</p>
 <dl class="function">
 <dt id="ComplexMath.continuate">
-<tt class="descclassname">ComplexMath.</tt><tt class="descname">continuate</tt><big>(</big><em>data</em>, <em>jump=6.283185307179586</em>, <em>reference=0.0</em><big>)</big><a class="reference internal" href="../_modules/ComplexMath.html#continuate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.continuate" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ComplexMath.</code><code class="descname">continuate</code><span class="sig-paren">(</span><em>data</em>, <em>jump=6.283185307179586</em>, <em>reference=0.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ComplexMath.html#continuate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.continuate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make the given data continuous by removing all jumps of size <img class="math" src="../_images/math/2192c0591cf0bb2892d5599ed0aca1da464e673e.png" alt="k\cdot\text{jump}"/>
 but not touching jumps of any other size. This can be used to overcome issues with
 the branch cut along the negative axis. There may be arise problems with jumps that
@@ -83,7 +83,7 @@ are of size nearly <img class="math" src="../_images/math/2192c0591cf0bb2892d559
 <li><strong>data</strong> &#8211; An array with the input data.</li>
 <li><strong>jump</strong> &#8211; The basic size of jumps which will be removed. Default is <img class="math" src="../_images/math/78b13210d9a65c08832c81655587364d44d1bf95.png" alt="2 \pi"/>.</li>
 <li><strong>reference</strong> (<em>A single float number.</em>) &#8211; This value allows the specify the starting point for continuation
-explicitly. It can be used together with <tt class="docutils literal"><span class="pre">data</span></tt>.</li>
+explicitly. It can be used together with <code class="docutils literal"><span class="pre">data</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -93,7 +93,7 @@ explicitly. It can be used together with <tt class="docutils literal"><span clas
 
 <dl class="function">
 <dt id="ComplexMath.cont_angle">
-<tt class="descclassname">ComplexMath.</tt><tt class="descname">cont_angle</tt><big>(</big><em>data</em>, <em>reference=None</em><big>)</big><a class="reference internal" href="../_modules/ComplexMath.html#cont_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.cont_angle" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ComplexMath.</code><code class="descname">cont_angle</code><span class="sig-paren">(</span><em>data</em>, <em>reference=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ComplexMath.html#cont_angle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.cont_angle" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the angle of a complex number <em>not</em> constrained to
 the principal value and avoiding discontinuities at the branch cut.
 This function just applies &#8216;continuate(.)&#8217; to the complex phase.</p>
@@ -104,7 +104,7 @@ This function just applies &#8216;continuate(.)&#8217; to the complex phase.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>data</strong> &#8211; An array with the input data.</li>
 <li><strong>reference</strong> (<em>A single float number.</em>) &#8211; This value allows the specify the starting point for
-continuation explicitly. It can be used together with <tt class="docutils literal"><span class="pre">data</span></tt>.</li>
+continuation explicitly. It can be used together with <code class="docutils literal"><span class="pre">data</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -114,7 +114,7 @@ continuation explicitly. It can be used together with <tt class="docutils litera
 
 <dl class="function">
 <dt id="ComplexMath.cont_sqrt">
-<tt class="descclassname">ComplexMath.</tt><tt class="descname">cont_sqrt</tt><big>(</big><em>data</em>, <em>reference=None</em><big>)</big><a class="reference internal" href="../_modules/ComplexMath.html#cont_sqrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.cont_sqrt" title="Permalink to this definition">¶</a></dt>
+<code class="descclassname">ComplexMath.</code><code class="descname">cont_sqrt</code><span class="sig-paren">(</span><em>data</em>, <em>reference=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/ComplexMath.html#cont_sqrt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#ComplexMath.cont_sqrt" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the complex square root (following the Riemann surface)
 yields a result <em>not</em> constrained to the principal value and avoiding
 discontinuities at the branch cut. This function applies &#8216;continuate(.)&#8217;
@@ -129,7 +129,7 @@ its square root according to the formula
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>data</strong> &#8211; An array with the input data.</li>
 <li><strong>reference</strong> (<em>A single float number.</em>) &#8211; This value allows the specify the starting point for
-continuation explicitly. It can be used together with <tt class="docutils literal"><span class="pre">data</span></tt>.</li>
+continuation explicitly. It can be used together with <code class="docutils literal"><span class="pre">data</span></code>.</li>
 </ul>
 </td>
 </tr>
@@ -144,12 +144,12 @@ continuation explicitly. It can be used together with <tt class="docutils litera
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">ComplexMath</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">ComplexMath</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">ComplexMath</span></code> class</a></li>
 <li><a class="reference internal" href="#module-ComplexMath">Class documentation</a></li>
 </ul>
 </li>
@@ -161,29 +161,28 @@ continuation explicitly. It can be used together with <tt class="docutils litera
   <h4>Next topic</h4>
   <p class="topless"><a href="Grid.html"
                         title="next chapter">AbstractGrid</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/ComplexMath.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/ComplexMath.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -198,12 +197,12 @@ continuation explicitly. It can be used together with <tt class="docutils litera
         <li class="right" >
           <a href="../potlib/potentials.html" title="Ready made Potentials"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

@@ -8,7 +8,7 @@
     
     <title>IOM_plugin_wavefunction &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
     <link rel="up" title="Module code" href="index.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -36,18 +36,18 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
-          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <h1>Source code for IOM_plugin_wavefunction</h1><div class="highlight"><pre>
-<span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
 
 <span class="sd">IOM plugin providing functions for handling wavefunction data.</span>
 
@@ -74,13 +74,13 @@
 <span class="sd">                      to get automatically growing datasets.</span>
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">grp_wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="s">&quot;wavefunction&quot;</span><span class="p">)</span>
+    <span class="n">grp_wf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">require_group</span><span class="p">(</span><span class="s2">&quot;wavefunction&quot;</span><span class="p">)</span>
 
-    <span class="c"># TODO: Remove quick hack:</span>
+    <span class="c1"># TODO: Remove quick hack:</span>
     <span class="k">if</span> <span class="n">flat</span><span class="p">:</span>
-        <span class="n">datashape</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;ncomponents&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;number_nodes&quot;</span><span class="p">])]</span>
+        <span class="n">datashape</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;number_nodes&quot;</span><span class="p">])]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">datashape</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;ncomponents&quot;</span><span class="p">]]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s">&quot;number_nodes&quot;</span><span class="p">])</span>
+        <span class="n">datashape</span> <span class="o">=</span> <span class="p">[</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">]]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;number_nodes&quot;</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">timeslots</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">T</span> <span class="o">=</span> <span class="mi">0</span>
@@ -89,32 +89,32 @@
         <span class="n">T</span> <span class="o">=</span> <span class="n">timeslots</span>
         <span class="n">Ts</span> <span class="o">=</span> <span class="n">timeslots</span>
 
-    <span class="c"># TODO: Improve chunking</span>
-    <span class="n">daset_psi_tg</span> <span class="o">=</span> <span class="n">grp_wf</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;timegrid&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">[</span><span class="n">Ts</span><span class="p">],</span> <span class="n">fillvalue</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">grp_wf</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s">&quot;Psi&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="n">datashape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">[</span><span class="n">Ts</span><span class="p">]</span> <span class="o">+</span> <span class="n">datashape</span><span class="p">)</span>
+    <span class="c1"># TODO: Improve chunking</span>
+    <span class="n">daset_psi_tg</span> <span class="o">=</span> <span class="n">grp_wf</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;timegrid&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">integer</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">[</span><span class="n">Ts</span><span class="p">],</span> <span class="n">fillvalue</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">grp_wf</span><span class="o">.</span><span class="n">create_dataset</span><span class="p">(</span><span class="s2">&quot;Psi&quot;</span><span class="p">,</span> <span class="p">[</span><span class="n">T</span><span class="p">]</span> <span class="o">+</span> <span class="n">datashape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">chunks</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">maxshape</span><span class="o">=</span><span class="p">[</span><span class="n">Ts</span><span class="p">]</span> <span class="o">+</span> <span class="n">datashape</span><span class="p">)</span>
 
-    <span class="n">daset_psi_tg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">daset_psi_tg</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span></div>
 
-</div>
+
 <div class="viewcode-block" id="delete_wavefunction"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavefunction.html#IOM_plugin_wavefunction.delete_wavefunction">[docs]</a><span class="k">def</span> <span class="nf">delete_wavefunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Remove the stored wavefunction.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction&quot;</span><span class="p">]</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-        <span class="k">pass</span>
+        <span class="k">pass</span></div>
 
-</div>
+
 <div class="viewcode-block" id="has_wavefunction"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavefunction.html#IOM_plugin_wavefunction.has_wavefunction">[docs]</a><span class="k">def</span> <span class="nf">has_wavefunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Ask if the specified data block has the desired data tensor.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="s">&quot;wavefunction&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+    <span class="k">return</span> <span class="s2">&quot;wavefunction&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span></div>
 
-</div>
+
 <div class="viewcode-block" id="save_wavefunction"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavefunction.html#IOM_plugin_wavefunction.save_wavefunction">[docs]</a><span class="k">def</span> <span class="nf">save_wavefunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavefunctionvalues</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Save the values :math:`\psi_i` of a :py:class:`WaveFunction` instance.</span>
 
@@ -123,42 +123,42 @@
 <span class="sd">    :param timestep: The timestep at which we save the data.</span>
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="c"># TODO: take wavefunction or wavefunction.get_values() as input?</span>
-    <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction/timegrid&quot;</span>
-    <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction/Psi&quot;</span>
-    <span class="n">timeslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span>
+    <span class="c1"># TODO: take wavefunction or wavefunction.get_values() as input?</span>
+    <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction/timegrid&quot;</span>
+    <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction/Psi&quot;</span>
+    <span class="n">timeslot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span>
 
-    <span class="c"># Store the values given</span>
+    <span class="c1"># Store the values given</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">must_resize</span><span class="p">(</span><span class="n">pathd</span><span class="p">,</span> <span class="n">timeslot</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">wavefunctionvalues</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">][</span><span class="n">timeslot</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="n">item</span>
 
-    <span class="c"># Write the timestep to which the stored values belong into the timegrid</span>
+    <span class="c1"># Write the timestep to which the stored values belong into the timegrid</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">must_resize</span><span class="p">(</span><span class="n">pathtg</span><span class="p">,</span> <span class="n">timeslot</span><span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][</span><span class="n">timeslot</span><span class="p">]</span> <span class="o">=</span> <span class="n">timestep</span>
 
-    <span class="c"># Update the pointer</span>
-    <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="c1"># Update the pointer</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;pointer&quot;</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span></div>
 
-</div>
+
 <div class="viewcode-block" id="load_wavefunction_timegrid"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavefunction.html#IOM_plugin_wavefunction.load_wavefunction_timegrid">[docs]</a><span class="k">def</span> <span class="nf">load_wavefunction_timegrid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Load the wavefunction timegrid.</span>
 
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction/timegrid&quot;</span>
-    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][</span><span class="o">...</span><span class="p">]</span>
+    <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction/timegrid&quot;</span>
+    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathtg</span><span class="p">][</span><span class="o">...</span><span class="p">]</span></div>
 
-</div>
+
 <div class="viewcode-block" id="load_wavefunction"><a class="viewcode-back" href="../waveblocks_classes/IOM_plugin_wavefunction.html#IOM_plugin_wavefunction.load_wavefunction">[docs]</a><span class="k">def</span> <span class="nf">load_wavefunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">timestep</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">blockid</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Load the wavefunction values.</span>
 
 <span class="sd">    :param timestep: Load only the data of this timestep.</span>
 <span class="sd">    :param blockid: The ID of the data block to operate on.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">pathtg</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction/timegrid&quot;</span>
-    <span class="n">pathd</span> <span class="o">=</span> <span class="s">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;/wavefunction/Psi&quot;</span>
+    <span class="n">pathtg</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction/timegrid&quot;</span>
+    <span class="n">pathd</span> <span class="o">=</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_prefixb</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">blockid</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;/wavefunction/Psi&quot;</span>
     <span class="k">if</span> <span class="n">timestep</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
         <span class="n">index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">find_timestep_index</span><span class="p">(</span><span class="n">pathtg</span><span class="p">,</span> <span class="n">timestep</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_srf</span><span class="p">[</span><span class="n">pathd</span><span class="p">][</span><span class="n">index</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span>
@@ -169,26 +169,23 @@
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-<div id="searchbox" style="display: none">
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -197,13 +194,13 @@
         <li class="right" >
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
-          <li><a href="index.html" >Module code</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

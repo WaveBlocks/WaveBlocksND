@@ -8,7 +8,7 @@
     
     <title>Welcome to WaveBlocksND’s documentation! &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -26,8 +26,8 @@
     <link rel="top" title="WaveBlocksND devel documentation" href="#" />
     <link rel="next" title="A first glance" href="manual/ch0_first_glance.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -39,14 +39,14 @@
         <li class="right" >
           <a href="manual/ch0_first_glance.html" title="A first glance"
              accesskey="N">next</a> |</li>
-        <li><a href="#">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="welcome-to-waveblocksnd-s-documentation">
 <h1>Welcome to WaveBlocksND&#8217;s documentation!<a class="headerlink" href="#welcome-to-waveblocksnd-s-documentation" title="Permalink to this headline">¶</a></h1>
@@ -98,7 +98,7 @@ The source code documentation below is actually up to date.</p>
 <li class="toctree-l2"><a class="reference internal" href="manual/example_eigenstates/example_eigenstates.html">Computing Eigenstates</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="manual/ch5_extending_waveblocks.html">Extending <tt class="docutils literal"><span class="pre">WaveBlocksND</span></tt></a><ul>
+<li class="toctree-l1"><a class="reference internal" href="manual/ch5_extending_waveblocks.html">Extending <code class="docutils literal"><span class="pre">WaveBlocksND</span></code></a><ul>
 <li class="toctree-l2"><a class="reference internal" href="manual/ch5_extending_waveblocks.html#structure-of-potential-definitions">Structure of potential definitions</a></li>
 <li class="toctree-l2"><a class="reference internal" href="manual/ch5_extending_waveblocks.html#adding-new-potentials">Adding new potentials</a></li>
 <li class="toctree-l2"><a class="reference internal" href="manual/ch5_extending_waveblocks.html#compute-and-store-more-data">Compute and store more data</a></li>
@@ -172,6 +172,7 @@ The source code documentation below is actually up to date.</p>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/HagedornWavepacketInhomogeneous.html">HagedornWavepacketInhomogeneous</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/Gradient.html">Gradient</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/GradientHAWP.html">GradientHAWP</a></li>
+<li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/PositionHAWP.html">PositionHAWP</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/BasisTransformation.html">BasisTransformation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/BasisTransformationWF.html">BasisTransformationWF</a></li>
 <li class="toctree-l1"><a class="reference internal" href="waveblocks_classes/BasisTransformationHAWP.html">BasisTransformationHAWP</a></li>
@@ -296,8 +297,8 @@ The source code documentation below is actually up to date.</p>
 <div class="section" id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this headline">¶</a></h1>
 <ul class="simple">
-<li><a class="reference internal" href="genindex.html"><em>Index</em></a></li>
-<li><a class="reference internal" href="search.html"><em>Search Page</em></a></li>
+<li><a class="reference internal" href="genindex.html"><span class="std std-ref">Index</span></a></li>
+<li><a class="reference internal" href="search.html"><span class="std std-ref">Search Page</span></a></li>
 </ul>
 </div>
 
@@ -305,7 +306,7 @@ The source code documentation below is actually up to date.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
@@ -334,29 +335,28 @@ The source code documentation below is actually up to date.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="manual/ch0_first_glance.html"
                         title="next chapter">A first glance</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="_sources/index.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -368,12 +368,12 @@ The source code documentation below is actually up to date.</p>
         <li class="right" >
           <a href="manual/ch0_first_glance.html" title="A first glance"
              >next</a> |</li>
-        <li><a href="#">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="#">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

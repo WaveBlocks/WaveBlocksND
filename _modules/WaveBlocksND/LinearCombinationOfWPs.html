@@ -1,0 +1,329 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.LinearCombinationOfWPs &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.LinearCombinationOfWPs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the class which represents linear combinations</span>
+<span class="sd">of general but compatible wavepackets of any kind.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">vstack</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.LinearCombinationOfWavepackets</span> <span class="kn">import</span> <span class="n">LinearCombinationOfWavepackets</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LinearCombinationOfWPs&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs">[docs]</a><span class="k">class</span> <span class="nc">LinearCombinationOfWPs</span><span class="p">(</span><span class="n">LinearCombinationOfWavepackets</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class represents linear combinations</span>
+<span class="sd">    of general but compatible wavepackets of any kind.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.__init__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">number_components</span><span class="p">,</span> <span class="n">number_packets</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new linear combination of general wavepackets. This</span>
+<span class="sd">        object represents :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.</span>
+<span class="sd">        All :math:`J` wavepackets :math:`\Psi_j` have the same number :math:`N`</span>
+<span class="sd">        components and are defined in the :math:`D` dimensional space.</span>
+
+<span class="sd">        :param dimension: The space dimension :math:`D` the packets have.</span>
+<span class="sd">        :param ncomponents: The number :math:`N` of components the packets have.</span>
+<span class="sd">        :return: An instance of :py:class:`LinearCombinationOfWPs`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">=</span> <span class="n">number_components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="n">number_packets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">number_packets</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.__str__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: A string describing the linear combination of general</span>
+<span class="sd">                 wavepackets :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Linear combination of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; general wavepackets, each with &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; component(s) in &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; space dimension(s)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.get_description"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this linear combination object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;LinearCombinationOfWPs&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keepid</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="c1"># Parameters of this packet</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="c1"># Create a new linear combination</span>
+        <span class="c1"># TODO: Consider using the block factory</span>
+        <span class="n">other</span> <span class="o">=</span> <span class="n">LinearCombinationOfWPs</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">],</span>
+                                       <span class="n">params</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">])</span>
+        <span class="n">newpackets</span> <span class="o">=</span> <span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">clone</span><span class="p">(</span><span class="n">keepid</span><span class="o">=</span><span class="n">keepid</span><span class="p">)</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()]</span>
+        <span class="n">other</span><span class="o">.</span><span class="n">add_wavepackets</span><span class="p">(</span><span class="n">newpackets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">other</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.add_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.add_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">coefficient</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a new wavepacket to the linear combination.</span>
+
+<span class="sd">        :param packet: The new wavepacket :math:`\Psi_j` to add.</span>
+<span class="sd">        :type packet: A :py:class:`Wavepacket` subclass instance.</span>
+<span class="sd">        :param coefficient: The corresponding coefficient :math:`c_j`, default is 1.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions does not match.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of components does not match.&quot;</span><span class="p">)</span>
+        <span class="c1"># Note: we do not test that the varepsilon parameter matches.</span>
+        <span class="n">pid</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Adding packet failed due to duplicate id.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">coefficient</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.add_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.add_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">,</span> <span class="n">coefficients</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a list of new wavepackets to the linear combination.</span>
+
+<span class="sd">        :param packetlist: A list of new wavepackets :math:`\{\Psi_j\}`.</span>
+<span class="sd">        :type packetlist: A list of :py:class:`Wavepacket` subclass instances.</span>
+<span class="sd">        :param coefficients: The corresponding coefficient vector :math:`c`, default</span>
+<span class="sd">                             is a vector of all 1.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span> <span class="o">!=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Differently many packets and coefficients given.&quot;</span><span class="p">)</span>
+
+        <span class="n">pids</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">packet</span> <span class="ow">in</span> <span class="n">packetlist</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions does not match.&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of components does not match.&quot;</span><span class="p">)</span>
+            <span class="c1"># Note: we do not test that the varepsilon parameter matches.</span>
+            <span class="n">pid</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_id</span><span class="p">()</span>
+            <span class="n">pids</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pid</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Adding packet failed due to duplicate id.&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">coefficients</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">pids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))])</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.remove_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.remove_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">remove_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Remove a wavepacket :math:`\Psi_j` from the linear combination.</span>
+
+<span class="sd">        :param index: The index :math:`0 \leq j &lt; J` of the packet to remove.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.get_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.get_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the wavepacket :math:`\Psi_j` from the linear combination.</span>
+
+<span class="sd">        :param index: The index :math:`0 \leq j &lt; J` of the packet to retrieve.</span>
+<span class="sd">        :return: The wavepacket :math:`\Psi_j`.</span>
+<span class="sd">        :type: A :py:class:`Wavepacket` subclass instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.get_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.get_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get a list of all wavepackets :math:`\Psi_j` in the linear combination.</span>
+
+<span class="sd">        :return: A list of all wavepackets :math:`\Psi_j`.</span>
+<span class="sd">        :type: A list of :py:class:`Wavepacket` subclass instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.set_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.set_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the list :math:`\{\Psi_j\}_j` of new wavepackets.</span>
+
+<span class="sd">        :param packetlist: A list of new wavepackets :math:`\Psi_j`.</span>
+<span class="sd">        :type packetlist: A list of :py:class:`Wavepacket` subclass instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of new packets.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span> <span class="o">=</span> <span class="n">packetlist</span><span class="p">[:]</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.get_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.get_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the coefficient :math:`c_j` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param index: The index :math:`0 \leq j &lt; J` of the coefficient to retrieve.</span>
+<span class="sd">        :return: The coefficient :math:`c_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.set_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.set_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the coefficient :math:`c_j` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param index: The index :math:`0 \leq j &lt; J` of the coefficient to retrieve.</span>
+<span class="sd">        :param coefficient: The coefficient :math:`c_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">=</span> <span class="n">coefficient</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.get_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.get_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the vector with all coefficients :math:`c_j` of all wavepackets :math:`\Psi_j`.</span>
+
+<span class="sd">        :return: The vector :math:`c` of all coefficients :math:`c_j`. The vector is of</span>
+<span class="sd">                 shape :math:`(J, 1)`.</span>
+<span class="sd">        :type: An :py:class:`ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.set_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.set_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Update all the coefficients :math:`c` of :math:`\Upsilon`.</span>
+
+<span class="sd">        :param coefficients: The vector :math:`c`.</span>
+<span class="sd">        :type coefficients: An :py:class:`ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of new coefficients.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfWPs.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the linear combination of wavepackets :math:`\Upsilon` at</span>
+<span class="sd">        the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a ``get_nodes`` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component to evaluate.</span>
+<span class="sd">                          (Defaults to ``None`` for evaluating all components.)</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the</span>
+<span class="sd">                 :math:`\Phi_i` at the nodes :math:`\gamma`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No packets in the linear combination to evaluate.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Split one off to get the result array shape</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vals</span>
+
+        <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">packet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">val</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">vals</span><span class="p">)]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">vals</span>
+
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

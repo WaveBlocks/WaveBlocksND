@@ -8,7 +8,7 @@
     
     <title>SymbolicIntegral0 &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="SymbolicIntegral" href="SymbolicIntegral.html" />
     <link rel="prev" title="GaussianIntegral" href="GaussianIntegral.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="GaussianIntegral.html" title="GaussianIntegral"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="symbolicintegral0">
 <h1>SymbolicIntegral0<a class="headerlink" href="#symbolicintegral0" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-symbolicintegral0-class"></span><h2>About the <tt class="docutils literal"><span class="pre">SymbolicIntegral0</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-symbolicintegral0-class"></span><h2>About the <code class="docutils literal"><span class="pre">SymbolicIntegral0</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,21 +63,19 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-73b9ee641eb15d5c829fad090f7f2a00485b32ff.png" alt="Inheritance diagram of SymbolicIntegral0" usemap="#inheritance5810d903b7" class="inheritance"/>
+<img src="../_images/inheritance-4344ae68b0cacb5312a4861329aa3738b12a7bc9.png" alt="Inheritance diagram of SymbolicIntegral0" usemap="#inheritance5810d903b7" class="inheritance"/>
 <map id="inheritance5810d903b7" name="inheritance5810d903b7">
 <area shape="rect" id="node3" title="This class is an abstract interface to quadratures in general." alt="" coords="4,4,219,24"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.SymbolicIntegral0">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">SymbolicIntegral0</tt><big>(</big><em>doraise=False</em>, <em>*unused</em>, <em>**kunused</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">SymbolicIntegral0</code><span class="sig-paren">(</span><em>doraise=False</em>, <em>*unused</em>, <em>**kunused</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SymbolicIntegral0.html#SymbolicIntegral0"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>doraise=False</em>, <em>*unused</em>, <em>**kunused</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>doraise=False</em>, <em>*unused</em>, <em>**kunused</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Use a symbolic exact formula for computing the inner product
 between two semi-classical wavepackets. The formula is
 constructed explicitly for the inhomogeneous case.</p>
@@ -85,9 +83,9 @@ constructed explicitly for the inhomogeneous case.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>doraise</strong> &#8211; Raise an <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProductException" title="WaveBlocksND.InnerProductException"><tt class="xref py py-class docutils literal"><span class="pre">InnerProductException</span></tt></a> exception
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>doraise</strong> &#8211; Raise an <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProductException" title="WaveBlocksND.InnerProductException"><code class="xref py py-class docutils literal"><span class="pre">InnerProductException</span></code></a> exception
 in case the symbolic formula will fail due to an
-inherent mathematical singularity. Default is <tt class="docutils literal"><span class="pre">False</span></tt>.</td>
+inherent mathematical singularity. Default is <code class="docutils literal"><span class="pre">False</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -95,11 +93,11 @@ inherent mathematical singularity. Default is <tt class="docutils literal"><span
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.exact_result_ground">
-<tt class="descname">exact_result_ground</tt><big>(</big><em>Pibra</em>, <em>Piket</em>, <em>eps</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_ground" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exact_result_ground</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em>, <em>eps</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_ground" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the overlap integral <img class="math" src="../_images/math/139b634148ebc4963ffcc0fcc74891e24052129a.png" alt="\langle \phi_0 | \phi_0 \rangle"/> of
 the groundstate <img class="math" src="../_images/math/8b67aa9294c96292c23cd0cc36c4af0bd82c5a53.png" alt="\phi_0"/> by using the symbolic formula:</p>
 <div class="math">
-<p><img src="../_images/math/f9dd262c8ab8b4cefa3e8563791b75dd39d4e1e4.png" alt="\langle \phi_0 | \phi_0 \rangle =
+<p><img src="../_images/math/51f746c1d5913c2790ee9b115e01eec65ad29a5e.png" alt="\langle \phi_0 | \phi_0 \rangle =
 \sqrt{\frac{-2 i}{Q_2 \overline{P_1} - P_2 \overline{Q_1}}} \cdot
   \exp \Biggl(
     \frac{i}{2 \varepsilon^2}
@@ -132,11 +130,11 @@ reason to call it from outside.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.exact_result_higher">
-<tt class="descname">exact_result_higher</tt><big>(</big><em>Pibra</em>, <em>Piket</em>, <em>eps</em>, <em>k</em>, <em>l</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_higher" title="Permalink to this definition">¶</a></dt>
+<code class="descname">exact_result_higher</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em>, <em>eps</em>, <em>k</em>, <em>l</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SymbolicIntegral0.html#SymbolicIntegral0.exact_result_higher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_higher" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the overlap integral <img class="math" src="../_images/math/224a2573968f7ab950662d920675f9bb17c43ec5.png" alt="\langle \phi_0 | \phi_l \rangle"/> of
 two states <img class="math" src="../_images/math/8b67aa9294c96292c23cd0cc36c4af0bd82c5a53.png" alt="\phi_0"/> and <img class="math" src="../_images/math/c0f0ca50ca07beb49e5b34860a4bb4b8d649db5e.png" alt="\phi_l"/> by using the symbolic formula:</p>
 <div class="math">
-<p><img src="../_images/math/c539447421d7e9424a222e9a363a64178affe8b2.png" alt="\langle \phi_0 | \phi_l \rangle =
+<p><img src="../_images/math/b584bbb7e43e1fd0640db9a22c2d8c121472d8a6.png" alt="\langle \phi_0 | \phi_l \rangle =
 \frac{1}{\sqrt{l!}} 2^{-\frac{l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
 \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{l}{2}} \cdot
 \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l}{2}}
@@ -170,17 +168,17 @@ reason to call it from outside.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SymbolicIntegral0.html#SymbolicIntegral0.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this integral object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.get_qr">
-<tt class="descname">get_qr</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.get_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">get_qr</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.get_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -193,7 +191,7 @@ never contains any data.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.initialize_operator">
-<tt class="descname">initialize_operator</tt><big>(</big><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.initialize_operator" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_operator</code><span class="sig-paren">(</span><em>operator=None</em>, <em>matrix=False</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.initialize_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the operator part of the inner product to evaluate.
 This function initializes the operator used for quadratures
 and for building matrices.</p>
@@ -207,12 +205,12 @@ and for building matrices.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>operator</strong> &#8211; The operator of the inner product.
-If <tt class="docutils literal"><span class="pre">None</span></tt> a suitable identity is used.</li>
-<li><strong>matrix</strong> &#8211; Set this to <tt class="docutils literal"><span class="pre">True</span></tt> (Default is <tt class="docutils literal"><span class="pre">False</span></tt>) in case
+If <code class="docutils literal"><span class="pre">None</span></code> a suitable identity is used.</li>
+<li><strong>matrix</strong> &#8211; Set this to <code class="docutils literal"><span class="pre">True</span></code> (Default is <code class="docutils literal"><span class="pre">False</span></code>) in case
 we want to compute the matrix elements.
 For nasty technical reasons we can not yet unify
 the operator call syntax.</li>
-<li><strong>eval_at_once</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">False</span></tt>.) &#8211; Flag to tell whether the operator supports the <tt class="docutils literal"><span class="pre">entry=(r,c)</span></tt> call syntax.
+<li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.
 Since we do not support operators at all, it has no effect.</li>
 </ul>
 </td>
@@ -223,7 +221,7 @@ Since we do not support operators at all, it has no effect.</li>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.initialize_packet">
-<tt class="descname">initialize_packet</tt><big>(</big><em>pacbra</em>, <em>packet=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.initialize_packet" title="Permalink to this definition">¶</a></dt>
+<code class="descname">initialize_packet</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.initialize_packet" title="Permalink to this definition">¶</a></dt>
 <dd><p>Provide the wavepacket parts of the inner product to evaluate.
 Since the formula is for the inhomogeneous case explicitly, different
 wavepackets can be used for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
@@ -237,7 +235,7 @@ wavepackets can be used for the &#8216;bra&#8217; as well as the &#8216;ket&#821
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><tt class="xref py py-class docutils literal"><span class="pre">ValueError</span></tt> if the dimension of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> is not 1.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> if the dimension of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> is not 1.</p>
 </td>
 </tr>
 </tbody>
@@ -246,7 +244,7 @@ wavepackets can be used for the &#8216;bra&#8217; as well as the &#8216;ket&#821
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.perform_build_matrix">
-<tt class="descname">perform_build_matrix</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_build_matrix</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes the matrix elements <img class="math" src="../_images/math/803df1c04ca5fe42c35c60666fad39826e64d8d0.png" alt="\langle\Phi_i |\Phi^\prime_j\rangle"/>
 by an exact symbolic formula.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -268,7 +266,7 @@ by an exact symbolic formula.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.perform_quadrature">
-<tt class="descname">perform_quadrature</tt><big>(</big><em>row</em>, <em>col</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_quadrature" title="Permalink to this definition">¶</a></dt>
+<code class="descname">perform_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates the integral <img class="math" src="../_images/math/5e7fecb3ab78459ce4114f10754d5794b3ec0760.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/>
 by an exact symbolic formula.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -290,7 +288,7 @@ by an exact symbolic formula.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.prepare">
-<tt class="descname">prepare</tt><big>(</big><em>rows</em>, <em>cols</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.prepare" title="Permalink to this definition">¶</a></dt>
+<code class="descname">prepare</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precompute some values needed for evaluating the integral
 <img class="math" src="../_images/math/5e7fecb3ab78459ce4114f10754d5794b3ec0760.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/> or the corresponding
 matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/>.
@@ -313,13 +311,13 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
 
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.set_qr">
-<tt class="descname">set_qr</tt><big>(</big><em>QR</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.set_qr" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> subclass instance used for quadrature.</p>
+<code class="descname">set_qr</code><span class="sig-paren">(</span><em>QR</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.set_qr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass instance used for quadrature.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><tt class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></tt></a> instance.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>QR</strong> &#8211; The new <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> instance.</td>
 </tr>
 </tbody>
 </table>
@@ -334,12 +332,12 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SymbolicIntegral0</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">SymbolicIntegral0</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">SymbolicIntegral0</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -352,29 +350,28 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
   <h4>Next topic</h4>
   <p class="topless"><a href="SymbolicIntegral.html"
                         title="next chapter">SymbolicIntegral</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/SymbolicIntegral0.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/SymbolicIntegral0.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -389,12 +386,12 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
         <li class="right" >
           <a href="GaussianIntegral.html" title="GaussianIntegral"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

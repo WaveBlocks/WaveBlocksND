@@ -1,0 +1,811 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.LinearCombinationOfHAWPs &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.LinearCombinationOfHAWPs</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code to represent linear combinations of compatible</span>
+<span class="sd">Hagedorn wavepackets in a more efficient and storage friendly way</span>
+<span class="sd">than the general linear combination class.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">eye</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">concatenate</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">squeeze</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">pi</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">einsum</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">delete</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">exp</span><span class="p">,</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">det</span><span class="p">,</span> <span class="n">inv</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.LinearCombinationOfWavepackets</span> <span class="kn">import</span> <span class="n">LinearCombinationOfWavepackets</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacket</span> <span class="kn">import</span> <span class="n">HagedornWavepacket</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="kn">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="kn">import</span> <span class="n">GridWrapper</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LinearCombinationOfHAWPs&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs">[docs]</a><span class="k">class</span> <span class="nc">LinearCombinationOfHAWPs</span><span class="p">(</span><span class="n">LinearCombinationOfWavepackets</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class represents linear combinations</span>
+<span class="sd">    of compatible Hagedorn wavepackets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.__init__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dimension</span><span class="p">,</span> <span class="n">number_components</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">number_packets</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new linear combination of Hagedorn wavepackets. This</span>
+<span class="sd">        object represents :math:`\Upsilon := \sum_{j=0}^{J-1} c_j \Psi_j`.</span>
+<span class="sd">        All :math:`J` wavepackets :math:`\Psi_j` have the same number :math:`N`</span>
+<span class="sd">        components and are defined in the :math:`D` dimensional space.</span>
+
+<span class="sd">        :param dimension: The space dimension :math:`D` the packets have.</span>
+<span class="sd">        :param ncomponents: The number :math:`N` of components the packets have.</span>
+<span class="sd">        :return: An instance of :py:class:`LinearCombinationOfHAWPs`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">=</span> <span class="n">dimension</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">=</span> <span class="n">number_components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="n">number_packets</span>
+
+        <span class="c1"># Epsilon</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span> <span class="o">=</span> <span class="n">eps</span>
+
+        <span class="c1"># Basis shapes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># Coefficients of individual packets</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">number_packets</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c1"># Default parameters of harmonic oscillator eigenstates</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="mf">1.0j</span> <span class="o">*</span> <span class="n">ones</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">eye</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="c1"># Parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span> <span class="o">=</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">]</span>
+
+        <span class="c1"># Coefficients of linear combination</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">number_packets</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="c1"># TODO: Handle multi-component packets</span>
+        <span class="k">assert</span> <span class="n">number_components</span> <span class="o">==</span> <span class="mi">1</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.__str__"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.__str__">[docs]</a>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        :return: A string describing the linear combination of Hagedorn</span>
+<span class="sd">                 wavepackets :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Linear combination of &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; Hagedorn wavepackets, each with &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; component(s) in &quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot; space dimension(s)</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">s</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_description"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this linear combination object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;LinearCombinationOfHAWPs&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.add_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.add_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">coefficient</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a new wavepacket to the linear combination.</span>
+
+<span class="sd">        :param packet: The new Hagedorn wavepacket :math:`\Psi_j` to add.</span>
+<span class="sd">        :type packet: A :py:class:`HagedornWavepacket` instance.</span>
+<span class="sd">        :param coefficient: The corresponding coefficient :math:`c_j`, default is 1.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of dimensions does not match.&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Number of components does not match.&quot;</span><span class="p">)</span>
+        <span class="c1"># Note: we do not test that the varepsilon parameter matches.</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="c1"># Store the shape</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">hash</span><span class="p">(</span><span class="n">K</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="nb">hash</span><span class="p">(</span><span class="n">K</span><span class="p">)]</span> <span class="o">=</span> <span class="n">K</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">K</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">())</span>
+        <span class="c1"># Store the coefficients</span>
+        <span class="n">bs</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span>
+        <span class="c1"># Resize storage if necessary</span>
+        <span class="n">curlen</span><span class="p">,</span> <span class="n">cursize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">diff</span> <span class="o">=</span> <span class="n">bs</span> <span class="o">-</span> <span class="n">cursize</span>
+        <span class="k">if</span> <span class="n">diff</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">Z</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">curlen</span><span class="p">,</span> <span class="n">diff</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span> <span class="o">=</span> <span class="n">hstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">,</span> <span class="n">Z</span><span class="p">])</span>
+        <span class="c1"># Append new coefficients</span>
+        <span class="n">curlen</span><span class="p">,</span> <span class="n">cursize</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">cursize</span> <span class="o">-</span> <span class="n">bs</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">,</span> <span class="n">hstack</span><span class="p">([</span><span class="n">c</span><span class="p">,</span> <span class="n">Z</span><span class="p">])])</span>
+        <span class="c1"># Store the parameter set</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">qs</span><span class="p">,</span> <span class="n">ps</span><span class="p">,</span> <span class="n">Qs</span><span class="p">,</span> <span class="n">Ps</span><span class="p">,</span> <span class="n">Ss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">qs</span><span class="p">,</span> <span class="n">q</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">ps</span><span class="p">,</span> <span class="n">p</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">Qs</span><span class="p">,</span> <span class="n">Q</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">Ps</span><span class="p">,</span> <span class="n">P</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">concatenate</span><span class="p">([</span><span class="n">Ss</span><span class="p">,</span> <span class="n">S</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Store the linear combination coefficient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">coefficient</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.add_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.add_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">,</span> <span class="n">coefficients</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Add a list of new wavepackets to the linear combination.</span>
+
+<span class="sd">        :param packetlist: A list of new Hagedorn wavepackets :math:`\{\Psi_j\}`.</span>
+<span class="sd">        :type packetlist: A list of :py:class:`HagedornWavepacket` instances.</span>
+<span class="sd">        :param coefficients: The corresponding coefficient vector :math:`c`, default</span>
+<span class="sd">                             is a vector of all 1.0.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">coefficients</span> <span class="o">=</span> <span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">))</span>
+
+        <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">packet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">packetlist</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">add_wavepacket</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">[</span><span class="n">j</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.remove_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.remove_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">remove_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Remove a wavepacket :math:`\Psi_j` from the linear combination.</span>
+
+<span class="sd">        :param packetindex: The index :math:`0 \leq j &lt; J` of the packet to remove.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Note: There are two potential issues:</span>
+        <span class="c1">#       * Unused basis shapes are never removed.</span>
+        <span class="c1">#       * The wp_coefficients array does not shrink along axis=1</span>
+        <span class="c1"># Remove basis shape book keeping</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">packetindex</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">packetindex</span><span class="p">)</span>
+        <span class="c1"># Remove wavepacket coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Remove wavepacket parameters</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Remove the linear combination coefficients</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span> <span class="o">=</span> <span class="n">delete</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_wavepacket"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the wavepacket :math:`\Psi_j` from the linear combination.</span>
+
+<span class="sd">        :param index: The index :math:`0 \leq j &lt; J` of the packet to retrieve.</span>
+<span class="sd">        :return: The wavepacket :math:`\Psi_j`.</span>
+<span class="sd">        :type: A :py:class:`HagedornWavepacket` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+        <span class="n">HAWP</span> <span class="o">=</span> <span class="n">HagedornWavepacket</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="p">)</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]]</span>
+        <span class="n">HAWP</span><span class="o">.</span><span class="n">set_basis_shapes</span><span class="p">([</span><span class="n">K</span><span class="p">])</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
+        <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">HAWP</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">])</span>
+        <span class="n">cj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">HAWP</span><span class="o">.</span><span class="n">set_coefficients</span><span class="p">(</span><span class="n">cj</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">HAWP</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get all the wavepackets :math:`\Psi_j` from the linear combination :math:`\Upsilon`.</span>
+
+<span class="sd">        .. warning:: This method potentially generates a *large* number of wavepacket instances.</span>
+
+<span class="sd">        :return: A list of :py:class:`HagedornWavepacket` instances.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">get_wavepacket</span><span class="p">(</span><span class="n">j</span><span class="p">)</span> <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">)]</span></div>
+
+
+    <span class="c1"># def set_wavepackets(self, packetlist):</span>
+    <span class="c1">#     r&quot;&quot;&quot;</span>
+    <span class="c1">#     :raise: :py:class:`NotImplementedError` Abstract interface.</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     raise NotImplementedError(&quot;&#39;LinearCombinationOfWavepackets&#39; is an abstract interface.&quot;)</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_basis_shapes"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_shapes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the basis shapes :math:`\mathfrak{K}_j` for each packet :math:`\Psi_j`.</span>
+
+<span class="sd">        :param component: The component :math:`i` whose basis shape we request. (Default is</span>
+<span class="sd">                          ``None`` which means to return the basis shapes for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        :return: The basis shape for an individual component or a list with all shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="n">ha</span><span class="p">]</span> <span class="k">for</span> <span class="n">ha</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">])</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_basis_shapes_hashes"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_shapes_hashes">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_shapes_hashes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the hashes of all basis shapes :math:`\mathfrak{K}_j` for each packet :math:`\Psi_j`.</span>
+
+<span class="sd">        :param component: The component :math:`i` whose basis shape we request. (Default is</span>
+<span class="sd">                          ``None`` which means to return the basis shapes for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        :return: The basis shape for an individual component or a list with all shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_basis_sizes"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_basis_sizes">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_sizes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the basis sizes :math:`|\mathfrak{K}_j|` for each packet :math:`\Psi_j`.</span>
+
+<span class="sd">        :param component: The component :math:`i` whose basis shape we request. (Default is</span>
+<span class="sd">                          ``None`` which means to return the basis shapes for all components.</span>
+<span class="sd">        :type component: int</span>
+<span class="sd">        :return: The basis shape for an individual component or a list with all shapes.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">)</span></div>
+
+
+    <span class="c1"># def set_basis_shapes(self, basis_shape, component=None):</span>
+    <span class="c1">#     r&quot;&quot;&quot;Set the basis shape :math:`\mathfrak{K}` of a given component or for all components.</span>
+
+    <span class="c1">#     :param basis_shape: The basis shape for an individual component or a list with all :math:`N` shapes.</span>
+    <span class="c1">#     :type basis_shape: A subclass of :py:class:`BasisShape`.</span>
+    <span class="c1">#     :param component: The component :math:`i` whose basis shape we want to set. (Default is</span>
+    <span class="c1">#                       ``None`` which means to set the basis shapes for all components.</span>
+    <span class="c1">#     :type component: int</span>
+    <span class="c1">#     &quot;&quot;&quot;</span>
+    <span class="c1">#     if component is not None:</span>
+    <span class="c1">#         # Check for valid input basis shape</span>
+    <span class="c1">#         if not component in range(self._number_components):</span>
+    <span class="c1">#             raise ValueError(&quot;Invalid component index &quot; + str(component))</span>
+
+    <span class="c1">#         # Adapt the coefficient storage vectors</span>
+    <span class="c1">#         self._resize_coefficient_storage(component, self._basis_shapes[component], basis_shape)</span>
+    <span class="c1">#         # Set the new basis shape for the given component</span>
+    <span class="c1">#         self._basis_shapes[component] = basis_shape</span>
+    <span class="c1">#     else:</span>
+    <span class="c1">#         # Check for valid input basis shape</span>
+    <span class="c1">#         if not len(basis_shape) == self._number_components:</span>
+    <span class="c1">#             raise ValueError(&quot;Number of basis shape(s) does not match to number of components.&quot;)</span>
+
+    <span class="c1">#         for index, bsnew in enumerate(basis_shape):</span>
+    <span class="c1">#             # Adapt the coefficient storage vectors</span>
+    <span class="c1">#             self._resize_coefficient_storage(index, self._basis_shapes[index], bsnew)</span>
+    <span class="c1">#             # Set the new basis shape for the given component</span>
+    <span class="c1">#             self._basis_shapes[index] = bsnew</span>
+
+    <span class="c1">#     # And update the caches information</span>
+    <span class="c1">#     self._basis_sizes = [ bs.get_basis_size() for bs in self._basis_shapes ]</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_wavepacket_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">index</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :return: A single complex number.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+        <span class="n">basis_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">basis_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no basis function with multi-index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># Apply linear order mapping here</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">basis_shape</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">][</span><span class="n">key</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.set_wavepacket_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepacket_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :param value: The new value of the coefficient :math:`c^i_k`.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+        <span class="n">basis_shape</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]]</span>
+
+        <span class="k">if</span> <span class="n">index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">basis_shape</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no basis function with multi-index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+
+        <span class="c1"># Apply linear order mapping here</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">basis_shape</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">][</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_wavepacket_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :return: A single complex number.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+            <span class="n">bs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:</span><span class="n">bs</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.set_wavepacket_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepacket_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">,</span> <span class="n">basisshapes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve a single coefficient :math:`c^i_k` of the specified component :math:`\Phi_i`</span>
+<span class="sd">        of :math:`\Psi`.</span>
+
+<span class="sd">        Warning: make sure the coefficients and basis shapes stay in sync!</span>
+
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_i` we want to update.</span>
+<span class="sd">        :type components: int</span>
+<span class="sd">        :param index: The multi-index :math:`k` of the coefficient :math:`c^i_k` we want to update.</span>
+<span class="sd">        :type index: A tuple of :math:`D` integers.</span>
+<span class="sd">        :return: A single complex number.</span>
+<span class="sd">        :raise: :py:class:`ValueError` For invalid indices :math:`i` or :math:`k`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+            <span class="k">if</span> <span class="n">basisshapes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span> <span class="o">=</span> <span class="nb">hash</span><span class="p">(</span><span class="n">basisshapes</span><span class="p">)</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="nb">hash</span><span class="p">(</span><span class="n">basisshapes</span><span class="p">)]</span> <span class="o">=</span> <span class="n">basisshapes</span>
+                <span class="n">bs</span> <span class="o">=</span> <span class="n">basisshapes</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span> <span class="o">=</span> <span class="n">bs</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">bs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:</span><span class="n">bs</span><span class="p">]</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="n">coefficients</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span>
+
+            <span class="k">if</span> <span class="n">basisshapes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span> <span class="o">=</span> <span class="p">[</span><span class="nb">hash</span><span class="p">(</span><span class="n">ashape</span><span class="p">)</span> <span class="k">for</span> <span class="n">ashape</span> <span class="ow">in</span> <span class="n">basisshapes</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span> <span class="o">=</span> <span class="p">{</span><span class="nb">hash</span><span class="p">(</span><span class="n">ashape</span><span class="p">):</span> <span class="n">ashape</span> <span class="k">for</span> <span class="n">ashape</span> <span class="ow">in</span> <span class="nb">list</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">basisshapes</span><span class="p">))}</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_basis_sizes</span> <span class="o">=</span> <span class="p">[</span><span class="n">K</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">()</span> <span class="k">for</span> <span class="n">K</span> <span class="ow">in</span> <span class="n">basisshapes</span><span class="p">]</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">J</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_wavepacket_parameters"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_wavepacket_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavepacket_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">)):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the Hagedorn parameter set :math:`\Pi` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param packetindex: The index :math:`0 \leq j &lt; J` of the packet whose parameter</span>
+<span class="sd">                      set :math:`Pi` we want.</span>
+<span class="sd">        :return: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Pilist</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">packetindex</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">packetindex</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">packetindex</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">packetindex</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">packetindex</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Invalid parameter key: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Pilist</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">key</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+                    <span class="n">Pilist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Invalid parameter key: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">Pilist</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.set_wavepacket_parameters"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.set_wavepacket_parameters">[docs]</a>    <span class="k">def</span> <span class="nf">set_wavepacket_parameters</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pilist</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">key</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;q&quot;</span><span class="p">,</span> <span class="s2">&quot;p&quot;</span><span class="p">,</span> <span class="s2">&quot;Q&quot;</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">,</span> <span class="s2">&quot;S&quot;</span><span class="p">)):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the Hagedorn parameters :math:`\Pi` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param Pilist: The Hagedorn parameter set :math:`\Pi = (q, p, Q, P, S)` in this order.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">packetindex</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+            <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+
+        <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">item</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">Pilist</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;q&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;p&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;Q&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;P&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">k</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">item</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Invalid parameter key: {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_eps"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_eps">[docs]</a>    <span class="k">def</span> <span class="nf">get_eps</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Retrieve the semi-classical scaling parameter :math:`\varepsilon` of the wavepacket.</span>
+
+<span class="sd">        :return: The value of :math:`\varepsilon`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the coefficient :math:`c_j` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param packetindex: The index :math:`0 \leq j &lt; J` of the coefficient to retrieve.</span>
+<span class="sd">        :return: The coefficient :math:`c_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.set_coefficient"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.set_coefficient">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">coefficient</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the coefficient :math:`c_j` of the wavepacket :math:`\Psi_j`.</span>
+
+<span class="sd">        :param packetindex: The index :math:`0 \leq j &lt; J` of the coefficient to retrieve.</span>
+<span class="sd">        :param coefficient: The coefficient :math:`c_j`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]</span> <span class="o">=</span> <span class="n">coefficient</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.get_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.get_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">get_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the vector with all coefficients :math:`c_j` of all wavepackets :math:`\Psi_j`.</span>
+
+<span class="sd">        :return: The vector :math:`c` of all coefficients :math:`c_j`. The vector is of</span>
+<span class="sd">                 shape :math:`(J, 1)`.</span>
+<span class="sd">        :type: An :py:class:`ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.set_coefficients"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.set_coefficients">[docs]</a>    <span class="k">def</span> <span class="nf">set_coefficients</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coefficients</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Update all the coefficients :math:`c` of :math:`\Upsilon`.</span>
+
+<span class="sd">        :param coefficients: The vector :math:`c`.</span>
+<span class="sd">        :type coefficients: An :py:class:`ndarray`</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wrong number of new coefficients.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
+
+
+    <span class="c1"># TODO: Put all evaluation functions into common class</span>
+
+    <span class="k">def</span> <span class="nf">_grid_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agrid</span><span class="p">):</span>
+        <span class="c1"># TODO: Consider additional input types for &quot;nodes&quot;:</span>
+        <span class="c1">#       list of numpy ndarrays, list of single python scalars</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agrid</span><span class="p">,</span> <span class="n">AbstractGrid</span><span class="p">):</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">agrid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">GridWrapper</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">agrid</span>
+
+
+    <span class="k">def</span> <span class="nf">_evaluate_phi0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the lowest order basis function :math:`\phi_0` on a</span>
+<span class="sd">        grid :math:`\Gamma` of nodes.</span>
+
+<span class="sd">        :param Pi: The parameter set :math:`\Pi`.</span>
+<span class="sd">        :param nodes: The nodes we evaluate :math:`\phi_0` at.</span>
+<span class="sd">        :type nodes: An ndarray of shape ``(D, |\Gamma|)``.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :param root: The function used to compute the square root in the prefactor.</span>
+<span class="sd">                     Defaults to the ``sqrt`` function of ``numpy`` but can be any</span>
+<span class="sd">                     callable object and especially an instance of :py:class:`ContinuousSqrt`.</span>
+<span class="sd">        :return: An ndarray of shape ``(|\Gamma|)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+
+        <span class="c1"># The current parameters</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">p</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">1</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+        <span class="n">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">3</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+
+        <span class="c1"># TODO: Maybe use LU instead of inv(...)</span>
+        <span class="n">df</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span>
+        <span class="n">pr1</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ik,ij,jk-&gt;k&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)),</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">pr2</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ik&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pr1</span> <span class="o">+</span> <span class="n">pr2</span><span class="p">)</span>
+
+        <span class="c1"># The problematic prefactor cancels in inner products</span>
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">D</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">prefactor</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.slim_recursion"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.slim_recursion">[docs]</a>    <span class="k">def</span> <span class="nf">slim_recursion</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.</span>
+<span class="sd">        This routine is a slim version compared to the full basis evaluation. At every moment</span>
+<span class="sd">        we store only the data we really need to compute the next step until we hit the highest</span>
+<span class="sd">        order basis functions.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a ``get_nodes(...)`` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i`</span>
+<span class="sd">                 at the nodes :math:`\gamma`.</span>
+
+<span class="sd">        Note that this function does not include the global phase :math:`\exp(\frac{i S}{\varepsilon^2})`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+
+        <span class="c1"># The current parameters</span>
+        <span class="n">q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="c1"># p = self._Pis[1][packetindex,:].reshape((D,1))</span>
+        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
+        <span class="c1"># P = self._Pis[3][packetindex,:,:].reshape((D,D))</span>
+
+        <span class="c1"># Precompute some constants</span>
+        <span class="n">Qinv</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">Qbar</span> <span class="o">=</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Q</span><span class="p">)</span>
+        <span class="n">QQ</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">,</span> <span class="n">Qbar</span><span class="p">)</span>
+
+        <span class="c1"># The basis shape</span>
+        <span class="n">bas</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_basis_shapes_hashes</span><span class="p">[</span><span class="n">packetindex</span><span class="p">]]</span>
+        <span class="n">Z</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">D</span> <span class="o">*</span> <span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="c1"># Book keeping</span>
+        <span class="n">todo</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">newtodo</span> <span class="o">=</span> <span class="p">[</span><span class="n">Z</span><span class="p">]</span>
+        <span class="n">olddelete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">delete</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">{}</span>
+
+        <span class="c1"># The grid nodes</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">nn</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
+
+        <span class="c1"># Evaluate phi0</span>
+        <span class="n">tmp</span><span class="p">[</span><span class="n">Z</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_evaluate_phi0</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+
+        <span class="n">psi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">,</span> <span class="n">bas</span><span class="p">[</span><span class="n">Z</span><span class="p">]]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">Z</span><span class="p">]</span>
+
+        <span class="c1"># Iterate for higher order states</span>
+        <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">newtodo</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># Delete results that never will be used again</span>
+            <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">olddelete</span><span class="p">:</span>
+                <span class="k">del</span> <span class="n">tmp</span><span class="p">[</span><span class="n">d</span><span class="p">]</span>
+
+            <span class="c1"># Exchange queus</span>
+            <span class="n">todo</span> <span class="o">=</span> <span class="n">newtodo</span>
+            <span class="n">newtodo</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">olddelete</span> <span class="o">=</span> <span class="n">delete</span>
+            <span class="n">delete</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="c1"># Compute new results</span>
+            <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">todo</span><span class="p">:</span>
+                <span class="c1"># Center stencil at node k</span>
+                <span class="n">ki</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+                <span class="c1"># Access predecessors</span>
+                <span class="n">phim</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">nn</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">kpj</span> <span class="ow">in</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;backward&quot;</span><span class="p">):</span>
+                    <span class="n">phim</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">kpj</span><span class="p">]</span>
+
+                <span class="c1"># Compute the neighbours</span>
+                <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">bas</span><span class="o">.</span><span class="n">get_neighbours</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="s2">&quot;forward&quot;</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">n</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">tmp</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                        <span class="c1"># Compute 3-term recursion</span>
+                        <span class="n">p1</span> <span class="o">=</span> <span class="p">(</span><span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span><span class="p">)</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                        <span class="n">p2</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">)</span> <span class="o">*</span> <span class="n">phim</span>
+
+                        <span class="n">t1</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span> <span class="n">dot</span><span class="p">(</span><span class="n">Qinv</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p1</span><span class="p">)</span>
+                        <span class="n">t2</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">QQ</span><span class="p">[</span><span class="n">d</span><span class="p">,</span> <span class="p">:],</span> <span class="n">p2</span><span class="p">)</span>
+
+                        <span class="c1"># Store computed value</span>
+                        <span class="n">tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t1</span> <span class="o">-</span> <span class="n">t2</span><span class="p">)</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">ki</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+                        <span class="c1"># And update the result</span>
+                        <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_wp_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">,</span> <span class="n">bas</span><span class="p">[</span><span class="n">n</span><span class="p">]]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+                        <span class="n">newtodo</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+                <span class="n">delete</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">psi</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">psi</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.evaluate_basis_at"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.evaluate_basis_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate all the individual Hagedorn wavepackets :math:`\Psi_j` of</span>
+<span class="sd">        :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j` at the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a ``get_nodes(...)`` method.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q_j)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\Gamma|, J)` where</span>
+<span class="sd">                 the entry :math:`H[i, j]` is the value of :math:`\Psi_j(\gamma_i)`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+
+        <span class="n">values</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">G</span><span class="p">,</span> <span class="n">J</span><span class="p">))</span>
+        <span class="c1"># Evaluate each packet individually</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">J</span><span class="p">):</span>
+            <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">S</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">values</span><span class="p">[:,</span> <span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">values</span></div>
+
+
+<div class="viewcode-block" id="LinearCombinationOfHAWPs.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfHAWPs.html#WaveBlocksND.LinearCombinationOfHAWPs.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">packetindex</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the linear copmbination :math:`\Upsilon = \sum_{j=0}^J c_j \Psi_j`</span>
+<span class="sd">        of Hagedorn wavepackets :math:`\Psi_j` at the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a ``get_nodes(...)`` method.</span>
+<span class="sd">        :param packetindex: The index :math:`j` of a single packet :math:`\Psi_j` to evaluate.</span>
+<span class="sd">                            (Defaults to ``None`` for evaluating all wavepackets.)</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q_j)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the :math:`\Psi_j` at the nodes :math:`\gamma`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+
+        <span class="k">if</span> <span class="n">packetindex</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">packetindex</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">-</span> <span class="mi">1</span> <span class="ow">or</span> <span class="n">packetindex</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;There is no packet with index {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">packetindex</span><span class="p">))</span>
+
+            <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">packetindex</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">S</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">squeeze</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">[</span><span class="n">packetindex</span><span class="p">])</span> <span class="o">*</span> <span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">packetindex</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">),))</span>
+            <span class="c1"># Evaluate each packet individually</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span><span class="p">):</span>
+                <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_Pis</span><span class="p">[</span><span class="mi">4</span><span class="p">][</span><span class="n">j</span><span class="p">,</span> <span class="p">:]</span>
+                <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">*</span> <span class="n">S</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">+</span> <span class="n">squeeze</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lc_coefficients</span><span class="p">[</span><span class="n">j</span><span class="p">])</span> <span class="o">*</span> <span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">j</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">values</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>

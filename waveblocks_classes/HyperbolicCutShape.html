@@ -8,7 +8,7 @@
     
     <title>HyperbolicCutShape &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="LimitedHyperbolicCutShape" href="LimitedHyperbolicCutShape.html" />
     <link rel="prev" title="SimplexShape" href="SimplexShape.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="SimplexShape.html" title="SimplexShape"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="hyperboliccutshape">
 <h1>HyperbolicCutShape<a class="headerlink" href="#hyperboliccutshape" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-hyperboliccutshape-class"></span><h2>About the <tt class="docutils literal"><span class="pre">HyperbolicCutShape</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-hyperboliccutshape-class"></span><h2>About the <code class="docutils literal"><span class="pre">HyperbolicCutShape</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,31 +63,29 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-b83cb2d1bb1f88d214cd9dd1c05d9495fc94804c.png" alt="Inheritance diagram of HyperbolicCutShape" usemap="#inheritance0df5393bbe" class="inheritance"/>
+<img src="../_images/inheritance-7cd0e51d2b49e8b75d71c91320c3a4de527da4c4.png" alt="Inheritance diagram of HyperbolicCutShape" usemap="#inheritance0df5393bbe" class="inheritance"/>
 <map id="inheritance0df5393bbe" name="inheritance0df5393bbe">
 <area shape="rect" id="node1" title="This class implements the hyperbolic cut basis shape which" alt="" coords="328,5,615,31"/>
 <area shape="rect" id="node2" title="This class defines the abstract interface to basis shapes." alt="" coords="5,5,280,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.HyperbolicCutShape">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">HyperbolicCutShape</tt><big>(</big><em>D</em>, <em>K</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HyperbolicCutShape</code><span class="sig-paren">(</span><em>D</em>, <em>K</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements the hyperbolic cut basis shape which
 is a special type of sparse basis set. A basis shape is essentially
 all information and operations related to the set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>
 of multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>. The hyperbolic cut shape in <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> dimensions
 and with <cite>sparsity</cite> <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> is defined as the set</p>
 <div class="math">
-<p><img src="../_images/math/8f55e4dc1d143b6b8000c28c94898f7ebbf1b216.png" alt="\mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) |
+<p><img src="../_images/math/f325a638495141b4173d6b450b93335413b9d95e.png" alt="\mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) |
                          k_d \geq 0 \forall d \in [0,\ldots,D-1]
                          \land \prod_{d=0}^{D-1}(1+k_d) \leq K \}"/></p>
 </div><dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>D</em>, <em>K</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>D</em>, <em>K</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -104,7 +102,7 @@ and with <cite>sparsity</cite> <img class="math" src="../_images/math/28e003020d
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__str__">
-<tt class="descname">__str__</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__str__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -117,7 +115,7 @@ and with <cite>sparsity</cite> <img class="math" src="../_images/math/28e003020d
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__hash__">
-<tt class="descname">__hash__</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__hash__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__hash__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a unique hash for the basis shape. In the case of hyperbolic
 cut basis shapes <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/> the basis is fully specified by its
 dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> and the sparsity parameter <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/>.</p>
@@ -125,22 +123,22 @@ dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__getitem__">
-<tt class="descname">__getitem__</tt><big>(</big><em>k</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__getitem__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__getitem__</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__getitem__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__getitem__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Make map look ups.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__iter__">
-<tt class="descname">__iter__</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__iter__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__iter__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Implements iteration over the multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>
 of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
 <p>Note: The order of iteration is NOT fixed. If you need a special
-iteration scheme, use <a class="reference internal" href="#WaveBlocksND.HyperbolicCutShape.get_node_iterator" title="WaveBlocksND.HyperbolicCutShape.get_node_iterator"><tt class="xref py py-meth docutils literal"><span class="pre">get_node_iterator()</span></tt></a>.</p>
+iteration scheme, use <a class="reference internal" href="#WaveBlocksND.HyperbolicCutShape.get_node_iterator" title="WaveBlocksND.HyperbolicCutShape.get_node_iterator"><code class="xref py py-meth docutils literal"><span class="pre">get_node_iterator()</span></code></a>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.__contains__">
-<tt class="descname">__contains__</tt><big>(</big><em>k</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__contains__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__contains__</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.__contains__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.__contains__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a given multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -154,7 +152,7 @@ iteration scheme, use <a class="reference internal" href="#WaveBlocksND.Hyperbol
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.contains">
-<tt class="descname">contains</tt><big>(</big><em>k</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.contains" title="Permalink to this definition">¶</a></dt>
+<code class="descname">contains</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.contains" title="Permalink to this definition">¶</a></dt>
 <dd><p>Checks if a given multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -168,14 +166,14 @@ iteration scheme, use <a class="reference internal" href="#WaveBlocksND.Hyperbol
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.extend">
-<tt class="descname">extend</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.extend" title="Permalink to this definition">¶</a></dt>
+<code class="descname">extend</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.extend"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.extend" title="Permalink to this definition">¶</a></dt>
 <dd><p>Extend the basis shape such that (at least) all neighbours of all
 boundary nodes are included in the extended basis shape.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.find_largest_index">
-<tt class="descname">find_largest_index</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.find_largest_index" title="Permalink to this definition">¶</a></dt>
+<code class="descname">find_largest_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.find_largest_index" title="Permalink to this definition">¶</a></dt>
 <dd><p>Find the index <img class="math" src="../_images/math/f364dc342dae06435b4b03258ebc7fbcab96db39.png" alt="k \in \mathfrak{K}"/> with maximal distance
 <img class="math" src="../_images/math/e1144896e09376f22a9709512baeb172c92d3fe0.png" alt="\sum_{d=0}^D k_d^2"/> from the zero index. In case of
 multiple maxima the method returns the first one found.</p>
@@ -183,7 +181,7 @@ multiple maxima the method returns the first one found.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_basis_size">
-<tt class="descname">get_basis_size</tt><big>(</big><em>extended=False</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_basis_size" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_basis_size</code><span class="sig-paren">(</span><em>extended=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_basis_size" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the size <img class="math" src="../_images/math/20933735c7854a75ecd9f091134f79bfef74f9c1.png" alt="|\mathfrak{K}|"/> of the basis. The size is the
 number of distinct multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> that belong to the basis
 <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
@@ -191,7 +189,7 @@ number of distinct multi-indices <img class="math" src="../_images/math/e9203da5
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -199,16 +197,16 @@ number of distinct multi-indices <img class="math" src="../_images/math/e9203da5
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_description">
-<tt class="descname">get_description</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_description" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this basis shape object.
-A description is a <tt class="docutils literal"><span class="pre">dict</span></tt> containing all key-value pairs
+A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current basis shape. A description
 never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_dimension">
-<tt class="descname">get_dimension</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_dimension" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the basis shape <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.
 This is defined as the number of components each multi-index
 <img class="math" src="../_images/math/67aacb3d19739daa4afa4fbf9fea63c412eeeec5.png" alt="k = (k_0, \ldots, k_{D-1})"/> has.</p>
@@ -216,7 +214,7 @@ This is defined as the number of components each multi-index
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><tt class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></tt> Abstract interface.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">NotImplementedError</span></code> Abstract interface.</td>
 </tr>
 </tbody>
 </table>
@@ -224,7 +222,7 @@ This is defined as the number of components each multi-index
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_limits">
-<tt class="descname">get_limits</tt><big>(</big><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_limits" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_limits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.get_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_limits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the upper limit <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> which is the same for all directions <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -238,7 +236,7 @@ This is defined as the number of components each multi-index
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_neighbours">
-<tt class="descname">get_neighbours</tt><big>(</big><em>k</em>, <em>selection=None</em>, <em>direction=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_neighbours" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_neighbours</code><span class="sig-paren">(</span><em>k</em>, <em>selection=None</em>, <em>direction=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.get_neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_neighbours" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all multi-indices that are neighbours of a given
 multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>. A direct neighbour is defined as
 <img class="math" src="../_images/math/16e636cfe8f9ae057568a0b8f026e4541ce77877.png" alt="(k_0, \ldots, k_d \pm 1, \ldots, k_{D-1}) \forall d \in [0 \ldots D-1]"/>.</p>
@@ -248,8 +246,8 @@ multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>k</strong> (<em>tuple</em>) &#8211; The multi-index of which we want to get the neighbours.</li>
-<li><strong>selection</strong> (string with fixed values <tt class="docutils literal"><span class="pre">forward</span></tt>, <tt class="docutils literal"><span class="pre">backward</span></tt> or <tt class="docutils literal"><span class="pre">all</span></tt>.
-The values <tt class="docutils literal"><span class="pre">all</span></tt> is equivalent to the value <tt class="docutils literal"><span class="pre">None</span></tt> (default).) &#8211; </li>
+<li><strong>selection</strong> (string with fixed values <code class="docutils literal"><span class="pre">forward</span></code>, <code class="docutils literal"><span class="pre">backward</span></code> or <code class="docutils literal"><span class="pre">all</span></code>.
+The values <code class="docutils literal"><span class="pre">all</span></code> is equivalent to the value <code class="docutils literal"><span class="pre">None</span></code> (default).) &#8211; </li>
 <li><strong>direction</strong> (<em>int</em>) &#8211; The direction <img class="math" src="../_images/math/caad2dfb9cbe44796c5ea89eb90f32ae3907e286.png" alt="0 \leq d &lt; D"/> in which we want to find
 the neighbours <img class="math" src="../_images/math/825f4d551c6c6b4c7f76abb0c331258ec41b6699.png" alt="k \pm e_d"/>.</li>
 </ul>
@@ -264,15 +262,15 @@ the neighbours <img class="math" src="../_images/math/825f4d551c6c6b4c7f76abb0c3
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperbolicCutShape.get_node_iterator">
-<tt class="descname">get_node_iterator</tt><big>(</big><em>mode='lex'</em>, <em>direction=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_node_iterator" title="Permalink to this definition">¶</a></dt>
+<code class="descname">get_node_iterator</code><span class="sig-paren">(</span><em>mode='lex'</em>, <em>direction=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperbolicCutShape.html#HyperbolicCutShape.get_node_iterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperbolicCutShape.get_node_iterator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns an iterator to iterate over all basis elements <img class="math" src="../_images/math/f364dc342dae06435b4b03258ebc7fbcab96db39.png" alt="k \in \mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>mode</strong> (<em>string</em>) &#8211; The mode by which we iterate over the indices. Default is <tt class="docutils literal"><span class="pre">lex</span></tt>
-for lexicographical order. Supported is also <tt class="docutils literal"><span class="pre">chain</span></tt>, for
+<li><strong>mode</strong> (<em>string</em>) &#8211; The mode by which we iterate over the indices. Default is <code class="docutils literal"><span class="pre">lex</span></code>
+for lexicographical order. Supported is also <code class="docutils literal"><span class="pre">chain</span></code>, for
 the chain-like mode, details see the manual.</li>
 <li><strong>direction</strong> (<em>integer.</em>) &#8211; If iterating in <cite>chainmode</cite> this specifies the direction
 the chains go.</li>
@@ -292,12 +290,12 @@ the chains go.</li>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">HyperbolicCutShape</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">HyperbolicCutShape</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">HyperbolicCutShape</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -310,29 +308,28 @@ the chains go.</li>
   <h4>Next topic</h4>
   <p class="topless"><a href="LimitedHyperbolicCutShape.html"
                         title="next chapter">LimitedHyperbolicCutShape</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/HyperbolicCutShape.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/HyperbolicCutShape.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -347,12 +344,12 @@ the chains go.</li>
         <li class="right" >
           <a href="SimplexShape.html" title="SimplexShape"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

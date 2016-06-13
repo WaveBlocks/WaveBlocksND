@@ -8,7 +8,7 @@
     
     <title>SparsityOraclePSHAWP &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -27,8 +27,8 @@
     <link rel="next" title="SparsityOracleGIHAWP" href="SparsityOracleGIHAWP.html" />
     <link rel="prev" title="SparsityOracleTrue" href="SparsityOracleTrue.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -43,19 +43,19 @@
         <li class="right" >
           <a href="SparsityOracleTrue.html" title="SparsityOracleTrue"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="sparsityoraclepshawp">
 <h1>SparsityOraclePSHAWP<a class="headerlink" href="#sparsityoraclepshawp" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-sparsityoraclepshawp-class"></span><h2>About the <tt class="docutils literal"><span class="pre">SparsityOraclePSHAWP</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-sparsityoraclepshawp-class"></span><h2>About the <code class="docutils literal"><span class="pre">SparsityOraclePSHAWP</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,23 +63,21 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-15199200a79475b545d91c928fa3eb55fca91ce4.png" alt="Inheritance diagram of SparsityOraclePSHAWP" usemap="#inheritanceea2d7542a3" class="inheritance"/>
+<img src="../_images/inheritance-d0c8937f7ed49d65406aa7ff0d83b2ce9dbf90bf.png" alt="Inheritance diagram of SparsityOraclePSHAWP" usemap="#inheritanceea2d7542a3" class="inheritance"/>
 <map id="inheritanceea2d7542a3" name="inheritanceea2d7542a3">
 <area shape="rect" id="node1" title="This class implements an oracle by looking at a phase space distance." alt="" coords="364,5,683,31"/>
 <area shape="rect" id="node2" title="This class defines the interface for general sparsity oracles." alt="" coords="5,5,316,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.SparsityOraclePSHAWP">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">SparsityOraclePSHAWP</tt><big>(</big><em>factor=1.5</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">SparsityOraclePSHAWP</code><span class="sig-paren">(</span><em>factor=1.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements an oracle by looking at a phase space distance.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.__init__">
-<tt class="descname">__init__</tt><big>(</big><em>factor=1.5</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.__init__" title="Permalink to this definition">¶</a></dt>
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>factor=1.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an oracle for estimating if a specific overlap integral
 <img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/> is approximately zero. The
 oracle works by computing first and second moments <img class="math" src="../_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> and <img class="math" src="../_images/math/2298cf1485084afe72757a9c8483af49a138d81f.png" alt="\sigma"/>
@@ -87,10 +85,10 @@ of the highest order function <img class="math" src="../_images/math/ca5185b3298
 and <img class="math" src="../_images/math/290e9536e6750ac11e6489d5484493b2a323447d.png" alt="\Psi_l"/> for both, position and momentum. Then we compute the
 estimators:</p>
 <div class="math">
-<p><img src="../_images/math/e653b865a679fccd2fb47393ccc3a92ea701448f.png" alt="\|q_k - q_l\| \leq \alpha ( \|\sigma^q_k\| + \|\sigma^q_l\| )"/></p>
+<p><img src="../_images/math/a7af2dc3625e44f4db22ba62fa7d151ae0755db1.png" alt="\|q_k - q_l\| \leq \alpha ( \|\sigma^q_k\| + \|\sigma^q_l\| )"/></p>
 </div><p>and</p>
 <div class="math">
-<p><img src="../_images/math/9cba39d8095877778548b044646e34d9264facb2.png" alt="\|p_k - p_l\| \leq \alpha ( \|\sigma^p_k\| + \|\sigma^p_l\| )"/></p>
+<p><img src="../_images/math/25a83c38c415f82cc4ee5ef59f7fe535ab0957dd.png" alt="\|p_k - p_l\| \leq \alpha ( \|\sigma^p_k\| + \|\sigma^p_l\| )"/></p>
 </div><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -104,7 +102,7 @@ The default value of 1.5 should be reasonable in most cases.</td>
 
 <dl class="method">
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.bias">
-<tt class="descname">bias</tt><big>(</big><em>bramink=None</em>, <em>ketmink=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.bias" title="Permalink to this definition">¶</a></dt>
+<code class="descname">bias</code><span class="sig-paren">(</span><em>bramink=None</em>, <em>ketmink=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.bias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bias the sparsity oracle. The oracle tends to underestimate
 the wavepacket spread for small basis shapes <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>
 and therefore small maximal indices <img class="math" src="../_images/math/f364dc342dae06435b4b03258ebc7fbcab96db39.png" alt="k \in \mathfrak{K}"/>.
@@ -126,7 +124,7 @@ and ket independently.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.is_not_zero">
-<tt class="descname">is_not_zero</tt><big>(</big><em>pacbra</em>, <em>packet</em>, <em>component=None</em><big>)</big><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero" title="Permalink to this definition">¶</a></dt>
+<code class="descname">is_not_zero</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.is_not_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>Try to estimate if the overlap integral <img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
 is zero or at least negligible.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -140,7 +138,7 @@ is zero or at least negligible.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><tt class="docutils literal"><span class="pre">True</span></tt> or <tt class="docutils literal"><span class="pre">False</span></tt> whether the inner product is negligible.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last"><code class="docutils literal"><span class="pre">True</span></code> or <code class="docutils literal"><span class="pre">False</span></code> whether the inner product is negligible.</p>
 </td>
 </tr>
 </tbody>
@@ -156,12 +154,12 @@ is zero or at least negligible.</p>
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">SparsityOraclePSHAWP</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">SparsityOraclePSHAWP</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">SparsityOraclePSHAWP</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -174,29 +172,28 @@ is zero or at least negligible.</p>
   <h4>Next topic</h4>
   <p class="topless"><a href="SparsityOracleGIHAWP.html"
                         title="next chapter">SparsityOracleGIHAWP</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/SparsityOraclePSHAWP.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/SparsityOraclePSHAWP.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -211,12 +208,12 @@ is zero or at least negligible.</p>
         <li class="right" >
           <a href="SparsityOracleTrue.html" title="SparsityOracleTrue"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

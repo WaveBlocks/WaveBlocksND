@@ -8,7 +8,7 @@
     
     <title>GradientHAWP &mdash; WaveBlocksND devel documentation</title>
     
-    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
     <script type="text/javascript">
@@ -24,11 +24,11 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
-    <link rel="next" title="BasisTransformation" href="BasisTransformation.html" />
+    <link rel="next" title="PositionHAWP" href="PositionHAWP.html" />
     <link rel="prev" title="Gradient" href="Gradient.html" /> 
   </head>
-  <body>
-    <div class="related">
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -38,24 +38,24 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="BasisTransformation.html" title="BasisTransformation"
+          <a href="PositionHAWP.html" title="PositionHAWP"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="Gradient.html" title="Gradient"
              accesskey="P">previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
-          <div class="body">
+          <div class="body" role="main">
             
   <div class="section" id="gradienthawp">
 <h1>GradientHAWP<a class="headerlink" href="#gradienthawp" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-gradienthawp-class"></span><h2>About the <tt class="docutils literal"><span class="pre">GradientHAWP</span></tt> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-gradienthawp-class"></span><h2>About the <code class="docutils literal"><span class="pre">GradientHAWP</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,25 +63,23 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<p class="graphviz">
-<img src="../_images/inheritance-c1a783d02562507bbd5bb9aafbbbd24c3c297450.png" alt="Inheritance diagram of GradientHAWP" usemap="#inheritance67d54fe026" class="inheritance"/>
+<img src="../_images/inheritance-74ba4fcbe5e25861575426d997704df65e033886.png" alt="Inheritance diagram of GradientHAWP" usemap="#inheritance67d54fe026" class="inheritance"/>
 <map id="inheritance67d54fe026" name="inheritance67d54fe026">
 <area shape="rect" id="node1" title="This class implements the computation of the action of the" alt="" coords="288,5,496,31"/>
 <area shape="rect" id="node2" title="This class implements the computation of the action of the" alt="" coords="5,5,240,31"/>
 </map>
-</p>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="WaveBlocksND.GradientHAWP">
-<em class="property">class </em><tt class="descclassname">WaveBlocksND.</tt><tt class="descname">GradientHAWP</tt><a class="headerlink" href="#WaveBlocksND.GradientHAWP" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">GradientHAWP</code><a class="reference internal" href="../_modules/WaveBlocksND/GradientHAWP.html#GradientHAWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GradientHAWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements the computation of the action of the
 gradient operator <img class="math" src="../_images/math/4af8e4c631258261de0d58bef92fa010d1b6aa50.png" alt="-i \varepsilon^2 \nabla_x"/> applied to
 a Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.GradientHAWP.apply_gradient">
-<tt class="descname">apply_gradient</tt><big>(</big><em>wavepacket</em>, <em>component=None</em>, <em>as_packet=True</em><big>)</big><a class="headerlink" href="#WaveBlocksND.GradientHAWP.apply_gradient" title="Permalink to this definition">¶</a></dt>
+<code class="descname">apply_gradient</code><span class="sig-paren">(</span><em>wavepacket</em>, <em>component=None</em>, <em>as_packet=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GradientHAWP.html#GradientHAWP.apply_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GradientHAWP.apply_gradient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the effect of the gradient operator <img class="math" src="../_images/math/4af8e4c631258261de0d58bef92fa010d1b6aa50.png" alt="-i \varepsilon^2 \nabla_x"/> on the basis
 functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791329edecd4.png" alt="\phi(x)"/> of a component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -89,9 +87,9 @@ functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></tt></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
-<li><strong>component</strong> (Integer or <tt class="docutils literal"><span class="pre">None</span></tt>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
-<li><strong>as_packet</strong> (Boolean, default is <tt class="docutils literal"><span class="pre">True</span></tt>.) &#8211; Whether to return a full packet.</li>
+<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>as_packet</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to return a full packet.</li>
 </ul>
 </td>
 </tr>
@@ -108,7 +106,7 @@ of the gradient.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.GradientHAWP.apply_gradient_component">
-<tt class="descname">apply_gradient_component</tt><big>(</big><em>wavepacket</em>, <em>component</em><big>)</big><a class="headerlink" href="#WaveBlocksND.GradientHAWP.apply_gradient_component" title="Permalink to this definition">¶</a></dt>
+<code class="descname">apply_gradient_component</code><span class="sig-paren">(</span><em>wavepacket</em>, <em>component</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GradientHAWP.html#GradientHAWP.apply_gradient_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GradientHAWP.apply_gradient_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the effect of the gradient operator <img class="math" src="../_images/math/4af8e4c631258261de0d58bef92fa010d1b6aa50.png" alt="-i \varepsilon^2 \nabla_x"/> on the basis
 functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791329edecd4.png" alt="\phi(x)"/> of a component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -116,7 +114,7 @@ functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><tt class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></tt></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
 <li><strong>component</strong> (<em>Integer.</em>) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
 </ul>
 </td>
@@ -140,12 +138,12 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
           </div>
         </div>
       </div>
-      <div class="sphinxsidebar">
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">GradientHAWP</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <tt class="docutils literal"><span class="pre">GradientHAWP</span></tt> class</a></li>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">GradientHAWP</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -156,31 +154,30 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
   <p class="topless"><a href="Gradient.html"
                         title="previous chapter">Gradient</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="BasisTransformation.html"
-                        title="next chapter">BasisTransformation</a></p>
-  <h3>This Page</h3>
-  <ul class="this-page-menu">
-    <li><a href="../_sources/waveblocks_classes/GradientHAWP.txt"
-           rel="nofollow">Show Source</a></li>
-  </ul>
-<div id="searchbox" style="display: none">
+  <p class="topless"><a href="PositionHAWP.html"
+                        title="next chapter">PositionHAWP</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/GradientHAWP.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
   <h3>Quick search</h3>
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" />
-      <input type="submit" value="Go" />
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
       <input type="hidden" name="check_keywords" value="yes" />
       <input type="hidden" name="area" value="default" />
     </form>
-    <p class="searchtip" style="font-size: 90%">
-    Enter search terms or a module, class or function name.
-    </p>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related">
+    <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
@@ -190,17 +187,17 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="BasisTransformation.html" title="BasisTransformation"
+          <a href="PositionHAWP.html" title="PositionHAWP"
              >next</a> |</li>
         <li class="right" >
           <a href="Gradient.html" title="Gradient"
              >previous</a> |</li>
-        <li><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
     </div>
-    <div class="footer">
-        &copy; Copyright 2015, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.3.
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
     </div>
   </body>
 </html>

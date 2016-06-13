@@ -1,0 +1,256 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.InhomogeneousInnerProductLCWP &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.InhomogeneousInnerProductLCWP</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains code for the delegation of the evaluation of inner products</span>
+<span class="sd">of two linear combinations of wavepackets. The class defined here can compute</span>
+<span class="sd">brakets, inner products and expectation values and the matrix elements of an</span>
+<span class="sd">arbitrary operator.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">reshape</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.InnerProduct</span> <span class="kn">import</span> <span class="n">InnerProduct</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;InhomogeneousInnerProductLCWP&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP">[docs]</a><span class="k">class</span> <span class="nc">InhomogeneousInnerProductLCWP</span><span class="p">(</span><span class="n">InnerProduct</span><span class="p">):</span>
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.__init__"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">oracle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">        This class computes the inhomogeneous inner product</span>
+<span class="sd">        :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` of two linear combinations</span>
+<span class="sd">        :math:`\Upsilon` and :math:`\Upsilon^\prime`. The delegate inner</span>
+<span class="sd">        product class used for computing :math:`\langle\Psi|f|\Psi^\prime\rangle`</span>
+<span class="sd">        has to be of *inhomogeneous* type.</span>
+
+<span class="sd">        :param delegate: The delegate inner product.</span>
+<span class="sd">        :type delegate: A :py:class:`InnerProduct` subclass instance.</span>
+<span class="sd">        :param oracle: The sparsity oracle to use. If the variable is ``None``</span>
+<span class="sd">                       no oracle is used and all integrals are computed.</span>
+
+<span class="sd">        .. note:: Make sure to use an inhomogeneous inner product here.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Pure convenience to allow setting of quadrature instance in constructor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_delegate</span><span class="p">(</span><span class="n">delegate</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">set_oracle</span><span class="p">(</span><span class="n">oracle</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="s2">&quot;Inhomogeneous inner product of linear combinations computed by &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_delegate</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.get_description"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.get_description">[docs]</a>    <span class="k">def</span> <span class="nf">get_description</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return a description of this inner product object.</span>
+<span class="sd">        A description is a ``dict`` containing all key-value pairs</span>
+<span class="sd">        necessary to reconstruct the current instance. A description</span>
+<span class="sd">        never contains any data.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;InhomogeneousInnerProductLCWP&quot;</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;delegate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delegate</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">d</span></div>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.get_oracle"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.get_oracle">[docs]</a>    <span class="k">def</span> <span class="nf">get_oracle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Return the sparsity oracle in use or ``None``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span></div>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.set_oracle"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.set_oracle">[docs]</a>    <span class="k">def</span> <span class="nf">set_oracle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">new_oracle</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Set the sparsity oracle.</span>
+
+<span class="sd">        :param new_oracle: The new oracle to use. If the variable is ``None``</span>
+<span class="sd">                           no oracle is used and all integrals are computed.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">new_oracle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span> <span class="o">=</span> <span class="n">new_oracle</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="bp">False</span></div>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.quadrature"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.quadrature">[docs]</a>    <span class="k">def</span> <span class="nf">quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Delegates the evaluation of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` for a general</span>
+<span class="sd">        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+
+<span class="sd">        :param lcbra: The linear combination :math:`\Upsilon` from the bra with :math:`J` summands :math:`\Psi_j`.</span>
+<span class="sd">        :param lcket: The linear combination :math:`\Upsilon^\prime` from the ket with :math:`J^\prime` summands :math:`\Psi_j^\prime`.</span>
+<span class="sd">        :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.</span>
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those</span>
+<span class="sd">                          components will be taken into account for the computation.</span>
+<span class="sd">        :type component: Integer or ``None``, default is ``None``.</span>
+<span class="sd">        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.</span>
+<span class="sd">        :type eval_at_once: Boolean, default is ``False``.</span>
+<span class="sd">        :return: The value of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`.</span>
+<span class="sd">        :type: An :py:class:`ndarray`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
+        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">lcket</span> <span class="o">=</span> <span class="n">lcbra</span>
+
+        <span class="c1"># Packets can in principle have different number of components</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">Nbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
+            <span class="n">Nket</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Nbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
+            <span class="n">Nket</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
+
+        <span class="n">M</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">build_matrix</span><span class="p">(</span><span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">operator</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="n">eval_at_once</span><span class="p">)</span>
+
+        <span class="n">cbra</span> <span class="o">=</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="n">cket</span> <span class="o">=</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span>
+        <span class="n">cbra</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">cbra</span><span class="p">,</span> <span class="n">Nbra</span><span class="p">)</span>
+        <span class="n">cket</span> <span class="o">=</span> <span class="n">repeat</span><span class="p">(</span><span class="n">cket</span><span class="p">,</span> <span class="n">Nket</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">cbra</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">cket</span><span class="p">))</span></div>
+
+
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.build_matrix"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.build_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">build_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Delegates the computation of the matrix elements of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`</span>
+<span class="sd">        for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
+<span class="sd">        The matrix is computed without including the coefficients :math:`c_j` and :math:`c_j^\prime`.</span>
+
+<span class="sd">        :param lcbra: The linear combination :math:`\Upsilon` from the bra with :math:`J` summands :math:`\Psi_j`.</span>
+<span class="sd">        :param lcket: The linear combination :math:`\Upsilon^\prime` from the ket with :math:`J^\prime` summands :math:`\Psi_j^\prime`.</span>
+<span class="sd">        :param operator: A matrix-valued function :math:`f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}`.</span>
+<span class="sd">        :param component: The index :math:`i` of the component :math:`\Phi_j` of :math:`\Psi_j`. If set only those</span>
+<span class="sd">                          components will be taken into account for the computation.</span>
+<span class="sd">        :type component: Integer or ``None``, default is ``None``.</span>
+<span class="sd">        :param eval_at_once: Flag to tell whether the operator supports the ``entry=(r,c)`` call syntax.</span>
+<span class="sd">        :type eval_at_once: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A matrix of size :math:`\sum_{j\in J} N_j \times \sum_{j^\prime\in J^\prime} N_{j^\prime}`.</span>
+<span class="sd">        :type: An :py:class:`ndarray`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
+        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">lcket</span> <span class="o">=</span> <span class="n">lcbra</span>
+
+        <span class="n">pacbras</span> <span class="o">=</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()</span>
+        <span class="n">packets</span> <span class="o">=</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()</span>
+
+        <span class="c1"># Packets can in principle have different number of components</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">Nbra</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">()</span>
+            <span class="n">Nket</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">Nbra</span> <span class="o">=</span> <span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">pacbras</span><span class="p">]</span>
+            <span class="n">Nket</span> <span class="o">=</span> <span class="p">[</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">packets</span><span class="p">]</span>
+
+        <span class="c1"># The partition scheme of the block vectors and block matrix</span>
+        <span class="n">partitionb</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumsum</span><span class="p">(</span><span class="n">Nbra</span><span class="p">))</span>
+        <span class="n">partitionk</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="nb">list</span><span class="p">(</span><span class="n">cumsum</span><span class="p">(</span><span class="n">Nket</span><span class="p">))</span>
+
+        <span class="n">result</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="nb">sum</span><span class="p">(</span><span class="n">Nbra</span><span class="p">),</span> <span class="nb">sum</span><span class="p">(</span><span class="n">Nket</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">pacbra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pacbras</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">packet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">packets</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span><span class="o">.</span><span class="n">is_not_zero</span><span class="p">(</span><span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">):</span>
+                        <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delegate</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">operator</span><span class="p">,</span> <span class="n">diag_component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="n">eval_at_once</span><span class="p">)</span>
+                        <span class="n">Q</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="p">(</span><span class="n">Nbra</span><span class="p">[</span><span class="n">row</span><span class="p">],</span> <span class="n">Nket</span><span class="p">[</span><span class="n">col</span><span class="p">]))</span>
+                        <span class="c1"># Put the result into the global storage</span>
+                        <span class="n">result</span><span class="p">[</span><span class="n">partitionb</span><span class="p">[</span><span class="n">row</span><span class="p">]:</span><span class="n">partitionb</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">partitionk</span><span class="p">[</span><span class="n">col</span><span class="p">]:</span><span class="n">partitionk</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="p">(</span><span class="n">Nbra</span><span class="p">[</span><span class="n">row</span><span class="p">],</span> <span class="n">Nket</span><span class="p">[</span><span class="n">col</span><span class="p">]))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">pacbra</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">pacbras</span><span class="p">):</span>
+                <span class="k">for</span> <span class="n">col</span><span class="p">,</span> <span class="n">packet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">packets</span><span class="p">):</span>
+                    <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delegate</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">operator</span><span class="p">,</span> <span class="n">diag_component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="n">eval_at_once</span><span class="p">)</span>
+                    <span class="n">Q</span> <span class="o">=</span> <span class="n">reshape</span><span class="p">(</span><span class="n">Q</span><span class="p">,</span> <span class="p">(</span><span class="n">Nbra</span><span class="p">[</span><span class="n">row</span><span class="p">],</span> <span class="n">Nket</span><span class="p">[</span><span class="n">col</span><span class="p">]))</span>
+                    <span class="c1"># Put the result into the global storage</span>
+                    <span class="n">result</span><span class="p">[</span><span class="n">partitionb</span><span class="p">[</span><span class="n">row</span><span class="p">]:</span><span class="n">partitionb</span><span class="p">[</span><span class="n">row</span> <span class="o">+</span> <span class="mi">1</span><span class="p">],</span> <span class="n">partitionk</span><span class="p">[</span><span class="n">col</span><span class="p">]:</span><span class="n">partitionk</span><span class="p">[</span><span class="n">col</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span> <span class="o">=</span> <span class="n">Q</span>
+
+        <span class="k">return</span> <span class="n">result</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+    </div>
+  </body>
+</html>
