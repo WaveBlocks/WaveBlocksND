@@ -54,7 +54,7 @@ def execute_for_all(resultspath, command):
 
         # For each file call the given script
         for resfile in resfiles:
-            sp.call(["python"] + command + [resfile])
+            sp.call(command + [resfile])
 
             # Move newly created files back to the simulation path.
             # NOTE: It is the responsability of the code in the
