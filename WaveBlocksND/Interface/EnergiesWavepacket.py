@@ -80,7 +80,7 @@ def compute_energy_hawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Compute the energies
         O.set_innerproduct(HAWP.get_innerproduct())
-        O.set_gradient(HAWP.get_gradient())
+        O.set_gradient(HAWP.get_gradient_operator())
         ekin = O.kinetic_energy(HAWP)
         if iseigen is True:
             epot = O.potential_energy(HAWP, Potential.evaluate_eigenvalues_at)
@@ -159,7 +159,7 @@ def compute_energy_inhawp(iom, blockid=0, eigentrafo=True, iseigen=True):
 
         # Compute the energies
         O.set_innerproduct(HAWP.get_innerproduct())
-        O.set_gradient(HAWP.get_gradient())
+        O.set_gradient(HAWP.get_gradient_operator())
         ekin = O.kinetic_energy(HAWP)
         if iseigen is True:
             epot = O.potential_energy(HAWP, Potential.evaluate_eigenvalues_at)
