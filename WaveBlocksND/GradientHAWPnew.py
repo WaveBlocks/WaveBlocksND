@@ -42,10 +42,6 @@ class GradientHAWPnew(WavepacketGradient):
                  one column per dimension :math:`d`. The :math:`c^\prime` array is of shape
                  :math:`|\mathfrak{\dot{K}}| \times D`.
         """
-        # TODO: Remove
-        if not wavepacket._new:
-            raise ValueError("Old style wavepacket in new style gradient operator!")
-
         D = wavepacket.get_dimension()
         eps = wavepacket.get_eps()
         q, p, Q, P, S = wavepacket.get_parameters(component=component)

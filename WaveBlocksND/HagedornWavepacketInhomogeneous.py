@@ -3,7 +3,7 @@
 This file contains the class which represents an inhomogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,11 +13,12 @@ from numpy.linalg import det
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 from WaveBlocksND.ComplexMath import ContinuousSqrt
+from WaveBlocksND.HagedornBasisEvaluationPhi import HagedornBasisEvaluationPhi
 
 __all__ = ["HagedornWavepacketInhomogeneous"]
 
 
-class HagedornWavepacketInhomogeneous(HagedornWavepacketBase):
+class HagedornWavepacketInhomogeneous(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
     r"""This class represents inhomogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
