@@ -3,13 +3,14 @@
 This file contains the Hagedorn propagator class for homogeneous wavepackets.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2015 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2012, 2015, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
 from functools import partial
-from numpy import dot, eye, atleast_2d
+from numpy import dot, eye, atleast_2d, arange, conjugate
 from numpy.linalg import inv, det
+from scipy.linalg import polar
 
 from WaveBlocksND.Propagator import Propagator
 from WaveBlocksND.BlockFactory import BlockFactory
@@ -168,10 +169,22 @@ class HagedornPropagator(Propagator):
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
-            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            # This hack is only for 1D
+            Z, PA = polar(Q, side='left')
+            K = packet.get_basis_shapes(component=leading_chi).get_basis_size()
+            z = (conjugate(Z)**arange(K)).reshape(-1, 1)
+
+            # G is F but in the new basis <psi|W|psi> at actual time t_{1/2}
+            packet._new = True
+            G = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+            packet._new = False
 
             coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j * dt / eps**2)
+            coefficients *= z
+            coefficients = self._matrix_exponential(G, coefficients, -1.0j * dt / eps**2)
+            coefficients *= conjugate(z)
+
             packet.set_coefficient_vector(coefficients)
 
             # Do a kinetic step of dt/2
