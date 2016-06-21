@@ -49,9 +49,9 @@ class GradientHAWPnew(WavepacketGradient):
         _, PA = polar(Q, side='left')
         EW, EV = eigh(real(PA))
 
-        C = -1.0j * conjugate(conjugate(dot(P, inv(Q))) + dot(P, inv(Q))).T
-        Gb = 0.5 * dot(C, dot(inv(EV.T), diag(EW))) - dot(inv(EV.T), diag(1.0 / EW))
-        Gf = 0.5 * dot(C, dot(inv(EV.T), diag(EW))) + dot(inv(EV.T), diag(1.0 / EW))
+        E = real(dot(P, inv(Q)))
+        Gb = dot(E, dot(inv(EV.T), diag(EW))) - 1.0j * dot(inv(EV.T), diag(1.0 / EW))
+        Gf = dot(E, dot(inv(EV.T), diag(EW))) + 1.0j * dot(inv(EV.T), diag(1.0 / EW))
 
         coeffs = wavepacket.get_coefficients(component=component)
 
@@ -70,7 +70,7 @@ class GradientHAWPnew(WavepacketGradient):
             nbw = Ke.get_neighbours(k, selection="backward")
 
             for d, nb in nbw:
-                cnew[Ke[nb], :] += (1.0j * sqrt(eps**2 / 2.0) *
+                cnew[Ke[nb], :] += (sqrt(eps**2 / 2.0) *
                                     sqrt(k[d]) * coeffs[K[k]] *
                                     Gb[:, d])
 
@@ -78,7 +78,7 @@ class GradientHAWPnew(WavepacketGradient):
             nfw = Ke.get_neighbours(k, selection="forward")
 
             for d, nb in nfw:
-                cnew[Ke[nb], :] += (1.0j * sqrt(eps**2 / 2.0) *
+                cnew[Ke[nb], :] += (sqrt(eps**2 / 2.0) *
                                     sqrt(k[d] + 1.0) * coeffs[K[k]] *
                                     Gf[:, d])
 
