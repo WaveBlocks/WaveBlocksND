@@ -184,14 +184,14 @@ class IOManager(object):
         """
         if groupid is not None:
             if str(groupid) in self._group_ids:
-                return self._srf["/"+self._prefixg+str(groupid)].keys()
+                return self._srf["/" + self._prefixg + str(groupid)].keys()
             else:
                 return []
         else:
             if grouped is False:
                 return self._block_ids[:]
             else:
-                return [self._srf["/"+self._prefixg+str(gid)].keys() for gid in self.get_group_ids()]
+                return [self._srf["/" + self._prefixg + str(gid)].keys() for gid in self.get_group_ids()]
 
 
     def get_group_ids(self, exclude=[]):
@@ -209,7 +209,7 @@ class IOManager(object):
         :param blockid: The ID of the given block.
         """
         if str(blockid) in self._block_ids:
-            return self._srf["/"+self._prefixb+str(blockid)].attrs["group"]
+            return self._srf["/" + self._prefixb + str(blockid)].attrs["group"]
         else:
             return None
 
@@ -288,7 +288,7 @@ class IOManager(object):
         self._group_ids.append(str(groupid))
         self._group_count += 1
         # Create the group
-        self._srf.create_group("/"+self._prefixg + str(groupid))
+        self._srf.create_group("/" + self._prefixg + str(groupid))
 
         return groupid
 
