@@ -84,7 +84,7 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
         key = ("q", "p", "Q", "P", "S", "adQ")
 
         for i in range(npackets):
-            bid = self.IOManager.create_block()
+            bid = self.IOManager.create_block(dt=self.parameters.get("dt", 0.0))
             self.IOManager.add_inhomogwavepacket(self.parameters, timeslots=slots, blockid=bid, key=key)
 
         # Write some initial values to disk

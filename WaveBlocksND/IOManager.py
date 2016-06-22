@@ -214,7 +214,7 @@ class IOManager(object):
             return None
 
 
-    def create_block(self, blockid=None, groupid="global"):
+    def create_block(self, *, blockid=None, groupid="global", **blockattributes):
         """Create a data block with the specified block ID. Each data block can
         store several chunks of information, and there can be an arbitrary number
         of data blocks per file.
@@ -243,15 +243,19 @@ class IOManager(object):
         self._block_count += 1
 
         # Create the data block
-        self._srf.create_group("/"+self._prefixb + str(blockid))
+        datablock = self._srf.create_group("/" + self._prefixb + str(blockid))
 
         # Does the group already exist?
         if not str(groupid) in self._group_ids:
             self.create_group(groupid=groupid)
 
         # Put the data block into the group
-        self._srf["/"+self._prefixb+str(blockid)].attrs["group"] = str(groupid)
-        self._srf["/"+self._prefixg+str(groupid)+"/"+str(blockid)] = hdf.SoftLink("/"+self._prefixb+str(blockid))
+        datablock.attrs["group"] = str(groupid)
+        self._srf["/" + self._prefixg + str(groupid) + "/" + str(blockid)] = hdf.SoftLink("/" + self._prefixb + str(blockid))
+
+        # Write some extended attributes
+        for attribute, value in blockattributes.items():
+            datablock.attrs['ext:' + attribute] = str(value)
 
         return blockid
 

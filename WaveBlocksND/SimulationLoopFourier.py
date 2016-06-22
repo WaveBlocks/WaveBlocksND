@@ -46,7 +46,7 @@ class SimulationLoopFourier(SimulationLoop):
         # Set up serialization of simulation data
         self.IOManager = IOManager()
         self.IOManager.create_file(resultsfile)
-        self.IOManager.create_block()
+        self.IOManager.create_block(dt=self.parameters.get("dt", 0.0))
 
         # Save the simulation parameters
         self.IOManager.add_parameters()
