@@ -5,7 +5,7 @@ and matrix elements by using standard quadrature rules.
 Here we handle the homogeneous case.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -118,7 +118,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         self._bases = bases
 
         # Operator
-        q, p, Q, P, S = self._packet.get_parameters()
+        q, _, _, _, _ = self._packet.get_parameters()
         if self._eval_at_once is True:
             self._values = tuple(self._operator(self._nodes, q))
         else:
@@ -131,7 +131,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         self._coeffs = self._packet.get_coefficients()
 
 
-    def transform_nodes(self, Pi, eps, QR=None):
+    def transform_nodes(self, Pi, eps, *, QR=None):
         r"""Transform the quadrature nodes :math:`\gamma` such that they
         fit the given wavepacket :math:`\Phi\left[\Pi\right]`.
 
@@ -148,7 +148,7 @@ class DirectHomogeneousQuadrature(DirectQuadrature):
         if QR["transform"] is not None and QR["transform"] is False:
             return QR.get_nodes()
 
-        q, p, Q, P, S = Pi
+        q, _, Q, _, _ = Pi
 
         # Compute the affine transformation
         q0 = q

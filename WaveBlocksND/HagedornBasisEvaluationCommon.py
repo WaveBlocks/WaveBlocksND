@@ -53,7 +53,6 @@ class HagedornBasisEvaluationCommon(object):
         eps = self._eps
         q, p, Q, P, S = self.get_parameters(component=component)
 
-        # TODO: Use LU instead of inv(...)
         df = nodes - q
         pr1 = einsum("ik,ij,jk->k", df, dot(P, inv(Q)), df)
         pr2 = einsum("ij,ik", p, df)
