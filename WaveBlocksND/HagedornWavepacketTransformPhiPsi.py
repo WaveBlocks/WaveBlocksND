@@ -1,5 +1,7 @@
 """The WaveBlocks Project
 
+Implementation of the unitary transformation between
+old-kind and new-kind Hagedorn wavepackets.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2016 R. Bourquin
@@ -28,7 +30,9 @@ __all__ = ["HagedornWavepacketTransformPhiPsi"]
 
 
 class HagedornWavepacketTransformPhiPsi(object):
-    r"""
+    r"""Implementation of the unitary transformation between old-kind
+    Hagedorn wavepackets :math:`\Phi[\Pi]` and new-kind Hagedorn wavepackets
+    :math:`\Psi[\Pi]`.
     """
 
     def __init__(self):
@@ -41,7 +45,6 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param D: The dimension :math:`D` of the wavepacket.
         :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.
         """
-        # ED = vsplit(identity(D, dtype=integer), D)
         ED = identity(D, dtype=integer)
         nu = [array([zeros((D,))], dtype=integer)]
         for i in range(1, order + 1):
@@ -51,33 +54,25 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def _build_mu(self, D, order):
-        r"""Build the list containing the :math:`\mu_i`.
+        r"""Build the list containing the lists :math:`\mu_i` where each
+        :math:`\mu_i` contains the :math:`D`-tuples in reverse lexicographical order.
 
         :param D: The dimension :math:`D` of the wavepacket.
         :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.
         """
-        # TODO: Replace by K-nativ ordering
         return [vstack(lattice_points_norm(D, i)) for i in range(order + 1)]
 
 
-    def _mapit(self, BS, MU, c):
-        # TODO: Will resolve in identity
-        cm = zeros_like(c)
-        K = BS.get_basis_size()
-        mu = vstack(MU)
-        for k in range(K):
-            cm[BS[tuple(mu[k, :])]] = c[k]
-        return cm
+    def _adapt_index_order(self, BS, MU):
+        r"""Map the arrangement of the multi-indices :math:`\underline{k}` between the
+        native order :math:`\underline{k} \in \mathfrak{K}` and the
+        reverse lexicographical order sorted by increasing :math:`l_1` norm.
 
-
-    def _mapitinv(self, BS, MU, c):
-        # TODO: Will resolve in identity
-        cm = zeros_like(c)
-        K = BS.get_basis_size()
+        :param BS: The basis shape :math:`\mathfrak{K}`.
+        :param MU: The list of all :math:`\mu_i`.
+        """
         mu = vstack(MU)
-        for k in range(K):
-            cm[k] = c[BS[tuple(mu[k, :])]]
-        return cm
+        return array([BS[tuple(mu[k, :])] for k in range(BS.get_basis_size())])
 
 
     def overlap(self, D, Pi, eps):
@@ -92,16 +87,15 @@ class HagedornWavepacketTransformPhiPsi(object):
         """
         ED = list(lattice_points_norm(D, 1))
 
-        # TODO: Recheck and be careful with lima order
-        K = SimplexShape(D, 1)
+        BS = SimplexShape(D, 1)
 
         WPo = HagedornWavepacket(D, 1, eps)
         WPo.set_parameters(Pi)
-        WPo.set_basis_shapes([K])
+        WPo.set_basis_shapes([BS])
 
         WPn = HagedornWavepacketNew(D, 1, eps)
         WPn.set_parameters(Pi)
-        WPn.set_basis_shapes([K])
+        WPn.set_basis_shapes([BS])
 
         TPG = TensorProductQR(D * [GaussHermiteQR(2)])
         DHQ = DirectHomogeneousQuadrature(TPG)
@@ -111,13 +105,13 @@ class HagedornWavepacketTransformPhiPsi(object):
         phi = WPo.evaluate_basis_at(G, component=0)
         psi = WPn.evaluate_basis_at(G, component=0)
 
-        M = zeros((D, D), dtype=complexfloating)
+        K = zeros((D, D), dtype=complexfloating)
 
         for r, er in enumerate(ED):
             for c, ec in enumerate(ED):
-                M[r, c] = eps**D * sum(conjugate(psi[K[er], :]) * phi[K[ec], :] * W)
+                K[r, c] = eps**D * sum(conjugate(psi[BS[er], :]) * phi[BS[ec], :] * W)
 
-        return M
+        return K
 
 
     def _built_lut(self, nu):
@@ -213,7 +207,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param coeffs: The coefficients vector.
         :param LOP: The transformation operator matrix.
         :param NU: The list of all :math:`\nu_i`.
-        :param Nu: The list of all :math:`\mu_i`.
+        :param MU: The list of all :math:`\mu_i`.
         :param D: The dimension :math:`D`.
         :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.
         """
@@ -239,7 +233,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param coeffs: The coefficients vector :math:`\underline{c}`.
         :param K: The overlap matrix :math:`\mathbf{K}`.
         :param NU: The list of all :math:`\nu_i`.
-        :param Nu: The list of all :math:`\mu_i`.
+        :param MU: The list of all :math:`\mu_i`.
         :param D: The dimension :math:`D`.
         :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.
         """
@@ -253,7 +247,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param coeffs: The coefficients vector :math:`\underline{d}`.
         :param K: The overlap matrix :math:`\mathbf{K}`.
         :param NU: The list of all :math:`\nu_i`.
-        :param Nu: The list of all :math:`\mu_i`.
+        :param MU: The list of all :math:`\mu_i`.
         :param D: The dimension :math:`D`.
         :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.
         """
@@ -289,10 +283,10 @@ class HagedornWavepacketTransformPhiPsi(object):
         K = self.overlap(D, Pi, eps)
 
         # Permutation, adapter to basis index order
+        I = self._adapt_index_order(BS, MU)
         cfrom = HAWPfrom.get_coefficients(component=0)
-        cfromt = self._mapitinv(BS, MU, cfrom)
-        ctot = LOP(cfromt, K, NU, MU, D, J)
-        cto = self._mapit(BS, MU, ctot)
+        cto = zeros_like(cfrom)
+        cto[I] = LOP(cfrom[I], K, NU, MU, D, J)
 
         # Set up a to wavepacket
         HAWPto = HAWPtoConstructor(D, 1, eps)
