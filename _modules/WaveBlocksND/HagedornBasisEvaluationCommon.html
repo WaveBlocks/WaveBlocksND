@@ -1,0 +1,190 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.HagedornBasisEvaluationCommon &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.HagedornBasisEvaluationCommon</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">The basic common algorithms for evaluation Hagedorn basis functions.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">einsum</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">pi</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">exp</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">det</span><span class="p">,</span> <span class="n">inv</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="k">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="k">import</span> <span class="n">GridWrapper</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HagedornBasisEvaluationCommon&quot;</span><span class="p">]</span>
+
+
+<span class="k">class</span> <span class="nc">HagedornBasisEvaluationCommon</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># We can evaluate the ground state basis function phi_0 on a set of nodes</span>
+    <span class="c1"># the same way for homogeneous and inhomogeneous Hagedorn wavepackets.</span>
+
+
+    <span class="k">def</span> <span class="nf">_grid_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agrid</span><span class="p">):</span>
+        <span class="c1"># TODO: Consider additional input types for &quot;nodes&quot;:</span>
+        <span class="c1">#       list of numpy ndarrays, list of single python scalars</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">agrid</span><span class="p">,</span> <span class="n">AbstractGrid</span><span class="p">):</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">agrid</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">agrid</span> <span class="o">=</span> <span class="n">GridWrapper</span><span class="p">(</span><span class="n">agrid</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">agrid</span>
+
+
+    <span class="k">def</span> <span class="nf">_evaluate_phi0</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">nodes</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the lowest order basis function :math:`\phi_0` on a</span>
+<span class="sd">        grid :math:`\Gamma` of nodes.</span>
+
+<span class="sd">        :param Pi: The parameter set :math:`\Pi`.</span>
+<span class="sd">        :param nodes: The nodes we evaluate :math:`\phi_0` at.</span>
+<span class="sd">        :type nodes: An ndarray of shape ``(D, |\Gamma|)``.</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :param root: The function used to compute the square root in the prefactor.</span>
+<span class="sd">                     Defaults to the ``sqrt`` function of ``numpy`` but can be any</span>
+<span class="sd">                     callable object and especially an instance of :py:class:`ContinuousSqrt`.</span>
+<span class="sd">        :return: An ndarray of shape ``(|\Gamma|)``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">d</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
+
+        <span class="n">df</span> <span class="o">=</span> <span class="n">nodes</span> <span class="o">-</span> <span class="n">q</span>
+        <span class="n">pr1</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ik,ij,jk-&gt;k&quot;</span><span class="p">,</span> <span class="n">df</span><span class="p">,</span> <span class="n">dot</span><span class="p">(</span><span class="n">P</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Q</span><span class="p">)),</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">pr2</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;ij,ik&quot;</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">df</span><span class="p">)</span>
+        <span class="n">exponent</span> <span class="o">=</span> <span class="mf">1.0</span><span class="n">j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">pr1</span> <span class="o">+</span> <span class="n">pr2</span><span class="p">)</span>
+
+        <span class="c1"># The problematic prefactor cancels in inner products</span>
+        <span class="k">if</span> <span class="n">prefactor</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_sqrt</span><span class="p">(</span><span class="n">component</span><span class="p">)(</span><span class="n">det</span><span class="p">(</span><span class="n">Q</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">prefactor</span> <span class="o">=</span> <span class="p">(</span><span class="n">pi</span> <span class="o">*</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="n">d</span> <span class="o">*</span> <span class="mf">0.25</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">prefactor</span> <span class="o">*</span> <span class="n">exp</span><span class="p">(</span><span class="n">exponent</span><span class="p">)</span>
+
+
+    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Evaluate the Hagedorn wavepacket :math:`\Psi` at the given nodes :math:`\gamma`.</span>
+
+<span class="sd">        :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.</span>
+<span class="sd">        :type grid: A class having a :py:meth:`get_nodes(...)` method.</span>
+<span class="sd">        :param component: The index :math:`i` of a single component :math:`\Phi_i` to evaluate.</span>
+<span class="sd">                          (Defaults to ``None`` for evaluating all components.)</span>
+<span class="sd">        :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.</span>
+<span class="sd">        :type prefactor: Boolean, default is ``False``.</span>
+<span class="sd">        :return: A list of arrays or a single array containing the values of the :math:`\Phi_i` at the nodes :math:`\gamma`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Pis</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">aslist</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">Pis</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">values</span> <span class="o">=</span> <span class="p">[]</span>
+
+            <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span><span class="p">):</span>
+                <span class="c1"># Note: This is very inefficient! We may evaluate the same basis functions multiple</span>
+                <span class="c1">#       times. But as long as we don&#39;t know that the basis shapes are true subsets</span>
+                <span class="c1">#       of the largest one, we can not evaluate just all functions in this</span>
+                <span class="c1">#       maximal set.</span>
+
+                <span class="c1"># TODO: Find more efficient way to do this</span>
+
+                <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">Pis</span><span class="p">[</span><span class="n">component</span><span class="p">][</span><span class="mi">4</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eps</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+                <span class="n">values</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">phase</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">slim_recursion</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="n">prefactor</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">values</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

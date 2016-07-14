@@ -57,9 +57,9 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Observables</span> <span class="kn">import</span> <span class="n">Observables</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Observables</span> <span class="k">import</span> <span class="n">Observables</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ObservablesLCWP&quot;</span><span class="p">]</span>
 
@@ -74,8 +74,8 @@
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`ObservablesLCWP` instance for observable computation</span>
 <span class="sd">        of linear combinations :math:`\Upsilon` of wavepackets :math:`\Psi_j`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="bp">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
 <div class="viewcode-block" id="ObservablesLCWP.set_innerproduct"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.set_innerproduct">[docs]</a>    <span class="k">def</span> <span class="nf">set_innerproduct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">innerproduct</span><span class="p">):</span>
@@ -99,7 +99,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="n">gradient</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the overlap matrix :math:`M_{r,c} = \langle\Upsilon_r|\Upsilon_c\rangle`.</span>
 
 <span class="sd">        Note that this function is just a shortcut for calling the inner</span>
@@ -116,7 +116,7 @@
         <span class="k">return</span> <span class="n">OM</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.norm"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.norm"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the :math:`L^2` norm :math:`\langle\Upsilon|\Upsilon\rangle`</span>
 <span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
 
@@ -131,12 +131,12 @@
 <span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
 <span class="sd">        :return: The norm of :math:`\Upsilon` and optionally the overlap matrix :math:`M`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">OM</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">OM</span> <span class="o">=</span> <span class="n">matrix</span>
 
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
@@ -156,7 +156,7 @@
             <span class="k">return</span> <span class="n">norm</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.kinetic_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.kinetic_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the kinetic overlap matrix :math:`{M_T}_{r,c} = \langle\Upsilon_r|T|\Upsilon_c\rangle`.</span>
 
 <span class="sd">        :param lincomb: The linear combination :math:`\Upsilon`.</span>
@@ -176,7 +176,7 @@
         <span class="k">return</span> <span class="n">OMT</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the kinetic energy :math:`E_{\text{kin}} := \langle\Upsilon|T|\Upsilon\rangle`</span>
 <span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
 
@@ -192,12 +192,12 @@
 <span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
 <span class="sd">        :return: The kinetic energy of :math:`\Upsilon` and optionally the kinetic overlap matrix :math:`M_T`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">OMT</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">kinetic_overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">OMT</span> <span class="o">=</span> <span class="n">matrix</span>
 
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
@@ -216,7 +216,7 @@
             <span class="k">return</span> <span class="n">ekin</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.potential_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">potential_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.potential_overlap_matrix"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_overlap_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">potential_overlap_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the potential overlap matrix :math:`{M_V}_{r,c} = \langle\Upsilon_r|V|\Upsilon_c\rangle`.</span>
 
 <span class="sd">        :param lincomb: The linear combination :math:`\Upsilon`.</span>
@@ -232,7 +232,7 @@
         <span class="k">return</span> <span class="n">OMV</span></div>
 
 
-<div class="viewcode-block" id="ObservablesLCWP.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesLCWP.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesLCWP.html#WaveBlocksND.ObservablesLCWP.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">return_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the potential energy :math:`E_{\text{pot}} := \langle\Upsilon|V|\Upsilon\rangle`.</span>
 <span class="sd">        of a linear combination :math:`\Upsilon` of wavepackets.</span>
 
@@ -250,12 +250,12 @@
 <span class="sd">        :type return_matrix: Boolean, default is ``False``.</span>
 <span class="sd">        :return: The potential energy of :math:`\Upsilon` and optionally the potential overlap matrix :math:`M_V`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">OMV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">potential_overlap_matrix</span><span class="p">(</span><span class="n">lincomb</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">OMV</span> <span class="o">=</span> <span class="n">matrix</span>
 
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="n">wp</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="k">for</span> <span class="n">wp</span> <span class="ow">in</span> <span class="n">lincomb</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()])</span>
@@ -308,7 +308,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

@@ -59,16 +59,16 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">reshape</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">transpose</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="nb">sum</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">repeat</span><span class="p">,</span> <span class="n">reshape</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.InnerProduct</span> <span class="kn">import</span> <span class="n">InnerProduct</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.InnerProduct</span> <span class="k">import</span> <span class="n">InnerProduct</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;InhomogeneousInnerProductLCWP&quot;</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="InhomogeneousInnerProductLCWP"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP">[docs]</a><span class="k">class</span> <span class="nc">InhomogeneousInnerProductLCWP</span><span class="p">(</span><span class="n">InnerProduct</span><span class="p">):</span>
 
-<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.__init__"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">oracle</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.__init__"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">delegate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">oracle</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        This class computes the inhomogeneous inner product</span>
 <span class="sd">        :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` of two linear combinations</span>
@@ -116,15 +116,15 @@
 <span class="sd">        :param new_oracle: The new oracle to use. If the variable is ``None``</span>
 <span class="sd">                           no oracle is used and all integrals are computed.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">new_oracle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">new_oracle</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span> <span class="o">=</span> <span class="n">new_oracle</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span> <span class="o">=</span> <span class="bp">None</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="bp">False</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_oracle</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_obey_oracle</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.quadrature"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.quadrature">[docs]</a>    <span class="k">def</span> <span class="nf">quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.quadrature"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.quadrature">[docs]</a>    <span class="k">def</span> <span class="nf">quadrature</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Delegates the evaluation of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle` for a general</span>
 <span class="sd">        function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
 
@@ -140,11 +140,11 @@
 <span class="sd">        :type: An :py:class:`ndarray`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
-        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lcket</span> <span class="o">=</span> <span class="n">lcbra</span>
 
         <span class="c1"># Packets can in principle have different number of components</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">Nbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
             <span class="n">Nket</span> <span class="o">=</span> <span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
@@ -160,7 +160,7 @@
         <span class="k">return</span> <span class="n">dot</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">transpose</span><span class="p">(</span><span class="n">cbra</span><span class="p">)),</span> <span class="n">dot</span><span class="p">(</span><span class="n">M</span><span class="p">,</span> <span class="n">cket</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.build_matrix"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.build_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">build_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="InhomogeneousInnerProductLCWP.build_matrix"><a class="viewcode-back" href="../../waveblocks_classes/InhomogeneousInnerProductLCWP.html#WaveBlocksND.InhomogeneousInnerProductLCWP.build_matrix">[docs]</a>    <span class="k">def</span> <span class="nf">build_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lcbra</span><span class="p">,</span> <span class="n">lcket</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Delegates the computation of the matrix elements of :math:`\langle\Upsilon|f|\Upsilon^\prime\rangle`</span>
 <span class="sd">        for a general function :math:`f(x)` with :math:`x \in \mathbb{R}^D`.</span>
 <span class="sd">        The matrix is computed without including the coefficients :math:`c_j` and :math:`c_j^\prime`.</span>
@@ -177,14 +177,14 @@
 <span class="sd">        :type: An :py:class:`ndarray`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
-        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">lcket</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lcket</span> <span class="o">=</span> <span class="n">lcbra</span>
 
         <span class="n">pacbras</span> <span class="o">=</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()</span>
         <span class="n">packets</span> <span class="o">=</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_wavepackets</span><span class="p">()</span>
 
         <span class="c1"># Packets can in principle have different number of components</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">Nbra</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcbra</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">()</span>
             <span class="n">Nket</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">lcket</span><span class="o">.</span><span class="n">get_number_packets</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
@@ -250,7 +250,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

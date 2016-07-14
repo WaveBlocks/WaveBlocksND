@@ -57,10 +57,10 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">atleast_1d</span>
-<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">sqrt</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">atleast_1d</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">norm</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.SparsityOracle</span> <span class="kn">import</span> <span class="n">SparsityOracle</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SparsityOracle</span> <span class="k">import</span> <span class="n">SparsityOracle</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SparsityOraclePSHAWP&quot;</span><span class="p">]</span>
 
@@ -89,11 +89,11 @@
 <span class="sd">                       The default value of 1.5 should be reasonable in most cases.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">=</span> <span class="n">factor</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="bp">False</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="bp">False</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="kc">False</span></div>
 
 
-<div class="viewcode-block" id="SparsityOraclePSHAWP.is_not_zero"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero">[docs]</a>    <span class="k">def</span> <span class="nf">is_not_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SparsityOraclePSHAWP.is_not_zero"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero">[docs]</a>    <span class="k">def</span> <span class="nf">is_not_zero</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Try to estimate if the overlap integral :math:`\langle \Psi_k | \Psi_l \rangle`</span>
 <span class="sd">        is zero or at least negligible.</span>
 
@@ -120,7 +120,7 @@
         <span class="c1">#kket = indices.max(axis=0)</span>
 
         <span class="c1"># Third strategy</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">kbra</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">pacbra</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">())</span>
             <span class="n">kket</span> <span class="o">=</span> <span class="n">array</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span><span class="o">.</span><span class="n">find_largest_index</span><span class="p">())</span>
         <span class="k">else</span><span class="p">:</span>
@@ -150,7 +150,7 @@
                 <span class="n">norm</span><span class="p">(</span><span class="n">pbra</span> <span class="o">-</span> <span class="n">pket</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">sigpbra</span><span class="p">)</span> <span class="o">+</span> <span class="n">norm</span><span class="p">(</span><span class="n">sigpket</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="SparsityOraclePSHAWP.bias"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.bias">[docs]</a>    <span class="k">def</span> <span class="nf">bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bramink</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">ketmink</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="SparsityOraclePSHAWP.bias"><a class="viewcode-back" href="../../waveblocks_classes/SparsityOraclePSHAWP.html#WaveBlocksND.SparsityOraclePSHAWP.bias">[docs]</a>    <span class="k">def</span> <span class="nf">bias</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bramink</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ketmink</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Bias the sparsity oracle. The oracle tends to underestimate</span>
 <span class="sd">        the wavepacket spread for small basis shapes :math:`\mathfrak{K}`</span>
 <span class="sd">        and therefore small maximal indices :math:`k \in \mathfrak{K}`.</span>
@@ -160,15 +160,15 @@
 <span class="sd">        :param bramink: Minimal :math:`k` for :math:`\langle \Psi |`</span>
 <span class="sd">        :param ketmink: Minimal :math:`k` for :math:`| \Psi \rangle`</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">bramink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">bramink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k</span> <span class="o">=</span> <span class="n">bramink</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_bra_min_k_norm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">bramink</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_bra</span> <span class="o">=</span> <span class="kc">True</span>
 
-        <span class="k">if</span> <span class="n">ketmink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ketmink</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k</span> <span class="o">=</span> <span class="n">ketmink</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_ket_min_k_norm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">ketmink</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="bp">True</span></div></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_bias_ket</span> <span class="o">=</span> <span class="kc">True</span></div></div>
 </pre></div>
 
           </div>
@@ -205,7 +205,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

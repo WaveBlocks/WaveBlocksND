@@ -57,11 +57,11 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">amax</span><span class="p">,</span> <span class="n">amin</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">squeeze</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">gca</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">amax</span><span class="p">,</span> <span class="n">amin</span><span class="p">,</span> <span class="n">arange</span><span class="p">,</span> <span class="n">squeeze</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="k">import</span> <span class="n">gca</span>
 
 
-<div class="viewcode-block" id="contourcf"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.contourcf">[docs]</a><span class="k">def</span> <span class="nf">contourcf</span><span class="p">(</span><span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">leveldist</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="contourcf"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.contourcf">[docs]</a><span class="k">def</span> <span class="nf">contourcf</span><span class="p">(</span><span class="n">gridx</span><span class="p">,</span> <span class="n">gridy</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">leveldist</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">    Plot a function :math:`f:I^2 \rightarrow C` with contour levels.</span>
 <span class="sd">    Put levels in linear and fixed distances on the third axis.</span>
@@ -76,7 +76,7 @@
     <span class="c1"># number of contour levels.</span>
     <span class="n">levels</span> <span class="o">=</span> <span class="n">arange</span><span class="p">(</span><span class="n">amin</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">amax</span><span class="p">(</span><span class="n">values</span><span class="p">),</span> <span class="n">leveldist</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">gca</span><span class="p">()</span>
 
     <span class="c1"># Change axes because x.shape = (Nrows, 1) and y.shape = (1, Ncols)</span>
@@ -118,7 +118,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

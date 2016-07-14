@@ -24,7 +24,7 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
-    <link rel="next" title="BasisTransformation" href="BasisTransformation.html" />
+    <link rel="next" title="GradientHAWPnew" href="GradientHAWPnew.html" />
     <link rel="prev" title="GradientHAWP" href="GradientHAWP.html" /> 
   </head>
   <body role="document">
@@ -38,7 +38,7 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="BasisTransformation.html" title="BasisTransformation"
+          <a href="GradientHAWPnew.html" title="GradientHAWPnew"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="GradientHAWP.html" title="GradientHAWP"
@@ -74,27 +74,27 @@
 <dt id="WaveBlocksND.PositionHAWP">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">PositionHAWP</code><a class="reference internal" href="../_modules/WaveBlocksND/PositionHAWP.html#PositionHAWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.PositionHAWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements the computation of the action of the
-position operator <img class="math" src="../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> applied to a Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+position operator <img class="math" src="../_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> applied to a Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.PositionHAWP.apply_position">
 <code class="descname">apply_position</code><span class="sig-paren">(</span><em>wavepacket</em>, <em>*</em>, <em>component=None</em>, <em>as_packet=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/PositionHAWP.html#PositionHAWP.apply_position"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.PositionHAWP.apply_position" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the effect of the position operator <img class="math" src="../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> on the basis
-functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791329edecd4.png" alt="\phi(x)"/> of a component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Compute the effect of the position operator <img class="math" src="../_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> on the basis
+functions <img class="math" src="../_images/math/b8e4bb24aac6307dc01fb354bfa993dadde23850.png" alt="\phi(x)"/> of a component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
-<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> containing <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
 <li><strong>as_packet</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to return a full packet.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of length <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> or a single pair of extended basis shapes <img class="math" src="../_images/math/68138eb5345264a455d6bf45b33319d616a33ce2.png" alt="\mathfrak{\dot{K}}_i"/>
-and new coefficients <img class="math" src="../_images/math/411269092dece5b860166511319d78087213b812.png" alt="c^\prime_i"/>.
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of length <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> or a single pair of extended basis shapes <img class="math" src="../_images/math/07b68a005359de20a62acd6c536f17a67363b5a9.png" alt="\mathfrak{\dot{K}}_i"/>
+and new coefficients <img class="math" src="../_images/math/e04378d5a107fd2e3d2545f58d180f737e66e413.png" alt="c^\prime_i"/>.
 If requested, copies of the original wavepacket are returned with these new values set.
-There are <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> packets, one for each space variable component <img class="math" src="../_images/math/a5a7e0f54e43059714de4c0b1c07e8cad2d36ff5.png" alt="x_d"/>
+There are <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> packets, one for each space variable component <img class="math" src="../_images/math/118c41d67a122de619bd2ff464adf03ff88051b6.png" alt="x_d"/>
 of the position operator.</p>
 </td>
 </tr>
@@ -105,22 +105,22 @@ of the position operator.</p>
 <dl class="method">
 <dt id="WaveBlocksND.PositionHAWP.apply_position_component">
 <code class="descname">apply_position_component</code><span class="sig-paren">(</span><em>wavepacket</em>, <em>component</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/PositionHAWP.html#PositionHAWP.apply_position_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.PositionHAWP.apply_position_component" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the effect of the position operator <img class="math" src="../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> on the basis functions <img class="math" src="../_images/math/b7b008c5bcea35d5d937ef653111791329edecd4.png" alt="\phi(x)"/>
-of a component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Compute the effect of the position operator <img class="math" src="../_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> on the basis functions <img class="math" src="../_images/math/b8e4bb24aac6307dc01fb354bfa993dadde23850.png" alt="\phi(x)"/>
+of a component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> containing <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
-<li><strong>component</strong> (<em>Integer.</em>) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>wavepacket</strong> (A <a class="reference internal" href="HagedornWavepacketBase.html#WaveBlocksND.HagedornWavepacketBase" title="WaveBlocksND.HagedornWavepacketBase"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketBase</span></code></a> subclass instance.) &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> containing <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
+<li><strong>component</strong> (<em>Integer.</em>) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Extended basis shape <img class="math" src="../_images/math/789b58c273b1b1e4c8acdb883ddbe6bf5f6ab666.png" alt="\mathfrak{\dot{K}}"/> and new coefficients <img class="math" src="../_images/math/f452ff8e1b2e0bccea59f641af7e2aba9b23fbfd.png" alt="c^\prime"/>
-for component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>. The coefficients are stored column-wise with
-one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>. The <img class="math" src="../_images/math/f452ff8e1b2e0bccea59f641af7e2aba9b23fbfd.png" alt="c^\prime"/> array is of shape
-<img class="math" src="../_images/math/a5c4c55805740eed8873da8f9c1f879347c12dfd.png" alt="|\mathfrak{\dot{K}}| \times D"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">Extended basis shape <img class="math" src="../_images/math/7e3b2e3abac4538dfc958713e376ef5cb843fe99.png" alt="\mathfrak{\dot{K}}"/> and new coefficients <img class="math" src="../_images/math/d54fd5f6a2b76550cdad51c59f7322aa67e92e0a.png" alt="c^\prime"/>
+for component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>. The coefficients are stored column-wise with
+one column per dimension <img class="math" src="../_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/>. The <img class="math" src="../_images/math/d54fd5f6a2b76550cdad51c59f7322aa67e92e0a.png" alt="c^\prime"/> array is of shape
+<img class="math" src="../_images/math/1b4cda3125f0092d0431fe4016288bc0a2b4c177.png" alt="|\mathfrak{\dot{K}}| \times D"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -152,8 +152,8 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
   <p class="topless"><a href="GradientHAWP.html"
                         title="previous chapter">GradientHAWP</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="BasisTransformation.html"
-                        title="next chapter">BasisTransformation</a></p>
+  <p class="topless"><a href="GradientHAWPnew.html"
+                        title="next chapter">GradientHAWPnew</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -185,7 +185,7 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="BasisTransformation.html" title="BasisTransformation"
+          <a href="GradientHAWPnew.html" title="GradientHAWPnew"
              >next</a> |</li>
         <li class="right" >
           <a href="GradientHAWP.html" title="GradientHAWP"
@@ -195,7 +195,7 @@ one column per dimension <img class="math" src="../_images/math/425d86ba2f2979d7
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

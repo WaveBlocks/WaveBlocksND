@@ -54,14 +54,14 @@
 <span class="sd">Here we handle the homogeneous case.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">einsum</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">sqrtm</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">einsum</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">sqrtm</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectQuadrature</span> <span class="kn">import</span> <span class="n">DirectQuadrature</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectQuadrature</span> <span class="k">import</span> <span class="n">DirectQuadrature</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">]</span>
 
@@ -70,12 +70,12 @@
     <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Pure convenience to allow setting of quadrature rule in constructor</span>
-        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_qr</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="kc">None</span>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -110,12 +110,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
 
         <span class="c1"># Force a call of &#39;preprare&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_bases</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffs</span> <span class="o">=</span> <span class="bp">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_bases</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffs</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="DirectHomogeneousQuadrature.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/DirectHomogeneousQuadrature.html#WaveBlocksND.DirectHomogeneousQuadrature.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectHomogeneousQuadrature.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/DirectHomogeneousQuadrature.html#WaveBlocksND.DirectHomogeneousQuadrature.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Provide the operator part of the inner product to evaluate.</span>
 <span class="sd">        This function initializes the operator used for quadratures</span>
 <span class="sd">        and for building matrices.</span>
@@ -132,11 +132,11 @@
         <span class="c1"># TODO: Make this more efficient, only compute values needed at each (r,c) step.</span>
         <span class="c1">#       For this, &#39;operator&#39; must support the &#39;component=(r,c)&#39; option.</span>
         <span class="c1"># Operator is None is interpreted as identity transformation</span>
-        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="n">operator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="o">=</span> <span class="n">eval_at_once</span></div>
@@ -154,21 +154,21 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Evaluate only the bases we need</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
-        <span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="bp">None</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
+        <span class="n">bases</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
 
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">bases</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">bases</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bases</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bases</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">bases</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-                <span class="n">bases</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">bases</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">bases</span><span class="p">[</span><span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_bases</span> <span class="o">=</span> <span class="n">bases</span>
 
         <span class="c1"># Operator</span>
-        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">q</span><span class="p">))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_values</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">))</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span>
@@ -180,7 +180,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_coeffs</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="DirectHomogeneousQuadrature.transform_nodes"><a class="viewcode-back" href="../../waveblocks_classes/DirectHomogeneousQuadrature.html#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">transform_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pi</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectHomogeneousQuadrature.transform_nodes"><a class="viewcode-back" href="../../waveblocks_classes/DirectHomogeneousQuadrature.html#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">transform_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pi</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Transform the quadrature nodes :math:`\gamma` such that they</span>
 <span class="sd">        fit the given wavepacket :math:`\Phi\left[\Pi\right]`.</span>
 
@@ -191,13 +191,13 @@
 <span class="sd">        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where</span>
 <span class="sd">                 :math:`|\Gamma|` denotes the total number of quadrature nodes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span>
 
-        <span class="k">if</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QR</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
 
-        <span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span> <span class="o">=</span> <span class="n">Pi</span>
+        <span class="n">q</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Pi</span>
 
         <span class="c1"># Compute the affine transformation</span>
         <span class="n">q0</span> <span class="o">=</span> <span class="n">q</span>
@@ -261,7 +261,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

@@ -1,0 +1,397 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.HagedornWavepacketTransformPhiPsi &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.HagedornWavepacketTransformPhiPsi</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">Implementation of the unitary transformation between</span>
+<span class="sd">old-kind and new-kind Hagedorn wavepackets.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">collections</span> <span class="k">import</span> <span class="n">defaultdict</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="p">(</span><span class="n">complexfloating</span><span class="p">,</span> <span class="n">array</span><span class="p">,</span> <span class="n">hstack</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">split</span><span class="p">,</span> <span class="n">integer</span><span class="p">,</span>
+                   <span class="n">conjugate</span><span class="p">,</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">identity</span><span class="p">,</span> <span class="n">zeros_like</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">,</span> <span class="nb">sum</span><span class="p">)</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">sqrt</span>
+<span class="kn">from</span> <span class="nn">scipy.special</span> <span class="k">import</span> <span class="n">binom</span>
+
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SimplexShape</span> <span class="k">import</span> <span class="n">SimplexShape</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacket</span> <span class="k">import</span> <span class="n">HagedornWavepacket</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacketNew</span> <span class="k">import</span> <span class="n">HagedornWavepacketNew</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GaussHermiteQR</span> <span class="k">import</span> <span class="n">GaussHermiteQR</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.TensorProductQR</span> <span class="k">import</span> <span class="n">TensorProductQR</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectHomogeneousQuadrature</span> <span class="k">import</span> <span class="n">DirectHomogeneousQuadrature</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Combinatorics</span> <span class="k">import</span> <span class="n">multinomial</span><span class="p">,</span> <span class="n">lattice_points_norm</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HagedornWavepacketTransformPhiPsi&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi">[docs]</a><span class="k">class</span> <span class="nc">HagedornWavepacketTransformPhiPsi</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;Implementation of the unitary transformation between old-kind</span>
+<span class="sd">    Hagedorn wavepackets :math:`\Phi[\Pi]` and new-kind Hagedorn wavepackets</span>
+<span class="sd">    :math:`\Psi[\Pi]`.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">pass</span>
+
+
+    <span class="k">def</span> <span class="nf">_build_nu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Build the list containing the :math:`\nu_i`.</span>
+
+<span class="sd">        :param D: The dimension :math:`D` of the wavepacket.</span>
+<span class="sd">        :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ED</span> <span class="o">=</span> <span class="n">identity</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">integer</span><span class="p">)</span>
+        <span class="n">nu</span> <span class="o">=</span> <span class="p">[</span><span class="n">array</span><span class="p">([</span><span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,))],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">integer</span><span class="p">)]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="n">nu</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vstack</span><span class="p">([</span><span class="n">nu</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ed</span> <span class="k">for</span> <span class="n">ed</span> <span class="ow">in</span> <span class="n">ED</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="n">nu</span>
+
+
+    <span class="k">def</span> <span class="nf">_build_mu</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">order</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Build the list containing the lists :math:`\mu_i` where each</span>
+<span class="sd">        :math:`\mu_i` contains the :math:`D`-tuples in reverse lexicographical order.</span>
+
+<span class="sd">        :param D: The dimension :math:`D` of the wavepacket.</span>
+<span class="sd">        :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">lattice_points_norm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">order</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)]</span>
+
+
+    <span class="k">def</span> <span class="nf">_adapt_index_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">BS</span><span class="p">,</span> <span class="n">MU</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Map the arrangement of the multi-indices :math:`\underline{k}` between the</span>
+<span class="sd">        native order :math:`\underline{k} \in \mathfrak{K}` and the</span>
+<span class="sd">        reverse lexicographical order sorted by increasing :math:`l_1` norm.</span>
+
+<span class="sd">        :param BS: The basis shape :math:`\mathfrak{K}`.</span>
+<span class="sd">        :param MU: The list of all :math:`\mu_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">mu</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span> <span class="k">for</span> <span class="n">mui</span> <span class="ow">in</span> <span class="n">MU</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">mui</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">array</span><span class="p">([</span><span class="n">BS</span><span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">BS</span><span class="o">.</span><span class="n">get_basis_size</span><span class="p">())])</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.overlap"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.overlap">[docs]</a>    <span class="k">def</span> <span class="nf">overlap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">Pi</span><span class="p">,</span> <span class="n">eps</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the overlap matrix:</span>
+
+<span class="sd">        .. math::</span>
+<span class="sd">            \mathbf{K}_{r,c} := \langle \psi_{\underline{e_r}}[\Pi] | \phi_{\underline{e_c}}[\Pi] \rangle</span>
+
+<span class="sd">        :param D: The dimension :math:`D`.</span>
+<span class="sd">        :param Pi: The parameter set :math:`\Pi`.</span>
+<span class="sd">        :param eps: The semiclassical scaling parameter :math:`\varepsilon`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">ED</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">lattice_points_norm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+
+        <span class="n">BS</span> <span class="o">=</span> <span class="n">SimplexShape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">WPo</span> <span class="o">=</span> <span class="n">HagedornWavepacket</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">WPo</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">Pi</span><span class="p">)</span>
+        <span class="n">WPo</span><span class="o">.</span><span class="n">set_basis_shapes</span><span class="p">([</span><span class="n">BS</span><span class="p">])</span>
+
+        <span class="n">WPn</span> <span class="o">=</span> <span class="n">HagedornWavepacketNew</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">WPn</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">Pi</span><span class="p">)</span>
+        <span class="n">WPn</span><span class="o">.</span><span class="n">set_basis_shapes</span><span class="p">([</span><span class="n">BS</span><span class="p">])</span>
+
+        <span class="n">TPG</span> <span class="o">=</span> <span class="n">TensorProductQR</span><span class="p">(</span><span class="n">D</span> <span class="o">*</span> <span class="p">[</span><span class="n">GaussHermiteQR</span><span class="p">(</span><span class="mi">2</span><span class="p">)])</span>
+        <span class="n">DHQ</span> <span class="o">=</span> <span class="n">DirectHomogeneousQuadrature</span><span class="p">(</span><span class="n">TPG</span><span class="p">)</span>
+        <span class="n">G</span> <span class="o">=</span> <span class="n">DHQ</span><span class="o">.</span><span class="n">transform_nodes</span><span class="p">(</span><span class="n">Pi</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">W</span> <span class="o">=</span> <span class="n">TPG</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
+
+        <span class="n">phi</span> <span class="o">=</span> <span class="n">WPo</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">psi</span> <span class="o">=</span> <span class="n">WPn</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">G</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="n">K</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">r</span><span class="p">,</span> <span class="n">er</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ED</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">ec</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ED</span><span class="p">):</span>
+                <span class="n">K</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">=</span> <span class="n">eps</span><span class="o">**</span><span class="n">D</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">psi</span><span class="p">[</span><span class="n">BS</span><span class="p">[</span><span class="n">er</span><span class="p">],</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">phi</span><span class="p">[</span><span class="n">BS</span><span class="p">[</span><span class="n">ec</span><span class="p">],</span> <span class="p">:]</span> <span class="o">*</span> <span class="n">W</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">K</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_built_lut</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Build the lookup table for simultaneuos multi-acces to arrays by label lists.</span>
+
+<span class="sd">        :param nu: The list of all :math:`\nu_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">lut</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">nu</span><span class="p">):</span>
+            <span class="n">lut</span><span class="p">[</span><span class="nb">tuple</span><span class="p">(</span><span class="n">k</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">lut</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.multiply_Pi_v"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Pi_v">[docs]</a>    <span class="k">def</span> <span class="nf">multiply_Pi_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">lut</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Multiply the matrix :math:`\mathbf{P_i}` by a vector :math:`\underline{v}`</span>
+<span class="sd">        from the right. Do not construct the matrix explicitly.</span>
+
+<span class="sd">        :param nu: The list :math:`\nu_i`.</span>
+<span class="sd">        :param mu: The list :math:`\mu_i`.</span>
+<span class="sd">        :param lut: The lookup table.</span>
+<span class="sd">        :param v: The vector :math:`\underline{v} \in \mathcal{X}_i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mu</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mu</span><span class="p">)):</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">multinomial</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">lut</span><span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]][</span><span class="mi">0</span><span class="p">]]</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.multiply_PiT_v"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_PiT_v">[docs]</a>    <span class="k">def</span> <span class="nf">multiply_PiT_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nu</span><span class="p">,</span> <span class="n">mu</span><span class="p">,</span> <span class="n">lut</span><span class="p">,</span> <span class="n">v</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Multiply the matrix :math:`\mathbf{P_i}^{\mathrm{T}}` by a vector</span>
+<span class="sd">        :math:`\underline{v}` from the right. Do not construct the matrix explicitly.</span>
+
+<span class="sd">        :param nu: The list :math:`\nu_i`.</span>
+<span class="sd">        :param mu: The list :math:`\mu_i`.</span>
+<span class="sd">        :param lut: The lookup table.</span>
+<span class="sd">        :param v: The vector :math:`\underline{v} \in \mathbb{C}^{n(D,i)}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">zeros</span><span class="p">(</span><span class="n">nu</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">v</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mu</span><span class="p">)):</span>
+            <span class="n">res</span><span class="p">[</span><span class="n">lut</span><span class="p">[</span><span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]]]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sqrt</span><span class="p">(</span><span class="n">multinomial</span><span class="p">(</span><span class="n">mu</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="o">*</span> <span class="n">v</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.multiply_kronecker_power_v"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_kronecker_power_v">[docs]</a>    <span class="k">def</span> <span class="nf">multiply_kronecker_power_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">A</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Multiply the :math:`i`-th Kronecker power of the matrix :math:`\mathbf{A}`</span>
+<span class="sd">        by a vector :math:`\underline{v}` from the right.</span>
+
+<span class="sd">        :param D: The dimension :math:`D`.</span>
+<span class="sd">        :param A: The matrix :math:`\mathbf{A}`.</span>
+<span class="sd">        :param v: The vector :math:`\underline{v}`.</span>
+<span class="sd">        :param i: The non-negative integer Kronecker power exponent.</span>
+
+<span class="sd">        .. note:: The matrix has to be square and of size :math:`D^i`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">assert</span> <span class="n">i</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+
+        <span class="c1"># Select from &#39;data&#39; exactly &#39;size&#39; items every &#39;step&#39; with offset &#39;base&#39;</span>
+        <span class="n">select</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">data</span><span class="p">,</span> <span class="n">base</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="n">data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">step</span><span class="p">)[:,</span> <span class="n">base</span><span class="o">*</span><span class="n">size</span><span class="p">:(</span><span class="n">base</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">size</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">v</span>
+
+        <span class="n">w</span> <span class="o">=</span> <span class="n">v</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="n">zeros_like</span><span class="p">(</span><span class="n">w</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+                <span class="n">rhs</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">res</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">D</span><span class="o">**</span><span class="n">j</span><span class="p">,</span> <span class="n">D</span><span class="o">**</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                <span class="k">for</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
+                    <span class="n">lhs</span> <span class="o">=</span> <span class="n">select</span><span class="p">(</span><span class="n">w</span><span class="p">,</span> <span class="n">c</span><span class="p">,</span> <span class="n">D</span><span class="o">**</span><span class="n">j</span><span class="p">,</span> <span class="n">D</span><span class="o">**</span><span class="p">(</span><span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="n">rhs</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">r</span><span class="p">,</span> <span class="n">c</span><span class="p">]</span> <span class="o">*</span> <span class="n">lhs</span>
+
+            <span class="n">w</span> <span class="o">=</span> <span class="n">res</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_multiply_LOP_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">LOP</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Apply the transformation operator matrix to the coefficient vector.</span>
+
+<span class="sd">        :param coeffs: The coefficients vector.</span>
+<span class="sd">        :param LOP: The transformation operator matrix.</span>
+<span class="sd">        :param NU: The list of all :math:`\nu_i`.</span>
+<span class="sd">        :param MU: The list of all :math:`\mu_i`.</span>
+<span class="sd">        :param D: The dimension :math:`D`.</span>
+<span class="sd">        :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">nDm</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">D</span><span class="p">,</span> <span class="n">m</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">binom</span><span class="p">(</span><span class="n">D</span> <span class="o">+</span> <span class="n">m</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+
+        <span class="n">s</span> <span class="o">=</span> <span class="p">[</span><span class="n">nDm</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">J</span><span class="p">)]</span>
+        <span class="n">Ci</span> <span class="o">=</span> <span class="n">split</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">cumsum</span><span class="p">(</span><span class="n">s</span><span class="p">))</span>
+        <span class="n">Cit</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">ci</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">Ci</span><span class="p">):</span>
+            <span class="n">lut</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_built_lut</span><span class="p">(</span><span class="n">NU</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">cit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply_PiT_v</span><span class="p">(</span><span class="n">NU</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">MU</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">lut</span><span class="p">,</span> <span class="n">ci</span><span class="p">)</span>
+            <span class="n">cit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply_kronecker_power_v</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">LOP</span><span class="p">,</span> <span class="n">cit</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
+            <span class="n">cit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply_Pi_v</span><span class="p">(</span><span class="n">NU</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">MU</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">lut</span><span class="p">,</span> <span class="n">cit</span><span class="p">)</span>
+            <span class="n">Cit</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cit</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">hstack</span><span class="p">(</span><span class="n">Cit</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">*</span><span class="n">coeffs</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.multiply_T_v"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_T_v">[docs]</a>    <span class="k">def</span> <span class="nf">multiply_T_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Apply the transformation matrix :math:`\mathbf{T}` to the coefficients :math:`\underline{c}`.</span>
+
+<span class="sd">        :param coeffs: The coefficients vector :math:`\underline{c}`.</span>
+<span class="sd">        :param K: The overlap matrix :math:`\mathbf{K}`.</span>
+<span class="sd">        :param NU: The list of all :math:`\nu_i`.</span>
+<span class="sd">        :param MU: The list of all :math:`\mu_i`.</span>
+<span class="sd">        :param D: The dimension :math:`D`.</span>
+<span class="sd">        :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multiply_LOP_v</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.multiply_Tinv_v"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Tinv_v">[docs]</a>    <span class="k">def</span> <span class="nf">multiply_Tinv_v</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coeffs</span><span class="p">,</span> <span class="n">K</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Apply the transformation matrix :math:`\mathbf{T}^{-1}`</span>
+<span class="sd">        to the coefficients :math:`\underline{d}`.</span>
+
+<span class="sd">        :param coeffs: The coefficients vector :math:`\underline{d}`.</span>
+<span class="sd">        :param K: The overlap matrix :math:`\mathbf{K}`.</span>
+<span class="sd">        :param NU: The list of all :math:`\nu_i`.</span>
+<span class="sd">        :param MU: The list of all :math:`\mu_i`.</span>
+<span class="sd">        :param D: The dimension :math:`D`.</span>
+<span class="sd">        :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">Kinv</span> <span class="o">=</span> <span class="n">K</span><span class="o">.</span><span class="n">transpose</span><span class="p">()</span><span class="o">.</span><span class="n">conjugate</span><span class="p">()</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_multiply_LOP_v</span><span class="p">(</span><span class="n">coeffs</span><span class="p">,</span> <span class="n">Kinv</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_transform</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">HAWPfrom</span><span class="p">,</span> <span class="n">LOP</span><span class="p">,</span> <span class="n">HAWPtoConstructor</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;The transformation logic. This function can transform</span>
+<span class="sd">        in both directions depending on the linear operator argument.</span>
+
+<span class="sd">        :param HAWPfrom: The wavepacket to transform.</span>
+<span class="sd">        :param LOP: The linear transformation operator, either :math:`\mathbf{T}` or :math:`\mathbf{T}^{-1}`.</span>
+<span class="sd">        :param HAWPtoConstructor: Constructor of the resulting wavepacket type.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Only scalar wavepackets are supported.&quot;</span><span class="p">)</span>
+
+        <span class="n">D</span> <span class="o">=</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
+        <span class="n">BS</span> <span class="o">=</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_basis_shapes</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">BS</span><span class="p">,</span> <span class="n">SimplexShape</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The wavepacket does not have a simplex basis shape.&quot;</span><span class="p">)</span>
+
+        <span class="n">J</span> <span class="o">=</span> <span class="n">BS</span><span class="o">.</span><span class="n">get_description</span><span class="p">()[</span><span class="s1">&#39;K&#39;</span><span class="p">]</span>
+
+        <span class="n">NU</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_nu</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+        <span class="n">MU</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_build_mu</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+
+        <span class="c1"># Compute small overlap matrix</span>
+        <span class="n">Pi</span> <span class="o">=</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_parameters</span><span class="p">()</span>
+        <span class="n">eps</span> <span class="o">=</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_eps</span><span class="p">()</span>
+        <span class="n">K</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">overlap</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">Pi</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+
+        <span class="c1"># Permutation, adapter to basis index order</span>
+        <span class="n">I</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_adapt_index_order</span><span class="p">(</span><span class="n">BS</span><span class="p">,</span> <span class="n">MU</span><span class="p">)</span>
+        <span class="n">cfrom</span> <span class="o">=</span> <span class="n">HAWPfrom</span><span class="o">.</span><span class="n">get_coefficients</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">cto</span> <span class="o">=</span> <span class="n">zeros_like</span><span class="p">(</span><span class="n">cfrom</span><span class="p">)</span>
+        <span class="n">cto</span><span class="p">[</span><span class="n">I</span><span class="p">]</span> <span class="o">=</span> <span class="n">LOP</span><span class="p">(</span><span class="n">cfrom</span><span class="p">[</span><span class="n">I</span><span class="p">],</span> <span class="n">K</span><span class="p">,</span> <span class="n">NU</span><span class="p">,</span> <span class="n">MU</span><span class="p">,</span> <span class="n">D</span><span class="p">,</span> <span class="n">J</span><span class="p">)</span>
+
+        <span class="c1"># Set up a to wavepacket</span>
+        <span class="n">HAWPto</span> <span class="o">=</span> <span class="n">HAWPtoConstructor</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
+        <span class="n">HAWPto</span><span class="o">.</span><span class="n">set_parameters</span><span class="p">(</span><span class="n">Pi</span><span class="p">)</span>
+        <span class="n">HAWPto</span><span class="o">.</span><span class="n">set_basis_shapes</span><span class="p">(</span><span class="n">BS</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">HAWPto</span><span class="o">.</span><span class="n">set_coefficients</span><span class="p">(</span><span class="n">cto</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">HAWPto</span>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.transform_phi_to_psi"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_phi_to_psi">[docs]</a>    <span class="k">def</span> <span class="nf">transform_phi_to_psi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">HAWPphi</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Transform a old-kind wavepacket :math:`\Phi[\Pi]` into a new-kind wavepacket :math:`\Psi[\Pi]`.</span>
+
+<span class="sd">        :param HAWPphi: The wavepacket :math:`\Phi[\Pi]` to transform.</span>
+<span class="sd">        :return: A new wavepacket object representing :math:`\Psi[\Pi]`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">(</span><span class="n">HAWPphi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply_T_v</span><span class="p">,</span> <span class="n">HagedornWavepacketNew</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="HagedornWavepacketTransformPhiPsi.transform_psi_to_phi"><a class="viewcode-back" href="../../waveblocks_classes/HagedornWavepacketTransformPhiPsi.html#WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_psi_to_phi">[docs]</a>    <span class="k">def</span> <span class="nf">transform_psi_to_phi</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">HAWPpsi</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Transform a new-kind wavepacket :math:`\Psi[\Pi]` into a old-kind wavepacket :math:`\Phi[\Pi]`.</span>
+
+<span class="sd">        :param HAWPpsi: The wavepacket :math:`\Psi[\Pi]` to transform.</span>
+<span class="sd">        :return: A new wavepacket object representing :math:`\Phi[\Pi]`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_transform</span><span class="p">(</span><span class="n">HAWPpsi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">multiply_Tinv_v</span><span class="p">,</span> <span class="n">HagedornWavepacket</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

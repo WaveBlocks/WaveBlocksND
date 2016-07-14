@@ -58,10 +58,10 @@
 <h1>Computing Eigenstates<a class="headerlink" href="#computing-eigenstates" title="Permalink to this headline">¶</a></h1>
 <p>In this section we show how to compute eigenstates on the
 example of the Henon-Heiles potential. This two-dimensional
-potential in the variables <img class="math" src="../../_images/math/188c175aac0a8a9c22499336711b5d7256407254.png" alt="x"/> and <img class="math" src="../../_images/math/b124ff74afb0914bb434e8fb849eb56d734412f8.png" alt="y"/> is given by:</p>
+potential in the variables <img class="math" src="../../_images/math/a59f68a4202623bb859a7093f0316bf466e6f75d.png" alt="x"/> and <img class="math" src="../../_images/math/276f7e256cbddeb81eee42e1efc348f3cb4ab5f8.png" alt="y"/> is given by:</p>
 <div class="math">
-<p><img src="../../_images/math/a9f1a8f6a28158f7389c9618f31cbd52ba242c5c.png" alt="V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - \frac{y^{3}}{3}\right)"/></p>
-</div><p>where we set <img class="math" src="../../_images/math/43f2f20146486a3c666597f49c782a2612f847e4.png" alt="a = 1"/> and  <img class="math" src="../../_images/math/5a3e3a764588e8e79a543ed0dc4b7fba99e1022d.png" alt="b = \frac{1}{2}"/>. To compute the
+<p><img src="../../_images/math/f5add1189969f9b9b29102758d7be7346e8f4961.png" alt="V(x) = \frac{a}{2} \left(x^{2} + y^{2}\right) + b \left(x^{2} y - \frac{y^{3}}{3}\right)"/></p>
+</div><p>where we set <img class="math" src="../../_images/math/e06353dbe841a361b6e9c30ddef88432e4e946cb.png" alt="a = 1"/> and  <img class="math" src="../../_images/math/e3c2988e9e9866c13cf64628a0546ae6ec28428c.png" alt="b = \frac{1}{2}"/>. To compute the
 eigenstates we write a configuration file <code class="docutils literal"><span class="pre">eigenstates.py</span></code> like:</p>
 <div class="code python highlight-default"><div class="highlight"><pre><span></span><span class="n">dimension</span> <span class="o">=</span> <span class="mi">2</span>
 <span class="n">ncomponents</span> <span class="o">=</span> <span class="mi">1</span>
@@ -102,11 +102,11 @@ eigenstates we write a configuration file <code class="docutils literal"><span c
 <span class="p">}</span>
 </pre></div>
 </div>
-<p>We compute the first 15 eigenstates <img class="math" src="../../_images/math/62f447db67e9b360b217749041f32388ad8db91c.png" alt="\Psi_{0}"/> up to <img class="math" src="../../_images/math/4e8d109f3137408589b50fb18190e66578a7d171.png" alt="\Psi_{14}"/>.
+<p>We compute the first 15 eigenstates <img class="math" src="../../_images/math/8bb20821ec43603856a215a58d47e71759b975d4.png" alt="\Psi_{0}"/> up to <img class="math" src="../../_images/math/bb4c980566180f1ce478e759e3abf778f261b39e.png" alt="\Psi_{14}"/>.
 The parameter <code class="docutils literal"><span class="pre">starting_point</span></code> sets the starting value for the minimization
 of the potential surface. This value is choosen such to stay in the local minimum
 we are interested in. The basis consists of the space spanned by all wavepackets
-indexed in the hyperbolic cut having sparsity <img class="math" src="../../_images/math/1d3d2cb43b185cf38f50e28c8cc489c54e0c61ee.png" alt="K=24"/>. The actual computation
+indexed in the hyperbolic cut having sparsity <img class="math" src="../../_images/math/7b073c6e8972714177cf1f3dd6b7490ab10343ab.png" alt="K=24"/>. The actual computation
 is done by using the script <code class="docutils literal"><span class="pre">ComputeEigenstates.py</span></code>:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ComputeEigenstates</span><span class="o">.</span><span class="n">py</span> <span class="n">eigenstates</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
@@ -334,7 +334,7 @@ and therefore switch to an interactive <cite>Python</cite> session now:</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

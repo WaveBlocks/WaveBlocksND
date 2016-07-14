@@ -72,8 +72,8 @@
 <dt id="IOM_plugin_wavefunction.add_wavefunction">
 <code class="descclassname">IOM_plugin_wavefunction.</code><code class="descname">add_wavefunction</code><span class="sig-paren">(</span><em>self</em>, <em>parameters</em>, <em>flat=False</em>, <em>timeslots=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_wavefunction.html#add_wavefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_wavefunction.add_wavefunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add storage for sampled wavefunctions. The wavefunction is
-saved in full hypercubic array shape with <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> dimensions and
-<img class="math" src="../_images/math/9b65279d9f2351ff7fe22a34d827ea9447a2f300.png" alt="N_d"/> data points in each direction.</p>
+saved in full hypercubic array shape with <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> dimensions and
+<img class="math" src="../_images/math/e21591fec1728eccb94d5135a08dadaa0ed77400.png" alt="N_d"/> data points in each direction.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -81,9 +81,9 @@ saved in full hypercubic array shape with <img class="math" src="../_images/math
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>parameters</strong> &#8211; A <code class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></code> instance containing
 at least the keys <cite>number_nodes</cite> and <cite>ncomponents</cite>.</li>
-<li><strong>flat</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; A flag indicating if we store wavefunctions <img class="math" src="../_images/math/5b1be7843909382dd6a3620782d21788e570734e.png" alt="\Psi(\Gamma)"/>
-in a hypercubic shape <img class="math" src="../_images/math/2e2b08c6943247c099f338d406512813fe7f651a.png" alt="(N_1, ..., N_D)"/> or
-in a flat shape <img class="math" src="../_images/math/d16e6a6e129385b62ac6a9a940374a6653447d01.png" alt="(D, |\Gamma|)"/> with <img class="math" src="../_images/math/1078fe9ea8dda059a761a44e3bd12d9f7f90ea5c.png" alt="|\Gamma| = \prod_i^D N_i"/>.</li>
+<li><strong>flat</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; A flag indicating if we store wavefunctions <img class="math" src="../_images/math/7e3449b74b914c8f5312bb21cc4c91a78e529e3f.png" alt="\Psi(\Gamma)"/>
+in a hypercubic shape <img class="math" src="../_images/math/0c52d658df5ea182317796445e5cdc474b46d867.png" alt="(N_1, ..., N_D)"/> or
+in a flat shape <img class="math" src="../_images/math/fffde8054c7b28b736757b3a6b9c50f7a395e9bb.png" alt="(D, |\Gamma|)"/> with <img class="math" src="../_images/math/d2b96f709b5185987284818784c21b703a7fae68.png" alt="|\Gamma| = \prod_i^D N_i"/>.</li>
 <li><strong>timeslots</strong> &#8211; The number of time slots we need. Can be set to <code class="docutils literal"><span class="pre">None</span></code>
 to get automatically growing datasets.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
@@ -157,7 +157,7 @@ to get automatically growing datasets.</li>
 <dl class="function">
 <dt id="IOM_plugin_wavefunction.save_wavefunction">
 <code class="descclassname">IOM_plugin_wavefunction.</code><code class="descname">save_wavefunction</code><span class="sig-paren">(</span><em>self</em>, <em>wavefunctionvalues</em>, <em>timestep=None</em>, <em>blockid=0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_wavefunction.html#save_wavefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_wavefunction.save_wavefunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the values <img class="math" src="../_images/math/8d2d995a74b06539d80f577bbed5b4ee1525e33f.png" alt="\psi_i"/> of a <code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code> instance.</p>
+<dd><p>Save the values <img class="math" src="../_images/math/ff4c68667536108ad669e43fe2c20417abc1cad6.png" alt="\psi_i"/> of a <code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code> instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -238,7 +238,7 @@ to get automatically growing datasets.</li>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

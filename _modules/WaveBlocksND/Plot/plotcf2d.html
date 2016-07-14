@@ -58,13 +58,13 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">where</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">gca</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">meshgrid</span><span class="p">,</span> <span class="n">real</span><span class="p">,</span> <span class="n">where</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="k">import</span> <span class="n">gca</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Plot.color_map</span> <span class="kn">import</span> <span class="n">color_map</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Plot.color_map</span> <span class="k">import</span> <span class="n">color_map</span>
 
 
-<div class="viewcode-block" id="plotcf2d"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.plotcf2d">[docs]</a><span class="k">def</span> <span class="nf">plotcf2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">darken</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="plotcf2d"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.plotcf2d">[docs]</a><span class="k">def</span> <span class="nf">plotcf2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">darken</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">limits</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Plot complex valued functions :math:`\mathbb{R}^2 \rightarrow \mathbb{C}`</span>
 <span class="sd">    with the usual color code.</span>
 
@@ -78,7 +78,7 @@
 <span class="sd">    :type darken: Float or ``None`` to disable darkening of colors. Default is :math:`R = 1.0`.</span>
 <span class="sd">    :param axes: The axes instance used for plotting.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">limits</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">limits</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">xmin</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="n">xmax</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">ymin</span> <span class="o">=</span> <span class="n">real</span><span class="p">(</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
@@ -98,7 +98,7 @@
     <span class="n">kw</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># Plot to the given axis instance or retrieve the current one</span>
-    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">axes</span> <span class="o">=</span> <span class="n">gca</span><span class="p">()</span>
 
     <span class="c1"># Region to cut out</span>
@@ -146,7 +146,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

@@ -77,7 +77,7 @@
 <dt id="WaveBlocksND.InhomogeneousInnerProduct.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>delegate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InhomogeneousInnerProduct.html#InhomogeneousInnerProduct.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class computes the inhomogeneous inner product
-<img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>.</p>
+<img class="math" src="../_images/math/95a6111af944b187fb1aa0857ebfcd343af80dcd.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -91,22 +91,22 @@
 <dl class="method">
 <dt id="WaveBlocksND.InhomogeneousInnerProduct.build_matrix">
 <code class="descname">build_matrix</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet=None</em>, <em>operator=None</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InhomogeneousInnerProduct.html#InhomogeneousInnerProduct.build_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.build_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delegates the computation of the matrix elements <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>
-for a general function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
-The matrix is computed without including the coefficients <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/>.</p>
+<dd><p>Delegates the computation of the matrix elements <img class="math" src="../_images/math/95a6111af944b187fb1aa0857ebfcd343af80dcd.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>
+for a general function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.
+The matrix is computed without including the coefficients <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/867c955c2c72005c675f66dc9ba9d508bed05cb6.png" alt="N^\prime"/> components.</li>
-<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/67abe63d842662798a8bd651ffff8acee9d18af8.png" alt="f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
+<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> components.</li>
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/86e5f11a1e7d4e6e0e6d3e4461bfca74fcf747c0.png" alt="N^\prime"/> components.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/1e0378deac1ffc82121189df24b263b1737bd6d3.png" alt="f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
 <li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix of size <img class="math" src="../_images/math/16129530b9b9b3ca77f729e4fd5a02e1067710f6.png" alt="\sum_i^N |\mathfrak{K}_i| \times \sum_j^{N^\prime} |\mathfrak{K}^\prime_j|"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A matrix of size <img class="math" src="../_images/math/bad84d5e50da3e6e4d00f7cc6bdb312808e1f1ea.png" alt="\sum_i^N |\mathfrak{K}_i| \times \sum_j^{N^\prime} |\mathfrak{K}^\prime_j|"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -140,28 +140,28 @@ never contains any data.</p>
 <dl class="method">
 <dt id="WaveBlocksND.InhomogeneousInnerProduct.quadrature">
 <code class="descname">quadrature</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet=None</em>, <em>operator=None</em>, <em>summed=False</em>, <em>component=None</em>, <em>diag_component=None</em>, <em>diagonal=False</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/InhomogeneousInnerProduct.html#InhomogeneousInnerProduct.quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.InhomogeneousInnerProduct.quadrature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delegates the evaluation of <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/> for a general
-function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<dd><p>Delegates the evaluation of <img class="math" src="../_images/math/95a6111af944b187fb1aa0857ebfcd343af80dcd.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/> for a general
+function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/867c955c2c72005c675f66dc9ba9d508bed05cb6.png" alt="N^\prime"/> components.</li>
-<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/6ff0fd1ce23d51119969a53c0ebb7d6a91ce244b.png" alt="f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
-<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the individual integrals <img class="math" src="../_images/math/f2feda174b43b1e69d87b8e83f40bfbf00ff85eb.png" alt="\langle\Phi_i|f_{i,j}|\Phi^\prime_j\rangle"/>.</li>
-<li><strong>component</strong> &#8211; Request only the i-th component of the result. Remember that <img class="math" src="../_images/math/64c90cb4de234ef09f9df4c716e36d8a9eff1c34.png" alt="i \in [0, N \cdot N^\prime-1]"/>.</li>
-<li><strong>diag_component</strong> &#8211; Request only the i-th component from the diagonal entries, here <img class="math" src="../_images/math/750a348bbd54a60dc92109496e52604230811e89.png" alt="i \in [0, N^\prime-1]"/>.
+<li><strong>pacbra</strong> &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> from the bra with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> components.</li>
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/> from the ket with <img class="math" src="../_images/math/86e5f11a1e7d4e6e0e6d3e4461bfca74fcf747c0.png" alt="N^\prime"/> components.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/b2384a920ea34506402437d44328470846a34628.png" alt="f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N^\prime}"/>.</li>
+<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the individual integrals <img class="math" src="../_images/math/d94810aaefa98cd61efd7672e90857b9581a57e7.png" alt="\langle\Phi_i|f_{i,j}|\Phi^\prime_j\rangle"/>.</li>
+<li><strong>component</strong> &#8211; Request only the i-th component of the result. Remember that <img class="math" src="../_images/math/799984f6e7542b8c4bf3b96a41a6c60169bed725.png" alt="i \in [0, N \cdot N^\prime-1]"/>.</li>
+<li><strong>diag_component</strong> &#8211; Request only the i-th component from the diagonal entries, here <img class="math" src="../_images/math/62bbf83c16c65277557b65f4df3b610f63cbee7a.png" alt="i \in [0, N^\prime-1]"/>.
 Note that <code class="docutils literal"><span class="pre">component</span></code> takes precedence over <code class="docutils literal"><span class="pre">diag_component</span></code> if both are supplied. (Which is discouraged)</li>
-<li><strong>diagonal</strong> &#8211; Only return the diagonal elements <img class="math" src="../_images/math/3b986006f84a5b094c41ff7a6c188701bd2e649c.png" alt="\langle\Phi_i|f_{i,i}|\Phi^\prime_i\rangle"/>.
-This is useful for diagonal operators <img class="math" src="../_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/>.</li>
+<li><strong>diagonal</strong> &#8211; Only return the diagonal elements <img class="math" src="../_images/math/cd3c4b560942e8b940e41ba094a1ac5879a1b66a.png" alt="\langle\Phi_i|f_{i,i}|\Phi^\prime_i\rangle"/>.
+This is useful for diagonal operators <img class="math" src="../_images/math/875eb40014526135383caa89fd500ae40a835f56.png" alt="f"/>.</li>
 <li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the braket <img class="math" src="../_images/math/8ebace35b1086a20a01ffdb68efe48002ab1ae46.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>. This is either a scalar value or
-a list of <img class="math" src="../_images/math/bd545bf7332e1c0703888f08debafef33e03f7e3.png" alt="N \cdot N^\prime"/> scalar elements depending on the value of <code class="docutils literal"><span class="pre">summed</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the braket <img class="math" src="../_images/math/95a6111af944b187fb1aa0857ebfcd343af80dcd.png" alt="\langle\Psi|f|\Psi^\prime\rangle"/>. This is either a scalar value or
+a list of <img class="math" src="../_images/math/5d91212ecdcad4a1252459613beadf3e83e5c3fb.png" alt="N \cdot N^\prime"/> scalar elements depending on the value of <code class="docutils literal"><span class="pre">summed</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -250,7 +250,7 @@ a list of <img class="math" src="../_images/math/bd545bf7332e1c0703888f08debafef
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

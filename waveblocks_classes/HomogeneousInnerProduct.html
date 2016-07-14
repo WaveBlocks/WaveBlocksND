@@ -77,7 +77,7 @@
 <dt id="WaveBlocksND.HomogeneousInnerProduct.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>delegate=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HomogeneousInnerProduct.html#HomogeneousInnerProduct.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HomogeneousInnerProduct.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class computes the homogeneous inner product
-<img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/>.</p>
+<img class="math" src="../_images/math/e9946fb85f50cea1da88c91a1cda52571e8b3abd.png" alt="\langle\Psi|f|\Psi\rangle"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -91,21 +91,21 @@
 <dl class="method">
 <dt id="WaveBlocksND.HomogeneousInnerProduct.build_matrix">
 <code class="descname">build_matrix</code><span class="sig-paren">(</span><em>packet</em>, <em>operator=None</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HomogeneousInnerProduct.html#HomogeneousInnerProduct.build_matrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HomogeneousInnerProduct.build_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delegates the computation of the matrix elements <img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/>
-for a general function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.
-The matrix is computed without including the coefficients <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/>.</p>
+<dd><p>Delegates the computation of the matrix elements <img class="math" src="../_images/math/e9946fb85f50cea1da88c91a1cda52571e8b3abd.png" alt="\langle\Psi|f|\Psi\rangle"/>
+for a general function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.
+The matrix is computed without including the coefficients <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/e2c2f5ec1723c1db096f39870bab92c9a74cbde1.png" alt="f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}"/>.</li>
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/32c14d68673797f26649650f327687889f134258.png" alt="f(q, x): \mathbb{R} \times \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}"/>.</li>
 <li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A square matrix of size <img class="math" src="../_images/math/4ce47a67f77fd36446ec49826cd9017ee9318e64.png" alt="\sum_i^N |\mathfrak{K}_i| \times \sum_j^N |\mathfrak{K}_j|"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A square matrix of size <img class="math" src="../_images/math/7dc7345554b7591fdca6ac3974249b8d6a9ef454.png" alt="\sum_i^N |\mathfrak{K}_i| \times \sum_j^N |\mathfrak{K}_j|"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -139,27 +139,27 @@ never contains any data.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HomogeneousInnerProduct.quadrature">
 <code class="descname">quadrature</code><span class="sig-paren">(</span><em>packet</em>, <em>operator=None</em>, <em>summed=False</em>, <em>component=None</em>, <em>diag_component=None</em>, <em>diagonal=False</em>, <em>eval_at_once=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HomogeneousInnerProduct.html#HomogeneousInnerProduct.quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HomogeneousInnerProduct.quadrature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Delegates the evaluation of <img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/> for a general
-function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<dd><p>Delegates the evaluation of <img class="math" src="../_images/math/e9946fb85f50cea1da88c91a1cda52571e8b3abd.png" alt="\langle\Psi|f|\Psi\rangle"/> for a general
+function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/b0b125f51cb07e6cef3e9b2e9bacf924e6174028.png" alt="f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}"/>.</li>
-<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the individual integrals <img class="math" src="../_images/math/120346f66fbbdb0a25bf724db9b753a203ef25aa.png" alt="\langle\Phi_i|f_{i,j}|\Phi_j\rangle"/>.</li>
-<li><strong>component</strong> &#8211; Request only the i-th component of the result. Remember that <img class="math" src="../_images/math/74ca1881cc8405090688bc74e532fbfe8594dfff.png" alt="i \in [0, N^2-1]"/>.</li>
-<li><strong>diag_component</strong> &#8211; Request only the i-th component from the diagonal entries, here <img class="math" src="../_images/math/49768accfce119eec64d3cbae198ba5e5dd87f44.png" alt="i \in [0, N-1]"/>.
+<li><strong>packet</strong> &#8211; The wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>operator</strong> &#8211; A matrix-valued function <img class="math" src="../_images/math/06a9039a14a5af777dd9319cd0929a7b53aa373a.png" alt="f(x): \mathbb{R}^D \rightarrow \mathbb{R}^{N \times N}"/>.</li>
+<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the individual integrals <img class="math" src="../_images/math/582885e1432c133bd7c0eaef4a1cd318246fb729.png" alt="\langle\Phi_i|f_{i,j}|\Phi_j\rangle"/>.</li>
+<li><strong>component</strong> &#8211; Request only the i-th component of the result. Remember that <img class="math" src="../_images/math/c307955eaa84eea9bf13c5c5a9ff8fec24a763d5.png" alt="i \in [0, N^2-1]"/>.</li>
+<li><strong>diag_component</strong> &#8211; Request only the i-th component from the diagonal entries, here <img class="math" src="../_images/math/bf7bf3ad4433b5583a02c510f8de22f4a0d3ccf6.png" alt="i \in [0, N-1]"/>.
 Note that <code class="docutils literal"><span class="pre">component</span></code> takes precedence over <code class="docutils literal"><span class="pre">diag_component</span></code> if both are supplied. (Which is discouraged)</li>
-<li><strong>diagonal</strong> &#8211; Only return the diagonal elements <img class="math" src="../_images/math/ab5af1249ab1250a3ac95aa7ead325e2018e271a.png" alt="\langle\Phi_i|f_{i,i}|\Phi_i\rangle"/>.
-This is useful for diagonal operators <img class="math" src="../_images/math/0001d02b63ede2fe3219e05a7cd09c82ae6298b6.png" alt="f"/>.</li>
+<li><strong>diagonal</strong> &#8211; Only return the diagonal elements <img class="math" src="../_images/math/f57d2d63b34a8eb94f895e8cbcb020e905f00470.png" alt="\langle\Phi_i|f_{i,i}|\Phi_i\rangle"/>.
+This is useful for diagonal operators <img class="math" src="../_images/math/875eb40014526135383caa89fd500ae40a835f56.png" alt="f"/>.</li>
 <li><strong>eval_at_once</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Flag to tell whether the operator supports the <code class="docutils literal"><span class="pre">entry=(r,c)</span></code> call syntax.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the braket <img class="math" src="../_images/math/d40290424834d8cf3cdd74e0cc853cd80ba61734.png" alt="\langle\Psi|f|\Psi\rangle"/>. This is either a scalar value or
-a list of <img class="math" src="../_images/math/b0614445362e91ebcad2b2650b0eab330c60a5ea.png" alt="N^2"/> scalar elements depending on the value of <code class="docutils literal"><span class="pre">summed</span></code>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the braket <img class="math" src="../_images/math/e9946fb85f50cea1da88c91a1cda52571e8b3abd.png" alt="\langle\Psi|f|\Psi\rangle"/>. This is either a scalar value or
+a list of <img class="math" src="../_images/math/61238a715e39bba62102c685cc0036931b98c5c6.png" alt="N^2"/> scalar elements depending on the value of <code class="docutils literal"><span class="pre">summed</span></code>.</p>
 </td>
 </tr>
 </tbody>
@@ -248,7 +248,7 @@ a list of <img class="math" src="../_images/math/b0614445362e91ebcad2b2650b0eab3
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

@@ -57,9 +57,9 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">atleast_1d</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">product</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">atleast_1d</span><span class="p">,</span> <span class="nb">abs</span><span class="p">,</span> <span class="n">product</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="kn">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="k">import</span> <span class="n">AbstractGrid</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;GridWrapper&quot;</span><span class="p">]</span>
 
@@ -82,7 +82,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span> <span class="o">=</span> <span class="p">[</span><span class="nb">abs</span><span class="p">(</span><span class="n">l</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">l</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_limits</span><span class="p">]</span>
 
 
-<div class="viewcode-block" id="GridWrapper.get_number_nodes"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_number_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="GridWrapper.get_number_nodes"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_number_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">overall</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Returns the number of grid nodes.</span>
 
 <span class="sd">        :param overall: Compute the product :math:`N = \prod_i^D N_i` of the</span>
@@ -91,13 +91,13 @@
 <span class="sd">        :type overall: Boolean, default is ``False``</span>
 <span class="sd">        :return: A list of :math:`N_i` values or a single value :math:`N`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">overall</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">overall</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">product</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span></div>
 
 
-<div class="viewcode-block" id="GridWrapper.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="GridWrapper.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Returns all grid nodes.</span>
 
 <span class="sd">        :param flat: Whether to return the grid with a `hypercubic`</span>
@@ -111,16 +111,16 @@
 <span class="sd">        :type split: Boolean, default is ``False``.</span>
 <span class="sd">        :return: Depends of the optional arguments.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">flat</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">flat</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Grid wrapping for hypercubic storage.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">split</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">split</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span></div>
 
 
-<div class="viewcode-block" id="GridWrapper.get_limits"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridWrapper.get_limits"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Returns the limits of the bounding box.</span>
 
 <span class="sd">        :param axes: The axes for which we want to get the limits.</span>
@@ -128,13 +128,13 @@
 <span class="sd">                    to ``None`` (default) we return the limits for all axes.</span>
 <span class="sd">        :return: A list of :math:`(min_i, max_i)` ndarrays.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_limits</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span></div>
 
 
-<div class="viewcode-block" id="GridWrapper.get_extensions"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="GridWrapper.get_extensions"><a class="viewcode-back" href="../../waveblocks_classes/GridWrapper.html#WaveBlocksND.GridWrapper.get_extensions">[docs]</a>    <span class="k">def</span> <span class="nf">get_extensions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Returns the extensions (length of the edges) of the bounding box.</span>
 
 <span class="sd">        :param axes: The axes for which we want to get the extensions.</span>
@@ -142,7 +142,7 @@
 <span class="sd">                    to ``None`` (default) we return the extensions for all axes.</span>
 <span class="sd">        :return: A list of :math:`|max_i-min_i|` values.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">axes</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_extensions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">atleast_1d</span><span class="p">(</span><span class="n">axes</span><span class="p">)]</span></div></div>
@@ -182,7 +182,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

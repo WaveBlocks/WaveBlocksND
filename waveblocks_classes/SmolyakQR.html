@@ -86,13 +86,13 @@ Smolyak construction.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>dimension</strong> &#8211; The dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the final
+<li><strong>dimension</strong> &#8211; The dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> of the final
 quadrature rule.</li>
-<li><strong>level</strong> &#8211; The level <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the Smolyak construction.
+<li><strong>level</strong> &#8211; The level <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> of the Smolyak construction.
 From theory we know that a Smolyak rule of order
-<img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is exact up to <img class="math" src="../_images/math/c65e1779c5a1d2d22eeef49774e9791dcd69207c.png" alt="2 k - 1"/> if the
-individual rules <img class="math" src="../_images/math/5858efa49652e464eb0c356d3682910a5fbb57e5.png" alt="Q_i"/> are exact up to
-<img class="math" src="../_images/math/8b3ce5e9996a7d257c3427328d829c5522966d8c.png" alt="2 i - 1"/>. The level has to be larger than
+<img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> is exact up to <img class="math" src="../_images/math/89b99e51154f863295a4631cf146a1205d6f802c.png" alt="2 k - 1"/> if the
+individual rules <img class="math" src="../_images/math/817befe60cf3bbf72c6b755f9b407e3c154c3fac.png" alt="Q_i"/> are exact up to
+<img class="math" src="../_images/math/8c1ff6e1ea9f0561015bbca042b46d6c7a0604ed.png" alt="2 i - 1"/>. The level has to be larger than
 or equal 1.</li>
 <li><strong>rules</strong> &#8211; A collection of <a class="reference internal" href="QuadratureRule.html#WaveBlocksND.QuadratureRule" title="WaveBlocksND.QuadratureRule"><code class="xref py py-class docutils literal"><span class="pre">QuadratureRule</span></code></a> subclass
 instances. Their nodes and weights will be used
@@ -105,8 +105,8 @@ in the Smolyak construction.</li>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
 <p class="last">The <code class="docutils literal"><span class="pre">rules</span></code> object must implement simple indexing by
-non-negative numbers and for a given index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> return
-a univariate quadrature rule of order <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/>. Special attention
+non-negative numbers and for a given index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> return
+a univariate quadrature rule of order <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/>. Special attention
 must be payed in case this object is mutable. We do not copy it.</p>
 </div>
 <div class="admonition warning">
@@ -115,8 +115,8 @@ must be payed in case this object is mutable. We do not copy it.</p>
 speeds up the computation of all quadrature nodes, especially
 in high dimension, but is only valid if all one dimensional
 rules have symmetric nodes and weights. That is, for every node
-weight pair <img class="math" src="../_images/math/40895bf03c0ba4451a9bef0dbf2e6d1ed50e3fbc.png" alt="(\gamma, \omega)"/> that is part of the rule,
-the pair <img class="math" src="../_images/math/d00fac6442ba4aa3d996223cf7cae08c5fc9a8b8.png" alt="(-\gamma, \omega)"/> is also contained
+weight pair <img class="math" src="../_images/math/aa2f4ee45a9fa002a1fda65c0e909ab2e673ab7f.png" alt="(\gamma, \omega)"/> that is part of the rule,
+the pair <img class="math" src="../_images/math/aec02db256cc49755ca76fee4ce0b732910e939a.png" alt="(-\gamma, \omega)"/> is also contained
 in the quadrature rule.</p>
 </div>
 </dd></dl>
@@ -124,14 +124,14 @@ in the quadrature rule.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SmolyakQR.construct_rule">
 <code class="descname">construct_rule</code><span class="sig-paren">(</span><em>K</em>, <em>tolerance=1e-15</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SmolyakQR.html#SmolyakQR.construct_rule"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SmolyakQR.construct_rule" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the quadrature nodes <img class="math" src="../_images/math/72c82a512fdcf651b011831d045774d332782320.png" alt="\{\gamma_i\}_i"/> and quadrature
-weights <img class="math" src="../_images/math/e9a1cc441abfee5dc1f5b96317326e843502d221.png" alt="\{\omega_i\}_i"/>.</p>
+<dd><p>Compute the quadrature nodes <img class="math" src="../_images/math/aaab9c5ece8d481d05aef2a3dd5b557c9203aeaa.png" alt="\{\gamma_i\}_i"/> and quadrature
+weights <img class="math" src="../_images/math/33540e93d0d25022763d3c2716795b61b1b71cb2.png" alt="\{\omega_i\}_i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>K</strong> &#8211; The level <img class="math" src="../_images/math/28e003020d0ae96250b302d7d779c791f183f707.png" alt="K"/> of the Smolyak construction.</li>
+<li><strong>K</strong> &#8211; The level <img class="math" src="../_images/math/684381a21cd73ebbf43b63a087d3f7410ee99ce8.png" alt="K"/> of the Smolyak construction.</li>
 <li><strong>tolerance</strong> &#8211; Tolerance for dropping identical quadrature nodes.</li>
 </ul>
 </td>
@@ -167,7 +167,7 @@ never contains any data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the quadrature rule.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> of the quadrature rule.</td>
 </tr>
 </tbody>
 </table>
@@ -176,7 +176,7 @@ never contains any data.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SmolyakQR.get_nodes">
 <code class="descname">get_nodes</code><span class="sig-paren">(</span><em>flat=True</em>, <em>split=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SmolyakQR.html#SmolyakQR.get_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SmolyakQR.get_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the quadrature nodes <img class="math" src="../_images/math/72c82a512fdcf651b011831d045774d332782320.png" alt="\{\gamma_i\}_i"/>.</p>
+<dd><p>Returns the quadrature nodes <img class="math" src="../_images/math/aaab9c5ece8d481d05aef2a3dd5b557c9203aeaa.png" alt="\{\gamma_i\}_i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -187,7 +187,7 @@ never contains any data.</p>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An ndarray containing the quadrature nodes <img class="math" src="../_images/math/72c82a512fdcf651b011831d045774d332782320.png" alt="\{\gamma_i\}_i"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An ndarray containing the quadrature nodes <img class="math" src="../_images/math/aaab9c5ece8d481d05aef2a3dd5b557c9203aeaa.png" alt="\{\gamma_i\}_i"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -201,8 +201,8 @@ never contains any data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of quadrature nodes denoted by <img class="math" src="../_images/math/0de5e5343aaf9413370055e0b0230e62d881120a.png" alt="|\Gamma|"/> that are
-part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50edc770051c6fac45ce16555507f7.png" alt="\Gamma = (\gamma, \omega)"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number of quadrature nodes denoted by <img class="math" src="../_images/math/96928d57c4ef323790bb153c714f7533e5eff8c5.png" alt="|\Gamma|"/> that are
+part of this quadrature rule <img class="math" src="../_images/math/5ea59139dfdb041856f73473478c72fb9375252e.png" alt="\Gamma = (\gamma, \omega)"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -211,12 +211,12 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
 <dl class="method">
 <dt id="WaveBlocksND.SmolyakQR.get_weights">
 <code class="descname">get_weights</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SmolyakQR.html#SmolyakQR.get_weights"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SmolyakQR.get_weights" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the quadrature weights <img class="math" src="../_images/math/e9a1cc441abfee5dc1f5b96317326e843502d221.png" alt="\{\omega_i\}_i"/>.</p>
+<dd><p>Returns the quadrature weights <img class="math" src="../_images/math/33540e93d0d25022763d3c2716795b61b1b71cb2.png" alt="\{\omega_i\}_i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ndarray containing the quadrature weights <img class="math" src="../_images/math/e9a1cc441abfee5dc1f5b96317326e843502d221.png" alt="\{\omega_i\}_i"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">An ndarray containing the quadrature weights <img class="math" src="../_images/math/33540e93d0d25022763d3c2716795b61b1b71cb2.png" alt="\{\omega_i\}_i"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -290,7 +290,7 @@ part of this quadrature rule <img class="math" src="../_images/math/c3a2bdedae50
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

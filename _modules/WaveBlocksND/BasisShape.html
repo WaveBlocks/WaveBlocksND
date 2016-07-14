@@ -56,7 +56,7 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">argmax</span><span class="p">,</span> <span class="nb">sum</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span><span class="p">,</span> <span class="n">argmax</span><span class="p">,</span> <span class="nb">sum</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasisShape&quot;</span><span class="p">]</span>
 
@@ -134,7 +134,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span></div>
 
 
-<div class="viewcode-block" id="BasisShape.get_basis_size"><a class="viewcode-back" href="../../waveblocks_classes/BasisShape.html#WaveBlocksND.BasisShape.get_basis_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extended</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="BasisShape.get_basis_size"><a class="viewcode-back" href="../../waveblocks_classes/BasisShape.html#WaveBlocksND.BasisShape.get_basis_size">[docs]</a>    <span class="k">def</span> <span class="nf">get_basis_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extended</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Returns the size :math:`|\mathfrak{K}|` of the basis. The size is the</span>
 <span class="sd">        number of distinct multi-indices :math:`k` that belong to the basis</span>
@@ -172,7 +172,7 @@
         <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;&#39;BasisShape&#39; is an abstract interface.&quot;</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="BasisShape.get_neighbours"><a class="viewcode-back" href="../../waveblocks_classes/BasisShape.html#WaveBlocksND.BasisShape.get_neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BasisShape.get_neighbours"><a class="viewcode-back" href="../../waveblocks_classes/BasisShape.html#WaveBlocksND.BasisShape.get_neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all multi-indices that are neighbours of a given</span>
 <span class="sd">        multi-index :math:`k`. A direct neighbours is defines as</span>
@@ -235,7 +235,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

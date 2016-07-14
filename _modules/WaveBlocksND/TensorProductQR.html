@@ -57,13 +57,13 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">import</span> <span class="nn">operator</span> <span class="kn">as</span> <span class="nn">op</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">multiply</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
+<span class="kn">import</span> <span class="nn">operator</span> <span class="k">as</span> <span class="nn">op</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">multiply</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.QuadratureRule</span> <span class="kn">import</span> <span class="n">QuadratureRule</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Utils</span> <span class="kn">import</span> <span class="n">meshgrid_nd</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.QuadratureRule</span> <span class="k">import</span> <span class="n">QuadratureRule</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Utils</span> <span class="k">import</span> <span class="n">meshgrid_nd</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;TensorProductQR&quot;</span><span class="p">]</span>
 
@@ -93,13 +93,13 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_options</span> <span class="o">=</span> <span class="n">options</span>
 
         <span class="c1"># The number of nodes in this quadrature rule.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># The quadrature nodes \gamma.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># The quadrature weights \omega.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># Actually compute the nodes and weights.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">construct_rule</span><span class="p">()</span></div>
@@ -116,20 +116,20 @@
 <span class="sd">                 nodes has a shape of :math:`(D, |\Gamma|)` and the</span>
 <span class="sd">                 array of weights is of shape :math:`(|\Gamma|)`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_number_nodes</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="p">[</span><span class="n">rule</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">])</span>
         <span class="c1"># The quadrature nodes \gamma.</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">meshgrid_nd</span><span class="p">([</span><span class="n">rule</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_nodes</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="n">node</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">node</span> <span class="ow">in</span> <span class="n">nodes</span><span class="p">])</span>
         <span class="c1"># The quadrature weights \omega.</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="n">meshgrid_nd</span><span class="p">([</span><span class="n">rule</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">])</span>
-        <span class="n">weights</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">multiply</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="n">s</span> <span class="o">=</span> <span class="s2">&quot;Tensor product quadrature rule consisting of:</span><span class="se">\n</span><span class="s2">&quot;</span>
         <span class="n">l</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;  &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">rule</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">rule</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_rules</span><span class="p">]</span>
-        <span class="n">s</span> <span class="o">+=</span> <span class="nb">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
+        <span class="n">s</span> <span class="o">+=</span> <span class="n">reduce</span><span class="p">(</span><span class="n">op</span><span class="o">.</span><span class="n">add</span><span class="p">,</span> <span class="n">l</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">s</span>
 
 
@@ -147,7 +147,7 @@
         <span class="k">return</span> <span class="n">d</span></div>
 
 
-<div class="viewcode-block" id="TensorProductQR.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductQR.html#WaveBlocksND.TensorProductQR.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="TensorProductQR.get_nodes"><a class="viewcode-back" href="../../waveblocks_classes/TensorProductQR.html#WaveBlocksND.TensorProductQR.get_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">get_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">flat</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Return the quadrature nodes :math:`\{\gamma_i\}_i`.</span>
 
 <span class="sd">        :param flat: Dummy parameter for API compatibility with Grids.</span>
@@ -201,7 +201,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

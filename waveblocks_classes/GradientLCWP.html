@@ -75,26 +75,26 @@
 <dt id="WaveBlocksND.GradientLCWP">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">GradientLCWP</code><a class="reference internal" href="../_modules/WaveBlocksND/GradientLCWP.html#GradientLCWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GradientLCWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements the computation of the action of the
-gradient operator <img class="math" src="../_images/math/4af8e4c631258261de0d58bef92fa010d1b6aa50.png" alt="-i \varepsilon^2 \nabla_x"/> applied to
-a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of arbitrary wavepackets.</p>
+gradient operator <img class="math" src="../_images/math/b528d937a8c16a2b95d2f5e4463f2ffddd05c7de.png" alt="-i \varepsilon^2 \nabla_x"/> applied to
+a linear combination <img class="math" src="../_images/math/eef1b9c4763571551b33733e5a457467f93796d1.png" alt="\Upsilon"/> of arbitrary wavepackets.</p>
 <dl class="method">
 <dt id="WaveBlocksND.GradientLCWP.apply_gradient">
 <code class="descname">apply_gradient</code><span class="sig-paren">(</span><em>lincomb</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GradientLCWP.html#GradientLCWP.apply_gradient"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GradientLCWP.apply_gradient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the effect of the gradient operator <img class="math" src="../_images/math/4af8e4c631258261de0d58bef92fa010d1b6aa50.png" alt="-i \varepsilon^2 \nabla_x"/>
-applied to a linear combination <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> of arbitrary wavepackets.</p>
+<dd><p>Compute the effect of the gradient operator <img class="math" src="../_images/math/b528d937a8c16a2b95d2f5e4463f2ffddd05c7de.png" alt="-i \varepsilon^2 \nabla_x"/>
+applied to a linear combination <img class="math" src="../_images/math/eef1b9c4763571551b33733e5a457467f93796d1.png" alt="\Upsilon"/> of arbitrary wavepackets.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>lincomb</strong> (A <a class="reference internal" href="LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs" title="WaveBlocksND.LinearCombinationOfWPs"><code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code></a> instance.) &#8211; The lincomb <img class="math" src="../_images/math/e838cc7ce47de4242e2d27771140908bff604da6.png" alt="\Upsilon"/> containing the wavepackets <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</li>
-<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of each <img class="math" src="../_images/math/ab7f7c655bbc8fec08f08c10d8cf1eeb56560103.png" alt="\Psi_j"/>.</li>
+<li><strong>lincomb</strong> (A <a class="reference internal" href="LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs" title="WaveBlocksND.LinearCombinationOfWPs"><code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfWPs</span></code></a> instance.) &#8211; The lincomb <img class="math" src="../_images/math/eef1b9c4763571551b33733e5a457467f93796d1.png" alt="\Upsilon"/> containing the wavepackets <img class="math" src="../_images/math/189e6171751bfe3e7fe4bb49b16d84bebd15b2f8.png" alt="\Psi_j"/>.</li>
+<li><strong>component</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of each <img class="math" src="../_images/math/189e6171751bfe3e7fe4bb49b16d84bebd15b2f8.png" alt="\Psi_j"/>.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of linear combinations of the gradients of all packets from the given
-linearcombination. There are <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> linearcombinations <img class="math" src="../_images/math/9190aad6e8e560838b088f1df10add2580a8295e.png" alt="\Upsilon_d"/>,
-one for each space variable component <img class="math" src="../_images/math/354aa290e824f42d96a393ee2da0f3f489f67c17.png" alt="\partial_{x_d}"/> of the gradient.</p>
+linearcombination. There are <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> linearcombinations <img class="math" src="../_images/math/4c6a853dc6e70e1d6226ef2338de73e1addef3e6.png" alt="\Upsilon_d"/>,
+one for each space variable component <img class="math" src="../_images/math/1b07b25676dfec7a853ba3090fd151b2d2938513.png" alt="\partial_{x_d}"/> of the gradient.</p>
 </td>
 </tr>
 </tbody>
@@ -169,7 +169,7 @@ one for each space variable component <img class="math" src="../_images/math/354
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

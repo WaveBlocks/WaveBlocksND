@@ -94,10 +94,10 @@ inherent mathematical singularity. Default is <code class="docutils literal"><sp
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.exact_result_ground">
 <code class="descname">exact_result_ground</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em>, <em>eps</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_ground" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the overlap integral <img class="math" src="../_images/math/139b634148ebc4963ffcc0fcc74891e24052129a.png" alt="\langle \phi_0 | \phi_0 \rangle"/> of
-the groundstate <img class="math" src="../_images/math/8b67aa9294c96292c23cd0cc36c4af0bd82c5a53.png" alt="\phi_0"/> by using the symbolic formula:</p>
+<dd><p>Compute the overlap integral <img class="math" src="../_images/math/5b3b40cd9059ce2bec4ce0cfcb8f00697c8931bc.png" alt="\langle \phi_0 | \phi_0 \rangle"/> of
+the groundstate <img class="math" src="../_images/math/ef6bacb188bb5a31ab677ef67ed7edf7426b9984.png" alt="\phi_0"/> by using the symbolic formula:</p>
 <div class="math">
-<p><img src="../_images/math/51f746c1d5913c2790ee9b115e01eec65ad29a5e.png" alt="\langle \phi_0 | \phi_0 \rangle =
+<p><img src="../_images/math/fe450b9e1b2971d7c762646e4035369bbd45579d.png" alt="\langle \phi_0 | \phi_0 \rangle =
 \sqrt{\frac{-2 i}{Q_2 \overline{P_1} - P_2 \overline{Q_1}}} \cdot
   \exp \Biggl(
     \frac{i}{2 \varepsilon^2}
@@ -115,13 +115,13 @@ reason to call it from outside.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>Pibra</strong> &#8211; The parameter set <img class="math" src="../_images/math/4def07ca0bd48ba37c217fe217a8a1e57f61ae60.png" alt="\Pi = \{q_1,p_1,Q_1,P_1\}"/> of the bra <img class="math" src="../_images/math/7f94126a3b1e093d548cbd4fe0bb358a88007518.png" alt="\langle \phi_0 |"/>.</li>
-<li><strong>Piket</strong> &#8211; The parameter set <img class="math" src="../_images/math/f4cca922f58693378a7d1c37e33506ccfef7f7aa.png" alt="\Pi^\prime = \{q_2,p_2,Q_2,P_2\}"/> of the ket <img class="math" src="../_images/math/3282208e57910464b25ec39fe4afbc823165e803.png" alt="| \phi_0 \rangle"/>.</li>
-<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>.</li>
+<li><strong>Pibra</strong> &#8211; The parameter set <img class="math" src="../_images/math/1361643339f75d60a5669e6528d4ec7bb860d5db.png" alt="\Pi = \{q_1,p_1,Q_1,P_1\}"/> of the bra <img class="math" src="../_images/math/4a271f478f080e64a8bc9bb3b9438923aeb5f49b.png" alt="\langle \phi_0 |"/>.</li>
+<li><strong>Piket</strong> &#8211; The parameter set <img class="math" src="../_images/math/303f7aca27d8f5089ce4b3e919b83de68d4102b0.png" alt="\Pi^\prime = \{q_2,p_2,Q_2,P_2\}"/> of the ket <img class="math" src="../_images/math/125af7bbc21482c6261e20c4c435f0677e8d106b.png" alt="| \phi_0 \rangle"/>.</li>
+<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the integral <img class="math" src="../_images/math/139b634148ebc4963ffcc0fcc74891e24052129a.png" alt="\langle \phi_0 | \phi_0 \rangle"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the integral <img class="math" src="../_images/math/5b3b40cd9059ce2bec4ce0cfcb8f00697c8931bc.png" alt="\langle \phi_0 | \phi_0 \rangle"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -131,10 +131,10 @@ reason to call it from outside.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.exact_result_higher">
 <code class="descname">exact_result_higher</code><span class="sig-paren">(</span><em>Pibra</em>, <em>Piket</em>, <em>eps</em>, <em>k</em>, <em>l</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SymbolicIntegral0.html#SymbolicIntegral0.exact_result_higher"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.exact_result_higher" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the overlap integral <img class="math" src="../_images/math/224a2573968f7ab950662d920675f9bb17c43ec5.png" alt="\langle \phi_0 | \phi_l \rangle"/> of
-two states <img class="math" src="../_images/math/8b67aa9294c96292c23cd0cc36c4af0bd82c5a53.png" alt="\phi_0"/> and <img class="math" src="../_images/math/c0f0ca50ca07beb49e5b34860a4bb4b8d649db5e.png" alt="\phi_l"/> by using the symbolic formula:</p>
+<dd><p>Compute the overlap integral <img class="math" src="../_images/math/7ea763d24c0f8c3fe28ae7a2622bfa79bbb4ffd4.png" alt="\langle \phi_0 | \phi_l \rangle"/> of
+two states <img class="math" src="../_images/math/ef6bacb188bb5a31ab677ef67ed7edf7426b9984.png" alt="\phi_0"/> and <img class="math" src="../_images/math/b3458a11c76e37d66db5d2df764897a7fd8a46e4.png" alt="\phi_l"/> by using the symbolic formula:</p>
 <div class="math">
-<p><img src="../_images/math/b584bbb7e43e1fd0640db9a22c2d8c121472d8a6.png" alt="\langle \phi_0 | \phi_l \rangle =
+<p><img src="../_images/math/82b02b71434f1503b7565d0ebe9e3a8eb2b04977.png" alt="\langle \phi_0 | \phi_l \rangle =
 \frac{1}{\sqrt{l!}} 2^{-\frac{l}{2}} \langle \phi_0 | \phi_0 \rangle \cdot
 \left(i \overline{ P_1} Q_2 - i \overline{Q_1} P_2\right)^{-\frac{l}{2}} \cdot
 \left(i \overline{Q_2 P_1} - i\overline{Q_1 P_2}\right)^{\frac{l}{2}}
@@ -151,15 +151,15 @@ reason to call it from outside.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>Pibra</strong> &#8211; The parameter set <img class="math" src="../_images/math/4def07ca0bd48ba37c217fe217a8a1e57f61ae60.png" alt="\Pi = \{q_1,p_1,Q_1,P_1\}"/> of the bra <img class="math" src="../_images/math/7f94126a3b1e093d548cbd4fe0bb358a88007518.png" alt="\langle \phi_0 |"/>.</li>
-<li><strong>Piket</strong> &#8211; The parameter set <img class="math" src="../_images/math/f4cca922f58693378a7d1c37e33506ccfef7f7aa.png" alt="\Pi^\prime = \{q_2,p_2,Q_2,P_2\}"/> of the ket <img class="math" src="../_images/math/83ebdb4b3dd3d356110a89efbb0b72f4e5483b40.png" alt="| \phi_l \rangle"/>.</li>
-<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>.</li>
-<li><strong>k</strong> &#8211; Index <img class="math" src="../_images/math/d85fd3ecb4c7dd371fbf412352b67be347043fba.png" alt="k=0"/> of the wavepacket basis function <img class="math" src="../_images/math/8b67aa9294c96292c23cd0cc36c4af0bd82c5a53.png" alt="\phi_0"/>.</li>
-<li><strong>l</strong> &#8211; Index <img class="math" src="../_images/math/d99efde75c84ef402a92cd4497530d2366fb112f.png" alt="l"/> of the wavepacket basis function <img class="math" src="../_images/math/c0f0ca50ca07beb49e5b34860a4bb4b8d649db5e.png" alt="\phi_l"/>.</li>
+<li><strong>Pibra</strong> &#8211; The parameter set <img class="math" src="../_images/math/1361643339f75d60a5669e6528d4ec7bb860d5db.png" alt="\Pi = \{q_1,p_1,Q_1,P_1\}"/> of the bra <img class="math" src="../_images/math/4a271f478f080e64a8bc9bb3b9438923aeb5f49b.png" alt="\langle \phi_0 |"/>.</li>
+<li><strong>Piket</strong> &#8211; The parameter set <img class="math" src="../_images/math/303f7aca27d8f5089ce4b3e919b83de68d4102b0.png" alt="\Pi^\prime = \{q_2,p_2,Q_2,P_2\}"/> of the ket <img class="math" src="../_images/math/96d803631a9fb76680c1f6bcf252d77a6f0b13e9.png" alt="| \phi_l \rangle"/>.</li>
+<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>.</li>
+<li><strong>k</strong> &#8211; Index <img class="math" src="../_images/math/bc37fb6f186e2b76055e72b6196c830f1ae7f4e9.png" alt="k=0"/> of the wavepacket basis function <img class="math" src="../_images/math/ef6bacb188bb5a31ab677ef67ed7edf7426b9984.png" alt="\phi_0"/>.</li>
+<li><strong>l</strong> &#8211; Index <img class="math" src="../_images/math/b359488b993294ebbc2c7b30ab8f749dcbc6826d.png" alt="l"/> of the wavepacket basis function <img class="math" src="../_images/math/b3458a11c76e37d66db5d2df764897a7fd8a46e4.png" alt="\phi_l"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the integral <img class="math" src="../_images/math/224a2573968f7ab950662d920675f9bb17c43ec5.png" alt="\langle \phi_0 | \phi_l \rangle"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The value of the integral <img class="math" src="../_images/math/7ea763d24c0f8c3fe28ae7a2622bfa79bbb4ffd4.png" alt="\langle \phi_0 | \phi_l \rangle"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -235,7 +235,7 @@ wavepackets can be used for the &#8216;bra&#8217; as well as the &#8216;ket&#821
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> if the dimension of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> is not 1.</p>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> if the dimension of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> is not 1.</p>
 </td>
 </tr>
 </tbody>
@@ -245,19 +245,19 @@ wavepackets can be used for the &#8216;bra&#8217; as well as the &#8216;ket&#821
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.perform_build_matrix">
 <code class="descname">perform_build_matrix</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the matrix elements <img class="math" src="../_images/math/803df1c04ca5fe42c35c60666fad39826e64d8d0.png" alt="\langle\Phi_i |\Phi^\prime_j\rangle"/>
+<dd><p>Computes the matrix elements <img class="math" src="../_images/math/b8bd0aa9ec434ca2146c6d0058ee0ec845ade36d.png" alt="\langle\Phi_i |\Phi^\prime_j\rangle"/>
 by an exact symbolic formula.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> of the component <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/60dd313b71dcb52ef5cc0ba8c42b5cce2b859872.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/8dca76fed88926873540cabfe621ecd7a8ff4aa3.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -267,15 +267,15 @@ by an exact symbolic formula.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SymbolicIntegral0.perform_quadrature">
 <code class="descname">perform_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.perform_quadrature" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluates the integral <img class="math" src="../_images/math/5e7fecb3ab78459ce4114f10754d5794b3ec0760.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/>
+<dd><p>Evaluates the integral <img class="math" src="../_images/math/3eb0074971650eeb055f64ed73666dae778b9430.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/>
 by an exact symbolic formula.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> of the component <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/>.</li>
 </ul>
 </td>
 </tr>
@@ -290,18 +290,18 @@ by an exact symbolic formula.</p>
 <dt id="WaveBlocksND.SymbolicIntegral0.prepare">
 <code class="descname">prepare</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.SymbolicIntegral0.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precompute some values needed for evaluating the integral
-<img class="math" src="../_images/math/5e7fecb3ab78459ce4114f10754d5794b3ec0760.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/> or the corresponding
-matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/>.
+<img class="math" src="../_images/math/3eb0074971650eeb055f64ed73666dae778b9430.png" alt="\langle \Phi_i | \Phi^\prime_j \rangle"/> or the corresponding
+matrix over the basis functions of <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/>.
 Note that this function does nothing in the current implementation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rows</strong> &#8211; A list of all <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> with <img class="math" src="../_images/math/c641334893af173dd5b3030f99548af3d0e9ec30.png" alt="0 \leq i \leq N"/>
-selecting the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> for which we precompute values.</li>
-<li><strong>cols</strong> &#8211; A list of all <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> with <img class="math" src="../_images/math/8b74560b070d7dc4a60efb67b313b253b717f9ce.png" alt="0 \leq j \leq N"/>
-selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> for which we precompute values.</li>
+<li><strong>rows</strong> &#8211; A list of all <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> with <img class="math" src="../_images/math/645fd0049f8afc242a43ccf64c518f2795e67a7d.png" alt="0 \leq i \leq N"/>
+selecting the <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> for which we precompute values.</li>
+<li><strong>cols</strong> &#8211; A list of all <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> with <img class="math" src="../_images/math/e104d6c41308132f413973b42c657206e8d8697b.png" alt="0 \leq j \leq N"/>
+selecting the <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/> for which we precompute values.</li>
 </ul>
 </td>
 </tr>
@@ -391,7 +391,7 @@ selecting the <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

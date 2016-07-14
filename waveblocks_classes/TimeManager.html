@@ -88,33 +88,33 @@
 </tr>
 </thead>
 <tbody valign="top">
-<tr class="row-even"><td><img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/></td>
+<tr class="row-even"><td><img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/></td>
 <td>T</td>
 <td>the fixed simulation end time</td>
 </tr>
-<tr class="row-odd"><td><img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/></td>
+<tr class="row-odd"><td><img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/></td>
 <td>dt</td>
 <td>the size of the timestep</td>
 </tr>
-<tr class="row-even"><td><img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/></td>
+<tr class="row-even"><td><img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/></td>
 <td>nsteps</td>
 <td>the overall number of timesteps.</td>
 </tr>
-<tr class="row-odd"><td><img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/></td>
+<tr class="row-odd"><td><img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/></td>
 <td>&nbsp;</td>
-<td>an unspecified time in the interval <img class="math" src="../_images/math/1d3cb81063fd04cd699285c31684aa3e5b20ada6.png" alt="[0, T]"/></td>
+<td>an unspecified time in the interval <img class="math" src="../_images/math/caa9c457c24f9a82eb1c804ba53842230bcebb4c.png" alt="[0, T]"/></td>
 </tr>
-<tr class="row-even"><td><img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/></td>
+<tr class="row-even"><td><img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/></td>
 <td>&nbsp;</td>
-<td>an unspecified timestep in the interval <img class="math" src="../_images/math/24655ad9b84a4f2bc1bd17ac39deea5cc1d3cc19.png" alt="[0, N]"/></td>
+<td>an unspecified timestep in the interval <img class="math" src="../_images/math/3ba83ffae598c05cfb980b835a897af2207453da.png" alt="[0, N]"/></td>
 </tr>
 </tbody>
 </table>
-<p>The important relations that hold are <img class="math" src="../_images/math/82d6ef2c35be6c13d16e6ff4526b3e95ebc92f7e.png" alt="T = N \tau"/> and
-in analogy <img class="math" src="../_images/math/62a81619a9d2019873a7fb017fe2f2dc906cd8cd.png" alt="t = n \tau"/>. There are also conversion routines
-for <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> and <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/>.</p>
+<p>The important relations that hold are <img class="math" src="../_images/math/9b5761c3e63775212ac37b5fe95c07d5fd83b82f.png" alt="T = N \tau"/> and
+in analogy <img class="math" src="../_images/math/76675d160b13f3d336ef120673f2ea237053efed.png" alt="t = n \tau"/>. There are also conversion routines
+for <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> and <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/>.</p>
 <p>The simulation parameters handed over to the constructor must contain at least
-two out of the three values <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>, <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> and <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>. If all three
+two out of the three values <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>, <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> and <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/>. If all three
 are given, the user is responsible for compatible values.</p>
 <p>Additionally the class contains some routines for determining
 if and when some events (for example saving data) should occur.</p>
@@ -139,12 +139,12 @@ given in monotone order.</p>
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_endtime">
 <code class="descname">compute_endtime</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_endtime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_endtime" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
+<dd><p>Computes the simulation endtime <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The endtime <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -170,12 +170,12 @@ is saved.</p>
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_number_timesteps">
 <code class="descname">compute_number_timesteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_number_timesteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_number_timesteps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of time steps we will perform.</p>
+<dd><p>Computes the number <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> of time steps we will perform.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of timesteps.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> of timesteps.</td>
 </tr>
 </tbody>
 </table>
@@ -184,15 +184,15 @@ is saved.</p>
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_time">
 <code class="descname">compute_time</code><span class="sig-paren">(</span><em>n</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_time"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_time" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> from a timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> such that
-<img class="math" src="../_images/math/62a81619a9d2019873a7fb017fe2f2dc906cd8cd.png" alt="t = n \tau"/> holds.</p>
+<dd><p>Compute the time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> from a timestep <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> such that
+<img class="math" src="../_images/math/76675d160b13f3d336ef120673f2ea237053efed.png" alt="t = n \tau"/> holds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>n</strong> &#8211; The timestep n of which we want to find the corresponding time.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corresponding time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corresponding time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -201,31 +201,31 @@ is saved.</p>
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_timestep">
 <code class="descname">compute_timestep</code><span class="sig-paren">(</span><em>t</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_timestep"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep" title="Permalink to this definition">¶</a></dt>
-<dd><p>Compute the timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> from a time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> such that
-<img class="math" src="../_images/math/62a81619a9d2019873a7fb017fe2f2dc906cd8cd.png" alt="t = n \tau"/> holds.</p>
+<dd><p>Compute the timestep <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> from a time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> such that
+<img class="math" src="../_images/math/76675d160b13f3d336ef120673f2ea237053efed.png" alt="t = n \tau"/> holds.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>t</strong> &#8211; The time t of which we want to find the timestep number.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corresponding timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The corresponding timestep <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/>.</td>
 </tr>
 </tbody>
 </table>
-<p>Note that the user has to ensure that time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/> is an integral
-multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
+<p>Note that the user has to ensure that time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> is an integral
+multiple of <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.compute_timestep_size">
 <code class="descname">compute_timestep_size</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.compute_timestep_size"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.compute_timestep_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Computes the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
+<dd><p>Computes the simulation timestep size <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The timestep <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The timestep <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -234,12 +234,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_T">
 <code class="descname">get_T</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_T" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
+<dd><p>Set the simulation endtime <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The endtime <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -248,12 +248,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_dt">
 <code class="descname">get_dt</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_dt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
+<dd><p>Get the simulation timestep size <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The timestep <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The timestep <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -262,12 +262,12 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.get_nsteps">
 <code class="descname">get_nsteps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.get_nsteps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.get_nsteps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of timesteps the simulation runs.</p>
+<dd><p>Get the number <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> of timesteps the simulation runs.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> of timesteps.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">the number <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> of timesteps.</td>
 </tr>
 </tbody>
 </table>
@@ -292,7 +292,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_T">
 <code class="descname">set_T</code><span class="sig-paren">(</span><em>T</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_T"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_T" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the simulation endtime <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
+<dd><p>Set the simulation endtime <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -306,7 +306,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <dl class="method">
 <dt id="WaveBlocksND.TimeManager.set_dt">
 <code class="descname">set_dt</code><span class="sig-paren">(</span><em>dt</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/TimeManager.html#TimeManager.set_dt"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.TimeManager.set_dt" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the simulation timestep size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/>.</p>
+<dd><p>Set the simulation timestep size <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -340,7 +340,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nsteps</strong> &#8211; The number <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> timesteps we do.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>nsteps</strong> &#8211; The number <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> timesteps we do.</td>
 </tr>
 </tbody>
 </table>
@@ -414,7 +414,7 @@ multiple of <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

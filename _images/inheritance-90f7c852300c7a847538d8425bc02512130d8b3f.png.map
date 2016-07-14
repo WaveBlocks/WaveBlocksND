@@ -1,0 +1,5 @@
+<map id="inheritancef534a7d71b" name="inheritancef534a7d71b">
+<area shape="rect" id="node1" title="This class represents homogeneous vector valued Hagedorn wavepackets" alt="" coords="585,16,765,28"/>
+<area shape="rect" id="node2" title="This class implements the abstract :py:class:`Wavepacket` interface" alt="" coords="319,3,555,16"/>
+<area shape="rect" id="node5" title="This class is an abstract interface to wavepackets in general." alt="" coords="77,3,216,16"/>
+</map>

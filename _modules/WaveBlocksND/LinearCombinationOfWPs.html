@@ -57,9 +57,9 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">vstack</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">,</span> <span class="n">delete</span><span class="p">,</span> <span class="n">vstack</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.LinearCombinationOfWavepackets</span> <span class="kn">import</span> <span class="n">LinearCombinationOfWavepackets</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.LinearCombinationOfWavepackets</span> <span class="k">import</span> <span class="n">LinearCombinationOfWavepackets</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;LinearCombinationOfWPs&quot;</span><span class="p">]</span>
 
@@ -109,7 +109,7 @@
         <span class="k">return</span> <span class="n">d</span></div>
 
 
-    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keepid</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">clone</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">keepid</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># Parameters of this packet</span>
         <span class="n">params</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_description</span><span class="p">()</span>
         <span class="c1"># Create a new linear combination</span>
@@ -143,7 +143,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">vstack</span><span class="p">([</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">,</span> <span class="n">atleast_2d</span><span class="p">(</span><span class="n">coefficient</span><span class="p">)])</span></div>
 
 
-<div class="viewcode-block" id="LinearCombinationOfWPs.add_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.add_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">,</span> <span class="n">coefficients</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearCombinationOfWPs.add_wavepackets"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.add_wavepackets">[docs]</a>    <span class="k">def</span> <span class="nf">add_wavepackets</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">packetlist</span><span class="p">,</span> <span class="n">coefficients</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Add a list of new wavepackets to the linear combination.</span>
 
 <span class="sd">        :param packetlist: A list of new wavepackets :math:`\{\Psi_j\}`.</span>
@@ -151,7 +151,7 @@
 <span class="sd">        :param coefficients: The corresponding coefficient vector :math:`c`, default</span>
 <span class="sd">                             is a vector of all 1.0.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span> <span class="o">!=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span> <span class="o">!=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Differently many packets and coefficients given.&quot;</span><span class="p">)</span>
 
         <span class="n">pids</span> <span class="o">=</span> <span class="p">[]</span>
@@ -166,7 +166,7 @@
             <span class="k">if</span> <span class="n">pid</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet_ids</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Adding packet failed due to duplicate id.&quot;</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">coefficients</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">coefficients</span> <span class="o">=</span> <span class="n">ones</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">packetlist</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="n">packetlist</span><span class="p">)</span>
@@ -257,7 +257,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span> <span class="o">=</span> <span class="n">coefficients</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="LinearCombinationOfWPs.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="LinearCombinationOfWPs.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/LinearCombinationOfWPs.html#WaveBlocksND.LinearCombinationOfWPs.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the linear combination of wavepackets :math:`\Upsilon` at</span>
 <span class="sd">        the given nodes :math:`\gamma`.</span>
 
@@ -273,15 +273,15 @@
 
         <span class="c1"># Split one off to get the result array shape</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_packets</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">val</span> <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">vals</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">vals</span>
 
         <span class="k">for</span> <span class="n">index</span><span class="p">,</span> <span class="n">packet</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_packets</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
-            <span class="n">vals</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+            <span class="n">vals</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="p">[</span><span class="n">res</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">val</span> <span class="k">for</span> <span class="n">res</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="n">vals</span><span class="p">)]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">result</span> <span class="o">=</span> <span class="n">result</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_coefficients</span><span class="p">[</span><span class="n">index</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">*</span> <span class="n">vals</span>
@@ -323,7 +323,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

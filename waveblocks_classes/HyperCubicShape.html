@@ -77,11 +77,11 @@
 <dd><p>This class implements the hypercubic basis shape
 which is the full dense basis set.
 A basis shape is essentially all information and operations
-related to the set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/> of multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.
-The hypercubic shape in <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> dimensions and with limit <img class="math" src="../_images/math/7b8117c1641f2565d7a38e8cc7d61359b8adf3f6.png" alt="K_d"/>
-in dimension <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/> is defined as the set</p>
+related to the set <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/> of multi-indices <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>.
+The hypercubic shape in <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> dimensions and with limit <img class="math" src="../_images/math/2c1a6afa8f3d97ac6b701e15b458c0f4db7e4549.png" alt="K_d"/>
+in dimension <img class="math" src="../_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/> is defined as the set</p>
 <div class="math">
-<p><img src="../_images/math/acfe97a198058f00b8dc3dc0d38a9d4033b98a8e.png" alt="\mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) \in \mathbb{N}_0^D |
+<p><img src="../_images/math/a10f7b8003b06a1412f5d3d80ca06596eb805ba6.png" alt="\mathfrak{K}(D, K) := \{ (k_0, \ldots, k_{D-1}) \in \mathbb{N}_0^D |
                          k_d &lt; K_d \forall d \in [0,\ldots,D-1] \}"/></p>
 </div><dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.__init__">
@@ -90,7 +90,7 @@ in dimension <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf9
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>limits</strong> &#8211; The list of all limits <img class="math" src="../_images/math/8fb1e1307d9cec4cc8b8609b983fa9517cf3c048.png" alt="\{K_d\}_{d=0}^{D-1}"/></td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>limits</strong> &#8211; The list of all limits <img class="math" src="../_images/math/27b8d33c802b47f8cc99f22e120043ef4cd1f299.png" alt="\{K_d\}_{d=0}^{D-1}"/></td>
 </tr>
 </tbody>
 </table>
@@ -103,7 +103,7 @@ in dimension <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf9
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the basis shape <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the basis shape <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -113,8 +113,8 @@ in dimension <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf9
 <dt id="WaveBlocksND.HyperCubicShape.__hash__">
 <code class="descname">__hash__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.__hash__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.__hash__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute a unique hash for the basis shape. In the case of hypercubic
-basis shapes <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/> the basis is fully specified by its
-maximal index <img class="math" src="../_images/math/4268459ea3178827ee706b1f82bfd62764c8dd45.png" alt="K_i"/> along each direction <img class="math" src="../_images/math/a86fafbe3a54f76cafa8594f923ce6664f14cc4a.png" alt="i \in [0,\ldots,D-1]"/>.</p>
+basis shapes <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/> the basis is fully specified by its
+maximal index <img class="math" src="../_images/math/5c483f204bb00e2e88dad309baf1f6682178966e.png" alt="K_i"/> along each direction <img class="math" src="../_images/math/22557b6a2574ed7e36742acba797a5afe122b28d.png" alt="i \in [0,\ldots,D-1]"/>.</p>
 </dd></dl>
 
 <dl class="method">
@@ -126,8 +126,8 @@ maximal index <img class="math" src="../_images/math/4268459ea3178827ee706b1f82b
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.__iter__">
 <code class="descname">__iter__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.__iter__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.__iter__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Implements iteration over the multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>
-of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
+<dd><p>Implements iteration over the multi-indices <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>
+of the basis set <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</p>
 <p>Note: The order of iteration is NOT fixed. If you need a special
 iteration scheme, use <a class="reference internal" href="#WaveBlocksND.HyperCubicShape.get_node_iterator" title="WaveBlocksND.HyperCubicShape.get_node_iterator"><code class="xref py py-meth docutils literal"><span class="pre">get_node_iterator()</span></code></a>.</p>
 </dd></dl>
@@ -135,7 +135,7 @@ iteration scheme, use <a class="reference internal" href="#WaveBlocksND.HyperCub
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.__contains__">
 <code class="descname">__contains__</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.__contains__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.__contains__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if a given multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
+<dd><p>Checks if a given multi-index <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -149,7 +149,7 @@ iteration scheme, use <a class="reference internal" href="#WaveBlocksND.HyperCub
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.contains">
 <code class="descname">contains</code><span class="sig-paren">(</span><em>k</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.contains"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.contains" title="Permalink to this definition">¶</a></dt>
-<dd><p>Checks if a given multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
+<dd><p>Checks if a given multi-index <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> is part of the basis set <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -170,17 +170,17 @@ boundary nodes are included in the extended basis shape.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.find_largest_index">
 <code class="descname">find_largest_index</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.find_largest_index"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.find_largest_index" title="Permalink to this definition">¶</a></dt>
-<dd><p>Find the index <img class="math" src="../_images/math/f364dc342dae06435b4b03258ebc7fbcab96db39.png" alt="k \in \mathfrak{K}"/> with maximal distance
-<img class="math" src="../_images/math/e1144896e09376f22a9709512baeb172c92d3fe0.png" alt="\sum_{d=0}^D k_d^2"/> from the zero index. In case of
+<dd><p>Find the index <img class="math" src="../_images/math/fd500e42b81a8490a2ae39e8190d2c2aea7cce24.png" alt="k \in \mathfrak{K}"/> with maximal distance
+<img class="math" src="../_images/math/6ab289a515b43d9dcd8d44cce1320f5a45b16865.png" alt="\sum_{d=0}^D k_d^2"/> from the zero index. In case of
 multiple maxima the method returns the first one found.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.get_basis_size">
 <code class="descname">get_basis_size</code><span class="sig-paren">(</span><em>extended=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.get_basis_size" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the size <img class="math" src="../_images/math/20933735c7854a75ecd9f091134f79bfef74f9c1.png" alt="|\mathfrak{K}|"/> of the basis. The size is the
-number of distinct multi-indices <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> that belong to the basis
-<img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
+<dd><p>Returns the size <img class="math" src="../_images/math/b36f614f0cde37a05da3099676dc6b5907f5876f.png" alt="|\mathfrak{K}|"/> of the basis. The size is the
+number of distinct multi-indices <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> that belong to the basis
+<img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -203,9 +203,9 @@ never contains any data.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.get_dimension">
 <code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.get_dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the basis shape <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.
+<dd><p>Returns the dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> of the basis shape <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.
 This is defined as the number of components each multi-index
-<img class="math" src="../_images/math/67aacb3d19739daa4afa4fbf9fea63c412eeeec5.png" alt="k = (k_0, \ldots, k_{D-1})"/> has.</p>
+<img class="math" src="../_images/math/8eaef4d7e9af7841b041caf7b5d6194aac41370a.png" alt="k = (k_0, \ldots, k_{D-1})"/> has.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -219,7 +219,7 @@ This is defined as the number of components each multi-index
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.get_limits">
 <code class="descname">get_limits</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.get_limits"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.get_limits" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the upper limit <img class="math" src="../_images/math/7b8117c1641f2565d7a38e8cc7d61359b8adf3f6.png" alt="K_d"/> for all directions <img class="math" src="../_images/math/425d86ba2f2979d75b7535c2bcf92c33ed6b285a.png" alt="d"/>.
+<dd><p>Returns the upper limit <img class="math" src="../_images/math/2c1a6afa8f3d97ac6b701e15b458c0f4db7e4549.png" alt="K_d"/> for all directions <img class="math" src="../_images/math/b9d10b54744d07746b97f53c55eb98046fd76c8c.png" alt="d"/>.
 :return: A tuple of the maximum of the multi-index in each direction.</p>
 </dd></dl>
 
@@ -227,8 +227,8 @@ This is defined as the number of components each multi-index
 <dt id="WaveBlocksND.HyperCubicShape.get_neighbours">
 <code class="descname">get_neighbours</code><span class="sig-paren">(</span><em>k</em>, <em>selection=None</em>, <em>direction=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.get_neighbours"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.get_neighbours" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns a list of all multi-indices that are neighbours of a given
-multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>. A direct neighbour is defined as
-<img class="math" src="../_images/math/16e636cfe8f9ae057568a0b8f026e4541ce77877.png" alt="(k_0, \ldots, k_d \pm 1, \ldots, k_{D-1}) \forall d \in [0 \ldots D-1]"/>.</p>
+multi-index <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>. A direct neighbour is defined as
+<img class="math" src="../_images/math/d9417ffa6460da55f8383940249ff7138a0e3613.png" alt="(k_0, \ldots, k_d \pm 1, \ldots, k_{D-1}) \forall d \in [0 \ldots D-1]"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -237,12 +237,12 @@ multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716
 <li><strong>k</strong> (<em>tuple</em>) &#8211; The multi-index of which we want to get the neighbours.</li>
 <li><strong>selection</strong> (string with fixed values <code class="docutils literal"><span class="pre">forward</span></code>, <code class="docutils literal"><span class="pre">backward</span></code> or <code class="docutils literal"><span class="pre">all</span></code>.
 The values <code class="docutils literal"><span class="pre">all</span></code> is equivalent to the value <code class="docutils literal"><span class="pre">None</span></code> (default).) &#8211; </li>
-<li><strong>direction</strong> (<em>int</em>) &#8211; The direction <img class="math" src="../_images/math/caad2dfb9cbe44796c5ea89eb90f32ae3907e286.png" alt="0 \leq d &lt; D"/> in which we want to find
-the neighbours <img class="math" src="../_images/math/825f4d551c6c6b4c7f76abb0c331258ec41b6699.png" alt="k \pm e_d"/>.</li>
+<li><strong>direction</strong> (<em>int</em>) &#8211; The direction <img class="math" src="../_images/math/65f511143334a1409608145b79104b5688cfd124.png" alt="0 \leq d &lt; D"/> in which we want to find
+the neighbours <img class="math" src="../_images/math/76903f7bcbf8b1c095af9ce60979b4c93bfa24fc.png" alt="k \pm e_d"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing the pairs <img class="math" src="../_images/math/32e61e1bef7fc93d469b7bd83940d51829c4c00d.png" alt="(d, k^\prime)"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list containing the pairs <img class="math" src="../_images/math/73688a98af10228f81fc9975c8bd52663c9186c9.png" alt="(d, k^\prime)"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -252,7 +252,7 @@ the neighbours <img class="math" src="../_images/math/825f4d551c6c6b4c7f76abb0c3
 <dl class="method">
 <dt id="WaveBlocksND.HyperCubicShape.get_node_iterator">
 <code class="descname">get_node_iterator</code><span class="sig-paren">(</span><em>mode='lex'</em>, <em>direction=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HyperCubicShape.html#HyperCubicShape.get_node_iterator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HyperCubicShape.get_node_iterator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns an iterator to iterate over all basis elements <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+<dd><p>Returns an iterator to iterate over all basis elements <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -338,7 +338,7 @@ the chains go.</li>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

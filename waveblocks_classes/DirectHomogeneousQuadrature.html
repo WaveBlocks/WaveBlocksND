@@ -77,19 +77,19 @@
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.do_quadrature">
 <code class="descname">do_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.do_quadrature"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.do_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by standard quadrature the integral
-<img class="math" src="../_images/math/5043f2e0523a09611e24be7ca84953e64bb70519.png" alt="\langle \Phi_i | f | \Phi_j \rangle"/> for a polynomial
-function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<img class="math" src="../_images/math/2a15f90efbd304643a62e73546c08eb6fcebbccd.png" alt="\langle \Phi_i | f | \Phi_j \rangle"/> for a polynomial
+function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c88139b0c48f6df1e0.png" alt="\Phi_j"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> of the component <img class="math" src="../_images/math/77b80a6576350faf3c4072ca35add7658142052e.png" alt="\Phi_j"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/f3e35690b050467f1fa77293b9193be72f87a6fb.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}_j|"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/cbc5012773eca1a273c25b44fc5d6367d033200d.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}_j|"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -164,19 +164,19 @@ for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.perform_build_matrix">
 <code class="descname">perform_build_matrix</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_build_matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Computes by standard quadrature the matrix elements
-<img class="math" src="../_images/math/95754092d910f9d6e6cb0fef991c2377bcdee3cf.png" alt="\langle\Phi_i | f |\Phi^\prime_j\rangle"/> for a general function
-<img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<img class="math" src="../_images/math/a8b4d2627a61a3adb91aee98c424aaccf0435389.png" alt="\langle\Phi_i | f |\Phi^\prime_j\rangle"/> for a general function
+<img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> of the component <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/60dd313b71dcb52ef5cc0ba8c42b5cce2b859872.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A complex valued matrix of shape <img class="math" src="../_images/math/8dca76fed88926873540cabfe621ecd7a8ff4aa3.png" alt="|\mathfrak{K}_i| \times |\mathfrak{K}^\prime_j|"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -187,15 +187,15 @@ for the &#8216;bra&#8217; as well as the &#8216;ket&#8217; part.</p>
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.perform_quadrature">
 <code class="descname">perform_quadrature</code><span class="sig-paren">(</span><em>row</em>, <em>col</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.perform_quadrature" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluates by numerical steepest descent the integral
-<img class="math" src="../_images/math/dc1db0b8480daabea945d56d260b6b327885014c.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
-function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c503ea109.png" alt="f(x)"/> with <img class="math" src="../_images/math/71928d7ec88b1eddd6b449fc1b5d32192eca4885.png" alt="x \in \mathbb{R}^D"/>.</p>
+<img class="math" src="../_images/math/2e7d92e229c0b44672b5cd7b1a9e5ca87c1ccbbb.png" alt="\langle \Phi_i | f | \Phi^\prime_j \rangle"/> for a polynomial
+function <img class="math" src="../_images/math/eda52292f6952f7e27fef52e7ce8393981770d2c.png" alt="f(x)"/> with <img class="math" src="../_images/math/1a8d66cd32a08aedf69a7c6bd3e3e683d24f5b80.png" alt="x \in \mathbb{R}^D"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</li>
-<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> of the component <img class="math" src="../_images/math/924ace1c8e81589280984b0fa6b0a5808fc5ec37.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</li>
+<li><strong>row</strong> &#8211; The index <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> of the component <img class="math" src="../_images/math/001bc2ee5f896971009df7a69b466cd14adc0287.png" alt="\Phi^\prime_j"/> of <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/>.</li>
 </ul>
 </td>
 </tr>
@@ -210,17 +210,17 @@ function <img class="math" src="../_images/math/14546c27a7b929642f7840acca5f851c
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.prepare">
 <code class="descname">prepare</code><span class="sig-paren">(</span><em>rows</em>, <em>cols</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.prepare"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.prepare" title="Permalink to this definition">¶</a></dt>
 <dd><p>Precompute some values needed for evaluating the quadrature
-<img class="math" src="../_images/math/8dd72d7a872f6ba433aa59d98100b4b8c8221a46.png" alt="\langle \Phi_i | f(x) | \Phi_j \rangle"/> or the corresponding
-matrix over the basis functions of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c88139b0c48f6df1e0.png" alt="\Phi_j"/>.</p>
+<img class="math" src="../_images/math/99ee47717a607892a80281f4ceebe2d40a77b5aa.png" alt="\langle \Phi_i | f(x) | \Phi_j \rangle"/> or the corresponding
+matrix over the basis functions of <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> and <img class="math" src="../_images/math/77b80a6576350faf3c4072ca35add7658142052e.png" alt="\Phi_j"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>rows</strong> &#8211; A list of all <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> with <img class="math" src="../_images/math/c641334893af173dd5b3030f99548af3d0e9ec30.png" alt="0 \leq i \leq N"/>
-selecting the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> for which we precompute values.</li>
-<li><strong>cols</strong> &#8211; A list of all <img class="math" src="../_images/math/d32c78b759903e3f4bd4fd2ce0b86358f7500c5d.png" alt="j"/> with <img class="math" src="../_images/math/8b74560b070d7dc4a60efb67b313b253b717f9ce.png" alt="0 \leq j \leq N"/>
-selecting the <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c88139b0c48f6df1e0.png" alt="\Phi_j"/> for which we precompute values.</li>
+<li><strong>rows</strong> &#8211; A list of all <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> with <img class="math" src="../_images/math/645fd0049f8afc242a43ccf64c518f2795e67a7d.png" alt="0 \leq i \leq N"/>
+selecting the <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> for which we precompute values.</li>
+<li><strong>cols</strong> &#8211; A list of all <img class="math" src="../_images/math/6b21e0b0899a0d2879d3b8019087fa630bab4ea2.png" alt="j"/> with <img class="math" src="../_images/math/e104d6c41308132f413973b42c657206e8d8697b.png" alt="0 \leq j \leq N"/>
+selecting the <img class="math" src="../_images/math/77b80a6576350faf3c4072ca35add7658142052e.png" alt="\Phi_j"/> for which we precompute values.</li>
 </ul>
 </td>
 </tr>
@@ -244,23 +244,23 @@ selecting the <img class="math" src="../_images/math/98b0d5028b29b85afa71c3c8813
 
 <dl class="method">
 <dt id="WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes">
-<code class="descname">transform_nodes</code><span class="sig-paren">(</span><em>Pi</em>, <em>eps</em>, <em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.transform_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the quadrature nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/> such that they
-fit the given wavepacket <img class="math" src="../_images/math/8df5705a740354c696cde3f58c144189ac1009f3.png" alt="\Phi\left[\Pi\right]"/>.</p>
+<code class="descname">transform_nodes</code><span class="sig-paren">(</span><em>Pi</em>, <em>eps</em>, <em>*</em>, <em>QR=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/DirectHomogeneousQuadrature.html#DirectHomogeneousQuadrature.transform_nodes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.DirectHomogeneousQuadrature.transform_nodes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform the quadrature nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/> such that they
+fit the given wavepacket <img class="math" src="../_images/math/a13534e01bc356c40405ff192a2830508c2da76d.png" alt="\Phi\left[\Pi\right]"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>Pi</strong> &#8211; The parameter set <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the wavepacket.</li>
-<li><strong>eps</strong> &#8211; The value of <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/> of the wavepacket.</li>
-<li><strong>QR</strong> &#8211; An optional quadrature rule <img class="math" src="../_images/math/c3a2bdedae50edc770051c6fac45ce16555507f7.png" alt="\Gamma = (\gamma, \omega)"/> providing
+<li><strong>Pi</strong> &#8211; The parameter set <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the wavepacket.</li>
+<li><strong>eps</strong> &#8211; The value of <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/> of the wavepacket.</li>
+<li><strong>QR</strong> &#8211; An optional quadrature rule <img class="math" src="../_images/math/5ea59139dfdb041856f73473478c72fb9375252e.png" alt="\Gamma = (\gamma, \omega)"/> providing
 the nodes. If not given the internal quadrature rule will be used.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A two-dimensional ndarray of shape <img class="math" src="../_images/math/d16e6a6e129385b62ac6a9a940374a6653447d01.png" alt="(D, |\Gamma|)"/> where
-<img class="math" src="../_images/math/0de5e5343aaf9413370055e0b0230e62d881120a.png" alt="|\Gamma|"/> denotes the total number of quadrature nodes.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A two-dimensional ndarray of shape <img class="math" src="../_images/math/fffde8054c7b28b736757b3a6b9c50f7a395e9bb.png" alt="(D, |\Gamma|)"/> where
+<img class="math" src="../_images/math/96928d57c4ef323790bb153c714f7533e5eff8c5.png" alt="|\Gamma|"/> denotes the total number of quadrature nodes.</p>
 </td>
 </tr>
 </tbody>
@@ -335,7 +335,7 @@ the nodes. If not given the internal quadrature rule will be used.</li>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

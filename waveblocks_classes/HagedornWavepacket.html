@@ -63,11 +63,11 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<img src="../_images/inheritance-2fcc96f363741d578d4e0be4e46d3260d4e6c630.png" alt="Inheritance diagram of HagedornWavepacket" usemap="#inheritance9619db9810" class="inheritance"/>
+<img src="../_images/inheritance-7dc537178e81d0cc56b91f4f5723559003f0543f.png" alt="Inheritance diagram of HagedornWavepacket" usemap="#inheritance9619db9810" class="inheritance"/>
 <map id="inheritance9619db9810" name="inheritance9619db9810">
-<area shape="rect" id="node1" title="This class represents homogeneous vector valued Hagedorn wavepackets" alt="" coords="562,4,764,20"/>
-<area shape="rect" id="node2" title="This class implements the abstract :py:class:`Wavepacket` interface" alt="" coords="219,4,530,20"/>
-<area shape="rect" id="node3" title="This class is an abstract interface to wavepackets in general." alt="" coords="4,4,187,20"/>
+<area shape="rect" id="node1" title="This class represents homogeneous vector valued Hagedorn wavepackets" alt="" coords="606,16,765,29"/>
+<area shape="rect" id="node2" title="This class implements the abstract :py:class:`Wavepacket` interface" alt="" coords="331,3,575,16"/>
+<area shape="rect" id="node5" title="This class is an abstract interface to wavepackets in general." alt="" coords="79,3,224,16"/>
 </map>
 </div>
 <div class="section" id="class-documentation">
@@ -76,7 +76,7 @@
 <dt id="WaveBlocksND.HagedornWavepacket">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HagedornWavepacket</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacket.html#HagedornWavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class represents homogeneous vector valued Hagedorn wavepackets
-<img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components in <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> space dimensions.</p>
+<img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> components in <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> space dimensions.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacket.html#HagedornWavepacket.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.__init__" title="Permalink to this definition">¶</a></dt>
@@ -86,9 +86,9 @@
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>dimension</strong> &#8211; The space dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> the packet has.</li>
-<li><strong>ncomponents</strong> &#8211; The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components the packet has.</li>
-<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/> of the basis functions.</li>
+<li><strong>dimension</strong> &#8211; The space dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> the packet has.</li>
+<li><strong>ncomponents</strong> &#8211; The number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> of components the packet has.</li>
+<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/> of the basis functions.</li>
 </ul>
 </td>
 </tr>
@@ -106,7 +106,7 @@
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A string describing the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -114,21 +114,21 @@
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.evaluate_at">
-<code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid</em>, <em>component=None</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.evaluate_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid</em>, <em>*</em>, <em>component=None</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.evaluate_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of a single component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> to evaluate.
+<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/d872993ed0c7c420e73e77a1d285ac100c516806.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of a single component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> to evaluate.
 (Defaults to <code class="docutils literal"><span class="pre">None</span></code> for evaluating all components.)</li>
-<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/a3aea50980fd0d53683953da994dbfbe23210c74.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
+<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/79f085057aae37ede9334aa418c31a225ffa1609.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> at the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> at the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -137,21 +137,21 @@
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.evaluate_basis_at">
-<code class="descname">evaluate_basis_at</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.evaluate_basis_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the basis functions <img class="math" src="../_images/math/34ea3b8fe46ef695984759103d7bcdecd553f321.png" alt="\phi_k"/> recursively at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<code class="descname">evaluate_basis_at</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.evaluate_basis_at" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the basis functions <img class="math" src="../_images/math/247f0cbdfff0bc65d05f0abf2f79214b3d8d1c49.png" alt="\phi_k"/> recursively at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of a single component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> to evaluate.</li>
-<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/a3aea50980fd0d53683953da994dbfbe23210c74.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
+<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/d872993ed0c7c420e73e77a1d285ac100c516806.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of a single component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> to evaluate.</li>
+<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/79f085057aae37ede9334aa418c31a225ffa1609.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A two-dimensional ndarray <img class="math" src="../_images/math/48f75e0b463f2fdb7fca9566cffdc439cae6967f.png" alt="H"/> of shape <img class="math" src="../_images/math/433a40108d39535ad49b26d4c7ebaa0586a9340a.png" alt="(|\mathfrak{K}_i|, |\Gamma|)"/> where
-the entry <img class="math" src="../_images/math/1c67e7a30dbfd467f9e84b79638d2e5a43074762.png" alt="H[\mu(k), i]"/> is the value of <img class="math" src="../_images/math/5316a7352bfbf9e899261a2e83fe334922beab24.png" alt="\phi_k(\gamma_i)"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A two-dimensional ndarray <img class="math" src="../_images/math/44d4c3f22452acebfb3ac644e23508b67500be90.png" alt="H"/> of shape <img class="math" src="../_images/math/98bdb15485e7f9622e55483af45267d79a21d7dd.png" alt="(|\mathfrak{K}_i|, |\Gamma|)"/> where
+the entry <img class="math" src="../_images/math/c4ca09037b0c386d796812584b0498bfbda6820f.png" alt="H[\mu(k), i]"/> is the value of <img class="math" src="../_images/math/af08bd258d04cd3f1a47b0de75f110583c484669.png" alt="\phi_k(\gamma_i)"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -166,13 +166,13 @@ the entry <img class="math" src="../_images/math/1c67e7a30dbfd467f9e84b79638d2e5
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_basis_shapes">
-<code class="descname">get_basis_shapes</code><span class="sig-paren">(</span><em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_basis_shapes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the basis shapes <img class="math" src="../_images/math/70c68ea910117d9f21524ea601664eac7eda53a8.png" alt="\mathfrak{K}_i"/> for each component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>.</p>
+<code class="descname">get_basis_shapes</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_basis_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the basis shapes <img class="math" src="../_images/math/888b5457b8c715ad991a5ef52fb5dc42ee3ffc8a.png" alt="\mathfrak{K}_i"/> for each component <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose basis shape we request. (Default is
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> whose basis shape we request. (Default is
 <code class="docutils literal"><span class="pre">None</span></code> which means to return the basis shapes for all components.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The basis shape for an individual component or a list with all shapes.</td>
@@ -184,22 +184,22 @@ the entry <img class="math" src="../_images/math/1c67e7a30dbfd467f9e84b79638d2e5
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_coefficient">
 <code class="descname">get_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_coefficient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
-of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
-<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> we want to update.</li>
 </ul>
 </td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">A single complex number.</p>
 </td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid indices <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> or <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -208,8 +208,8 @@ of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b5
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_coefficient_vector">
-<code class="descname">get_coefficient_vector</code><span class="sig-paren">(</span><em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_coefficient_vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the coefficients for all components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> simultaneously.</p>
+<code class="descname">get_coefficient_vector</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_coefficient_vector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Retrieve the coefficients for all components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> simultaneously.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This function does <em>not</em> copy the input data!
@@ -219,11 +219,11 @@ This is for efficiency as this routine is used in the innermost loops.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose coefficients we request. (Default is
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> whose coefficients we request. (Default is
 <code class="docutils literal"><span class="pre">None</span></code> which means to return the coefficients for all components.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The coefficients <img class="math" src="../_images/math/2f51a7a77ca12ac9b26ded3fefca5d8521bbb706.png" alt="c^i"/> of all components
-<img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> stacked into a single long column vector.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">The coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> of all components
+<img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> stacked into a single long column vector.</td>
 </tr>
 </tbody>
 </table>
@@ -231,21 +231,21 @@ This is for efficiency as this routine is used in the innermost loops.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_coefficients">
-<code class="descname">get_coefficients</code><span class="sig-paren">(</span><em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_coefficients" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the coefficients <img class="math" src="../_images/math/2f51a7a77ca12ac9b26ded3fefca5d8521bbb706.png" alt="c^i"/> for some component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> of
-<img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> or all the coefficients <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/> of all components.</p>
+<code class="descname">get_coefficients</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> for some component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of
+<img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> or all the coefficients <img class="math" src="../_images/math/ae12a24f88803b5895632e4848d87d46483c492c.png" alt="c"/> of all components.</p>
 <p>Note: this method copies the data arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (int (Default is <code class="docutils literal"><span class="pre">None</span></code> meaning all)) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component we want to retrieve.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>component</strong> (int (Default is <code class="docutils literal"><span class="pre">None</span></code> meaning all)) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component we want to retrieve.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A single ndarray with the coefficients of the given component or
 a list containing the ndarrays for each component. Each ndarray
-is two-dimensional with a shape of <img class="math" src="../_images/math/eaee0c7cf07dc41e968d78c4cb295fa04c6c745e.png" alt="(|\mathfrak{K}_i|, 1)"/>.</td>
+is two-dimensional with a shape of <img class="math" src="../_images/math/085884d4f720a6769da382fc25612be82be7c11b.png" alt="(|\mathfrak{K}_i|, 1)"/>.</td>
 </tr>
-<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid component indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>.</td>
+<tr class="field-odd field"><th class="field-name">Raise:</th><td class="field-body"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid component indices <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -267,7 +267,7 @@ never contains any data.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The space dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -276,12 +276,12 @@ never contains any data.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_eps">
 <code class="descname">get_eps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_eps" title="Permalink to this definition">¶</a></dt>
-<dd><p>Retrieve the semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/> of the wavepacket.</p>
+<dd><p>Retrieve the semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/> of the wavepacket.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The value of <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -339,7 +339,7 @@ inner products and evaluating brakets.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> has.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> of components the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> has.</td>
 </tr>
 </tbody>
 </table>
@@ -348,19 +348,19 @@ inner products and evaluating brakets.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.get_parameters">
 <code class="descname">get_parameters</code><span class="sig-paren">(</span><em>component=None</em>, <em>aslist=False</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacket.html#HagedornWavepacket.get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.get_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the Hagedorn parameter set <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Get the Hagedorn parameter set <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>component</strong> &#8211; Dummy parameter for API compatibility with the inhomogeneous packets.</li>
-<li><strong>aslist</strong> &#8211; Return a list of <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> parameter tuples. This is for API compatibility
+<li><strong>aslist</strong> &#8211; Return a list of <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> parameter tuples. This is for API compatibility
 with inhomogeneous packets.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Hagedorn parameter set <img class="math" src="../_images/math/e1cf285bb6a36bb64b4e3f6567e557daafd190da.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Hagedorn parameter set <img class="math" src="../_images/math/3b16f8483e581f75c2a6d26a1080f11611fdc390.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</p>
 </td>
 </tr>
 </tbody>
@@ -370,20 +370,20 @@ with inhomogeneous packets.</li>
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.norm">
 <code class="descname">norm</code><span class="sig-paren">(</span><em>component=None</em>, <em>summed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.norm" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the <img class="math" src="../_images/math/8e53b35e6dba31d49686a9f1ea7ef219da16e494.png" alt="L^2"/> norm <img class="math" src="../_images/math/13c6d476eae0da59c7aa373e621b805ce06d7af8.png" alt="\langle\Psi|\Psi\rangle"/> of the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Calculate the <img class="math" src="../_images/math/2e013a48785d65c4aae0036e07c161d643373a84.png" alt="L^2"/> norm <img class="math" src="../_images/math/036aff7515a7e09a71de139068fc89fef0ad2b88.png" alt="\langle\Psi|\Psi\rangle"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> (int or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> whose norm is calculated.
-The default value is <code class="docutils literal"><span class="pre">None</span></code> which means to compute the norms of all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> components.</li>
-<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the norms <img class="math" src="../_images/math/6eb306d8fc37bea64cf8b47813febf039bfab78b.png" alt="\langle\Phi_i|\Phi_i\rangle"/> of the
-individual components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
+<li><strong>component</strong> (int or <code class="docutils literal"><span class="pre">None</span></code>.) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> whose norm is calculated.
+The default value is <code class="docutils literal"><span class="pre">None</span></code> which means to compute the norms of all <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> components.</li>
+<li><strong>summed</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to sum up the norms <img class="math" src="../_images/math/2365edf95c928355902a9d7eca4bdb510c42831f.png" alt="\langle\Phi_i|\Phi_i\rangle"/> of the
+individual components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The norm of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> or the norm of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> or a list with the <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The norm of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> or the norm of <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> or a list with the <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/>
 norms of all components. Depending on the values of <code class="docutils literal"><span class="pre">component</span></code> and <code class="docutils literal"><span class="pre">summed</span></code>.</p>
 </td>
 </tr>
@@ -393,15 +393,15 @@ norms of all components. Depending on the values of <code class="docutils litera
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.set_basis_shapes">
-<code class="descname">set_basis_shapes</code><span class="sig-paren">(</span><em>basis_shape</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_basis_shapes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the basis shape <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/> of a given component or for all components.</p>
+<code class="descname">set_basis_shapes</code><span class="sig-paren">(</span><em>basis_shape</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_basis_shapes" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the basis shape <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/> of a given component or for all components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>basis_shape</strong> (A subclass of <a class="reference internal" href="BasisShape.html#WaveBlocksND.BasisShape" title="WaveBlocksND.BasisShape"><code class="xref py py-class docutils literal"><span class="pre">BasisShape</span></code></a>.) &#8211; The basis shape for an individual component or a list with all <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> shapes.</li>
-<li><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> whose basis shape we want to set. (Default is
+<li><strong>basis_shape</strong> (A subclass of <a class="reference internal" href="BasisShape.html#WaveBlocksND.BasisShape" title="WaveBlocksND.BasisShape"><code class="xref py py-class docutils literal"><span class="pre">BasisShape</span></code></a>.) &#8211; The basis shape for an individual component or a list with all <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> shapes.</li>
+<li><strong>component</strong> (<em>int</em>) &#8211; The component <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> whose basis shape we want to set. (Default is
 <code class="docutils literal"><span class="pre">None</span></code> which means to set the basis shapes for all components.</li>
 </ul>
 </td>
@@ -413,20 +413,20 @@ norms of all components. Depending on the values of <code class="docutils litera
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.set_coefficient">
 <code class="descname">set_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_coefficient" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set a single coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
-of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Set a single coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>
+of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> we want to update.</li>
-<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/> we want to update.</li>
-<li><strong>value</strong> &#8211; The new value of the coefficient <img class="math" src="../_images/math/1bcd8a3e375587fd315176fb13d6c0964e8b661e.png" alt="c^i_k"/>.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> we want to update.</li>
+<li><strong>index</strong> (A tuple of <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> integers.) &#8211; The multi-index <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> of the coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> we want to update.</li>
+<li><strong>value</strong> &#8211; The new value of the coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> or <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/>.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid indices <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> or <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -436,7 +436,7 @@ of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b5
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.set_coefficient_vector">
 <code class="descname">set_coefficient_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_coefficient_vector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the coefficients for all components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> simultaneously.</p>
+<dd><p>Set the coefficients for all components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> simultaneously.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This function does <em>not</em> copy the input data!
@@ -454,21 +454,21 @@ This is for efficiency as this routine is used in the innermost loops.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.set_coefficients">
-<code class="descname">set_coefficients</code><span class="sig-paren">(</span><em>values</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_coefficients" title="Permalink to this definition">¶</a></dt>
-<dd><p>Update all the coefficients <img class="math" src="../_images/math/65868d23a5bfe5b3b2d819386b19c14fa36af134.png" alt="c"/> of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> or update
-the coefficients <img class="math" src="../_images/math/2f51a7a77ca12ac9b26ded3fefca5d8521bbb706.png" alt="c^i"/> of the components <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> only.</p>
+<code class="descname">set_coefficients</code><span class="sig-paren">(</span><em>values</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_coefficients" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update all the coefficients <img class="math" src="../_images/math/ae12a24f88803b5895632e4848d87d46483c492c.png" alt="c"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> or update
+the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> of the components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> only.</p>
 <p>Note: this method copies the data arrays.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>values</strong> (<em>An ndarray of suitable shape or a list of ndarrays.</em>) &#8211; The new values of the coefficients <img class="math" src="../_images/math/2f51a7a77ca12ac9b26ded3fefca5d8521bbb706.png" alt="c^i"/> of <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>.</li>
-<li><strong>component</strong> (int (Default is <code class="docutils literal"><span class="pre">None</span></code> meaning all)) &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of the component we want to update with new coefficients.</li>
+<li><strong>values</strong> (<em>An ndarray of suitable shape or a list of ndarrays.</em>) &#8211; The new values of the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> of <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>.</li>
+<li><strong>component</strong> (int (Default is <code class="docutils literal"><span class="pre">None</span></code> meaning all)) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component we want to update with new coefficients.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid component indices <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/>.</p>
+<tr class="field-even field"><th class="field-name">Raise:</th><td class="field-body"><p class="first last"><code class="xref py py-class docutils literal"><span class="pre">ValueError</span></code> For invalid component indices <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>.</p>
 </td>
 </tr>
 </tbody>
@@ -507,13 +507,13 @@ inner products and evaluating brakets.</p>
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.set_parameters">
 <code class="descname">set_parameters</code><span class="sig-paren">(</span><em>Pi</em>, <em>component=None</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacket.html#HagedornWavepacket.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the Hagedorn parameters <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Set the Hagedorn parameters <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>Pi</strong> &#8211; The Hagedorn parameter set <img class="math" src="../_images/math/e1cf285bb6a36bb64b4e3f6567e557daafd190da.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</li>
+<li><strong>Pi</strong> &#8211; The Hagedorn parameter set <img class="math" src="../_images/math/3b16f8483e581f75c2a6d26a1080f11611fdc390.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</li>
 <li><strong>component</strong> &#8211; Dummy parameter for API compatibility with the inhomogeneous packets.</li>
 </ul>
 </td>
@@ -524,8 +524,8 @@ inner products and evaluating brakets.</p>
 
 <dl class="method">
 <dt id="WaveBlocksND.HagedornWavepacket.slim_recursion">
-<code class="descname">slim_recursion</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.slim_recursion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.
+<code class="descname">slim_recursion</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.slim_recursion" title="Permalink to this definition">¶</a></dt>
+<dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.
 This routine is a slim version compared to the full basis evaluation. At every moment
 we store only the data we really need to compute the next step until we hit the highest
 order basis functions.</p>
@@ -534,19 +534,19 @@ order basis functions.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</li>
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> of a single component <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/> to evaluate.</li>
-<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/a3aea50980fd0d53683953da994dbfbe23210c74.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
+<li><strong>grid</strong> (A class having a <code class="xref py py-meth docutils literal"><span class="pre">get_nodes(...)()</span></code> method.) &#8211; The grid <img class="math" src="../_images/math/d872993ed0c7c420e73e77a1d285ac100c516806.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</li>
+<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of a single component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> to evaluate.</li>
+<li><strong>prefactor</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to include a factor of <img class="math" src="../_images/math/79f085057aae37ede9334aa418c31a225ffa1609.png" alt="\frac{1}{\sqrt{\det(Q)}}"/>.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/7e85868a38cec20390ec1816976ad68089bb2a48.png" alt="\Phi_i"/>
-at the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list of arrays or a single array containing the values of the <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>
+at the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 </td>
 </tr>
 </tbody>
 </table>
-<p>Note that this function does not include the global phase <img class="math" src="../_images/math/056350764f820245947ee3206230948a8eba8816.png" alt="\exp(\frac{i S}{\varepsilon^2})"/>.</p>
+<p>Note that this function does not include the global phase <img class="math" src="../_images/math/8ef2e4d557e0b5c7f25d3569f2681efbd2fedbc9.png" alt="\exp(\frac{i S}{\varepsilon^2})"/>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -617,7 +617,7 @@ at the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef0
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

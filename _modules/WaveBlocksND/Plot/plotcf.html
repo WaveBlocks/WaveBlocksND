@@ -57,14 +57,14 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">array</span>
-<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="kn">import</span> <span class="n">LineCollection</span>
-<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">import</span> <span class="n">gca</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">array</span>
+<span class="kn">from</span> <span class="nn">matplotlib.collections</span> <span class="k">import</span> <span class="n">LineCollection</span>
+<span class="kn">from</span> <span class="nn">matplotlib.pyplot</span> <span class="k">import</span> <span class="n">gca</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Plot.color_map</span> <span class="kn">import</span> <span class="n">color_map</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Plot.color_map</span> <span class="k">import</span> <span class="n">color_map</span>
 
 
-<div class="viewcode-block" id="plotcf"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.plotcf">[docs]</a><span class="k">def</span> <span class="nf">plotcf</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">modulus</span><span class="p">,</span> <span class="n">darken</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">linestylep</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span> <span class="n">linewidthp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="plotcf"><a class="viewcode-back" href="../../../waveblocks_classes/plot/plot.html#WaveBlocksND.Plot.plotcf">[docs]</a><span class="k">def</span> <span class="nf">plotcf</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">phase</span><span class="p">,</span> <span class="n">modulus</span><span class="p">,</span> <span class="n">darken</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">axes</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestylep</span><span class="o">=</span><span class="s2">&quot;solid&quot;</span><span class="p">,</span> <span class="n">linewidthp</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
     <span class="sd">r&quot;&quot;&quot;Plot the modulus of a complex valued function</span>
 <span class="sd">    :math:`f:\mathbb{R} \rightarrow \mathbb{C}`</span>
 <span class="sd">    together with its phase in a color coded fashion.</span>
@@ -92,7 +92,7 @@
     <span class="n">line_segments</span><span class="o">.</span><span class="n">set_linewidth</span><span class="p">(</span><span class="n">linewidthp</span><span class="p">)</span>
 
     <span class="c1"># Plot to the given axis instance or retrieve the current one</span>
-    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">axes</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">axes</span> <span class="o">=</span> <span class="n">gca</span><span class="p">()</span>
 
     <span class="c1"># Plot the phase</span>
@@ -135,7 +135,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

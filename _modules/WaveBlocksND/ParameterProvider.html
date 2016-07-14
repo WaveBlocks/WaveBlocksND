@@ -58,11 +58,11 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">GlobalDefaults</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="kn">import</span> <span class="n">TimeManager</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">GlobalDefaults</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="k">import</span> <span class="n">BlockFactory</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="k">import</span> <span class="n">TimeManager</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ParameterProvider&quot;</span><span class="p">]</span>
 
@@ -75,7 +75,7 @@
 
 
     <span class="k">def</span> <span class="nf">__getattr__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s2">&quot; Depreceated __getattr__ for key &#39;{}&#39; at ParameterProvider instance!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Depreceated __getattr__ for key &#39;</span><span class="si">{}</span><span class="s2">&#39; at ParameterProvider instance!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
 
@@ -85,12 +85,12 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># If not, try to find a global default value for it and copy over this value</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: parameter &#39;{}&#39; not found, now trying global defaults!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: parameter &#39;</span><span class="si">{}</span><span class="s2">&#39; not found, now trying global defaults!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
             <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">GlobalDefaults</span><span class="o">.</span><span class="n">__dict__</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">__setitem__</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">GlobalDefaults</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="n">key</span><span class="p">]))</span>
                 <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Could not find a default value for parameter {}!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
+                <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Could not find a default value for parameter </span><span class="si">{}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">key</span><span class="p">))</span>
 
 
     <span class="k">def</span> <span class="nf">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
@@ -264,7 +264,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

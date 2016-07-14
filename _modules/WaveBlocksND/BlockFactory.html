@@ -57,7 +57,7 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BlockFactory&quot;</span><span class="p">]</span>
 
@@ -70,13 +70,13 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="c1"># Load different factory methods</span>
-        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">GridFactory</span>
+        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">GridFactory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s2">&quot;create_grid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">GridFactory</span><span class="o">.</span><span class="n">create_grid</span>
 
-        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">PotentialFactory</span>
+        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">PotentialFactory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s2">&quot;create_potential&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">PotentialFactory</span><span class="o">.</span><span class="n">create_potential</span>
 
-        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">MatrixExponentialFactory</span>
+        <span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">MatrixExponentialFactory</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">__dict__</span><span class="p">[</span><span class="s2">&quot;create_matrixexponential&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">MatrixExponentialFactory</span><span class="o">.</span><span class="n">create_matrixexponential</span>
 
 
@@ -92,24 +92,24 @@
             <span class="n">bs_type</span> <span class="o">=</span> <span class="s2">&quot;HyperCubicShape&quot;</span>
 
         <span class="k">if</span> <span class="n">bs_type</span> <span class="o">==</span> <span class="s2">&quot;HyperCubicShape&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HyperCubicShape</span> <span class="kn">import</span> <span class="n">HyperCubicShape</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HyperCubicShape</span> <span class="k">import</span> <span class="n">HyperCubicShape</span>
             <span class="n">limits</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;limits&quot;</span><span class="p">]</span>
             <span class="n">BS</span> <span class="o">=</span> <span class="n">HyperCubicShape</span><span class="p">(</span><span class="n">limits</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">bs_type</span> <span class="o">==</span> <span class="s2">&quot;SimplexShape&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.SimplexShape</span> <span class="kn">import</span> <span class="n">SimplexShape</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.SimplexShape</span> <span class="k">import</span> <span class="n">SimplexShape</span>
             <span class="n">K</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">]</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span>
             <span class="n">BS</span> <span class="o">=</span> <span class="n">SimplexShape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">bs_type</span> <span class="o">==</span> <span class="s2">&quot;HyperbolicCutShape&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HyperbolicCutShape</span> <span class="kn">import</span> <span class="n">HyperbolicCutShape</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HyperbolicCutShape</span> <span class="k">import</span> <span class="n">HyperbolicCutShape</span>
             <span class="n">K</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;K&quot;</span><span class="p">]</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">]</span>
             <span class="n">BS</span> <span class="o">=</span> <span class="n">HyperbolicCutShape</span><span class="p">(</span><span class="n">D</span><span class="p">,</span> <span class="n">K</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown basis shape type {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bs_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown basis shape type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">bs_type</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">BS</span>
 
@@ -119,7 +119,7 @@
         <span class="n">wp_type</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">wp_type</span> <span class="o">==</span> <span class="s2">&quot;HagedornWavepacket&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacket</span> <span class="kn">import</span> <span class="n">HagedornWavepacket</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacket</span> <span class="k">import</span> <span class="n">HagedornWavepacket</span>
 
             <span class="c1"># Initialize a packet</span>
             <span class="n">WP</span> <span class="o">=</span> <span class="n">HagedornWavepacket</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">],</span>
@@ -145,17 +145,17 @@
                         <span class="k">if</span> <span class="n">BS</span><span class="o">.</span><span class="n">contains</span><span class="p">(</span><span class="n">index</span><span class="p">):</span>
                             <span class="n">WP</span><span class="o">.</span><span class="n">set_coefficient</span><span class="p">(</span><span class="n">component</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span>
                         <span class="k">else</span><span class="p">:</span>
-                            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: dropped coefficient with index {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
+                            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: dropped coefficient with index </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">index</span><span class="p">))</span>
 
             <span class="c1"># And the inner product</span>
             <span class="k">if</span> <span class="s2">&quot;innerproduct&quot;</span> <span class="ow">in</span> <span class="n">description</span><span class="p">:</span>
                 <span class="n">IP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_inner_product</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;innerproduct&quot;</span><span class="p">])</span>
                 <span class="n">WP</span><span class="o">.</span><span class="n">set_innerproduct</span><span class="p">(</span><span class="n">IP</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: no inner product specified!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: no inner product specified!&quot;</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">wp_type</span> <span class="o">==</span> <span class="s2">&quot;HagedornWavepacketInhomogeneous&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacketInhomogeneous</span> <span class="kn">import</span> <span class="n">HagedornWavepacketInhomogeneous</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornWavepacketInhomogeneous</span> <span class="k">import</span> <span class="n">HagedornWavepacketInhomogeneous</span>
 
             <span class="c1"># Initialize a packet</span>
             <span class="n">WP</span> <span class="o">=</span> <span class="n">HagedornWavepacketInhomogeneous</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;dimension&quot;</span><span class="p">],</span>
@@ -184,10 +184,10 @@
                 <span class="n">IP</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_inner_product</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;innerproduct&quot;</span><span class="p">])</span>
                 <span class="n">WP</span><span class="o">.</span><span class="n">set_innerproduct</span><span class="p">(</span><span class="n">IP</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: no inner product specified!&quot;</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: no inner product specified!&quot;</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown wavepacket type {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wp_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown wavepacket type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wp_type</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">WP</span>
 
@@ -198,22 +198,22 @@
             <span class="n">ip_type</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="c1"># Default setting</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot;Warning: Using fall-back inner product of type &#39;InhomogeneousInnerProduct&#39;!&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Warning: Using fall-back inner product of type &#39;InhomogeneousInnerProduct&#39;!&quot;</span><span class="p">)</span>
             <span class="c1"># TODO: Maybe change to homogeneous one?</span>
             <span class="n">ip_type</span> <span class="o">=</span> <span class="s2">&quot;InhomogeneousInnerProduct&quot;</span>
 
         <span class="k">if</span> <span class="n">ip_type</span> <span class="o">==</span> <span class="s2">&quot;HomogeneousInnerProduct&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HomogeneousInnerProduct</span> <span class="kn">import</span> <span class="n">HomogeneousInnerProduct</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HomogeneousInnerProduct</span> <span class="k">import</span> <span class="n">HomogeneousInnerProduct</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;delegate&quot;</span><span class="p">])</span>
             <span class="n">IP</span> <span class="o">=</span> <span class="n">HomogeneousInnerProduct</span><span class="p">(</span><span class="n">QE</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">ip_type</span> <span class="o">==</span> <span class="s2">&quot;InhomogeneousInnerProduct&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.InhomogeneousInnerProduct</span> <span class="kn">import</span> <span class="n">InhomogeneousInnerProduct</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.InhomogeneousInnerProduct</span> <span class="k">import</span> <span class="n">InhomogeneousInnerProduct</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;delegate&quot;</span><span class="p">])</span>
             <span class="n">IP</span> <span class="o">=</span> <span class="n">InhomogeneousInnerProduct</span><span class="p">(</span><span class="n">QE</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown inner product type {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ip_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown inner product type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ip_type</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">IP</span>
 
@@ -229,26 +229,26 @@
 
         <span class="c1"># TODO: Maybe denest QR initialization?</span>
         <span class="k">if</span> <span class="n">qe_type</span> <span class="o">==</span> <span class="s2">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.DirectHomogeneousQuadrature</span> <span class="kn">import</span> <span class="n">DirectHomogeneousQuadrature</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.DirectHomogeneousQuadrature</span> <span class="k">import</span> <span class="n">DirectHomogeneousQuadrature</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature_rule</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;qr&quot;</span><span class="p">])</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="n">DirectHomogeneousQuadrature</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qe_type</span> <span class="o">==</span> <span class="s2">&quot;DirectInhomogeneousQuadrature&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.DirectInhomogeneousQuadrature</span> <span class="kn">import</span> <span class="n">DirectInhomogeneousQuadrature</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.DirectInhomogeneousQuadrature</span> <span class="k">import</span> <span class="n">DirectInhomogeneousQuadrature</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature_rule</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;qr&quot;</span><span class="p">])</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="n">DirectInhomogeneousQuadrature</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qe_type</span> <span class="o">==</span> <span class="s2">&quot;NSDInhomogeneous&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.NSDInhomogeneous</span> <span class="kn">import</span> <span class="n">NSDInhomogeneous</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.NSDInhomogeneous</span> <span class="k">import</span> <span class="n">NSDInhomogeneous</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature_rule</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;qr&quot;</span><span class="p">])</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="n">NSDInhomogeneous</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qe_type</span> <span class="o">==</span> <span class="s2">&quot;SymbolicIntegral&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.SymbolicIntegral</span> <span class="kn">import</span> <span class="n">SymbolicIntegral</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.SymbolicIntegral</span> <span class="k">import</span> <span class="n">SymbolicIntegral</span>
             <span class="n">QE</span> <span class="o">=</span> <span class="n">SymbolicIntegral</span><span class="p">()</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown quadrature type {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qe_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown quadrature type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qe_type</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">QE</span>
 
@@ -260,22 +260,22 @@
             <span class="n">op</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">description</span><span class="p">[</span><span class="s2">&quot;options&quot;</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Per default, adapt qr to follow dynamics</span>
-            <span class="n">op</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;transform&quot;</span><span class="p">:</span> <span class="bp">True</span><span class="p">}</span>
+            <span class="n">op</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;transform&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
         <span class="k">if</span> <span class="n">qr_type</span> <span class="o">==</span> <span class="s2">&quot;GaussHermiteQR&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussHermiteQR</span> <span class="kn">import</span> <span class="n">GaussHermiteQR</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussHermiteQR</span> <span class="k">import</span> <span class="n">GaussHermiteQR</span>
             <span class="n">order</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span>
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="n">GaussHermiteQR</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qr_type</span> <span class="o">==</span> <span class="s2">&quot;GaussHermiteOriginalQR&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussHermiteOriginalQR</span> <span class="kn">import</span> <span class="n">GaussHermiteOriginalQR</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussHermiteOriginalQR</span> <span class="k">import</span> <span class="n">GaussHermiteOriginalQR</span>
             <span class="n">order</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span>
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="n">GaussHermiteOriginalQR</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qr_type</span> <span class="o">==</span> <span class="s2">&quot;TrapezoidalQR&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.TrapezoidalQR</span> <span class="kn">import</span> <span class="n">TrapezoidalQR</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.TrapezoidalQR</span> <span class="k">import</span> <span class="n">TrapezoidalQR</span>
             <span class="n">left</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;left&quot;</span><span class="p">]</span>
             <span class="n">right</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;right&quot;</span><span class="p">]</span>
             <span class="n">order</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span>
@@ -283,20 +283,20 @@
             <span class="n">QR</span> <span class="o">=</span> <span class="n">TrapezoidalQR</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">order</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qr_type</span> <span class="o">==</span> <span class="s2">&quot;GaussLaguerreQR&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussLaguerreQR</span> <span class="kn">import</span> <span class="n">GaussLaguerreQR</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.GaussLaguerreQR</span> <span class="k">import</span> <span class="n">GaussLaguerreQR</span>
             <span class="n">order</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;order&quot;</span><span class="p">]</span>
             <span class="n">a</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;a&quot;</span><span class="p">]</span>
             <span class="k">assert</span> <span class="nb">type</span><span class="p">(</span><span class="n">order</span><span class="p">)</span> <span class="o">==</span> <span class="nb">int</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="n">GaussLaguerreQR</span><span class="p">(</span><span class="n">order</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="n">a</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
 
         <span class="k">elif</span> <span class="n">qr_type</span> <span class="o">==</span> <span class="s2">&quot;TensorProductQR&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.TensorProductQR</span> <span class="kn">import</span> <span class="n">TensorProductQR</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.TensorProductQR</span> <span class="k">import</span> <span class="n">TensorProductQR</span>
             <span class="c1"># Iteratively create all quadrature rules necessary</span>
             <span class="n">qrs</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">create_quadrature_rule</span><span class="p">(</span><span class="n">desc</span><span class="p">)</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;qr_rules&quot;</span><span class="p">]]</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="n">TensorProductQR</span><span class="p">(</span><span class="n">qrs</span><span class="p">,</span> <span class="n">options</span><span class="o">=</span><span class="n">op</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown quadrature rule type {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qr_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown quadrature rule type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qr_type</span><span class="p">))</span>
 
         <span class="k">return</span> <span class="n">QR</span></div>
 </pre></div>
@@ -335,7 +335,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

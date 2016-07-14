@@ -75,13 +75,13 @@
 <dt id="WaveBlocksND.BasisTransformationHAWP">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">BasisTransformationHAWP</code><span class="sig-paren">(</span><em>potential</em>, <em>builder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationHAWP.html#BasisTransformationHAWP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationHAWP" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class implements basis transformations of Hagedorn wavepackets
-<img class="math" src="../_images/math/38f5ac0b422e055f841b8df52c7127536cb52fa3.png" alt="\Psi(x)"/> between the canonical basis of and the basis <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/>
-spanned by the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
+<img class="math" src="../_images/math/eee83b22727fe8ac3353b39523a4857adc423d7c.png" alt="\Psi(x)"/> between the canonical basis of and the basis <img class="math" src="../_images/math/b3668770474adf7027e6e0044994b54e305a7e8d.png" alt="\Lambda(x)"/>
+spanned by the eigenvectors <img class="math" src="../_images/math/2cb96168ca1c2ef43c134e02390e712136ed774b.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationHAWP.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>potential</em>, <em>builder=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationHAWP.html#BasisTransformationHAWP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationHAWP.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new <a class="reference internal" href="#WaveBlocksND.BasisTransformationHAWP" title="WaveBlocksND.BasisTransformationHAWP"><code class="xref py py-class docutils literal"><span class="pre">BasisTransformationHAWP</span></code></a> instance for a
-given potential matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
+given potential matrix <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -100,7 +100,7 @@ given potential matrix <img class="math" src="../_images/math/e0ec0629769ae6a945
 <dt id="WaveBlocksND.BasisTransformationHAWP.set_matrix_builder">
 <code class="descname">set_matrix_builder</code><span class="sig-paren">(</span><em>builder</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationHAWP.html#BasisTransformationHAWP.set_matrix_builder"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationHAWP.set_matrix_builder" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the matrix builder. It is responsible for computing the matrix
-elements <img class="math" src="../_images/math/767de456665bf109dcfabf3523d183d82a3dd3bc.png" alt="\langle\phi_i|V_{i,j}|\phi_j\rangle"/>. This matrix
+elements <img class="math" src="../_images/math/994aea4560dc150859b80f7584cbf0b10427b564.png" alt="\langle\phi_i|V_{i,j}|\phi_j\rangle"/>. This matrix
 is used during the basis transformation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -115,7 +115,7 @@ is used during the basis transformation.</p>
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationHAWP.transform_to_canonical">
 <code class="descname">transform_to_canonical</code><span class="sig-paren">(</span><em>wavepacket</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationHAWP.html#BasisTransformationHAWP.transform_to_canonical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationHAWP.transform_to_canonical" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> given
+<dd><p>Transform the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> given
 in the eigenbasis to the canonical basis.</p>
 <p>Note that this method acts destructively on the given
 <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> instance. If this is not desired,
@@ -127,7 +127,7 @@ clone the packet before handing it over to this method.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavepacket</strong> (A <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> subclass instance.) &#8211; The Hagedorn wavepacket to transform.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> instance containing the
-transformed wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/>.</td>
+transformed wavepacket <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -136,7 +136,7 @@ transformed wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationHAWP.transform_to_eigen">
 <code class="descname">transform_to_eigen</code><span class="sig-paren">(</span><em>wavepacket</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationHAWP.html#BasisTransformationHAWP.transform_to_eigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationHAWP.transform_to_eigen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the wavepacket <img class="math" src="../_images/math/421b68b30d0b8cc1ee3218ee97c944438c36c933.png" alt="\Psi^\prime"/> given
+<dd><p>Transform the wavepacket <img class="math" src="../_images/math/d414593e782c183da7a56ce39e6f2e4c4f10cd07.png" alt="\Psi^\prime"/> given
 in the canonical basis to the eigenbasis.</p>
 <p>Note that this method acts destructively on the given
 <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> instance. If this is not desired,
@@ -148,7 +148,7 @@ clone the packet before handing it over to this method.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavepacket</strong> (A <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> subclass instance.) &#8211; The Hagedorn wavepacket to transform.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="Wavepacket.html#WaveBlocksND.Wavepacket" title="WaveBlocksND.Wavepacket"><code class="xref py py-class docutils literal"><span class="pre">Wavepacket</span></code></a> instance containing the
-transformed wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</td>
+transformed wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -222,7 +222,7 @@ transformed wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04b
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

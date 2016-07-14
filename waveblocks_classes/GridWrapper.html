@@ -76,11 +76,11 @@
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">GridWrapper</code><span class="sig-paren">(</span><em>anarray</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/GridWrapper.html#GridWrapper"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.GridWrapper" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class constructs a thin layer around an <code class="docutils literal"><span class="pre">ndarray</span></code> and wraps
 it as <code class="xref py py-class docutils literal"><span class="pre">Grid</span></code> subclass for API compatibility. The array must
-have a shape of <img class="math" src="../_images/math/2e47c63c919a92180ec998c6c1ad9f98858351d2.png" alt="(D, N)"/> with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> the overall number of nodes.</p>
+have a shape of <img class="math" src="../_images/math/c27bba959c0a1f8fc1d3b605ceb914a445785014.png" alt="(D, N)"/> with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> the overall number of nodes.</p>
 <dl class="method">
 <dt id="WaveBlocksND.GridWrapper.get_dimension">
 <code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.GridWrapper.get_dimension" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the dimension <img class="math" src="../_images/math/9dfa31437b58c0473299320aa638151cd88cf61b.png" alt="D"/> of the grid.</p>
+<dd><p>Return the dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> of the grid.</p>
 </dd></dl>
 
 <dl class="method">
@@ -94,7 +94,7 @@ have a shape of <img class="math" src="../_images/math/2e47c63c919a92180ec998c6c
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axes</strong> (A single integer or a list of integers. If set
 to <code class="docutils literal"><span class="pre">None</span></code> (default) we return the extensions for all axes.) &#8211; The axes for which we want to get the extensions.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/194761fcd807e42863e5371d54d95af47494ce19.png" alt="|max_i-min_i|"/> values.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/10fc3fe87b89245106e57a304cb5cb4d8f95ba48.png" alt="|max_i-min_i|"/> values.</td>
 </tr>
 </tbody>
 </table>
@@ -111,7 +111,7 @@ to <code class="docutils literal"><span class="pre">None</span></code> (default)
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>axes</strong> (A single integer or a list of integers. If set
 to <code class="docutils literal"><span class="pre">None</span></code> (default) we return the limits for all axes.) &#8211; The axes for which we want to get the limits.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/62f9f767f3127d07a5497128aa0ba2bc34393d4e.png" alt="(min_i, max_i)"/> ndarrays.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/e18aebb0c1b36f83e5bc6c923642761e1f621843.png" alt="(min_i, max_i)"/> ndarrays.</td>
 </tr>
 </tbody>
 </table>
@@ -127,8 +127,8 @@ to <code class="docutils literal"><span class="pre">None</span></code> (default)
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
 <li><strong>flat</strong> (Boolean, default is <code class="docutils literal"><span class="pre">True</span></code>.) &#8211; Whether to return the grid with a <cite>hypercubic</cite>
-<img class="math" src="../_images/math/c80fd85af4b698ccfeabc5958475504c37657635.png" alt="(D, N_1, ..., N_D)"/> shape or a <cite>flat</cite>
-<img class="math" src="../_images/math/b5ce27d57494e2b0011f3890ce9eed8a4e91952b.png" alt="(D, \prod_i^D N_i)"/> shape. Note that the
+<img class="math" src="../_images/math/90cc7839dbb0f4798bf86939d01df1673a55d310.png" alt="(D, N_1, ..., N_D)"/> shape or a <cite>flat</cite>
+<img class="math" src="../_images/math/377bbac1f501761867293977709ac8ae016961f9.png" alt="(D, \prod_i^D N_i)"/> shape. Note that the
 hypercubic shape is not implemented!</li>
 <li><strong>split</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>.) &#8211; Whether to return the different components, one for each
 dimension inside a single ndarray or a list with ndarrays,
@@ -151,11 +151,11 @@ with one item per dimension.</li>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>overall</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>) &#8211; Compute the product <img class="math" src="../_images/math/96c7243208eef3ffc6d1b58a0064c89405fe893b.png" alt="N = \prod_i^D N_i"/> of the
-number <img class="math" src="../_images/math/d1929c9e1002e67a2164c6440efbe0ad4e42073e.png" alt="N_i"/> of grid nodes along each dimension
-<img class="math" src="../_images/math/a581f053bbfa5115f42c13094857cdd12a37ec49.png" alt="i"/> specified.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>overall</strong> (Boolean, default is <code class="docutils literal"><span class="pre">False</span></code>) &#8211; Compute the product <img class="math" src="../_images/math/c14abcaa8af0dc7b6cdbb096f83f18d3fa727a4e.png" alt="N = \prod_i^D N_i"/> of the
+number <img class="math" src="../_images/math/46832e8eff2171864496bed218daacc3b7ce0afa.png" alt="N_i"/> of grid nodes along each dimension
+<img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> specified.</td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/d1929c9e1002e67a2164c6440efbe0ad4e42073e.png" alt="N_i"/> values or a single value <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>.</td>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <img class="math" src="../_images/math/46832e8eff2171864496bed218daacc3b7ce0afa.png" alt="N_i"/> values or a single value <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -229,7 +229,7 @@ number <img class="math" src="../_images/math/d1929c9e1002e67a2164c6440efbe0ad4e
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

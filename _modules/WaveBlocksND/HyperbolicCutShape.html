@@ -57,10 +57,10 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">eye</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">integer</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">eye</span><span class="p">,</span> <span class="n">vstack</span><span class="p">,</span> <span class="n">integer</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisShape</span> <span class="kn">import</span> <span class="n">BasisShape</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="nb">reduce</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisShape</span> <span class="k">import</span> <span class="n">BasisShape</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">reduce</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HyperbolicCutShape&quot;</span><span class="p">]</span>
 
@@ -209,7 +209,7 @@
 
                 <span class="c1"># Reset overflows</span>
                 <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">):</span>
-                    <span class="n">K</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">K</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">z</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="n">Kmax</span><span class="p">:</span>
                         <span class="n">z</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="n">z</span><span class="p">[</span><span class="n">d</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -236,7 +236,7 @@
                 <span class="c1"># If yes, move base point and start a new chain</span>
                 <span class="c1"># Reset overflows</span>
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span> <span class="o">-</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">D</span><span class="p">):</span>
-                    <span class="n">K</span> <span class="o">=</span> <span class="nb">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">z</span><span class="p">[(</span><span class="n">D</span> <span class="o">-</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
+                    <span class="n">K</span> <span class="o">=</span> <span class="n">reduce</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="mi">1</span><span class="p">),</span> <span class="n">z</span><span class="p">[(</span><span class="n">D</span> <span class="o">-</span> <span class="n">d</span> <span class="o">-</span> <span class="mi">1</span><span class="p">):</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
                     <span class="k">if</span> <span class="n">K</span> <span class="o">&gt;</span> <span class="n">Kmax</span><span class="p">:</span>
                         <span class="n">z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
                         <span class="n">z</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">1</span>
@@ -257,7 +257,7 @@
         <span class="k">return</span> <span class="n">index_iterator_mag</span><span class="p">(</span><span class="n">nodes</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="HyperbolicCutShape.get_node_iterator"><a class="viewcode-back" href="../../waveblocks_classes/HyperbolicCutShape.html#WaveBlocksND.HyperbolicCutShape.get_node_iterator">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lex&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperbolicCutShape.get_node_iterator"><a class="viewcode-back" href="../../waveblocks_classes/HyperbolicCutShape.html#WaveBlocksND.HyperbolicCutShape.get_node_iterator">[docs]</a>    <span class="k">def</span> <span class="nf">get_node_iterator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;lex&quot;</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Returns an iterator to iterate over all basis elements :math:`k \in \mathfrak{K}`.</span>
 
@@ -280,7 +280,7 @@
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_index_iterator_mag</span><span class="p">()</span>
         <span class="c1"># TODO: Consider boundary node only iterator</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown iterator mode: {}.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span></div>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown iterator mode: </span><span class="si">{}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="HyperbolicCutShape.get_limits"><a class="viewcode-back" href="../../waveblocks_classes/HyperbolicCutShape.html#WaveBlocksND.HyperbolicCutShape.get_limits">[docs]</a>    <span class="k">def</span> <span class="nf">get_limits</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -291,7 +291,7 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span> <span class="o">*</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_sparsity</span> <span class="o">-</span> <span class="mi">1</span><span class="p">])</span></div>
 
 
-<div class="viewcode-block" id="HyperbolicCutShape.get_neighbours"><a class="viewcode-back" href="../../waveblocks_classes/HyperbolicCutShape.html#WaveBlocksND.HyperbolicCutShape.get_neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="HyperbolicCutShape.get_neighbours"><a class="viewcode-back" href="../../waveblocks_classes/HyperbolicCutShape.html#WaveBlocksND.HyperbolicCutShape.get_neighbours">[docs]</a>    <span class="k">def</span> <span class="nf">get_neighbours</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">k</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">        Returns a list of all multi-indices that are neighbours of a given</span>
 <span class="sd">        multi-index :math:`k`. A direct neighbour is defined as</span>
@@ -320,7 +320,7 @@
         <span class="c1"># Keep only the valid ones</span>
         <span class="n">nbh</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">direction</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">directions</span> <span class="o">=</span> <span class="p">[</span><span class="n">direction</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">directions</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span><span class="p">)</span>
@@ -330,11 +330,11 @@
             <span class="n">nbw</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">nbbw</span><span class="p">[:,</span> <span class="n">d</span><span class="p">])</span>
 
             <span class="c1"># TODO: Try to simplify these nested if blocks</span>
-            <span class="k">if</span> <span class="n">selection</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">selection</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;backward&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">nbw</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                     <span class="n">nbh</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="n">nbw</span><span class="p">))</span>
 
-            <span class="k">if</span> <span class="n">selection</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">selection</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">&quot;forward&quot;</span><span class="p">,</span> <span class="s2">&quot;all&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">):</span>
                 <span class="k">if</span> <span class="n">nfw</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
                     <span class="n">nbh</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">d</span><span class="p">,</span> <span class="n">nfw</span><span class="p">))</span>
 
@@ -375,7 +375,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

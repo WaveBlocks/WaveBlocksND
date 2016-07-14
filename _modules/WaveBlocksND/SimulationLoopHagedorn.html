@@ -57,11 +57,11 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.SimulationLoop</span> <span class="kn">import</span> <span class="n">SimulationLoop</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.IOManager</span> <span class="kn">import</span> <span class="n">IOManager</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="kn">import</span> <span class="n">TimeManager</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="kn">import</span> <span class="n">BlockFactory</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformationHAWP</span> <span class="kn">import</span> <span class="n">BasisTransformationHAWP</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.SimulationLoop</span> <span class="k">import</span> <span class="n">SimulationLoop</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.IOManager</span> <span class="k">import</span> <span class="n">IOManager</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="k">import</span> <span class="n">TimeManager</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="k">import</span> <span class="n">BlockFactory</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformationHAWP</span> <span class="k">import</span> <span class="n">BasisTransformationHAWP</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SimulationLoopHagedorn&quot;</span><span class="p">]</span>
 
@@ -84,10 +84,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span> <span class="o">=</span> <span class="n">parameters</span>
 
         <span class="c1"># The time propagator instance driving the simulation.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># A `IOManager` instance for saving simulation results.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">IOManager</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="c1"># The time manager</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_tm</span> <span class="o">=</span> <span class="n">TimeManager</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
@@ -117,22 +117,22 @@
         <span class="c1"># TODO: Attach the &quot;leading_component to the hawp as codata</span>
         <span class="c1"># TODO: Clean up this ugly if tree</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;magnus_split&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.MagnusPropagator</span> <span class="kn">import</span> <span class="n">MagnusPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.MagnusPropagator</span> <span class="k">import</span> <span class="n">MagnusPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">MagnusPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;semiclassical&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.SemiclassicalPropagator</span> <span class="kn">import</span> <span class="n">SemiclassicalPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.SemiclassicalPropagator</span> <span class="k">import</span> <span class="n">SemiclassicalPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">SemiclassicalPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL42sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL42scPropagator</span> <span class="kn">import</span> <span class="n">McL42scPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL42scPropagator</span> <span class="k">import</span> <span class="n">McL42scPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL42scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pre764sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.Pre764scPropagator</span> <span class="kn">import</span> <span class="n">Pre764scPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.Pre764scPropagator</span> <span class="k">import</span> <span class="n">Pre764scPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">Pre764scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL84sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL84scPropagator</span> <span class="kn">import</span> <span class="n">McL84scPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL84scPropagator</span> <span class="k">import</span> <span class="n">McL84scPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL84scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hagedorn&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="kn">import</span> <span class="n">HagedornPropagator</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="k">import</span> <span class="n">HagedornPropagator</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown propagator type: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">])</span>
@@ -187,7 +187,7 @@
 
         <span class="c1"># Run the simulation for a given number of timesteps</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nsteps</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
-            <span class="k">print</span><span class="p">(</span><span class="s2">&quot; doing timestep {}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; doing timestep </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="p">))</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span><span class="o">.</span><span class="n">propagate</span><span class="p">()</span>
 
@@ -258,7 +258,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

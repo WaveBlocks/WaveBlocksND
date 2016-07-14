@@ -138,7 +138,7 @@ convenience and is not particularly efficient.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>timestep</strong> &#8211; The timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> we load the wavepacket.</li>
+<li><strong>timestep</strong> &#8211; The timestep <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> we load the wavepacket.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
 </td>
@@ -291,7 +291,7 @@ method call.</p>
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
 <li><strong>lincomb</strong> &#8211; The <code class="xref py py-class docutils literal"><span class="pre">LinearCombinationOfHAWPs</span></code> instance we want to save.</li>
-<li><strong>timestep</strong> &#8211; The timestep <img class="math" src="../_images/math/413f8a8e40062a9090d9d50b88bc7b551b314c26.png" alt="n"/> at which we save the linear combination.</li>
+<li><strong>timestep</strong> &#8211; The timestep <img class="math" src="../_images/math/e11f2701c4a39c7fe543a6c4150b421d50f1c159.png" alt="n"/> at which we save the linear combination.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
 </td>
@@ -367,8 +367,8 @@ You have to save the basis shape with the corresponding function too.</p>
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>coefficients</strong> (A <code class="docutils literal"><span class="pre">list</span></code> with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> suitable <code class="docutils literal"><span class="pre">ndarrays</span></code>.) &#8211; The coefficients of the Hagedorn wavepacket.</li>
-<li><strong>basisshapes</strong> (A <code class="docutils literal"><span class="pre">list</span></code> with <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> <code class="xref py py-class docutils literal"><span class="pre">BasisShape</span></code> subclass instances.) &#8211; The corresponding basis shapes of the Hagedorn wavepacket.</li>
+<li><strong>coefficients</strong> (A <code class="docutils literal"><span class="pre">list</span></code> with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> suitable <code class="docutils literal"><span class="pre">ndarrays</span></code>.) &#8211; The coefficients of the Hagedorn wavepacket.</li>
+<li><strong>basisshapes</strong> (A <code class="docutils literal"><span class="pre">list</span></code> with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> <code class="xref py py-class docutils literal"><span class="pre">BasisShape</span></code> subclass instances.) &#8211; The corresponding basis shapes of the Hagedorn wavepacket.</li>
 <li><strong>timestep</strong> &#8211; The timestep at which we save the data.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 </ul>
@@ -381,13 +381,13 @@ You have to save the basis shape with the corresponding function too.</p>
 <dl class="function">
 <dt id="IOM_plugin_lincombhawp.save_lincombhawp_wavepacket_parameters">
 <code class="descclassname">IOM_plugin_lincombhawp.</code><code class="descname">save_lincombhawp_wavepacket_parameters</code><span class="sig-paren">(</span><em>self</em>, <em>parameters</em>, <em>timestep</em>, <em>blockid=0</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/IOM_plugin_lincombhawp.html#save_lincombhawp_wavepacket_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#IOM_plugin_lincombhawp.save_lincombhawp_wavepacket_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Save the parameter set <img class="math" src="../_images/math/fab626933a4c5c14dc2c29fb783db0f824a4a9d8.png" alt="\Pi"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/> to a file.</p>
+<dd><p>Save the parameter set <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> to a file.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>parameters</strong> (A <code class="docutils literal"><span class="pre">list</span></code> containing the (five) <code class="docutils literal"><span class="pre">ndarrays</span></code> like <img class="math" src="../_images/math/bec511c316ac530a543999d70bbd377a09fe196f.png" alt="(q,p,Q,P,S)"/>) &#8211; The parameter set of the Hagedorn wavepacket.</li>
+<li><strong>parameters</strong> (A <code class="docutils literal"><span class="pre">list</span></code> containing the (five) <code class="docutils literal"><span class="pre">ndarrays</span></code> like <img class="math" src="../_images/math/d317acd31e405d24f96886f8246d0ef9909586d0.png" alt="(q,p,Q,P,S)"/>) &#8211; The parameter set of the Hagedorn wavepacket.</li>
 <li><strong>timestep</strong> &#8211; The timestep at which we save the data.</li>
 <li><strong>blockid</strong> &#8211; The ID of the data block to operate on.</li>
 <li><strong>key</strong> (Tuple of valid identifier strings that are <code class="docutils literal"><span class="pre">q</span></code>, <code class="docutils literal"><span class="pre">p</span></code>, <code class="docutils literal"><span class="pre">Q</span></code>, <code class="docutils literal"><span class="pre">P</span></code>, <code class="docutils literal"><span class="pre">S</span></code> and <code class="docutils literal"><span class="pre">adQ</span></code>.
@@ -464,7 +464,7 @@ Default is <code class="docutils literal"><span class="pre">(&quot;q&quot;,</spa
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

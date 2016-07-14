@@ -73,20 +73,20 @@
 <dl class="class">
 <dt id="WaveBlocksND.KineticOperator">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">KineticOperator</code><span class="sig-paren">(</span><em>grid</em>, <em>eps=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents the kinetic operator <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/> in Fourier space.</p>
+<dd><p>This class represents the kinetic operator <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/> in Fourier space.</p>
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>grid</em>, <em>eps=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compute the Fourier transformation of the position space representation
-of the kinetic operator <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>.</p>
+of the kinetic operator <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>grid</strong> &#8211; The position space grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> of which we compute
-its Fourier transform <img class="math" src="../_images/math/b39932b8cbb311eeee9815738f6be3757737b2ff.png" alt="\Omega"/>.</li>
-<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>. (optional)</li>
+<li><strong>grid</strong> &#8211; The position space grid <img class="math" src="../_images/math/d872993ed0c7c420e73e77a1d285ac100c516806.png" alt="\Gamma"/> of which we compute
+its Fourier transform <img class="math" src="../_images/math/cd30e0b91d2b53728ae09ccac9d857b79b3adfcb.png" alt="\Omega"/>.</li>
+<li><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>. (optional)</li>
 </ul>
 </td>
 </tr>
@@ -97,14 +97,14 @@ its Fourier transform <img class="math" src="../_images/math/b39932b8cbb311eeee9
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.calculate_exponential">
 <code class="descname">calculate_exponential</code><span class="sig-paren">(</span><em>factor=1.0</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.calculate_exponential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.calculate_exponential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the exponential <img class="math" src="../_images/math/580636101fb73b4f75e153d53823e9622ceb5d49.png" alt="\exp(\alpha \underline{\omega} \cdot \underline{\omega})"/>
+<dd><p>Calculate the exponential <img class="math" src="../_images/math/7026494ddbfe15944465972612d226cb217de1e3.png" alt="\exp(\alpha \underline{\omega} \cdot \underline{\omega})"/>
 used in the Strang splitting.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The prefactor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/>. It defaults to 1 but is
-usually set to <img class="math" src="../_images/math/ed85129828225e5965a803e95a52bdca02f7fad6.png" alt="-\frac{i}{2} \varepsilon^2 \tau"/>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The prefactor <img class="math" src="../_images/math/877d234f4cec6974ce218fc2e975a486a7972dfd.png" alt="\alpha"/>. It defaults to 1 but is
+usually set to <img class="math" src="../_images/math/76656ff8dac59147426af7bf9be9b205d5c1853b.png" alt="-\frac{i}{2} \varepsilon^2 \tau"/>
 by the caller.</td>
 </tr>
 </tbody>
@@ -114,13 +114,13 @@ by the caller.</td>
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.calculate_operator">
 <code class="descname">calculate_operator</code><span class="sig-paren">(</span><em>eps=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.calculate_operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.calculate_operator" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate the kinetic operator <img class="math" src="../_images/math/fcd2252b5c1e03d4ce9dfc8c0dd163443acff515.png" alt="\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}"/>
+<dd><p>Calculate the kinetic operator <img class="math" src="../_images/math/19c3f32fca2781c9ceb96bdf472c647665c3f539.png" alt="\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}"/>
 in Fourier space.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/f348c73e654151e416e3c525b2ff7803590754ce.png" alt="\varepsilon"/>. It has to
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>eps</strong> &#8211; The semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>. It has to
 be given here or during the initialization of the current instance.</td>
 </tr>
 </tbody>
@@ -130,8 +130,8 @@ be given here or during the initialization of the current instance.</td>
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.evaluate_at">
 <code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.evaluate_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.evaluate_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the kinetic operator <img class="math" src="../_images/math/fcd2252b5c1e03d4ce9dfc8c0dd163443acff515.png" alt="\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}"/>
-in Fourier space. This returns an numpy <code class="docutils literal"><span class="pre">ndarray</span></code> by using a specific <img class="math" src="../_images/math/916cc4abfd58753747deb83a01f4abed53b81d8b.png" alt="\underline{\omega}"/>.</p>
+<dd><p>Evaluate the kinetic operator <img class="math" src="../_images/math/19c3f32fca2781c9ceb96bdf472c647665c3f539.png" alt="\hat{T} = \frac{\varepsilon^4}{2} \underline{\omega} \cdot \underline{\omega}"/>
+in Fourier space. This returns an numpy <code class="docutils literal"><span class="pre">ndarray</span></code> by using a specific <img class="math" src="../_images/math/821870a5018d69af67851b446cc442394d7ab0a3.png" alt="\underline{\omega}"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -145,9 +145,9 @@ in Fourier space. This returns an numpy <code class="docutils literal"><span cla
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.evaluate_exponential_at">
 <code class="descname">evaluate_exponential_at</code><span class="sig-paren">(</span><em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.evaluate_exponential_at"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.evaluate_exponential_at" title="Permalink to this definition">¶</a></dt>
-<dd><p>Evaluate the exponential <img class="math" src="../_images/math/fb13af74a4a552d16d87eefd7f3125ba972893b0.png" alt="\exp(\alpha \hat{T})"/> in Fourier space.
-This returns a numpy <code class="docutils literal"><span class="pre">ndarray</span></code> by using a specific <img class="math" src="../_images/math/916cc4abfd58753747deb83a01f4abed53b81d8b.png" alt="\underline{\omega}"/>.
-The factor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> can be set by the corresponding method.</p>
+<dd><p>Evaluate the exponential <img class="math" src="../_images/math/bbbab6d5d4840e92a715a48ccd3c5cf0daf13640.png" alt="\exp(\alpha \hat{T})"/> in Fourier space.
+This returns a numpy <code class="docutils literal"><span class="pre">ndarray</span></code> by using a specific <img class="math" src="../_images/math/821870a5018d69af67851b446cc442394d7ab0a3.png" alt="\underline{\omega}"/>.
+The factor <img class="math" src="../_images/math/877d234f4cec6974ce218fc2e975a486a7972dfd.png" alt="\alpha"/> can be set by the corresponding method.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -161,7 +161,7 @@ The factor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d
 <dl class="method">
 <dt id="WaveBlocksND.KineticOperator.get_fourier_grid_axes">
 <code class="descname">get_fourier_grid_axes</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/KineticOperator.html#KineticOperator.get_fourier_grid_axes"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.KineticOperator.get_fourier_grid_axes" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return the grid axes of the Fourier space grid <img class="math" src="../_images/math/b39932b8cbb311eeee9815738f6be3757737b2ff.png" alt="\Omega"/>.</p>
+<dd><p>Return the grid axes of the Fourier space grid <img class="math" src="../_images/math/cd30e0b91d2b53728ae09ccac9d857b79b3adfcb.png" alt="\Omega"/>.</p>
 </dd></dl>
 
 </dd></dl>
@@ -232,7 +232,7 @@ The factor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

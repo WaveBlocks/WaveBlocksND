@@ -79,14 +79,14 @@
 <dt id="WaveBlocksND.SparsityOracleGIHAWP.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>threshold=1e-08</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOracleGIHAWP.html#SparsityOracleGIHAWP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOracleGIHAWP.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an oracle for estimating if a specific overlap integral
-<img class="math" src="../_images/math/7df36a73674cbe98302cfc61ef986eda2da297a9.png" alt="\langle \Psi_k | O | \Psi_l \rangle"/> is approximately zero. The
-oracle works by approximating <img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
+<img class="math" src="../_images/math/bc73d615ab77dc25b49c7e39fe273655dc9ecb5b.png" alt="\langle \Psi_k | O | \Psi_l \rangle"/> is approximately zero. The
+oracle works by approximating <img class="math" src="../_images/math/8280dbd3eccca9d741e6429f5753a6892e2d0abf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
 with a Gaussian integral. If</p>
 <div class="math">
-<p><img src="../_images/math/d2302ec045ccf43a21192683b301db182c06ac77.png" alt="\langle \Psi_k | \Psi_l \rangle \approx \langle \Psi_k^G | \Psi_l^G \rangle \leq \tau"/></p>
-</div><p>the value <img class="math" src="../_images/math/7df36a73674cbe98302cfc61ef986eda2da297a9.png" alt="\langle \Psi_k | O | \Psi_l \rangle"/> is considered
+<p><img src="../_images/math/df6cf1d39ea01e979a08a628d382355563e0def3.png" alt="\langle \Psi_k | \Psi_l \rangle \approx \langle \Psi_k^G | \Psi_l^G \rangle \leq \tau"/></p>
+</div><p>the value <img class="math" src="../_images/math/bc73d615ab77dc25b49c7e39fe273655dc9ecb5b.png" alt="\langle \Psi_k | O | \Psi_l \rangle"/> is considered
 to be zero. Of course this may fail depending on the form of the
-operator <img class="math" src="../_images/math/f3f716e1c56d5ebdca97bb1546662b9e96f5be07.png" alt="O"/> or the basis shape <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>.</p>
+operator <img class="math" src="../_images/math/e13e795642d3a6b063c1aa644bd328792bb8b1ad.png" alt="O"/> or the basis shape <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
 <p class="last">This code is highly experimental.</p>
@@ -95,8 +95,8 @@ operator <img class="math" src="../_images/math/f3f716e1c56d5ebdca97bb1546662b9e
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>threshold</strong> &#8211; The threshold <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> in the Gaussian integral criterion.
-The default value of <img class="math" src="../_images/math/21657abf2dea8e36fed8ad9de97c6a7d36bb6953.png" alt="10^{-8}"/> should be reasonable in most cases.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>threshold</strong> &#8211; The threshold <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> in the Gaussian integral criterion.
+The default value of <img class="math" src="../_images/math/243f1a66e58bf5d9b3a8aec65edb2ef28879b0af.png" alt="10^{-8}"/> should be reasonable in most cases.</td>
 </tr>
 </tbody>
 </table>
@@ -105,15 +105,15 @@ The default value of <img class="math" src="../_images/math/21657abf2dea8e36fed8
 <dl class="method">
 <dt id="WaveBlocksND.SparsityOracleGIHAWP.is_not_zero">
 <code class="descname">is_not_zero</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOracleGIHAWP.html#SparsityOracleGIHAWP.is_not_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOracleGIHAWP.is_not_zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Try to estimate if the overlap integral <img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
+<dd><p>Try to estimate if the overlap integral <img class="math" src="../_images/math/8280dbd3eccca9d741e6429f5753a6892e2d0abf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
 is zero or at least negligible.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pacbra</strong> &#8211; The packet <img class="math" src="../_images/math/2b537b2bed799c31f526f1e071c8d0b37b508099.png" alt="\Psi_k"/> that is used for the &#8216;bra&#8217; part.</li>
-<li><strong>packet</strong> &#8211; The packet <img class="math" src="../_images/math/290e9536e6750ac11e6489d5484493b2a323447d.png" alt="\Psi_l"/> that is used for the &#8216;ket&#8217; part.</li>
+<li><strong>pacbra</strong> &#8211; The packet <img class="math" src="../_images/math/3c640be616c740d573b7ee02fd4c715eaa1687db.png" alt="\Psi_k"/> that is used for the &#8216;bra&#8217; part.</li>
+<li><strong>packet</strong> &#8211; The packet <img class="math" src="../_images/math/9a329c0c3583731978c57c161b402ab525b7b9a3.png" alt="\Psi_l"/> that is used for the &#8216;ket&#8217; part.</li>
 <li><strong>component</strong> &#8211; The component of the packet that is considered.</li>
 </ul>
 </td>
@@ -193,7 +193,7 @@ is zero or at least negligible.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

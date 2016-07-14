@@ -74,14 +74,14 @@
 <dl class="class">
 <dt id="WaveBlocksND.BasisTransformationWF">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">BasisTransformationWF</code><span class="sig-paren">(</span><em>potential</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class implements basis transformations of wavefunctions <img class="math" src="../_images/math/e60ce0558b237ca2c209ea6715a552d6fedeebb6.png" alt="\psi(x)"/>
-between the canonical basis of and the basis <img class="math" src="../_images/math/7b6b6c4275f6e0b44e048947e78a385d0bdf3294.png" alt="\Lambda(x)"/> spanned
-by the eigenvectors <img class="math" src="../_images/math/28503e2b24a27dee989a89efad94a290f763a086.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
+<dd><p>This class implements basis transformations of wavefunctions <img class="math" src="../_images/math/cd5cc0c6ed6826a1a3677346a180bfd596a9f18c.png" alt="\psi(x)"/>
+between the canonical basis of and the basis <img class="math" src="../_images/math/b3668770474adf7027e6e0044994b54e305a7e8d.png" alt="\Lambda(x)"/> spanned
+by the eigenvectors <img class="math" src="../_images/math/2cb96168ca1c2ef43c134e02390e712136ed774b.png" alt="\nu_i(x)"/> of the potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>potential</em>, <em>grid=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a new <a class="reference internal" href="BasisTransformation.html#WaveBlocksND.BasisTransformation" title="WaveBlocksND.BasisTransformation"><code class="xref py py-class docutils literal"><span class="pre">BasisTransformation</span></code></a> instance for a given potential
-matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>.</p>
+matrix <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -99,9 +99,9 @@ matrix <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.set_grid">
 <code class="descname">set_grid</code><span class="sig-paren">(</span><em>grid</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.set_grid"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.set_grid" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the grid <img class="math" src="../_images/math/85011adca50d3725af2e048eeb9ec7b02ccdd401.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/0ebb67342b546ca42a1c634b1ef03c893c4cdedb.png" alt="\gamma"/> on
-which the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> was evaluated. The <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> eigenvectors
-<img class="math" src="../_images/math/b64f0104caa39246ba6988c5b48b5a028857c035.png" alt="\nu_i"/> will be evaluated on the same grid nodes.</p>
+<dd><p>Set the grid <img class="math" src="../_images/math/d872993ed0c7c420e73e77a1d285ac100c516806.png" alt="\Gamma"/> containing the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/> on
+which the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> was evaluated. The <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> eigenvectors
+<img class="math" src="../_images/math/ea8e9890f020b058f5d3f414b4ec7e47669e9b38.png" alt="\nu_i"/> will be evaluated on the same grid nodes.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -115,7 +115,7 @@ which the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dc
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.transform_to_canonical">
 <code class="descname">transform_to_canonical</code><span class="sig-paren">(</span><em>wavefunction</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.transform_to_canonical"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_canonical" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0bdb3772e8bc252ce8c6a5dee.png" alt="\psi(\Gamma)"/> given
+<dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/a7ee2eac589334be07054feb520ef50c2b50f0ac.png" alt="\psi(\Gamma)"/> given
 in the eigenbasis to the canonical basis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -124,7 +124,7 @@ in the eigenbasis to the canonical basis.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance.) &#8211; The wavefunction to transform.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance containing the
-transformed wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a81b1438b79650a34b091f3d87.png" alt="\psi^\prime(\Gamma)"/>.</td>
+transformed wavefunction <img class="math" src="../_images/math/b6b37e0e79ca1752dbb804d8fec080d737c866a9.png" alt="\psi^\prime(\Gamma)"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -133,7 +133,7 @@ transformed wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a8
 <dl class="method">
 <dt id="WaveBlocksND.BasisTransformationWF.transform_to_eigen">
 <code class="descname">transform_to_eigen</code><span class="sig-paren">(</span><em>wavefunction</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/BasisTransformationWF.html#BasisTransformationWF.transform_to_eigen"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.BasisTransformationWF.transform_to_eigen" title="Permalink to this definition">¶</a></dt>
-<dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/e9db36dbbd3f72a81b1438b79650a34b091f3d87.png" alt="\psi^\prime(\Gamma)"/> given
+<dd><p>Transform the evaluated wavefunction <img class="math" src="../_images/math/b6b37e0e79ca1752dbb804d8fec080d737c866a9.png" alt="\psi^\prime(\Gamma)"/> given
 in the canonical basis to the eigenbasis.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -142,7 +142,7 @@ in the canonical basis to the eigenbasis.</p>
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>wavefunction</strong> (A <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance.) &#8211; The wavefunction to transform.</td>
 </tr>
 <tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">Another <a class="reference internal" href="WaveFunction.html#WaveBlocksND.WaveFunction" title="WaveBlocksND.WaveFunction"><code class="xref py py-class docutils literal"><span class="pre">WaveFunction</span></code></a> instance containing the
-transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0bdb3772e8bc252ce8c6a5dee.png" alt="\psi(\Gamma)"/>.</td>
+transformed wavefunction <img class="math" src="../_images/math/a7ee2eac589334be07054feb520ef50c2b50f0ac.png" alt="\psi(\Gamma)"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -216,7 +216,7 @@ transformed wavefunction <img class="math" src="../_images/math/299cd4247cedd5d0
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

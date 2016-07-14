@@ -58,11 +58,11 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformation</span> <span class="kn">import</span> <span class="n">BasisTransformation</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformation</span> <span class="k">import</span> <span class="n">BasisTransformation</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;BasisTransformationWF&quot;</span><span class="p">]</span>
 
@@ -73,7 +73,7 @@
 <span class="sd">    by the eigenvectors :math:`\nu_i(x)` of the potential :math:`V(x)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-<div class="viewcode-block" id="BasisTransformationWF.__init__"><a class="viewcode-back" href="../../waveblocks_classes/BasisTransformationWF.html#WaveBlocksND.BasisTransformationWF.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="BasisTransformationWF.__init__"><a class="viewcode-back" href="../../waveblocks_classes/BasisTransformationWF.html#WaveBlocksND.BasisTransformationWF.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">grid</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Create a new :py:class:`BasisTransformation` instance for a given potential</span>
 <span class="sd">        matrix :math:`V(x)`.</span>
 
@@ -88,7 +88,7 @@
         <span class="c1"># Precompute eigenvectors is case it is necessary</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_eigenvectors</span><span class="p">()</span>
 
-        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">grid</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_grid</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span></div>
 
 
@@ -215,7 +215,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

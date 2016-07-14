@@ -61,12 +61,12 @@
 
 <span class="kn">import</span> <span class="nn">sympy</span>
 <span class="kn">import</span> <span class="nn">numpy</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">linalg</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">linalg</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.MatrixPotential</span> <span class="kn">import</span> <span class="n">MatrixPotential</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="kn">import</span> <span class="n">AbstractGrid</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="kn">import</span> <span class="n">GridWrapper</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="kn">import</span> <span class="n">GlobalDefaults</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.MatrixPotential</span> <span class="k">import</span> <span class="n">MatrixPotential</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.AbstractGrid</span> <span class="k">import</span> <span class="n">AbstractGrid</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.GridWrapper</span> <span class="k">import</span> <span class="n">GridWrapper</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND</span> <span class="k">import</span> <span class="n">GlobalDefaults</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;MatrixPotentialMS&quot;</span><span class="p">]</span>
 
@@ -110,10 +110,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_potential_n</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential_s</span><span class="p">)</span>
 
         <span class="c1"># The Jacobian and Hessian matrices of all entries of V</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_JV_s</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_JV_n</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_HV_s</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_HV_n</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_JV_s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_JV_n</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_HV_s</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_HV_n</span> <span class="o">=</span> <span class="kc">None</span>
 
 
     <span class="k">def</span> <span class="nf">_grid_wrap</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">agrid</span><span class="p">):</span>
@@ -126,7 +126,7 @@
         <span class="k">return</span> <span class="n">agrid</span>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the potential :math:`V(x)` elementwise on a grid :math:`\Gamma`.</span>
 
 <span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
@@ -141,7 +141,7 @@
         <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="c1"># Determine which entries to evaluate</span>
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry</span>
             <span class="n">entries</span> <span class="o">=</span> <span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -151,7 +151,7 @@
         <span class="c1"># Evaluate all entries specified</span>
         <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="n">entries</span><span class="p">:</span>
             <span class="c1"># Evaluate the potential at the given nodes</span>
@@ -162,11 +162,11 @@
                 <span class="n">values</span> <span class="o">=</span> <span class="n">values</span> <span class="o">*</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
 
             <span class="c1"># Put the result in correct shape (1, #gridnodes)</span>
-            <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">N</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">N</span><span class="p">)))</span>
 
         <span class="c1"># TODO: Consider unpacking single ndarray iff entry != None</span>
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
@@ -181,7 +181,7 @@
         <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_eigenvalues_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvalues_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvalues_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_eigenvalues_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvalues_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvalues_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the eigenvalues :math:`\lambda_i(x)` elementwise on a grid :math:`\Gamma`.</span>
 
 <span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
@@ -198,10 +198,10 @@
         <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Early return shortcut for off-diagonal entries</span>
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry</span>
             <span class="k">if</span> <span class="n">row</span> <span class="o">!=</span> <span class="n">col</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
@@ -221,7 +221,7 @@
         <span class="c1"># Calculate eigenvalues assuming hermitian matrix (eigvalsh for stability!)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">ew</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigvalsh</span><span class="p">(</span><span class="n">tmppot</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
-            <span class="k">if</span> <span class="nb">sorted</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">sorted</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># Sorting the eigenvalues, biggest first.</span>
                 <span class="c1"># TODO: Sort will fail iff energy level cross!</span>
                 <span class="n">ew</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
@@ -233,11 +233,11 @@
         <span class="c1"># Split the data into different eigenvalues</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">tmpew</span><span class="p">[:,</span> <span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">)</span> <span class="o">=</span> <span class="n">entry</span>
             <span class="n">result</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">row</span><span class="p">]</span>
             <span class="c1"># Offdiagonal case handled on top</span>
-        <span class="k">elif</span> <span class="n">as_matrix</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">as_matrix</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
             <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -260,7 +260,7 @@
         <span class="k">pass</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_eigenvectors_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvectors_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvectors_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_eigenvectors_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_eigenvectors_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_eigenvectors_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the eigenvectors :math:`\nu_i(x)` elementwise on a grid :math:`\Gamma`.</span>
 
 <span class="sd">        :param grid: The grid containing the nodes :math:`\gamma_i` we want</span>
@@ -271,7 +271,7 @@
         <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Memory for storing temporary values</span>
         <span class="n">tmppot</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
@@ -288,7 +288,7 @@
         <span class="c1"># Calculate eigenvectors assuming hermitian matrix (eigh for stability!)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
             <span class="n">ew</span><span class="p">,</span> <span class="n">ev</span> <span class="o">=</span> <span class="n">linalg</span><span class="o">.</span><span class="n">eigh</span><span class="p">(</span><span class="n">tmppot</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
-            <span class="k">if</span> <span class="nb">sorted</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="nb">sorted</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
                 <span class="c1"># Sorting the eigenvectors in the same order as the eigenvalues.</span>
                 <span class="n">ind</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">ew</span><span class="p">)</span>
                 <span class="n">ind</span> <span class="o">=</span> <span class="n">ind</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
@@ -300,7 +300,7 @@
 
         <span class="c1"># A trick due to G. Hagedorn to get continuous eigenvectors</span>
         <span class="c1"># TODO: Not sure if it works in higher dimensions too! (Probably it does not)</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_continuous_eigenvectors</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_continuous_eigenvectors</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">):</span>
                 <span class="k">for</span> <span class="n">ev</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
                     <span class="k">if</span> <span class="n">numpy</span><span class="o">.</span><span class="n">dot</span><span class="p">(</span><span class="n">tmpev</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="n">ev</span><span class="p">],</span> <span class="n">tmpev</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="p">:,</span> <span class="n">ev</span><span class="p">])</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -335,7 +335,7 @@
         <span class="n">grid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid_wrap</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
 
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Memory for storing temporary values</span>
         <span class="n">tmp</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">ndarray</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
@@ -356,10 +356,10 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">tmp</span><span class="p">[:,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">))</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_calculate_jacobian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_calculate_jacobian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the Jacobian of the matrix elements :math:`V_{i,j}`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_JV_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_JV_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_JV_s</span> <span class="o">=</span> <span class="p">{}</span>
@@ -372,10 +372,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_JV_n</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">v</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">_calculate_hessian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_calculate_hessian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the Hessian of the matrix elements :math:`V_{i,j}`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HV_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_HV_s</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">return</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_HV_s</span> <span class="o">=</span> <span class="p">{}</span>
@@ -389,11 +389,11 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_HV_n</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">sympy</span><span class="o">.</span><span class="n">lambdify</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_variables</span><span class="p">,</span> <span class="n">entry</span><span class="p">,</span> <span class="s2">&quot;numpy&quot;</span><span class="p">)</span> <span class="k">for</span> <span class="n">entry</span> <span class="ow">in</span> <span class="n">val</span><span class="p">)</span>
 
 
-    <span class="k">def</span> <span class="nf">_evaluate_jacobian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_evaluate_jacobian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variable</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Note: We assume grid is already of supertype Grid</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">dAdxk</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -403,11 +403,11 @@
         <span class="k">return</span> <span class="n">dAdxk</span>
 
 
-    <span class="k">def</span> <span class="nf">_evaluate_hessian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">_evaluate_hessian_of_matrix</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">variables</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Note: We assume grid is already of supertype Grid</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">(</span><span class="n">split</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">dAdxidxj</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">numpy</span><span class="o">.</span><span class="n">complexfloating</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
@@ -426,7 +426,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_jacobian_of_matrix</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_jacobian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_jacobian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_jacobian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_jacobian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_jacobian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_jacobian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the list of Jacobian matrices :math:`\nabla \lambda_i(x)` at some grid</span>
 <span class="sd">        nodes :math:`\Gamma` for one or all eigenvalues.</span>
 
@@ -442,16 +442,16 @@
 
         <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># For which eigenvalues do we need to do the computation</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">levels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
 
         <span class="c1"># Compute eigenvectors</span>
-        <span class="n">EV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvectors_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">EV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvectors_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">Jn</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># For each eigenvalue</span>
@@ -465,7 +465,7 @@
 
             <span class="n">Jn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Jl</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Unpack single item</span>
             <span class="k">return</span> <span class="n">Jn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -481,7 +481,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_hessian_of_matrix</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_hessian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_hessian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_hessian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_hessian_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_hessian_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_hessian_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Evaluate the list of Hessian matrices :math:`\nabla^2 \lambda_i(x)` at some grid</span>
 <span class="sd">        nodes :math:`\Gamma` for one or all eigenvalues.</span>
 
@@ -497,19 +497,19 @@
 
         <span class="n">D</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dimension</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
-        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># For which eigenvalues do we need to do the computation</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">levels</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">levels</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
 
         <span class="c1"># Compute eigenvalues</span>
-        <span class="n">EW</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvalues_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">EW</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvalues_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="c1"># Compute eigenvectors</span>
-        <span class="n">EV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvectors_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+        <span class="n">EV</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvectors_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="nb">sorted</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
 
         <span class="n">Hn</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="c1"># For each eigenvalue</span>
@@ -543,14 +543,14 @@
                 <span class="n">Hl</span> <span class="o">=</span> <span class="n">Hl</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="n">D</span><span class="p">,</span> <span class="n">D</span><span class="p">))</span>
             <span class="n">Hn</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Hl</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Unpack single item</span>
             <span class="k">return</span> <span class="n">Hn</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">Hn</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.calculate_local_quadratic"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.calculate_local_quadratic">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_quadratic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.calculate_local_quadratic"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.calculate_local_quadratic">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_quadratic</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the local quadratic approximation matrix :math:`U(x)` of the potential&#39;s</span>
 <span class="sd">        eigenvalues in :math:`\Lambda(x)`. This function can be used for the homogeneous case</span>
 <span class="sd">        and takes into account the leading component :math:`\chi \in [0,\ldots,N-1]`.</span>
@@ -564,7 +564,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_hessian_of_matrix</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_local_quadratic_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_local_quadratic_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_quadratic_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_local_quadratic_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_local_quadratic_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_quadratic_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Numerically evaluate the local quadratic approximation matrix :math:`U(x)` of</span>
 <span class="sd">        the potential&#39;s eigenvalues in :math:`\Lambda(x)` at the given grid nodes :math:`\Gamma`.</span>
 
@@ -577,7 +577,7 @@
 <span class="sd">                 the evaluated eigenvalue :math:`\lambda_i(\Gamma)`, its Jacobian :math:`J(\Gamma)`</span>
 <span class="sd">                 and its Hessian :math:`H(\Gamma)` in this order.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_eigenvalues_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="p">(</span><span class="n">diagonal_component</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="p">))</span>
             <span class="n">J</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_jacobian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">diagonal_component</span><span class="p">)</span>
             <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_hessian_at</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">diagonal_component</span><span class="p">)</span>
@@ -591,7 +591,7 @@
         <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">result</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.calculate_local_remainder"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.calculate_local_remainder">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_remainder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.calculate_local_remainder"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.calculate_local_remainder">[docs]</a>    <span class="k">def</span> <span class="nf">calculate_local_remainder</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the non-quadratic remainder matrix :math:`W(x) = V(x) - U(x)` of the</span>
 <span class="sd">        quadratic approximation matrix :math:`U(x)` of the potential&#39;s eigenvalue matrix</span>
 <span class="sd">        :math:`\Lambda(x)`. In the homogeneous case the matrix :math:`U` is given by</span>
@@ -607,7 +607,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_calculate_hessian_of_matrix</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="MatrixPotentialMS.evaluate_local_remainder_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_local_remainder_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_remainder_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="MatrixPotentialMS.evaluate_local_remainder_at"><a class="viewcode-back" href="../../waveblocks_classes/MatrixPotentialMS.html#WaveBlocksND.MatrixPotentialMS.evaluate_local_remainder_at">[docs]</a>    <span class="k">def</span> <span class="nf">evaluate_local_remainder_at</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">position</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Numerically evaluate the non-quadratic remainder :math:`W(x)` of the quadratic</span>
 <span class="sd">        approximation :math:`U(x)` of the potential&#39;s eigenvalue :math:`\Lambda(x)` at the</span>
 <span class="sd">        given nodes :math:`\Gamma`.</span>
@@ -634,7 +634,7 @@
         <span class="n">nodes</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
         <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_number_components</span>
 
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">rows</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
             <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span><span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -643,7 +643,7 @@
 
         <span class="n">W</span> <span class="o">=</span> <span class="p">[]</span>
 
-        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">diagonal_component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Homogeneous case</span>
             <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
             <span class="n">L</span><span class="p">,</span> <span class="n">J</span><span class="p">,</span> <span class="n">H</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluate_local_quadratic_at</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">diagonal_component</span><span class="o">=</span><span class="n">diagonal_component</span><span class="p">)</span>
@@ -678,7 +678,7 @@
                     <span class="k">else</span><span class="p">:</span>
                         <span class="n">W</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">V</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">])</span>
 
-        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Unpack single item</span>
             <span class="k">return</span> <span class="n">W</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -719,7 +719,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

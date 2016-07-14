@@ -1,0 +1,315 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HagedornWavepacketTransformPhiPsi &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="BasisTransformation" href="BasisTransformation.html" />
+    <link rel="prev" title="GradientHAWPnew" href="GradientHAWPnew.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BasisTransformation.html" title="BasisTransformation"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="GradientHAWPnew.html" title="GradientHAWPnew"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hagedornwavepackettransformphipsi">
+<h1>HagedornWavepacketTransformPhiPsi<a class="headerlink" href="#hagedornwavepackettransformphipsi" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-hagedornwavepackettransformphipsi-class"></span><h2>About the <code class="docutils literal"><span class="pre">HagedornWavepacketTransformPhiPsi</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<img src="../_images/inheritance-d9fb6b07a33f1752237db98bb185a1a078567269.png" alt="Inheritance diagram of HagedornWavepacketTransformPhiPsi" usemap="#inheritancea20e53d5cf" class="inheritance"/>
+<map id="inheritancea20e53d5cf" name="inheritancea20e53d5cf">
+<area shape="rect" id="node1" title="Implementation of the unitary transformation between old&#45;kind" alt="" coords="5,5,509,31"/>
+</map>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi">
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HagedornWavepacketTransformPhiPsi</code><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Implementation of the unitary transformation between old-kind
+Hagedorn wavepackets <img class="math" src="../_images/math/bb11bf735fa57b5a745288c8707c61ab56e64f98.png" alt="\Phi[\Pi]"/> and new-kind Hagedorn wavepackets
+<img class="math" src="../_images/math/b6c6bf2f8fda162a7173b3af497cb3798710077c.png" alt="\Psi[\Pi]"/>.</p>
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_PiT_v">
+<code class="descname">multiply_PiT_v</code><span class="sig-paren">(</span><em>nu</em>, <em>mu</em>, <em>lut</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.multiply_PiT_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_PiT_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply the matrix <img class="math" src="../_images/math/c014254e1b8bb00fcc63a111a6d492969844930f.png" alt="\mathbf{P_i}^{\mathrm{T}}"/> by a vector
+<img class="math" src="../_images/math/5c041542668ed218c6d1030f0fcaa315c024cbda.png" alt="\underline{v}"/> from the right. Do not construct the matrix explicitly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nu</strong> &#8211; The list <img class="math" src="../_images/math/ea8e9890f020b058f5d3f414b4ec7e47669e9b38.png" alt="\nu_i"/>.</li>
+<li><strong>mu</strong> &#8211; The list <img class="math" src="../_images/math/5a43d260d9ab6205cb578f762508a7d0efb10a6f.png" alt="\mu_i"/>.</li>
+<li><strong>lut</strong> &#8211; The lookup table.</li>
+<li><strong>v</strong> &#8211; The vector <img class="math" src="../_images/math/f9b96f8dbbf7398b70368e578e0c865d12fa2725.png" alt="\underline{v} \in \mathbb{C}^{n(D,i)}"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Pi_v">
+<code class="descname">multiply_Pi_v</code><span class="sig-paren">(</span><em>nu</em>, <em>mu</em>, <em>lut</em>, <em>v</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.multiply_Pi_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Pi_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply the matrix <img class="math" src="../_images/math/b94cea6f5ec803c405b483c78de91323e06c8812.png" alt="\mathbf{P_i}"/> by a vector <img class="math" src="../_images/math/5c041542668ed218c6d1030f0fcaa315c024cbda.png" alt="\underline{v}"/>
+from the right. Do not construct the matrix explicitly.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>nu</strong> &#8211; The list <img class="math" src="../_images/math/ea8e9890f020b058f5d3f414b4ec7e47669e9b38.png" alt="\nu_i"/>.</li>
+<li><strong>mu</strong> &#8211; The list <img class="math" src="../_images/math/5a43d260d9ab6205cb578f762508a7d0efb10a6f.png" alt="\mu_i"/>.</li>
+<li><strong>lut</strong> &#8211; The lookup table.</li>
+<li><strong>v</strong> &#8211; The vector <img class="math" src="../_images/math/aed295bf91e9669f73acf6e065b13fd586ecde6d.png" alt="\underline{v} \in \mathcal{X}_i"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_T_v">
+<code class="descname">multiply_T_v</code><span class="sig-paren">(</span><em>coeffs</em>, <em>K</em>, <em>NU</em>, <em>MU</em>, <em>D</em>, <em>J</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.multiply_T_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_T_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the transformation matrix <img class="math" src="../_images/math/3d76e42ab54f07b9c038883e7c9728fda92a348b.png" alt="\mathbf{T}"/> to the coefficients <img class="math" src="../_images/math/382b56fb776362cf875fff649831ad5172dd97aa.png" alt="\underline{c}"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coeffs</strong> &#8211; The coefficients vector <img class="math" src="../_images/math/382b56fb776362cf875fff649831ad5172dd97aa.png" alt="\underline{c}"/>.</li>
+<li><strong>K</strong> &#8211; The overlap matrix <img class="math" src="../_images/math/970d58dfe30d97dba4e714f2f68a78194339b2e7.png" alt="\mathbf{K}"/>.</li>
+<li><strong>NU</strong> &#8211; The list of all <img class="math" src="../_images/math/ea8e9890f020b058f5d3f414b4ec7e47669e9b38.png" alt="\nu_i"/>.</li>
+<li><strong>MU</strong> &#8211; The list of all <img class="math" src="../_images/math/5a43d260d9ab6205cb578f762508a7d0efb10a6f.png" alt="\mu_i"/>.</li>
+<li><strong>D</strong> &#8211; The dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/>.</li>
+<li><strong>J</strong> &#8211; The maximal <img class="math" src="../_images/math/b306e99fccaa1b7d2c6b2094d1ac0261a33695b1.png" alt="l_1"/> norm of any <img class="math" src="../_images/math/e40d8d87f965f5cfc104f186d9644154142cb9ee.png" alt="\underline{k} \in \mathfrak{K}"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Tinv_v">
+<code class="descname">multiply_Tinv_v</code><span class="sig-paren">(</span><em>coeffs</em>, <em>K</em>, <em>NU</em>, <em>MU</em>, <em>D</em>, <em>J</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.multiply_Tinv_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_Tinv_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Apply the transformation matrix <img class="math" src="../_images/math/f480f9f3f4e2d0a9e72865ecfe78d50eb670b5a5.png" alt="\mathbf{T}^{-1}"/>
+to the coefficients <img class="math" src="../_images/math/4fa22de253ba34294a76d5194ada7b7681e4ed02.png" alt="\underline{d}"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>coeffs</strong> &#8211; The coefficients vector <img class="math" src="../_images/math/4fa22de253ba34294a76d5194ada7b7681e4ed02.png" alt="\underline{d}"/>.</li>
+<li><strong>K</strong> &#8211; The overlap matrix <img class="math" src="../_images/math/970d58dfe30d97dba4e714f2f68a78194339b2e7.png" alt="\mathbf{K}"/>.</li>
+<li><strong>NU</strong> &#8211; The list of all <img class="math" src="../_images/math/ea8e9890f020b058f5d3f414b4ec7e47669e9b38.png" alt="\nu_i"/>.</li>
+<li><strong>MU</strong> &#8211; The list of all <img class="math" src="../_images/math/5a43d260d9ab6205cb578f762508a7d0efb10a6f.png" alt="\mu_i"/>.</li>
+<li><strong>D</strong> &#8211; The dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/>.</li>
+<li><strong>J</strong> &#8211; The maximal <img class="math" src="../_images/math/b306e99fccaa1b7d2c6b2094d1ac0261a33695b1.png" alt="l_1"/> norm of any <img class="math" src="../_images/math/e40d8d87f965f5cfc104f186d9644154142cb9ee.png" alt="\underline{k} \in \mathfrak{K}"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_kronecker_power_v">
+<code class="descname">multiply_kronecker_power_v</code><span class="sig-paren">(</span><em>D</em>, <em>A</em>, <em>v</em>, <em>i</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.multiply_kronecker_power_v"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.multiply_kronecker_power_v" title="Permalink to this definition">¶</a></dt>
+<dd><p>Multiply the <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>-th Kronecker power of the matrix <img class="math" src="../_images/math/1b009ec88d176a0e31309bf4a536fcdeedb9f38e.png" alt="\mathbf{A}"/>
+by a vector <img class="math" src="../_images/math/5c041542668ed218c6d1030f0fcaa315c024cbda.png" alt="\underline{v}"/> from the right.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>D</strong> &#8211; The dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/>.</li>
+<li><strong>A</strong> &#8211; The matrix <img class="math" src="../_images/math/1b009ec88d176a0e31309bf4a536fcdeedb9f38e.png" alt="\mathbf{A}"/>.</li>
+<li><strong>v</strong> &#8211; The vector <img class="math" src="../_images/math/5c041542668ed218c6d1030f0fcaa315c024cbda.png" alt="\underline{v}"/>.</li>
+<li><strong>i</strong> &#8211; The non-negative integer Kronecker power exponent.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The matrix has to be square and of size <img class="math" src="../_images/math/b21bac1bcc4deb2401ec9afa813a344feba6dd5c.png" alt="D^i"/>.</p>
+</div>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.overlap">
+<code class="descname">overlap</code><span class="sig-paren">(</span><em>D</em>, <em>Pi</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.overlap"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.overlap" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compute the overlap matrix:</p>
+<div class="math">
+<p><img src="../_images/math/e9f1db5308e8561a22b57f2f6afb1006bb8c01b8.png" alt="\mathbf{K}_{r,c} := \langle \psi_{\underline{e_r}}[\Pi] | \phi_{\underline{e_c}}[\Pi] \rangle"/></p>
+</div><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>D</strong> &#8211; The dimension <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/>.</li>
+<li><strong>Pi</strong> &#8211; The parameter set <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/>.</li>
+<li><strong>eps</strong> &#8211; The semiclassical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/>.</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_phi_to_psi">
+<code class="descname">transform_phi_to_psi</code><span class="sig-paren">(</span><em>HAWPphi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.transform_phi_to_psi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_phi_to_psi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a old-kind wavepacket <img class="math" src="../_images/math/bb11bf735fa57b5a745288c8707c61ab56e64f98.png" alt="\Phi[\Pi]"/> into a new-kind wavepacket <img class="math" src="../_images/math/b6c6bf2f8fda162a7173b3af497cb3798710077c.png" alt="\Psi[\Pi]"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>HAWPphi</strong> &#8211; The wavepacket <img class="math" src="../_images/math/bb11bf735fa57b5a745288c8707c61ab56e64f98.png" alt="\Phi[\Pi]"/> to transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new wavepacket object representing <img class="math" src="../_images/math/b6c6bf2f8fda162a7173b3af497cb3798710077c.png" alt="\Psi[\Pi]"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_psi_to_phi">
+<code class="descname">transform_psi_to_phi</code><span class="sig-paren">(</span><em>HAWPpsi</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketTransformPhiPsi.html#HagedornWavepacketTransformPhiPsi.transform_psi_to_phi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketTransformPhiPsi.transform_psi_to_phi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Transform a new-kind wavepacket <img class="math" src="../_images/math/b6c6bf2f8fda162a7173b3af497cb3798710077c.png" alt="\Psi[\Pi]"/> into a old-kind wavepacket <img class="math" src="../_images/math/bb11bf735fa57b5a745288c8707c61ab56e64f98.png" alt="\Phi[\Pi]"/>.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>HAWPpsi</strong> &#8211; The wavepacket <img class="math" src="../_images/math/b6c6bf2f8fda162a7173b3af497cb3798710077c.png" alt="\Psi[\Pi]"/> to transform.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A new wavepacket object representing <img class="math" src="../_images/math/bb11bf735fa57b5a745288c8707c61ab56e64f98.png" alt="\Phi[\Pi]"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HagedornWavepacketTransformPhiPsi</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">HagedornWavepacketTransformPhiPsi</span></code> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="GradientHAWPnew.html"
+                        title="previous chapter">GradientHAWPnew</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="BasisTransformation.html"
+                        title="next chapter">BasisTransformation</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/HagedornWavepacketTransformPhiPsi.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="BasisTransformation.html" title="BasisTransformation"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="GradientHAWPnew.html" title="GradientHAWPnew"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

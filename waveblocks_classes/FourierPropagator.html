@@ -74,18 +74,18 @@
 <dl class="class">
 <dt id="WaveBlocksND.FourierPropagator">
 <em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">FourierPropagator</code><span class="sig-paren">(</span><em>potential</em>, <em>initial_values</em>, <em>para</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/1311af10c3fc8f6e94ef1d8a12b43b1967a6c9a4.png" alt="\Psi(x_0, t_0)"/> on
-a potential hyper surface <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/>. The propagation is done with a Strang splitting
-of the time propagation operator <img class="math" src="../_images/math/d37b15746efc323a0f5b8296d7d5c9e899dad7e2.png" alt="\exp(-\frac{i}{\varepsilon^2} \tau H)"/>.</p>
+<dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/09ed461798fa50f983c7f98d565397d0e561c9bb.png" alt="\Psi(x_0, t_0)"/> on
+a potential hyper surface <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>. The propagation is done with a Strang splitting
+of the time propagation operator <img class="math" src="../_images/math/06bd4236d9ab66809a1626d5c16887acd3db060e.png" alt="\exp(-\frac{i}{\varepsilon^2} \tau H)"/>.</p>
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.get_number_components">
 <code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/> of components of <img class="math" src="../_images/math/de6f6ec55da5bff04bdf591d5bb35136eb51b579.png" alt="\Psi"/>.</p>
+<dd><p>Get the number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> of components of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/75e27f04188974063be3230dca208cd495b77ce1.png" alt="N"/>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/>.</td>
 </tr>
 </tbody>
 </table>
@@ -94,12 +94,12 @@ of the time propagation operator <img class="math" src="../_images/math/d37b1574
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.get_operators">
 <code class="descname">get_operators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_operators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_operators" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the kinetic and potential operators <img class="math" src="../_images/math/62bb15ac7312a22c42be5bfe52c67742a49ff64d.png" alt="T(\Omega)"/> and <img class="math" src="../_images/math/ecb9ac43dbf52be6e181a0e67c827fea96b7d6c1.png" alt="V(\Gamma)"/>.</p>
+<dd><p>Get the kinetic and potential operators <img class="math" src="../_images/math/ac3f008033c12a5ed03fd3a31ffcea8805427080.png" alt="T(\Omega)"/> and <img class="math" src="../_images/math/0498251675a2eecf06ea76263ec8c7871b99f3c2.png" alt="V(\Gamma)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple <img class="math" src="../_images/math/7bf5ed1473e5dee69b361769a6f6ac8ff4b54b3c.png" alt="(T, V)"/> containing two <code class="docutils literal"><span class="pre">ndarrays</span></code>.</td>
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A tuple <img class="math" src="../_images/math/93dc9ee713f6b766cbb69993fe73da97734012f8.png" alt="(T, V)"/> containing two <code class="docutils literal"><span class="pre">ndarrays</span></code>.</td>
 </tr>
 </tbody>
 </table>
@@ -108,7 +108,7 @@ of the time propagation operator <img class="math" src="../_images/math/d37b1574
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.get_potential">
 <code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the potential <img class="math" src="../_images/math/e0ec0629769ae6a9454173e71aa1df11f9209631.png" alt="V(x)"/> used for time propagation.</p>
+<dd><p>Returns the potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/> used for time propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -122,7 +122,7 @@ of the time propagation operator <img class="math" src="../_images/math/d37b1574
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.get_wavefunction">
 <code class="descname">get_wavefunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_wavefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_wavefunction" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the wavefunction that stores the current data <img class="math" src="../_images/math/5b1be7843909382dd6a3620782d21788e570734e.png" alt="\Psi(\Gamma)"/>.</p>
+<dd><p>Get the wavefunction that stores the current data <img class="math" src="../_images/math/7e3449b74b914c8f5312bb21cc4c91a78e529e3f.png" alt="\Psi(\Gamma)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -136,7 +136,7 @@ of the time propagation operator <img class="math" src="../_images/math/d37b1574
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.post_propagate">
 <code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at final time <img class="math" src="../_images/math/6d42c88506b8da39a2a23653aecbfb7c29728063.png" alt="T"/>,
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at final time <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>,
 perform some computations exactly once after running the ordinary
 time propagation and before each time simulation data will be saved.</p>
 <p>This method does not raise an exception but instead just does
@@ -146,7 +146,7 @@ nothing and returns.</p>
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.pre_propagate">
 <code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given the wavefunction <img class="math" src="../_images/math/1a52481ac36eb889dcbbdcc0783ba2a755ba3547.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/fb761c2e199ad45ccf14767f48b88169479d840f.png" alt="t_0"/>,
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/1410bd3aa3d34373bc7de52c132b4fd6f154019a.png" alt="t_0"/>,
 perform some computations exactly once before running the ordinary
 time propagation and after each time simulation data was saved.</p>
 <p>This method does not raise an exception but instead just does
@@ -156,9 +156,9 @@ nothing and returns.</p>
 <dl class="method">
 <dt id="WaveBlocksND.FourierPropagator.propagate">
 <code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.propagate" title="Permalink to this definition">¶</a></dt>
-<dd><p>Given the wavefunction values <img class="math" src="../_images/math/5b1be7843909382dd6a3620782d21788e570734e.png" alt="\Psi(\Gamma)"/> at time <img class="math" src="../_images/math/ef9270877405055756d345facd044e4ab297f858.png" alt="t"/>, calculate
-new values <img class="math" src="../_images/math/f38e06a44339d7eb0e7798268a68aa94d4384d94.png" alt="\Psi^\prime(\Gamma)"/> at time <img class="math" src="../_images/math/248f20efaf95b4d4c73e23e7cb9ece1b73e10098.png" alt="t + \tau"/>. We perform exactly
-one single timestep of size <img class="math" src="../_images/math/d9e99c35d3632bb156b7aca0e93cd78a148a10e8.png" alt="\tau"/> within this function.</p>
+<dd><p>Given the wavefunction values <img class="math" src="../_images/math/7e3449b74b914c8f5312bb21cc4c91a78e529e3f.png" alt="\Psi(\Gamma)"/> at time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/>, calculate
+new values <img class="math" src="../_images/math/88fa0a2a3140f647e930e715d1aae6f097775318.png" alt="\Psi^\prime(\Gamma)"/> at time <img class="math" src="../_images/math/9ef2d61249c313f3251d7908ea2ae2defd92a1c0.png" alt="t + \tau"/>. We perform exactly
+one single timestep of size <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> within this function.</p>
 </dd></dl>
 
 </dd></dl>
@@ -229,7 +229,7 @@ one single timestep of size <img class="math" src="../_images/math/d9e99c35d3632
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

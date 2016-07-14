@@ -79,21 +79,21 @@
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.__init__">
 <code class="descname">__init__</code><span class="sig-paren">(</span><em>factor=1.5</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.__init__" title="Permalink to this definition">¶</a></dt>
 <dd><p>Initialize an oracle for estimating if a specific overlap integral
-<img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/> is approximately zero. The
-oracle works by computing first and second moments <img class="math" src="../_images/math/126e84ba38f7dece5f0ad64e929b9588b20f6440.png" alt="\mu"/> and <img class="math" src="../_images/math/2298cf1485084afe72757a9c8483af49a138d81f.png" alt="\sigma"/>
-of the highest order function <img class="math" src="../_images/math/ca5185b32984bfd8107d41af4a27499db30b7102.png" alt="\phi_i"/> of both wavepackts <img class="math" src="../_images/math/2b537b2bed799c31f526f1e071c8d0b37b508099.png" alt="\Psi_k"/>
-and <img class="math" src="../_images/math/290e9536e6750ac11e6489d5484493b2a323447d.png" alt="\Psi_l"/> for both, position and momentum. Then we compute the
+<img class="math" src="../_images/math/8280dbd3eccca9d741e6429f5753a6892e2d0abf.png" alt="\langle \Psi_k | \Psi_l \rangle"/> is approximately zero. The
+oracle works by computing first and second moments <img class="math" src="../_images/math/d79e8a2c7ce54906c2b25549da38bdbe02cf40d6.png" alt="\mu"/> and <img class="math" src="../_images/math/011e5790a6c33043ceadca81d9657dde6c61d769.png" alt="\sigma"/>
+of the highest order function <img class="math" src="../_images/math/60836ad199aed9b87c24d65353dfcbf363e2bc78.png" alt="\phi_i"/> of both wavepackts <img class="math" src="../_images/math/3c640be616c740d573b7ee02fd4c715eaa1687db.png" alt="\Psi_k"/>
+and <img class="math" src="../_images/math/9a329c0c3583731978c57c161b402ab525b7b9a3.png" alt="\Psi_l"/> for both, position and momentum. Then we compute the
 estimators:</p>
 <div class="math">
-<p><img src="../_images/math/a7af2dc3625e44f4db22ba62fa7d151ae0755db1.png" alt="\|q_k - q_l\| \leq \alpha ( \|\sigma^q_k\| + \|\sigma^q_l\| )"/></p>
+<p><img src="../_images/math/5a6cf61a576358c783d313227a1126cd3cb6943b.png" alt="\|q_k - q_l\| \leq \alpha ( \|\sigma^q_k\| + \|\sigma^q_l\| )"/></p>
 </div><p>and</p>
 <div class="math">
-<p><img src="../_images/math/25a83c38c415f82cc4ee5ef59f7fe535ab0957dd.png" alt="\|p_k - p_l\| \leq \alpha ( \|\sigma^p_k\| + \|\sigma^p_l\| )"/></p>
+<p><img src="../_images/math/8e8923ef2fb856ad10af4605f210c86af4c8f256.png" alt="\|p_k - p_l\| \leq \alpha ( \|\sigma^p_k\| + \|\sigma^p_l\| )"/></p>
 </div><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The factor <img class="math" src="../_images/math/ad59b6e24a4a00ac621801f8d7513d68be654ab5.png" alt="\alpha"/> in the phase space distance.
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>factor</strong> &#8211; The factor <img class="math" src="../_images/math/877d234f4cec6974ce218fc2e975a486a7972dfd.png" alt="\alpha"/> in the phase space distance.
 The default value of 1.5 should be reasonable in most cases.</td>
 </tr>
 </tbody>
@@ -104,17 +104,17 @@ The default value of 1.5 should be reasonable in most cases.</td>
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.bias">
 <code class="descname">bias</code><span class="sig-paren">(</span><em>bramink=None</em>, <em>ketmink=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.bias"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.bias" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bias the sparsity oracle. The oracle tends to underestimate
-the wavepacket spread for small basis shapes <img class="math" src="../_images/math/6f43991b0a0bf1eb4a569c9ea9759ab1f699e1ac.png" alt="\mathfrak{K}"/>
-and therefore small maximal indices <img class="math" src="../_images/math/f364dc342dae06435b4b03258ebc7fbcab96db39.png" alt="k \in \mathfrak{K}"/>.
-This method allows to set a minimal <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> for both the bra
+the wavepacket spread for small basis shapes <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/>
+and therefore small maximal indices <img class="math" src="../_images/math/fd500e42b81a8490a2ae39e8190d2c2aea7cce24.png" alt="k \in \mathfrak{K}"/>.
+This method allows to set a minimal <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> for both the bra
 and ket independently.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>bramink</strong> &#8211; Minimal <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> for <img class="math" src="../_images/math/703e2130b7a2efd28eabac0d32a0deb86baa2799.png" alt="\langle \Psi |"/></li>
-<li><strong>ketmink</strong> &#8211; Minimal <img class="math" src="../_images/math/e9203da50e1059455123460d4e716c9c7f440cc3.png" alt="k"/> for <img class="math" src="../_images/math/db188f4251fe0130a3d7cfc505ea257448725e48.png" alt="| \Psi \rangle"/></li>
+<li><strong>bramink</strong> &#8211; Minimal <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> for <img class="math" src="../_images/math/9c13b85f93562dc02d2d1302567074c8729ec8f2.png" alt="\langle \Psi |"/></li>
+<li><strong>ketmink</strong> &#8211; Minimal <img class="math" src="../_images/math/0b7c1e16a3a8a849bb8ffdcdbf86f65fd1f30438.png" alt="k"/> for <img class="math" src="../_images/math/01d66ca1c58cabc5543ec48b2e7a6a3474a6b720.png" alt="| \Psi \rangle"/></li>
 </ul>
 </td>
 </tr>
@@ -125,15 +125,15 @@ and ket independently.</p>
 <dl class="method">
 <dt id="WaveBlocksND.SparsityOraclePSHAWP.is_not_zero">
 <code class="descname">is_not_zero</code><span class="sig-paren">(</span><em>pacbra</em>, <em>packet</em>, <em>component=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SparsityOraclePSHAWP.html#SparsityOraclePSHAWP.is_not_zero"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SparsityOraclePSHAWP.is_not_zero" title="Permalink to this definition">¶</a></dt>
-<dd><p>Try to estimate if the overlap integral <img class="math" src="../_images/math/ce0c4b4696ce724d8a8b5834af0224f54d1915cf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
+<dd><p>Try to estimate if the overlap integral <img class="math" src="../_images/math/8280dbd3eccca9d741e6429f5753a6892e2d0abf.png" alt="\langle \Psi_k | \Psi_l \rangle"/>
 is zero or at least negligible.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>pacbra</strong> &#8211; The packet <img class="math" src="../_images/math/2b537b2bed799c31f526f1e071c8d0b37b508099.png" alt="\Psi_k"/> that is used for the &#8216;bra&#8217; part.</li>
-<li><strong>packet</strong> &#8211; The packet <img class="math" src="../_images/math/290e9536e6750ac11e6489d5484493b2a323447d.png" alt="\Psi_l"/> that is used for the &#8216;ket&#8217; part.</li>
+<li><strong>pacbra</strong> &#8211; The packet <img class="math" src="../_images/math/3c640be616c740d573b7ee02fd4c715eaa1687db.png" alt="\Psi_k"/> that is used for the &#8216;bra&#8217; part.</li>
+<li><strong>packet</strong> &#8211; The packet <img class="math" src="../_images/math/9a329c0c3583731978c57c161b402ab525b7b9a3.png" alt="\Psi_l"/> that is used for the &#8216;ket&#8217; part.</li>
 <li><strong>component</strong> &#8211; The component of the packet that is considered.</li>
 </ul>
 </td>
@@ -213,7 +213,7 @@ is zero or at least negligible.</p>
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

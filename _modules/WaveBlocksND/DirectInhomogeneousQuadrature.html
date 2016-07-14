@@ -54,15 +54,15 @@
 <span class="sd">Here we handle the inhomogeneous case.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2013, 2014 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">imag</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">einsum</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">exp</span>
-<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="kn">import</span> <span class="n">sqrtm</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> <span class="n">det</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">ones</span><span class="p">,</span> <span class="n">imag</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">dot</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">einsum</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="k">import</span> <span class="n">exp</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">sqrtm</span><span class="p">,</span> <span class="n">inv</span><span class="p">,</span> <span class="n">det</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectQuadrature</span> <span class="kn">import</span> <span class="n">DirectQuadrature</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.DirectQuadrature</span> <span class="k">import</span> <span class="n">DirectQuadrature</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;DirectInhomogeneousQuadrature&quot;</span><span class="p">]</span>
 
@@ -71,12 +71,12 @@
     <span class="sd">r&quot;&quot;&quot;</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="c1"># Pure convenience to allow setting of quadrature rule in constructor</span>
-        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">set_qr</span><span class="p">(</span><span class="n">QR</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="bp">None</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span> <span class="o">=</span> <span class="kc">None</span>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -95,7 +95,7 @@
         <span class="k">return</span> <span class="n">d</span></div>
 
 
-<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_packet"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_packet"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_packet">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_packet</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pacbra</span><span class="p">,</span> <span class="n">packet</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Provide the wavepacket parts of the inner product to evaluate.</span>
 <span class="sd">        Since the quadrature is inhomogeneous different wavepackets can be</span>
 <span class="sd">        used for the &#39;bra&#39; as well as the &#39;ket&#39; part.</span>
@@ -104,7 +104,7 @@
 <span class="sd">        :param packet: The packet that is used for the &#39;ket&#39; part.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Allow to omit the ket if it is the same as the bra</span>
-        <span class="k">if</span> <span class="n">packet</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">packet</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">packet</span> <span class="o">=</span> <span class="n">pacbra</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span> <span class="o">=</span> <span class="n">pacbra</span>
@@ -114,11 +114,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_weights</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span><span class="o">.</span><span class="n">get_weights</span><span class="p">()</span>
 
         <span class="c1"># Force a call of &#39;preprare&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffbra</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffket</span> <span class="o">=</span> <span class="bp">None</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffbra</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_coeffket</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.initialize_operator"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.initialize_operator">[docs]</a>    <span class="k">def</span> <span class="nf">initialize_operator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">matrix</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Provide the operator part of the inner product to evaluate.</span>
 <span class="sd">        This function initializes the operator used for quadratures</span>
 <span class="sd">        and for building matrices.</span>
@@ -135,11 +135,11 @@
         <span class="c1"># TODO: Make this more efficient, only compute values needed at each (r,c) step.</span>
         <span class="c1">#       For this, &#39;operator&#39; must support the &#39;component=(r,c)&#39; option.</span>
         <span class="c1"># Operator is None is interpreted as identity transformation</span>
-        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
+        <span class="k">if</span> <span class="n">operator</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">if</span> <span class="n">entry</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">entry</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">else</span> <span class="n">zeros</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">nodes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="bp">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">matrix</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">nodes</span><span class="p">,</span> <span class="n">dummy</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="kc">None</span><span class="p">:</span> <span class="n">operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">entry</span><span class="o">=</span><span class="n">entry</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span> <span class="o">=</span> <span class="n">operator</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="o">=</span> <span class="n">eval_at_once</span></div>
@@ -170,8 +170,8 @@
 <span class="sd">        :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># &lt;Pibra | ... | Piket&gt;</span>
-        <span class="p">(</span><span class="n">qr</span><span class="p">,</span> <span class="n">pr</span><span class="p">,</span> <span class="n">Qr</span><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <span class="n">Sr</span><span class="p">)</span> <span class="o">=</span> <span class="n">Pibra</span>
-        <span class="p">(</span><span class="n">qc</span><span class="p">,</span> <span class="n">pc</span><span class="p">,</span> <span class="n">Qc</span><span class="p">,</span> <span class="n">Pc</span><span class="p">,</span> <span class="n">Sc</span><span class="p">)</span> <span class="o">=</span> <span class="n">Piket</span>
+        <span class="n">qr</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Qr</span><span class="p">,</span> <span class="n">Pr</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Pibra</span>
+        <span class="n">qc</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">Qc</span><span class="p">,</span> <span class="n">Pc</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">Piket</span>
 
         <span class="c1"># Mix the parameters</span>
         <span class="n">Gr</span> <span class="o">=</span> <span class="n">dot</span><span class="p">(</span><span class="n">Pr</span><span class="p">,</span> <span class="n">inv</span><span class="p">(</span><span class="n">Qr</span><span class="p">))</span>
@@ -184,10 +184,10 @@
         <span class="n">Q0</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">r</span>
         <span class="n">Q0</span> <span class="o">=</span> <span class="n">inv</span><span class="p">(</span><span class="n">sqrtm</span><span class="p">(</span><span class="n">Q0</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="p">(</span><span class="n">q0</span><span class="p">,</span> <span class="n">Q0</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="n">q0</span><span class="p">,</span> <span class="n">Q0</span></div>
 
 
-<div class="viewcode-block" id="DirectInhomogeneousQuadrature.transform_nodes"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.transform_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">transform_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+<div class="viewcode-block" id="DirectInhomogeneousQuadrature.transform_nodes"><a class="viewcode-back" href="../../waveblocks_classes/DirectInhomogeneousQuadrature.html#WaveBlocksND.DirectInhomogeneousQuadrature.transform_nodes">[docs]</a>    <span class="k">def</span> <span class="nf">transform_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">QR</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Transform the quadrature nodes :math:`\gamma` such that they</span>
 <span class="sd">        fit the given wavepackets :math:`\Phi\left[\Pi_i\right]` and</span>
 <span class="sd">        :math:`\Phi^\prime\left[\Pi_j\right]` best.</span>
@@ -200,10 +200,10 @@
 <span class="sd">        :return: A two-dimensional ndarray of shape :math:`(D, |\Gamma|)` where</span>
 <span class="sd">                 :math:`|\Gamma|` denotes the total number of quadrature nodes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">QR</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_QR</span>
 
-        <span class="k">if</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span> <span class="ow">and</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="bp">False</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">QR</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">QR</span><span class="o">.</span><span class="n">get_nodes</span><span class="p">()</span>
 
         <span class="c1"># Mix the parameters and compute the affine transformation</span>
@@ -232,10 +232,10 @@
         <span class="n">Pimix</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mix_parameters</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">)</span>
         <span class="c1"># Transform nodes and evaluate bases</span>
         <span class="n">nodes</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">transform_nodes</span><span class="p">(</span><span class="n">Pibra</span><span class="p">,</span> <span class="n">Piket</span><span class="p">,</span> <span class="n">eps</span><span class="p">)</span>
-        <span class="n">basisr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
-        <span class="n">basisc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">basisr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pacbra</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">row</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">basisc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_packet</span><span class="o">.</span><span class="n">evaluate_basis_at</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">prefactor</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="c1"># Operator should support the component notation for efficiency</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_eval_at_once</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="c1"># TODO: Sure, this is inefficient, but we can not do better right now.</span>
             <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_operator</span><span class="p">(</span><span class="n">nodes</span><span class="p">,</span> <span class="n">Pimix</span><span class="p">[</span><span class="mi">0</span><span class="p">])[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
@@ -248,7 +248,7 @@
         <span class="c1"># Sum up matrices over all quadrature nodes</span>
         <span class="n">M</span> <span class="o">=</span> <span class="n">einsum</span><span class="p">(</span><span class="s2">&quot;k,ik,jk&quot;</span><span class="p">,</span> <span class="n">factor</span><span class="p">,</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">basisr</span><span class="p">),</span> <span class="n">basisc</span><span class="p">)</span>
         <span class="c1"># Compute global phase difference</span>
-        <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Piket</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
+        <span class="n">phase</span> <span class="o">=</span> <span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">/</span> <span class="n">eps</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span><span class="n">Piket</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span> <span class="o">-</span> <span class="n">conjugate</span><span class="p">(</span><span class="n">Pibra</span><span class="p">[</span><span class="mi">4</span><span class="p">])))</span>
         <span class="k">return</span> <span class="n">phase</span> <span class="o">*</span> <span class="n">M</span></div></div>
 </pre></div>
 
@@ -286,7 +286,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

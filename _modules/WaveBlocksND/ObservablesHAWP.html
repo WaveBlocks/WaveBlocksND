@@ -57,10 +57,10 @@
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
-<span class="kn">from</span> <span class="nn">numpy</span> <span class="kn">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="nb">sum</span>
+<span class="kn">from</span> <span class="nn">functools</span> <span class="k">import</span> <span class="n">partial</span>
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">conjugate</span><span class="p">,</span> <span class="n">squeeze</span><span class="p">,</span> <span class="nb">sum</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Observables</span> <span class="kn">import</span> <span class="n">Observables</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Observables</span> <span class="k">import</span> <span class="n">Observables</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ObservablesHAWP&quot;</span><span class="p">]</span>
 
@@ -72,8 +72,8 @@
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`ObservablesHAWP` instance for observable computation of Hagedorn wavepackets.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="bp">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="kc">None</span>
 
 
 <div class="viewcode-block" id="ObservablesHAWP.set_innerproduct"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.set_innerproduct">[docs]</a>    <span class="k">def</span> <span class="nf">set_innerproduct</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">innerproduct</span><span class="p">):</span>
@@ -97,7 +97,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span> <span class="o">=</span> <span class="n">gradient</span></div>
 
 
-<div class="viewcode-block" id="ObservablesHAWP.norm"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesHAWP.norm"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.norm">[docs]</a>    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Calculate the :math:`L^2` norm :math:`\langle \Psi | \Psi \rangle` of the wavepacket :math:`\Psi`.</span>
 
 <span class="sd">        .. note:: This method is just a shortcut and calls the :py:meth:`HagedornWavepacketBase.norm`</span>
@@ -117,7 +117,7 @@
         <span class="k">return</span> <span class="n">wavepacket</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="n">summed</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="ObservablesHAWP.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesHAWP.kinetic_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.kinetic_energy">[docs]</a>    <span class="k">def</span> <span class="nf">kinetic_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the kinetic energy :math:`E_{\text{kin}} := \langle \Psi | T | \Psi \rangle`</span>
 <span class="sd">        of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.</span>
 
@@ -133,7 +133,7 @@
 <span class="sd">        :return: A list with the kinetic energies of the individual components or the</span>
 <span class="sd">                 overall kinetic energy of the wavepacket. (Depending on the optional arguments.)</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">N</span> <span class="o">=</span> <span class="n">wavepacket</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
             <span class="n">components</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
@@ -142,19 +142,19 @@
         <span class="n">ekin</span> <span class="o">=</span> <span class="p">[]</span>
 
         <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">components</span><span class="p">:</span>
-            <span class="n">Kprime</span><span class="p">,</span> <span class="n">cnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span><span class="o">.</span><span class="n">apply_gradient</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">as_packet</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+            <span class="n">Kprime</span><span class="p">,</span> <span class="n">cnew</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gradient</span><span class="o">.</span><span class="n">apply_gradient</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">n</span><span class="p">,</span> <span class="n">as_packet</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
             <span class="n">ekin</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mf">0.5</span> <span class="o">*</span> <span class="nb">sum</span><span class="p">(</span><span class="nb">sum</span><span class="p">(</span><span class="n">conjugate</span><span class="p">(</span><span class="n">cnew</span><span class="p">)</span> <span class="o">*</span> <span class="n">cnew</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
 
-        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">ekin</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">ekin</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># Do not return a list for specific single components</span>
             <span class="n">ekin</span> <span class="o">=</span> <span class="n">ekin</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">ekin</span></div>
 
 
-<div class="viewcode-block" id="ObservablesHAWP.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="bp">False</span><span class="p">):</span>
+<div class="viewcode-block" id="ObservablesHAWP.potential_energy"><a class="viewcode-back" href="../../waveblocks_classes/ObservablesHAWP.html#WaveBlocksND.ObservablesHAWP.potential_energy">[docs]</a>    <span class="k">def</span> <span class="nf">potential_energy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">summed</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Compute the potential energy :math:`E_{\text{pot}} := \langle \Psi | V(x) | \Psi \rangle`</span>
 <span class="sd">        of the different components :math:`\Phi_i` of the wavepacket :math:`\Psi`.</span>
 
@@ -176,19 +176,19 @@
 
         <span class="c1"># TODO: Better take &#39;V&#39; instead of &#39;V.evaluate_at&#39; as argument?</span>
         <span class="c1"># f = partial(potential.evaluate_at, as_matrix=True)</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">potential</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">partial</span><span class="p">(</span><span class="n">potential</span><span class="p">,</span> <span class="n">as_matrix</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="c1"># Compute the brakets for each component</span>
-        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">:</span>
-            <span class="n">epot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">diag_component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">epot</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">diag_component</span><span class="o">=</span><span class="n">component</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="bp">True</span><span class="p">)</span>
+            <span class="n">Q</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_innerproduct</span><span class="o">.</span><span class="n">quadrature</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">operator</span><span class="o">=</span><span class="n">f</span><span class="p">,</span> <span class="n">eval_at_once</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
             <span class="c1"># And don&#39;t forget the summation in the matrix multiplication of &#39;operator&#39; and &#39;ket&#39;</span>
             <span class="c1"># TODO: Should this go inside the innerproduct?</span>
             <span class="n">tmp</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="n">squeeze</span><span class="p">,</span> <span class="n">Q</span><span class="p">))</span>
             <span class="n">epot</span> <span class="o">=</span> <span class="p">[</span><span class="nb">sum</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="n">N</span><span class="p">:(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">N</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)]</span>
 
-        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">summed</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">epot</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">epot</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="n">epot</span></div></div>
@@ -228,7 +228,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>

@@ -58,9 +58,9 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="kn">import</span> <span class="nn">types</span>
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span> <span class="nn">copy</span> <span class="k">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.ParameterProvider</span> <span class="kn">import</span> <span class="n">ParameterProvider</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.ParameterProvider</span> <span class="k">import</span> <span class="n">ParameterProvider</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ParameterLoader&quot;</span><span class="p">]</span>
 
@@ -79,7 +79,7 @@
         <span class="c1"># Execute the configuration file, they are plain python files</span>
         <span class="n">globalvals</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">localvals</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">exec</span><span class="p">(</span><span class="n">_scriptcode</span><span class="p">,</span> <span class="n">globalvals</span><span class="p">,</span> <span class="n">localvals</span><span class="p">)</span>
+        <span class="n">exec</span><span class="p">(</span><span class="n">_scriptcode</span><span class="p">,</span> <span class="n">globalvals</span><span class="p">,</span> <span class="n">localvals</span><span class="p">)</span>
 
         <span class="c1"># Filter out private variables (the ones prefixed by &quot;_&quot;)</span>
         <span class="c1"># Instances like &quot;self&quot; and imported modules.</span>
@@ -160,7 +160,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &copy; Copyright 2016, R. Bourquin.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.4.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
     </div>
   </body>
 </html>
