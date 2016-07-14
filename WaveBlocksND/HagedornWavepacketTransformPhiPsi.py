@@ -60,7 +60,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param D: The dimension :math:`D` of the wavepacket.
         :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.
         """
-        return [vstack(lattice_points_norm(D, i)) for i in range(order + 1)]
+        return [list(lattice_points_norm(D, i)) for i in range(order + 1)]
 
 
     def _adapt_index_order(self, BS, MU):
@@ -71,8 +71,8 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param BS: The basis shape :math:`\mathfrak{K}`.
         :param MU: The list of all :math:`\mu_i`.
         """
-        mu = vstack(MU)
-        return array([BS[tuple(mu[k, :])] for k in range(BS.get_basis_size())])
+        mu = [item for mui in MU for item in mui]
+        return array([BS[mu[k]] for k in range(BS.get_basis_size())])
 
 
     def overlap(self, D, Pi, eps):
@@ -124,7 +124,6 @@ class HagedornWavepacketTransformPhiPsi(object):
         for i, k in enumerate(nu):
             lut[tuple(k)].append(i)
 
-        # TODO: Maybe convert lists to arrays?
         return lut
 
 
@@ -137,13 +136,10 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param lut: The lookup table.
         :param v: The vector :math:`\underline{v} \in \mathcal{X}_i`.
         """
-        nmu = mu.shape[0]
-        res = zeros(nmu, dtype=v.dtype)
+        res = zeros(len(mu), dtype=v.dtype)
 
-        for i in range(nmu):
-            mui = tuple(mu[i, :])
-            j = lut[mui][0]
-            res[i] = sqrt(multinomial(mui)) * v[j]
+        for i in range(len(mu)):
+            res[i] = sqrt(multinomial(mu[i])) * v[lut[mu[i]][0]]
 
         return res
 
@@ -157,14 +153,10 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param lut: The lookup table.
         :param v: The vector :math:`\underline{v} \in \mathbb{C}^{n(D,i)}`.
         """
-        nmu = mu.shape[0]
-        nnu = nu.shape[0]
-        res = zeros(nnu, dtype=v.dtype)
+        res = zeros(nu.shape[0], dtype=v.dtype)
 
-        for i in range(nmu):
-            mui = tuple(mu[i, :])
-            j = lut[mui]
-            res[j] = 1.0 / sqrt(multinomial(mui)) * v[i]
+        for i in range(len(mu)):
+            res[lut[mu[i]]] = 1.0 / sqrt(multinomial(mu[i])) * v[i]
 
         return res
 
@@ -176,12 +168,13 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param D: The dimension :math:`D`.
         :param A: The matrix :math:`\mathbf{A}`.
         :param v: The vector :math:`\underline{v}`.
-        :param i: The integer Kronecker power exponent.
+        :param i: The non-negative integer Kronecker power exponent.
 
         .. note:: The matrix has to be square and of size :math:`D^i`.
         """
         assert i >= 0
 
+        # Select from 'data' exactly 'size' items every 'step' with offset 'base'
         select = lambda data, base, size, step: data.reshape(-1, step)[:, base*size:(base+1)*size]
 
         if i == 0:
