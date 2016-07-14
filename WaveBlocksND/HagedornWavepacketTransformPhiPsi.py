@@ -9,7 +9,7 @@
 from collections import defaultdict
 
 from numpy import (complexfloating, array, hstack, vstack, split, integer,
-                   conjugate, zeros, identity, zeros_like, cumsum)
+                   conjugate, zeros, identity, zeros_like, cumsum, sum)
 from scipy import sqrt
 from scipy.special import binom
 
@@ -59,28 +59,35 @@ class HagedornWavepacketTransformPhiPsi(object):
         return [vstack(lattice_points_norm(D, i)) for i in range(order + 1)]
 
 
-    def mapit(BS, MU, c):
+    def mapit(self, BS, MU, c):
         # TODO: Will resolve in identity
         cm = zeros_like(c)
         K = BS.get_basis_size()
         mu = vstack(MU)
         for k in range(K):
-            cm[BS[tuple(mu[k,:])]] = c[k]
+            cm[BS[tuple(mu[k, :])]] = c[k]
         return cm
 
 
-    def mapitinv(BS, MU, c):
+    def mapitinv(self, BS, MU, c):
         # TODO: Will resolve in identity
         cm = zeros_like(c)
         K = BS.get_basis_size()
         mu = vstack(MU)
         for k in range(K):
-            cm[k] = c[BS[tuple(mu[k,:])]]
+            cm[k] = c[BS[tuple(mu[k, :])]]
         return cm
 
 
     def overlap(self, D, Pi, eps):
-        r"""
+        r"""Compute the overlap matrix:
+
+        .. math::
+            \mathbf{K}_{r,c} \assign \langle \psi_{\underline{e_r}}[\Pi] | \phi_{\underline{e_c}}[\Pi] \rangle
+
+        :param D: The dimension :math:`D`.
+        :param Pi: The parameter set :math:`\Pi`.
+        :param eps: The semiclassical scaling parameter :math:`\varepsilon`.
         """
         ED = list(lattice_points_norm(D, 1))
 
@@ -113,8 +120,9 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def build_lut(self, nu):
-        r"""
-        Build the lookup table for simultaneuos multi-acces to arrays by labellists.
+        r"""Build the lookup table for simultaneuos multi-acces to arrays by label lists.
+
+        :param nu: The list of all :math:`\nu_i`.
         """
         lut = defaultdict(list)
 
@@ -126,16 +134,13 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_Pi_v(self, nu, mu, lut, v):
-        r"""
-        Multiply the matrix :math:`P_i` by a vector :math:`v` from the right.
+        r"""Multiply the matrix :math:`P_i` by a underlinetor :math:`v` from the right.
 
-        :param nu: The list :math:`\nu`.
-        :param mu: The list :math:`\mu`.
         :param lut: The lookup table.
         :param v: The vector :math:`v \in \mathcal{X}_i`.
         """
         nmu = mu.shape[0]
-        res = zeros((nmu), dtype=v.dtype)
+        res = zeros(nmu, dtype=v.dtype)
 
         for i in range(nmu):
             mui = tuple(mu[i, :])
@@ -146,8 +151,7 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_PiT_v(self, nu, mu, lut, v):
-        r"""
-        Multiply the matrix :math:`P_i^{T}` by a vector :math:`v` from the right.
+        r"""Multiply the matrix :math:`P_i^{T}` by a vector :math:`v` from the right.
 
         :param nu: The list :math:`\nu`.
         :param mu: The list :math:`\mu`.
@@ -156,7 +160,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         """
         nmu = mu.shape[0]
         nnu = nu.shape[0]
-        res = zeros((nnu), dtype=v.dtype)
+        res = zeros(nnu, dtype=v.dtype)
 
         for i in range(nmu):
             mui = tuple(mu[i, :])
@@ -166,10 +170,9 @@ class HagedornWavepacketTransformPhiPsi(object):
         return res
 
 
-    def multiply_kronecker_power_v(self, A, v, i):
-        r"""
-        Multiply the :math:`i`-th Kronecker power of the matrix :math:`A` by a
-        vector :math:`v` from the right.
+    def multiply_kronecker_power_v(self, D, A, v, i):
+        r"""Multiply the :math:`i`-th Kronecker power of the matrix :math:`A`
+        by a vector :math:`v` from the right.
 
         :param A: The matrix :math:`A`.
         :param v: The vector :math:`v`.
@@ -183,9 +186,6 @@ class HagedornWavepacketTransformPhiPsi(object):
 
         if i == 0:
             return v
-
-        assert A.shape[0] == A.shape[1]
-        D = A.shape[0]
 
         w = v
         for j in range(i):
@@ -202,8 +202,7 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_T_v(self, coeffs, K, NU, MU, D, J):
-        r"""
-        Apply the transformation matrix :math:`T` to the coefficients :math:`c`.
+        r"""Apply the transformation matrix :math:`T` to the coefficients :math:`c`.
 
         :param coeffs:
         :param K:
@@ -221,7 +220,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         for i, ci in enumerate(Ci):
             lut = self.build_lut(NU[i])
             cit = self.multiply_PiT_v(NU[i], MU[i], lut, ci)
-            cit = self.multiply_kronecker_power_v(K, cit, i)
+            cit = self.multiply_kronecker_power_v(D, K, cit, i)
             cit = self.multiply_Pi_v(NU[i], MU[i], lut, cit)
             Cit.append(cit)
 
@@ -229,88 +228,88 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_Tinv_v(self, coeffs, K, NU, MU, D, J):
-        r"""
+        r"""Apply the transformation matrix :math:`T` to the coefficients :math:`d`.
+
+        :param coeffs:
+        :param K:
+        :param NU:
+        :param MU:
+        :param D:
+        :param J:
         """
         nDm = lambda D, m: int(binom(D + m - 1, m))
 
-        raise NotImplementedError()
+        s = [nDm(D, i) for i in range(J)]
+        Ci = split(coeffs, cumsum(s))
+        Cit = []
+
+        Kinv = K.transpose().conjugate()
+
+        for i, ci in enumerate(Ci):
+            lut = self.build_lut(NU[i])
+            cit = self.multiply_PiT_v(NU[i], MU[i], lut, ci)
+            cit = self.multiply_kronecker_power_v(D, Kinv, cit, i)
+            cit = self.multiply_Pi_v(NU[i], MU[i], lut, cit)
+            Cit.append(cit)
+
+        return hstack(Cit).reshape(*coeffs.shape)
 
 
-    def transform_phi_psi(self, HAWPold):
-        r"""
-        # Old -> New
-        # Muliply by T
+    def _transform(self, HAWPfrom, LOP, HAWPtoConstructor):
+        r"""The transformation logic. This function can transform
+        in both directions depending on the linear operator argument.
+
+        :param HAWPfrom: The wavepacket to transform.
+        :param LOP: The linear transformation operator, either :math:`T` or :math:`T^{-1}`.
+        :param HAWPtoConstructor: Constructor of the resulting wavepacket type.
         """
-        D = HAWPold.get_dimension()
+        if not HAWPfrom.get_number_components() == 1:
+            raise NotImplementedError("Only scalar wavepackets are supported.")
 
-        # TODO: We handle scalar wavepackets only
-        BS = HAWPold.get_basis_shapes(component=0)
+        D = HAWPfrom.get_dimension()
+        BS = HAWPfrom.get_basis_shapes(component=0)
 
         if not isinstance(BS, SimplexShape):
             raise ValueError("The wavepacket does not have a simplex basis shape.")
 
-        # J = sum(BS.find_largest_index())
         J = BS.get_description()['K']
 
         NU = self.build_nu(D, J)
         MU = self.build_mu(D, J)
 
         # Compute small overlap matrix
-        Pi = HAWPold.get_parameters()
-        eps = HAWPold.get_eps()
-
+        Pi = HAWPfrom.get_parameters()
+        eps = HAWPfrom.get_eps()
         M = self.overlap(D, Pi, eps)
 
         # Permutation, adapter to basis index order
-        cold = HAWPold.get_coefficients(component=0)
-        coldt = self.mapitinv(BS, MU, cold)
-        cnewt = self.multiply_T_v(coldt, M, NU, MU, D, J)
-        cnew = self.mapit(BS, MU, cnewt)
+        cfrom = HAWPfrom.get_coefficients(component=0)
+        cfromt = self.mapitinv(BS, MU, cfrom)
+        ctot = LOP(cfromt, M, NU, MU, D, J)
+        cto = self.mapit(BS, MU, ctot)
 
-        # Set up a new wavepacket
-        HAWPnew = HagedornWavepacketNew(D, 1, eps)
-        HAWPnew.set_parameters(Pi)
-        HAWPnew.set_basis_shapes([BS])
-        HAWPnew.set_coefficients(cnew)
+        # Set up a to wavepacket
+        HAWPto = HAWPtoConstructor(D, 1, eps)
+        HAWPto.set_parameters(Pi)
+        HAWPto.set_basis_shapes(BS, component=0)
+        HAWPto.set_coefficients(cto, component=0)
 
-        return HAWPnew
+        return HAWPto
 
 
-    def transform_psi_phi(self, HAWPnew):
-        r"""
-        # New -> Old
-        # Multiply by T^{-1}
+    def transform_phi_to_psi(self, HAWPphi):
+        r"""Transform a old-kind wavepacket :math:`\Phi` into a new-kind wavepacket :math:`\Psi`.
+
+        :param HAWPphi: The wavepacket :math:`\Phi` to transform.
+        :return: A new wavepacket object for :math:`\Psi`.
         """
-        D = HAWPnew.get_dimension()
+        return self._transform(HAWPphi, self.multiply_T_v, HagedornWavepacketNew)
 
-        # TODO: We handle scalar wavepackets only
-        BS = HAWPnew.get_basis_shapes(component=0)
 
-        if not isinstance(BS, SimplexShape):
-            raise ValueError("The wavepacket does not have a simplex basis shape.")
+    def transform_psi_to_phi(self, HAWPpsi):
+        r"""Transform a new-kind wavepacket :math:`\Psi` into a old-kind wavepacket :math:`\Phi`.
 
-        # J = sum(BS.find_largest_index())
-        J = BS.get_description()['K']
-
-        NU = self.build_nu(D, J)
-        MU = self.build_mu(D, J)
-
-        # Compute small overlap matrix
-        Pi = HAWPnew.get_parameters()
-        eps = HAWPnew.get_eps()
-
-        M = self.overlap(D, Pi, eps)
-
-        # Permutation, adapter to basis index order
-        cnew = HAWPnew.get_coefficients(component=0)
-        cnewt = self.mapitinv(BS, MU, cnew)
-        coldt = self.multiply_Tinv_v(cnewt, M, NU, MU, D, J)
-        cold = self.mapit(BS, MU, coldt)
-
-        # Set up a new wavepacket
-        HAWPold = HagedornWavepacketNew(D, 1, eps)
-        HAWPold.set_parameters(Pi)
-        HAWPold.set_basis_shapes([BS])
-        HAWPold.set_coefficients(cold)
-
-        return HAWPold
+        :param HAWPphi: The wavepacket :math:`\Psi` to transform.
+        :return: A new wavepacket object for :math:`\Phi`.
+        """
+        return self._transform(HAWPpsi, self.multiply_Tinv_v, HagedornWavepacket)

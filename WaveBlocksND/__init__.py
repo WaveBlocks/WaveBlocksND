@@ -70,6 +70,8 @@ from WaveBlocksND.GradientHAWP import GradientHAWP
 from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
 from WaveBlocksND.PositionHAWP import PositionHAWP
 
+from WaveBlocksND.HagedornWavepacketTransformPhiPsi import HagedornWavepacketTransformPhiPsi
+
 # Linear combinations
 from WaveBlocksND.LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
 from WaveBlocksND.LinearCombinationOfWPs import LinearCombinationOfWPs
