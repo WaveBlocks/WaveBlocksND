@@ -30,15 +30,16 @@ __all__ = ["HagedornWavepacketTransformPhiPsi"]
 class HagedornWavepacketTransformPhiPsi(object):
     r"""
     """
+
     def __init__(self):
         pass
 
 
-    def build_nu(self, D, order):
+    def _build_nu(self, D, order):
         r"""Build the list containing the :math:`\nu_i`.
 
         :param D: The dimension :math:`D` of the wavepacket.
-        :param order: The maximal :math:`l_1` norm of any basis index :math:`k`.
+        :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.
         """
         # ED = vsplit(identity(D, dtype=integer), D)
         ED = identity(D, dtype=integer)
@@ -49,17 +50,17 @@ class HagedornWavepacketTransformPhiPsi(object):
         return nu
 
 
-    def build_mu(self, D, order):
+    def _build_mu(self, D, order):
         r"""Build the list containing the :math:`\mu_i`.
 
         :param D: The dimension :math:`D` of the wavepacket.
-        :param order: The maximal :math:`l_1` norm of any basis index :math:`k`.
+        :param order: The maximal :math:`l_1` norm of any basis index :math:`\underline{k}`.
         """
         # TODO: Replace by K-nativ ordering
         return [vstack(lattice_points_norm(D, i)) for i in range(order + 1)]
 
 
-    def mapit(self, BS, MU, c):
+    def _mapit(self, BS, MU, c):
         # TODO: Will resolve in identity
         cm = zeros_like(c)
         K = BS.get_basis_size()
@@ -69,7 +70,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         return cm
 
 
-    def mapitinv(self, BS, MU, c):
+    def _mapitinv(self, BS, MU, c):
         # TODO: Will resolve in identity
         cm = zeros_like(c)
         K = BS.get_basis_size()
@@ -83,7 +84,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         r"""Compute the overlap matrix:
 
         .. math::
-            \mathbf{K}_{r,c} \assign \langle \psi_{\underline{e_r}}[\Pi] | \phi_{\underline{e_c}}[\Pi] \rangle
+            \mathbf{K}_{r,c} := \langle \psi_{\underline{e_r}}[\Pi] | \phi_{\underline{e_c}}[\Pi] \rangle
 
         :param D: The dimension :math:`D`.
         :param Pi: The parameter set :math:`\Pi`.
@@ -119,7 +120,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         return M
 
 
-    def build_lut(self, nu):
+    def _built_lut(self, nu):
         r"""Build the lookup table for simultaneuos multi-acces to arrays by label lists.
 
         :param nu: The list of all :math:`\nu_i`.
@@ -134,10 +135,13 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_Pi_v(self, nu, mu, lut, v):
-        r"""Multiply the matrix :math:`P_i` by a underlinetor :math:`v` from the right.
+        r"""Multiply the matrix :math:`\mathbf{P_i}` by a vector :math:`\underline{v}`
+        from the right. Do not construct the matrix explicitly.
 
+        :param nu: The list :math:`\nu_i`.
+        :param mu: The list :math:`\mu_i`.
         :param lut: The lookup table.
-        :param v: The vector :math:`v \in \mathcal{X}_i`.
+        :param v: The vector :math:`\underline{v} \in \mathcal{X}_i`.
         """
         nmu = mu.shape[0]
         res = zeros(nmu, dtype=v.dtype)
@@ -151,12 +155,13 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_PiT_v(self, nu, mu, lut, v):
-        r"""Multiply the matrix :math:`P_i^{T}` by a vector :math:`v` from the right.
+        r"""Multiply the matrix :math:`\mathbf{P_i}^{\mathrm{T}}` by a vector
+        :math:`\underline{v}` from the right. Do not construct the matrix explicitly.
 
-        :param nu: The list :math:`\nu`.
-        :param mu: The list :math:`\mu`.
+        :param nu: The list :math:`\nu_i`.
+        :param mu: The list :math:`\mu_i`.
         :param lut: The lookup table.
-        :param v: The vector :math:`v \in \mathbb{C}^{n(D,i)}`.
+        :param v: The vector :math:`\underline{v} \in \mathbb{C}^{n(D,i)}`.
         """
         nmu = mu.shape[0]
         nnu = nu.shape[0]
@@ -171,14 +176,15 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_kronecker_power_v(self, D, A, v, i):
-        r"""Multiply the :math:`i`-th Kronecker power of the matrix :math:`A`
-        by a vector :math:`v` from the right.
+        r"""Multiply the :math:`i`-th Kronecker power of the matrix :math:`\mathbf{A}`
+        by a vector :math:`\underline{v}` from the right.
 
-        :param A: The matrix :math:`A`.
-        :param v: The vector :math:`v`.
+        :param D: The dimension :math:`D`.
+        :param A: The matrix :math:`\mathbf{A}`.
+        :param v: The vector :math:`\underline{v}`.
         :param i: The integer Kronecker power exponent.
 
-        .. note:: The matrix has to be square.
+        .. note:: The matrix has to be square and of size :math:`D^i`.
         """
         assert i >= 0
 
@@ -202,14 +208,14 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_T_v(self, coeffs, K, NU, MU, D, J):
-        r"""Apply the transformation matrix :math:`T` to the coefficients :math:`c`.
+        r"""Apply the transformation matrix :math:`\mathbf{T}` to the coefficients :math:`\underline{c}`.
 
-        :param coeffs:
-        :param K:
-        :param NU:
-        :param MU:
-        :param D:
-        :param J:
+        :param coeffs: The coefficients vector :math:`\underline{c}`.
+        :param K: The overlap matrix :math:`\mathbf{K}`.
+        :param NU: The list of all :math:`\nu_i`.
+        :param Nu: The list of all :math:`\mu_i`.
+        :param D: The dimension :math:`D`.
+        :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.
         """
         nDm = lambda D, m: int(binom(D + m - 1, m))
 
@@ -218,7 +224,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         Cit = []
 
         for i, ci in enumerate(Ci):
-            lut = self.build_lut(NU[i])
+            lut = self._built_lut(NU[i])
             cit = self.multiply_PiT_v(NU[i], MU[i], lut, ci)
             cit = self.multiply_kronecker_power_v(D, K, cit, i)
             cit = self.multiply_Pi_v(NU[i], MU[i], lut, cit)
@@ -228,14 +234,15 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def multiply_Tinv_v(self, coeffs, K, NU, MU, D, J):
-        r"""Apply the transformation matrix :math:`T` to the coefficients :math:`d`.
+        r"""Apply the transformation matrix :math:`\mathbf{T}^{-1}`
+        to the coefficients :math:`\underline{d}`.
 
-        :param coeffs:
-        :param K:
-        :param NU:
-        :param MU:
-        :param D:
-        :param J:
+        :param coeffs: The coefficients vector :math:`\underline{d}`.
+        :param K: The overlap matrix :math:`\mathbf{K}`.
+        :param NU: The list of all :math:`\nu_i`.
+        :param Nu: The list of all :math:`\mu_i`.
+        :param D: The dimension :math:`D`.
+        :param J: The maximal :math:`l_1` norm of any :math:`\underline{k} \in \mathfrak{K}`.
         """
         nDm = lambda D, m: int(binom(D + m - 1, m))
 
@@ -246,7 +253,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         Kinv = K.transpose().conjugate()
 
         for i, ci in enumerate(Ci):
-            lut = self.build_lut(NU[i])
+            lut = self._built_lut(NU[i])
             cit = self.multiply_PiT_v(NU[i], MU[i], lut, ci)
             cit = self.multiply_kronecker_power_v(D, Kinv, cit, i)
             cit = self.multiply_Pi_v(NU[i], MU[i], lut, cit)
@@ -260,7 +267,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         in both directions depending on the linear operator argument.
 
         :param HAWPfrom: The wavepacket to transform.
-        :param LOP: The linear transformation operator, either :math:`T` or :math:`T^{-1}`.
+        :param LOP: The linear transformation operator, either :math:`\mathbf{T}` or :math:`\mathbf{T}^{-1}`.
         :param HAWPtoConstructor: Constructor of the resulting wavepacket type.
         """
         if not HAWPfrom.get_number_components() == 1:
@@ -274,8 +281,8 @@ class HagedornWavepacketTransformPhiPsi(object):
 
         J = BS.get_description()['K']
 
-        NU = self.build_nu(D, J)
-        MU = self.build_mu(D, J)
+        NU = self._build_nu(D, J)
+        MU = self._build_mu(D, J)
 
         # Compute small overlap matrix
         Pi = HAWPfrom.get_parameters()
@@ -284,9 +291,9 @@ class HagedornWavepacketTransformPhiPsi(object):
 
         # Permutation, adapter to basis index order
         cfrom = HAWPfrom.get_coefficients(component=0)
-        cfromt = self.mapitinv(BS, MU, cfrom)
+        cfromt = self._mapitinv(BS, MU, cfrom)
         ctot = LOP(cfromt, M, NU, MU, D, J)
-        cto = self.mapit(BS, MU, ctot)
+        cto = self._mapit(BS, MU, ctot)
 
         # Set up a to wavepacket
         HAWPto = HAWPtoConstructor(D, 1, eps)
@@ -298,18 +305,18 @@ class HagedornWavepacketTransformPhiPsi(object):
 
 
     def transform_phi_to_psi(self, HAWPphi):
-        r"""Transform a old-kind wavepacket :math:`\Phi` into a new-kind wavepacket :math:`\Psi`.
+        r"""Transform a old-kind wavepacket :math:`\Phi[\Pi]` into a new-kind wavepacket :math:`\Psi[\Pi]`.
 
-        :param HAWPphi: The wavepacket :math:`\Phi` to transform.
-        :return: A new wavepacket object for :math:`\Psi`.
+        :param HAWPphi: The wavepacket :math:`\Phi[\Pi]` to transform.
+        :return: A new wavepacket object representing :math:`\Psi[\Pi]`.
         """
         return self._transform(HAWPphi, self.multiply_T_v, HagedornWavepacketNew)
 
 
     def transform_psi_to_phi(self, HAWPpsi):
-        r"""Transform a new-kind wavepacket :math:`\Psi` into a old-kind wavepacket :math:`\Phi`.
+        r"""Transform a new-kind wavepacket :math:`\Psi[\Pi]` into a old-kind wavepacket :math:`\Phi[\Pi]`.
 
-        :param HAWPphi: The wavepacket :math:`\Psi` to transform.
-        :return: A new wavepacket object for :math:`\Phi`.
+        :param HAWPpsi: The wavepacket :math:`\Psi[\Pi]` to transform.
+        :return: A new wavepacket object representing :math:`\Phi[\Pi]`.
         """
         return self._transform(HAWPpsi, self.multiply_Tinv_v, HagedornWavepacket)

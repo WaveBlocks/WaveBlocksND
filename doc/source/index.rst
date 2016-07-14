@@ -100,6 +100,8 @@ Wavepackets
    waveblocks_classes/GradientHAWP
    waveblocks_classes/PositionHAWP
 
+   waveblocks_classes/HagedornWavepacketTransformPhiPsi
+
    waveblocks_classes/BasisTransformation
    waveblocks_classes/BasisTransformationWF
    waveblocks_classes/BasisTransformationHAWP
