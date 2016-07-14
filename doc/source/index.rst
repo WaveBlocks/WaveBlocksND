@@ -95,10 +95,12 @@ Wavepackets
    waveblocks_classes/HagedornWavepacketBase
    waveblocks_classes/HagedornWavepacket
    waveblocks_classes/HagedornWavepacketInhomogeneous
+   waveblocks_classes/HagedornWavepacketNew
 
    waveblocks_classes/Gradient
    waveblocks_classes/GradientHAWP
    waveblocks_classes/PositionHAWP
+   waveblocks_classes/GradientHAWPnew
 
    waveblocks_classes/HagedornWavepacketTransformPhiPsi
 
