@@ -3,7 +3,7 @@
 This file contains the class which represents a homogeneous Hagedorn wavepacket.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
+@copyright: Copyright (C) 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,18 +13,19 @@ from numpy.linalg import det
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 from WaveBlocksND.ComplexMath import ContinuousSqrt
-from WaveBlocksND.HagedornBasisEvaluationPhi import HagedornBasisEvaluationPhi
+from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
+from WaveBlocksND.HagedornBasisEvaluationPsi import HagedornBasisEvaluationPsi
 
-__all__ = ["HagedornWavepacket"]
+__all__ = ["HagedornWavepacketNew"]
 
 
-class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
+class HagedornWavepacketNew(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
     r"""This class represents homogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
 
     def __init__(self, dimension, ncomponents, eps):
-        r"""Initialize a new homogeneous Hagedorn wavepacket.
+        r"""Initialize a new homogeneous Hagedorn wavepacket of the new kind.
 
         :param dimension: The space dimension :math:`D` the packet has.
         :param ncomponents: The number :math:`N` of components the packet has.
@@ -89,7 +90,7 @@ class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
         never contains any data.
         """
         d = {}
-        d["type"] = "HagedornWavepacket"
+        d["type"] = "HagedornWavepacketNew"
         d["dimension"] = self._dimension
         d["ncomponents"] = self._number_components
         d["eps"] = self._eps
@@ -103,9 +104,9 @@ class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
         params = self.get_description()
         # Create a new Packet
         # TODO: Consider using the block factory
-        other = HagedornWavepacket(params["dimension"],
-                                   params["ncomponents"],
-                                   params["eps"])
+        other = HagedornWavepacketNew(params["dimension"],
+                                      params["ncomponents"],
+                                      params["eps"])
         # If we wish to keep the packet ID
         if keepid is True:
             other.set_id(self.get_id())
@@ -176,3 +177,12 @@ class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
                 self._get_sqrt(component).set(squeeze(item))
             else:
                 raise KeyError("Invalid parameter key: {}".format(key))
+
+
+    def get_gradient_operator(self):
+        r"""Return the :py:class:`Gradient` subclass suitable for
+        computing gradients of this wavepacket.
+
+        :return: A :py:class:`GradientHAWP` instance.
+        """
+        return GradientHAWPnew()

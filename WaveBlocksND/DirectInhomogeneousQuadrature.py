@@ -5,7 +5,7 @@ and matrix elements by using standard quadrature rules.
 Here we handle the inhomogeneous case.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2013, 2014 R. Bourquin
+@copyright: Copyright (C) 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -121,8 +121,8 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         :return: The mixed parameters :math:`q_0` and :math:`Q_S`. (See the theory for details.)
         """
         # <Pibra | ... | Piket>
-        (qr, pr, Qr, Pr, Sr) = Pibra
-        (qc, pc, Qc, Pc, Sc) = Piket
+        qr, _, Qr, Pr, _ = Pibra
+        qc, _, Qc, Pc, _ = Piket
 
         # Mix the parameters
         Gr = dot(Pr, inv(Qr))
@@ -135,10 +135,10 @@ class DirectInhomogeneousQuadrature(DirectQuadrature):
         Q0 = 0.5 * r
         Q0 = inv(sqrtm(Q0))
 
-        return (q0, Q0)
+        return q0, Q0
 
 
-    def transform_nodes(self, Pibra, Piket, eps, QR=None):
+    def transform_nodes(self, Pibra, Piket, eps, *, QR=None):
         r"""Transform the quadrature nodes :math:`\gamma` such that they
         fit the given wavepackets :math:`\Phi\left[\Pi_i\right]` and
         :math:`\Phi^\prime\left[\Pi_j\right]` best.

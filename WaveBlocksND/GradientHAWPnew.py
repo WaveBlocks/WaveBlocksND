@@ -1,24 +1,26 @@
 """The WaveBlocks Project
 
-Compute the action of the gradient operator applied to a Hagedorn wavepacket.
+Compute the action of the gradient operator applied to a new-kind Hagedorn wavepacket.
 
 @author: R. Bourquin
 @copyright: Copyright (C) 2012, 2013, 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
-from numpy import zeros, complexfloating, conjugate, squeeze
+from numpy import zeros, complexfloating, squeeze, dot, diag, real
+from numpy.linalg import inv
 from scipy import sqrt
+from scipy.linalg import polar, eigh
 
 from WaveBlocksND.WavepacketGradient import WavepacketGradient
 
-__all__ = ["GradientHAWP"]
+__all__ = ["GradientHAWPnew"]
 
 
-class GradientHAWP(WavepacketGradient):
+class GradientHAWPnew(WavepacketGradient):
     r"""This class implements the computation of the action of the
     gradient operator :math:`-i \varepsilon^2 \nabla_x` applied to
-    a Hagedorn wavepacket :math:`\Psi`.
+    a new-kind Hagedorn wavepacket :math:`\Psi`.
     """
 
     def __init__(self):
@@ -28,8 +30,9 @@ class GradientHAWP(WavepacketGradient):
 
 
     def apply_gradient_component(self, wavepacket, component):
-        r"""Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x` on the basis
-        functions :math:`\phi(x)` of a component :math:`\Phi_i` of the Hagedorn wavepacket :math:`\Psi`.
+        r"""Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x`
+        on the basis functions :math:`\psi(x)` of a component :math:`\Phi_i` of the
+        new-kind Hagedorn wavepacket :math:`\Psi`.
 
         :param wavepacket: The wavepacket :math:`\Psi` containing :math:`\Phi_i`.
         :type wavepacket: A :py:class:`HagedornWavepacketBase` subclass instance.
@@ -43,7 +46,16 @@ class GradientHAWP(WavepacketGradient):
         D = wavepacket.get_dimension()
         eps = wavepacket.get_eps()
         q, p, Q, P, S = wavepacket.get_parameters(component=component)
-        Pbar = conjugate(P)
+
+        _, PA = polar(Q, side='left')
+        EW, EV = eigh(real(PA))
+
+        E = real(dot(P, inv(Q)))
+        F1 = dot(E, dot(inv(EV.T), diag(EW)))
+        F2 = 1.0j * dot(inv(EV.T), diag(1.0 / EW))
+        Gb = F1 - F2
+        Gf = F1 + F2
+
         coeffs = wavepacket.get_coefficients(component=component)
 
         # Prepare storage for new coefficients
@@ -61,12 +73,16 @@ class GradientHAWP(WavepacketGradient):
             nbw = Ke.get_neighbours(k, selection="backward")
 
             for d, nb in nbw:
-                cnew[Ke[nb], :] += sqrt(eps**2 / 2.0) * sqrt(k[d]) * coeffs[K[k]] * Pbar[:, d]
+                cnew[Ke[nb], :] += (sqrt(eps**2 / 2.0) *
+                                    sqrt(k[d]) * coeffs[K[k]] *
+                                    Gb[:, d])
 
             # Forward neighbours phi_{i + e_d}
             nfw = Ke.get_neighbours(k, selection="forward")
 
             for d, nb in nfw:
-                cnew[Ke[nb], :] += sqrt(eps**2 / 2.0) * sqrt(k[d] + 1.0) * coeffs[K[k]] * P[:, d]
+                cnew[Ke[nb], :] += (sqrt(eps**2 / 2.0) *
+                                    sqrt(k[d] + 1.0) * coeffs[K[k]] *
+                                    Gf[:, d])
 
         return (Ke, cnew)

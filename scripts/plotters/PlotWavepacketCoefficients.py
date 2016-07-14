@@ -99,11 +99,11 @@ def plot_coefficients(parameters, data, absang=False, index=0, reim=False, imgsi
             if j is not None:
                 ax = fig.add_subplot(N, 1, level + 1)
 
-                if not reim:
-                    ax.plot(time, angle(coeffs[level][:, j]), label=r"$\arg c$")
-                else:
-                    ax.plot(time, real(coeffs[level][:, j]), label=r"$\Re c$")
-                    ax.plot(time, imag(coeffs[level][:, j]), label=r"$\Im c$")
+                #if not reim:
+                #    ax.plot(time, angle(coeffs[level][:, j]), label=r"$\arg c$")
+                #else:
+                #    ax.plot(time, real(coeffs[level][:, j]), label=r"$\Re c$")
+                #    ax.plot(time, imag(coeffs[level][:, j]), label=r"$\Im c$")
 
                 ax.plot(time, abs(coeffs[level][:, j]), "r", label=r"$|c|$")
 

@@ -7,7 +7,16 @@ Combinatorics functions for enumerating various objects.
 @license: Modified BSD License
 """
 
-from numpy import zeros, integer
+from numpy import zeros, integer, product
+from scipy.special import binom
+
+
+def multinomial(kv):
+    r"""Compute the multinomial
+
+    :param kv: The numbers downstairs in the multinomial notation.
+    """
+    return product([binom(sum(kv[:i + 1]), ki) for i, ki in enumerate(kv)])
 
 
 def partitions(D, K):

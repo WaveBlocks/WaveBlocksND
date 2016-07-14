@@ -56,13 +56,21 @@ from WaveBlocksND.LimitedHyperbolicCutShape import LimitedHyperbolicCutShape
 
 # Wavepackets
 from WaveBlocksND.Wavepacket import Wavepacket
+from WaveBlocksND.HagedornBasisEvaluationCommon import HagedornBasisEvaluationCommon
+from WaveBlocksND.HagedornBasisEvaluationPhi import HagedornBasisEvaluationPhi
+from WaveBlocksND.HagedornBasisEvaluationPsi import HagedornBasisEvaluationPsi
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HagedornWavepacket import HagedornWavepacket
+from WaveBlocksND.HagedornWavepacketNew import HagedornWavepacketNew
 from WaveBlocksND.HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 
 from WaveBlocksND.Gradient import Gradient
+from WaveBlocksND.WavepacketGradient import WavepacketGradient
 from WaveBlocksND.GradientHAWP import GradientHAWP
+from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
 from WaveBlocksND.PositionHAWP import PositionHAWP
+
+from WaveBlocksND.HagedornWavepacketTransformPhiPsi import HagedornWavepacketTransformPhiPsi
 
 # Linear combinations
 from WaveBlocksND.LinearCombinationOfWavepackets import LinearCombinationOfWavepackets
