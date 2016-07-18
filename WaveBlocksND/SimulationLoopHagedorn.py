@@ -58,44 +58,23 @@ class SimulationLoopHagedorn(SimulationLoop):
 
         :raise: :py:class:`ValueError` For invalid or missing input data.
         """
+        BF = BlockFactory()
+
         # The potential instance
-        potential = BlockFactory().create_potential(self.parameters)
+        potential = BF.create_potential(self.parameters)
 
         # Project the initial values to the canonical basis
         BT = BasisTransformationHAWP(potential)
 
         # Finally create and initialize the propagator instance
         # TODO: Attach the "leading_component to the hawp as codata
-        # TODO: Clean up this ugly if tree
-        if self.parameters["propagator"] == "magnus_split":
-            from WaveBlocksND.MagnusPropagator import MagnusPropagator
-            self.propagator = MagnusPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "semiclassical":
-            from WaveBlocksND.SemiclassicalPropagator import SemiclassicalPropagator
-            self.propagator = SemiclassicalPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "McL42sc":
-            from WaveBlocksND.McL42scPropagator import McL42scPropagator
-            self.propagator = McL42scPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "Pre764sc":
-            from WaveBlocksND.Pre764scPropagator import Pre764scPropagator
-            self.propagator = Pre764scPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "McL84sc":
-            from WaveBlocksND.McL84scPropagator import McL84scPropagator
-            self.propagator = McL84scPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "hagedorn":
-            from WaveBlocksND.HagedornPropagator import HagedornPropagator
-            self.propagator = HagedornPropagator(self.parameters, potential)
-        elif self.parameters["propagator"] == "hagedorn_psi":
-            from WaveBlocksND.HagedornPropagatorPsi import HagedornPropagatorPsi
-            self.propagator = HagedornPropagatorPsi(self.parameters, potential)
-        else:
-            raise NotImplementedError("Unknown propagator type: " + self.parameters["propagator"])
+        self.propagator = BF.create_propagator(self.parameters, potential)
 
         # Create suitable wavepackets
         chi = self.parameters["leading_component"]
 
         for packet_descr in self.parameters["initvals"]:
-            packet = BlockFactory().create_wavepacket(packet_descr)
+            packet = BF.create_wavepacket(packet_descr)
             # Transform to canonical basis
             BT.set_matrix_builder(packet.get_innerproduct())
             BT.transform_to_canonical(packet)

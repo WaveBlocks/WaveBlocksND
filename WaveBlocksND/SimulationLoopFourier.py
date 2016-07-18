@@ -11,7 +11,6 @@ for the Fourier propagator.
 from WaveBlocksND.BlockFactory import BlockFactory
 from WaveBlocksND.Initializer import Initializer
 from WaveBlocksND.BasisTransformationWF import BasisTransformationWF
-from WaveBlocksND.FourierPropagator import FourierPropagator
 from WaveBlocksND.SimulationLoop import SimulationLoop
 from WaveBlocksND.IOManager import IOManager
 
@@ -59,11 +58,13 @@ class SimulationLoopFourier(SimulationLoop):
 
         :raise: :py:class:`ValueError` For invalid or missing input data.
         """
+        BF = BlockFactory()
+
         # The potential instance
-        potential = BlockFactory().create_potential(self.parameters)
+        potential = BF.create_potential(self.parameters)
 
         # Compute the position space grid points
-        grid = BlockFactory().create_grid(self.parameters)
+        grid = BF.create_grid(self.parameters)
 
         # Construct initial values
         I = Initializer(self.parameters)
@@ -75,7 +76,7 @@ class SimulationLoopFourier(SimulationLoop):
         BT.transform_to_canonical(initialvalues)
 
         # Finally create and initialize the propagator instance
-        self.propagator = FourierPropagator(potential, initialvalues, self.parameters)
+        self.propagator = BF.create_propagator(self.parameters, potential, initialvalues)
 
         # Write some initial values to disk
         slots = self._tm.compute_number_events()

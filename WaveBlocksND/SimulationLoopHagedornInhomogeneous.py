@@ -13,7 +13,6 @@ from WaveBlocksND.IOManager import IOManager
 from WaveBlocksND.TimeManager import TimeManager
 from WaveBlocksND.BlockFactory import BlockFactory
 from WaveBlocksND.BasisTransformationHAWP import BasisTransformationHAWP
-from WaveBlocksND.HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
 
 __all__ = ["SimulationLoopHagedornInhomogeneous"]
 
@@ -59,19 +58,21 @@ class SimulationLoopHagedornInhomogeneous(SimulationLoop):
 
         :raise: :py:class:`ValueError` For invalid or missing input data.
         """
+        BF = BlockFactory()
+
         # The potential instance
-        potential = BlockFactory().create_potential(self.parameters)
+        potential = BF.create_potential(self.parameters)
 
         # Project the initial values to the canonical basis
         BT = BasisTransformationHAWP(potential)
 
         # Finally create and initialize the propagator instance
         # TODO: Attach the "leading_component to the hawp as codata
-        self.propagator = HagedornPropagatorInhomogeneous(self.parameters, potential)
+        self.propagator = BF.create_propagator(self.parameters, potential)
 
         # Create suitable wavepackets
         for packet_descr in self.parameters["initvals"]:
-            packet = BlockFactory().create_wavepacket(packet_descr)
+            packet = BF.create_wavepacket(packet_descr)
             # Transform to canonical basis
             BT.set_matrix_builder(packet.get_innerproduct())
             BT.transform_to_canonical(packet)

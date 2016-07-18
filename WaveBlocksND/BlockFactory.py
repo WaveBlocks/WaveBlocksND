@@ -250,3 +250,48 @@ class BlockFactory(object):
             raise ValueError("Unknown quadrature rule type {}".format(qr_type))
 
         return QR
+
+
+    def create_propagator(self, description, *args, **kwargs):
+        prop_type = description["propagator"]
+
+        if prop_type == "fourier":
+            from WaveBlocksND.FourierPropagator import FourierPropagator
+            propagator = FourierPropagator(description, *args, **kwargs)
+
+        elif prop_type == "hagedorn":
+            from WaveBlocksND.HagedornPropagator import HagedornPropagator
+            propagator = HagedornPropagator(description, *args, **kwargs)
+
+        elif prop_type == "semiclassical":
+            from WaveBlocksND.SemiclassicalPropagator import SemiclassicalPropagator
+            propagator = SemiclassicalPropagator(description, *args, **kwargs)
+
+        elif prop_type == "magnus_split":
+            from WaveBlocksND.MagnusPropagator import MagnusPropagator
+            propagator = MagnusPropagator(description, *args, **kwargs)
+
+        elif prop_type == "McL42sc":
+            from WaveBlocksND.McL42scPropagator import McL42scPropagator
+            propagator = McL42scPropagator(description, *args, **kwargs)
+
+        elif prop_type == "McL84sc":
+            from WaveBlocksND.McL84scPropagator import McL84scPropagator
+            propagator = McL84scPropagator(description, *args, **kwargs)
+
+        elif prop_type == "Pre764sc":
+            from WaveBlocksND.Pre764scPropagator import Pre764scPropagator
+            propagator = Pre764scPropagator(description, *args, **kwargs)
+
+        elif prop_type == "hagedorn_inhomog":
+            from WaveBlocksND.HagedornPropagatorInhomogeneous import HagedornPropagatorInhomogeneous
+            propagator = HagedornPropagatorInhomogeneous(description, *args, **kwargs)
+
+        elif prop_type == "hagedorn_psi":
+            from WaveBlocksND.HagedornPropagatorPsi import HagedornPropagatorPsi
+            propagator = HagedornPropagatorPsi(description, *args, **kwargs)
+
+        else:
+            raise ValueError("Unknown propagator type {}".format(prop_type))
+
+        return propagator

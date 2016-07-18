@@ -5,7 +5,7 @@ This file contains the Fourier propagator class. The wavefunction
 exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2012 R. Bourquin
+@copyright: Copyright (C) 2012, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -24,7 +24,7 @@ class FourierPropagator(Propagator):
     of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
     """
 
-    def __init__(self, potential, initial_values, para):
+    def __init__(self, parameters, potential, initial_values):
         r"""Initialize a new :py:class:`FourierPropagator` instance. Precalculate the
         the kinetic operator :math:`T_e` and the potential operator :math:`V_e`
         used or time propagation.
@@ -54,14 +54,14 @@ class FourierPropagator(Propagator):
         self._grid = initial_values.get_grid()
 
         # The kinetic operator 'T' defined in momentum space.
-        self._KO = KineticOperator(self._grid, para["eps"])
+        self._KO = KineticOperator(self._grid, parameters["eps"])
 
         # Exponential '\exp(-i/2*eps^2*dt*T)' used in the Strang splitting.
-        self._KO.calculate_exponential(-0.5j * para["dt"] * para["eps"]**2)
+        self._KO.calculate_exponential(-0.5j * parameters["dt"] * parameters["eps"]**2)
         self._TE = self._KO.evaluate_exponential_at()
 
         # Exponential '\exp(-i/eps^2*dt*V)' used in the Strang splitting.
-        self._potential.calculate_exponential(-0.5j * para["dt"] / para["eps"]**2)
+        self._potential.calculate_exponential(-0.5j * parameters["dt"] / parameters["eps"]**2)
         VE = self._potential.evaluate_exponential_at(self._grid)
         self._VE = tuple([ve.reshape(self._grid.get_number_nodes()) for ve in VE])
 
