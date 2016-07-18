@@ -1,9 +1,10 @@
 """The WaveBlocks Project
 
 This file contains the Hagedorn propagator class for homogeneous wavepackets.
+This version of the propagator uses the phi to psi transformation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2015 R. Bourquin
+@copyright: Copyright (C) 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -14,14 +15,16 @@ from numpy.linalg import inv, det
 from WaveBlocksND.Propagator import Propagator
 from WaveBlocksND.BlockFactory import BlockFactory
 from WaveBlocksND.ComplexMath import cont_angle
+from WaveBlocksND.HagedornWavepacketTransformPhiPsi import HagedornWavepacketTransformPhiPsi
 
-__all__ = ["HagedornPropagator"]
+__all__ = ["HagedornPropagatorPsi"]
 
 
-class HagedornPropagator(Propagator):
+class HagedornPropagatorPsi(Propagator):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
-    Hagedorn wavepackets neglecting interaction."""
+    Hagedorn wavepackets neglecting interaction. This version of the propagator uses
+    the :math:`phi` to :math:`psi` transformation."""
 
     def __init__(self, parameters, potential, packets=[]):
         r"""Initialize a new :py:class:`HagedornPropagator` instance.
@@ -70,6 +73,9 @@ class HagedornPropagator(Propagator):
 
         # Precalculate the potential splittings needed
         self._prepare_potential()
+
+        # Transformation between phi and psi wavepacket versions
+        self._TR = HagedornWavepacketTransformPhiPsi()
 
 
     def __str__(self):
@@ -168,11 +174,20 @@ class HagedornPropagator(Propagator):
 
             # Do a potential step with the local non-quadratic Taylor remainder
             innerproduct = packet.get_innerproduct()
-            F = innerproduct.build_matrix(packet, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
 
-            coefficients = packet.get_coefficient_vector()
-            coefficients = self._matrix_exponential(F, coefficients, -1.0j * dt / eps**2)
-            packet.set_coefficient_vector(coefficients)
+            # Transform to psi
+            packet2psi = self._TR.transform_phi_to_psi(packet)
+
+            # G is F but in the new basis <psi|W|psi> at actual time t_{1/2}
+            G = innerproduct.build_matrix(packet2psi, operator=partial(self._potential.evaluate_local_remainder_at, diagonal_component=leading_chi))
+
+            coefficients = packet2psi.get_coefficient_vector()
+            coefficients = self._matrix_exponential(G, coefficients, -1.0j * dt / eps**2)
+            packet2psi.set_coefficient_vector(coefficients)
+
+            # Transform back to phi
+            packet2phi = self._TR.transform_psi_to_phi(packet2psi)
+            packet.set_coefficient_vector(packet2phi.get_coefficient_vector())
 
             # Do a kinetic step of dt/2
             q, p, Q, P, S, adQ = packet.get_parameters(key=key)

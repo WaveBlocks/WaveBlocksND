@@ -85,6 +85,9 @@ class SimulationLoopHagedorn(SimulationLoop):
         elif self.parameters["propagator"] == "hagedorn":
             from WaveBlocksND.HagedornPropagator import HagedornPropagator
             self.propagator = HagedornPropagator(self.parameters, potential)
+        elif self.parameters["propagator"] == "hagedorn_psi":
+            from WaveBlocksND.HagedornPropagatorPsi import HagedornPropagatorPsi
+            self.propagator = HagedornPropagatorPsi(self.parameters, potential)
         else:
             raise NotImplementedError("Unknown propagator type: " + self.parameters["propagator"])
 
