@@ -177,6 +177,7 @@ Time propagation
    waveblocks_classes/McL42scPropagator
    waveblocks_classes/McL84scPropagator
    waveblocks_classes/Pre764scPropagator
+   waveblocks_classes/HagedornPropagatorPsi
 
    waveblocks_classes/SimulationLoop
    waveblocks_classes/SimulationLoopFourier
