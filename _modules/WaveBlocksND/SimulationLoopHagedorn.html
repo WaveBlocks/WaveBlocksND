@@ -107,44 +107,23 @@
 
 <span class="sd">        :raise: :py:class:`ValueError` For invalid or missing input data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BF</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span>
+
         <span class="c1"># The potential instance</span>
-        <span class="n">potential</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_potential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_potential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
         <span class="c1"># Project the initial values to the canonical basis</span>
         <span class="n">BT</span> <span class="o">=</span> <span class="n">BasisTransformationHAWP</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
 
         <span class="c1"># Finally create and initialize the propagator instance</span>
         <span class="c1"># TODO: Attach the &quot;leading_component to the hawp as codata</span>
-        <span class="c1"># TODO: Clean up this ugly if tree</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;magnus_split&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.MagnusPropagator</span> <span class="k">import</span> <span class="n">MagnusPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">MagnusPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;semiclassical&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.SemiclassicalPropagator</span> <span class="k">import</span> <span class="n">SemiclassicalPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">SemiclassicalPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL42sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL42scPropagator</span> <span class="k">import</span> <span class="n">McL42scPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL42scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Pre764sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.Pre764scPropagator</span> <span class="k">import</span> <span class="n">Pre764scPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">Pre764scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;McL84sc&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL84scPropagator</span> <span class="k">import</span> <span class="n">McL84scPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">McL84scPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hagedorn&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="k">import</span> <span class="n">HagedornPropagator</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;hagedorn_psi&quot;</span><span class="p">:</span>
-            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagatorPsi</span> <span class="k">import</span> <span class="n">HagedornPropagatorPsi</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagatorPsi</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="s2">&quot;Unknown propagator type: &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_propagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
 
         <span class="c1"># Create suitable wavepackets</span>
         <span class="n">chi</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;leading_component&quot;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">packet_descr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;initvals&quot;</span><span class="p">]:</span>
-            <span class="n">packet</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_wavepacket</span><span class="p">(</span><span class="n">packet_descr</span><span class="p">)</span>
+            <span class="n">packet</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_wavepacket</span><span class="p">(</span><span class="n">packet_descr</span><span class="p">)</span>
             <span class="c1"># Transform to canonical basis</span>
             <span class="n">BT</span><span class="o">.</span><span class="n">set_matrix_builder</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_innerproduct</span><span class="p">())</span>
             <span class="n">BT</span><span class="o">.</span><span class="n">transform_to_canonical</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>

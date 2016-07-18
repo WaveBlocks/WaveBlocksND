@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>WaveBlocksND.WavepacketGradient &mdash; WaveBlocksND devel documentation</title>
+    <title>WaveBlocksND.WavepacketPosition &mdash; WaveBlocksND devel documentation</title>
     
     <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -46,25 +46,24 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <h1>Source code for WaveBlocksND.WavepacketGradient</h1><div class="highlight"><pre>
+  <h1>Source code for WaveBlocksND.WavepacketPosition</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;The WaveBlocks Project</span>
 
-<span class="sd">Compute the action of the gradient operator applied to a wavepacket.</span>
+<span class="sd">Compute the action of the position operator applied to a wavepacket.</span>
 
 <span class="sd">@author: R. Bourquin</span>
 <span class="sd">@copyright: Copyright (C) 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">WaveBlocksND.Gradient</span> <span class="k">import</span> <span class="n">Gradient</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Position</span> <span class="k">import</span> <span class="n">Position</span>
 
-<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;WavepacketGradient&quot;</span><span class="p">]</span>
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;WavepacketPosition&quot;</span><span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">WavepacketGradient</span><span class="p">(</span><span class="n">Gradient</span><span class="p">):</span>
-    <span class="sd">r&quot;&quot;&quot;This class implements the computation of the action of the</span>
-<span class="sd">    gradient operator :math:`-i \varepsilon^2 \nabla_x` applied to</span>
-<span class="sd">    a Hagedorn wavepacket :math:`\Psi`.</span>
+<span class="k">class</span> <span class="nc">WavepacketPosition</span><span class="p">(</span><span class="n">Position</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class implements the computation of the action of the position</span>
+<span class="sd">    operator :math:`x` applied to a Hagedorn wavepacket :math:`\Psi`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -73,9 +72,10 @@
         <span class="k">pass</span>
 
 
-    <span class="k">def</span> <span class="nf">apply_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">as_packet</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">r&quot;&quot;&quot;Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x` on the basis</span>
-<span class="sd">        functions :math:`\phi(x)` of a component :math:`\Phi_i` of the Hagedorn wavepacket :math:`\Psi`.</span>
+    <span class="k">def</span> <span class="nf">apply_position</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">wavepacket</span><span class="p">,</span> <span class="o">*</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">as_packet</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Compute the effect of the position operator :math:`x` on the basis</span>
+<span class="sd">        functions :math:`\phi(x)` of a component :math:`\Phi_i` of the Hagedorn</span>
+<span class="sd">        wavepacket :math:`\Psi`.</span>
 
 <span class="sd">        :param wavepacket: The wavepacket :math:`\Psi` containing :math:`\Phi_i`.</span>
 <span class="sd">        :type wavepacket: A :py:class:`HagedornWavepacketBase` subclass instance.</span>
@@ -86,8 +86,8 @@
 <span class="sd">        :return: A list of length :math:`N` or a single pair of extended basis shapes :math:`\mathfrak{\dot{K}}_i`</span>
 <span class="sd">                 and new coefficients :math:`c^\prime_i`.</span>
 <span class="sd">                 If requested, copies of the original wavepacket are returned with these new values set.</span>
-<span class="sd">                 There are :math:`D` packets, one for each space variable component :math:`\partial_{x_d}`</span>
-<span class="sd">                 of the gradient.</span>
+<span class="sd">                 There are :math:`D` packets, one for each space variable component :math:`x_d`</span>
+<span class="sd">                 of the position operator.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">components</span> <span class="o">=</span> <span class="p">[</span><span class="n">component</span><span class="p">]</span>
@@ -95,8 +95,8 @@
             <span class="n">N</span> <span class="o">=</span> <span class="n">wavepacket</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
             <span class="n">components</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 
-        <span class="c1"># Apply the gradient operator to all components</span>
-        <span class="n">gradientparts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_gradient_component</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">components</span><span class="p">]</span>
+        <span class="c1"># Apply the position operator to all components</span>
+        <span class="n">positionparts</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">apply_position_component</span><span class="p">(</span><span class="n">wavepacket</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">components</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">as_packet</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">D</span> <span class="o">=</span> <span class="n">wavepacket</span><span class="o">.</span><span class="n">get_dimension</span><span class="p">()</span>
@@ -104,15 +104,15 @@
             <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">D</span><span class="p">):</span>
                 <span class="n">hawp_new</span> <span class="o">=</span> <span class="n">wavepacket</span><span class="o">.</span><span class="n">clone</span><span class="p">()</span>
                 <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">component</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">components</span><span class="p">):</span>
-                    <span class="n">Ke</span><span class="p">,</span> <span class="n">cnew</span> <span class="o">=</span> <span class="n">gradientparts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="n">Ke</span><span class="p">,</span> <span class="n">cnew</span> <span class="o">=</span> <span class="n">positionparts</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
                     <span class="n">hawp_new</span><span class="o">.</span><span class="n">set_basis_shapes</span><span class="p">(</span><span class="n">Ke</span><span class="p">,</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
                     <span class="n">hawp_new</span><span class="o">.</span><span class="n">set_coefficients</span><span class="p">(</span><span class="n">cnew</span><span class="p">[:,</span> <span class="n">d</span><span class="p">],</span> <span class="n">component</span><span class="o">=</span><span class="n">component</span><span class="p">)</span>
                 <span class="n">new_wps</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hawp_new</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">new_wps</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">component</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">return</span> <span class="n">gradientparts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">gradientparts</span>
+                <span class="k">return</span> <span class="n">positionparts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">positionparts</span>
 </pre></div>
 
           </div>

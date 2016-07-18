@@ -298,7 +298,52 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown quadrature rule type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">qr_type</span><span class="p">))</span>
 
-        <span class="k">return</span> <span class="n">QR</span></div>
+        <span class="k">return</span> <span class="n">QR</span>
+
+
+    <span class="k">def</span> <span class="nf">create_propagator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="n">prop_type</span> <span class="o">=</span> <span class="n">description</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;fourier&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.FourierPropagator</span> <span class="k">import</span> <span class="n">FourierPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">FourierPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;hagedorn&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="k">import</span> <span class="n">HagedornPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;semiclassical&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.SemiclassicalPropagator</span> <span class="k">import</span> <span class="n">SemiclassicalPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">SemiclassicalPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;magnus_split&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.MagnusPropagator</span> <span class="k">import</span> <span class="n">MagnusPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">MagnusPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;McL42sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL42scPropagator</span> <span class="k">import</span> <span class="n">McL42scPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">McL42scPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;McL84sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.McL84scPropagator</span> <span class="k">import</span> <span class="n">McL84scPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">McL84scPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;Pre764sc&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.Pre764scPropagator</span> <span class="k">import</span> <span class="n">Pre764scPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">Pre764scPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;hagedorn_inhomog&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagatorInhomogeneous</span> <span class="k">import</span> <span class="n">HagedornPropagatorInhomogeneous</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagatorInhomogeneous</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;hagedorn_psi&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagatorPsi</span> <span class="k">import</span> <span class="n">HagedornPropagatorPsi</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagatorPsi</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown propagator type </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">prop_type</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">propagator</span></div>
 </pre></div>
 
           </div>

@@ -54,7 +54,7 @@
 <span class="sd">exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2012 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2012, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -73,7 +73,7 @@
 <span class="sd">    of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">,</span> <span class="n">para</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`FourierPropagator` instance. Precalculate the</span>
 <span class="sd">        the kinetic operator :math:`T_e` and the potential operator :math:`V_e`</span>
 <span class="sd">        used or time propagation.</span>
@@ -103,14 +103,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">initial_values</span><span class="o">.</span><span class="n">get_grid</span><span class="p">()</span>
 
         <span class="c1"># The kinetic operator &#39;T&#39; defined in momentum space.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span> <span class="o">=</span> <span class="n">KineticOperator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">,</span> <span class="n">para</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span> <span class="o">=</span> <span class="n">KineticOperator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">,</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">])</span>
 
         <span class="c1"># Exponential &#39;\exp(-i/2*eps^2*dt*T)&#39; used in the Strang splitting.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">para</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">para</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_TE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">evaluate_exponential_at</span><span class="p">()</span>
 
         <span class="c1"># Exponential &#39;\exp(-i/eps^2*dt*V)&#39; used in the Strang splitting.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">para</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">para</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">VE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_exponential_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">ve</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">ve</span> <span class="ow">in</span> <span class="n">VE</span><span class="p">])</span>
 

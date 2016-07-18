@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>HagedornWavepacketInhomogeneous &mdash; WaveBlocksND devel documentation</title>
+    <title>HagedornWavepacketPsi &mdash; WaveBlocksND devel documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
-    <link rel="next" title="HagedornWavepacketPsi" href="HagedornWavepacketPsi.html" />
-    <link rel="prev" title="HagedornWavepacket" href="HagedornWavepacket.html" /> 
+    <link rel="next" title="Gradient" href="Gradient.html" />
+    <link rel="prev" title="HagedornWavepacketInhomogeneous" href="HagedornWavepacketInhomogeneous.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,10 +38,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="HagedornWavepacketPsi.html" title="HagedornWavepacketPsi"
+          <a href="Gradient.html" title="Gradient"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="HagedornWavepacket.html" title="HagedornWavepacket"
+          <a href="HagedornWavepacketInhomogeneous.html" title="HagedornWavepacketInhomogeneous"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
@@ -52,10 +52,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="hagedornwavepacketinhomogeneous">
-<h1>HagedornWavepacketInhomogeneous<a class="headerlink" href="#hagedornwavepacketinhomogeneous" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="hagedornwavepacketpsi">
+<h1>HagedornWavepacketPsi<a class="headerlink" href="#hagedornwavepacketpsi" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-hagedornwavepacketinhomogeneous-class"></span><h2>About the <code class="docutils literal"><span class="pre">HagedornWavepacketInhomogeneous</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-hagedornwavepacketpsi-class"></span><h2>About the <code class="docutils literal"><span class="pre">HagedornWavepacketPsi</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,24 +63,24 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<img src="../_images/inheritance-b033685300b07277636f93a754985347a2e9026b.png" alt="Inheritance diagram of HagedornWavepacketInhomogeneous" usemap="#inheritancefb1b717a41" class="inheritance"/>
-<map id="inheritancefb1b717a41" name="inheritancefb1b717a41">
-<area shape="rect" id="node1" title="This class represents inhomogeneous vector valued Hagedorn wavepackets" alt="" coords="531,14,766,26"/>
-<area shape="rect" id="node2" title="This class implements the abstract :py:class:`Wavepacket` interface" alt="" coords="290,2,504,14"/>
-<area shape="rect" id="node5" title="This class is an abstract interface to wavepackets in general." alt="" coords="69,2,196,14"/>
+<img src="../_images/inheritance-f994cc5cff3eb6dff977ce127ff81bf5ccaaefce.png" alt="Inheritance diagram of HagedornWavepacketPsi" usemap="#inheritance76cd108793" class="inheritance"/>
+<map id="inheritance76cd108793" name="inheritance76cd108793">
+<area shape="rect" id="node1" title="This class represents homogeneous vector valued Hagedorn wavepackets" alt="" coords="591,16,765,29"/>
+<area shape="rect" id="node2" title="This class implements the abstract :py:class:`Wavepacket` interface" alt="" coords="323,3,562,16"/>
+<area shape="rect" id="node5" title="This class is an abstract interface to wavepackets in general." alt="" coords="77,3,219,16"/>
 </map>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous">
-<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HagedornWavepacketInhomogeneous</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous" title="Permalink to this definition">¶</a></dt>
-<dd><p>This class represents inhomogeneous vector valued Hagedorn wavepackets
+<dt id="WaveBlocksND.HagedornWavepacketPsi">
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HagedornWavepacketPsi</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class represents homogeneous vector valued Hagedorn wavepackets
 <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> with <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> components in <img class="math" src="../_images/math/3cf5aa5abe312e6fd4996975341a43aa566e8d8d.png" alt="D"/> space dimensions.</p>
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a new in homogeneous Hagedorn wavepacket.</p>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>dimension</em>, <em>ncomponents</em>, <em>eps</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new homogeneous Hagedorn wavepacket of the new kind.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -92,7 +92,7 @@
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An instance of <a class="reference internal" href="#WaveBlocksND.HagedornWavepacketInhomogeneous" title="WaveBlocksND.HagedornWavepacketInhomogeneous"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacketInhomogeneous</span></code></a>.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">An instance of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></code></a>.</p>
 </td>
 </tr>
 </tbody>
@@ -100,8 +100,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.__str__">
-<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.__str__" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.__str__">
+<code class="descname">__str__</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.__str__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.__str__" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -113,8 +113,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.evaluate_at">
-<code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid</em>, <em>*</em>, <em>component=None</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.evaluate_at" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.evaluate_at">
+<code class="descname">evaluate_at</code><span class="sig-paren">(</span><em>grid</em>, <em>*</em>, <em>component=None</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.evaluate_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -136,8 +136,8 @@
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.evaluate_basis_at">
-<code class="descname">evaluate_basis_at</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.evaluate_basis_at" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.evaluate_basis_at">
+<code class="descname">evaluate_basis_at</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.evaluate_basis_at" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the basis functions <img class="math" src="../_images/math/247f0cbdfff0bc65d05f0abf2f79214b3d8d1c49.png" alt="\phi_k"/> recursively at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -159,14 +159,14 @@ the entry <img class="math" src="../_images/math/c4ca09037b0c386d796812584b0498b
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.gen_id">
-<code class="descname">gen_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.gen_id" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.gen_id">
+<code class="descname">gen_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.gen_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an (unique) ID per wavepacket instance.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_basis_shapes">
-<code class="descname">get_basis_shapes</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_basis_shapes" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_basis_shapes">
+<code class="descname">get_basis_shapes</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_basis_shapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the basis shapes <img class="math" src="../_images/math/888b5457b8c715ad991a5ef52fb5dc42ee3ffc8a.png" alt="\mathfrak{K}_i"/> for each component <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -182,8 +182,8 @@ the entry <img class="math" src="../_images/math/c4ca09037b0c386d796812584b0498b
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficient">
-<code class="descname">get_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficient" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_coefficient">
+<code class="descname">get_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_coefficient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve a single coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>
 of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -207,8 +207,8 @@ of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e48
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficient_vector">
-<code class="descname">get_coefficient_vector</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficient_vector" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_coefficient_vector">
+<code class="descname">get_coefficient_vector</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_coefficient_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the coefficients for all components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> simultaneously.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -230,8 +230,8 @@ This is for efficiency as this routine is used in the innermost loops.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficients">
-<code class="descname">get_coefficients</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_coefficients" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_coefficients">
+<code class="descname">get_coefficients</code><span class="sig-paren">(</span><em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> for some component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of
 <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> or all the coefficients <img class="math" src="../_images/math/ae12a24f88803b5895632e4848d87d46483c492c.png" alt="c"/> of all components.</p>
 <p>Note: this method copies the data arrays.</p>
@@ -252,8 +252,8 @@ is two-dimensional with a shape of <img class="math" src="../_images/math/085884
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_description">
-<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_description" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_description">
+<code class="descname">get_description</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.get_description"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_description" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a description of this wavepacket object.
 A description is a <code class="docutils literal"><span class="pre">dict</span></code> containing all key-value pairs
 necessary to reconstruct the current instance. A description
@@ -261,8 +261,8 @@ never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_dimension">
-<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_dimension" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_dimension">
+<code class="descname">get_dimension</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_dimension" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -274,8 +274,8 @@ never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_eps">
-<code class="descname">get_eps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_eps" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_eps">
+<code class="descname">get_eps</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_eps" title="Permalink to this definition">¶</a></dt>
 <dd><p>Retrieve the semi-classical scaling parameter <img class="math" src="../_images/math/3cb373a8030ad846aed7b1ee45bab27b13775928.png" alt="\varepsilon"/> of the wavepacket.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -288,8 +288,8 @@ never contains any data.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_gradient_operator">
-<code class="descname">get_gradient_operator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_gradient_operator" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_gradient_operator">
+<code class="descname">get_gradient_operator</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.get_gradient_operator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_gradient_operator" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="Gradient.html#WaveBlocksND.Gradient" title="WaveBlocksND.Gradient"><code class="xref py py-class docutils literal"><span class="pre">Gradient</span></code></a> subclass suitable for
 computing gradients of this wavepacket.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -303,8 +303,8 @@ computing gradients of this wavepacket.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_id">
-<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_id" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_id">
+<code class="descname">get_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the packet ID of this wavepacket instance.
 The ID may be used for storing packets in associative lists.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -318,8 +318,8 @@ The ID may be used for storing packets in associative lists.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_innerproduct">
-<code class="descname">get_innerproduct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_innerproduct" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_innerproduct">
+<code class="descname">get_innerproduct</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_innerproduct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return the <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProduct" title="WaveBlocksND.InnerProduct"><code class="xref py py-class docutils literal"><span class="pre">InnerProduct</span></code></a> subclass instance used computing
 inner products and evaluating brakets.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -333,8 +333,8 @@ inner products and evaluating brakets.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_number_components">
-<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_number_components">
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -346,23 +346,21 @@ inner products and evaluating brakets.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.get_parameters">
-<code class="descname">get_parameters</code><span class="sig-paren">(</span><em>component=None</em>, <em>aslist=False</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous.get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.get_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Get the Hagedorn parameter set <img class="math" src="../_images/math/bccfb8a47f4de2c308eabe9df82428a3fdd1bebd.png" alt="\Pi_i"/> of each component :math`Phi_i`
-of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.get_parameters">
+<code class="descname">get_parameters</code><span class="sig-paren">(</span><em>component=None</em>, <em>aslist=False</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.get_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.get_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the Hagedorn parameter set <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> whose
-parameters <img class="math" src="../_images/math/bccfb8a47f4de2c308eabe9df82428a3fdd1bebd.png" alt="\Pi_i"/> we want to get.</li>
-<li><strong>aslist</strong> &#8211; Dummy parameter for API compatibility with the homogeneous packets.</li>
+<li><strong>component</strong> &#8211; Dummy parameter for API compatibility with the inhomogeneous packets.</li>
+<li><strong>aslist</strong> &#8211; Return a list of <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> parameter tuples. This is for API compatibility
+with inhomogeneous packets.</li>
 </ul>
 </td>
 </tr>
-<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">A list with all parameter sets <img class="math" src="../_images/math/bccfb8a47f4de2c308eabe9df82428a3fdd1bebd.png" alt="\Pi_i"/> or a single parameter set.
-The parameters <img class="math" src="../_images/math/6afac84892bc46cd7fc2593a3a36fb2b08f357c9.png" alt="\Pi_i = (q_i, p_i, Q_i, P_i, S_i)"/> are always in this order.</p>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first last">The Hagedorn parameter set <img class="math" src="../_images/math/3b16f8483e581f75c2a6d26a1080f11611fdc390.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</p>
 </td>
 </tr>
 </tbody>
@@ -370,8 +368,8 @@ The parameters <img class="math" src="../_images/math/6afac84892bc46cd7fc2593a3a
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.norm">
-<code class="descname">norm</code><span class="sig-paren">(</span><em>component=None</em>, <em>summed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.norm" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.norm">
+<code class="descname">norm</code><span class="sig-paren">(</span><em>component=None</em>, <em>summed=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.norm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculate the <img class="math" src="../_images/math/2e013a48785d65c4aae0036e07c161d643373a84.png" alt="L^2"/> norm <img class="math" src="../_images/math/036aff7515a7e09a71de139068fc89fef0ad2b88.png" alt="\langle\Psi|\Psi\rangle"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -394,8 +392,8 @@ norms of all components. Depending on the values of <code class="docutils litera
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_basis_shapes">
-<code class="descname">set_basis_shapes</code><span class="sig-paren">(</span><em>basis_shape</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_basis_shapes" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_basis_shapes">
+<code class="descname">set_basis_shapes</code><span class="sig-paren">(</span><em>basis_shape</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_basis_shapes" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the basis shape <img class="math" src="../_images/math/aa533e0d43eb2898d324a12d38821acd1ec5b4b5.png" alt="\mathfrak{K}"/> of a given component or for all components.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -413,8 +411,8 @@ norms of all components. Depending on the values of <code class="docutils litera
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficient">
-<code class="descname">set_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficient" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_coefficient">
+<code class="descname">set_coefficient</code><span class="sig-paren">(</span><em>component</em>, <em>index</em>, <em>value</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_coefficient" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set a single coefficient <img class="math" src="../_images/math/23d91c86939564b5fbd026e9cffb4cbb149ea38b.png" alt="c^i_k"/> of the specified component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/>
 of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -436,8 +434,8 @@ of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e48
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficient_vector">
-<code class="descname">set_coefficient_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficient_vector" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_coefficient_vector">
+<code class="descname">set_coefficient_vector</code><span class="sig-paren">(</span><em>vector</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_coefficient_vector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the coefficients for all components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> simultaneously.</p>
 <div class="admonition warning">
 <p class="first admonition-title">Warning</p>
@@ -455,8 +453,8 @@ This is for efficiency as this routine is used in the innermost loops.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficients">
-<code class="descname">set_coefficients</code><span class="sig-paren">(</span><em>values</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_coefficients" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_coefficients">
+<code class="descname">set_coefficients</code><span class="sig-paren">(</span><em>values</em>, <em>*</em>, <em>component=None</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_coefficients" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update all the coefficients <img class="math" src="../_images/math/ae12a24f88803b5895632e4848d87d46483c492c.png" alt="c"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> or update
 the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e084964c94f1e34b62d2c.png" alt="c^i"/> of the components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> only.</p>
 <p>Note: this method copies the data arrays.</p>
@@ -478,8 +476,8 @@ the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e0849
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_id">
-<code class="descname">set_id</code><span class="sig-paren">(</span><em>anid</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_id" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_id">
+<code class="descname">set_id</code><span class="sig-paren">(</span><em>anid</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Manually set a new ID for the current wavepacket instance.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -492,8 +490,8 @@ the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e0849
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_innerproduct">
-<code class="descname">set_innerproduct</code><span class="sig-paren">(</span><em>innerproduct</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_innerproduct" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_innerproduct">
+<code class="descname">set_innerproduct</code><span class="sig-paren">(</span><em>innerproduct</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_innerproduct" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the <a class="reference internal" href="InnerProduct.html#WaveBlocksND.InnerProduct" title="WaveBlocksND.InnerProduct"><code class="xref py py-class docutils literal"><span class="pre">InnerProduct</span></code></a> subclass instance used for computing
 inner products and evaluating brakets.</p>
 <table class="docutils field-list" frame="void" rules="none">
@@ -507,17 +505,16 @@ inner products and evaluating brakets.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.set_parameters">
-<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>Pi</em>, <em>component=None</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketInhomogeneous.html#HagedornWavepacketInhomogeneous.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.set_parameters" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the Hagedorn parameter set <img class="math" src="../_images/math/bccfb8a47f4de2c308eabe9df82428a3fdd1bebd.png" alt="\Pi_i"/> of each component :math`Phi_i`
-of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.set_parameters">
+<code class="descname">set_parameters</code><span class="sig-paren">(</span><em>Pi</em>, <em>component=None</em>, <em>key=('q'</em>, <em>'p'</em>, <em>'Q'</em>, <em>'P'</em>, <em>'S')</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornWavepacketPsi.html#HagedornWavepacketPsi.set_parameters"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.set_parameters" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the Hagedorn parameters <img class="math" src="../_images/math/48df4c3c7ccc8857bb1a8690c2b1207275b0a626.png" alt="\Pi"/> of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
 <tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
-<li><strong>Pi</strong> (<em>A single tuple or a list of tuples</em>) &#8211; The parameter sets <img class="math" src="../_images/math/6afac84892bc46cd7fc2593a3a36fb2b08f357c9.png" alt="\Pi_i = (q_i, p_i, Q_i, P_i, S_i)"/> with its values in this order.</li>
-<li><strong>component</strong> &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> of the component <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> whose parameters <img class="math" src="../_images/math/bccfb8a47f4de2c308eabe9df82428a3fdd1bebd.png" alt="\Pi_i"/> we want to update.</li>
+<li><strong>Pi</strong> &#8211; The Hagedorn parameter set <img class="math" src="../_images/math/3b16f8483e581f75c2a6d26a1080f11611fdc390.png" alt="\Pi = (q, p, Q, P, S)"/> in this order.</li>
+<li><strong>component</strong> &#8211; Dummy parameter for API compatibility with the inhomogeneous packets.</li>
 </ul>
 </td>
 </tr>
@@ -526,8 +523,8 @@ of the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e4831
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.HagedornWavepacketInhomogeneous.slim_recursion">
-<code class="descname">slim_recursion</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketInhomogeneous.slim_recursion" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.HagedornWavepacketPsi.slim_recursion">
+<code class="descname">slim_recursion</code><span class="sig-paren">(</span><em>grid</em>, <em>component</em>, <em>*</em>, <em>prefactor=False</em><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacketPsi.slim_recursion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Evaluate the Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> at the given nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64aad59b425cbaf.png" alt="\gamma"/>.
 This routine is a slim version compared to the full basis evaluation. At every moment
 we store only the data we really need to compute the next step until we hit the highest
@@ -565,8 +562,8 @@ at the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64a
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">HagedornWavepacketInhomogeneous</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">HagedornWavepacketInhomogeneous</span></code> class</a></li>
+<li><a class="reference internal" href="#">HagedornWavepacketPsi</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">HagedornWavepacketPsi</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -574,15 +571,15 @@ at the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64a
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="HagedornWavepacket.html"
-                        title="previous chapter">HagedornWavepacket</a></p>
+  <p class="topless"><a href="HagedornWavepacketInhomogeneous.html"
+                        title="previous chapter">HagedornWavepacketInhomogeneous</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="HagedornWavepacketPsi.html"
-                        title="next chapter">HagedornWavepacketPsi</a></p>
+  <p class="topless"><a href="Gradient.html"
+                        title="next chapter">Gradient</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/waveblocks_classes/HagedornWavepacketInhomogeneous.txt"
+      <li><a href="../_sources/waveblocks_classes/HagedornWavepacketPsi.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -610,10 +607,10 @@ at the nodes <img class="math" src="../_images/math/3666981dc77862de77b6ecfcb64a
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="HagedornWavepacketPsi.html" title="HagedornWavepacketPsi"
+          <a href="Gradient.html" title="Gradient"
              >next</a> |</li>
         <li class="right" >
-          <a href="HagedornWavepacket.html" title="HagedornWavepacket"
+          <a href="HagedornWavepacketInhomogeneous.html" title="HagedornWavepacketInhomogeneous"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>

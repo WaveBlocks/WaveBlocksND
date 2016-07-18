@@ -62,7 +62,6 @@
 <span class="kn">from</span> <span class="nn">WaveBlocksND.TimeManager</span> <span class="k">import</span> <span class="n">TimeManager</span>
 <span class="kn">from</span> <span class="nn">WaveBlocksND.BlockFactory</span> <span class="k">import</span> <span class="n">BlockFactory</span>
 <span class="kn">from</span> <span class="nn">WaveBlocksND.BasisTransformationHAWP</span> <span class="k">import</span> <span class="n">BasisTransformationHAWP</span>
-<span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagatorInhomogeneous</span> <span class="k">import</span> <span class="n">HagedornPropagatorInhomogeneous</span>
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;SimulationLoopHagedornInhomogeneous&quot;</span><span class="p">]</span>
 
@@ -108,19 +107,21 @@
 
 <span class="sd">        :raise: :py:class:`ValueError` For invalid or missing input data.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">BF</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span>
+
         <span class="c1"># The potential instance</span>
-        <span class="n">potential</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_potential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
+        <span class="n">potential</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_potential</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">)</span>
 
         <span class="c1"># Project the initial values to the canonical basis</span>
         <span class="n">BT</span> <span class="o">=</span> <span class="n">BasisTransformationHAWP</span><span class="p">(</span><span class="n">potential</span><span class="p">)</span>
 
         <span class="c1"># Finally create and initialize the propagator instance</span>
         <span class="c1"># TODO: Attach the &quot;leading_component to the hawp as codata</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagatorInhomogeneous</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">propagator</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_propagator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">)</span>
 
         <span class="c1"># Create suitable wavepackets</span>
         <span class="k">for</span> <span class="n">packet_descr</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;initvals&quot;</span><span class="p">]:</span>
-            <span class="n">packet</span> <span class="o">=</span> <span class="n">BlockFactory</span><span class="p">()</span><span class="o">.</span><span class="n">create_wavepacket</span><span class="p">(</span><span class="n">packet_descr</span><span class="p">)</span>
+            <span class="n">packet</span> <span class="o">=</span> <span class="n">BF</span><span class="o">.</span><span class="n">create_wavepacket</span><span class="p">(</span><span class="n">packet_descr</span><span class="p">)</span>
             <span class="c1"># Transform to canonical basis</span>
             <span class="n">BT</span><span class="o">.</span><span class="n">set_matrix_builder</span><span class="p">(</span><span class="n">packet</span><span class="o">.</span><span class="n">get_innerproduct</span><span class="p">())</span>
             <span class="n">BT</span><span class="o">.</span><span class="n">transform_to_canonical</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>
