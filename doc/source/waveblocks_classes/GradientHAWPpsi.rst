@@ -1,7 +1,7 @@
-GradientHAWPnew
+GradientHAWPpsi
 ===============
 
-About the ``GradientHAWPnew`` class
+About the ``GradientHAWPpsi`` class
 -----------------------------------
 
 .. automodule:: WaveBlocksND
@@ -9,11 +9,11 @@ About the ``GradientHAWPnew`` class
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: GradientHAWPnew
+.. inheritance-diagram:: GradientHAWPpsi
 
 Class documentation
 -------------------
 
-.. autoclass:: GradientHAWPnew
+.. autoclass:: GradientHAWPpsi
    :members:
    :inherited-members:

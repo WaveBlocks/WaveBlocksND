@@ -68,11 +68,12 @@ from WaveBlocksND.HagedornWavepacketInhomogeneous import HagedornWavepacketInhom
 from WaveBlocksND.Position import Position
 from WaveBlocksND.WavepacketPosition import WavepacketPosition
 from WaveBlocksND.PositionHAWP import PositionHAWP
+from WaveBlocksND.PositionHAWPpsi import PositionHAWPpsi
 
 from WaveBlocksND.Gradient import Gradient
 from WaveBlocksND.WavepacketGradient import WavepacketGradient
 from WaveBlocksND.GradientHAWP import GradientHAWP
-from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
+from WaveBlocksND.GradientHAWPpsi import GradientHAWPpsi
 
 from WaveBlocksND.HagedornWavepacketTransformPhiPsi import HagedornWavepacketTransformPhiPsi
 

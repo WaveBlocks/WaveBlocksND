@@ -100,11 +100,12 @@ Wavepackets
    waveblocks_classes/Gradient
    waveblocks_classes/WavepacketGradient
    waveblocks_classes/GradientHAWP
-   waveblocks_classes/GradientHAWPnew
+   waveblocks_classes/GradientHAWPpsi
 
    waveblocks_classes/Position
    waveblocks_classes/WavepacketPosition
    waveblocks_classes/PositionHAWP
+   waveblocks_classes/PositionHAWPpsi
 
    waveblocks_classes/HagedornWavepacketTransformPhiPsi
 

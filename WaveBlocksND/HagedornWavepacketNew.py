@@ -13,7 +13,7 @@ from numpy.linalg import det
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 from WaveBlocksND.ComplexMath import ContinuousSqrt
-from WaveBlocksND.GradientHAWPnew import GradientHAWPnew
+from WaveBlocksND.GradientHAWPpsi import GradientHAWPpsi
 from WaveBlocksND.HagedornBasisEvaluationPsi import HagedornBasisEvaluationPsi
 
 __all__ = ["HagedornWavepacketNew"]
@@ -185,4 +185,4 @@ class HagedornWavepacketNew(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
 
         :return: A :py:class:`GradientHAWP` instance.
         """
-        return GradientHAWPnew()
+        return GradientHAWPpsi()

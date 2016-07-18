@@ -21,12 +21,6 @@ class GradientHAWP(WavepacketGradient):
     a Hagedorn wavepacket :math:`\Psi`.
     """
 
-    def __init__(self):
-        r"""
-        """
-        pass
-
-
     def apply_gradient_component(self, wavepacket, component):
         r"""Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x` on the basis
         functions :math:`\phi(x)` of a component :math:`\Phi_i` of the Hagedorn wavepacket :math:`\Psi`.

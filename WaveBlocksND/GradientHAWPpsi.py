@@ -14,20 +14,14 @@ from scipy.linalg import polar, eigh
 
 from WaveBlocksND.WavepacketGradient import WavepacketGradient
 
-__all__ = ["GradientHAWPnew"]
+__all__ = ["GradientHAWPpsi"]
 
 
-class GradientHAWPnew(WavepacketGradient):
+class GradientHAWPpsi(WavepacketGradient):
     r"""This class implements the computation of the action of the
     gradient operator :math:`-i \varepsilon^2 \nabla_x` applied to
     a new-kind Hagedorn wavepacket :math:`\Psi`.
     """
-
-    def __init__(self):
-        r"""
-        """
-        pass
-
 
     def apply_gradient_component(self, wavepacket, component):
         r"""Compute the effect of the gradient operator :math:`-i \varepsilon^2 \nabla_x`
@@ -45,7 +39,7 @@ class GradientHAWPnew(WavepacketGradient):
         """
         D = wavepacket.get_dimension()
         eps = wavepacket.get_eps()
-        q, p, Q, P, S = wavepacket.get_parameters(component=component)
+        q, p, Q, P, _ = wavepacket.get_parameters(component=component)
 
         _, PA = polar(Q, side='left')
         EW, EV = eigh(real(PA))
