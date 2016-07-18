@@ -1,7 +1,7 @@
-HagedornWavepacketNew
+HagedornWavepacketPsi
 =====================
 
-About the ``HagedornWavepacketNew`` class
+About the ``HagedornWavepacketPsi`` class
 -----------------------------------------
 
 .. automodule:: WaveBlocksND
@@ -9,12 +9,12 @@ About the ``HagedornWavepacketNew`` class
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: HagedornWavepacketNew
+.. inheritance-diagram:: HagedornWavepacketPsi
 
 Class documentation
 -------------------
 
-.. autoclass:: HagedornWavepacketNew
+.. autoclass:: HagedornWavepacketPsi
    :members:
    :inherited-members:
 

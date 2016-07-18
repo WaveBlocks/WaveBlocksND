@@ -16,10 +16,10 @@ from WaveBlocksND.ComplexMath import ContinuousSqrt
 from WaveBlocksND.GradientHAWPpsi import GradientHAWPpsi
 from WaveBlocksND.HagedornBasisEvaluationPsi import HagedornBasisEvaluationPsi
 
-__all__ = ["HagedornWavepacketNew"]
+__all__ = ["HagedornWavepacketPsi"]
 
 
-class HagedornWavepacketNew(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
+class HagedornWavepacketPsi(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
     r"""This class represents homogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
@@ -90,7 +90,7 @@ class HagedornWavepacketNew(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
         never contains any data.
         """
         d = {}
-        d["type"] = "HagedornWavepacketNew"
+        d["type"] = "HagedornWavepacketPsi"
         d["dimension"] = self._dimension
         d["ncomponents"] = self._number_components
         d["eps"] = self._eps
@@ -104,7 +104,7 @@ class HagedornWavepacketNew(HagedornWavepacketBase, HagedornBasisEvaluationPsi):
         params = self.get_description()
         # Create a new Packet
         # TODO: Consider using the block factory
-        other = HagedornWavepacketNew(params["dimension"],
+        other = HagedornWavepacketPsi(params["dimension"],
                                       params["ncomponents"],
                                       params["eps"])
         # If we wish to keep the packet ID

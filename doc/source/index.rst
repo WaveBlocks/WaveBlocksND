@@ -95,7 +95,7 @@ Wavepackets
    waveblocks_classes/HagedornWavepacketBase
    waveblocks_classes/HagedornWavepacket
    waveblocks_classes/HagedornWavepacketInhomogeneous
-   waveblocks_classes/HagedornWavepacketNew
+   waveblocks_classes/HagedornWavepacketPsi
 
    waveblocks_classes/Gradient
    waveblocks_classes/WavepacketGradient

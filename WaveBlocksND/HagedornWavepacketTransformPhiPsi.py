@@ -18,7 +18,7 @@ from scipy.special import binom
 
 from WaveBlocksND.SimplexShape import SimplexShape
 from WaveBlocksND.HagedornWavepacket import HagedornWavepacket
-from WaveBlocksND.HagedornWavepacketNew import HagedornWavepacketNew
+from WaveBlocksND.HagedornWavepacketPsi import HagedornWavepacketPsi
 
 from WaveBlocksND.GaussHermiteQR import GaussHermiteQR
 from WaveBlocksND.TensorProductQR import TensorProductQR
@@ -93,7 +93,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         WPo.set_parameters(Pi)
         WPo.set_basis_shapes([BS])
 
-        WPn = HagedornWavepacketNew(D, 1, eps)
+        WPn = HagedornWavepacketPsi(D, 1, eps)
         WPn.set_parameters(Pi)
         WPn.set_basis_shapes([BS])
 
@@ -296,7 +296,7 @@ class HagedornWavepacketTransformPhiPsi(object):
         :param HAWPphi: The wavepacket :math:`\Phi[\Pi]` to transform.
         :return: A new wavepacket object representing :math:`\Psi[\Pi]`.
         """
-        return self._transform(HAWPphi, self.multiply_T_v, HagedornWavepacketNew)
+        return self._transform(HAWPphi, self.multiply_T_v, HagedornWavepacketPsi)
 
 
     def transform_psi_to_phi(self, HAWPpsi):
