@@ -1,0 +1,264 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>HagedornPropagatorPsi &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
+    <link rel="next" title="SimulationLoop" href="SimulationLoop.html" />
+    <link rel="prev" title="Pre764scPropagator" href="Pre764scPropagator.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimulationLoop.html" title="SimulationLoop"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="Pre764scPropagator.html" title="Pre764scPropagator"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="hagedornpropagatorpsi">
+<h1>HagedornPropagatorPsi<a class="headerlink" href="#hagedornpropagatorpsi" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="module-WaveBlocksND">
+<span id="about-the-hagedornpropagatorpsi-class"></span><h2>About the <code class="docutils literal"><span class="pre">HagedornPropagatorPsi</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<p>The WaveBlocks Project</p>
+<p>&#64;author: R. Bourquin
+&#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
+&#64;license: Modified BSD License</p>
+</div>
+<div class="section" id="inheritance-diagram">
+<h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
+<img src="../_images/inheritance-2d690d268bb367ce2e2f20873c4395bb6397ddd0.png" alt="Inheritance diagram of HagedornPropagatorPsi" usemap="#inheritance4a7d78f676" class="inheritance"/>
+<map id="inheritance4a7d78f676" name="inheritance4a7d78f676">
+<area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi` in" alt="" coords="319,5,649,31"/>
+<area shape="rect" id="node2" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="5,5,271,31"/>
+</map>
+</div>
+<div class="section" id="class-documentation">
+<h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="WaveBlocksND.HagedornPropagatorPsi">
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">HagedornPropagatorPsi</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>packets=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> in
+a potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>. The propagation is done for a given set of homogeneous
+Hagedorn wavepackets neglecting interaction. This version of the propagator uses
+the <img class="math" src="../_images/math/4efb887d0d27f3caa83f8913c0426dc73021d3e0.png" alt="phi"/> to <img class="math" src="../_images/math/3bf88f871a36eb150b47343e697734136dba2093.png" alt="psi"/> transformation.</p>
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.add_wavepacket">
+<code class="descname">add_wavepacket</code><span class="sig-paren">(</span><em>packet</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi.add_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.add_wavepacket" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a new wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> to the list of propagated wavepackets.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (A tuple <img class="math" src="../_images/math/e1133ecc44d1b2ff886d59a40ec6d1f392f92423.png" alt="(\Psi, \chi)"/> with <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> a <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></code></a>
+instance and <img class="math" src="../_images/math/1bc8153a40ba7d2281c26bfe99604ad9e6f34749.png" alt="\chi"/> an integer.) &#8211; The new wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> and its leading component <img class="math" src="../_images/math/b07aef8fb164e62cacfd4be92bc7aa04b49d6f7b.png" alt="\chi \in [0,N-1]"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.get_number_components">
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dd><table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">The number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> of components <img class="math" src="../_images/math/fa93a8918df02b02ef54bd2029df9d0d9a5e24ba.png" alt="\Phi_i"/> of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.get_potential">
+<code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.get_potential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/> used for time propagation.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">A <a class="reference internal" href="MatrixPotential.html#WaveBlocksND.MatrixPotential" title="WaveBlocksND.MatrixPotential"><code class="xref py py-class docutils literal"><span class="pre">MatrixPotential</span></code></a> subclass instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.get_wavepackets">
+<code class="descname">get_wavepackets</code><span class="sig-paren">(</span><em>packet=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi.get_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.get_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the wavepackets <img class="math" src="../_images/math/701a2ac32c022a9deeef9be67c8fa723fa1f3936.png" alt="\{\Psi_i\}_i"/> that take part in the time propagation by the
+current <a class="reference internal" href="HagedornPropagator.html#WaveBlocksND.HagedornPropagator" title="WaveBlocksND.HagedornPropagator"><code class="xref py py-class docutils literal"><span class="pre">HagedornPropagator</span></code></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packet</strong> (Integer or <code class="docutils literal"><span class="pre">None</span></code>) &#8211; The index <img class="math" src="../_images/math/df0deb143e5ac127f00bd248ee8001ecae572adc.png" alt="i"/> (in this list) of a single packet <img class="math" src="../_images/math/8fe4f46a1aecdb3b703f86073de9105dd7d3b3b9.png" alt="\Psi_i"/> that is
+to be returned. If set to <code class="docutils literal"><span class="pre">None</span></code> (default) return the full list with all packets.</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">A list of <a class="reference internal" href="HagedornWavepacket.html#WaveBlocksND.HagedornWavepacket" title="WaveBlocksND.HagedornWavepacket"><code class="xref py py-class docutils literal"><span class="pre">HagedornWavepacket</span></code></a> instances or a single instance.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.post_propagate">
+<code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.post_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at final time <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>,
+perform some computations exactly once after running the ordinary
+time propagation and before each time simulation data will be saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.pre_propagate">
+<code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/1410bd3aa3d34373bc7de52c132b4fd6f154019a.png" alt="t_0"/>,
+perform some computations exactly once before running the ordinary
+time propagation and after each time simulation data was saved.</p>
+<p>This method does not raise an exception but instead just does
+nothing and returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.propagate">
+<code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.propagate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> at time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/> compute the propagated
+wavepacket at time <img class="math" src="../_images/math/9ef2d61249c313f3251d7908ea2ae2defd92a1c0.png" alt="t + \tau"/>. We perform exactly one timestep of size
+<img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> here. This propagation is done for all packets in the list
+<img class="math" src="../_images/math/701a2ac32c022a9deeef9be67c8fa723fa1f3936.png" alt="\{\Psi_i\}_i"/> and neglects any interaction between two packets.</p>
+<p>More details can be found in <a class="footnote-reference" href="#id2" id="id1">[1]</a>.</p>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>E. Faou, V. Gradinaru and C. Lubich, &#8220;Computing semiclassical quantum dynamics with Hagedorn wavepackets&#8221;,
+SIAM Journal on Scientific Computing, volume 31 number 4 (2009) 3027-3041.</td></tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="WaveBlocksND.HagedornPropagatorPsi.set_wavepackets">
+<code class="descname">set_wavepackets</code><span class="sig-paren">(</span><em>packetlist</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/HagedornPropagatorPsi.html#HagedornPropagatorPsi.set_wavepackets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.HagedornPropagatorPsi.set_wavepackets" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the list <img class="math" src="../_images/math/701a2ac32c022a9deeef9be67c8fa723fa1f3936.png" alt="\{\Psi_i\}_i"/> of wavepackets that the propagator will propagate.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>packetlist</strong> (A list of <img class="math" src="../_images/math/9ef71ebf7d65eee32b5d8dba611e186c90721ff2.png" alt="(\Psi_i, \chi_i)"/> tuples.) &#8211; A list of new wavepackets <img class="math" src="../_images/math/8fe4f46a1aecdb3b703f86073de9105dd7d3b3b9.png" alt="\Psi_i"/> and their
+leading components <img class="math" src="../_images/math/1ca2ea7dcf3ed38f020b9821a593fff553dfc83f.png" alt="\chi_i"/> to propagate.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">HagedornPropagatorPsi</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">HagedornPropagatorPsi</span></code> class</a></li>
+<li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
+<li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="Pre764scPropagator.html"
+                        title="previous chapter">Pre764scPropagator</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="SimulationLoop.html"
+                        title="next chapter">SimulationLoop</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/waveblocks_classes/HagedornPropagatorPsi.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="SimulationLoop.html" title="SimulationLoop"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="Pre764scPropagator.html" title="Pre764scPropagator"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>
