@@ -95,6 +95,9 @@
 
 <div class="viewcode-block" id="Wavepacket.gen_id"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.gen_id">[docs]</a>    <span class="k">def</span> <span class="nf">gen_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Generate an (unique) ID per wavepacket instance.</span>
+
+<span class="sd">        .. note:: The ``packet id`` is a string of length 32 because this is</span>
+<span class="sd">                  exactly the length of an &#39;md5&#39; digest in hex representation.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># Generate the packet ID from the current time as well as</span>
         <span class="c1"># memory location and take the md5 hash. The hash can be</span>
@@ -103,7 +106,7 @@
         <span class="c1"># in case the timer resolution is too small. The &#39;time&#39; part</span>
         <span class="c1"># assures that in case one instance gets deleted and another</span>
         <span class="c1"># created at the same location, their IDs still differ.</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">hashlib</span><span class="o">.</span><span class="n">md5</span><span class="p">((</span><span class="nb">str</span><span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()))</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;utf-8&#39;</span><span class="p">))</span><span class="o">.</span><span class="n">hexdigest</span><span class="p">()</span></div>
 
 
 <div class="viewcode-block" id="Wavepacket.get_id"><a class="viewcode-back" href="../../waveblocks_classes/Wavepacket.html#WaveBlocksND.Wavepacket.get_id">[docs]</a>    <span class="k">def</span> <span class="nf">get_id</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -122,11 +125,15 @@
         <span class="sd">r&quot;&quot;&quot;Manually set a new ID for the current wavepacket instance.</span>
 
 <span class="sd">        :param anid: The new ID.</span>
-<span class="sd">        :type anid: int</span>
+<span class="sd">        :type anid: str</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="c1"># Currently we force integers as ID s. However in general IDs</span>
-        <span class="c1"># could be of any object type, as long as we can avoid name clashes.</span>
-        <span class="k">assert</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">anid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">int</span><span class="p">)</span>
+        <span class="c1"># Currently we force 32-character strings as ID s. (32 characters</span>
+        <span class="c1"># is the length of a &#39;md5&#39; digest in hex representation) However in</span>
+        <span class="c1"># general IDs could be of any object type, as long as we can avoid</span>
+        <span class="c1"># name clashes.</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">type</span><span class="p">(</span><span class="n">anid</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">anid</span><span class="p">)</span> <span class="o">==</span> <span class="mi">32</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Packet id has to be a string with 32 characters.&#39;</span><span class="p">)</span>
+
         <span class="bp">self</span><span class="o">.</span><span class="n">_id</span> <span class="o">=</span> <span class="n">anid</span></div>
 
 

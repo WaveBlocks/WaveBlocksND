@@ -93,6 +93,11 @@ make sure that all references between the two wavepackets get broken.</p>
 <dt id="WaveBlocksND.Wavepacket.gen_id">
 <code class="descname">gen_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/Wavepacket.html#Wavepacket.gen_id"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.Wavepacket.gen_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an (unique) ID per wavepacket instance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">packet</span> <span class="pre">id</span></code> is a string of length 32 because this is
+exactly the length of an &#8216;md5&#8217; digest in hex representation.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -144,7 +149,7 @@ The ID may be used for storing packets in associative lists.</p>
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anid</strong> (<em>int</em>) &#8211; The new ID.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anid</strong> (<em>str</em>) &#8211; The new ID.</td>
 </tr>
 </tbody>
 </table>
