@@ -12,7 +12,7 @@ time propagation.
 
 import argparse
 import os
-from numpy import real, imag, abs, array, where, nan, isnan, nanmin, nanmax, conjugate, dot, identity
+from numpy import real, imag, abs, array, where, nan, isnan, nanmin, nanmax, conjugate, identity, einsum
 from numpy.linalg import norm, det
 from matplotlib.pyplot import figure, close
 
@@ -37,17 +37,23 @@ def read_data_homogeneous(iom, blockid=0):
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
-    qhist = array([norm(qhist[i, :]) for i in range(qhist.shape[0])]).reshape(-1)
-    phist = array([norm(phist[i, :]) for i in range(phist.shape[0])]).reshape(-1)
-    Qhist = array([det(Qhist[i, :, :]) for i in range(Qhist.shape[0])]).reshape(-1)
-    Phist = array([det(Phist[i, :, :]) for i in range(Phist.shape[0])]).reshape(-1)
+    # qhist, phist have shape (n, D, 1)
+    # Qhist, Phist have shape (n, D, D)
+    _, D, _ = Qhist.shape
+
+    qnhist = array([norm(qhist[i, :]) for i in range(qhist.shape[0])]).reshape(-1)
+    pnhist = array([norm(phist[i, :]) for i in range(phist.shape[0])]).reshape(-1)
+    Qdethist = array([det(Qhist[i, :, :]) for i in range(Qhist.shape[0])]).reshape(-1)
+    Pdethist = array([det(Phist[i, :, :]) for i in range(Phist.shape[0])]).reshape(-1)
     Shist = Shist.reshape(-1)
 
-    #relPQ1 = norm(dot(Phist.T, Q) - dot(Q.T, P), ord='fro', axis=0)
-    #relPQ2 = norm(dot(conjugate(P.T), Q) - dot(conjugate(Q.T), P) + 2.0j * identity(D), ord='fro', axis=0)
+    relPQ1 = norm(einsum('...ij,...ik', Phist, Qhist) -
+                  einsum('...ij,...ik', Qhist, Phist), ord='fro', axis=(1, 2))
+    relPQ2 = norm(einsum('...ij,...ik', conjugate(Phist), Qhist) -
+                  einsum('...ij,...ik', conjugate(Qhist), Phist) +
+                  2.0j * identity(D), ord='fro', axis=(1, 2))
 
-
-    return (time, [qhist], [phist], [Qhist], [Phist], [Shist], [relPQ1], [relPQ2])
+    return time, [qnhist], [pnhist], [Qdethist], [Pdethist], [Shist], [relPQ1], [relPQ2]
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -65,20 +71,32 @@ def read_data_inhomogeneous(iom, blockid=0):
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
     # List with Pi time evolutions
-    Phist = []
-    Qhist = []
+    qnhist = []
+    pnhist = []
+    Qdethist = []
+    Pdethist = []
     Shist = []
-    phist = []
-    qhist = []
+    relPQ1 = []
+    relPQ2 = []
 
-    for q, p, Q, P, S in Pis:
-        qhist.append(array([norm(q[i, :]) for i in range(q.shape[0])]).reshape(-1))
-        phist.append(array([norm(p[i, :]) for i in range(p.shape[0])]).reshape(-1))
-        Qhist.append(array([det(Q[i, :, :]) for i in range(Q.shape[0])]).reshape(-1))
-        Phist.append(array([det(P[i, :, :]) for i in range(P.shape[0])]).reshape(-1))
-        Shist.append(S.reshape(-1))
+    for qhist, phist, Qhist, Phist, Shist in Pis:
+        # qhist, phist have shape (n, D, 1)
+        # Qhist, Phist have shape (n, D, D)
+        _, D, _ = Qhist.shape
 
-    return (time, qhist, phist, Qhist, Phist, Shist)
+        qnhist.append(array([norm(qhist[i, :]) for i in range(qhist.shape[0])]).reshape(-1))
+        pnhist.append(array([norm(phist[i, :]) for i in range(phist.shape[0])]).reshape(-1))
+        Qdethist.append(array([det(Qhist[i, :, :]) for i in range(Qhist.shape[0])]).reshape(-1))
+        Pdethist.append(array([det(Phist[i, :, :]) for i in range(Phist.shape[0])]).reshape(-1))
+        Shist.append(Shist.reshape(-1))
+
+        relPQ1.append(norm(einsum('...ij,...ik', Phist, Qhist) -
+                      einsum('...ij,...ik', Qhist, Phist), ord='fro', axis=(1, 2)))
+        relPQ2.append(norm(einsum('...ij,...ik', conjugate(Phist), Qhist) -
+                      einsum('...ij,...ik', conjugate(Qhist), Phist) +
+                      2.0j * identity(D), ord='fro', axis=(1, 2)))
+
+    return time, qnhist, pnhist, Qdethist, Pdethist, Shist, relPQ1, relPQ2
 
 
 def plot_parameters(data, index=0, view=[None, None], path='.'):
@@ -149,7 +167,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_title(r"$S$")
 
     fig.suptitle("Wavepacket parameters")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
@@ -207,7 +225,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_title(r"$S$")
 
     fig.suptitle("Wavepacket parameters")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_abs_ang_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_abs_ang_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
@@ -223,7 +241,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.grid(True)
     ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $\det P$")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryP_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryP_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
@@ -237,21 +255,22 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.grid(True)
     ax.set_aspect("equal")
     ax.set_title(r"Trajectory of $\det Q$")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
-    # fig = figure()
-    # ax = fig.gca()
-    # for P, Q in zip(Phist, Qhist):
-    #     ax.plot(time, norm(dot(P.T, Q) - dot(Q.T, P), ord='fro', axis=0), label=r'$P^{T} Q - Q^{T} P$')
-    #     ax.plot(time, norm(dot(conjugate(P.T), Q) - dot(conjugate(Q.T), P) + 2.0j * identity(D), ord='fro', axis=0), label=r'$P^{H} Q - Q^{H} P$')
-    # ax.set_xlim(view[0], view[1])
-    # ax.grid(True)
-    # ax.legend(loc='upper left')
-    # fig.suptitle("Wavepacket PQ relation check")
-    # fig.savefig(os.path.join(path, "wavepacket_PQrelation_block"+str(index)+GD.output_format))
-    # close(fig)
+    fig = figure()
+    ax = fig.gca()
+    for rel1, rel2 in zip(relPQ1, relPQ2):
+        ax.plot(time, rel1, label=r'$P^{T} Q - Q^{T} P = 0$')
+        ax.plot(time, rel2, label=r'$P^{H} Q - Q^{H} P + 2\imath I = 0$')
+    ax.set_xlim(view[0], view[1])
+    ax.grid(True)
+    ax.set_xlabel(r"$t$")
+    ax.legend(loc='upper left')
+    fig.suptitle("Wavepacket PQ relation check")
+    fig.savefig(os.path.join(path, "wavepacket_PQrelation_block{}{}".format(index, GD.output_format)))
+    close(fig)
 
 
 

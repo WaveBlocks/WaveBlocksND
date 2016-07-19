@@ -36,20 +36,19 @@ def read_data_homogeneous(iom, blockid=0):
     Pi = iom.load_wavepacket_parameters(blockid=blockid)
     qhist, phist, Qhist, Phist, Shist = Pi
 
-    # The Dimension D, we know that q has shape (#timesteps, D, 1)
-    D = qhist.shape[1]
+    # qhist, phist have shape (n, D, 1)
+    # Qhist, Phist have shape (n, D, D)
+    _, D, _ = Qhist.shape
 
     if not D == 1:
         raise NotImplementedError("This script is for 1D wavepackets only")
 
-    data = (time,
+    return (time,
             [qhist.reshape(-1)],
             [phist.reshape(-1)],
             [Qhist.reshape(-1)],
             [Phist.reshape(-1)],
             [Shist.reshape(-1)])
-
-    return data
 
 
 def read_data_inhomogeneous(iom, blockid=0):
@@ -66,8 +65,10 @@ def read_data_inhomogeneous(iom, blockid=0):
 
     Pis = iom.load_inhomogwavepacket_parameters(blockid=blockid)
 
-    # The Dimension D, we know that q_0 has shape (#timesteps, D, 1)
-    D = Pis[0][0].shape[1]
+    # qhist, phist have shape (n, D, 1)
+    # Qhist, Phist have shape (n, D, D)
+    _, D, _ = Pis[0][0].shape
+
     if not D == 1:
         raise NotImplementedError("This script is for 1D wavepackets only")
 
@@ -156,7 +157,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_title(r"$S$")
 
     fig.suptitle("Wavepacket parameters")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_block".format(index, GD.output_format)))
     close(fig)
 
 
@@ -214,7 +215,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_title(r"$S$")
 
     fig.suptitle("Wavepacket parameters")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_abs_ang_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_abs_ang_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
@@ -230,7 +231,7 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_xlabel(r"$\Re P(t)$")
     ax.set_ylabel(r"$\Im P(t)$")
     ax.set_title(r"Trajectory of $P$")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryP_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryP_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
@@ -244,20 +245,21 @@ def plot_parameters(data, index=0, view=[None, None], path='.'):
     ax.set_xlabel(r"$\Re Q(t)$")
     ax.set_ylabel(r"$\Im Q(t)$")
     ax.set_title(r"Trajectory of $Q$")
-    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_parameters_trajectoryQ_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
     fig = figure()
     ax = fig.gca()
     for P, Q in zip(Phist, Qhist):
-        ax.plot(time, abs(P.T * Q - Q.T * P), label=r'$P^{T} Q - Q^{T} P$')
-        ax.plot(time, abs(conjugate(P.T) * Q - conjugate(Q.T) * P + 2.0j), label=r'$P^{H} Q - Q^{H} P$')
+        ax.plot(time, abs(P.T * Q - Q.T * P), label=r'$P^{T} Q - Q^{T} P = 0$')
+        ax.plot(time, abs(conjugate(P.T) * Q - conjugate(Q.T) * P + 2.0j), label=r'$P^{H} Q - Q^{H} P + 2\imath I = 0$')
     ax.set_xlim(view[0], view[1])
     ax.grid(True)
+    ax.set_xlabel(r"$t$")
     ax.legend(loc='upper left')
     fig.suptitle("Wavepacket PQ relation check")
-    fig.savefig(os.path.join(path, "wavepacket_PQrelation_block"+str(index)+GD.output_format))
+    fig.savefig(os.path.join(path, "wavepacket_PQrelation_block{}{}".format(index, GD.output_format)))
     close(fig)
 
 
