@@ -46,6 +46,9 @@ class Wavepacket(object):
 
     def gen_id(self):
         r"""Generate an (unique) ID per wavepacket instance.
+
+        .. note:: The ``packet id`` is a string of length 32 because this is
+                  exactly the length of an 'md5' digest in hex representation.
         """
         # Generate the packet ID from the current time as well as
         # memory location and take the md5 hash. The hash can be
@@ -54,7 +57,7 @@ class Wavepacket(object):
         # in case the timer resolution is too small. The 'time' part
         # assures that in case one instance gets deleted and another
         # created at the same location, their IDs still differ.
-        self._id = hashlib.md5(str(id(self)) + str(time.time())).hexdigest()
+        self._id = hashlib.md5((str(id(self)) + str(time.time())).encode('utf-8')).hexdigest()
 
 
     def get_id(self):
@@ -73,11 +76,15 @@ class Wavepacket(object):
         r"""Manually set a new ID for the current wavepacket instance.
 
         :param anid: The new ID.
-        :type anid: int
+        :type anid: str
         """
-        # Currently we force integers as ID s. However in general IDs
-        # could be of any object type, as long as we can avoid name clashes.
-        assert(type(anid) is int)
+        # Currently we force 32-character strings as ID s. (32 characters
+        # is the length of a 'md5' digest in hex representation) However in
+        # general IDs could be of any object type, as long as we can avoid
+        # name clashes.
+        if not type(anid) is str or not len(anid) == 32:
+            raise ValueError('Packet id has to be a string with 32 characters.')
+
         self._id = anid
 
 

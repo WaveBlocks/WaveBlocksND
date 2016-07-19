@@ -52,7 +52,7 @@ def add_lincombwp(self, parameters, timeslots=None, lincombsize=None, blockid=0)
     grp_lc.create_dataset("lincomb_size", (T,), dtype=np.integer, chunks=True, maxshape=(Ts,))
     # Coefficients
     grp_lc.create_dataset("coefficients", (T, J), dtype=np.complexfloating, chunks=(1, csJs), maxshape=(Ts, Js))
-    # Packet IDs
+    # Packet IDs (32 characters is the length of a 'md5' digest in hex representation)
     daset_refs = grp_lc.create_dataset("packet_refs", (T, J), dtype=np.dtype((str, 32)), chunks=(1, csJs), maxshape=(Ts, Js))
 
     gid = self.create_group(groupid="wavepacketsLCblock" + str(blockid))
