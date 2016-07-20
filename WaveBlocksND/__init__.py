@@ -34,6 +34,7 @@ from WaveBlocksND.KineticOperator import KineticOperator
 # Time Propagators
 from WaveBlocksND.Propagator import Propagator
 from WaveBlocksND.FourierPropagator import FourierPropagator
+from WaveBlocksND.ChinChenPropagator import ChinChenPropagator
 from WaveBlocksND.HagedornPropagator import HagedornPropagator
 from WaveBlocksND.MagnusPropagator import MagnusPropagator
 from WaveBlocksND.SemiclassicalPropagator import SemiclassicalPropagator

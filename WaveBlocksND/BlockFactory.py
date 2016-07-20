@@ -259,6 +259,10 @@ class BlockFactory(object):
             from WaveBlocksND.FourierPropagator import FourierPropagator
             propagator = FourierPropagator(description, *args, **kwargs)
 
+        elif prop_type == "chinchen":
+            from WaveBlocksND.ChinChenPropagator import ChinChenPropagator
+            propagator = ChinChenPropagator(description, *args, **kwargs)
+
         elif prop_type == "hagedorn":
             from WaveBlocksND.HagedornPropagator import HagedornPropagator
             propagator = HagedornPropagator(description, *args, **kwargs)

@@ -59,7 +59,8 @@ PA = ParameterLoader().load_from_file(args.parametersfile)
 print(PA)
 
 # Decide which simulation loop to use
-if PA["algorithm"] == "fourier":
+if PA["algorithm"] == "fourier" or PA["algorithm"] == "chinchen":
+    # TODO: Split configuration into 'algorithm' and 'propagator'
     from WaveBlocksND import SimulationLoopFourier
     SL = SimulationLoopFourier(PA, resultsfile=outputfile)
 
