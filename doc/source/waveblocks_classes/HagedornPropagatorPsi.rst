@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: HagedornPropagatorPsi
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

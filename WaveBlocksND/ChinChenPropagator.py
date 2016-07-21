@@ -1,7 +1,7 @@
 r"""The WaveBlocks Project
 
 This file contains the ChinChen propagator class. The wavefunction
-:math:`Psi` is propagated in time with a chin-chen splitting of the
+:math:`\Psi` is propagated in time with a chin-chen splitting of the
 exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 
 @author: R. Bourquin

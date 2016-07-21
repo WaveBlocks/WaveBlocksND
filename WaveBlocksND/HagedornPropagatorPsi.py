@@ -24,7 +24,7 @@ class HagedornPropagatorPsi(Propagator):
     r"""This class can numerically propagate given initial values :math:`\Psi` in
     a potential :math:`V(x)`. The propagation is done for a given set of homogeneous
     Hagedorn wavepackets neglecting interaction. This version of the propagator uses
-    the :math:`phi` to :math:`psi` transformation."""
+    the :math:`\phi` to :math:`\psi` transformation."""
 
     def __init__(self, parameters, potential, packets=[]):
         r"""Initialize a new :py:class:`HagedornPropagator` instance.
