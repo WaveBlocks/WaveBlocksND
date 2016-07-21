@@ -23,21 +23,21 @@ S = [[0.0]]
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 1,
+    "type": "HagedornWavepacket",
+    "dimension": 1,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : [q,p,Q,P,S],
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 32,
-        "dimension" : 1
+    "eps": eps,
+    "Pi": [q, p, Q, P, S],
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 32,
+        "dimension": 1
     }],
-    "coefficients" : [[ ((0,), 1.0) ]],
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
+    "coefficients": [[((0,), 1.0)]],
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "DirectHomogeneousQuadrature",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
@@ -48,7 +48,7 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]
 
 leading_component = 0
 

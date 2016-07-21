@@ -21,21 +21,21 @@ S = [[0.0]]
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 1,
+    "type": "HagedornWavepacket",
+    "dimension": 1,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : [q,p,Q,P,S],
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 4,
-        "dimension" : 1
+    "eps": eps,
+    "Pi": [q, p, Q, P, S],
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 4,
+        "dimension": 1
     }],
-    "coefficients" : [[ ((0,), 1.0) ]],
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "NSDInhomogeneous",
+    "coefficients": [[((0,), 1.0)]],
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "NSDInhomogeneous",
             'qr': {
                 'type': 'GaussLaguerreQR',
                 'order': 5,
@@ -46,7 +46,7 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]
 
 leading_component = 0
 
@@ -55,13 +55,12 @@ write_nth = 5
 
 matrix_exponential = "pade"
 
-
 observables = {
-    "autocorrelation" : {
-        "innerproduct" : {
-            "type" : "InhomogeneousInnerProduct",
-            "delegate" : {
-                "type" : "NSDInhomogeneous",
+    "autocorrelation": {
+        "innerproduct": {
+            "type": "InhomogeneousInnerProduct",
+            "delegate": {
+                "type": "NSDInhomogeneous",
                 'qr': {
                     'type': 'GaussLaguerreQR',
                     'order': 5,

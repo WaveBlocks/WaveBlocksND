@@ -12,20 +12,20 @@ starting_point = [0, 0]
 eps = 0.5
 
 hawp_template = {
-    "type" : "HagedornWavepacket",
-    "dimension" : dimension,
+    "type": "HagedornWavepacket",
+    "dimension": dimension,
     "ncomponents": ncomponents,
-    "eps" : eps,
-    "basis_shapes" : [{
-            "type" : "HyperCubicShape",
-            "limits" : [10,10],
-            }]
-    }
+    "eps": eps,
+    "basis_shapes": [{
+        "type": "HyperCubicShape",
+        "limits": [10, 10],
+    }]
+}
 
 innerproduct = {
-    "type" : "HomogeneousInnerProduct",
-    "delegate" : {
-        "type" : "DirectHomogeneousQuadrature",
+    "type": "HomogeneousInnerProduct",
+    "delegate": {
+        "type": "DirectHomogeneousQuadrature",
         'qr': {
             'type': 'TensorProductQR',
             'dimension': dimension,
@@ -36,5 +36,5 @@ innerproduct = {
 }
 
 # Grid for evaluation and plotting
-limits = [[-2, 2], [-2,2]]
+limits = [[-2, 2], [-2, 2]]
 number_nodes = [500, 500]

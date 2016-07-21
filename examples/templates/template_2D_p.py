@@ -36,21 +36,21 @@ matrix_exponential = "pade"
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 2,
+    "type": "HagedornWavepacket",
+    "dimension": 2,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : [q,p,Q,P,S],
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 8,
-        "dimension" : 2
+    "eps": eps,
+    "Pi": [q, p, Q, P, S],
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 8,
+        "dimension": 2
     }],
-    "coefficients" : [[ ((0,0), 1.0) ]],
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
+    "coefficients": [[((0, 0), 1.0)]],
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "DirectHomogeneousQuadrature",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 2,
@@ -62,4 +62,4 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]

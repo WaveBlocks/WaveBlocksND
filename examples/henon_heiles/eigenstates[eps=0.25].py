@@ -12,21 +12,21 @@ starting_point = [0.5, 0.5]
 eps = 0.25
 
 hawp_template = {
-    "type" : "HagedornWavepacket",
-    "dimension" : dimension,
+    "type": "HagedornWavepacket",
+    "dimension": dimension,
     "ncomponents": 1,
-    "eps" : eps,
-    "basis_shapes" : [{
-            "type" : "HyperbolicCutShape",
-            "K" : 24,
-            "dimension" : dimension
-            }]
-    }
+    "eps": eps,
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 24,
+        "dimension": dimension
+    }]
+}
 
 innerproduct = {
-    "type" : "HomogeneousInnerProduct",
-    "delegate" : {
-        "type" : "DirectHomogeneousQuadrature",
+    "type": "HomogeneousInnerProduct",
+    "delegate": {
+        "type": "DirectHomogeneousQuadrature",
         'qr': {
             'type': 'TensorProductQR',
             'dimension': dimension,

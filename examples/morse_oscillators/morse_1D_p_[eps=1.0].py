@@ -12,7 +12,7 @@ ncomponents = 1
 
 eps = 1.0
 
-potential ="morse_zero_2"
+potential = "morse_zero_2"
 l = 1.0
 x0 = 0.0
 
@@ -21,22 +21,22 @@ PI, C = LFF.load_from_file("groundstate.hdf5")
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 1,
+    "type": "HagedornWavepacket",
+    "dimension": 1,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : PI,
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 64,
-        "dimension" : 1
+    "eps": eps,
+    "Pi": PI,
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 64,
+        "dimension": 1
     }],
-# Coefficient values computed by 'ComputeGroundstate.py'
-    "coefficients" : C,
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
+    # Coefficient values computed by 'ComputeGroundstate.py'
+    "coefficients": C,
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "DirectHomogeneousQuadrature",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
@@ -47,7 +47,7 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]
 
 leading_component = 0
 

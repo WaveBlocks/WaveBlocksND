@@ -1,4 +1,5 @@
 algorithm = "fourier"
+propagator = "fourier"
 
 T = 12
 dt = 0.01
@@ -12,7 +13,7 @@ potential = "cosh_osc_rotsym_2d"
 
 # The grid of our simulation domain
 limits = [(-6.283185307179586, 6.283185307179586), (-6.283185307179586, 6.283185307179586)]
-#number_nodes = [1024, 1024]
+# number_nodes = [1024, 1024]
 number_nodes = [2048, 2048]
 
 # The parameter set of the initial wavepacket
@@ -32,21 +33,21 @@ S = [[0.0]]
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 2,
+    "type": "HagedornWavepacket",
+    "dimension": 2,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : [q,p,Q,P,S],
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 12,
-        "dimension" : 2
+    "eps": eps,
+    "Pi": [q, p, Q, P, S],
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 12,
+        "dimension": 2
     }],
-    "coefficients" : [[ ((0,0), 1.0) ]],
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
+    "coefficients": [[((0, 0), 1.0)]],
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "DirectHomogeneousQuadrature",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 2,
@@ -58,7 +59,7 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]
 
 leading_component = 0
 
