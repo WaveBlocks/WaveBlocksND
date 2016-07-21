@@ -162,6 +162,11 @@ the entry <img class="math" src="../_images/math/c4ca09037b0c386d796812584b0498b
 <dt id="WaveBlocksND.HagedornWavepacket.gen_id">
 <code class="descname">gen_id</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.HagedornWavepacket.gen_id" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate an (unique) ID per wavepacket instance.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The <code class="docutils literal"><span class="pre">packet</span> <span class="pre">id</span></code> is a string of length 32 because this is
+exactly the length of an &#8216;md5&#8217; digest in hex representation.</p>
+</div>
 </dd></dl>
 
 <dl class="method">
@@ -483,7 +488,7 @@ the coefficients <img class="math" src="../_images/math/c7852a3f2c7571fbba5e0849
 <col class="field-name" />
 <col class="field-body" />
 <tbody valign="top">
-<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anid</strong> (<em>int</em>) &#8211; The new ID.</td>
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>anid</strong> (<em>str</em>) &#8211; The new ID.</td>
 </tr>
 </tbody>
 </table>

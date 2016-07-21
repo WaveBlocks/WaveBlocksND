@@ -73,9 +73,9 @@
     <span class="sd">r&quot;&quot;&quot;This class can numerically propagate given initial values :math:`\Psi` in</span>
 <span class="sd">    a potential :math:`V(x)`. The propagation is done for a given set of homogeneous</span>
 <span class="sd">    Hagedorn wavepackets neglecting interaction. This version of the propagator uses</span>
-<span class="sd">    the :math:`phi` to :math:`psi` transformation.&quot;&quot;&quot;</span>
+<span class="sd">    the :math:`\phi` to :math:`\psi` transformation.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="HagedornPropagatorPsi.__init__"><a class="viewcode-back" href="../../waveblocks_classes/HagedornPropagatorPsi.html#WaveBlocksND.HagedornPropagatorPsi.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`HagedornPropagator` instance.</span>
 
 <span class="sd">        :param parameters: A :py:class:`ParameterProvider` instance containing at least</span>
@@ -124,7 +124,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_potential</span><span class="p">()</span>
 
         <span class="c1"># Transformation between phi and psi wavepacket versions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_TR</span> <span class="o">=</span> <span class="n">HagedornWavepacketTransformPhiPsi</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TR</span> <span class="o">=</span> <span class="n">HagedornWavepacketTransformPhiPsi</span><span class="p">()</span></div>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

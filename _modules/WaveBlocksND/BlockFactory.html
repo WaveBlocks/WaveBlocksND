@@ -308,6 +308,10 @@
             <span class="kn">from</span> <span class="nn">WaveBlocksND.FourierPropagator</span> <span class="k">import</span> <span class="n">FourierPropagator</span>
             <span class="n">propagator</span> <span class="o">=</span> <span class="n">FourierPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
+        <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;chinchen&quot;</span><span class="p">:</span>
+            <span class="kn">from</span> <span class="nn">WaveBlocksND.ChinChenPropagator</span> <span class="k">import</span> <span class="n">ChinChenPropagator</span>
+            <span class="n">propagator</span> <span class="o">=</span> <span class="n">ChinChenPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+
         <span class="k">elif</span> <span class="n">prop_type</span> <span class="o">==</span> <span class="s2">&quot;hagedorn&quot;</span><span class="p">:</span>
             <span class="kn">from</span> <span class="nn">WaveBlocksND.HagedornPropagator</span> <span class="k">import</span> <span class="n">HagedornPropagator</span>
             <span class="n">propagator</span> <span class="o">=</span> <span class="n">HagedornPropagator</span><span class="p">(</span><span class="n">description</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>

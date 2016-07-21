@@ -78,6 +78,30 @@
 a potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>. The propagation is done for a given set of homogeneous
 Hagedorn wavepackets neglecting interaction.</p>
 <dl class="method">
+<dt id="WaveBlocksND.SemiclassicalPropagator.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>packets=[]</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#WaveBlocksND.SemiclassicalPropagator" title="WaveBlocksND.SemiclassicalPropagator"><code class="xref py py-class docutils literal"><span class="pre">SemiclassicalPropagator</span></code></a> instance.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>parameters</strong> (A <a class="reference internal" href="ParameterProvider.html#WaveBlocksND.ParameterProvider" title="WaveBlocksND.ParameterProvider"><code class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></code></a> instance) &#8211; A <a class="reference internal" href="ParameterProvider.html#WaveBlocksND.ParameterProvider" title="WaveBlocksND.ParameterProvider"><code class="xref py py-class docutils literal"><span class="pre">ParameterProvider</span></code></a> instance containing at least
+the key <code class="docutils literal"><span class="pre">dt</span></code> for providing the timestep <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/>.</li>
+<li><strong>potential</strong> &#8211; The potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/> the wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> feels during the time propagation.</li>
+<li><strong>packet</strong> &#8211; The initial homogeneous Hagedorn wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> we propagate in time.</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Raises:</th><td class="field-body"><p class="first last"><strong>ValueError</strong> &#8211; If the number of components of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> does not match
+the number of energy levels <img class="math" src="../_images/math/159e1bfcbbeedf7e28983ee80db2b2d37c3b3ebc.png" alt="\lambda_i"/> of the potential.</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
 <dt id="WaveBlocksND.SemiclassicalPropagator.add_wavepacket">
 <code class="descname">add_wavepacket</code><span class="sig-paren">(</span><em>packet</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/SemiclassicalPropagator.html#SemiclassicalPropagator.add_wavepacket"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.SemiclassicalPropagator.add_wavepacket" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a new wavepacket <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/> to the list of propagated wavepackets.</p>

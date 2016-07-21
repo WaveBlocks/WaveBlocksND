@@ -71,15 +71,15 @@
 <span class="sd">    a potential :math:`V(x)`. The propagation is done for a given set of inhomogeneous</span>
 <span class="sd">    Hagedorn wavepackets neglecting interaction.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="HagedornPropagatorInhomogeneous.__init__"><a class="viewcode-back" href="../../waveblocks_classes/HagedornPropagatorInhomogeneous.html#WaveBlocksND.HagedornPropagatorInhomogeneous.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`HagedornPropagatorInhomogeneous` instance.</span>
 
 <span class="sd">        :param parameters: A :py:class:`ParameterProvider` instance containing at least</span>
 <span class="sd">                           the key ``dt`` for providing the timestep :math:`\tau`.</span>
 <span class="sd">        :type parameters: A :py:class:`ParameterProvider` instance</span>
-
 <span class="sd">        :param potential: The potential :math:`V(x)` the wavepacket :math:`\Psi` feels during the time propagation.</span>
 <span class="sd">        :param packet: The initial homogeneous Hagedorn wavepacket :math:`\Psi` we propagate in time.</span>
+
 <span class="sd">        :raises ValueError: If the number of components of :math:`\Psi` does not match</span>
 <span class="sd">                            the number of energy levels :math:`\lambda_i` of the potential.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -115,7 +115,7 @@
 
         <span class="c1"># Precalculate the potential splittings needed</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_local_quadratic</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_local_remainder</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_local_remainder</span><span class="p">()</span></div>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>FourierPropagator &mdash; WaveBlocksND devel documentation</title>
+    <title>ChinChenPropagator &mdash; WaveBlocksND devel documentation</title>
     
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
@@ -24,8 +24,8 @@
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <link rel="top" title="WaveBlocksND devel documentation" href="../index.html" />
-    <link rel="next" title="ChinChenPropagator" href="ChinChenPropagator.html" />
-    <link rel="prev" title="Propagator" href="Propagator.html" /> 
+    <link rel="next" title="HagedornPropagator" href="HagedornPropagator.html" />
+    <link rel="prev" title="FourierPropagator" href="FourierPropagator.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -38,10 +38,10 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ChinChenPropagator.html" title="ChinChenPropagator"
+          <a href="HagedornPropagator.html" title="HagedornPropagator"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="Propagator.html" title="Propagator"
+          <a href="FourierPropagator.html" title="FourierPropagator"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>
@@ -52,10 +52,10 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="fourierpropagator">
-<h1>FourierPropagator<a class="headerlink" href="#fourierpropagator" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="chinchenpropagator">
+<h1>ChinChenPropagator<a class="headerlink" href="#chinchenpropagator" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="module-WaveBlocksND">
-<span id="about-the-fourierpropagator-class"></span><h2>About the <code class="docutils literal"><span class="pre">FourierPropagator</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
+<span id="about-the-chinchenpropagator-class"></span><h2>About the <code class="docutils literal"><span class="pre">ChinChenPropagator</span></code> class<a class="headerlink" href="#module-WaveBlocksND" title="Permalink to this headline">¶</a></h2>
 <p>The WaveBlocks Project</p>
 <p>&#64;author: R. Bourquin
 &#64;copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2015, 2016 R. Bourquin
@@ -63,26 +63,40 @@
 </div>
 <div class="section" id="inheritance-diagram">
 <h2>Inheritance diagram<a class="headerlink" href="#inheritance-diagram" title="Permalink to this headline">¶</a></h2>
-<img src="../_images/inheritance-709eb5ab1b6efdc912988c487a90372074a5e74e.png" alt="Inheritance diagram of FourierPropagator" usemap="#inheritance52a761d7bc" class="inheritance"/>
-<map id="inheritance52a761d7bc" name="inheritance52a761d7bc">
-<area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi(x_0, t_0)` on" alt="" coords="319,5,573,31"/>
+<img src="../_images/inheritance-51fce89fed9ebb538123f9e0ae8032953ddeb7ea.png" alt="Inheritance diagram of ChinChenPropagator" usemap="#inheritanceefc319c072" class="inheritance"/>
+<map id="inheritanceefc319c072" name="inheritanceefc319c072">
+<area shape="rect" id="node1" title="This class can numerically propagate given initial values :math:`\Psi(x_0, t_0)` on" alt="" coords="319,5,608,31"/>
 <area shape="rect" id="node2" title="Propagators can numerically simulate the time evolution of quantum states" alt="" coords="5,5,271,31"/>
 </map>
 </div>
 <div class="section" id="class-documentation">
 <h2>Class documentation<a class="headerlink" href="#class-documentation" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
-<dt id="WaveBlocksND.FourierPropagator">
-<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">FourierPropagator</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>initial_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator">
+<em class="property">class </em><code class="descclassname">WaveBlocksND.</code><code class="descname">ChinChenPropagator</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>initial_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator" title="Permalink to this definition">¶</a></dt>
 <dd><p>This class can numerically propagate given initial values <img class="math" src="../_images/math/09ed461798fa50f983c7f98d565397d0e561c9bb.png" alt="\Psi(x_0, t_0)"/> on
-a potential hyper surface <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>. The propagation is done with a Strang splitting
-of the time propagation operator <img class="math" src="../_images/math/06bd4236d9ab66809a1626d5c16887acd3db060e.png" alt="\exp(-\frac{i}{\varepsilon^2} \tau H)"/>.</p>
+a potential hyper surface <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/>. The propagation is done with a Chin-Chen <a class="footnote-reference" href="#id2" id="id1">[1]</a>
+splitting of the time propagation operator <img class="math" src="../_images/math/06bd4236d9ab66809a1626d5c16887acd3db060e.png" alt="\exp(-\frac{i}{\varepsilon^2} \tau H)"/>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This propagator is implemented for single-level potentials (<a class="reference internal" href="MatrixPotential1S.html#WaveBlocksND.MatrixPotential1S" title="WaveBlocksND.MatrixPotential1S"><code class="xref py py-class docutils literal"><span class="pre">MatrixPotential1S</span></code></a>)
+only. More precisely, the other potential implementations do not provide
+some functionality needed here.</p>
+</div>
+<table class="docutils footnote" frame="void" id="id2" rules="none">
+<colgroup><col class="label" /><col /></colgroup>
+<tbody valign="top">
+<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>S. A. Chin and C. R. Chen, &#8220;Fourth order gradient symplectic integrator methods
+for solving the time-dependent Schroedinger equation&#8221;,
+J. Chem. Phys. Volume 114, Issue 17, (2001) 7338-7341.</td></tr>
+</tbody>
+</table>
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.__init__">
-<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>initial_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize a new <a class="reference internal" href="#WaveBlocksND.FourierPropagator" title="WaveBlocksND.FourierPropagator"><code class="xref py py-class docutils literal"><span class="pre">FourierPropagator</span></code></a> instance. Precalculate the
-the kinetic operator <img class="math" src="../_images/math/f5339fd8776a3b7a951bfacc10f6c264c2722ca6.png" alt="T_e"/> and the potential operator <img class="math" src="../_images/math/dd50200d238d34d8a9c9a131b57883840d9a6980.png" alt="V_e"/>
-used for time propagation.</p>
+<dt id="WaveBlocksND.ChinChenPropagator.__init__">
+<code class="descname">__init__</code><span class="sig-paren">(</span><em>parameters</em>, <em>potential</em>, <em>initial_values</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator.__init__"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize a new <a class="reference internal" href="#WaveBlocksND.ChinChenPropagator" title="WaveBlocksND.ChinChenPropagator"><code class="xref py py-class docutils literal"><span class="pre">ChinChenPropagator</span></code></a> instance. Precalculate the
+the kinetic operator <img class="math" src="../_images/math/f5339fd8776a3b7a951bfacc10f6c264c2722ca6.png" alt="T_e"/> and the potential operators <img class="math" src="../_images/math/dd50200d238d34d8a9c9a131b57883840d9a6980.png" alt="V_e"/> and
+<img class="math" src="../_images/math/57f5fff658c131b92248c5ebd4222531be7e6826.png" alt="\tilde{V}_e"/> used for time propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
 <col class="field-body" />
@@ -106,8 +120,8 @@ number of energy surfaces <img class="math" src="../_images/math/0ebb7072df26217
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.get_number_components">
-<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.get_number_components">
+<code class="descname">get_number_components</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator.get_number_components"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.get_number_components" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the number <img class="math" src="../_images/math/f4170ed8938b79490d8923857962695514a8e4cb.png" alt="N"/> of components of <img class="math" src="../_images/math/334b0728f25dd84a28e483181038a307ea6e483e.png" alt="\Psi"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -120,8 +134,8 @@ number of energy surfaces <img class="math" src="../_images/math/0ebb7072df26217
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.get_operators">
-<code class="descname">get_operators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_operators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_operators" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.get_operators">
+<code class="descname">get_operators</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator.get_operators"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.get_operators" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the kinetic and potential operators <img class="math" src="../_images/math/ac3f008033c12a5ed03fd3a31ffcea8805427080.png" alt="T(\Omega)"/> and <img class="math" src="../_images/math/0498251675a2eecf06ea76263ec8c7871b99f3c2.png" alt="V(\Gamma)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -134,8 +148,8 @@ number of energy surfaces <img class="math" src="../_images/math/0ebb7072df26217
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.get_potential">
-<code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.get_potential">
+<code class="descname">get_potential</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.get_potential" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the potential <img class="math" src="../_images/math/947b2e7cf74785c545d567645fb43e1310e3b227.png" alt="V(x)"/> used for time propagation.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -148,8 +162,8 @@ number of energy surfaces <img class="math" src="../_images/math/0ebb7072df26217
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.get_wavefunction">
-<code class="descname">get_wavefunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.get_wavefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.get_wavefunction" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.get_wavefunction">
+<code class="descname">get_wavefunction</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator.get_wavefunction"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.get_wavefunction" title="Permalink to this definition">¶</a></dt>
 <dd><p>Get the wavefunction that stores the current data <img class="math" src="../_images/math/7e3449b74b914c8f5312bb21cc4c91a78e529e3f.png" alt="\Psi(\Gamma)"/>.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -162,8 +176,8 @@ number of energy surfaces <img class="math" src="../_images/math/0ebb7072df26217
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.post_propagate">
-<code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.post_propagate">
+<code class="descname">post_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.post_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at final time <img class="math" src="../_images/math/f2d283a2071f9d043c9e0b0f794a8880fa0d3ce9.png" alt="T"/>,
 perform some computations exactly once after running the ordinary
 time propagation and before each time simulation data will be saved.</p>
@@ -172,8 +186,8 @@ nothing and returns.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.pre_propagate">
-<code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.FourierPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.pre_propagate">
+<code class="descname">pre_propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.pre_propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction <img class="math" src="../_images/math/499a2ee48b33448e80b97af9df9550828bdbfb59.png" alt="\psi"/> at initial time <img class="math" src="../_images/math/1410bd3aa3d34373bc7de52c132b4fd6f154019a.png" alt="t_0"/>,
 perform some computations exactly once before running the ordinary
 time propagation and after each time simulation data was saved.</p>
@@ -182,8 +196,8 @@ nothing and returns.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="WaveBlocksND.FourierPropagator.propagate">
-<code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/FourierPropagator.html#FourierPropagator.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.FourierPropagator.propagate" title="Permalink to this definition">¶</a></dt>
+<dt id="WaveBlocksND.ChinChenPropagator.propagate">
+<code class="descname">propagate</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/WaveBlocksND/ChinChenPropagator.html#ChinChenPropagator.propagate"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#WaveBlocksND.ChinChenPropagator.propagate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Given the wavefunction values <img class="math" src="../_images/math/7e3449b74b914c8f5312bb21cc4c91a78e529e3f.png" alt="\Psi(\Gamma)"/> at time <img class="math" src="../_images/math/5ec053cf70dc1c98cc297322250569eda193e7a4.png" alt="t"/>, calculate
 new values <img class="math" src="../_images/math/88fa0a2a3140f647e930e715d1aae6f097775318.png" alt="\Psi^\prime(\Gamma)"/> at time <img class="math" src="../_images/math/9ef2d61249c313f3251d7908ea2ae2defd92a1c0.png" alt="t + \tau"/>. We perform exactly
 one single timestep of size <img class="math" src="../_images/math/557d5fad862c9046d26e1a930f45a550c146d592.png" alt="\tau"/> within this function.</p>
@@ -202,8 +216,8 @@ one single timestep of size <img class="math" src="../_images/math/557d5fad862c9
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">FourierPropagator</a><ul>
-<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">FourierPropagator</span></code> class</a></li>
+<li><a class="reference internal" href="#">ChinChenPropagator</a><ul>
+<li><a class="reference internal" href="#module-WaveBlocksND">About the <code class="docutils literal"><span class="pre">ChinChenPropagator</span></code> class</a></li>
 <li><a class="reference internal" href="#inheritance-diagram">Inheritance diagram</a></li>
 <li><a class="reference internal" href="#class-documentation">Class documentation</a></li>
 </ul>
@@ -211,15 +225,15 @@ one single timestep of size <img class="math" src="../_images/math/557d5fad862c9
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="Propagator.html"
-                        title="previous chapter">Propagator</a></p>
+  <p class="topless"><a href="FourierPropagator.html"
+                        title="previous chapter">FourierPropagator</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="ChinChenPropagator.html"
-                        title="next chapter">ChinChenPropagator</a></p>
+  <p class="topless"><a href="HagedornPropagator.html"
+                        title="next chapter">HagedornPropagator</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/waveblocks_classes/FourierPropagator.txt"
+      <li><a href="../_sources/waveblocks_classes/ChinChenPropagator.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -247,10 +261,10 @@ one single timestep of size <img class="math" src="../_images/math/557d5fad862c9
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ChinChenPropagator.html" title="ChinChenPropagator"
+          <a href="HagedornPropagator.html" title="HagedornPropagator"
              >next</a> |</li>
         <li class="right" >
-          <a href="Propagator.html" title="Propagator"
+          <a href="FourierPropagator.html" title="FourierPropagator"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">WaveBlocksND devel documentation</a> &raquo;</li> 
       </ul>

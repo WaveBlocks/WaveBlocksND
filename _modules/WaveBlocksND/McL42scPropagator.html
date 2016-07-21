@@ -75,15 +75,15 @@
 <span class="sd">    Hagedorn wavepackets neglecting interaction. It uses the McL42 and the idea of the</span>
 <span class="sd">    semiclassical splitting&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
+<div class="viewcode-block" id="McL42scPropagator.__init__"><a class="viewcode-back" href="../../waveblocks_classes/McL42scPropagator.html#WaveBlocksND.McL42scPropagator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">packets</span><span class="o">=</span><span class="p">[]):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`SemiclassicalPropagator` instance.</span>
 
 <span class="sd">        :param parameters: A :py:class:`ParameterProvider` instance containing at least</span>
 <span class="sd">                           the key ``dt`` for providing the timestep :math:`\tau`.</span>
 <span class="sd">        :type parameters: A :py:class:`ParameterProvider` instance</span>
-
 <span class="sd">        :param potential: The potential :math:`V(x)` the wavepacket :math:`\Psi` feels during the time propagation.</span>
 <span class="sd">        :param packet: The initial homogeneous Hagedorn wavepacket :math:`\Psi` we propagate in time.</span>
+
 <span class="sd">        :raises ValueError: If the number of components of :math:`\Psi` does not match</span>
 <span class="sd">                            the number of energy levels :math:`\lambda_i` of the potential.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -124,7 +124,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_prepare_potential</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_a</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_b</span> <span class="o">=</span> <span class="n">SplittingParameters</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;splitting_method&quot;</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_innerorder</span> <span class="o">=</span> <span class="n">SplittingParameters</span><span class="p">()</span><span class="o">.</span><span class="n">order</span><span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;splitting_method&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_B</span> <span class="o">=</span> <span class="n">PerturbedSplittingParameters</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s2">&quot;L42&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_A</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_B</span> <span class="o">=</span> <span class="n">PerturbedSplittingParameters</span><span class="p">()</span><span class="o">.</span><span class="n">build</span><span class="p">(</span><span class="s2">&quot;L42&quot;</span><span class="p">)</span></div>
 
 
     <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>

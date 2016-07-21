@@ -50,7 +50,7 @@
 <span></span><span class="sd">r&quot;&quot;&quot;The WaveBlocks Project</span>
 
 <span class="sd">This file contains the Fourier propagator class. The wavefunction</span>
-<span class="sd">:math:`Psi` is propagated in time with a strang splitting of the</span>
+<span class="sd">:math:`\Psi` is propagated in time with a strang splitting of the</span>
 <span class="sd">exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
 
 <span class="sd">@author: R. Bourquin</span>
@@ -73,19 +73,19 @@
 <span class="sd">    of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">):</span>
+<div class="viewcode-block" id="FourierPropagator.__init__"><a class="viewcode-back" href="../../waveblocks_classes/FourierPropagator.html#WaveBlocksND.FourierPropagator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">):</span>
         <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`FourierPropagator` instance. Precalculate the</span>
 <span class="sd">        the kinetic operator :math:`T_e` and the potential operator :math:`V_e`</span>
-<span class="sd">        used or time propagation.</span>
+<span class="sd">        used for time propagation.</span>
 
+<span class="sd">        :param parameters: The set of simulation parameters. It must contain at least</span>
+<span class="sd">                           the semi-classical parameter :math:`\varepsilon` and the</span>
+<span class="sd">                           time step size :math:`\tau`.</span>
 <span class="sd">        :param potential: The potential :math:`V(x)` governing the time evolution.</span>
 <span class="sd">        :type potential: A :py:class:`MatrixPotential` instance.</span>
 <span class="sd">        :param initial_values: The initial values :math:`\Psi(\Gamma, t_0)` given</span>
 <span class="sd">                               in the canonical basis.</span>
 <span class="sd">        :type initial_values: A :py:class:`WaveFunction` instance.</span>
-<span class="sd">        :param para: The set of simulation parameters. It must contain at least</span>
-<span class="sd">                     the semi-classical parameter :math:`\varepsilon` and the</span>
-<span class="sd">                     time step size :math:`tau`.</span>
 
 <span class="sd">        :raise: :py:class:`ValueError` If the number of components of :math:`\Psi` does not match the</span>
 <span class="sd">                           number of energy surfaces :math:`\lambda_i(x)` of the potential.</span>
@@ -112,7 +112,7 @@
         <span class="c1"># Exponential &#39;\exp(-i/eps^2*dt*V)&#39; used in the Strang splitting.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="n">j</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
         <span class="n">VE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_exponential_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">ve</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">ve</span> <span class="ow">in</span> <span class="n">VE</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">ve</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">ve</span> <span class="ow">in</span> <span class="n">VE</span><span class="p">])</span></div>
 
 
     <span class="c1"># TODO: Consider removing this, duplicate</span>

@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: FourierPropagator
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

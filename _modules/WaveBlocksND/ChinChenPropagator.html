@@ -1,0 +1,276 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>WaveBlocksND.ChinChenPropagator &mdash; WaveBlocksND devel documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     'devel',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="WaveBlocksND devel documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for WaveBlocksND.ChinChenPropagator</h1><div class="highlight"><pre>
+<span></span><span class="sd">r&quot;&quot;&quot;The WaveBlocks Project</span>
+
+<span class="sd">This file contains the ChinChen propagator class. The wavefunction</span>
+<span class="sd">:math:`\Psi` is propagated in time with a chin-chen splitting of the</span>
+<span class="sd">exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
+
+<span class="sd">@author: R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2014, 2016 R. Bourquin</span>
+<span class="sd">@license: Modified BSD License</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">from</span> <span class="nn">numpy</span> <span class="k">import</span> <span class="n">zeros</span><span class="p">,</span> <span class="n">complexfloating</span><span class="p">,</span> <span class="n">ndarray</span><span class="p">,</span> <span class="n">vstack</span>
+<span class="kn">from</span> <span class="nn">numpy.fft</span> <span class="k">import</span> <span class="n">fftn</span><span class="p">,</span> <span class="n">ifftn</span>
+<span class="kn">from</span> <span class="nn">numpy.linalg</span> <span class="k">import</span> <span class="n">norm</span>
+<span class="kn">from</span> <span class="nn">scipy.linalg</span> <span class="k">import</span> <span class="n">expm</span>
+
+<span class="kn">from</span> <span class="nn">WaveBlocksND.Propagator</span> <span class="k">import</span> <span class="n">Propagator</span>
+<span class="kn">from</span> <span class="nn">WaveBlocksND.KineticOperator</span> <span class="k">import</span> <span class="n">KineticOperator</span>
+
+<span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;ChinChenPropagator&quot;</span><span class="p">]</span>
+
+
+<div class="viewcode-block" id="ChinChenPropagator"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator">[docs]</a><span class="k">class</span> <span class="nc">ChinChenPropagator</span><span class="p">(</span><span class="n">Propagator</span><span class="p">):</span>
+    <span class="sd">r&quot;&quot;&quot;This class can numerically propagate given initial values :math:`\Psi(x_0, t_0)` on</span>
+<span class="sd">    a potential hyper surface :math:`V(x)`. The propagation is done with a Chin-Chen [1]_</span>
+<span class="sd">    splitting of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.</span>
+
+<span class="sd">    .. note:: This propagator is implemented for single-level potentials (:py:class:`MatrixPotential1S`)</span>
+<span class="sd">              only. More precisely, the other potential implementations do not provide</span>
+<span class="sd">              some functionality needed here.</span>
+
+<span class="sd">    .. [1] S. A. Chin and C. R. Chen, &quot;Fourth order gradient symplectic integrator methods</span>
+<span class="sd">           for solving the time-dependent Schroedinger equation&quot;,</span>
+<span class="sd">           J. Chem. Phys. Volume 114, Issue 17, (2001) 7338-7341.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="ChinChenPropagator.__init__"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator.__init__">[docs]</a>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">parameters</span><span class="p">,</span> <span class="n">potential</span><span class="p">,</span> <span class="n">initial_values</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Initialize a new :py:class:`ChinChenPropagator` instance. Precalculate the</span>
+<span class="sd">        the kinetic operator :math:`T_e` and the potential operators :math:`V_e` and</span>
+<span class="sd">        :math:`\tilde{V}_e` used for time propagation.</span>
+
+<span class="sd">        :param parameters: The set of simulation parameters. It must contain at least</span>
+<span class="sd">                           the semi-classical parameter :math:`\varepsilon` and the</span>
+<span class="sd">                           time step size :math:`\tau`.</span>
+<span class="sd">        :param potential: The potential :math:`V(x)` governing the time evolution.</span>
+<span class="sd">        :type potential: A :py:class:`MatrixPotential` instance.</span>
+<span class="sd">        :param initial_values: The initial values :math:`\Psi(\Gamma, t_0)` given</span>
+<span class="sd">                               in the canonical basis.</span>
+<span class="sd">        :type initial_values: A :py:class:`WaveFunction` instance.</span>
+
+<span class="sd">        :raise: :py:class:`ValueError` If the number of components of :math:`\Psi` does not match the</span>
+<span class="sd">                           number of energy surfaces :math:`\lambda_i(x)` of the potential.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># The embedded &#39;MatrixPotential&#39; instance representing the potential &#39;V&#39;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span> <span class="o">=</span> <span class="n">potential</span>
+
+        <span class="c1"># The initial values of the components &#39;\psi_i&#39; sampled at the given grid.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span> <span class="o">=</span> <span class="n">initial_values</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">():</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Potential dimension and number of components do not match.&quot;</span><span class="p">)</span>
+
+        <span class="c1"># The position space grid nodes &#39;\Gamma&#39;.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span> <span class="o">=</span> <span class="n">initial_values</span><span class="o">.</span><span class="n">get_grid</span><span class="p">()</span>
+
+        <span class="c1"># The kinetic operator &#39;T&#39; defined in momentum space.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span> <span class="o">=</span> <span class="n">KineticOperator</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">,</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">])</span>
+
+        <span class="c1"># Exponential &#39;\exp(-i/4*eps^2*dt*T)&#39; used in the Chin-Chen splitting.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">0.25</span><span class="n">j</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_TE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">evaluate_exponential_at</span><span class="p">()</span>
+
+        <span class="c1"># Exponential &#39;\exp(-i/(6*eps^2)*dt*V)&#39; used in the Chin-Chen splitting.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_exponential</span><span class="p">(</span><span class="o">-</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">/</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">VE</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_exponential_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">ve</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">ve</span> <span class="ow">in</span> <span class="n">VE</span><span class="p">])</span>
+
+
+        <span class="c1"># Operator V-tilde</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">(</span><span class="n">overall</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Memory for storing temporary values</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="n">ndarray</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span>
+
+        <span class="c1"># Evaluate potential and gradient</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">calculate_jacobian_canonical</span><span class="p">()</span>
+        <span class="n">Vx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
+        <span class="n">Jx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_jacobian_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
+        <span class="n">Jx</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">vstack</span><span class="p">(</span><span class="n">Jx</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">)</span>
+
+        <span class="c1"># Exponential &#39;\exp(-2i/(3*eps^2)*dt * (V + 1/48*dt^2*JV))&#39; used in the Chin-Chen splitting.</span>
+        <span class="c1"># Fill in values</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+                <span class="n">tmp</span><span class="p">[:,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mf">2.0</span><span class="n">j</span> <span class="o">/</span> <span class="p">(</span><span class="mf">3.0</span> <span class="o">*</span> <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;eps&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">*</span>
+                                    <span class="p">(</span><span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">Vx</span><span class="p">[</span><span class="n">N</span> <span class="o">*</span> <span class="n">row</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">+</span>
+                                     <span class="n">parameters</span><span class="p">[</span><span class="s2">&quot;dt&quot;</span><span class="p">]</span><span class="o">**</span><span class="mi">3</span> <span class="o">/</span> <span class="mf">48.0</span> <span class="o">*</span> <span class="n">Jx</span><span class="p">[</span><span class="n">N</span> <span class="o">*</span> <span class="n">row</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+
+        <span class="c1"># Calculate exponential</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+            <span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">expm</span><span class="p">(</span><span class="n">tmp</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+
+        <span class="c1"># Split the data into different components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_VEtilde</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">tmp</span><span class="p">[:,</span> <span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)</span> <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">)])</span></div>
+
+
+    <span class="c1"># TODO: Consider removing this, duplicate</span>
+<div class="viewcode-block" id="ChinChenPropagator.get_number_components"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator.get_number_components">[docs]</a>    <span class="k">def</span> <span class="nf">get_number_components</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the number :math:`N` of components of :math:`\Psi`.</span>
+
+<span class="sd">        :return: The number :math:`N`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span></div>
+
+
+<div class="viewcode-block" id="ChinChenPropagator.get_wavefunction"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator.get_wavefunction">[docs]</a>    <span class="k">def</span> <span class="nf">get_wavefunction</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the wavefunction that stores the current data :math:`\Psi(\Gamma)`.</span>
+
+<span class="sd">        :return: The :py:class:`WaveFunction` instance.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span></div>
+
+
+<div class="viewcode-block" id="ChinChenPropagator.get_operators"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator.get_operators">[docs]</a>    <span class="k">def</span> <span class="nf">get_operators</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Get the kinetic and potential operators :math:`T(\Omega)` and :math:`V(\Gamma)`.</span>
+
+<span class="sd">        :return: A tuple :math:`(T, V)` containing two ``ndarrays``.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># TODO: What kind of object exactly do we want to return?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">calculate_operator</span><span class="p">()</span>
+        <span class="n">T</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_KO</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">()</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_potential</span><span class="o">.</span><span class="n">evaluate_at</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="p">)</span>
+        <span class="n">V</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">([</span><span class="n">v</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_grid</span><span class="o">.</span><span class="n">get_number_nodes</span><span class="p">())</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">V</span><span class="p">])</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">T</span><span class="p">,</span> <span class="n">V</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ChinChenPropagator.propagate"><a class="viewcode-back" href="../../waveblocks_classes/ChinChenPropagator.html#WaveBlocksND.ChinChenPropagator.propagate">[docs]</a>    <span class="k">def</span> <span class="nf">propagate</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">r&quot;&quot;&quot;Given the wavefunction values :math:`\Psi(\Gamma)` at time :math:`t`, calculate</span>
+<span class="sd">        new values :math:`\Psi^\prime(\Gamma)` at time :math:`t + \tau`. We perform exactly</span>
+<span class="sd">        one single timestep of size :math:`\tau` within this function.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># How many components does Psi have</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span><span class="o">.</span><span class="n">get_number_components</span><span class="p">()</span>
+
+        <span class="c1"># Unpack the values from the current WaveFunction</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span><span class="o">.</span><span class="n">get_values</span><span class="p">()</span>
+
+        <span class="c1"># First step with the potential</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">tmp</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="n">values</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+        <span class="c1"># Go to Fourier space</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># First step with the kinetic operator</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_TE</span> <span class="o">*</span> <span class="n">component</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># Go back to real space</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">ifftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># Central step with V-tilde</span>
+        <span class="n">tmp2</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">value</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">values</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">tmp2</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">tmp2</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VEtilde</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+        <span class="c1"># Go to Fourier space</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">fftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp2</span><span class="p">]</span>
+
+        <span class="c1"># Second step with the kinetic operator</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_TE</span> <span class="o">*</span> <span class="n">component</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># Go back to real space</span>
+        <span class="n">tmp</span> <span class="o">=</span> <span class="p">[</span><span class="n">ifftn</span><span class="p">(</span><span class="n">component</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+
+        <span class="c1"># Second step with the potential</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">zeros</span><span class="p">(</span><span class="n">component</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">complexfloating</span><span class="p">)</span> <span class="k">for</span> <span class="n">component</span> <span class="ow">in</span> <span class="n">tmp</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">N</span><span class="p">):</span>
+                <span class="n">values</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">=</span> <span class="n">values</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">_VE</span><span class="p">[</span><span class="n">row</span> <span class="o">*</span> <span class="n">N</span> <span class="o">+</span> <span class="n">col</span><span class="p">]</span> <span class="o">*</span> <span class="n">tmp</span><span class="p">[</span><span class="n">col</span><span class="p">]</span>
+
+        <span class="c1"># Pack values back to WaveFunction object</span>
+        <span class="c1"># TODO: Consider squeeze(.) of data before repacking</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_psi</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../index.html">WaveBlocksND devel documentation</a> &raquo;</li>
+          <li class="nav-item nav-item-1"><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &copy; Copyright 2016, R. Bourquin.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.4.5.
+    </div>
+  </body>
+</html>

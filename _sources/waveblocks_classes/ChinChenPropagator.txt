@@ -1,7 +1,7 @@
-HagedornPropagator
+ChinChenPropagator
 ==================
 
-About the ``HagedornPropagator`` class
+About the ``ChinChenPropagator`` class
 --------------------------------------
 
 .. automodule:: WaveBlocksND
@@ -9,12 +9,12 @@ About the ``HagedornPropagator`` class
 Inheritance diagram
 -------------------
 
-.. inheritance-diagram:: HagedornPropagator
+.. inheritance-diagram:: ChinChenPropagator
 
 Class documentation
 -------------------
 
-.. autoclass:: HagedornPropagator
+.. autoclass:: ChinChenPropagator
    :members:
    :inherited-members:
 
