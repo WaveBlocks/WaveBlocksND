@@ -33,9 +33,9 @@ class Pre764scPropagator(Propagator, SplittingParameters):
         :param parameters: A :py:class:`ParameterProvider` instance containing at least
                            the key ``dt`` for providing the timestep :math:`\tau`.
         :type parameters: A :py:class:`ParameterProvider` instance
-
         :param potential: The potential :math:`V(x)` the wavepacket :math:`\Psi` feels during the time propagation.
         :param packet: The initial homogeneous Hagedorn wavepacket :math:`\Psi` we propagate in time.
+
         :raises ValueError: If the number of components of :math:`\Psi` does not match
                             the number of energy levels :math:`\lambda_i` of the potential.
         """

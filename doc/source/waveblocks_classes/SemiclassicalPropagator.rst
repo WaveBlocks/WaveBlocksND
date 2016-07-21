@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: SemiclassicalPropagator
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

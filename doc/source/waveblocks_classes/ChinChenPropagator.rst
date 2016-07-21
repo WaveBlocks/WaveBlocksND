@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: ChinChenPropagator
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

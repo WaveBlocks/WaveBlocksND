@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: McL42scPropagator
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

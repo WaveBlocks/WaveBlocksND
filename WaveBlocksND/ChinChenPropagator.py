@@ -5,7 +5,7 @@ This file contains the ChinChen propagator class. The wavefunction
 exponential :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2014 R. Bourquin
+@copyright: Copyright (C) 2014, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -25,6 +25,10 @@ class ChinChenPropagator(Propagator):
     a potential hyper surface :math:`V(x)`. The propagation is done with a Chin-Chen [1]_
     splitting of the time propagation operator :math:`\exp(-\frac{i}{\varepsilon^2} \tau H)`.
 
+    .. note:: This propagator is implemented for single-level potentials (:py:class:`MatrixPotential1S`)
+              only. More precisely, the other potential implementations do not provide
+              some functionality needed here.
+
     .. [1] S. A. Chin and C. R. Chen, "Fourth order gradient symplectic integrator methods
            for solving the time-dependent Schroedinger equation",
            J. Chem. Phys. Volume 114, Issue 17, (2001) 7338-7341.
@@ -32,19 +36,17 @@ class ChinChenPropagator(Propagator):
 
     def __init__(self, parameters, potential, initial_values):
         r"""Initialize a new :py:class:`ChinChenPropagator` instance. Precalculate the
-        the kinetic operator :math:`T_e` and the potential operator :math:`V_e`
-        used for time propagation.
+        the kinetic operator :math:`T_e` and the potential operators :math:`V_e` and
+        :math:`\tilde{V}_e` used for time propagation.
 
-        :param para: The set of simulation parameters. It must contain at least
-                     the semi-classical parameter :math:`\varepsilon` and the
-                     time step size :math:`tau`.
+        :param parameters: The set of simulation parameters. It must contain at least
+                           the semi-classical parameter :math:`\varepsilon` and the
+                           time step size :math:`\tau`.
         :param potential: The potential :math:`V(x)` governing the time evolution.
         :type potential: A :py:class:`MatrixPotential` instance.
         :param initial_values: The initial values :math:`\Psi(\Gamma, t_0)` given
                                in the canonical basis.
         :type initial_values: A :py:class:`WaveFunction` instance.
-
-        .. note:: This propagator is implemented for single-level potentials only.
 
         :raise: :py:class:`ValueError` If the number of components of :math:`\Psi` does not match the
                            number of energy surfaces :math:`\lambda_i(x)` of the potential.

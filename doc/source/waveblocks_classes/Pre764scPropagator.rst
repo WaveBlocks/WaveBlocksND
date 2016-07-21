@@ -17,3 +17,5 @@ Class documentation
 .. autoclass:: Pre764scPropagator
    :members:
    :inherited-members:
+
+   .. automethod:: __init__

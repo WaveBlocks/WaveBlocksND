@@ -29,9 +29,9 @@ class FourierPropagator(Propagator):
         the kinetic operator :math:`T_e` and the potential operator :math:`V_e`
         used for time propagation.
 
-        :param para: The set of simulation parameters. It must contain at least
-                     the semi-classical parameter :math:`\varepsilon` and the
-                     time step size :math:`tau`.
+        :param parameters: The set of simulation parameters. It must contain at least
+                           the semi-classical parameter :math:`\varepsilon` and the
+                           time step size :math:`\tau`.
         :param potential: The potential :math:`V(x)` governing the time evolution.
         :type potential: A :py:class:`MatrixPotential` instance.
         :param initial_values: The initial values :math:`\Psi(\Gamma, t_0)` given
