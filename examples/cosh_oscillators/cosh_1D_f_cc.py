@@ -1,5 +1,5 @@
 algorithm = "fourier"
-propagator = "fourier"
+propagator = "chinchen"
 
 T = 12
 dt = 0.001
