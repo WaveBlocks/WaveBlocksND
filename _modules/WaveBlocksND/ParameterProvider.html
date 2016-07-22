@@ -54,7 +54,7 @@
 <span class="sd">features like fetching undefined values from a global configuration.</span>
 
 <span class="sd">@author: R. Bourquin</span>
-<span class="sd">@copyright: Copyright (C) 2010, 2011 R. Bourquin</span>
+<span class="sd">@copyright: Copyright (C) 2010, 2011, 2016 R. Bourquin</span>
 <span class="sd">@license: Modified BSD License</span>
 <span class="sd">&quot;&quot;&quot;</span>
 
@@ -200,6 +200,7 @@
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;Parameters of the current simulation</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;------------------------------------</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; Propagation algorithm: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;algorithm&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;                scheme: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;propagator&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot; Potential: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;potential&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;  Number components: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_params</span><span class="p">[</span><span class="s2">&quot;ncomponents&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>
             <span class="n">s</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span>

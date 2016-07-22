@@ -95,21 +95,21 @@ collection. The full content of this file is printed below:</p>
 
 <span class="c1"># What it takes to specify a wavepacket!</span>
 <span class="n">wp0</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;HagedornWavepacket&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;dimension&quot;</span> <span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;HagedornWavepacket&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
     <span class="s2">&quot;ncomponents&quot;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
-    <span class="s2">&quot;eps&quot;</span> <span class="p">:</span> <span class="n">eps</span><span class="p">,</span>
-    <span class="s2">&quot;Pi&quot;</span> <span class="p">:</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span><span class="n">p</span><span class="p">,</span><span class="n">Q</span><span class="p">,</span><span class="n">P</span><span class="p">,</span><span class="n">S</span><span class="p">],</span>
-    <span class="s2">&quot;basis_shapes&quot;</span> <span class="p">:</span> <span class="p">[{</span>
-        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;HyperbolicCutShape&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;K&quot;</span> <span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
-        <span class="s2">&quot;dimension&quot;</span> <span class="p">:</span> <span class="mi">1</span>
+    <span class="s2">&quot;eps&quot;</span><span class="p">:</span> <span class="n">eps</span><span class="p">,</span>
+    <span class="s2">&quot;Pi&quot;</span><span class="p">:</span> <span class="p">[</span><span class="n">q</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">Q</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">S</span><span class="p">],</span>
+    <span class="s2">&quot;basis_shapes&quot;</span><span class="p">:</span> <span class="p">[{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;HyperbolicCutShape&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;K&quot;</span><span class="p">:</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="s2">&quot;dimension&quot;</span><span class="p">:</span> <span class="mi">1</span>
     <span class="p">}],</span>
-    <span class="s2">&quot;coefficients&quot;</span> <span class="p">:</span> <span class="p">[[</span> <span class="p">((</span><span class="mi">0</span><span class="p">,),</span> <span class="mf">1.0</span><span class="p">)</span> <span class="p">]],</span>
-    <span class="s2">&quot;innerproduct&quot;</span> <span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;HomogeneousInnerProduct&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;delegate&quot;</span> <span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;type&quot;</span> <span class="p">:</span> <span class="s2">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;coefficients&quot;</span><span class="p">:</span> <span class="p">[[((</span><span class="mi">0</span><span class="p">,),</span> <span class="mf">1.0</span><span class="p">)]],</span>
+    <span class="s2">&quot;innerproduct&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;HomogeneousInnerProduct&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;delegate&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;DirectHomogeneousQuadrature&quot;</span><span class="p">,</span>
             <span class="s1">&#39;qr&#39;</span><span class="p">:</span> <span class="p">{</span>
                 <span class="s1">&#39;type&#39;</span><span class="p">:</span> <span class="s1">&#39;TensorProductQR&#39;</span><span class="p">,</span>
                 <span class="s1">&#39;dimension&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
@@ -120,7 +120,7 @@ collection. The full content of this file is printed below:</p>
 <span class="p">}</span>
 
 <span class="c1"># Which wavepackets are initial values</span>
-<span class="n">initvals</span> <span class="o">=</span> <span class="p">[</span> <span class="n">wp0</span> <span class="p">]</span>
+<span class="n">initvals</span> <span class="o">=</span> <span class="p">[</span><span class="n">wp0</span><span class="p">]</span>
 
 <span class="n">leading_component</span> <span class="o">=</span> <span class="mi">0</span>
 
