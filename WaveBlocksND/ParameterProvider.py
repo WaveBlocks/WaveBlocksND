@@ -5,7 +5,7 @@ The structure is similar to a python dict but provides some more
 features like fetching undefined values from a global configuration.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011 R. Bourquin
+@copyright: Copyright (C) 2010, 2011, 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -151,6 +151,7 @@ class ParameterProvider(object):
             s += "Parameters of the current simulation\n"
             s += "------------------------------------\n"
             s += " Propagation algorithm: " + str(self._params["algorithm"]) + "\n"
+            s += "                scheme: " + str(self._params["propagator"]) + "\n"
             s += " Potential: " + str(self._params["potential"]) + "\n"
             s += "  Number components: " + str(self._params["ncomponents"]) + "\n"
             s += "\n"
