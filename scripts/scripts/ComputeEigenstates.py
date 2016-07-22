@@ -141,7 +141,7 @@ def compute_eigenstate(parameters, filename="eigenstates.hdf5", computepq=True, 
     # The kinetic part
     MT = zeros_like(MV, dtype=complexfloating)
     GR = GradientHAWP()
-    BS = HAWP.get_basis_shapes(N)
+    BS = HAWP.get_basis_shapes(component=N)
 
     vects = {}
     for i in BS:
