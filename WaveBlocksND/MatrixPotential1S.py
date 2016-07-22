@@ -254,7 +254,7 @@ class MatrixPotential1S(MatrixPotential):
         J = numpy.zeros((D, N), dtype=numpy.complexfloating)
 
         for row in range(D):
-            J[row, :] = self._jacobian_can_n[row](*nodes)
+            J[row, :] = self._jacobian_eigen_n[row](*nodes)
 
         return J
 
@@ -291,7 +291,7 @@ class MatrixPotential1S(MatrixPotential):
         J = numpy.zeros((D, N), dtype=numpy.complexfloating)
 
         for row in range(D):
-            J[row, :] = self._jacobian_eigen_n[row](*nodes)
+            J[row, :] = self._jacobian_can_n[row](*nodes)
 
         return J
 
@@ -368,7 +368,7 @@ class MatrixPotential1S(MatrixPotential):
 
         # TODO: Relate this to the _taylor_eigen_{s,n} data
         V = self.evaluate_eigenvalues_at(grid, entry=(diagonal_component, diagonal_component))
-        J = self.evaluate_jacobian_eigen_at(grid)
+        J = self.evaluate_jacobian_at(grid)
         H = self.evaluate_hessian_at(grid)
 
         return tuple([V, J, H])
