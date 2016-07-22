@@ -9,3 +9,16 @@ Data for the Hg2 example taken from:
   volume       = {15},
   year         = {1982},
 }
+
+
+Data for the I2 example taken from:
+
+@article{morse_parameters_I2,
+  author       = {Keller, Johannes and Lasser, Caroline},
+  doi          = {http://dx.doi.org/10.1063/1.4891517},
+  journaltitle = {The Journal of Chemical Physics},
+  number       = {5},
+  title        = {Quasi-classical description of molecular dynamics based on Egorov's theorem},
+  volume       = {141},
+  year         = {2014},
+}
