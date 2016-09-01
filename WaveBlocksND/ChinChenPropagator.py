@@ -86,7 +86,7 @@ class ChinChenPropagator(Propagator):
         # Evaluate potential and gradient
         self._potential.calculate_jacobian_canonical()
         Vx = self._potential.evaluate_at(self._grid)
-        Jx = self._potential.evaluate_jacobian_at(self._grid)
+        Jx = self._potential.evaluate_jacobian_canonical_at(self._grid)
         Jx = norm(vstack(Jx), axis=0).reshape(1, n)
 
         # Exponential '\exp(-2i/(3*eps^2)*dt * (V + 1/48*dt^2*JV))' used in the Chin-Chen splitting.

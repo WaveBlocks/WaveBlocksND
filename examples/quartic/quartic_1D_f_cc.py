@@ -1,30 +1,27 @@
-algorithm = "hagedorn"
-propagator = "semiclassical"
-splitting_method = "Y4"
+algorithm = "fourier"
+propagator = "chinchen"
 
-T =
-dt =
+T = 2 * 4.4
+dt = 0.05
 
 dimension = 1
 ncomponents = 1
 
-eps =
+eps = 0.1
 
-potential =
+potential = "quartic"
+sigma = 4.0
+
+# The grid of our simulation domain
+limits = [(-6.283185307179586, 6.283185307179586)]
+number_nodes = [8192]
 
 # The parameter set of the initial wavepacket
-Q = [[1.0]]
+Q = [[1.0 ]]
 P = [[1.0j]]
-q = [[1.0]]
-p = [[0.0]]
-S = [[0.0]]
-
-leading_component =
-
-# How often do we write data to disk
-write_nth = 1
-
-matrix_exponential = "pade"
+q = [[0.0 ]]
+p = [[1.0 ]]
+S = [[0.0 ]]
 
 # What it takes to specify a wavepacket!
 wp0 = {
@@ -35,7 +32,7 @@ wp0 = {
     "Pi": [q, p, Q, P, S],
     "basis_shapes": [{
         "type": "HyperbolicCutShape",
-        "K": 10,
+        "K": 7,
         "dimension": 1
     }],
     "coefficients": [[((0,), 1.0)]],
@@ -54,3 +51,6 @@ wp0 = {
 
 # Which wavepackets are initial values
 initvals = [wp0]
+
+# How often do we write data to disk
+write_nth = 1

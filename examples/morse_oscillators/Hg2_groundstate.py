@@ -1,13 +1,14 @@
 dimension = 1
 ncomponents = 1
 
-potential = 'morse_zero_2'
-l = 1.0
-x0 = 0.0
+potential = 'morse_zero'
+D = 0.004164356975043448
+a = 0.896696467191408
+x0 = 5.542566723349327
 
-eigenstate_of_level = 0
+eps = 0.048360430020609635
 
-eps = 1.0
+groundstate_of_level = 0
 
 hawp_template = {
     'type': 'HagedornWavepacket',
@@ -16,7 +17,7 @@ hawp_template = {
     'eps': eps,
     'basis_shapes': [{
         'type': 'HyperbolicCutShape',
-        'K': 64,
+        'K': 32,
         'dimension': 1
     }]
 }
@@ -28,7 +29,7 @@ innerproduct = {
         'qr': {
             'type': 'TensorProductQR',
             'dimension': 1,
-            'qr_rules': [{'dimension': 1, 'order': 68, 'type': 'GaussHermiteQR'}]
+            'qr_rules': [{'dimension': 1, 'order': 36, 'type': 'GaussHermiteQR'}]
         }
     }
 }

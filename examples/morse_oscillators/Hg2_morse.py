@@ -10,33 +10,34 @@ dt = 0.01
 dimension = 1
 ncomponents = 1
 
-eps = 0.1
+eps = 0.048360430020609635
 
-potential = "morse_zero_2"
-l = 1.0
-x0 = 0.0
+potential = 'morse_zero'
+D = 0.004164356975043448
+a = 0.896696467191408
+x0 = 5.542566723349327
 
 # The parameter set of the initial wavepacket
-PI, C = LFF.load_from_file("groundstate.hdf5")
+PI, C = LFF.load_from_file('eigenstates.hdf5')
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type": "HagedornWavepacket",
-    "dimension": 1,
-    "ncomponents": 1,
-    "eps": eps,
-    "Pi": PI,
-    "basis_shapes": [{
-        "type": "HyperbolicCutShape",
-        "K": 32,
-        "dimension": 1
+    'type': 'HagedornWavepacket',
+    'dimension': 1,
+    'ncomponents': 1,
+    'eps': eps,
+    'Pi': PI,
+    'basis_shapes': [{
+        'type': 'HyperbolicCutShape',
+        'K': 32,
+        'dimension': 1
     }],
     # Coefficient values computed by 'ComputeGroundstate.py'
-    "coefficients": C,
-    "innerproduct": {
-        "type": "HomogeneousInnerProduct",
-        "delegate": {
-            "type": "DirectHomogeneousQuadrature",
+    'coefficients': C,
+    'innerproduct': {
+        'type': 'HomogeneousInnerProduct',
+        'delegate': {
+            'type': 'DirectHomogeneousQuadrature',
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
@@ -54,4 +55,4 @@ leading_component = 0
 # How often do we write data to disk
 write_nth = 5
 
-matrix_exponential = "pade"
+matrix_exponential = 'pade'

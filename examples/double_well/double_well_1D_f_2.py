@@ -1,4 +1,5 @@
 algorithm = "fourier"
+propagator = "fourier"
 
 T = 2 * 4.4
 dt = 0.0005
@@ -20,26 +21,26 @@ number_nodes = [4096]
 Q = [[1.0]]
 P = [[1.0j]]
 q = [[0.70710678118654746]]
-p = [[-0.70710678118654746 + 2.0*0.1]]
+p = [[-0.70710678118654746 + 0.2]]
 S = [[0.0]]
 
 # What it takes to specify a wavepacket!
 wp0 = {
-    "type" : "HagedornWavepacket",
-    "dimension" : 1,
+    "type": "HagedornWavepacket",
+    "dimension": 1,
     "ncomponents": 1,
-    "eps" : eps,
-    "Pi" : [q,p,Q,P,S],
-    "basis_shapes" : [{
-        "type" : "HyperbolicCutShape",
-        "K" : 32,
-        "dimension" : 1
+    "eps": eps,
+    "Pi": [q, p, Q, P, S],
+    "basis_shapes": [{
+        "type": "HyperbolicCutShape",
+        "K": 32,
+        "dimension": 1
     }],
-    "coefficients" : [[ ((0,), 1.0) ]],
-    "innerproduct" : {
-        "type" : "HomogeneousInnerProduct",
-        "delegate" : {
-            "type" : "DirectHomogeneousQuadrature",
+    "coefficients": [[((0,), 1.0)]],
+    "innerproduct": {
+        "type": "HomogeneousInnerProduct",
+        "delegate": {
+            "type": "DirectHomogeneousQuadrature",
             'qr': {
                 'type': 'TensorProductQR',
                 'dimension': 1,
@@ -50,7 +51,7 @@ wp0 = {
 }
 
 # Which wavepackets are initial values
-initvals = [ wp0 ]
+initvals = [wp0]
 
 leading_component = 0
 

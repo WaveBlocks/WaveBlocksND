@@ -13,25 +13,25 @@ eigenstates_indices = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16,
 eps = 0.25
 
 hawp_template = {
-    "type" : "HagedornWavepacket",
-    "dimension" : dimension,
+    "type": "HagedornWavepacket",
+    "dimension": dimension,
     "ncomponents": 1,
-    "eps" : eps,
-    "basis_shapes" : [{
-            "type" : "HyperCubicShape",
-            "limits" : [128],
-            "dimension" : 1
-            }]
-    }
+    "eps": eps,
+    "basis_shapes": [{
+        "type": "HyperCubicShape",
+        "limits": [128],
+        "dimension": 1
+    }]
+}
 
 innerproduct = {
-    "type" : "HomogeneousInnerProduct",
-    "delegate" : {
-        "type" : "DirectHomogeneousQuadrature",
+    "type": "HomogeneousInnerProduct",
+    "delegate": {
+        "type": "DirectHomogeneousQuadrature",
         'qr': {
             'type': 'TensorProductQR',
             'dimension': 1,
             'qr_rules': [{'dimension': 1, 'order': 132, 'type': 'GaussHermiteQR'}]
-            }
         }
     }
+}
