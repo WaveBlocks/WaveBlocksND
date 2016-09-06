@@ -8,7 +8,7 @@ of the old kind.
 @license: Modified BSD License
 """
 
-from numpy import complexfloating, dot, vstack, zeros, conjugate, exp, real, imag, array
+from numpy import complexfloating, dot, zeros, conjugate, exp, real, imag, array
 from scipy import sqrt
 from scipy.linalg import det, inv
 
@@ -46,9 +46,6 @@ class HagedornBasisEvaluationAsy(HagedornBasisEvaluationCommon):
         nodes = grid.get_nodes()
         nn = grid.get_number_nodes(overall=True)
 
-        # Allocate the storage array
-        phi = zeros((bs, nn), dtype=complexfloating)
-
         # Precompute some constants
         eps = self._eps
 
@@ -67,6 +64,9 @@ class HagedornBasisEvaluationAsy(HagedornBasisEvaluationCommon):
         # Compute R(y)
         Ry = (exp(0.5j * nodest**2 * (real(P) * real(Q) + imag(P) * imag(Q))) *
               exp(1.0j / eps * p * Qabs * nodest))
+
+        # Allocate the storage array
+        phi = zeros((bs, nn), dtype=complexfloating)
 
         # Compute all states phi_k(x) via an asymptotic expansion of h_k(x)
         for k in bas.get_node_iterator(mode="lex"):
@@ -106,47 +106,53 @@ class HagedornBasisEvaluationAsy(HagedornBasisEvaluationCommon):
         """
         D = self._dimension
 
+        assert D == 1
+
+        bas = self._basis_shapes[component]
+
+        # The grid
+        grid = self._grid_wrap(grid)
+        nodes = grid.get_nodes()
+        nn = grid.get_number_nodes(overall=True)
+
         # Precompute some constants
+        eps = self._eps
+
         Pi = self.get_parameters(component=component)
         q, p, Q, P, _ = Pi
 
         Qinv = inv(Q)
         Qbar = conjugate(Q)
-        QQ = dot(Qinv, Qbar)
+        Qabs = dot(Q, Qbar)
 
-        # The basis shape
-        bas = self._basis_shapes[component]
-        Z = tuple(D * [0])
+        # Transform nodes
+        Q0 = inv(dot(Q, conjugate(Q.T)))
+        nodest = dot(Q0, nodes - q) / eps
+        nodest = real(nodest)
 
+        # Compute R(y)
+        Ry = (exp(0.5j * nodest**2 * (real(P) * real(Q) + imag(P) * imag(Q))) *
+              exp(1.0j / eps * p * Qabs * nodest))
 
-        # The grid nodes
-        grid = self._grid_wrap(grid)
-        nn = grid.get_number_nodes(overall=True)
-        nodes = grid.get_nodes()
+        # Allocate the storage array
+        phi = zeros((nn,), dtype=complexfloating)
 
-        # Evaluate phi0
-        tmp[Z] = self._evaluate_phi0(component, nodes, prefactor=False)
-        psi = self._coefficients[component][bas[Z], 0] * tmp[Z]
+        # Compute all states phi_k(x) via an asymptotic expansion of h_k(x)
+        for k in bas.get_node_iterator(mode="lex"):
+            # Current index vector
+            ki = array(k)[0]
 
-        # Iterate for higher order states
-        while len(newtodo) != 0:
-            # Delete results that never will be used again
-            for d in olddelete:
-                del tmp[d]
+            # Attention: Q, Qbar are scalars here
+            Qk = Qinv**(ki / 2.0) * Qbar**(ki / 2)
 
-            # Exchange queues
-            todo = newtodo
-            newtodo = []
-            olddelete = delete
-            delete = []
+            # Hermite function evaluation
+            hk = hermite_asy(ki, nodest)
 
-            # Compute new results
-            for k in todo:
-                # Center stencil at node k
-                ki = vstack(k)
-
+            # Assign
+            ck = self._coefficients[component][bas[k], 0]
+            phi = phi + ck * Qk * hk * Ry / sqrt(eps)
 
         if prefactor is True:
-            psi = psi / self._get_sqrt(component)(det(Q))
+            phi = phi / self._get_sqrt(component)(det(Q))
 
-        return psi
+        return phi

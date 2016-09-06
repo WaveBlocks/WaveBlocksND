@@ -140,7 +140,7 @@ class HagedornBasisEvaluationPhi(HagedornBasisEvaluationCommon):
 
         # Evaluate phi0
         tmp[Z] = self._evaluate_phi0(component, nodes, prefactor=False)
-        psi = self._coefficients[component][bas[Z], 0] * tmp[Z]
+        phi = self._coefficients[component][bas[Z], 0] * tmp[Z]
 
         # Iterate for higher order states
         while len(newtodo) != 0:
@@ -177,12 +177,12 @@ class HagedornBasisEvaluationPhi(HagedornBasisEvaluationCommon):
                         # Store computed value
                         tmp[n] = (t1 - t2) / sqrt(ki[d] + 1.0)
                         # And update the result
-                        psi = psi + self._coefficients[component][bas[n], 0] * tmp[n]
+                        phi = phi + self._coefficients[component][bas[n], 0] * tmp[n]
 
                         newtodo.append(n)
                 delete.append(k)
 
         if prefactor is True:
-            psi = psi / self._get_sqrt(component)(det(Q))
+            phi = phi / self._get_sqrt(component)(det(Q))
 
-        return psi
+        return phi

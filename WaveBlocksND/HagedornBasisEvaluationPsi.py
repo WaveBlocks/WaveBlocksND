@@ -23,7 +23,7 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
     """
 
     def evaluate_basis_at(self, grid, component, *, prefactor=False):
-        r"""Evaluate the basis functions :math:`\phi_k` recursively at the given nodes :math:`\gamma`.
+        r"""Evaluate the basis functions :math:`\psi_k` recursively at the given nodes :math:`\gamma`.
 
         :param grid: The grid :math:`\Gamma` containing the nodes :math:`\gamma`.
         :type grid: A class having a :py:meth:`get_nodes(...)` method.
@@ -31,7 +31,7 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
         :param prefactor: Whether to include a factor of :math:`\frac{1}{\sqrt{\det(Q)}}`.
         :type prefactor: Boolean, default is ``False``.
         :return: A two-dimensional ndarray :math:`H` of shape :math:`(|\mathfrak{K}_i|, |\Gamma|)` where
-                 the entry :math:`H[\mu(k), i]` is the value of :math:`\phi_k(\gamma_i)`.
+                 the entry :math:`H[\mu(k), i]` is the value of :math:`\psi_k(\gamma_i)`.
         """
         D = self._dimension
 
@@ -44,7 +44,7 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
         nn = grid.get_number_nodes(overall=True)
 
         # Allocate the storage array
-        phi = zeros((bs, nn), dtype=complexfloating)
+        psi = zeros((bs, nn), dtype=complexfloating)
 
         # Precompute some constants
         Pi = self.get_parameters(component=component)
@@ -56,11 +56,11 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
         Qinv = dot(diag(1.0 / EW), EV.T)
         QQ = identity(D)
 
-        # Compute the ground state phi_0 via direct evaluation
+        # Compute the ground state psi_0 via direct evaluation
         mu0 = bas[tuple(D * [0])]
-        phi[mu0, :] = self._evaluate_phi0(component, nodes, prefactor=False)
+        psi[mu0, :] = self._evaluate_psi0(component, nodes, prefactor=False)
 
-        # Compute all higher order states phi_k via recursion
+        # Compute all higher order states psi_k via recursion
         for d in range(D):
             # Iterator for all valid index vectors k
             indices = bas.get_node_iterator(mode="chain", direction=d)
@@ -70,15 +70,15 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
                 ki = vstack(k)
 
                 # Access predecessors
-                phim = zeros((D, nn), dtype=complexfloating)
+                psim = zeros((D, nn), dtype=complexfloating)
 
                 for j, kpj in bas.get_neighbours(k, selection="backward"):
                     mukpj = bas[kpj]
-                    phim[j, :] = phi[mukpj, :]
+                    psim[j, :] = psi[mukpj, :]
 
                 # Compute 3-term recursion
-                p1 = (nodes - q) * phi[bas[k], :]
-                p2 = sqrt(ki) * phim
+                p1 = (nodes - q) * psi[bas[k], :]
+                p2 = sqrt(ki) * psim
 
                 t1 = sqrt(2.0 / self._eps**2) * dot(Qinv[d, :], p1)
                 t2 = dot(QQ[d, :], p2)
@@ -91,12 +91,12 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
                     kped = kped[0]
 
                     # Store computed value
-                    phi[bas[kped[1]], :] = (t1 - t2) / sqrt(ki[d] + 1.0)
+                    psi[bas[kped[1]], :] = (t1 - t2) / sqrt(ki[d] + 1.0)
 
         if prefactor is True:
-            phi = phi / self._get_sqrt(component)(det(Q))
+            psi = psi / self._get_sqrt(component)(det(Q))
 
-        return phi
+        return psi
 
 
     def slim_recursion(self, grid, component, *, prefactor=False):
@@ -143,8 +143,8 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
         nn = grid.get_number_nodes(overall=True)
         nodes = grid.get_nodes()
 
-        # Evaluate phi0
-        tmp[Z] = self._evaluate_phi0(component, nodes, prefactor=False)
+        # Evaluate psi0
+        tmp[Z] = self._evaluate_psi0(component, nodes, prefactor=False)
         psi = self._coefficients[component][bas[Z], 0] * tmp[Z]
 
         # Iterate for higher order states
@@ -165,16 +165,16 @@ class HagedornBasisEvaluationPsi(HagedornBasisEvaluationCommon):
                 ki = vstack(k)
 
                 # Access predecessors
-                phim = zeros((D, nn), dtype=complexfloating)
+                psim = zeros((D, nn), dtype=complexfloating)
                 for j, kpj in bas.get_neighbours(k, selection="backward"):
-                    phim[j, :] = tmp[kpj]
+                    psim[j, :] = tmp[kpj]
 
                 # Compute the neighbours
                 for d, n in bas.get_neighbours(k, selection="forward"):
                     if n not in tmp.keys():
                         # Compute 3-term recursion
                         p1 = (nodes - q) * tmp[k]
-                        p2 = sqrt(ki) * phim
+                        p2 = sqrt(ki) * psim
 
                         t1 = sqrt(2.0 / self._eps**2) * dot(Qinv[d, :], p1)
                         t2 = dot(QQ[d, :], p2)
