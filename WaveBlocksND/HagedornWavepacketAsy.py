@@ -1,9 +1,10 @@
 """The WaveBlocks Project
 
-This file contains the class which represents a homogeneous Hagedorn wavepacket.
+This file contains the class which represents a homogeneous Hagedorn
+wavepacket in asymptotic representation.
 
 @author: R. Bourquin
-@copyright: Copyright (C) 2010, 2011, 2012, 2013, 2014, 2016 R. Bourquin
+@copyright: Copyright (C) 2016 R. Bourquin
 @license: Modified BSD License
 """
 
@@ -13,12 +14,12 @@ from numpy.linalg import det
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 from WaveBlocksND.ComplexMath import ContinuousSqrt
-from WaveBlocksND.HagedornBasisEvaluationPhi import HagedornBasisEvaluationPhi
+from WaveBlocksND.HagedornBasisEvaluationAsy import HagedornBasisEvaluationAsy
 
-__all__ = ["HagedornWavepacket"]
+__all__ = ["HagedornWavepacketAsy"]
 
 
-class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
+class HagedornWavepacketAsy(HagedornWavepacketBase, HagedornBasisEvaluationAsy):
     r"""This class represents homogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """
@@ -103,9 +104,9 @@ class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
         params = self.get_description()
         # Create a new Packet
         # TODO: Consider using the block factory
-        other = HagedornWavepacket(params["dimension"],
-                                   params["ncomponents"],
-                                   params["eps"])
+        other = HagedornWavepacketAsy(params["dimension"],
+                                      params["ncomponents"],
+                                      params["eps"])
         # If we wish to keep the packet ID
         if keepid is True:
             other.set_id(self.get_id())

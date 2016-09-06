@@ -13,12 +13,12 @@ from numpy.linalg import det
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HyperCubicShape import HyperCubicShape
 from WaveBlocksND.ComplexMath import ContinuousSqrt
-from WaveBlocksND.HagedornBasisEvaluationAsy import HagedornBasisEvaluationAsy
+from WaveBlocksND.HagedornBasisEvaluationPhi import HagedornBasisEvaluationPhi
 
 __all__ = ["HagedornWavepacket"]
 
 
-class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationAsy):
+class HagedornWavepacket(HagedornWavepacketBase, HagedornBasisEvaluationPhi):
     r"""This class represents homogeneous vector valued Hagedorn wavepackets
     :math:`\Psi` with :math:`N` components in :math:`D` space dimensions.
     """

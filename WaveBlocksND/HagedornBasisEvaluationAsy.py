@@ -8,7 +8,7 @@ of the old kind.
 @license: Modified BSD License
 """
 
-from numpy import complexfloating, dot, vstack, zeros, conjugate, exp, real, imag, squeeze, array
+from numpy import complexfloating, dot, vstack, zeros, conjugate, exp, real, imag, array
 from scipy import sqrt
 from scipy.linalg import det, inv
 
@@ -64,33 +64,26 @@ class HagedornBasisEvaluationAsy(HagedornBasisEvaluationCommon):
         nodest = dot(Q0, nodes - q) / eps
         nodest = real(nodest)
 
-        # Compute all higher order states phi_k via asymptotic expansion
-        for d in range(D):
-            # Iterator for all valid index vectors k
-            indices = list(bas.get_node_iterator(mode="chain", direction=d))
-            print(list(indices))
+        # Compute R(y)
+        Ry = (exp(0.5j * nodest**2 * (real(P) * real(Q) + imag(P) * imag(Q))) *
+              exp(1.0j / eps * p * Qabs * nodest))
 
-            for k in indices:
-                # Current index vector
-                ki = array(k)
-                print(ki)
+        # Compute all states phi_k(x) via an asymptotic expansion of h_k(x)
+        for k in bas.get_node_iterator(mode="lex"):
+            # Current index vector
+            ki = array(k)[0]
 
-                # Attention: Q, Qbar are scalars here
-                Qk = dot(Qinv**((ki + 1) / 2.0), Qbar**(ki / 2))
+            # Attention: Q, Qbar are scalars here
+            Qk = Qinv**(ki / 2.0) * Qbar**(ki / 2)
 
-                # Compute R(y)
-                Rk = (exp(0.5j * nodest**2 * (real(P) * real(Q) + imag(P) * imag(Q))) *
-                      exp(1.0j / eps * p * Qabs * nodest))
+            # Hermite function evaluation
+            hk = hermite_asy(ki, nodest)
 
-                # Hermite function evaluation
-                hk = hermite_asy(squeeze(ki), nodest)
+            # Assign
+            phi[bas[k], :] = Qk * hk * Ry / sqrt(eps)
 
-                # Assign
-                value = 1.0 / sqrt(eps) * Qk * hk * Rk
-                phi[bas[k], :] = value
-
-        # if prefactor is True:
-        #    phi = phi / self._get_sqrt(component)(det(Q))
+        if prefactor is True:
+            phi = phi / self._get_sqrt(component)(det(Q))
 
         return phi
 

@@ -64,6 +64,7 @@ from WaveBlocksND.HagedornBasisEvaluationPsi import HagedornBasisEvaluationPsi
 from WaveBlocksND.HagedornBasisEvaluationAsy import HagedornBasisEvaluationAsy
 from WaveBlocksND.HagedornWavepacketBase import HagedornWavepacketBase
 from WaveBlocksND.HagedornWavepacket import HagedornWavepacket
+from WaveBlocksND.HagedornWavepacketAsy import HagedornWavepacketAsy
 from WaveBlocksND.HagedornWavepacketPsi import HagedornWavepacketPsi
 from WaveBlocksND.HagedornWavepacketInhomogeneous import HagedornWavepacketInhomogeneous
 
