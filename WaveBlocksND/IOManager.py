@@ -127,10 +127,10 @@ class IOManager(object):
 
         # Check if the file format can be read by the IOManager
         if "file_version" not in self._srf.attrs.keys():
-            raise IOError("Unsupported file format without version number")
-
-        if self._srf.attrs["file_version"] != self._hdf_file_version:
-            raise IOError("Unsupported file format version " + str(self._srf.attrs["file_version"]))
+            print("Warning: Unsupported file format without version number")
+        else:
+            if self._srf.attrs["file_version"] != self._hdf_file_version:
+                raise IOError("Unsupported file format version " + str(self._srf.attrs["file_version"]))
 
         # Initialize the internal book keeping data
         self._block_ids = [s[len(self._prefixb):] for s in self._srf.keys() if s.startswith(self._prefixb)]
