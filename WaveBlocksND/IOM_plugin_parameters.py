@@ -37,7 +37,10 @@ def has_parameters(self, blockid="global"):
 
     :param blockid: The ID of the data block to operate on.
     """
-    return "simulation_parameters" in self._srf[self._prefixb + str(blockid)].keys()
+    if blockid in self.get_block_ids():
+        return "simulation_parameters" in self._srf[self._prefixb + str(blockid)].keys()
+    else:
+        return False
 
 
 def save_parameters(self, parameters, blockid="global"):
