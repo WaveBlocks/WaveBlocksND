@@ -53,17 +53,18 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     print("Plotting the energies of data block '{}'".format(blockid))
 
     timegridk, timegridp, ekin, epot, dt = data
-    # Filter
-    timek = timegridk * dt
-    timep = timegridp * dt
-    timek = where(timegridk < 0, nan, timek)
-    timep = where(timegridp < 0, nan, timep)
 
     if dt is None:
         xlbl = r"Timesteps $n$"
         dt = 1.0
     else:
         xlbl = r"Time $t$"
+
+    # Filter
+    timek = timegridk * dt
+    timep = timegridp * dt
+    timek = where(timegridk < 0, nan, timek)
+    timep = where(timegridp < 0, nan, timep)
 
     # View
     if view[0] is None:
@@ -102,7 +103,7 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     ax.set_xlabel(xlbl)
     legend(loc="outer right")
     ax.set_title(r"Energies of the wavepacket $\Psi$")
-    fig.savefig(os.path.join(path, "energies_block"+str(blockid)+GD.output_format))
+    fig.savefig(os.path.join(path, "energies_block" + str(blockid) + GD.output_format))
     close(fig)
 
 
@@ -121,7 +122,7 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
     ax.set_title(r"Energy drift of the wavepacket $\Psi$")
-    fig.savefig(os.path.join(path, "energy_drift_block"+str(blockid)+"_lin"+GD.output_format))
+    fig.savefig(os.path.join(path, "energy_drift_block" + str(blockid) + "_lin" + GD.output_format))
     close(fig)
 
 
@@ -135,7 +136,7 @@ def plot_energies(data, blockid=0, view=None, path='.'):
     ax.set_xlabel(xlbl)
     ax.set_ylabel(r"$|E_O^0 - \left( E_k^0 + E_p^0 \right) |$")
     ax.set_title(r"Energy drift of the wavepacket $\Psi$")
-    fig.savefig(os.path.join(path, "energy_drift_block"+str(blockid)+"_log"+GD.output_format))
+    fig.savefig(os.path.join(path, "energy_drift_block" + str(blockid) + "_log" + GD.output_format))
     close(fig)
 
 
@@ -145,34 +146,34 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
 
     parser.add_argument("-d", "--datafile",
-                        type = str,
-                        help = "The simulation data file",
-                        nargs = "?",
-                        default = GLD.file_resultdatafile)
+                        type=str,
+                        help="The simulation data file",
+                        nargs="?",
+                        default=GLD.file_resultdatafile)
 
     parser.add_argument("-b", "--blockid",
-                        type = str,
-                        help = "The data block to handle",
-                        nargs = "*",
-                        default = ["all"])
+                        type=str,
+                        help="The data block to handle",
+                        nargs="*",
+                        default=["all"])
 
     parser.add_argument("-r", "--resultspath",
-                        type = str,
-                        help = "Path where to put the results.",
-                        nargs = "?",
-                        default = '.')
+                        type=str,
+                        help="Path where to put the results.",
+                        nargs="?",
+                        default='.')
 
     parser.add_argument("-t", "--trange",
-                        type = float,
-                        help = "The plot range on the t-axis",
-                        nargs = 2,
-                        default = [None, None])
+                        type=float,
+                        help="The plot range on the t-axis",
+                        nargs=2,
+                        default=[None, None])
 
     parser.add_argument("-v", "--vrange",
-                        type = float,
-                        help = "The plot range on the y-axis",
-                        nargs = 2,
-                        default = [None, None])
+                        type=float,
+                        help="The plot range on the y-axis",
+                        nargs=2,
+                        default=[None, None])
 
     args = parser.parse_args()
 
