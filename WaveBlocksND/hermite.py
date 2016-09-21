@@ -78,9 +78,9 @@ def pbcf_asy_s(n, t):
     st = sin(theta)
     ct = cos(theta)
     # http://dlmf.nist.gov/12.10#vii
-    mu = 2.0*n + 1.0
+    mu = 2.0 * n + 1.0
     # http://dlmf.nist.gov/12.10#E23
-    eta = 0.5*theta - 0.5*st*ct
+    eta = 0.5 * theta - 0.5 * st * ct
     # http://dlmf.nist.gov/12.10#E39
     zeta = -(3.0 * eta / 2.0) ** (2.0 / 3.0)
     # http://dlmf.nist.gov/12.10#E40
@@ -102,9 +102,9 @@ def pbcf_asy_l(n, t):
     st = sinh(theta)
     ct = cosh(theta)
     # http://dlmf.nist.gov/12.10#vii
-    mu = 2.0*n + 1.0
+    mu = 2.0 * n + 1.0
     # http://dlmf.nist.gov/12.10#E23
-    eta = 0.5*st*ct - 0.5*log(st + ct)
+    eta = 0.5 * st * ct - 0.5 * log(st + ct)
     # http://dlmf.nist.gov/12.10#E39
     zeta = (3.0 * eta / 2.0) ** (2.0 / 3.0)
     # http://dlmf.nist.gov/12.10#E40
@@ -122,7 +122,7 @@ def pbcf_asy_tp(n, t):
     :param n: The order :math:`n`
     :param t: The rescaled variable :math:`t`
     """
-    mu = 2.0*n + 1.0
+    mu = 2.0 * n + 1.0
     # Series inversion
     zeta = (-1.1154602376350014386 + 0.94683206534259310319*t + 0.20092390951413596864*t**2 - 0.044104995690190539136*t**3 +
             0.017469790174220817687*t**4 - 0.0088287554164487068288*t**5 + 0.0051211352582927995985*t**6 - 0.0032244338764873460755*t**7 +
@@ -137,7 +137,7 @@ def pbcf_asy_tp(n, t):
            0.00017170521340783134157*t**16 - 0.000035325775105885003427*t**17 + 5.2214994798105409241*10**-6*t**18 - 4.9317900171943814621*10**-7*t**19 +
            2.2343423148466235499*10**-8*t**20)
     # Airy Evaluation (Bi and Bip unused)
-    Ai, Aip, Bi, Bip = airy(mu**(4.0/6.0) * zeta)
+    Ai, Aip, _, _ = airy(mu**(4.0 / 6.0) * zeta)
     # Terms for U
     # http://dlmf.nist.gov/12.10#E42
     A0 = 1.0
@@ -148,8 +148,8 @@ def pbcf_asy_tp(n, t):
     B2 = -0.021934053543058220142  + 0.022346550505843322786*zeta  - 0.024595927387236822024*zeta**2  + 0.025053467465276891847*zeta**3  - 0.023734309391991717696*zeta**4  + 0.021194552738417480440*zeta**5
     # U
     # http://dlmf.nist.gov/12.10#E35
-    U = phi * (Ai  * (A0 + A1/mu**2.0 + A2/mu**4.0) +
-               Aip * (B0 + B1/mu**2.0 + B2/mu**4.0) / mu**(8.0/6.0))
+    U = phi * (Ai  * (A0 + A1 / mu**2.0 + A2 / mu**4.0) +
+               Aip * (B0 + B1 / mu**2.0 + B2 / mu**4.0) / mu**(8.0 / 6.0))
     return U
 
 
@@ -164,12 +164,12 @@ def hermite_asy_pos(n, x):
     :param x: The variable :math:`x`
     """
     # Rescale the x values
-    mu = sqrt(2.0*n + 1.0)
+    mu = sqrt(2.0 * n + 1.0)
     t = x / mu
     # Bound the region around the turning point
     tau = (2.220446049250313e-16)**(0.125) / mu
-    lower = 1.0 - 2*0.5 * (3*tau)**(2.0/3.0)
-    upper = 1.0 + 2*0.5 * (3*tau)**(2.0/3.0)
+    lower = 1.0 - 2 * 0.5 * (3 * tau)**(2.0 / 3.0)
+    upper = 1.0 + 2 * 0.5 * (3 * tau)**(2.0 / 3.0)
     # Indices for all regions
     ilo = t < lower
     iup = t > upper
@@ -187,9 +187,9 @@ def get_tau(n):
 
     :param n: The order :math:`n`
     """
-    d = (n+1) + 1/(12*(n+1) - 1/(10*(n+1)))
-    tauexp = 1/4 - (n/2 - 1/4)*log(2) - ((n+1)/2)*log(d) + (n+1/3)*log(sqrt(2*n+1)) + log(n+1)/4
-    gams = [1.0, -1/24.0, 1/1152.0, 1003/414720.0, -4027/39813120.0]
+    d = (n + 1) + 1 / (12 * (n + 1) - 1 / (10 * (n + 1)))
+    tauexp = 1 / 4 - (n / 2 - 1 / 4) * log(2) - ((n + 1) / 2) * log(d) + (n + 1 / 3) * log(sqrt(2 * n + 1)) + log(n + 1) / 4
+    gams = [1.0, -1 / 24.0, 1 / 1152.0, 1003 / 414720.0, -4027 / 39813120.0]
     s = 1.0 + 0.5 * (sum(gams[i] / (n + 0.5)**i for i in range(1, 5)))
     tau = s * exp(tauexp)
     return tau
@@ -209,7 +209,7 @@ def hermite_asy(n, x):
     neg = x < 0
     pos = x > 0
     y = zeros_like(x, dtype=floating)
-    y[neg] = (-1)**(n%2) * hermite_asy_pos(n, -x[neg])
+    y[neg] = (-1)**(n % 2) * hermite_asy_pos(n, -x[neg])
     y[pos] = hermite_asy_pos(n, x[pos])
     tau = get_tau(n)
     return tau * y
